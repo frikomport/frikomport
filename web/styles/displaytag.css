@@ -44,7 +44,7 @@ span.export {
 
 span.pagebanner {
 	display: block;
-	width: 79%;
+	width: 100%;
 	background-color: #FFFFFF;
 	margin: 0;
 	font-size: 1.0em; //10px;
@@ -62,7 +62,7 @@ span.pagelinks {
 	margin-top: -18px;
 	padding: 2px 0px 2px 0px;
 	text-align: right;
-	width: 80%;
+	width: 100%;
 }
 
 table.list {
