@@ -68,6 +68,8 @@ public class CourseController extends BaseFormController {
         if (log.isDebugEnabled()) {
             log.debug("entering 'referenceData' method...");
         }
+        HttpSession session = request.getSession();
+        Object comm = session.getAttribute("course");
 
         Locale locale = request.getLocale();
         Map model = new HashMap();
@@ -80,8 +82,8 @@ public class CourseController extends BaseFormController {
         Date starttime = new Date();
         Date stoptime = null;
 
-        if (command != null) {
-            course = (Course) command;
+        if (comm != null) {
+            course = (Course) comm;
         }
 
         // Don't modify municipality if in postback
@@ -134,7 +136,6 @@ public class CourseController extends BaseFormController {
             model.put("courseList", courses);
         }
 
-        HttpSession session = request.getSession();
         model.put("JSESSIONID", session.getId());
 
         return model;
@@ -153,6 +154,7 @@ public class CourseController extends BaseFormController {
         }
 
         Map model = new HashMap();
+        HttpSession session = request.getSession();
 
         Locale locale = request.getLocale();
 
@@ -162,6 +164,7 @@ public class CourseController extends BaseFormController {
         model = addServiceAreas(model, locale);
         model = addMunicipalities(model, locale);
         model.put("course", course);
+        session.setAttribute("course", course);
 
         Boolean historic = new Boolean(false);
         Boolean past = new Boolean(false);
