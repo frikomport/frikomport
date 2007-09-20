@@ -1,4 +1,0 @@
-<invoke description="get Login Page" url="/"/>
-<setinputfield description="set user name" name="j_username" value="mraible"/>
-<setinputfield description="set password" name="j_password" value="tomcat"/>
-<clickbutton label="${button.login}" description="Click the submit button"/>
