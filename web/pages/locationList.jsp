@@ -48,7 +48,7 @@
     id="locationList" pagesize="25" styleClass="list" 
     export="true" requestURI="">
 
-    <display:column media="html" sort="true" headerClass="sortable" titleKey="location.name">
+    <display:column media="html" sort="true" headerClass="sortable" titleKey="location.name" sortProperty="name">
          <a href="<c:url value="/detailsLocation.html"><c:param name="id" value="${locationList.id}"/></c:url>" 
          title="<c:out value="${locationList.description}"/>"><c:out value="${locationList.name}"/></a>
     </display:column>

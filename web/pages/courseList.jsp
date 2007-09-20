@@ -137,7 +137,7 @@
     id="courseList" pagesize="25" styleClass="list" 
     export="true" requestURI="">
 
-    <display:column media="html" sort="true" headerClass="sortable" titleKey="course.name" sortProperty="name">
+    <display:column media="html" sort="true" headerClass="sortable" titleKey="course.name" sortProperty="name" url="/courseList.html">
          <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>" 
          title="<c:out value="${courseList.description}"/>"><c:out value="${courseList.name}"/></a>
     </display:column>
