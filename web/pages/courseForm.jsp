@@ -2,6 +2,10 @@
 
 <SCRIPT LANGUAGE="JavaScript" ID="js1">
 var cal1 = new CalendarPopup();
+cal1.setMonthNames('Januar','Februar','Mars','April','Mai','Juni','Juli','August','September','Oktober','November','Desember'); 
+cal1.setDayHeaders('S','M','T','O','T','F','L'); 
+cal1.setWeekStartDay(1); 
+cal1.setTodayText("Idag");
 </SCRIPT>
 
 <title><fmt:message key="courseEdit.title"/></title>

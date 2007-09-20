@@ -21,7 +21,7 @@
     id="personList" pagesize="25" styleClass="list" 
     export="true" requestURI="">
 
-    <display:column media="html" sort="true" headerClass="sortable" titleKey="person.name">
+    <display:column media="html" sort="true" headerClass="sortable" titleKey="person.name" sortProperty="name">
          <a href="<c:url value="/detailsPerson.html"><c:param name="id" value="${personList.id}"/></c:url>" 
          title="<c:out value="${personList.description}"/>"><c:out value="${personList.name}"/></a>
     </display:column>
