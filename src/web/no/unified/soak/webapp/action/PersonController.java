@@ -65,8 +65,8 @@ public class PersonController implements Controller {
     }
 
     /**
-     * Gets the list of persons and sorts it by last name
-     * @return A list of persons sorted by last name
+     * Gets the list of persons and sorts it by name
+     * @return A list of persons sorted by name
      */
     private List<Person> getPersons() {
         // Get all persons
@@ -74,16 +74,15 @@ public class PersonController implements Controller {
         List<Person> result = new ArrayList<Person>();
 
         // Get all last names into one TreeMap (automatically sorted by key)(
-        final TreeMap<String, Long> lastNames = new TreeMap<String, Long>();
+        final TreeMap<String, Long> names = new TreeMap<String, Long>();
 
         for (int i = 0; i < persons.size(); i++) {
-            String lastName = StringUtils.substringAfterLast(((Person) persons.get(
-                        i)).getName(), " ");
-            lastNames.put(lastName, new Long(i));
+            String name = ((Person) persons.get(i)).getName();
+            names.put(name, new Long(i));
         }
 
         // Get the sorted tree out into a collection
-        Collection<Long> values = lastNames.values();
+        Collection<Long> values = names.values();
 
         // And into the result-list
         for (Iterator<Long> iter = values.iterator(); iter.hasNext();) {
