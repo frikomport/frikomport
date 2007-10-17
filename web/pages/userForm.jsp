@@ -246,13 +246,13 @@
 	                <tr>
 	                    <th class="pickLabel">
 	                        <soak:label key="user.availableRoles" 
-	                            colon="false" styleClass="required"/>
+	                            colon="false" class="required"/>
 	                    </th>
 	                    <td>
 	                    </td>
 	                    <th class="pickLabel">
 	                        <soak:label key="user.roles"
-	                            colon="false" styleClass="required"/>
+	                            colon="false" class="required"/>
 	                    </th>
 	                </tr>
 	                <c:set var="leftList" value="${availableRoles}" scope="request"/>

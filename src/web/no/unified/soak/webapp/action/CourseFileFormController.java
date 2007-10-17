@@ -10,6 +10,17 @@
  */
 package no.unified.soak.webapp.action;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import no.unified.soak.Constants;
 import no.unified.soak.model.Attachment;
 import no.unified.soak.model.Course;
@@ -18,24 +29,10 @@ import no.unified.soak.service.CourseManager;
 import no.unified.soak.webapp.util.FileUtil;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.springframework.validation.BindException;
-
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 
 /**

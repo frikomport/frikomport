@@ -10,13 +10,14 @@
  */
 package no.unified.soak.webapp.decorators;
 
-import org.apache.commons.lang.time.FastDateFormat;
-
-import org.displaytag.decorator.ColumnDecorator;
-
-import org.displaytag.exception.DecoratorException;
-
 import java.util.Date;
+
+import javax.servlet.jsp.PageContext;
+
+import org.apache.commons.lang.time.FastDateFormat;
+import org.displaytag.decorator.DisplaytagColumnDecorator;
+import org.displaytag.exception.DecoratorException;
+import org.displaytag.properties.MediaTypeEnum;
 
 
 /**
@@ -27,7 +28,7 @@ import java.util.Date;
  *
  * @author hrj
  */
-public class StandardDateWrapper implements ColumnDecorator {
+public class StandardDateWrapper implements DisplaytagColumnDecorator {
     FastDateFormat dateFormat = FastDateFormat.getInstance("dd.MM.yyyy");
 
     /**
@@ -36,11 +37,11 @@ public class StandardDateWrapper implements ColumnDecorator {
     public StandardDateWrapper() {
         super();
     }
-
+    
     /**
-     * @see org.displaytag.decorator.ColumnDecorator#decorate(java.lang.Object)
+     * @see org.displaytag.decorator.DisplaytagColumnDecorator#decorate(java.lang.Object, javax.servlet.jsp.PageContext, org.displaytag.properties.MediaTypeEnum)
      */
-    public String decorate(Object arg0) throws DecoratorException {
+    public Object decorate(Object arg0, PageContext arg1, MediaTypeEnum arg2) throws DecoratorException {
         String result = "";
 
         if (arg0 != null) {

@@ -7,22 +7,20 @@
 */
 package no.unified.soak.service;
 
-import net.sf.acegisecurity.AccessDeniedException;
-import net.sf.acegisecurity.Authentication;
-import net.sf.acegisecurity.GrantedAuthority;
-import net.sf.acegisecurity.GrantedAuthorityImpl;
-import net.sf.acegisecurity.context.ContextHolder;
-import net.sf.acegisecurity.context.security.SecureContext;
-import net.sf.acegisecurity.context.security.SecureContextImpl;
-import net.sf.acegisecurity.providers.UsernamePasswordAuthenticationToken;
-
 import no.unified.soak.Constants;
 import no.unified.soak.dao.UserDAO;
 import no.unified.soak.model.Role;
 import no.unified.soak.model.User;
 
+import org.acegisecurity.AccessDeniedException;
+import org.acegisecurity.Authentication;
+import org.acegisecurity.GrantedAuthority;
+import org.acegisecurity.GrantedAuthorityImpl;
+import org.acegisecurity.context.SecurityContext;
+import org.acegisecurity.context.SecurityContextHolder;
+import org.acegisecurity.context.SecurityContextImpl;
+import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
 import org.jmock.Mock;
-
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -33,7 +31,7 @@ public class UserSecurityAdviceTest extends BaseManagerTestCase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        SecureContext context = new SecureContextImpl();
+        SecurityContext context = new SecurityContextImpl();
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("user",
                 "password",
                 new GrantedAuthority[] {
@@ -41,11 +39,11 @@ public class UserSecurityAdviceTest extends BaseManagerTestCase {
                 });
         token.setAuthenticated(true);
         context.setAuthentication(token);
-        ContextHolder.setContext(context);
+        SecurityContextHolder.setContext(context);
     }
 
     public void testAddUserWithoutAdminRole() throws Exception {
-        Authentication auth = ((SecureContext) ContextHolder.getContext()).getAuthentication();
+        Authentication auth = ((SecurityContext) SecurityContextHolder.getContext()).getAuthentication();
         assertTrue(auth.isAuthenticated());
 
         UserManager userManager = (UserManager) makeInterceptedTarget();
@@ -61,7 +59,7 @@ public class UserSecurityAdviceTest extends BaseManagerTestCase {
     }
 
     public void testAddUserAsAdmin() throws Exception {
-        SecureContext context = new SecureContextImpl();
+        SecurityContext context = new SecurityContextImpl();
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("admin",
                 "password",
                 new GrantedAuthority[] {
@@ -69,7 +67,7 @@ public class UserSecurityAdviceTest extends BaseManagerTestCase {
                 });
         token.setAuthenticated(true);
         context.setAuthentication(token);
-        ContextHolder.setContext(context);
+        SecurityContextHolder.setContext(context);
 
         UserManager userManager = (UserManager) makeInterceptedTarget();
         User user = new User("admin");
@@ -124,7 +122,7 @@ public class UserSecurityAdviceTest extends BaseManagerTestCase {
 
     // Test fix to http://issues.appfuse.org/browse/APF-96
     public void testAddUserRoleWhenHasAdminRole() throws Exception {
-        SecureContext context = new SecureContextImpl();
+        SecurityContext context = new SecurityContextImpl();
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("user",
                 "password",
                 new GrantedAuthority[] {
@@ -132,7 +130,7 @@ public class UserSecurityAdviceTest extends BaseManagerTestCase {
                 });
         token.setAuthenticated(true);
         context.setAuthentication(token);
-        ContextHolder.setContext(context);
+        SecurityContextHolder.setContext(context);
 
         UserManager userManager = (UserManager) makeInterceptedTarget();
         User user = new User("user");

@@ -287,18 +287,18 @@
     enctype="multipart/form-data" onsubmit="return validateFileUpload(this)">
     
 <display:table name="${attachments}" cellspacing="0" cellpadding="0"
-    id="attachmentsList" pagesize="25" styleClass="list"
+    id="attachmentsList" pagesize="25" class="list"
     export="true" requestURI="">
     
-    <display:column property="filename" sort="true" headerClass="sortable"
+    <display:column property="filename" sortable="true" headerClass="sortable"
          titleKey="attachment.filename"/>
          
-    <display:column sort="true" headerClass="sortable"
+    <display:column sortable="true" headerClass="sortable"
          titleKey="attachment.size">
 		<fmt:formatNumber value="${attachmentsList.size}" minFractionDigits="0"/>
     </display:column>
     
-    <display:column media="html" sort="false" headerClass="sortable" titleKey="button.heading">
+    <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
 	            <input type="submit" class="button" name="download"
                 onclick="document.courseFileListForm.attachmentid.value=<c:out value="${attachmentsList.id}"/>;bCancel=true;" 
                 value="<fmt:message key="button.download"/>" />

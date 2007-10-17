@@ -7,30 +7,27 @@
 */
 package no.unified.soak.service;
 
-import net.sf.acegisecurity.AccessDeniedException;
-import net.sf.acegisecurity.Authentication;
-import net.sf.acegisecurity.AuthenticationTrustResolver;
-import net.sf.acegisecurity.AuthenticationTrustResolverImpl;
-import net.sf.acegisecurity.GrantedAuthority;
-import net.sf.acegisecurity.UserDetails;
-import net.sf.acegisecurity.context.ContextHolder;
-import net.sf.acegisecurity.context.security.SecureContext;
+import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import no.unified.soak.Constants;
 import no.unified.soak.model.Role;
 import no.unified.soak.model.User;
 
+import org.acegisecurity.AccessDeniedException;
+import org.acegisecurity.Authentication;
+import org.acegisecurity.AuthenticationTrustResolver;
+import org.acegisecurity.AuthenticationTrustResolverImpl;
+import org.acegisecurity.GrantedAuthority;
+import org.acegisecurity.context.SecurityContext;
+import org.acegisecurity.context.SecurityContextHolder;
+import org.acegisecurity.userdetails.UserDetails;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.springframework.aop.MethodBeforeAdvice;
-
-import java.lang.reflect.Method;
-
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 
 
 public class UserSecurityAdvice implements MethodBeforeAdvice {
@@ -39,7 +36,7 @@ public class UserSecurityAdvice implements MethodBeforeAdvice {
 
     public void before(Method method, Object[] args, Object target)
         throws Throwable {
-        SecureContext ctx = (SecureContext) ContextHolder.getContext();
+        SecurityContext ctx = (SecurityContext) SecurityContextHolder.getContext();
 
         if (ctx != null) {
             Authentication auth = ctx.getAuthentication();

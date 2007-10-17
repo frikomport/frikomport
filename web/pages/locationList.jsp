@@ -45,16 +45,16 @@
 <c:out value="${buttons}" escapeXml="false"/>
 
 <display:table name="${locationList}" cellspacing="0" cellpadding="0"
-    id="locationList" pagesize="25" styleClass="list" 
+    id="locationList" pagesize="25" class="list" 
     export="true" requestURI="">
 
-    <display:column media="html" sort="true" headerClass="sortable" titleKey="location.name" sortProperty="name">
+    <display:column media="html" sortable="true" headerClass="sortable" titleKey="location.name" sortProperty="name">
          <a href="<c:url value="/detailsLocation.html"><c:param name="id" value="${locationList.id}"/></c:url>" 
          title="<c:out value="${locationList.description}"/>"><c:out value="${locationList.name}"/></a>
     </display:column>
-    <display:column media="csv excel xml pdf" property="name" sort="true" headerClass="sortable" titleKey="location.name"/>
+    <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="location.name"/>
     
-    <display:column media="html" sort="true" headerClass="sortable" titleKey="location.address">
+    <display:column media="html" sortable="true" headerClass="sortable" titleKey="location.address">
     	<c:choose>
 	    	<c:when test="${not empty locationList.mapURL}">
           		<a href="<c:out value="${locationList.mapURL}"/>"><c:out value="${locationList.address}"/></a>
@@ -64,22 +64,22 @@
 	    	</c:otherwise>
 	    </c:choose>
     </display:column>
-    <display:column media="csv excel xml pdf" property="address" sort="true" headerClass="sortable" titleKey="location.address"/>
+    <display:column media="csv excel xml pdf" property="address" sortable="true" headerClass="sortable" titleKey="location.address"/>
     
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
-    <display:column media="html" sort="true" headerClass="sortable" titleKey="location.contactName">
+    <display:column media="html" sortable="true" headerClass="sortable" titleKey="location.contactName" sortProperty="contactName">
          <a href="mailto:<c:out value="${locationList.email}"/>"><c:out value="${locationList.contactName}"/></a>
     </display:column>
-    <display:column media="csv excel xml pdf" property="contactName" sort="true" headerClass="sortable" titleKey="location.contactName"/>
-    <display:column media="csv excel xml pdf" property="email" sort="true" headerClass="sortable" titleKey="location.email"/>
+    <display:column media="csv excel xml pdf" property="contactName" sortable="true" headerClass="sortable" titleKey="location.contactName"/>
+    <display:column media="csv excel xml pdf" property="email" sortable="true" headerClass="sortable" titleKey="location.email"/>
     
-    <display:column property="phone" sort="true" headerClass="sortable"
+    <display:column property="phone" sortable="true" headerClass="sortable"
          titleKey="location.phone"/>
          
-    <display:column property="municipality.name" sort="true" headerClass="sortable"
+    <display:column property="municipality.name" sortable="true" headerClass="sortable"
          titleKey="location.municipality"/>
 
-    <display:column sort="true" headerClass="sortable"
+    <display:column sortable="true" headerClass="sortable"
          titleKey="location.selectable">
 		<c:if test="${locationList.selectable == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${locationList.selectable == false}"><fmt:message key="checkbox.unchecked"/></c:if>
@@ -87,7 +87,7 @@
 </c:if>
 
 <c:if test="${isAdmin || isEducationResponsible}">
-    <display:column media="html" sort="false" headerClass="sortable" titleKey="button.heading">
+    <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
 	    <button type="button" onclick="location.href='<c:url value="/editLocation.html"><c:param name="id" value="${locationList.id}"/></c:url>'">
     	    <fmt:message key="button.edit"/>
 	    </button>

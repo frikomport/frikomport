@@ -10,7 +10,6 @@
 
 <form method="post" action="<c:url value="/listCourses.html"/>" id="courseList">
    	<INPUT type="hidden" id="ispostbackcourselist" name="ispostbackcourselist" value="1"/> 
-
 	<table>
 		<tr>
 		    <th>
@@ -134,40 +133,40 @@
 <c:out value="${buttons}" escapeXml="false"/>
 
 <display:table name="${courseList}" cellspacing="0" cellpadding="0"
-    id="courseList" pagesize="25" styleClass="list" 
-    export="true" requestURI="">
+    id="courseList" pagesize="25" class="list" 
+    export="true" requestURI="listCourses.html">
 
-    <display:column media="html" sort="true" headerClass="sortable" titleKey="course.name" sortProperty="name" url="/courseList.html">
+    <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="name">
          <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>" 
          title="<c:out value="${courseList.description}"/>"><c:out value="${courseList.name}"/></a>
     </display:column>
-    <display:column media="csv excel xml pdf" property="name" sort="true" headerClass="sortable" titleKey="course.name"/>
+    <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="course.name"/>
     
-    <display:column sort="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
+    <display:column sortable="true" headerClass="sortable" titleKey="course.startTime">
          <fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
 
-    <display:column property="duration" sort="true" headerClass="sortable"
+    <display:column property="duration" sortable="true" headerClass="sortable"
          titleKey="course.duration"/>
 
-    <display:column property="municipality.name" sort="true" headerClass="sortable"
+    <display:column property="municipality.name" sortable="true" headerClass="sortable"
          titleKey="course.municipality"/>
 
-    <display:column property="serviceArea.name" sort="true" headerClass="sortable"
+    <display:column property="serviceArea.name" sortable="true" headerClass="sortable"
          titleKey="course.serviceArea"/>
 
-    <display:column media="html" sort="true" headerClass="sortable" titleKey="course.location">
+    <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.location">
          <a href="<c:url value="/detailsLocation.html"><c:param name="id" value="${courseList.location.id}"/></c:url>" title="<c:out value="${courseList.location.description}"/>"><c:out value="${courseList.location.name}"/></a>
     </display:column>
-    <display:column media="csv excel xml pdf" property="location.name" sort="true" headerClass="sortable" titleKey="course.location"/>
+    <display:column media="csv excel xml pdf" property="location.name" sortable="true" headerClass="sortable" titleKey="course.location"/>
 
-    <display:column media="html" sort="true" headerClass="sortable" titleKey="course.responsible">
+    <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.responsible">
          <a href="<fmt:message key="course.responsible.urlpart"/>/<c:out value="${courseList.responsible.url_name}"/>" target="_top"><c:out value="${courseList.responsible.name}"/></a>
     </display:column>
-    <display:column media="csv excel xml pdf" property="responsible.name" sort="true" headerClass="sortable" titleKey="course.responsible"/>
+    <display:column media="csv excel xml pdf" property="responsible.name" sortable="true" headerClass="sortable" titleKey="course.responsible"/>
 
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
-    <display:column media="html" sort="false" headerClass="sortable" titleKey="button.heading">
+    <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
 <c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && eZUserid == courseList.responsibleid)}">
 	    <button type="button" onclick="location.href='<c:url value="/editCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>'">
     	    <fmt:message key="button.edit"/>

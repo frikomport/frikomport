@@ -10,14 +10,14 @@
  */
 package no.unified.soak.webapp.filter;
 
-import net.sf.acegisecurity.Authentication;
-import net.sf.acegisecurity.GrantedAuthority;
-import net.sf.acegisecurity.GrantedAuthorityImpl;
+import java.util.ArrayList;
+import java.util.List;
 
 import no.unified.soak.ez.EzUser;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.acegisecurity.Authentication;
+import org.acegisecurity.GrantedAuthority;
+import org.acegisecurity.GrantedAuthorityImpl;
 
 
 /**

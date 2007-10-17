@@ -386,7 +386,7 @@
             <webinf dir="${spring.dir}" includes="*.xml"/>
             
             <lib file="${clickstream.jar}"/>
-            <lib dir="${struts.dir}" includes="*.jar"/>
+            <lib dir="${commons.dir}" includes="*.jar"/>
             <lib dir="${jstl.dir}/lib">
                 <include name="jstl.jar"/>
                 <include name="standard.jar"/>

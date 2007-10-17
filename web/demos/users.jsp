@@ -94,11 +94,11 @@ this same data set, but this time you get column sorting.
 </p>
 
 <display:table name="${users.rows}" id="user" class="list">
-    <display:column property="username" sort="true"
+    <display:column property="username" sortable="true"
         titleKey="user.username" headerClass="sortable"/>
-    <display:column property="firstName" sort="true" 
+    <display:column property="firstName" sortable="true" 
         titleKey="user.firstName" headerClass="sortable"/>
-    <display:column property="lastName" sort="true" 
+    <display:column property="lastName" sortable="true" 
         titleKey="user.lastName" headerClass="sortable"/>
 </display:table>
 
@@ -109,11 +109,11 @@ this same data set, but this time you get column sorting.
 
 <div id="displaySource" style="display: none; margin-left: 10px; margin-top: 0">
 <pre>&lt;display:table name="${users.rows}" id="user" class="list"&gt;
-    &lt;display:column property="username" sort="true"
+    &lt;display:column property="username" sortable="true"
         titleKey="user.username" headerClass="sortable"/&gt;
-    &lt;display:column property="firstName" sort="true" 
+    &lt;display:column property="firstName" sortable="true" 
         titleKey="user.firstName" headerClass="sortable"/&gt;
-    &lt;display:column property="lastName" sort="true" 
+    &lt;display:column property="lastName" sortable="true" 
         titleKey="user.lastName" headerClass="sortable"/&gt;
 &lt;/display:table&gt;
 </pre>

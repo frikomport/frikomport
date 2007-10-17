@@ -37,6 +37,7 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 /**
@@ -76,6 +77,8 @@ public class RegistrationController extends BaseFormController {
         if (log.isDebugEnabled()) {
             log.debug("entering 'referenceData' method...");
         }
+        HttpSession session = request.getSession();
+        Object comm = session.getAttribute("registration");
 
         Boolean reserved = null;
         Boolean invoiced = null;
@@ -85,8 +88,8 @@ public class RegistrationController extends BaseFormController {
 
         Boolean historic = new Boolean(false);
 
-        if (command != null) {
-            registration = (Registration) command;
+        if (comm != null) {
+            registration = (Registration) comm;
         }
 
         // Don't modify municipality if in postback
@@ -177,6 +180,7 @@ public class RegistrationController extends BaseFormController {
         if (log.isDebugEnabled()) {
             log.debug("entering 'onSubmit' method...");
         }
+        HttpSession session = request.getSession();
 
         // Setup some default parameters
         Locale locale = request.getLocale();
@@ -239,6 +243,8 @@ public class RegistrationController extends BaseFormController {
         model.put("historic", historic);
         model.put("reservedValue", reservedParameter);
         model.put("invoicedValue", invoicedParameter);
+        
+        session.setAttribute("registration", registration);
 
         // Add all courses to the list
         List courses = getCourses(locale, historic);

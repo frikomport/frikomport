@@ -18,19 +18,19 @@
 <c:out value="${buttons}" escapeXml="false"/>
 
 <display:table name="${municipalitiesList}" cellspacing="0" cellpadding="0"
-    id="municipalitiesList" pagesize="25" styleClass="list" 
+    id="municipalitiesList" pagesize="25" class="list" 
     export="true" requestURI="">
 
-    <display:column property="name" sort="true" headerClass="sortable"
+    <display:column property="name" sortable="true" headerClass="sortable"
          titleKey="municipalities.name"/>
          
-    <display:column sort="true" headerClass="sortable"
+    <display:column sortable="true" headerClass="sortable"
          titleKey="municipalities.number">
          <fmt:formatNumber value="${municipalitiesList.number}" minFractionDigits="0"/>
     </display:column>
     
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
-    <display:column sort="true" headerClass="sortable"
+    <display:column sortable="true" headerClass="sortable"
          titleKey="municipalities.selectable">
 		<c:if test="${municipalitiesList.selectable == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${municipalitiesList.selectable == false}"><fmt:message key="checkbox.unchecked"/></c:if>
@@ -38,7 +38,7 @@
 </c:if>
 
 <c:if test="${isAdmin}">
-    <display:column media="html" sort="false" headerClass="sortable" titleKey="button.heading">
+    <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
 	    <button type="button" onclick="location.href='<c:url value="/editMunicipalities.html"><c:param name="id" value="${municipalitiesList.id}"/></c:url>'">
     	    <fmt:message key="button.edit"/>
 	    </button>

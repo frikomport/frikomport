@@ -7,36 +7,30 @@
 */
 package no.unified.soak.webapp.taglib;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.validator.Field;
-import org.apache.commons.validator.Form;
-import org.apache.commons.validator.ValidatorResources;
-
-import org.springframework.beans.factory.BeanFactoryUtils;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-
-import org.springframework.context.MessageSource;
-import org.springframework.context.NoSuchMessageException;
-
-import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
-
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
-import org.springframework.web.servlet.DispatcherServlet;
-import org.springframework.web.servlet.support.RequestContext;
-
-import org.springmodules.commons.validator.ValidatorFactory;
-
 import java.io.IOException;
-
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.validator.Field;
+import org.apache.commons.validator.Form;
+import org.apache.commons.validator.ValidatorResources;
+import org.springframework.beans.factory.BeanFactoryUtils;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.context.MessageSource;
+import org.springframework.context.NoSuchMessageException;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.support.RequestContext;
+import org.springmodules.validation.commons.ValidatorFactory;
 
 
 /**

@@ -239,19 +239,19 @@
 
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible || isCourseParticipant}">
 <display:table name="${registrationsBackingObject.registrations}" cellspacing="0" cellpadding="0"
-    pagesize="25" styleClass="list" 
+    pagesize="25" class="list" 
     export="true" id="registrationList" requestURI="">
 
-    <display:column property="firstName" sort="true" headerClass="sortable"
+    <display:column property="firstName" sortable="true" headerClass="sortable"
          titleKey="registration.firstName"/>
 
-    <display:column property="lastName" sort="true" headerClass="sortable"
+    <display:column property="lastName" sortable="true" headerClass="sortable"
          titleKey="registration.lastName"/>
 
-    <display:column property="municipality.name" sort="true" headerClass="sortable"
+    <display:column property="municipality.name" sortable="true" headerClass="sortable"
          titleKey="registration.municipality"/>
 
-    <display:column media="html" sort="true" headerClass="sortable" titleKey="registration.invoiced">
+    <display:column media="html" sortable="true" headerClass="sortable" titleKey="registration.invoiced">
 <c:if test="${admin == true}">
  		<input type="hidden" name="_invoiced_<c:out value="${registrationList.id}"/>" value="visible" />	
  		<input type="checkbox" name="invoiced_<c:out value="${registrationList.id}"/>" 
@@ -264,12 +264,12 @@
 		<c:if test="${registrationList.invoiced == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 </c:if>
 	</display:column>
-    <display:column media="csv excel xml pdf" sort="true" headerClass="sortable" titleKey="registration.invoiced">
+    <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="registration.invoiced">
 		<c:if test="${registrationList.invoiced == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${registrationList.invoiced == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 	</display:column>
 
-    <display:column media="html" sort="true" headerClass="sortable" titleKey="registration.reserved">
+    <display:column media="html" sortable="true" headerClass="sortable" titleKey="registration.reserved">
 <c:if test="${admin == true}">
  		<input type="hidden" name="_reserved<c:out value="${registrationList.id}"/>" value="visible"/>	
 		<input type="checkbox" name="reserved_<c:out value="${registrationList.id}"/>"
@@ -282,13 +282,13 @@
 		<c:if test="${registrationList.reserved == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 </c:if>
 	</display:column>
-    <display:column media="csv excel xml pdf" sort="true" headerClass="sortable" titleKey="registration.reserved">
+    <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="registration.reserved">
 		<c:if test="${registrationList.reserved == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${registrationList.reserved == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 	</display:column>
 
 <c:if test="${admin == true}">
-    <display:column media="html" sort="false" headerClass="sortable" titleKey="button.heading">
+    <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
 
 <c:if test="${admin == true}">
 	    <button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseid" value="${registrationList.courseid}"/></c:url>'">

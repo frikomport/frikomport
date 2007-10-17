@@ -13,18 +13,18 @@
 </button>
     
 <display:table name="${userNames}" id="user" cellspacing="0" cellpadding="0"
-    defaultsort="1" styleClass="list activeUserList" pagesize="50" requestURI="">
+    defaultsort="1" class="list activeUserList" pagesize="50" requestURI="">
   
     <%-- Table columns --%>
     <display:column property="username" width="30%" headerClass="sortable"
-        titleKey="user.username" sort="true"/>
+        titleKey="user.username" sortable="true"/>
     <display:column titleKey="activeUsers.fullName" headerClass="sortable"
-        sort="true">
+        sortable="true">
         <c:out value="${user.firstName} ${user.lastName}"/>
         <c:if test="${not empty user.email}">
         <a href="mailto:<c:out value="${user.email}"/>">
             <img src="<c:url value="/images/iconEmail.gif"/>" 
-                alt="<fmt:message key="icon.email"/>" styleClass="icon"/></a>
+                alt="<fmt:message key="icon.email"/>" class="icon"/></a>
         </c:if>
     </display:column>
         
