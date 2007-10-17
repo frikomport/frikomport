@@ -10,16 +10,14 @@
  */
 package no.unified.soak.service.impl;
 
+import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.WaitingListManager;
-import no.unified.soak.util.DateUtil;
-
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
+import no.unified.soak.util.MailUtil;
 
 import org.springframework.context.MessageSource;
 
@@ -138,6 +136,7 @@ public class WaitingListManagerImpl extends BaseManager
             courses = new ArrayList<Course>();
             courses.add(courseManager.getCourse(String.valueOf(specificCourseId)));
         }
+//        log.debug("Number of courses found for waitinglist: " + courses.size());
 
         // Are there any that needs checking?
         if (courses != null) {
@@ -278,148 +277,160 @@ public class WaitingListManagerImpl extends BaseManager
      */
     private void notifyAttendant(boolean confirmed,
         Registration currentRegistration) {
-        SimpleMailMessage theMessage = new SimpleMailMessage();
-        theMessage.setFrom(StringEscapeUtils.unescapeHtml(
-                messageSource.getMessage("mail.default.from", null, locale)));
+//    	log.debug("Sending mail from WaitingListManager");
+    	// Get the course we are notifying the attendant about
+    	Course course = currentRegistration.getCourse();
+    	
+    	// Create the body of the e-mail
+    	StringBuffer msg = MailUtil.createStandardBody(course, Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION, locale, messageSource, null, confirmed);
 
-        ArrayList<String> recipients = new ArrayList<String>();
-
-        if (!StringUtils.isEmpty(currentRegistration.getEmail())) {
-            recipients.add(currentRegistration.getEmail());
-        }
-
-        if (recipients.size() > 0) {
-            String[] recipientArray = new String[recipients.size()];
-
-            for (int i = 0; i < recipients.size(); i++) {
-                recipientArray[i] = recipients.get(i);
-            }
-
-            theMessage.setTo(recipientArray);
-        } else {
-            theMessage.setTo(currentRegistration.getCourse().getInstructor()
-                                                .getEmail());
-        }
-
-        StringBuffer msg = new StringBuffer();
-        String identifier = currentRegistration.getFirstName() + " " +
-            currentRegistration.getLastName();
-
-        if ((currentRegistration.getEmployeeNumber() != null) &&
-                (currentRegistration.getEmployeeNumber().intValue() != 0)) {
-            identifier = identifier + " (" +
-                StringEscapeUtils.unescapeHtml(messageSource.getMessage(
-                        "registration.employeeNumber", null, locale))
-                                 .toLowerCase() + " " +
-                currentRegistration.getEmployeeNumber().intValue() + ")";
-        }
-
-        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
-                    "misc.hello", null, locale)) + " " + identifier + "!\n\n");
-
-        if (confirmed) {
-            theMessage.setSubject(StringEscapeUtils.unescapeHtml(
-                    messageSource.getMessage(
-                        "registrationComplete.mail.subject",
-                        new String[] { currentRegistration.getCourse().getName() },
-                        locale)));
-            msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
-                        "registrationComplete.mail.body", null, locale)));
-        } else {
-            theMessage.setSubject(StringEscapeUtils.unescapeHtml(
-                    messageSource.getMessage(
-                        "registrationToWaitinglist.mail.subject",
-                        new String[] { currentRegistration.getCourse().getName() },
-                        locale)));
-        }
-
-        msg.append("\n\n");
-
-        // Include course details
-        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
-                    "course.name", null, locale)) + ": " +
-            currentRegistration.getCourse().getName() + "\n");
-        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
-                    "course.type", null, locale)) + ": " +
-            currentRegistration.getCourse().getType() + "\n");
-        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
-                    "course.startTime", null, locale)) + ": " +
-            DateUtil.getDateTime(messageSource.getMessage("date.format", null,
-                    locale) + " " +
-                messageSource.getMessage("time.format", null, locale),
-                currentRegistration.getCourse().getStartTime()) + "\n");
-
-        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
-                    "course.stopTime", null, locale)) + ": " +
-            DateUtil.getDateTime(messageSource.getMessage("date.format", null,
-                    locale) + " " +
-                messageSource.getMessage("time.format", null, locale),
-                currentRegistration.getCourse().getStopTime()) + "\n");
-        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
-                    "course.duration", null, locale)) + ": " +
-            currentRegistration.getCourse().getDuration() + "\n");
-        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
-                    "course.municipality", null, locale)) + ": " +
-            currentRegistration.getCourse().getMunicipality().getName() + "\n");
-        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
-                    "course.serviceArea", null, locale)) + ": " +
-            currentRegistration.getCourse().getServiceArea().getName() + "\n");
-        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
-                    "course.location", null, locale)) + ": " +
-            currentRegistration.getCourse().getLocation().getName() + "\n");
-
-        if (currentRegistration.getCourse().getResponsible() != null) {
-            msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
-                        "course.responsible", null, locale)) + ": " +
-                currentRegistration.getCourse().getResponsible().getName() +
-                "\n");
-        }
-
-        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
-                    "course.instructor", null, locale)) + ": " +
-            currentRegistration.getCourse().getInstructor().getName() + "\n");
-        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
-                    "course.description", null, locale)) + ": " +
-            currentRegistration.getCourse().getDescription() + "\n");
-
-        // We cannot link to a deleted course, so the link is only displayed if
-        // the course still exists
-        String baseurl = StringEscapeUtils.unescapeHtml(messageSource.getMessage(
-                    "javaapp.baseurl", null, locale));
-        String coursedetailurl = StringEscapeUtils.unescapeHtml(messageSource.getMessage(
-                    "javaapp.coursedetailurl",
-                    new String[] {
-                        String.valueOf(currentRegistration.getCourse().getId())
-                    }, locale));
-        msg.append("\n\n");
-        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
-                    "javaapp.findurlhere", null, locale)) + " " + baseurl +
-            coursedetailurl);
-
-        msg.append("\n\n");
-
-        if (confirmed) {
-            msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
-                        "registrationComplete.mail.footer", null, locale)));
-        } else {
-            msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
-                        "registrationToWaitinglist.mail.footer",
-                        new String[] {
-                            " " + currentRegistration.getCourse().getName() +
-                            "\n\n"
-                        }, locale)));
-        }
-
-        msg.append("\n\n");
-		msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage("mail.contactinfo", null, 
-				locale))
-				+ "\n");
-		msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage("mail.donotreply",
-				new String[] {messageSource.getMessage("mail.default.from", null, locale)}, locale))
-				+ "\n");
-
-        theMessage.setText(msg.toString());
-        mailEngine.send(theMessage);
+    	// Create the email
+    	ArrayList<SimpleMailMessage> theEmails = MailUtil.setMailInfo(currentRegistration, Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION, course, msg, messageSource, locale);
+    	
+    	// Send the email
+    	MailUtil.sendMails(theEmails, mailEngine);
+    	
+//        SimpleMailMessage theMessage = new SimpleMailMessage();
+//        theMessage.setFrom(StringEscapeUtils.unescapeHtml(
+//                messageSource.getMessage("mail.default.from", null, locale)));
+//
+//        ArrayList<String> recipients = new ArrayList<String>();
+//
+//        if (!StringUtils.isEmpty(currentRegistration.getEmail())) {
+//            recipients.add(currentRegistration.getEmail());
+//        }
+//
+//        if (recipients.size() > 0) {
+//            String[] recipientArray = new String[recipients.size()];
+//
+//            for (int i = 0; i < recipients.size(); i++) {
+//                recipientArray[i] = recipients.get(i);
+//            }
+//
+//            theMessage.setTo(recipientArray);
+//        } else {
+//            theMessage.setTo(currentRegistration.getCourse().getInstructor()
+//                                                .getEmail());
+//        }
+//
+//        StringBuffer msg = new StringBuffer();
+//        String identifier = currentRegistration.getFirstName() + " " +
+//            currentRegistration.getLastName();
+//
+//        if ((currentRegistration.getEmployeeNumber() != null) &&
+//                (currentRegistration.getEmployeeNumber().intValue() != 0)) {
+//            identifier = identifier + " (" +
+//                StringEscapeUtils.unescapeHtml(messageSource.getMessage(
+//                        "registration.employeeNumber", null, locale))
+//                                 .toLowerCase() + " " +
+//                currentRegistration.getEmployeeNumber().intValue() + ")";
+//        }
+//
+//        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
+//                    "misc.hello", null, locale)) + " " + identifier + "!\n\n");
+//        if (confirmed) {
+//            theMessage.setSubject(StringEscapeUtils.unescapeHtml(
+//                    messageSource.getMessage(
+//                        "registrationComplete.mail.subject",
+//                        new String[] { currentRegistration.getCourse().getName() },
+//                        locale)));
+//            msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
+//                        "registrationComplete.mail.body", null, locale)));
+//        } else {
+//            theMessage.setSubject(StringEscapeUtils.unescapeHtml(
+//                    messageSource.getMessage(
+//                        "registrationToWaitinglist.mail.subject",
+//                        new String[] { currentRegistration.getCourse().getName() },
+//                        locale)));
+//        }
+//
+//        msg.append("\n\n");
+//
+//        // Include course details
+//        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
+//                    "course.name", null, locale)) + ": " +
+//            currentRegistration.getCourse().getName() + "\n");
+//        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
+//                    "course.type", null, locale)) + ": " +
+//            currentRegistration.getCourse().getType() + "\n");
+//        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
+//                    "course.startTime", null, locale)) + ": " +
+//            DateUtil.getDateTime(messageSource.getMessage("date.format", null,
+//                    locale) + " " +
+//                messageSource.getMessage("time.format", null, locale),
+//                currentRegistration.getCourse().getStartTime()) + "\n");
+//
+//        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
+//                    "course.stopTime", null, locale)) + ": " +
+//            DateUtil.getDateTime(messageSource.getMessage("date.format", null,
+//                    locale) + " " +
+//                messageSource.getMessage("time.format", null, locale),
+//                currentRegistration.getCourse().getStopTime()) + "\n");
+//        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
+//                    "course.duration", null, locale)) + ": " +
+//            currentRegistration.getCourse().getDuration() + "\n");
+//        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
+//                    "course.municipality", null, locale)) + ": " +
+//            currentRegistration.getCourse().getMunicipality().getName() + "\n");
+//        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
+//                    "course.serviceArea", null, locale)) + ": " +
+//            currentRegistration.getCourse().getServiceArea().getName() + "\n");
+//        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
+//                    "course.location", null, locale)) + ": " +
+//            currentRegistration.getCourse().getLocation().getName() + "\n");
+//
+//        if (currentRegistration.getCourse().getResponsible() != null) {
+//            msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
+//                        "course.responsible", null, locale)) + ": " +
+//                currentRegistration.getCourse().getResponsible().getName() +
+//                "\n");
+//        }
+//
+//        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
+//                    "course.instructor", null, locale)) + ": " +
+//            currentRegistration.getCourse().getInstructor().getName() + "\n");
+//        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
+//                    "course.description", null, locale)) + ": " +
+//            currentRegistration.getCourse().getDescription() + "\n");
+//
+//        // We cannot link to a deleted course, so the link is only displayed if
+//        // the course still exists
+//        String baseurl = StringEscapeUtils.unescapeHtml(messageSource.getMessage(
+//                    "javaapp.baseurl", null, locale));
+//        String coursedetailurl = StringEscapeUtils.unescapeHtml(messageSource.getMessage(
+//                    "javaapp.coursedetailurl",
+//                    new String[] {
+//                        String.valueOf(currentRegistration.getCourse().getId())
+//                    }, locale));
+//        msg.append("\n\n");
+//        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
+//                    "javaapp.findurlhere", null, locale)) + " " + baseurl +
+//            coursedetailurl);
+//
+//        msg.append("\n\n");
+//
+//        if (confirmed) {
+//            msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
+//                        "registrationComplete.mail.footer", null, locale)));
+//        } else {
+//            msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
+//                        "registrationToWaitinglist.mail.footer",
+//                        new String[] {
+//                            " " + currentRegistration.getCourse().getName() +
+//                            "\n\n"
+//                        }, locale)));
+//        }
+//
+//        msg.append("\n\n");
+//		msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage("mail.contactinfo", null, 
+//				locale))
+//				+ "\n");
+//		msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage("mail.donotreply",
+//				new String[] {messageSource.getMessage("mail.default.from", null, locale)}, locale))
+//				+ "\n");
+//
+//        theMessage.setText(msg.toString());
+//        mailEngine.send(theMessage);
     }
 
     /**
@@ -480,4 +491,10 @@ public class WaitingListManagerImpl extends BaseManager
 
         return j;
     }
+
+	public void sayHello() {
+		log.debug("HELLO!!!");
+		// TODO Auto-generated method stub
+		
+	}
 }

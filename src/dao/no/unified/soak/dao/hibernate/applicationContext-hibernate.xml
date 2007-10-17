@@ -18,6 +18,7 @@
 	            <value>no/unified/soak/model/Course.hbm.xml</value>
 	            <value>no/unified/soak/model/Registration.hbm.xml</value>
 	            <value>no/unified/soak/model/Attachment.hbm.xml</value>
+	            <value>no/unified/soak/model/Notification.hbm.xml</value>
             </list>
         </property>
         <!-- The property below is commented out b/c it doesn't work when run via
@@ -31,8 +32,8 @@
             <prop key="hibernate.dialect">@HIBERNATE-DIALECT@</prop>
             <!-- Create/update the database tables automatically when the JVM starts up
             <prop key="hibernate.hbm2ddl.auto">update</prop> -->
-            <!-- Turn batching off for better error messages under PostgreSQL 
-            <prop key="hibernate.jdbc.batch_size">0</prop> -->
+            <!-- Turn batching off for better error messages under PostgreSQL -->
+            <prop key="hibernate.jdbc.batch_size">0</prop>
         </props>
         </property>
     </bean>
@@ -90,4 +91,9 @@
     <!--Attachment-START-->
     <bean id="attachmentDAO" class="no.unified.soak.dao.hibernate.AttachmentDAOHibernate" autowire="byName"/>
     <!--Attachment-END-->
+
+    <!--Notification-START-->
+    <bean id="notificationDao" class="no.unified.soak.dao.hibernate.NotificationDaoHibernate" autowire="byName"/>
+    <!--Notification-END-->
+    
 </beans>

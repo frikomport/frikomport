@@ -32,7 +32,7 @@ import java.util.Date;
  */
 public class Course extends BaseObject implements Serializable {
     /**
-     *
+     * When adding / removing attributes to this class, remember to update the copyAllButId-function
      */
     private static final long serialVersionUID = -4869033333668709720L;
     private Long id;
@@ -547,5 +547,38 @@ public class Course extends BaseObject implements Serializable {
      */
     public void setResponsible(EzUser responsible) {
         this.responsible = responsible;
+    }
+    
+    /**
+     * Copies all the attribues of an existing course into this instance
+     * 
+     * @param original The course from which we copy the attributes
+     */
+    public void copyAllButId(Course original) {
+    	this.setDescription(original.getDescription());
+    	this.setDetailURL(original.getDetailURL());
+    	this.setDuration(original.getDuration());
+    	this.setFeeExternal(original.getFeeExternal());
+    	this.setFeeMunicipal(original.getFeeMunicipal());
+    	this.setFreezeAttendance(original.getFreezeAttendance());
+    	this.setInstructor(original.getInstructor());
+    	this.setInstructorid(original.getInstructorid());
+    	this.setMunicipality(original.getMunicipality());
+    	this.setMunicipalityid(original.getMunicipalityid());
+    	this.setResponsible(original.getResponsible());
+    	this.setResponsibleid(original.getResponsibleid());
+    	this.setServiceArea(original.getServiceArea());
+    	this.setServiceAreaid(original.getServiceAreaid());
+    	this.setLocation(original.getLocation());
+    	this.setLocationid(original.getLocationid());
+    	this.setName(original.getName());
+    	this.setType(original.getType());
+    	this.setStartTime(original.getStartTime());
+    	this.setStopTime(original.getStopTime());
+    	this.setRegisterBy(original.getRegisterBy());
+    	this.setRegisterStart(original.getRegisterStart());
+    	this.setReminder(original.getReminder());
+    	this.setMaxAttendants(original.getMaxAttendants());
+    	this.setReservedMunicipal(original.getReservedMunicipal());
     }
 }

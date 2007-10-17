@@ -23,10 +23,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
+import no.unified.soak.model.Notification;
 import no.unified.soak.model.Registration;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.MunicipalitiesManager;
+import no.unified.soak.service.NotificationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.util.DateUtil;
@@ -54,11 +56,17 @@ public class RegistrationFormController extends BaseFormController {
 
 	private MunicipalitiesManager municipalitiesManager = null;
 
+	private NotificationManager notificationManager = null;
+
 	private MessageSource messageSource = null;
 
 	protected MailEngine mailEngine = null;
 
 	protected SimpleMailMessage message = null;
+
+	public void setNotificationManager(NotificationManager notificationManager) {
+		this.notificationManager = notificationManager;
+	}
 
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource = messageSource;
@@ -174,6 +182,7 @@ public class RegistrationFormController extends BaseFormController {
 
 		// Fetch the locale for resource message
 		Locale locale = request.getLocale();
+		registration.setLocale(locale.getLanguage());
 
 		// Are we to cancel?
 		if (request.getParameter("docancel") != null) {
@@ -224,6 +233,10 @@ public class RegistrationFormController extends BaseFormController {
 				courseFull = new Boolean(false);
 				registration.setReserved(new Boolean(true));
 				registrationManager.saveRegistration(registration);
+				Notification notification = new Notification();
+				notification.setRegistrationid(registration.getId());
+				notification.setReminderSent(false);
+				notificationManager.saveNotification(notification);
 				key = "registration.added";
 				saveMessage(request, getText(key, locale));
 
@@ -238,11 +251,18 @@ public class RegistrationFormController extends BaseFormController {
 				courseFull = new Boolean(true);
 				registration.setReserved(new Boolean(false));
 				registrationManager.saveRegistration(registration);
+				Notification notification = new Notification();
+				notification.setRegistrationid(registration.getId());
+				notification.setReminderSent(false);
+				notification.setRegistration(registration);
+				notificationManager.saveNotification(notification);
 				key = "registrationComplete.waitinglist";
 				saveMessage(request, getText(key, locale));
 				sendMail(locale, course, true, registration);
 			}
 		}
+		
+		notificationManager.sendReminders();
 
 		// Let the next page know what registration we were editing here
 		model.put("registrationid", registration.getId().toString());

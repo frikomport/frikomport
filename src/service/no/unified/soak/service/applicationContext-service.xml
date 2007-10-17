@@ -17,7 +17,7 @@
                 <prop key="process*">PROPAGATION_REQUIRED</prop>
                 <prop key="save*">PROPAGATION_REQUIRED</prop>
                 <prop key="remove*">PROPAGATION_REQUIRED</prop>
-                <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="*">PROPAGATION_REQUIRED</prop>
             </props>
         </property>
     </bean>
@@ -45,7 +45,7 @@
                 <prop key="save*">PROPAGATION_REQUIRED,-UserExistsException</prop>
                 <prop key="remove*">PROPAGATION_REQUIRED</prop>
                 <prop key="*LoginCookie">PROPAGATION_REQUIRED</prop>
-                <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="*">PROPAGATION_REQUIRED</prop>
             </props>
         </property>
         <!-- This property is overriden in applicationContext-security.xml to add
@@ -165,4 +165,18 @@
         </property>
     </bean>
     <!-- WaitingList-END-->
+
+    <!--Notification-START-->    
+    <bean id="notificationManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.NotificationManagerImpl">
+                <property name="notificationDao" ref="notificationDao"/>
+                <property name="registrationManager" ref="registrationManager"/>
+                <property name="message" ref="mailMessage"/>
+		        <property name="messageSource" ref="messageSource"/>
+			    <property name="mailEngine" ref="mailEngine"/>
+            </bean>
+        </property>
+    </bean>
+    <!--Notification-END-->
 </beans>

@@ -12,11 +12,15 @@ package no.unified.soak.service.impl;
 
 import no.unified.soak.dao.RegistrationDAO;
 import no.unified.soak.model.Course;
+import no.unified.soak.model.Notification;
 import no.unified.soak.model.Registration;
 import no.unified.soak.service.RegistrationManager;
 
 import java.util.Collection;
 import java.util.List;
+
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * Implementation of RegistrationManager interface to talk to the persistence
@@ -118,5 +122,13 @@ public class RegistrationManagerImpl extends BaseManager implements
 	 */
 	public Integer getNumberOfOccupiedSeats(Course course, Boolean localOnly) {
 		return dao.getNumberOfOccupiedSeats(course, localOnly);
+	}
+
+	public List<Registration> getRegistrations(Long courseId) {
+		return dao.getCourseRegistrations(courseId);
+	}
+
+	public List<Registration> getCourseRegistrations(Long courseId) {
+		return dao.getCourseRegistrations(courseId);
 	}
 }

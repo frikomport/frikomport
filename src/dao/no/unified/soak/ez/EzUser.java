@@ -16,6 +16,7 @@ import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 
 /**
@@ -96,8 +97,9 @@ public class EzUser extends BaseObject implements Serializable {
                 retStr.append(last_name.toLowerCase());
             }
         }
-
-        return retStr.toString();
+        // Dersom resultatstrengen inneheld " " må dette fjernes før returnering
+        
+        return retStr.toString().replace(' ', '_');
     }
 
     /**

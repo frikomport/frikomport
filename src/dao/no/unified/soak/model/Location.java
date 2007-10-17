@@ -279,7 +279,6 @@ public class Location extends BaseObject implements Serializable {
 
     /**
      * @param municipality The municipality to set.
-     * @spring.validator type="required"
      */
     public void setMunicipality(Municipalities municipality) {
         this.municipality = municipality;

@@ -10,7 +10,6 @@
  */
 package no.unified.soak.webapp.action;
 
-import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Municipalities;
 import no.unified.soak.model.ServiceArea;

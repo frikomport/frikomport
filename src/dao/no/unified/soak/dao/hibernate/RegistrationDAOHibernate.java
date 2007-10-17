@@ -10,12 +10,14 @@
  */
 package no.unified.soak.dao.hibernate;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import no.unified.soak.dao.RegistrationDAO;
 import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
 import no.unified.soak.model.Course;
+import no.unified.soak.model.Notification;
 import no.unified.soak.model.Registration;
 
 import org.hibernate.criterion.DetachedCriteria;
@@ -77,6 +79,20 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 	 * @see no.unified.soak.dao.RegistrationDAO#removeRegistration(Long id)
 	 */
 	public void removeRegistration(final Long id) {
+		
+		// First we need to make sure there are no Notifications to this registration
+		DetachedCriteria criteria = DetachedCriteria
+		.forClass(Notification.class);
+		criteria.add(Restrictions.eq("registrationid", id));
+		List result = getHibernateTemplate().findByCriteria(criteria);
+		if (result != null && result.size() > 0) {
+			for (int i=0; i < result.size(); i++) {
+				Notification notification = (Notification) result.get(i);
+				getHibernateTemplate().delete(notification);
+			}
+		}
+
+		// Now we should be allowed to delete this registration
 		getHibernateTemplate().delete(getRegistration(id));
 	}
 
@@ -241,4 +257,17 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 
 		return result;
 	}
+
+	public List<Registration> getCourseRegistrations(Long courseId) {
+		List<Registration> result = new ArrayList<Registration>();
+		if (courseId != null) {
+			DetachedCriteria criteria = DetachedCriteria
+			.forClass(Registration.class);
+			criteria.add(Restrictions.eq("courseid", courseId));
+			result = getHibernateTemplate().findByCriteria(criteria);
+		}
+		return result;
+	}
+	
+	
 }

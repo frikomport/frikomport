@@ -131,4 +131,12 @@ public interface RegistrationDAO extends DAO {
 	 * @return The number of occupied seats at the course
 	 */
 	public Integer getNumberOfOccupiedSeats(Course course, Boolean localOnly);
+	
+	/**
+	 * Retrieves all registrations for a given course
+	 * 
+	 * @param courseId the ID of the course to find registrations for
+	 * @return a list of all registrations for the given course
+	 */
+	public List<Registration> getCourseRegistrations(Long courseId);
 }

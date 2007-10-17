@@ -65,31 +65,12 @@ public class PersonController implements Controller {
     }
 
     /**
-     * Gets the list of persons and sorts it by name
-     * @return A list of persons sorted by name
+     * Gets the list of persons
+     * @return A list of persons
      */
     private List<Person> getPersons() {
         // Get all persons
         List<Person> persons = personManager.getPersons(null, new Boolean(true));
-        List<Person> result = new ArrayList<Person>();
-
-        // Get all last names into one TreeMap (automatically sorted by key)(
-        final TreeMap<String, Long> names = new TreeMap<String, Long>();
-
-        for (int i = 0; i < persons.size(); i++) {
-            String name = ((Person) persons.get(i)).getName();
-            names.put(name, new Long(i));
-        }
-
-        // Get the sorted tree out into a collection
-        Collection<Long> values = names.values();
-
-        // And into the result-list
-        for (Iterator<Long> iter = values.iterator(); iter.hasNext();) {
-            Long key = iter.next();
-            result.add(persons.get(key.intValue()));
-        }
-
-        return result;
+        return persons;
     }
 }

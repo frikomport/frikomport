@@ -73,4 +73,6 @@ public interface WaitingListManager extends Manager {
      */
     public void processSingleWaitingList(Long specificCourseId,
         boolean localsFirst);
+    
+    public void sayHello();
 }
