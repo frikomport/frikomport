@@ -37,7 +37,7 @@ public class UserSecurityAdviceTest extends BaseManagerTestCase {
                 new GrantedAuthority[] {
                     new GrantedAuthorityImpl(Constants.USER_ROLE)
                 });
-        token.setAuthenticated(true);
+        token.setAuthenticated(false);
         context.setAuthentication(token);
         SecurityContextHolder.setContext(context);
     }
@@ -65,7 +65,7 @@ public class UserSecurityAdviceTest extends BaseManagerTestCase {
                 new GrantedAuthority[] {
                     new GrantedAuthorityImpl(Constants.ADMIN_ROLE)
                 });
-        token.setAuthenticated(true);
+        token.setAuthenticated(false);
         context.setAuthentication(token);
         SecurityContextHolder.setContext(context);
 
@@ -128,7 +128,7 @@ public class UserSecurityAdviceTest extends BaseManagerTestCase {
                 new GrantedAuthority[] {
                     new GrantedAuthorityImpl(Constants.ADMIN_ROLE)
                 });
-        token.setAuthenticated(true);
+        token.setAuthenticated(false);
         context.setAuthentication(token);
         SecurityContextHolder.setContext(context);
 
