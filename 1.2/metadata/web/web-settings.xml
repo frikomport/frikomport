@@ -1,0 +1,55 @@
+  <XDtConfig:ifConfigParamNotEquals paramName="Displayname" value="">
+   <display-name><XDtConfig:configParameterValue paramName="Displayname"/></display-name>
+  </XDtConfig:ifConfigParamNotEquals>
+    <!-- You may experience issues in Mozilla < version 1.2 if you use  -->
+    <!-- ports other than 80 and 443, it seems to work fine with v1.2.  -->
+    <!-- For further information see the following article:             -->
+    <!-- http://www.javaworld.com/javaworld/jw-02-2002/jw-0215-ssl.html -->
+    <context-param>
+        <param-name>listenPort_http</param-name>
+        <param-value><XDtConfig:configParameterValue paramName="httpPort"/></param-value>
+    </context-param>
+    <context-param>
+        <param-name>listenPort_https</param-name>
+        <param-value><XDtConfig:configParameterValue paramName="httpsPort"/></param-value>
+    </context-param>
+    <!-- Possible values: hibernate (might be more in the future) -->
+    <context-param>
+        <param-name>daoType</param-name>
+        <param-value><XDtConfig:configParameterValue paramName="daoType"/></param-value>
+    </context-param>
+     <!-- Define the basename for a resource bundle for I18N -->
+    <context-param>
+        <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
+        <param-value>ApplicationResources</param-value>
+    </context-param>
+    <!-- Fallback locale if no bundles found for browser's preferred locale -->
+    <context-param>
+        <param-name>javax.servlet.jsp.jstl.fmt.fallbackLocale</param-name>
+        <param-value>no</param-value>
+    </context-param>
+    <!-- Force a single locale using param-name 'javax.servlet.jsp.jstl.fmt.locale' -->
+    <context-param>
+        <param-name>javax.servlet.jsp.jstl.fmt.locale</param-name>
+        <param-value>no</param-value>
+    </context-param>
+    <context-param>
+        <param-name>overrideFieldBindingLocaleGroupingUsed</param-name>
+        <param-value>false</param-value>
+    </context-param>
+    <context-param>
+        <param-name>overrideFieldBindingLocaleIntegerDigits</param-name>
+        <param-value>0</param-value>
+    </context-param>
+    <context-param>
+        <param-name>overrideFieldBindingLocaleDecimalDigits</param-name>
+        <param-value>2</param-value>
+    </context-param>
+    <!-- Context Configuration locations for Spring XML files -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            classpath*:META-INF/applicationContext-*.xml
+            /WEB-INF/applicationContext-*.xml
+        </param-value>
+    </context-param>
