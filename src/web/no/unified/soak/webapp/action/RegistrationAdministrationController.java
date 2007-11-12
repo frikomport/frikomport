@@ -245,12 +245,16 @@ public class RegistrationAdministrationController extends BaseFormController {
 			// Get reserved and invoiced as seen in the table at the
 			// time of submit
 			String reservedCheckbox = request.getParameter("reserved_" + thisRegistration.getId().toString());
+			String hiddenReservedCheckbox = request.getParameter("_reserved" + thisRegistration.getId().toString()); 
 			String invoicedCheckbox = request.getParameter("invoiced_" + thisRegistration.getId().toString());
+			String hiddenInvoicedCheckbox = request.getParameter("_invoiced" + thisRegistration.getId().toString()); 
 			boolean reserved = checkboxToBoolean(reservedCheckbox);
+			boolean hiddenReservedPresent = checkboxToBoolean(hiddenReservedCheckbox);
 			boolean invoiced = checkboxToBoolean(invoicedCheckbox);
+			boolean hiddenInvoicedPresent = checkboxToBoolean(hiddenInvoicedCheckbox); 
 
 			// Check if reserved is changed
-			if (thisRegistration.getReserved().booleanValue() != reserved) {
+			if (thisRegistration.getReserved().booleanValue() != reserved && hiddenReservedPresent) {
 				changed = true;
 				thisRegistration.setReserved(new Boolean(reserved));
 
@@ -265,7 +269,7 @@ public class RegistrationAdministrationController extends BaseFormController {
 			}
 
 			// Check if invoiced is changed
-			if (thisRegistration.getInvoiced().booleanValue() != invoiced) {
+			if (thisRegistration.getInvoiced().booleanValue() != invoiced && hiddenInvoicedPresent) {
 				changed = true;
 				thisRegistration.setInvoiced(new Boolean(invoiced));
 			}

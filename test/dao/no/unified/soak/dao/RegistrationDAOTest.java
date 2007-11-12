@@ -71,6 +71,9 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 
 		String email = new String("e@ma.il");
 		registration.setEmail(email);
+		
+		String locale = new String("no");
+		registration.setLocale(locale);
 
 		dao.saveRegistration(registration);
 
@@ -84,6 +87,7 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		assertEquals(registered, registration.getRegistered());
 		assertEquals(reserved, registration.getReserved());
 		assertEquals(serviceareaid, registration.getServiceareaid());
+		assertEquals(locale, registration.getLocale());
 	}
 
 	/**
