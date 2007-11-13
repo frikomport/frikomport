@@ -170,7 +170,7 @@ public class ActionFilter implements Filter {
 				.hasRolename(Constants.EZROLE_EDUCATIONMANAGER));
 		request.setAttribute("isAdmin", ezUser
 				.hasRolename(Constants.EZROLE_ADMIN));
-		request.setAttribute("isAdmin", true);
+		//request.setAttribute("isAdmin", true);
 
 		/* ezSessionid becomes null if not found. */
 		request.setAttribute(Constants.EZ_SESSIONID, eZSessionId);
