@@ -9,7 +9,7 @@
 <fmt:message key="courseList.items" var="items"/>
 
 <form method="post" action="<c:url value="/listCourses.html"/>" id="courseList">
-   	<INPUT type="hidden" id="ispostbackcourselist" name="ispostbackcourselist" value="1"/> 
+   	<input type="hidden" id="ispostbackcourselist" name="ispostbackcourselist" value="1"/> 
 	<table>
 		<tr>
 		    <th>
@@ -45,13 +45,13 @@
 		        </spring:bind>
 		    </td>
 		    
-	    	<INPUT type="hidden" id="past" name="past" 
+	    	<input type="hidden" id="past" name="past" 
 	    	<c:if test="${past == true}"> value="1" </c:if>
 	    	<c:if test="${past == false}"> value="0" </c:if> 
 	    	/>
 
 <c:if test="${past == true}">
-	    	<INPUT type="hidden" id="historic" name="historic" 
+	    	<input type="hidden" id="historic" name="historic" 
 	    	<c:if test="${historic == true}"> value="1" </c:if>
 	    	<c:if test="${historic == false}"> value="0" </c:if> 
 	    	/>
@@ -61,8 +61,8 @@
 				<label><fmt:message key="course.includeHistoric"/></label>
 		    </th>
 		    <td>
-		    	<INPUT type="hidden" name="_historic" value="0"/>
-		    	<INPUT type="checkbox" id="historic" name="historic" value="1" 
+		    	<input type="hidden" name="_historic" value="0"/>
+		    	<input type="checkbox" id="historic" name="historic" value="1" 
 		    	<c:if test="${historic == true}"> checked </c:if> />
 
 		    </td>
@@ -142,8 +142,12 @@
     </display:column>
     <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="course.name"/>
     
-    <display:column sortable="true" headerClass="sortable" titleKey="course.startTime">
+    <display:column sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
          <fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
+    </display:column>
+    
+    <display:column sortable="true" headerClass="sortable" titleKey="course.stopTime" sortProperty="stopTims">
+         <fmt:formatDate value="${courseList.stopTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
 
     <display:column property="duration" sortable="true" headerClass="sortable"
