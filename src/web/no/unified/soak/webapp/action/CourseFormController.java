@@ -144,6 +144,12 @@ public class CourseFormController extends BaseFormController {
 		if (responsibles != null) {
 			model.put("responsible", responsibles);
 		}
+		
+		// Retrieves visibility roles into an array
+		List roles = personManager.getEZRoles();
+		if (roles != null) {
+            model.put("roles", roles);
+        }
 
 		// Retrieve all locations into an array
 		List locations = locationManager.getLocations(null, new Boolean(false));

@@ -170,7 +170,7 @@ public class ActionFilter implements Filter {
 				.hasRolename(Constants.EZROLE_EDUCATIONMANAGER));
 		request.setAttribute("isAdmin", ezUser
 				.hasRolename(Constants.EZROLE_ADMIN));
-		//request.setAttribute("isAdmin", true);
+//		request.setAttribute("isAdmin", true);
 
 		/* ezSessionid becomes null if not found. */
 		request.setAttribute(Constants.EZ_SESSIONID, eZSessionId);
@@ -179,9 +179,11 @@ public class ActionFilter implements Filter {
 		if (eZSessionId != null && authentificationToken.isAuthenticated()) {
 			request.setAttribute(Constants.EZ_USERID, ezUser.getId());
 			request.setAttribute(Constants.EZ_MUNICIPALITY, ezUser.getKommune());
+			request.setAttribute(Constants.EZ_ROLES, ezUser.getRolenames());
 		} else {
 			request.setAttribute(Constants.EZ_USERID, null);
 			request.setAttribute(Constants.EZ_MUNICIPALITY, null);
+			request.setAttribute(Constants.EZ_ROLES, null);
 		}
 
 		if (eZSessionId != null && !authentificationToken.isAuthenticated()) {

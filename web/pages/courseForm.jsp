@@ -62,6 +62,25 @@ cal1.setTodayText("Idag");
             </spring:bind>
         </td>
     </tr>
+    
+    <tr>
+        <th>
+            <soak:label key="course.role"/>
+        </th>
+        <td>
+            <spring:bind path="course.role">
+				  <select name="<c:out value="${status.expression}"/>">
+				    <c:forEach var="role" items="${roles}">
+				      <option value="<c:out value="${role}"/>"
+					      <c:if test="${role == status.value}"> selected="selected"</c:if>>
+				        <c:out value="${role}"/>
+				      </option>
+				    </c:forEach>
+				  </select>            
+                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
+            </spring:bind>
+        </td>
+    </tr>
 
     <tr>
         <th>

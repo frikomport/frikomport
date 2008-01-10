@@ -89,6 +89,9 @@ public class CourseDAOTest extends BaseDAOTestCase {
 
         String description = "Et test kurs";
         course.setDescription(description);
+        
+        String role = "Anonymous";
+        course.setRole(role);
 
         dao.saveCourse(course);
 
@@ -113,6 +116,7 @@ public class CourseDAOTest extends BaseDAOTestCase {
         assertEquals(locationid, course.getLocationid());
         assertEquals(municipalityid, course.getMunicipalityid());
         assertEquals(description, course.getDescription());
+        assertEquals(role, course.getRole());
     }
 
     /**
@@ -199,6 +203,9 @@ public class CourseDAOTest extends BaseDAOTestCase {
 
         String description = "Et test kurs";
         course.setDescription(description);
+        
+        String role = "Ansatt";
+        course.setRole(role);
 
         dao.saveCourse(course);
 
@@ -219,6 +226,7 @@ public class CourseDAOTest extends BaseDAOTestCase {
         assertEquals(locationid, course.getLocationid());
         assertEquals(municipalityid, course.getMunicipalityid());
         assertEquals(description, course.getDescription());
+        assertEquals(role, course.getRole());
     }
 
     /**

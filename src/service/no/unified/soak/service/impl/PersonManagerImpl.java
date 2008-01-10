@@ -70,4 +70,10 @@ public class PersonManagerImpl extends BaseManager implements PersonManager {
 
         return users;
     }
+    
+    public List getEZRoles() {
+        UserEzDaoJdbc ezDaoJdbc = new UserEzDaoJdbc();
+        List roles = ezDaoJdbc.findRoles();
+        return roles;
+    }
 }

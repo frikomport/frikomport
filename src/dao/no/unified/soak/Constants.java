@@ -121,7 +121,12 @@ public class Constants {
 	 */
 	public static final String EZROLE_COURSEPARTICIPANTS = "Ansatt";
 
-	/**
+    /**
+     * User role in eZ publish for anonumous.
+     */
+    public static final String EZROLE_ANONYMOUS = "Anonymous";
+
+    /**
 	 * Name of cookie for "Remember Me" functionality.
 	 */
 	public static final String LOGIN_COOKIE = "sessionId";
@@ -224,6 +229,11 @@ public class Constants {
 	 */
 	public static final String EZ_MUNICIPALITY = "eZMunicipality";
 
+	/**
+     * Key string for transporting eZ publish user roles to jsp file.
+     */
+    public static final String EZ_ROLES = "eZroles";
+    
 	/**
 	 * Session scope attribute that holds the locale set by the user. By setting
 	 * this key to the same one that Struts uses, we get synchronization in

@@ -40,6 +40,14 @@ public interface PersonManager extends Manager {
      * @return
      */
     public List getEZResponsibles(EzUser user);
+    
+    /**
+     * Retrieves all roles from eZ publish.
+     * Should perhaps be located in a separate ezmanager.
+     * @param user
+     * @return
+     */
+    public List getEZRoles();
 
     /**
      * Gets person's information based on id.

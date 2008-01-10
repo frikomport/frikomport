@@ -103,7 +103,18 @@
 			</c:choose>
         </td>
     </tr>
-
+    
+    <tr>
+        <th>
+            <fmt:message key="course.role"/>
+        </th>
+        <td>
+            <spring:bind path="course.role">
+            	<c:out value="${status.value}"/>
+            </spring:bind>
+        </td>
+    </tr>
+    
     <tr>
         <th>
             <fmt:message key="course.type"/>

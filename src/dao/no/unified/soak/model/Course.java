@@ -61,6 +61,24 @@ public class Course extends BaseObject implements Serializable {
     private Double feeMunicipal;
     private Double feeExternal;
     private String description;
+    private String role;
+    
+    /**
+     * @return Returns the role.
+     * @hibernate.property column="role" length="50" not-null="true"
+     */
+    public String getRole() {
+        return role;
+    }
+
+    /**
+     * @param role
+     *            The role to set.
+     * @spring.validator type="required"
+     */
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     /**
      * @hibernate.property column="instructorid" not-null="true"

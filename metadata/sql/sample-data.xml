@@ -479,6 +479,7 @@
     <column>locationid</column>
     <column>municipalityid</column>
     <column>description</column>
+    <column>role</column>
     <row>
         <value>1</value>
         <value>86</value>
@@ -501,6 +502,7 @@
         <value>1</value>
         <value>1</value>
         <value>Et høytsvevende kurs om filosofi, estetikk og orale tradisjoner</value>
+        <value>Anonymous</value>
     </row>
     <row>
         <value>2</value>
@@ -524,6 +526,7 @@
         <value>2</value>
         <value>2</value>
         <value>Et kurs om tilpasset opplæring og elevadferd i skolen</value>
+        <value>Anonymous</value>
     </row>
     <row>
         <value>2</value>
@@ -547,6 +550,7 @@
         <value>1</value>
         <value>2</value>
         <value>Gjennomgår krav og forutsetninger for kommunal støtte til barnepass i privat regi</value>
+        <value>Anonymous</value>
     </row>
     <row>
         <value>2</value>
@@ -570,6 +574,7 @@
         <value>2</value>
         <value>2</value>
         <value>Kurs om å takle hverdagen som pensjonist i det reformerte helsenorge</value>
+        <value>Anonymous</value>
     </row>
     <row>
         <value>2</value>
@@ -592,7 +597,9 @@
         <value>Politisk interesserte</value>
         <value>2</value>
         <value>2</value>
-        <value>Videregående kurs om hvordan å presentere troverdige muntlige fremstillinger som bare løselig er forankret i virkelighetens verden. Dette er essensielt og populært materiale for medarbeidere med politiske ambisjoner</value>    </row>
+        <value>Videregående kurs om hvordan å presentere troverdige muntlige fremstillinger som bare løselig er forankret i virkelighetens verden. Dette er essensielt og populært materiale for medarbeidere med politiske ambisjoner</value>
+        <value>Anonymous</value>
+        </row>
   </table>
   <!--Course-END-->
 

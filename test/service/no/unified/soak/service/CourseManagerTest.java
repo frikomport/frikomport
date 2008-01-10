@@ -139,6 +139,7 @@ public class CourseManagerTest extends BaseManagerTestCase {
         course.setLocationid(new Long(2115135111));
         course.setMunicipalityid(new Long(1505726338));
         course.setDescription("Et test kurs");
+        course.setRole("Anonymous");
 
         // set expected behavior on dao
         courseDAO.expects(once()).method("saveCourse").with(same(course))

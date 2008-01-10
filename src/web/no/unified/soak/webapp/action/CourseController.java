@@ -10,6 +10,19 @@
  */
 package no.unified.soak.webapp.action;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Municipalities;
 import no.unified.soak.model.ServiceArea;
@@ -18,22 +31,9 @@ import no.unified.soak.service.MunicipalitiesManager;
 import no.unified.soak.service.ServiceAreaManager;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
-
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 
 /**
@@ -80,6 +80,13 @@ public class CourseController extends BaseFormController {
         
         Date starttime = new Date();
         Date stoptime = null;
+        
+        Boolean isAdmin = (Boolean)request.getAttribute("isAdmin");
+        List<String> roles = (List)request.getAttribute(Constants.EZ_ROLES);
+        if (roles == null) {
+            roles = new ArrayList<String>();
+            roles.add(Constants.EZROLE_ANONYMOUS); // Make sure not logged in users sees anonymous courses
+        }
 
         if (comm != null) {
             course = (Course) comm;
@@ -130,9 +137,22 @@ public class CourseController extends BaseFormController {
 
         // Add all courses to the list
         List courses = courseManager.searchCourses(course, starttime, stoptime);
+        List<Course> filtered = new ArrayList<Course>();
+        
+        // Filter all courses not visible for the user.
+        if (roles != null) {
+            for (Iterator iterator = courses.iterator(); iterator.hasNext();) {
+                Course roleCourse = (Course) iterator.next();
+                if (roles.contains(roleCourse.getRole()) || isAdmin.booleanValue()) {
+                    filtered.add(roleCourse);
+                }
+            }
+        } else { 
+            filtered = courses;
+        }
 
         if (courses != null) {
-            model.put("courseList", courses);
+            model.put("courseList", filtered);
         }
 
         model.put("JSESSIONID", session.getId());
@@ -171,6 +191,13 @@ public class CourseController extends BaseFormController {
         Date starttime = new Date();
         Date stoptime = null;
         
+        Boolean isAdmin = (Boolean)request.getAttribute("isAdmin");
+        List<String> roles = (List)request.getAttribute(Constants.EZ_ROLES);
+        if (roles == null) {
+            roles = new ArrayList<String>();
+            roles.add(Constants.EZROLE_ANONYMOUS); // Make sure not logged in users sees anonymous courses
+        }
+        
         // Check whether we should display historic data as well
         String hist = request.getParameter("historic");
         if ((hist != null) && StringUtils.isNumeric(hist)) {
@@ -202,7 +229,21 @@ public class CourseController extends BaseFormController {
 
         // Add all courses to the list
         List courses = courseManager.searchCourses(course, starttime, stoptime);
-        model.put("courseList", courses);
+        List<Course> filtered = new ArrayList<Course>();
+        
+        // Filter all courses not visible for the user.
+        if (roles != null) {
+            for (Iterator iterator = courses.iterator(); iterator.hasNext();) {
+                Course roleCourse = (Course) iterator.next();
+                if (roles.contains(roleCourse.getRole()) || isAdmin.booleanValue()) {
+                    filtered.add(roleCourse);
+                }
+            }
+        } else { 
+            filtered = courses;
+        }
+        
+        model.put("courseList", filtered);
         model.put("historic", historic);
         model.put("past", past);
 

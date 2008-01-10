@@ -208,6 +208,21 @@ public class UserEzDaoJdbc {
 		return eZUsers;
 	}
 
+	public List<String> findRoles(){
+	        String sql = "select distinct R.name from ezcontentobject_tree OT, ezuser_role UR, ezrole R, ezcontentobject_tree OT2"
+	                + " where OT.contentobject_id = UR.contentobject_id and OT.node_id = OT2.parent_node_id"
+	                + " and UR.role_id = R.id"
+	                + " and R.name in ('"+ Constants.EZROLE_COURSERESPONSIBLE +"','"
+	                + Constants.EZROLE_COURSEPARTICIPANTS+"','"
+	                + Constants.EZROLE_EDUCATIONMANAGER+"','"
+	                + Constants.EZROLE_ANONYMOUS+"' )";
+	        SqlRowSet rowSet = jt.queryForRowSet(sql);
+	        List<String> roles = new LinkedList();
+	        while (rowSet.next()) {
+	            roles.add(rowSet.getString("name"));
+	        }
+	        return roles;
+	}
 	/**
 	 * @param args
 	 */

@@ -10,13 +10,11 @@
  */
 package no.unified.soak.ez;
 
-import no.unified.soak.model.BaseObject;
-
 import java.io.Serializable;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
+
+import no.unified.soak.model.BaseObject;
 
 
 /**
@@ -63,11 +61,7 @@ public class EzUser extends BaseObject implements Serializable {
     }
 
     public boolean hasRolename(String rolename) {
-        if (rolenames.contains(rolename)) {
-            return true;
-        }
-
-        return false;
+        return rolenames.contains(rolename);
     }
 
     /**
