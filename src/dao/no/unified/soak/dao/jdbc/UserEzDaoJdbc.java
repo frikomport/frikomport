@@ -212,7 +212,8 @@ public class UserEzDaoJdbc {
 	        String sql = "select distinct R.name from ezcontentobject_tree OT, ezuser_role UR, ezrole R, ezcontentobject_tree OT2"
 	                + " where OT.contentobject_id = UR.contentobject_id and OT.node_id = OT2.parent_node_id"
 	                + " and UR.role_id = R.id"
-	                + " and R.id = 1 or R.id > 5"; 
+	                + " and R.id = 1 or R.id > 5"
+	                + " order by R.id"; 
 	        SqlRowSet rowSet = jt.queryForRowSet(sql);
 	        List<String> roles = new LinkedList();
 	        while (rowSet.next()) {
