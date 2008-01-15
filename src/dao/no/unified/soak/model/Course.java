@@ -598,5 +598,6 @@ public class Course extends BaseObject implements Serializable {
     	this.setReminder(original.getReminder());
     	this.setMaxAttendants(original.getMaxAttendants());
     	this.setReservedMunicipal(original.getReservedMunicipal());
+    	this.setRole(original.getRole());
     }
 }
