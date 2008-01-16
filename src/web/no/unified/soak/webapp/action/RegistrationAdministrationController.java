@@ -35,6 +35,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -130,6 +131,17 @@ public class RegistrationAdministrationController extends BaseFormController {
 
 		if (course != null) {
 			model.put("course", course);
+			
+            Date today = new Date();
+            Boolean allowRegistration = new Boolean(false);
+
+            if (today.before(course.getRegisterBy())
+                    && (course.getRegisterStart() == null || today
+                            .after(course.getRegisterStart()))) {
+                allowRegistration = new Boolean(true);
+            }
+
+            model.put("allowRegistration", allowRegistration);
 		}
 
 		/*
