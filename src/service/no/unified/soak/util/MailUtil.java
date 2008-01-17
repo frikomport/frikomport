@@ -111,6 +111,13 @@ public class MailUtil {
 	public static StringBuffer createStandardBody(Course course, int event, Locale locale, MessageSource messageSource,
 			String mailComment, boolean reservationConfirmed) {
 		StringBuffer msg = new StringBuffer();
+		
+        // Include user defined comment if specified
+        if (mailComment != null && StringUtils.isNotBlank(mailComment)) {
+            msg.append("\n");
+            msg.append(mailComment);
+            msg.append("\n");
+        }
 
 		// Build mail
 		switch (event) {
@@ -155,7 +162,7 @@ public class MailUtil {
 			break;
 		}
 		msg.append("\n\n");
-
+		
 		// Include all the course details
 		msg.append(StringEscapeUtils.unescapeHtml(getText("course.name", locale, messageSource)) + ": "
 				+ course.getName() + "\n");
@@ -187,13 +194,6 @@ public class MailUtil {
 				+ course.getInstructor().getName() + "\n");
 		msg.append(StringEscapeUtils.unescapeHtml(getText("course.description", locale, messageSource)) + ": "
 				+ course.getDescription() + "\n");
-
-		// Include user defined comment if specified
-		if (mailComment != null && StringUtils.isNotBlank(mailComment)) {
-			msg.append("\n");
-			msg.append(mailComment);
-			msg.append("\n");
-		}
 
 		// We cannot link to a deleted course, so the link is only displayed if
 		// the course still exists
