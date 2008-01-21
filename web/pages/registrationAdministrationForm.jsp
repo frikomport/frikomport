@@ -231,6 +231,18 @@
 			</spring:bind>
 		</td>
 	</tr>
+	
+	<c:if test="${allowRegistration == true && isCourseFull == true}">
+    <tr>
+        <td colspan="2">
+            <div class="error">
+           		<img src="<c:url value="/images/iconWarning.gif"/>"
+               		alt="<fmt:message key="icon.warning"/>" class="icon" />
+           		<fmt:message key="errors.courseFull.warning"/><br />
+    		</div>
+        </td>
+    </tr>
+	</c:if>
 </table>
 
 <form method="post" action="<c:url value="/administerRegistration.html"/>" name="registrationAdministrationForm" id="registrationAdministrationForm">

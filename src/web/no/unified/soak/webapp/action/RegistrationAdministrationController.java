@@ -142,6 +142,9 @@ public class RegistrationAdministrationController extends BaseFormController {
             }
 
             model.put("allowRegistration", allowRegistration);
+            
+            Integer registrations = registrationManager.getNumberOfAttendants(false, course);
+            model.put("isCourseFull", new Boolean(registrations.intValue() == course.getMaxAttendants()));
 		}
 
 		/*

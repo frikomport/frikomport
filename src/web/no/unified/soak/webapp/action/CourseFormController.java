@@ -206,6 +206,13 @@ public class CourseFormController extends BaseFormController {
 						model.put("attachments", attachments);
 					}
 				}
+				
+                if ((courseid != null) && StringUtils.isNumeric(courseid)
+                        && StringUtils.isNotBlank(courseid)
+                        && (Long.parseLong(courseid) != 0)) {
+                    Integer registrations = registrationManager.getNumberOfAttendants(false, course);
+                    model.put("isCourseFull", new Boolean(registrations.intValue() == course.getMaxAttendants()));
+                }
 			}
 		}
 		return model;
