@@ -211,7 +211,7 @@ public class CourseFormController extends BaseFormController {
                         && StringUtils.isNotBlank(courseid)
                         && (Long.parseLong(courseid) != 0)) {
                     Integer registrations = registrationManager.getNumberOfAttendants(false, course);
-                    model.put("isCourseFull", new Boolean(registrations.intValue() == course.getMaxAttendants()));
+                    model.put("isCourseFull", new Boolean(registrations.intValue() >= course.getMaxAttendants()));
                 }
 			}
 		}

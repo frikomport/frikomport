@@ -396,6 +396,7 @@
             <lib file="${strutsmenu.jar}"/>
             <lib dir="${displaytag.dir}" includes="*.jar"/>
             <lib dir="${poi.dir}" includes="*.jar"/>
+        	<lib dir="${ical4j.dir}" includes="*.jar"/>
             <lib file="${hibernate.jar}"/>
             <lib dir="${hibernate.dir}/lib" includes="*.jar" excludes="jta.jar"/>
             <lib dir="${spring.dir}" includes="*.jar" excludes="*mock.jar"/>

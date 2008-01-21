@@ -71,6 +71,8 @@ public class Registration extends BaseObject implements Serializable {
 	private Long serviceareaid;
 
 	private String locale;
+	
+	private String comment;
 
 	/**
 	 * Default constructor
@@ -448,4 +450,20 @@ public class Registration extends BaseObject implements Serializable {
 				.append("courseid", courseid).append("serviceareaid",
 						serviceareaid).toString();
 	}
+
+    /**
+     * @return the comment
+     * @hibernate.property column="comment" length="100"
+     */
+    public String getComment() {
+        return comment;
+    }
+
+    /**
+     * @param comment the comment to set
+
+     */
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 }

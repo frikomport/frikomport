@@ -165,6 +165,18 @@
 	            </spring:bind>
 	        </td>
 	    </tr>
+	    
+	    <tr>
+	        <th>
+	            <soak:label key="registration.comment"/>
+	        </th>
+	        <td>
+	            <spring:bind path="registration.comment">
+	                <textarea cols="50" rows="2" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>"><c:out value="${status.value}"/></textarea>
+	                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
+	            </spring:bind>
+	        </td>
+   		</tr>
 	
 	    <tr>
 	        <td></td>

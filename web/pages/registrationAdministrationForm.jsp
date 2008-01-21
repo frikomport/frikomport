@@ -271,6 +271,11 @@
 
 	<display:column property="mobilePhone" sortable="true" headerClass="sortable" 
 		titleKey="registration.mobilePhone"/>
+		
+	<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+	<display:column property="comment" sortable="true" headerClass="sortable" 
+		titleKey="registration.comment"/>
+	</c:if>
 
 	<display:column media="html" sortable="true" headerClass="sortable" titleKey="registration.invoiced">
 	<c:if test="${admin == true}">

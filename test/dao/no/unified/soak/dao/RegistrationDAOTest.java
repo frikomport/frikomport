@@ -74,6 +74,9 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		
 		String locale = new String("no");
 		registration.setLocale(locale);
+		
+		String comment = new String("Kommentar");
+		registration.setComment(comment);
 
 		dao.saveRegistration(registration);
 

@@ -117,6 +117,16 @@
         </td>
     </tr>
     <tr>
+        <th>
+            <fmt:message key="registration.comment"/>
+        </th>
+        <td>
+            <spring:bind path="registration.comment">
+            	<c:out value="${status.value}"/>
+            </spring:bind>
+        </td>
+    </tr>
+    <tr>
         <td></td>
 		 <form method="post" action="<c:url value="/listCourses.html"/>" id="registrationCompleteForm">
 
