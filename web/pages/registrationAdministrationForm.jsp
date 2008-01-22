@@ -4,6 +4,8 @@
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
 	<c:set var="admin" value="${true}"/>
 </c:if>
+<fmt:message var="canDelete" key="access.registration.delete"/>
+
 
 <title><fmt:message key="registrationAdministration.title"/></title>
 <content tag="heading">
@@ -313,10 +315,10 @@
 		<c:if test="${registrationList.reserved == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 	</display:column>
 
-	<c:if test="${admin == true}">
+	<c:if test="${admin == true || canDelete == true}">
 	<display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
 	
-		<c:if test="${admin == true}">
+		<c:if test="${admin == true || canDelete == true}">
 			<button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseid" value="${registrationList.courseid}"/></c:url>'">
 				<fmt:message key="button.edit"/>
 			</button>
