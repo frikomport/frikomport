@@ -46,17 +46,18 @@
 		            <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
 		        </spring:bind>
 		    </td>	
-
+		</tr>
+		<tr>
 		    <th>
 		        <soak:label key="registration.course"/>
 		    </th>
-		    <td>
+		    <td colspan="3">
 		        <spring:bind path="registration.courseid">
 					  <select name="<c:out value="${status.expression}"/>">
 					    <c:forEach var="theCourse" items="${courses}">
 					      <option value="<c:out value="${theCourse.id}"/>"
 						      <c:if test="${theCourse.id == registration.courseid}"> selected="selected"</c:if>>
-					        <c:out value="${theCourse.name}"/>
+					        <fmt:formatDate value="${theCourse.startTime}" type="both" pattern="${dateformat}"/> - <c:out value="${theCourse.name}"/>
 					      </option>
 					    </c:forEach>
 					  </select>
