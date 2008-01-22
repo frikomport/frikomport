@@ -15,7 +15,7 @@
     </c:if>
 </spring:bind>
 
-<c:if test="${courseFull != true}">
+<c:if test="${courseFull == false}">
 	<div class="message" style="font-size: 12px"><fmt:message key="registrationComplete.completed"/></div>
 </c:if>
 <c:if test="${courseFull == true}">

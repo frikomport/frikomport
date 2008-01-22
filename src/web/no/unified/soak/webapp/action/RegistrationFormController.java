@@ -237,7 +237,7 @@ public class RegistrationFormController extends BaseFormController {
 				notification.setRegistrationid(registration.getId());
 				notification.setReminderSent(false);
 				notificationManager.saveNotification(notification);
-				key = "registration.added";
+				key = "registrationComplete.completed";
 				saveMessage(request, getText(key, locale));
 
 				// Send an e-mail
