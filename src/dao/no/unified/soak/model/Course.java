@@ -62,6 +62,7 @@ public class Course extends BaseObject implements Serializable {
     private Double feeExternal;
     private String description;
     private String role;
+    private Integer availableAttendants; 
     
     /**
      * @return Returns the role.
@@ -599,5 +600,19 @@ public class Course extends BaseObject implements Serializable {
     	this.setMaxAttendants(original.getMaxAttendants());
     	this.setReservedMunicipal(original.getReservedMunicipal());
     	this.setRole(original.getRole());
+    }
+
+    /**
+     * @return the availableAttendants
+     */
+    public Integer getAvailableAttendants() {
+        return availableAttendants;
+    }
+
+    /**
+     * @param availableAttendants the availableAttendants to set
+     */
+    public void setAvailableAttendants(Integer availableAttendants) {
+        this.availableAttendants = availableAttendants;
     }
 }

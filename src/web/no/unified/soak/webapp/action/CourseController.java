@@ -28,6 +28,7 @@ import no.unified.soak.model.Municipalities;
 import no.unified.soak.model.ServiceArea;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MunicipalitiesManager;
+import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 
 import org.apache.commons.lang.StringUtils;
@@ -45,6 +46,7 @@ public class CourseController extends BaseFormController {
     private CourseManager courseManager = null;
     private MunicipalitiesManager municipalitiesManager = null;
     private ServiceAreaManager serviceAreaManager = null;
+    private RegistrationManager registrationManager = null;
 
     public void setCourseManager(CourseManager courseManager) {
         this.courseManager = courseManager;
@@ -57,6 +59,10 @@ public class CourseController extends BaseFormController {
 
     public void setServiceAreaManager(ServiceAreaManager serviceAreaManager) {
         this.serviceAreaManager = serviceAreaManager;
+    }
+    
+    public void setRegistrationManager(RegistrationManager registrationManager) {
+        this.registrationManager = registrationManager;
     }
 
     /**
@@ -144,6 +150,7 @@ public class CourseController extends BaseFormController {
             for (Iterator iterator = courses.iterator(); iterator.hasNext();) {
                 Course roleCourse = (Course) iterator.next();
                 if (roles.contains(roleCourse.getRole()) || isAdmin.booleanValue()) {
+                    roleCourse.setAvailableAttendants(registrationManager.getAvailability(true, roleCourse));
                     filtered.add(roleCourse);
                 }
             }
@@ -236,6 +243,7 @@ public class CourseController extends BaseFormController {
             for (Iterator iterator = courses.iterator(); iterator.hasNext();) {
                 Course roleCourse = (Course) iterator.next();
                 if (roles.contains(roleCourse.getRole()) || isAdmin.booleanValue()) {
+                    roleCourse.setAvailableAttendants(registrationManager.getAvailability(true, roleCourse));
                     filtered.add(roleCourse);
                 }
             }

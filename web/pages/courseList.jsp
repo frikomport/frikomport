@@ -107,6 +107,16 @@
 		        </spring:bind>
 			</td>
 			<th>
+				<soak:label key="courseSearch.availableAttendants"/>
+			</th>
+			<td>
+		        <spring:bind path="course.availableAttendants">
+	                <input type="text" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" 
+	                    value="<c:out value="${status.value}"/>" />
+	                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>		        
+		        </spring:bind>
+			</td>
+			<th>
 				<soak:label key="courseSearch.type"/>
 			</th>
 			<td>
@@ -146,9 +156,7 @@
          <fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
     
-    <display:column sortable="true" headerClass="sortable" titleKey="course.stopTime" sortProperty="stopTims">
-         <fmt:formatDate value="${courseList.stopTime}" type="both" pattern="${dateformat} ${timeformat}"/>
-    </display:column>
+    <display:column property="availableAttendants" sortable="true" headerClass="sortable" titleKey="course.availableAttendants"/>
 
     <display:column property="duration" sortable="true" headerClass="sortable"
          titleKey="course.duration"/>
