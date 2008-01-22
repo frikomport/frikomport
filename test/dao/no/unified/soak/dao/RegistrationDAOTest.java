@@ -91,6 +91,7 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		assertEquals(reserved, registration.getReserved());
 		assertEquals(serviceareaid, registration.getServiceareaid());
 		assertEquals(locale, registration.getLocale());
+		assertEquals(comment, registration.getComment());
 	}
 
 	/**
