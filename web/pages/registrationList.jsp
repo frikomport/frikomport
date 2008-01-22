@@ -57,7 +57,7 @@
 					    <c:forEach var="theCourse" items="${courses}">
 					      <option value="<c:out value="${theCourse.id}"/>"
 						      <c:if test="${theCourse.id == registration.courseid}"> selected="selected"</c:if>>
-					        <fmt:formatDate value="${theCourse.startTime}" type="both" pattern="${dateformat}"/> - <c:out value="${theCourse.name}"/>
+						      <fmt:formatDate value="${theCourse.startTime}" type="both" pattern="${dateformat} - "/><c:out value="${theCourse.name}"/>
 					      </option>
 					    </c:forEach>
 					  </select>
