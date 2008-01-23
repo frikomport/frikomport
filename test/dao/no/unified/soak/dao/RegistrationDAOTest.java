@@ -138,10 +138,11 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		Long serviceareaId = new Long(1);
 		Boolean reserved = new Boolean(true);
 		Boolean invoiced = new Boolean(true);
+		Boolean attended = new Boolean(false);
 		List limitToCourses = null;
 
 		List courses = dao.getSpecificRegistrations(courseId, municipalityId,
-				serviceareaId, reserved, invoiced, limitToCourses);
+				serviceareaId, reserved, invoiced, attended, limitToCourses);
 		assertTrue(courses.size() == 1);
 	}
 

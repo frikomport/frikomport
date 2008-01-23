@@ -84,7 +84,7 @@ public interface RegistrationDAO extends DAO {
 	public Integer getNumberOfAttendants(Boolean localOnly, Course course,
 			Boolean reserved);
 
-	/**
+    /**
 	 * Returns a list of registration based on serveral given vital attributes.
 	 * If a parameter is set to null, it is ignored, hence a call to this
 	 * function with all the parameters set to null would return all
@@ -92,23 +92,25 @@ public interface RegistrationDAO extends DAO {
 	 * 
 	 * @param courseId
 	 *            Restrict list to registrations to this specific course
-	 * @param municipalityId
+     * @param municipalityId
 	 *            Restrict list to registrations where the registered user
 	 *            belongs to this specific municipality
-	 * @param serviceareaId
+     * @param serviceareaId
 	 *            Restrict list to registrations where the registered user
 	 *            belongs to this service area
-	 * @param reserved
+     * @param reserved
 	 *            Restrict list to registrations where the registration is
 	 *            confirmed (true) or on waiting list (false)
-	 * @param invoiced
+     * @param invoiced
 	 *            Restrict list to registrations where the registration has been
 	 *            invoiced (true) or not (false)
+     * @param attended Restrict list to registrations where the course has been
+     *            attended (true) or not (false)
 	 * @return List of Courses
 	 */
 	public List getSpecificRegistrations(Long courseId, Long municipalityId,
 			Long serviceareaId, Boolean reserved, Boolean invoiced, 
-			Collection limitToCourses);
+			Boolean attended, Collection limitToCourses);
 
 	/**
 	 * Returns all registrations that are not confirmed (and thus are on the

@@ -446,7 +446,7 @@ public class CourseFormController extends BaseFormController {
 			} else {
 				List<Registration> registrations = registrationManager
 						.getSpecificRegistrations(course.getId(), null, null,
-								null, null, null);
+								null, null, null, null);
 				if (registrations.isEmpty()) {
 					model.put("enablemail", "false");
 				} else {
@@ -498,7 +498,7 @@ public class CourseFormController extends BaseFormController {
 		// Get all registrations
 		List<Registration> registrations = registrationManager
 		.getSpecificRegistrations(course.getId(), null, null, null,
-				null, null);
+				null, null, null);
 
 		// Build standard e-mail body
 		StringBuffer msg = MailUtil.createStandardBody(course, event, locale, messageSource, mailComment);

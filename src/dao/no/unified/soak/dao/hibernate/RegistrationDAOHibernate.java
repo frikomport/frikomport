@@ -165,9 +165,9 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 		return result;
 	}
 
-	public List getSpecificRegistrations(Long courseId, Long municipalityId,
+    public List getSpecificRegistrations(Long courseId, Long municipalityId,
 			Long serviceareaId, Boolean reserved, Boolean invoiced, 
-			Collection limitToCourses) {
+			Boolean attended, Collection limitToCourses) {
 		// The default setup - returns everything
 		DetachedCriteria criteria = DetachedCriteria
 				.forClass(Registration.class);
@@ -198,6 +198,11 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 		if (invoiced != null) {
 			criteria.add(Restrictions.eq("invoiced", invoiced));
 		}
+		
+		// If the course is attended
+	    if (attended != null) {
+	        criteria.add(Restrictions.eq("attended", attended));
+	    }
 
         if (limitToCourses != null) {
         	if (limitToCourses.isEmpty() == false) {

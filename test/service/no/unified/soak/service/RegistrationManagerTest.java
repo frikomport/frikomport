@@ -157,12 +157,13 @@ public class RegistrationManagerTest extends BaseManagerTestCase {
         Long serviceareaId = new Long(1);
         Boolean reserved = new Boolean(true);
         Boolean invoiced = new Boolean(true);
+        Boolean attended = new Boolean(true);
 		List limitToCourses = null;
 
         registrationDAO.expects(once()).method("getSpecificRegistrations")
                        .will(returnValue(new ArrayList()));
         registrationManager.getSpecificRegistrations(courseId, municipalityId,
-            serviceareaId, reserved, invoiced, limitToCourses);
+            serviceareaId, reserved, invoiced, attended, limitToCourses);
         registrationDAO.verify();
     }
 

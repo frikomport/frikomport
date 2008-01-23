@@ -178,7 +178,7 @@ private void sendMail(Locale locale, Course course, int event, String mailCommen
 		log.debug("Sending mail from CourseNotificationController");
 		List<Registration> registrations = registrationManager
 				.getSpecificRegistrations(course.getId(), null, null, null,
-						null, null);
+						null, null, null);
 		
 		StringBuffer msg = MailUtil.createStandardBody(course, event, locale, messageSource, mailComment);
 		ArrayList<SimpleMailMessage> emails = MailUtil.setMailInfo(registrations, event, course, msg, messageSource, locale);

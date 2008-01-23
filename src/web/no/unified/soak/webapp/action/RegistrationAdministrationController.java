@@ -173,7 +173,7 @@ public class RegistrationAdministrationController extends BaseFormController {
 		}
 
 		List registrations = registrationManager.getSpecificRegistrations(new Long(courseId), null, null, null, null,
-				null);
+				null, null);
 		registrationsBackingObject.setRegistrations(registrations);
 
 		return registrationsBackingObject;
@@ -229,7 +229,7 @@ public class RegistrationAdministrationController extends BaseFormController {
 					saveMessage(request, getText(key, locale));
 				}
 
-				String key = "registrationlist.updated";
+				String key = "registrationList.updated";
 				saveMessage(request, getText(key, locale));
 			}
 		}

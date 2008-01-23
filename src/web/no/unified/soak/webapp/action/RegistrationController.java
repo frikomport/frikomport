@@ -82,6 +82,7 @@ public class RegistrationController extends BaseFormController {
 
         Boolean reserved = null;
         Boolean invoiced = null;
+        Boolean attended = null;
         Locale locale = request.getLocale();
 
         Registration registration = new Registration();
@@ -136,6 +137,7 @@ public class RegistrationController extends BaseFormController {
         model = addMunicipalities(model, locale);
         model = addReserved(model, locale);
         model = addInvoiced(model, locale);
+        model = addAttended(model, locale);
         
         List courses = getCourses(locale, historic);
         List courseIds = null;
@@ -150,15 +152,17 @@ public class RegistrationController extends BaseFormController {
         model.put("historic", historic);
         model.put("reservedValue", new Integer(2));
         model.put("invoicedValue", new Integer(2));
+        model.put("attendedValue", new Integer(2));
 
         // These are set to false to trick the jsp
         registration.setInvoiced(new Boolean(false));
         registration.setReserved(new Boolean(false));
+        registration.setAttended(new Boolean(false));
 
         // Fetch all registrations that match the parameters
         List registrations = registrationManager.getSpecificRegistrations(registration.getCourseid(),
                 registration.getMunicipalityid(),
-                registration.getServiceareaid(), reserved, invoiced, courseIds);
+                registration.getServiceareaid(), reserved, invoiced, attended, courseIds);
 
         if (registrations != null) {
             model.put("registrationList", registrations);
@@ -186,6 +190,7 @@ public class RegistrationController extends BaseFormController {
         Locale locale = request.getLocale();
         Integer reservedParameter = 0;
         Integer invoicedParameter = 0;
+        Integer attendedParameter = 0;
         Boolean historic = new Boolean(false);
 
         // Fetch the form's command object
@@ -201,8 +206,9 @@ public class RegistrationController extends BaseFormController {
 
         String reservedRequest = request.getParameter("reservedField");
         String invoicedRequest = request.getParameter("invoicedField");
+        String attendedRequest = request.getParameter("attendedField");
 
-        // Check the "boolean" values for invoiced and reserved
+        // Check the "boolean" values for invoiced, reserved and attended
         if ((reservedRequest != null) && (reservedRequest.compareTo("0") == 0)) {
             registration.setReserved(new Boolean(false));
         } else if ((reservedRequest != null) &&
@@ -222,6 +228,16 @@ public class RegistrationController extends BaseFormController {
                 (invoicedRequest.compareTo("2") == 0)) {
             registration.setInvoiced(null);
         }
+        
+        if ((attendedRequest != null) && (attendedRequest.compareTo("0") == 0)) {
+            registration.setAttended(new Boolean(false));
+        } else if ((attendedRequest != null) &&
+                (attendedRequest.compareTo("1") == 0)) {
+            registration.setAttended(new Boolean(true));
+        } else if ((attendedRequest != null) &&
+                (attendedRequest.compareTo("2") == 0)) {
+            registration.setAttended(null);
+        }
 
         if ((invoicedRequest != null) &&
                 StringUtils.isNumeric(invoicedRequest)) {
@@ -232,6 +248,11 @@ public class RegistrationController extends BaseFormController {
                 StringUtils.isNumeric(reservedRequest)) {
             reservedParameter = new Integer(reservedRequest);
         }
+        
+        if ((attendedRequest != null) &&
+                StringUtils.isNumeric(attendedRequest)) {
+            attendedParameter = new Integer(attendedRequest);
+        }
 
         // Set up parameters, and return them to the view
         Map model = new HashMap();
@@ -239,10 +260,12 @@ public class RegistrationController extends BaseFormController {
         model = addMunicipalities(model, locale);
         model = addReserved(model, locale);
         model = addInvoiced(model, locale);
+        model = addAttended(model, locale);
         model.put("registration", registration);
         model.put("historic", historic);
         model.put("reservedValue", reservedParameter);
         model.put("invoicedValue", invoicedParameter);
+        model.put("attendedValue", attendedParameter);
         
         session.setAttribute("registration", registration);
 
@@ -261,7 +284,7 @@ public class RegistrationController extends BaseFormController {
             registrationManager.getSpecificRegistrations(
                 registration.getCourseid(), registration.getMunicipalityid(),
                 registration.getServiceareaid(), registration.getReserved(),
-                registration.getInvoiced(), courseIds));
+                registration.getInvoiced(), registration.getAttended(), courseIds));
 
         return new ModelAndView(getSuccessView(), model);
     }
@@ -386,8 +409,8 @@ public class RegistrationController extends BaseFormController {
 
         HashMap reserver = new HashMap();
         reserver.put("null", getText("misc.all", locale));
-        reserver.put("true", getText("registrationlist.reserved", locale));
-        reserver.put("false", getText("registrationlist.notReserved", locale));
+        reserver.put("true", getText("registrationList.reserved", locale));
+        reserver.put("false", getText("registrationList.notReserved", locale));
 
         model.put("reserved", reserver);
 
@@ -415,6 +438,32 @@ public class RegistrationController extends BaseFormController {
 
         if (invoiced != null) {
             model.put("invoiced", invoiced);
+        }
+
+        return model;
+    }
+    
+    /**
+     * Creates a list of choices for "attended" to be used in drop-down box
+     *
+     * @param model
+     *            model to send to the view
+     * @param locale
+     *            currently used locale
+     * @return map with all/attended/not attended
+     */
+    private Map addAttended(Map model, Locale locale) {
+        if (model == null) {
+            model = new HashMap();
+        }
+
+        HashMap attended = new HashMap();
+        attended.put("null", getText("misc.all", locale));
+        attended.put("true", getText("registrationList.attended", locale));
+        attended.put("false", getText("registrationList.notAttended", locale));
+
+        if (attended != null) {
+            model.put("attended", attended);
         }
 
         return model;

@@ -95,11 +95,12 @@ public interface RegistrationManager extends Manager {
      * @param serviceareaId Restrict list to registrations where the registered user belongs to this service area
      * @param reserved Restrict list to registrations where the registration is confirmed (true) or on waiting list (false)
      * @param invoiced Restrict list to registrations where the registration has been invoiced (true) or not (false)
+     * @param attended Restrict list to registrations where the course is attended (true) or not (false)
      * @return List of Courses
      */
     public List getSpecificRegistrations(Long courseId, Long municipalityId,
         Long serviceareaId, Boolean reserved, Boolean invoiced, 
-        Collection limitToCourses);
+        Boolean attended, Collection limitToCourses);
 
     /**
      * Returns all registrations that are not confirmed (and thus are on the waiting list)

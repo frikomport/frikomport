@@ -97,16 +97,16 @@ public class RegistrationManagerImpl extends BaseManager implements
 		return dao.getNumberOfAttendants(localOnly, course, reserved);
 	}
 
-	/**
+    /**
 	 * @see no.unified.soak.service.RegistrationManager#getSpecificRegistrations(java.lang.Long,
 	 *      java.lang.Long, java.lang.Long, java.lang.Boolean,
 	 *      java.lang.Boolean)
 	 */
 	public List getSpecificRegistrations(Long courseId, Long municipalityId,
 			Long serviceareaId, Boolean reserved, Boolean invoiced, 
-			Collection limitToCourses) {
+			Boolean attended, Collection limitToCourses) {
 		return dao.getSpecificRegistrations(courseId, municipalityId,
-				serviceareaId, reserved, invoiced, limitToCourses);
+				serviceareaId, reserved, invoiced, attended, limitToCourses);
 	}
 
 	/**

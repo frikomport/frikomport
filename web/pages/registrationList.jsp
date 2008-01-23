@@ -90,6 +90,16 @@
 		    </td>
 		</tr>
 		<tr>
+		   	<th>
+				<soak:label key="registration.attended"/>
+		    </th>
+		    <td>
+				  <select id="attendedField" name="attendedField">
+				      <option value="2" <c:if test="${attendedValue == 2}"> selected </c:if> /> <c:out value='${attended["null"]}'/></option>
+				      <option value="1" <c:if test="${attendedValue == 1}"> selected </c:if> /> <c:out value='${attended["true"]}'/></option>
+				      <option value="0" <c:if test="${attendedValue == 0}"> selected </c:if> /> <c:out value='${attended["false"]}'/></option>
+				  </select>
+		    </td>
 		    <th>
 				<soak:label key="course.includeHistoric"/>
 		    </th>
@@ -98,6 +108,7 @@
 		    	<INPUT type="checkbox" id="historic" name="historic" value="1" 
 		    	<c:if test="${historic == true}"> checked </c:if> />
 		    </td>
+ 
 	        <td class="buttonBar">            
 			<button type="submit" name="search" onclick="bCancel=false" style="margin-right: 5px">
 				<fmt:message key="button.search"/>
@@ -150,6 +161,12 @@
          titleKey="registration.invoiced">
 		<c:if test="${registrationList.invoiced == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${registrationList.invoiced == false}"><fmt:message key="checkbox.unchecked"/></c:if>
+    </display:column>
+    
+    <display:column sortable="true" headerClass="sortable"
+         titleKey="registration.attended">
+		<c:if test="${registrationList.attended == true}"><fmt:message key="checkbox.checked"/></c:if>
+		<c:if test="${registrationList.attended == false}"><fmt:message key="checkbox.unchecked"/></c:if>
     </display:column>
 
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
