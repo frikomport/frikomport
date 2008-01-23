@@ -263,10 +263,14 @@ public class RegistrationAdministrationController extends BaseFormController {
 			String hiddenReservedCheckbox = request.getParameter("_reserved" + thisRegistration.getId().toString()); 
 			String invoicedCheckbox = request.getParameter("invoiced_" + thisRegistration.getId().toString());
 			String hiddenInvoicedCheckbox = request.getParameter("_invoiced" + thisRegistration.getId().toString()); 
+			String attendedCheckbox = request.getParameter("attended_" + thisRegistration.getId().toString());
+			String hiddenAttendedCheckbox = request.getParameter("_attended" + thisRegistration.getId().toString()); 
 			boolean reserved = checkboxToBoolean(reservedCheckbox);
 			boolean hiddenReservedPresent = checkboxToBoolean(hiddenReservedCheckbox);
 			boolean invoiced = checkboxToBoolean(invoicedCheckbox);
-			boolean hiddenInvoicedPresent = checkboxToBoolean(hiddenInvoicedCheckbox); 
+			boolean hiddenInvoicedPresent = checkboxToBoolean(hiddenInvoicedCheckbox);
+			boolean attended = checkboxToBoolean(attendedCheckbox);
+			boolean hiddenAttendedPresent = checkboxToBoolean(hiddenAttendedCheckbox);
 
 			// Check if reserved is changed
 			if (thisRegistration.getReserved().booleanValue() != reserved && hiddenReservedPresent) {
@@ -288,6 +292,12 @@ public class RegistrationAdministrationController extends BaseFormController {
 				changed = true;
 				thisRegistration.setInvoiced(new Boolean(invoiced));
 			}
+			
+	         // Check if attended is changed
+            if (thisRegistration.getAttended().booleanValue() != attended && hiddenAttendedPresent) {
+                changed = true;
+                thisRegistration.setAttended(new Boolean(attended));
+            }
 
 			if (changed) {
 				runWaitingList = true;

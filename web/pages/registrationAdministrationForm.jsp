@@ -314,6 +314,24 @@
 		<c:if test="${registrationList.reserved == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${registrationList.reserved == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 	</display:column>
+	
+	<display:column media="html" sortable="true" headerClass="sortable" titleKey="registration.attended">
+	<c:if test="${admin == true}">
+		<input type="hidden" name="_attended<c:out value="${registrationList.id}"/>" value="visible"/>
+		<input type="checkbox" name="attended_<c:out value="${registrationList.id}"/>"
+		<c:if test="${registrationList.attended == true}"> CHECKED </c:if> />
+	</c:if>
+	<c:if test="${admin == false}">
+		<input type="hidden" name="_attended<c:out value="${registrationList.id}"/>" value="visible"/>
+		<input type="hidden" name="attended_<c:out value="${registrationList.id}"/>" value="${registrationList.attended}" />
+		<c:if test="${registrationList.attended == true}"><fmt:message key="checkbox.checked"/></c:if>
+		<c:if test="${registrationList.attended == false}"><fmt:message key="checkbox.unchecked"/></c:if>
+	</c:if>
+	</display:column>
+	<display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="registration.attended">
+		<c:if test="${registrationList.attended == true}"><fmt:message key="checkbox.checked"/></c:if>
+		<c:if test="${registrationList.attended == false}"><fmt:message key="checkbox.unchecked"/></c:if>
+	</display:column>
 
 	<c:if test="${admin == true || canDelete == true}">
 	<display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">

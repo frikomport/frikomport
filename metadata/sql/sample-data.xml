@@ -624,6 +624,7 @@
     <column>usemailaddress</column>
     <column>locale</column>
     <column>comment</column>
+    <column>attended</column>
     <row>
         <value>1</value>
         <value>frikomport@gmail.com</value>
@@ -643,6 +644,7 @@
         <value>Harald Haraldsensvei 11, 9999 Haraldsen</value>
         <value>no</value>
         <value></value>
+        <value>0</value>
     </row>
     <row>
         <value>2</value>
@@ -663,6 +665,7 @@
         <value>Heidi Heidisensvei 99, 9998 Heidistad</value>
         <value>no</value>
         <value></value>
+        <value>0</value>
     </row>
     <row>
         <value>1</value>
@@ -683,6 +686,7 @@
         <value>Jarle Jarlsesensvei 27, 9997 Jarlestølen</value>
         <value>no</value>
         <value></value>
+        <value>0</value>
     </row>
     <row>
         <value>2</value>				<!-- CourseId -->
@@ -703,6 +707,7 @@
         <value>Kari Karisdatterveg 2A, 9996 Karimoen</value> <!-- useemailaddress -->
         <value>no</value>
         <value></value>
+        <value>0</value>
     </row>
     <row>
         <value>1</value>				<!-- CourseId -->
@@ -723,6 +728,7 @@
         <value>Kari Karisdatterveg 2A, 9996 Karimoen</value> <!-- useemailaddress -->
         <value>no</value>
         <value></value>
+        <value>0</value>
     </row>
     <row>
         <value>1</value>				<!-- CourseId -->
@@ -743,6 +749,7 @@
         <value>Kari Karisdatterveg 2A, 9996 Karimoen</value> <!-- useemailaddress -->
         <value>no</value>
         <value></value>
+        <value>0</value>
     </row>
     <row>
         <value>1</value>				<!-- CourseId -->
@@ -763,6 +770,7 @@
         <value>Kari Karisdatterveg 2A, 9996 Karimoen</value> <!-- useemailaddress -->
         <value>no</value>
         <value></value>
+        <value>0</value>
     </row>
     <row>
         <value>1</value>				<!-- CourseId -->
@@ -783,6 +791,7 @@
         <value>Kari Karisdatterveg 2A, 9996 Karimoen</value> <!-- useemailaddress -->
         <value>no</value>
         <value></value>
+        <value>0</value>
     </row>
     <row>
         <value>1</value>				<!-- CourseId -->
@@ -803,6 +812,7 @@
         <value>Kari Karisdatterveg 2A, 9996 Karimoen</value> <!-- useemailaddress -->
         <value>no</value>
         <value></value>
+        <value>0</value>
     </row>
     <row>
         <value>1</value>				<!-- CourseId -->
@@ -823,6 +833,7 @@
         <value>Kari Karisdatterveg 2A, 9996 Karimoen</value> <!-- useemailaddress -->
         <value>no</value>
         <value></value>
+        <value>0</value>
     </row>
   </table>
   <!--Registration-END-->

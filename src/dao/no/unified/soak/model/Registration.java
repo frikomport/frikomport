@@ -73,6 +73,8 @@ public class Registration extends BaseObject implements Serializable {
 	private String locale;
 	
 	private String comment;
+	
+	private Boolean attended;
 
 	/**
 	 * Default constructor
@@ -82,6 +84,7 @@ public class Registration extends BaseObject implements Serializable {
 		reserved = new Boolean(false);
 		registered = new Date();
 		invoiced = new Boolean(false);
+		attended = new Boolean(false);
 	}
 
 	/**
@@ -465,5 +468,20 @@ public class Registration extends BaseObject implements Serializable {
      */
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    /**
+     * @return the attended
+     * @hibernate.property column="attended" not-null="true"
+     */
+    public Boolean getAttended() {
+        return attended;
+    }
+
+    /**
+     * @param attended the attended to set
+     */
+    public void setAttended(Boolean attended) {
+        this.attended = attended;
     }
 }

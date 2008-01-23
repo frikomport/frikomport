@@ -77,6 +77,9 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		
 		String comment = new String("Kommentar");
 		registration.setComment(comment);
+		
+		Boolean attended = new Boolean(false);
+		registration.setAttended(attended);
 
 		dao.saveRegistration(registration);
 
@@ -92,6 +95,7 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		assertEquals(serviceareaid, registration.getServiceareaid());
 		assertEquals(locale, registration.getLocale());
 		assertEquals(comment, registration.getComment());
+		assertEquals(attended, registration.getAttended());
 	}
 
 	/**
@@ -168,6 +172,9 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 
 		Long serviceareaid = new Long(2);
 		registration.setServiceareaid(serviceareaid);
+		
+		Boolean attended = new Boolean("false");
+		registration.setAttended(attended);
 
 		dao.saveRegistration(registration);
 
@@ -177,6 +184,7 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		assertEquals(registered, registration.getRegistered());
 		assertEquals(reserved, registration.getReserved());
 		assertEquals(serviceareaid, registration.getServiceareaid());
+		assertEquals(attended, registration.getAttended());
 	}
 
 	/**
