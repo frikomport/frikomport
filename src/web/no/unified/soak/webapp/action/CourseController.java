@@ -133,6 +133,11 @@ public class CourseController extends BaseFormController {
                 past = new Boolean(true);
             }
         }
+        
+        // Remember text searched for
+        if (course.getName() != null) {
+            model.put("searchText", course.getName());
+        }
 
         // Set up parameters, and return them to the view
         model = addServiceAreas(model, locale);
@@ -222,6 +227,12 @@ public class CourseController extends BaseFormController {
                 stoptime = new Date();
                 past = new Boolean(true);
             }
+        }
+        
+        String searchText = request.getParameter("searchText");
+        if (searchText != null) {
+            course.setName(searchText);
+            model.put("searchText", searchText);
         }
 
         Date startInterval = course.getStartTime();

@@ -44,6 +44,14 @@
 		            <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
 		        </spring:bind>
 		    </td>
+		</tr>
+		<tr>
+		    <th>
+		        <soak:label key="courseSearch.text"/>
+		    </th>
+		    <td>
+		    	<input type="text" id="searchText" name="searchText" value="<c:out value="${searchText}"/>" size="20"/>
+		    </td>
 		    
 	    	<input type="hidden" id="past" name="past" 
 	    	<c:if test="${past == true}"> value="1" </c:if>
