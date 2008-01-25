@@ -134,11 +134,6 @@ public class CourseController extends BaseFormController {
             }
         }
         
-        // Remember text searched for
-        if (course.getName() != null) {
-            model.put("searchText", course.getName());
-        }
-
         // Set up parameters, and return them to the view
         model = addServiceAreas(model, locale);
         model = addMunicipalities(model, locale);
@@ -229,12 +224,6 @@ public class CourseController extends BaseFormController {
             }
         }
         
-        String searchText = request.getParameter("searchText");
-        if (searchText != null) {
-            course.setName(searchText);
-            model.put("searchText", searchText);
-        }
-
         Date startInterval = course.getStartTime();
         Date stopInterval = course.getStopTime();
         

@@ -44,15 +44,17 @@
 		            <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
 		        </spring:bind>
 		    </td>
-		</tr>
-		<tr>
+
 		    <th>
-		        <soak:label key="courseSearch.text"/>
+		        <soak:label key="courseSearch.name"/>
 		    </th>
 		    <td>
-		    	<input type="text" id="searchText" name="searchText" value="<c:out value="${searchText}"/>" size="20"/>
+		    	<spring:bind path="course.name">
+		    		<input type="text" id="<c:out value="${status.expression}"/>" name="<c:out value="${status.expression}"/>" value="<c:out value="${status.value}"/>" size="15"/>
+		    	</spring:bind>
 		    </td>
-		    
+		</tr>
+		<tr>
 	    	<input type="hidden" id="past" name="past" 
 	    	<c:if test="${past == true}"> value="1" </c:if>
 	    	<c:if test="${past == false}"> value="0" </c:if> 
