@@ -185,6 +185,7 @@ public class RegistrationManagerTest extends BaseManagerTestCase {
         registration.setRegistered(new Date());
         registration.setReserved(new Boolean("false"));
         registration.setServiceareaid(new Long(1));
+        registration.setAttended(new Boolean(false));
 
         // set expected behavior on dao
         registrationDAO.expects(once()).method("saveRegistration")

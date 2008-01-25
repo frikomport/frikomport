@@ -127,6 +127,19 @@
 	            </spring:bind>
 	        </td>
 	    </tr>
+	    
+	    <tr>
+	        <th>
+	            <soak:label key="registration.workplace"/>
+	        </th>
+	        <td>
+	            <spring:bind path="registration.workplace">
+	                <input type="text" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" 
+	                    value="<c:out value="${status.value}"/>" />
+	                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
+	            </spring:bind>
+	        </td>
+	    </tr>
 	
 	    <tr>
 	        <th>

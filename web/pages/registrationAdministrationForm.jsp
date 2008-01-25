@@ -268,6 +268,9 @@
 	<display:column property="jobTitle" sortable="true" headerClass="sortable" 
 		titleKey="registration.jobTitle"/>
 
+	<display:column property="workplace" sortable="true" headerClass="sortable" 
+		titleKey="registration.workplace"/>
+		
 	<display:column property="phone" sortable="true" headerClass="sortable" 
 		titleKey="registration.phone"/>
 

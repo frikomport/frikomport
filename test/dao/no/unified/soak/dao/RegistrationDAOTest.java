@@ -80,6 +80,9 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		
 		Boolean attended = new Boolean(false);
 		registration.setAttended(attended);
+		
+		String workplace = "Arbeidssted";
+		registration.setWorkplace(workplace);
 
 		dao.saveRegistration(registration);
 
@@ -96,6 +99,7 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		assertEquals(locale, registration.getLocale());
 		assertEquals(comment, registration.getComment());
 		assertEquals(attended, registration.getAttended());
+		assertEquals(workplace, registration.getWorkplace());
 	}
 
 	/**

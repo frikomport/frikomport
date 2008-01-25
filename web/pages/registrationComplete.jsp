@@ -98,6 +98,16 @@
     </tr>
     <tr>
         <th>
+            <fmt:message key="registration.workplace"/>
+        </th>
+        <td>
+            <spring:bind path="registration.workplace">
+            	<c:out value="${status.value}"/>
+            </spring:bind>
+        </td>
+    </tr>
+    <tr>
+        <th>
             <fmt:message key="registration.municipality"/>
         </th>
         <td>

@@ -75,6 +75,8 @@ public class Registration extends BaseObject implements Serializable {
 	private String comment;
 	
 	private Boolean attended;
+	
+	private String workplace;
 
 	/**
 	 * Default constructor
@@ -483,5 +485,20 @@ public class Registration extends BaseObject implements Serializable {
      */
     public void setAttended(Boolean attended) {
         this.attended = attended;
+    }
+
+    /**
+     * @return the workplace
+     * @hibernate.property column="workplace" length="100"
+     */
+    public String getWorkplace() {
+        return workplace;
+    }
+
+    /**
+     * @param workplace the workplace to set
+     */
+    public void setWorkplace(String workplace) {
+        this.workplace = workplace;
     }
 }
