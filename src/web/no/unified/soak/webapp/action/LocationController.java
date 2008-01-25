@@ -68,14 +68,14 @@ public class LocationController extends BaseFormController {
         if (command != null) {
             location = (Location) command;
         }
-
+        
         // Don't modify municipality if in postback
         String postback = request.getParameter("ispostbacklocationlist");
         if ((postback == null) || (postback.compareTo("1") != 0)) {
-	        Object omid = request.getAttribute(Constants.EZ_MUNICIPALITY);
-	        if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
-	            location.setMunicipalityid(new Long(omid.toString()));
-	        }
+//	        Object omid = request.getAttribute(Constants.EZ_MUNICIPALITY);
+//	        if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
+//	            location.setMunicipalityid(new Long(omid.toString()));
+//	        }
 
         	// Check if a specific municipality has been requested
 	        String mid = request.getParameter("mid");
