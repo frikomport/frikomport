@@ -330,8 +330,7 @@ public class CourseFormController extends BaseFormController {
 		else {
 			log.debug("recieved 'save/update' from jsp");
 			// Parse date and time fields together
-			String format = getText("date.format", request.getLocale()) + " "
-					+ getText("time.format", request.getLocale());
+			String format = getText("date.format", request.getLocale()) + " " + getText("time.format", request.getLocale());
 			Object[] args = null;
 
 			try {
@@ -469,9 +468,10 @@ public class CourseFormController extends BaseFormController {
 		return new ModelAndView(getSuccessView(), model);
 	}
 
-	private Date parseDateAndTime(HttpServletRequest request, String fieldName,
-			String format) throws ParseException {
-		DateFormat formatter = new SimpleDateFormat(format);
+    private Date parseDateAndTime(HttpServletRequest request, String fieldName, String format) throws ParseException {
+		SimpleDateFormat formatter = new SimpleDateFormat(format);
+		formatter.setLenient(false);
+//		formatter.set2DigitYearStart(formatter.parse("01.01.2000 00:00"));
 		String date = request.getParameter(fieldName + "Date");
 		String time = request.getParameter(fieldName + "Time");
 
