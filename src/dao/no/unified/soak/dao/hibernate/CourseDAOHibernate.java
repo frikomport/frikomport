@@ -10,6 +10,10 @@
  */
 package no.unified.soak.dao.hibernate;
 
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
 import no.unified.soak.dao.CourseDAO;
 import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
 import no.unified.soak.model.Course;
@@ -17,12 +21,7 @@ import no.unified.soak.model.Course;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-
 import org.springframework.orm.ObjectRetrievalFailureException;
-
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 
 
 /**
@@ -31,6 +30,13 @@ import java.util.List;
  * @author hrj
  */
 public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
+    private UserEzDaoJdbc userEzDaoJdbc = null;
+    
+    public void setUserEzDaoJdbc(UserEzDaoJdbc userEzDaoJdbc)
+    {
+        this.userEzDaoJdbc = userEzDaoJdbc;
+    }
+    
     /**
      * @see no.unified.soak.dao.CourseDAO#getCourses(no.unified.soak.model.Course)
      */
@@ -53,8 +59,7 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
         }
 
         if (course.getResponsibleid() != null) {
-            UserEzDaoJdbc ezDaoJdbc = new UserEzDaoJdbc();
-            course.setResponsible(ezDaoJdbc.findKursansvarligUser(
+            course.setResponsible(userEzDaoJdbc.findKursansvarligUser(
                     course.getResponsibleid().intValue()));
         }
 
@@ -120,13 +125,12 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
 
         // Perform search
         List courses = getHibernateTemplate().findByCriteria(criteria);
-        UserEzDaoJdbc ezDaoJdbc = new UserEzDaoJdbc();
 
         for (Iterator iter = courses.iterator(); iter.hasNext();) {
             Course courseItem = (Course) iter.next();
 
             if (courseItem.getResponsibleid() != null) {
-                courseItem.setResponsible(ezDaoJdbc.findKursansvarligUser(
+                courseItem.setResponsible(userEzDaoJdbc.findKursansvarligUser(
                         courseItem.getResponsibleid().intValue()));
             }
         }

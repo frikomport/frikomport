@@ -87,6 +87,10 @@
         <filter token="DB-URL" value="${database.url}"/>
         <filter token="DB-USERNAME" value="${database.username}"/>
         <filter token="DB-PASSWORD" value="${database.password}"/>
+        <filter token="EZDB-DRIVERNAME" value="${ez.database.driver_class}"/>
+        <filter token="EZDB-URL" value="${ez.database.url}"/>
+        <filter token="EZDB-USERNAME" value="${ez.database.username}"/>
+        <filter token="EZDB-PASSWORD" value="${ez.database.password}"/>
     </filterset>
     
     <!-- Copy any resource or configuration files -->

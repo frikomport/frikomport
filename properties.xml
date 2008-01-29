@@ -44,7 +44,16 @@
     <property name="database.url" 
         value="jdbc:${database.type}://${database.host}/${database.name}?autoReconnect=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8"/>
     <property name="database.show_sql" value="true"/>
-    
+	
+	<!-- Defaults for eZ db integration -->
+	<property name="ez.database.type" value="mysql"/>
+    <property name="ez.database.name" value="frikom_ezdb"/>
+    <property name="ez.database.host" value="localhost"/>
+    <property name="ez.database.driver_class" value="com.mysql.jdbc.Driver"/>
+    <property name="ez.database.url" value="jdbc:${ez.database.type}://${ez.database.host}/${ez.database.name}?autoReconnect=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8"/>
+    <property name="ez.database.username" value="frikom"/>
+    <property name="ez.database.password" value="frikom"/>
+	
     <!-- Build and deploy properties -->
     <property environment="env"/>
     <property name="env.COMPUTERNAME" value="${env.HOSTNAME}"/>

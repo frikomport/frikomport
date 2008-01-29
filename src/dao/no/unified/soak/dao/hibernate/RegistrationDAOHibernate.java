@@ -31,8 +31,15 @@ import org.springframework.orm.ObjectRetrievalFailureException;
  * 
  * @author hrj
  */
-public class RegistrationDAOHibernate extends BaseDAOHibernate implements
-		RegistrationDAO {
+public class RegistrationDAOHibernate extends BaseDAOHibernate implements RegistrationDAO {
+    
+    private UserEzDaoJdbc userEzDaoJdbc = null;
+    
+    public void setUserEzDaoJdbc(UserEzDaoJdbc userEzDaoJdbc)
+    {
+        this.userEzDaoJdbc = userEzDaoJdbc;
+    }
+    
 	/**
 	 * @see no.unified.soak.dao.RegistrationDAO#getRegistrations(no.unified.soak.model.Registration)
 	 */
@@ -57,7 +64,6 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 
 		if (course != null) {
 			if ((course != null) && (course.getResponsibleid() != null)) {
-				UserEzDaoJdbc userEzDaoJdbc = new UserEzDaoJdbc();
 				Integer responsibleid = course.getResponsibleid().intValue();
 				course.setResponsible(userEzDaoJdbc
 						.findKursansvarligUser(responsibleid));

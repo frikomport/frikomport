@@ -26,6 +26,12 @@ import java.util.List;
  */
 public class PersonManagerImpl extends BaseManager implements PersonManager {
     private PersonDAO dao;
+    private UserEzDaoJdbc userEzDaoJdbc = null;
+    
+    public void setUserEzDaoJdbc(UserEzDaoJdbc userEzDaoJdbc)
+    {
+        this.userEzDaoJdbc = userEzDaoJdbc;
+    }
 
     /**
      * Set the DAO for communication with the data layer.
@@ -65,15 +71,13 @@ public class PersonManagerImpl extends BaseManager implements PersonManager {
     }
 
     public List getEZResponsibles(EzUser user) {
-        UserEzDaoJdbc ezDaoJdbc = new UserEzDaoJdbc();
-        List users = ezDaoJdbc.findKursansvarligeUser();
+        List users = userEzDaoJdbc.findKursansvarligeUser();
 
         return users;
     }
     
     public List getEZRoles() {
-        UserEzDaoJdbc ezDaoJdbc = new UserEzDaoJdbc();
-        List roles = ezDaoJdbc.findRoles();
+        List roles = userEzDaoJdbc.findRoles();
         return roles;
     }
 }

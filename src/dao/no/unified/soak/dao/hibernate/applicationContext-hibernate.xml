@@ -68,6 +68,11 @@
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
 	
+	<!-- UserEzDaoJdbc: Ez-publish interface -->
+	<bean id="userEzDaoJdbc" class="no.unified.soak.dao.jdbc.UserEzDaoJdbc">
+    	<property name="dataSource" ref="userEzDataSource"/>
+    </bean>
+    
     <!-- Add new DAOs here -->
 
      <!--Location-START-->

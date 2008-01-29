@@ -80,4 +80,13 @@
             <value>true</value>
         </parameter>
     </ResourceParams>
+    
+    <!-- eZ resource -->
+    <Resource name="jdbc/ezdb" auth="Container" type="javax.sql.DataSource"
+    	maxActive="100" maxIdle="30" maxWait="10000" 
+    	username="@EZDB-USERNAME@" password="@EZDB-PASSWORD@" 
+    	driverClassName="@EZDB-DRIVERNAME@" defaultAutoCommit="true" 
+    	url="@EZDB-URL@" removeAbandoned="true" 
+    	removeAbandonedTimeout="60" logAbandoned="true"/>
+
 </Context>

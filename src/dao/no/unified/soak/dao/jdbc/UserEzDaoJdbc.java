@@ -15,17 +15,18 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ResourceBundle;
 
-import no.unified.soak.Constants;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import no.unified.soak.ez.EzUser;
 import no.unified.soak.util.NumConvert;
 
 import org.springframework.dao.DataAccessException;
-
 import org.springframework.jdbc.InvalidResultSetAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 /**
@@ -33,26 +34,24 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
  * 
  */
 public class UserEzDaoJdbc {
-	DriverManagerDataSource dataSource = new DriverManagerDataSource();
+	DataSource dataSource = null;
+	
+	public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
 	JdbcTemplate jt = new JdbcTemplate();
 
 	public UserEzDaoJdbc() {
-		String driver = ResourceBundle.getBundle(Constants.BUNDLE_KEY)
-				.getString("ezpublish.database.driver_class");
-		String url = ResourceBundle.getBundle(Constants.BUNDLE_KEY).getString(
-				"ezpublish.database.url");
-		String user = ResourceBundle.getBundle(Constants.BUNDLE_KEY).getString(
-				"ezpublish.database.username");
-		String pwd = ResourceBundle.getBundle(Constants.BUNDLE_KEY).getString(
-				"ezpublish.database.password");
-
-		dataSource.setDriverClassName(driver);
-		dataSource.setUrl(url);
-		dataSource.setUsername(user);
-		dataSource.setPassword(pwd);
-
-		jt.setDataSource(dataSource);
+        try {
+            Context env = (Context) new InitialContext().lookup("java:comp/env");
+            dataSource = (DataSource) env.lookup("jdbc/ezdb");
+            jt.setDataSource(dataSource);
+        }
+        catch (NamingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 	}
 
 	public EzUser findUserBySessionID(String sessionId) {
@@ -225,8 +224,8 @@ public class UserEzDaoJdbc {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		UserEzDaoJdbc denne = new UserEzDaoJdbc();
-		List users = denne.findKursansvarligeUser();
+		UserEzDaoJdbc userEzDaoJdbc = new UserEzDaoJdbc();
+		List users = userEzDaoJdbc.findKursansvarligeUser();
 		for (Iterator iter = users.iterator(); iter.hasNext();) {
 			EzUser user = (EzUser) iter.next();
 //			System.out.println("ez User: " + user.getId() + ", " + user + " "
