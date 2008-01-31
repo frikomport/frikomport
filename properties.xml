@@ -184,6 +184,10 @@
                 <entry key="hibernate.connection.username" value="${database.username}"/>
                 <entry key="hibernate.connection.password" value="${database.password}"/>
                 <entry key="hibernate.connection.show_sql" value="${database.show_sql}"/>
+                <entry key="ez.connection.driver_class" value="${ez.database.driver_class}"/>
+                <entry key="ez.connection.url" value="${ez.database.url}"/>
+                <entry key="ez.connection.username" value="${ez.database.username}"/>
+                <entry key="ez.connection.password" value="${ez.database.password}"/>   
                 <entry key="dao.type" value="${dao.type}"/>
              </propertyfile>
              <replace file="database.properties" token="amp;" value=""/>

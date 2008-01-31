@@ -38,19 +38,19 @@ public class UserEzDaoJdbc {
 	
 	public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
+        jt.setDataSource(dataSource);
     }
 
 	JdbcTemplate jt = new JdbcTemplate();
 
 	public UserEzDaoJdbc() {
         try {
-            Context env = (Context) new InitialContext().lookup("java:comp/env");
+            Context env = (Context) new InitialContext().lookup("java:comp/env/");
             dataSource = (DataSource) env.lookup("jdbc/ezdb");
             jt.setDataSource(dataSource);
         }
         catch (NamingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            // Do nothing e.printStackTrace();
         }
 	}
 

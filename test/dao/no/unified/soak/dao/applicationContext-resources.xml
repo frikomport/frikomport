@@ -17,4 +17,11 @@
         <property name="username" value="${hibernate.connection.username}"/>
         <property name="password" value="${hibernate.connection.password}"/>
     </bean>
+
+    <bean id="userEzDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${ez.connection.driver_class}"/>
+        <property name="url" value="${ez.connection.url}"/>
+        <property name="username" value="${ez.connection.username}"/>
+        <property name="password" value="${ez.connection.password}"/>
+    </bean>
 </beans>

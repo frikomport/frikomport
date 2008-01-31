@@ -292,4 +292,8 @@
         <property name="prefix" value="/WEB-INF/pages/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
+        
+    <bean id="userEzDaoJdbc" class="no.unified.soak.dao.jdbc.UserEzDaoJdbc">
+    	<property name="dataSource" ref="userEzDataSource"/>
+    </bean>
 </beans>
