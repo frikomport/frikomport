@@ -286,7 +286,7 @@
 	<c:if test="${admin == true}">
 		<input type="hidden" name="_invoiced_<c:out value="${registrationList.id}"/>" value="visible" />
 		<input type="checkbox" name="invoiced_<c:out value="${registrationList.id}"/>"
-					<c:if test="${registrationList.invoiced == true}"> CHECKED </c:if> />
+					<c:if test="${registrationList.invoiced == true}"> checked="checked" </c:if> />
 	</c:if>
 	<c:if test="${admin == false}">
 		<input type="hidden" name="_invoiced_<c:out value="${registrationList.id}"/>" value="visible" />
@@ -304,7 +304,7 @@
 	<c:if test="${admin == true}">
 		<input type="hidden" name="_reserved<c:out value="${registrationList.id}"/>" value="visible"/>
 		<input type="checkbox" name="reserved_<c:out value="${registrationList.id}"/>"
-		<c:if test="${registrationList.reserved == true}"> CHECKED </c:if> />
+		<c:if test="${registrationList.reserved == true}"> checked="checked" </c:if> />
 	</c:if>
 	<c:if test="${admin == false}">
 		<input type="hidden" name="_reserved<c:out value="${registrationList.id}"/>" value="visible"/>
@@ -322,7 +322,7 @@
 	<c:if test="${admin == true}">
 		<input type="hidden" name="_attended<c:out value="${registrationList.id}"/>" value="visible"/>
 		<input type="checkbox" name="attended_<c:out value="${registrationList.id}"/>"
-		<c:if test="${registrationList.attended == true}"> CHECKED </c:if> />
+		<c:if test="${registrationList.attended == true}"> checked="checked" </c:if> />
 	</c:if>
 	<c:if test="${admin == false}">
 		<input type="hidden" name="_attended<c:out value="${registrationList.id}"/>" value="visible"/>
@@ -343,9 +343,14 @@
 			<button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseid" value="${registrationList.courseid}"/></c:url>'">
 				<fmt:message key="button.edit"/>
 			</button>
-			<input type="submit" class="button" name="delete"
-						onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmUnregistration()"
-						value="<fmt:message key="button.delete"/>" />
+			<button type="button" name="unregister"	onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmUnregistration()">
+				<fmt:message key="button.unregister"/>
+			</button>
+		</c:if>
+		<c:if test="${admin == true}">
+			<button type="submit" name="delete" onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmDeleteRegistration()">
+				<fmt:message key="button.delete"/>
+			</button>
 		</c:if>
 	</display:column>
 	</c:if>

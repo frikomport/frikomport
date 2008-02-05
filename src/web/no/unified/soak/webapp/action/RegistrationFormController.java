@@ -190,17 +190,19 @@ public class RegistrationFormController extends BaseFormController {
 				log.debug("recieved 'cancel' from jsp");
 			}
 
-			return new ModelAndView(getCancelView(), "courseid", registration
-					.getCourseid());
+			return new ModelAndView(getCancelView(), "courseid", registration.getCourseid());
 		} // or to delete?
-		else if (request.getParameter("delete") != null) {
-			registrationManager.removeRegistration(registration.getId()
-					.toString());
-			saveMessage(request, getText("registration.deleted", locale));
+		else if (request.getParameter("unregister") != null) {
+			registrationManager.removeRegistration(registration.getId().toString());
+			saveMessage(request, getText("registration.unregistered", locale));
 
-			return new ModelAndView(getCancelView(), "courseid", registration
-					.getCourseid());
-		} else {
+			return new ModelAndView(getCancelView(), "courseid", registration.getCourseid());
+		} else if (request.getParameter("delete") != null) {
+            registrationManager.removeRegistration(registration.getId().toString());
+            saveMessage(request, getText("registration.deleted", locale));
+
+            return new ModelAndView(getCancelView(), "courseid", registration.getCourseid());
+        } else {
 			// Perform a new registration
 
 			// We need the course as reference data

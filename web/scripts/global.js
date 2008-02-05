@@ -315,7 +315,17 @@ function confirmDelete(obj) {
 }
 
 function confirmUnregistration(obj) {   
-    var msg = "Vil du fjerne denne registreringen?";
+    var msg = "Vil du melde av denne registreringen?";
+    ans = confirm(msg);
+    if (ans) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function confirmDeleteRegistration(obj) {   
+    var msg = "Vil du slette denne registreringen?";
     ans = confirm(msg);
     if (ans) {
         return true;

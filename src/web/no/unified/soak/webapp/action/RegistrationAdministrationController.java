@@ -206,16 +206,26 @@ public class RegistrationAdministrationController extends BaseFormController {
 
 			return new ModelAndView(getCancelView(), "id", courseId);
 		} // or to delete?
-		else if (request.getParameter("delete") != null) {
+		else if (request.getParameter("unregister") != null) {
 			// We are deleting a registration
-			deleteRegistration(request, locale);
+			unregisterRegistration(request, locale);
 
 			// Ready the WaitingListManagerImpl
 			waitingListManager.processIfNeeded(new Long(courseId), locale);
 
 			String key = "waitinglist.updated";
 			saveMessage(request, getText(key, locale));
-		} else {
+		}
+		else if (request.getParameter("delete") != null) {
+            // We are deleting a registration
+            deleteRegistration(request, locale);
+
+            // Ready the WaitingListManagerImpl
+            waitingListManager.processIfNeeded(new Long(courseId), locale);
+
+            String key = "waitinglist.updated";
+            saveMessage(request, getText(key, locale));
+        } else {
 			// We are saving all changes made to the list
 
 			// Loop over the rows and check for changes and the presist what
@@ -309,14 +319,14 @@ public class RegistrationAdministrationController extends BaseFormController {
 	}
 
 	/**
-	 * Deletes a registration from the database
+	 * Unregister a registration from the database and sends confirmation email
 	 * 
 	 * @param request
 	 *            The HTTP request object
 	 * @param locale
 	 *            The current locale
 	 */
-	private void deleteRegistration(HttpServletRequest request, Locale locale) {
+	private void unregisterRegistration(HttpServletRequest request, Locale locale) {
 		String regid = request.getParameter("regid");
 
 		// Send mail to the person in question
@@ -325,9 +335,29 @@ public class RegistrationAdministrationController extends BaseFormController {
 		sendMail(locale, course, Constants.EMAIL_EVENT_REGISTRATION_DELETED, registration);
 		registrationManager.removeRegistration(regid);
 
-		String key = "registration.deleted";
+		String key = "registration.unregistered";
 		saveMessage(request, getText(key, locale));
 	}
+	
+	/**
+     * Deletes a registration from the database
+     * 
+     * @param request
+     *            The HTTP request object
+     * @param locale
+     *            The current locale
+     */
+    private void deleteRegistration(HttpServletRequest request, Locale locale) {
+        String regid = request.getParameter("regid");
+
+        // Send mail to the person in question
+        Registration registration = registrationManager.getRegistration(regid);
+        Course course = registration.getCourse();
+        registrationManager.removeRegistration(regid);
+
+        String key = "registration.deleted";
+        saveMessage(request, getText(key, locale));
+    }
 
 	/**
 	 * Converts a forms textual boolean to a boolean Expects input "null" or (null) or "false" for false - all others
