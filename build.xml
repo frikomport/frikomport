@@ -848,6 +848,12 @@
     </target>
     
     <!-- =================================================================== -->
+    <!--            Nightly - Setup db, Stops Tomcat, and refreshes everything -->
+    <!-- =================================================================== -->
+    <target name="nightly" depends="db-load,undeploy,clean,deploy"
+        description="Cleans db, undeploys, cleans, then re-deploys"/>
+    
+    <!-- =================================================================== -->
     <!--            Refresh - Stops Tomcat, and refreshes everything         -->
     <!-- =================================================================== -->
     <target name="refresh" depends="undeploy,clean,deploy"
