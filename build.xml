@@ -850,7 +850,7 @@
     <!-- =================================================================== -->
     <!--            Nightly - Setup db, Stops Tomcat, and refreshes everything -->
     <!-- =================================================================== -->
-    <target name="nightly" depends="db-load,undeploy,clean,deploy"
+    <target name="nightly" depends="setup-db,undeploy,clean,deploy"
         description="Cleans db, undeploys, cleans, then re-deploys"/>
     
     <!-- =================================================================== -->
