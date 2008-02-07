@@ -58,10 +58,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author ceg
  */
 public class CourseNotificationController extends BaseFormController {
-	private final int COURSEDELETED = 1;
-
-	private final int COURSECHANGED = 2;
-
+	
 	private CourseManager courseManager = null;
 
 	private RegistrationManager registrationManager = null;
@@ -160,7 +157,7 @@ public class CourseNotificationController extends BaseFormController {
 			return new ModelAndView(getCancelView(), "id", course.getId().toString());
 		} // or to send out notification email?
 		else if (request.getParameter("send") != null) {
-			sendMail(locale, course, COURSECHANGED, mailComment);
+			sendMail(locale, course, Constants.EMAIL_EVENT_COURSECHANGED, mailComment);
 		}
 
 		return new ModelAndView(getSuccessView());
@@ -174,7 +171,7 @@ public class CourseNotificationController extends BaseFormController {
 	 * @param course
 	 *            The course the applicant has registered for
 	 */
-private void sendMail(Locale locale, Course course, int event, String mailComment) {
+	protected void sendMail(Locale locale, Course course, int event, String mailComment) {
 		log.debug("Sending mail from CourseNotificationController");
 		List<Registration> registrations = registrationManager
 				.getSpecificRegistrations(course.getId(), null, null, null,
