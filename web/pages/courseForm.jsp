@@ -428,7 +428,7 @@ cal1.setTodayText("Idag");
             <input type="submit" class="button" name="save" 
                 onclick="bCancel=false" value="<fmt:message key="button.save"/>" />
 
-			<c:if test="${!empty course.id && !empty course.name}">
+			<c:if test="${!empty course.id && !empty course.name && canDelete}">
 	            <input type="submit" class="button" name="delete"
 	                onclick="bCancel=true;return confirmDelete('<fmt:message key="courseList.theitem"/>')" 
 	                value="<fmt:message key="button.delete"/>" />
