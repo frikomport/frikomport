@@ -210,8 +210,8 @@ public class CourseFormController extends BaseFormController {
                 if ((courseid != null) && StringUtils.isNumeric(courseid)
                         && StringUtils.isNotBlank(courseid)
                         && (Long.parseLong(courseid) != 0)) {
-                    Integer registrations = registrationManager.getNumberOfAttendants(false, course);
-                    model.put("isCourseFull", new Boolean(registrations.intValue() >= course.getMaxAttendants()));
+                    Integer registrations = registrationManager.getAvailability(true, course);
+                    model.put("isCourseFull", new Boolean(registrations.intValue() == 0 ));
                     // Course with registrations cannot be deleted.
                     model.put("canDelete", new Boolean(registrations.intValue() == 0));
                 }

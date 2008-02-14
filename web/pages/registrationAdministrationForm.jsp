@@ -336,21 +336,18 @@
 		<c:if test="${registrationList.attended == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 	</display:column>
 
-	<c:if test="${admin == true || canDelete == true}">
+	<c:if test="${(admin == true || canDelete == true) && allowRegistration == true}">
 	<display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-	
-		<c:if test="${admin == true || canDelete == true}">
-			<button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseid" value="${registrationList.courseid}"/></c:url>'">
-				<fmt:message key="button.edit"/>
-			</button>
-			<button type="button" name="unregister"	onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmUnregistration()">
-				<fmt:message key="button.unregister"/>
-			</button>
-		</c:if>
+		<button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseid" value="${registrationList.courseid}"/></c:url>'">
+			<fmt:message key="button.edit"/>
+		</button>
+		<button type="button" name="unregister"	onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmUnregistration()">
+			<fmt:message key="button.unregister"/>
+		</button>
 		<c:if test="${admin == true}">
-			<button type="submit" name="delete" onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmDeleteRegistration()">
-				<fmt:message key="button.delete"/>
-			</button>
+		<button type="submit" name="delete" onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmDeleteRegistration()">
+			<fmt:message key="button.delete"/>
+		</button>
 		</c:if>
 	</display:column>
 	</c:if>
