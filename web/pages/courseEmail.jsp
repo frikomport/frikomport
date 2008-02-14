@@ -15,7 +15,7 @@
     </c:if>
 </spring:bind>
 
-<form method="post" action="<c:url value="/notifyCourse.html"/>" id="courseForm"
+<form method="post" action="<c:url value="/emailCourse.html"/>" id="courseForm"
     onsubmit="return validateCourse(this)">
     
 <fmt:message key="date.format" var="dateformat"/>

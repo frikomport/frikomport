@@ -116,7 +116,7 @@ public class MailUtil {
         if (mailComment != null && StringUtils.isNotBlank(mailComment)) {
             msg.append("\n");
             msg.append(mailComment);
-            msg.append("\n");
+            msg.append("\n\n");
         }
 
 		// Build mail
