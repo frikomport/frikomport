@@ -31,6 +31,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 /**
@@ -60,23 +61,20 @@ public class LocationController extends BaseFormController {
         if (log.isDebugEnabled()) {
             log.debug("entering 'referenceData' method...");
         }
-
+        HttpSession session = request.getSession();
+        Location comm = (Location)session.getAttribute("location");
+        
         Locale locale = request.getLocale();
 
         Location location = new Location();
 
-        if (command != null) {
-            location = (Location) command;
+        if (comm != null) {
+            location = (Location) comm;
         }
         
         // Don't modify municipality if in postback
         String postback = request.getParameter("ispostbacklocationlist");
         if ((postback == null) || (postback.compareTo("1") != 0)) {
-//	        Object omid = request.getAttribute(Constants.EZ_MUNICIPALITY);
-//	        if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
-//	            location.setMunicipalityid(new Long(omid.toString()));
-//	        }
-
         	// Check if a specific municipality has been requested
 	        String mid = request.getParameter("mid");
 	        if ((mid != null) && StringUtils.isNumeric(mid)) {
@@ -110,6 +108,8 @@ public class LocationController extends BaseFormController {
         if (log.isDebugEnabled()) {
             log.debug("entering 'onSubmit' method...");
         }
+        
+        HttpSession session = request.getSession();
 
         Map model = new HashMap();
 
@@ -120,6 +120,7 @@ public class LocationController extends BaseFormController {
         // Set up parameters, and return them to the view
         model = addMunicipalities(model, locale);
         model.put("location", location);
+        session.setAttribute("location", location);
 
         // Add all courses to the list
         List locations = locationManager.searchLocations(location);
