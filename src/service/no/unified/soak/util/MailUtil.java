@@ -325,11 +325,11 @@ public class MailUtil {
 				if (registration.getReserved()) {
 					message.setSubject(StringEscapeUtils.unescapeHtml(
 							getText("courseChanged.mail.subject", course.getName(), locale, messageSource)).replaceAll(
-							"<registeredfor/>", registeredMsg));
+							"<registeredfor/>", registeredMsg).replaceAll("<coursename/>", course.getName()));
 				} else {
 					message.setSubject(StringEscapeUtils.unescapeHtml(
 							getText("courseChanged.mail.subject", course.getName(), locale, messageSource)).replaceAll(
-							"<registeredfor/>", waitingMsg));
+							"<registeredfor/>", waitingMsg).replaceAll("<coursename/>", course.getName()));
 				}
 				break;
 
@@ -337,11 +337,11 @@ public class MailUtil {
 				if (registration.getReserved()) {
 					message.setSubject(StringEscapeUtils.unescapeHtml(
 							getText("courseDeleted.mail.subject", course.getName(), locale, messageSource)).replaceAll(
-							"<registeredfor/>", registeredMsg));
+							"<registeredfor/>", registeredMsg).replaceAll("<coursename/>", course.getName()));
 				} else {
 					message.setSubject(StringEscapeUtils.unescapeHtml(
 							getText("courseDeleted.mail.subject", course.getName(), locale, messageSource)).replaceAll(
-							"<registeredfor/>", waitingMsg));
+							"<registeredfor/>", waitingMsg).replaceAll("<coursename/>", course.getName()));
 				}
 
 				break;
@@ -349,11 +349,11 @@ public class MailUtil {
 				if (registration.getReserved()) {
 					message.setSubject(StringEscapeUtils.unescapeHtml(
 							getText("courseNotification.mail.subject", course.getName(), locale, messageSource))
-							.replaceAll("<registeredfor/>", registeredMsg));
+							.replaceAll("<registeredfor/>", registeredMsg).replaceAll("<coursename/>", course.getName()));
 				} else {
 					message.setSubject(StringEscapeUtils.unescapeHtml(
 							getText("courseNotification.mail.subject", course.getName(), locale, messageSource))
-							.replaceAll("<registeredfor/>", waitingMsg));
+							.replaceAll("<registeredfor/>", waitingMsg).replaceAll("<coursename/>", course.getName()));
 				}
 				break;
 			case Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION:
@@ -388,9 +388,9 @@ public class MailUtil {
 
 			String custom = msg.toString();
 			if (registration.getReserved()) {
-				custom.replaceAll("<registeredfor/>", registeredMsg);
+				custom.replaceAll("<registeredfor/>", registeredMsg).replaceAll("<coursename/>", course.getName());
 			} else {
-				custom.replaceAll("<registeredfor/>", waitingMsg);
+				custom.replaceAll("<registeredfor/>", waitingMsg).replaceAll("<coursename/>", course.getName());
 			}
 
 			StringBuffer msgIndivid = new StringBuffer(custom);
