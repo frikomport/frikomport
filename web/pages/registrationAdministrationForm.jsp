@@ -341,7 +341,7 @@
 		<button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseid" value="${registrationList.courseid}"/></c:url>'">
 			<fmt:message key="button.edit"/>
 		</button>
-		<button type="button" name="unregister"	onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmUnregistration()">
+		<button type="submit" name="unregister"	onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmUnregistration()">
 			<fmt:message key="button.unregister"/>
 		</button>
 		<c:if test="${admin == true}">
