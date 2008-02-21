@@ -51,7 +51,7 @@ public class UserEzDaoJdbc implements IUserDaoJdbc {
             jt.setDataSource(dataSource);
         }
         catch (NamingException e) {
-            // Do nothing e.printStackTrace();
+            // Do nothing
         }
 	}
 
@@ -180,10 +180,11 @@ public class UserEzDaoJdbc implements IUserDaoJdbc {
 		List eZUsers = new ArrayList();
 
 		try {
-			String sql = "select O.id, O.name, CA.identifier, A.data_int, A.data_text from ezcontentobject O \r\n"
+			String sql = "select O.id, O.name, CA.identifier, A.data_int, A.data_text, U.email from ezcontentobject O \r\n"
 					+ "inner join ezcontentclass C on O.contentclass_id = C.id\r\n"
 					+ "inner join ezcontentobject_attribute A on A.contentobject_id = O.id\r\n"
 					+ "inner join ezcontentclass_attribute CA on CA.contentclass_id = C.id and CA.id = A.contentclassattribute_id\r\n"
+					+ "inner join ezuser U on U.contentobject_id = O.id\r\n"
 					+ "where C.identifier = \'user\' and O.current_version = A.version and CA.identifier in (\'first_name\',\'last_name\',\'kommune\')\r\n"
 					+ "and exists \r\n"
 					+ " (select null from ezcontentobject_tree OT, ezuser_role UR, ezrole R, ezcontentobject_tree OT2 \r\n"
@@ -200,6 +201,7 @@ public class UserEzDaoJdbc implements IUserDaoJdbc {
 					curId = rowSet.getInt("id");
 					user.setId(curId);
 					user.setName(rowSet.getString("name"));
+					user.setEmail(rowSet.getString("email"));
 				}
 				String identifier = rowSet.getString("identifier");
 				if ("first_name".equals(identifier)) {
