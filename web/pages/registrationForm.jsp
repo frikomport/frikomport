@@ -313,7 +313,7 @@
         </th>
         <td>
             <spring:bind path="course.responsible.name">
-            	<a href="<fmt:message key="course.responsiblePreURL"/><c:out value="${course.responsible.first_name}"/>_<c:out value="${course.responsible.last_name}"/>"><c:out value="${status.value}"/></a>
+            	<a href="<c:url value="/detailsUser.html"><c:param name="id" value="${course.responsible.id}"/></c:url>"><c:out value="${status.value}"/></a>
             </spring:bind>
         </td>
     </tr>
