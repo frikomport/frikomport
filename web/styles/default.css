@@ -121,9 +121,11 @@ div#loginTable th {
 }
 
 div#menu {
-    position: absolute;
+/*    position: relative; 
     top: 100px;
     right: 20px;
+    float: left;*/
+    height: 100%;
     width: 190px;
     padding: 10px;
     background-color: #eee;
@@ -140,6 +142,10 @@ body>div#menu {width: 150px;}
 div#menu a:visited {
     background: transparent;
     color: black;
+}
+
+div#menu ul {
+    padding-left: 10px;
 }
 
 div#readme {

@@ -11,8 +11,8 @@
 package no.unified.soak.service.impl;
 
 import no.unified.soak.dao.PersonDAO;
-import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
-import no.unified.soak.ez.EzUser;
+import no.unified.soak.dao.jdbc.IUserDaoJdbc;
+import no.unified.soak.ext.IUser;
 import no.unified.soak.model.Person;
 import no.unified.soak.service.PersonManager;
 
@@ -26,9 +26,9 @@ import java.util.List;
  */
 public class PersonManagerImpl extends BaseManager implements PersonManager {
     private PersonDAO dao;
-    private UserEzDaoJdbc userEzDaoJdbc = null;
+    private IUserDaoJdbc userEzDaoJdbc = null;
     
-    public void setUserEzDaoJdbc(UserEzDaoJdbc userEzDaoJdbc)
+    public void setUserEzDaoJdbc(IUserDaoJdbc userEzDaoJdbc)
     {
         this.userEzDaoJdbc = userEzDaoJdbc;
     }
@@ -70,7 +70,7 @@ public class PersonManagerImpl extends BaseManager implements PersonManager {
         dao.removePerson(new Long(id));
     }
 
-    public List getEZResponsibles(EzUser user) {
+    public List getEZResponsibles(IUser user) {
         List users = userEzDaoJdbc.findKursansvarligeUser();
 
         return users;

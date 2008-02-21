@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import no.unified.soak.Constants;
-import no.unified.soak.ez.EzUser;
+import no.unified.soak.ext.IUser;
 import no.unified.soak.model.Attachment;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
@@ -140,7 +140,7 @@ public class CourseFormController extends BaseFormController {
 			model.put("instructors", people);
 		}
 
-		List responsibles = personManager.getEZResponsibles((EzUser) null);
+		List responsibles = personManager.getEZResponsibles((IUser) null);
 		if (responsibles != null) {
 			model.put("responsible", responsibles);
 		}

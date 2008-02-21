@@ -9,6 +9,7 @@ package no.unified.soak.webapp.filter;
 
 import no.unified.soak.Constants;
 import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
+import no.unified.soak.ext.IUser;
 import no.unified.soak.ez.EzUser;
 import no.unified.soak.model.User;
 import no.unified.soak.service.UserManager;
@@ -139,7 +140,7 @@ public class ActionFilter implements Filter {
 	}
 
 	private void doEZAccessing(HttpServletRequest request, HttpSession session) {
-		EzUser ezUser = new EzUser();
+		IUser ezUser = new EzUser();
 
 		/*
 		 * eZ publish reuses the session id when logging out and in as a

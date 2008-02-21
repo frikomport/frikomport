@@ -11,7 +11,7 @@
 package no.unified.soak.service;
 
 import no.unified.soak.dao.PersonDAO;
-import no.unified.soak.ez.EzUser;
+import no.unified.soak.ext.IUser;
 import no.unified.soak.model.Person;
 
 import java.util.List;
@@ -39,7 +39,7 @@ public interface PersonManager extends Manager {
      * @param user
      * @return
      */
-    public List getEZResponsibles(EzUser user);
+    public List getEZResponsibles(IUser user);
     
     /**
      * Retrieves all roles from eZ publish.

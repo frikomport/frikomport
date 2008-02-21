@@ -183,7 +183,7 @@
         <property name="validator" ref="beanValidator"/>
         <property name="formView" value="registrationForm"/>
         <property name="successView" value="redirect:registrationComplete.html"/>
-        <property name="cancelView" value="redirect:/listCourses.html"/>
+        <property name="cancelView" value="redirect:listCourses.html"/>
     </bean>
 
     <bean id="registrationAdministrationController" class="no.unified.soak.webapp.action.RegistrationAdministrationController" autowire="byName">
@@ -222,6 +222,13 @@
 
     <bean id="waitingListController" class="no.unified.soak.webapp.action.WaitingListController" autowire="byName">
         <property name="viewName" value="waitingList"/>
+    </bean>
+    
+    <bean id="userDetailsController" class="no.unified.soak.webapp.action.ExternalUserController" autowire="byName">
+        <property name="commandName" value="user"/>
+        <property name="commandClass" value="no.unified.soak.ext.IUser"/>
+        <property name="formView" value="userDetails"/>
+        <property name="successView" value="redirect:listCourse.html"/>
     </bean>
 
     <!-- Load WEB-INF/classes/ApplicationResources.properties for i18n messages using JSTL's fmt tag -->
@@ -270,7 +277,7 @@
                 <!--Registration-URL-END-->
                 <!-- Add additional URL mappings here -->
                 <prop key="/waitingList.html">waitingListController</prop>
-
+				<prop key="/detailsUser.html">userDetailsController</prop>
             </props>
         </property>
     </bean>

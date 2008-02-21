@@ -33,14 +33,18 @@
     </div>
 
     <div id="screen">
-
+<table>
+    <td>
         <c:import url="/WEB-INF/pages/menu.jsp"/>
-
+    </td>
+    <td>
         <div id="content">
             <h1><decorator:getProperty property="page.heading"/></h1>
             <%@ include file="/common/messages.jsp" %>
             <decorator:body/>
         </div>
+    </td>
+</table>
     </div>
 
 </body>

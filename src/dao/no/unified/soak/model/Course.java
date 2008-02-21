@@ -10,7 +10,7 @@
  */
 package no.unified.soak.model;
 
-import no.unified.soak.ez.EzUser;
+import no.unified.soak.ext.IUser;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -38,7 +38,7 @@ public class Course extends BaseObject implements Serializable {
     private Long id;
     private Municipalities municipality;
     private Long municipalityid;
-    private EzUser responsible;
+    private IUser responsible;
     private Long responsibleid;
     private ServiceArea serviceArea;
     private Long serviceAreaid;
@@ -556,7 +556,7 @@ public class Course extends BaseObject implements Serializable {
     /**
      * @return Returns the responsible.
      */
-    public EzUser getResponsible() {
+    public IUser getResponsible() {
         return responsible;
     }
 
@@ -564,7 +564,7 @@ public class Course extends BaseObject implements Serializable {
      * @param responsible
      *            The responsible to set.
      */
-    public void setResponsible(EzUser responsible) {
+    public void setResponsible(IUser responsible) {
         this.responsible = responsible;
     }
     
