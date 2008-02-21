@@ -134,14 +134,18 @@ public class RegistrationAdministrationController extends BaseFormController {
 			
             Date today = new Date();
             Boolean allowRegistration = new Boolean(false);
-
             if (today.before(course.getRegisterBy())
                     && (course.getRegisterStart() == null || today
                             .after(course.getRegisterStart()))) {
                 allowRegistration = new Boolean(true);
             }
-
             model.put("allowRegistration", allowRegistration);
+
+            Boolean allowEditRegistration = new Boolean(false);
+            if (today.before(course.getStartTime())) {
+                allowEditRegistration = new Boolean(true);
+            }
+            model.put("allowEditRegistration", allowEditRegistration);
             
             Integer registrations = registrationManager.getAvailability(true, course);
             model.put("isCourseFull", new Boolean(registrations.intValue() == 0));

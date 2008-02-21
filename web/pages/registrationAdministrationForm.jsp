@@ -336,7 +336,7 @@
 		<c:if test="${registrationList.attended == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 	</display:column>
 
-	<c:if test="${(admin == true || canDelete == true) && allowRegistration == true}">
+	<c:if test="${(admin == true || canDelete == true) && allowEditRegistration == true}">
 	<display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
 		<button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseid" value="${registrationList.courseid}"/></c:url>'">
 			<fmt:message key="button.edit"/>
