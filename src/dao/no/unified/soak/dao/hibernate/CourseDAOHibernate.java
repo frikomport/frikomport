@@ -15,7 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import no.unified.soak.dao.CourseDAO;
-import no.unified.soak.dao.jdbc.IUserDaoJdbc;
+import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
 import no.unified.soak.model.Course;
 
 import org.hibernate.criterion.DetachedCriteria;
@@ -30,9 +30,9 @@ import org.springframework.orm.ObjectRetrievalFailureException;
  * @author hrj
  */
 public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
-    private IUserDaoJdbc userEzDaoJdbc = null;
+    private UserEzDaoJdbc userEzDaoJdbc = null;
     
-    public void setUserEzDaoJdbc(IUserDaoJdbc userEzDaoJdbc)
+    public void setUserEzDaoJdbc(UserEzDaoJdbc userEzDaoJdbc)
     {
         this.userEzDaoJdbc = userEzDaoJdbc;
     }

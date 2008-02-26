@@ -2,14 +2,13 @@ package no.unified.soak.webapp.action;
 
 import javax.servlet.http.HttpServletRequest;
 
-import no.unified.soak.dao.jdbc.IUserDaoJdbc;
-import no.unified.soak.ext.IUser;
+import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
 
 public class ExternalUserController extends BaseFormController
 {
-    private IUserDaoJdbc userEzDaoJdbc;
+    private UserEzDaoJdbc userEzDaoJdbc;
     
-    public void setUserEzDaoJdbc(IUserDaoJdbc userDaoJdbc) {
+    public void setUserEzDaoJdbc(UserEzDaoJdbc userDaoJdbc) {
         this.userEzDaoJdbc = userDaoJdbc;
     }
     

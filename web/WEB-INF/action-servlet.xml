@@ -226,7 +226,7 @@
     
     <bean id="userDetailsController" class="no.unified.soak.webapp.action.ExternalUserController" autowire="byName">
         <property name="commandName" value="user"/>
-        <property name="commandClass" value="no.unified.soak.ext.IUser"/>
+        <property name="commandClass" value="no.unified.soak.ez.EzUser"/>
         <property name="formView" value="userDetails"/>
         <property name="successView" value="redirect:listCourse.html"/>
     </bean>

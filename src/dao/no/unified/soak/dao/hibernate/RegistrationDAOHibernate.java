@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 import no.unified.soak.dao.RegistrationDAO;
-import no.unified.soak.dao.jdbc.IUserDaoJdbc;
+import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Notification;
 import no.unified.soak.model.Registration;
@@ -33,9 +33,9 @@ import org.springframework.orm.ObjectRetrievalFailureException;
  */
 public class RegistrationDAOHibernate extends BaseDAOHibernate implements RegistrationDAO {
     
-    private IUserDaoJdbc userEzDaoJdbc = null;
+    private UserEzDaoJdbc userEzDaoJdbc = null;
     
-    public void setUserEzDaoJdbc(IUserDaoJdbc userEzDaoJdbc)
+    public void setUserEzDaoJdbc(UserEzDaoJdbc userEzDaoJdbc)
     {
         this.userEzDaoJdbc = userEzDaoJdbc;
     }

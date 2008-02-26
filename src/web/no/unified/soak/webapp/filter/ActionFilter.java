@@ -7,23 +7,6 @@
  */
 package no.unified.soak.webapp.filter;
 
-import no.unified.soak.Constants;
-import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
-import no.unified.soak.ext.IUser;
-import no.unified.soak.ez.EzUser;
-import no.unified.soak.model.User;
-import no.unified.soak.service.UserManager;
-import no.unified.soak.webapp.util.RequestUtil;
-import no.unified.soak.webapp.util.SslUtil;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.i18n.LocaleContextHolder;
-
-import org.springframework.web.context.support.WebApplicationContextUtils;
-
 import java.io.IOException;
 
 import javax.servlet.Filter;
@@ -37,6 +20,20 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import no.unified.soak.Constants;
+import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
+import no.unified.soak.ez.EzUser;
+import no.unified.soak.model.User;
+import no.unified.soak.service.UserManager;
+import no.unified.soak.webapp.util.RequestUtil;
+import no.unified.soak.webapp.util.SslUtil;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * This class is used to filter all requests to the <code>Action</code>
@@ -140,7 +137,7 @@ public class ActionFilter implements Filter {
 	}
 
 	private void doEZAccessing(HttpServletRequest request, HttpSession session) {
-		IUser ezUser = new EzUser();
+	    EzUser ezUser = new EzUser();
 
 		/*
 		 * eZ publish reuses the session id when logging out and in as a

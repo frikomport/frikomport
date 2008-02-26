@@ -13,7 +13,7 @@ package no.unified.soak.webapp.filter;
 import java.util.ArrayList;
 import java.util.List;
 
-import no.unified.soak.ext.IUser;
+import no.unified.soak.ez.EzUser;
 
 import org.acegisecurity.Authentication;
 import org.acegisecurity.GrantedAuthority;
@@ -27,7 +27,7 @@ import org.acegisecurity.GrantedAuthorityImpl;
 public class EZAuthentificationToken implements Authentication {
     private boolean authenticated;
     private String eZSessionId;
-    private IUser ezUser;
+    private EzUser ezUser;
     List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
 
     /**
@@ -39,7 +39,7 @@ public class EZAuthentificationToken implements Authentication {
      * @param eZSessionId
      *            The session id of the http-session where user logged in.
      */
-    EZAuthentificationToken(IUser ezUser, String eZSessionId) {
+    EZAuthentificationToken(EzUser ezUser, String eZSessionId) {
         this.ezUser = ezUser;
         this.eZSessionId = eZSessionId;
 
