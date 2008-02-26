@@ -109,7 +109,7 @@ public class Constants {
 	/**
 	 * User role in eZ publish for education manager.
 	 */
-	public static final String EZROLE_EDUCATIONMANAGER = "Oppl\u00e6ringsansvarlig";
+	public static final String EZROLE_EDUCATIONMANAGER = "Opplaringsansvarlig";
 
 	/**
 	 * User role in eZ publish for course responsible.
