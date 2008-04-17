@@ -34,7 +34,8 @@
 
     <div id="screen">
 <table>
-    <td>
+<tr>
+    <td valign="top">
         <c:import url="/WEB-INF/pages/menu.jsp"/>
     </td>
     <td>
@@ -44,7 +45,9 @@
             <decorator:body/>
         </div>
     </td>
+</tr>
 </table>
+
     </div>
 
 </body>

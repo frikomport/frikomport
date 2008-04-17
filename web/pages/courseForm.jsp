@@ -62,7 +62,19 @@ cal1.setTodayText("Idag");
             </spring:bind>
         </td>
     </tr>
-    
+
+    <tr>
+        <th>
+            <soak:label key="course.description"/>
+        </th>
+        <td>
+            <spring:bind path="course.description">
+                <textarea cols="50" rows="3" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>"><c:out value="${status.value}"/></textarea>
+                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
+            </spring:bind>
+        </td>
+    </tr>
+
     <tr>
         <th>
             <soak:label key="course.role"/>
@@ -391,18 +403,6 @@ cal1.setTodayText("Idag");
                 <input type="hidden" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" 
                     value="<fmt:formatDate value="${time[0]}" type="date" pattern="${dateformat}"/>"/>
 	            <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
-        </td>
-    </tr>
-
-    <tr>
-        <th>
-            <soak:label key="course.description"/>
-        </th>
-        <td>
-            <spring:bind path="course.description">
-                <textarea cols="50" rows="3" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>"><c:out value="${status.value}"/></textarea>
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
             </spring:bind>
         </td>
     </tr>
