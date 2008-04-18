@@ -37,7 +37,7 @@
 	<jsp:include page="course.jsp">
 		<jsp:param name="course" value="${course}"/>
 	</jsp:include>
-		
+	
 	<c:if test="${allowRegistration == true && isCourseFull == true}">
     <tr>
         <td colspan="2">
@@ -91,12 +91,12 @@
 
 	<display:column media="html" sortable="true" headerClass="sortable" titleKey="registration.invoiced">
 	<c:if test="${admin == true}">
-		<input type="hidden" name="_invoiced_<c:out value="${registrationList.id}"/>" value="visible" />
+		<input type="hidden" name="_invoiced<c:out value="${registrationList.id}"/>" value="visible" />
 		<input type="checkbox" name="invoiced_<c:out value="${registrationList.id}"/>"
 					<c:if test="${registrationList.invoiced == true}"> checked="checked" </c:if> />
 	</c:if>
 	<c:if test="${admin == false}">
-		<input type="hidden" name="_invoiced_<c:out value="${registrationList.id}"/>" value="visible" />
+		<input type="hidden" name="_invoiced<c:out value="${registrationList.id}"/>" value="visible" />
 		<input type="hidden" name="invoiced_<c:out value="${registrationList.id}"/>" value="${registrationList.invoiced}" />
 		<c:if test="${registrationList.invoiced == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${registrationList.invoiced == false}"><fmt:message key="checkbox.unchecked"/></c:if>

@@ -32,6 +32,19 @@
 	<jsp:include page="course.jsp">
 		<jsp:param name="course" value="${course}"/>
 	</jsp:include>
+	
+	
+<c:if test="${allowRegistration == true && isCourseFull == true}">
+    <tr>
+        <td colspan="2">
+            <div class="error">
+           		<img src="<c:url value="/images/iconWarning.gif"/>"
+               		alt="<fmt:message key="icon.warning"/>" class="icon" />
+           		<fmt:message key="errors.courseFull.warning"/><br />
+    		</div>
+        </td>
+    </tr>
+</c:if>
 
     <tr>
         <td colspan="2" class="buttonBar">            

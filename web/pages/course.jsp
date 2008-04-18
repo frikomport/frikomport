@@ -1,4 +1,10 @@
 <%@ include file="/common/taglibs.jsp"%>
+<fmt:message key="date.format" var="dateformat"/>
+<fmt:message key="time.format" var="timeformat"/>
+<fmt:message key="attachmentList.item" var="item"/>
+<fmt:message key="attachmentList.items" var="items"/>
+<fmt:message key="access.course.singleprice" var="singleprice"/>
+
     <tr>
         <th>
             <fmt:message key="course.name"/>
@@ -132,7 +138,8 @@
         	<fmt:formatNumber value="${course.maxAttendants}" minFractionDigits="0"/>
         </td>
     </tr>
-
+	
+	<c:if test="${!singleprice}">
     <tr>
         <th>
             <fmt:message key="course.reservedMunicipal"/>
@@ -150,7 +157,8 @@
         	<fmt:formatNumber value="${course.feeMunicipal}" minFractionDigits="2"/>
         </td>
     </tr>
-
+	</c:if>
+    
     <tr>
         <th>
             <fmt:message key="course.feeExternal"/>
@@ -196,18 +204,6 @@
         </th>
         <td>
         	<fmt:formatDate value="${course.freezeAttendance}" type="both" pattern="${dateformat} ${timeformat}"/>
-        </td>
-    </tr>
-</c:if>
-
-<c:if test="${allowRegistration == true && isCourseFull == true}">
-    <tr>
-        <td colspan="2">
-            <div class="error">
-           		<img src="<c:url value="/images/iconWarning.gif"/>"
-               		alt="<fmt:message key="icon.warning"/>" class="icon" />
-           		<fmt:message key="errors.courseFull.warning"/><br />
-    		</div>
         </td>
     </tr>
 </c:if>

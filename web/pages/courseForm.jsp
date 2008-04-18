@@ -43,6 +43,7 @@ cal1.setTodayText("Idag");
 <fmt:message key="time.format" var="timeformat"/>
 <fmt:message key="date.format.localized" var="datelocalized"/>
 <fmt:message key="time.format.localized" var="timelocalized"/>
+<fmt:message key="access.course.singleprice" var="singleprice"/>
 
 <table class="detail">
 
@@ -276,7 +277,9 @@ cal1.setTodayText("Idag");
         </td>
     </tr>
 
-    <tr>
+	<c:choose>
+	<c:when test="${!singleprice}">
+	<tr>
         <th>
             <soak:label key="course.reservedMunicipal"/>
         </th>
@@ -301,7 +304,17 @@ cal1.setTodayText("Idag");
             </spring:bind>
         </td>
     </tr>
-
+	</c:when>
+	<c:otherwise>
+            <spring:bind path="course.reservedMunicipal">
+                <input type="hidden" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" value="0" />
+            </spring:bind>
+            <spring:bind path="course.feeMunicipal">
+                <input type="hidden" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" value="0" />
+            </spring:bind>
+    </c:otherwise>
+	</c:choose>
+	
     <tr>
         <th>
             <soak:label key="course.feeExternal"/>
