@@ -176,6 +176,8 @@
 
     <display:column property="serviceArea.name" sortable="true" headerClass="sortable"
          titleKey="course.serviceArea"/>
+         
+    <display:column property="type" sortable="true" headerClass="sortable" titleKey="course.type"/>
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.location">
          <a href="<c:url value="/detailsLocation.html"><c:param name="id" value="${courseList.location.id}"/></c:url>" title="<c:out value="${courseList.location.description}"/>"><c:out value="${courseList.location.name}"/></a>

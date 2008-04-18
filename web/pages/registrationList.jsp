@@ -156,6 +156,9 @@
          
     <display:column property="municipality.name" sortable="true" headerClass="sortable"
          titleKey="registration.municipality"/>
+	
+	<display:column property="serviceArea.name" sortable="true" headerClass="sortable" 
+		titleKey="registration.serviceArea"/>
          
     <display:column sortable="true" headerClass="sortable"
          titleKey="registration.invoiced">
