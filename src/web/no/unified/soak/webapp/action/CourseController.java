@@ -12,6 +12,7 @@ package no.unified.soak.webapp.action;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -68,18 +69,25 @@ public class CourseController extends BaseFormController {
     /**
      * @see org.springframework.web.servlet.mvc.SimpleFormController#referenceData(javax.servlet.http.HttpServletRequest)
      */
-    protected Map referenceData(HttpServletRequest request, Object command,
-        Errors errors) throws Exception {
+    protected Map referenceData(HttpServletRequest request, Object command, Errors errors) throws Exception {
         if (log.isDebugEnabled()) {
             log.debug("entering 'referenceData' method...");
         }
-        HttpSession session = request.getSession();
-        Object comm = session.getAttribute("course");
-
         Locale locale = request.getLocale();
         Map model = new HashMap();
-
+        
         Course course = new Course();
+
+        // use course from session if set
+        HttpSession session = request.getSession();
+        Object comm = session.getAttribute("course");
+        
+        Map map = request.getParameterMap();
+        
+        // if params then this is navigation in table
+        if (comm != null && map.size() > 1) {
+            course = (Course) comm;
+        }
         
         Boolean historic = new Boolean(false);
         Boolean past = new Boolean(false);
@@ -92,10 +100,6 @@ public class CourseController extends BaseFormController {
         if (roles == null) {
             roles = new ArrayList<String>();
             roles.add(Constants.EZROLE_ANONYMOUS); // Make sure not logged in users sees anonymous courses
-        }
-
-        if (comm != null) {
-            course = (Course) comm;
         }
 
         // Don't modify municipality if in postback
@@ -137,10 +141,9 @@ public class CourseController extends BaseFormController {
         // Set up parameters, and return them to the view
         model = addServiceAreas(model, locale);
         model = addMunicipalities(model, locale);
-        model.put("course", course);
         model.put("historic", historic);
         model.put("past", past);
-
+        
         // Add all courses to the list
         List courses = courseManager.searchCourses(course, starttime, stoptime);
         List<Course> filtered = new ArrayList<Course>();
@@ -257,6 +260,20 @@ public class CourseController extends BaseFormController {
 
         return new ModelAndView(getSuccessView(), model);
     }
+    
+    protected Object formBackingObject(HttpServletRequest request) throws Exception {
+        // Get course from session
+        HttpSession session = request.getSession();
+        Object comm = session.getAttribute("course");
+        
+        Map map = request.getParameterMap();
+        
+        // if no params, use new course
+        if (comm == null || map.size() < 2) {
+            comm = new Course();
+        }
+        return comm;
+    } 
 
     /**
      * Used to create a list of all service areas with an option 0 that says
