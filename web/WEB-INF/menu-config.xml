@@ -18,7 +18,7 @@
         <!-- ====================   Clickstream   =========================== -->
         <Menu name="Clickstream" title="menu.clickstream" page="/clickstreams.jsp" roles="admin"/>
         <!--ServiceArea-START-->
-        <Menu name="MunicipalitiesMenu" title="municipalitiesList.title" page="/listMunicipalities.html"/>
+        <Menu name="OrganizationMenu" title="organizationList.title" page="/listOrganization.html"/>
         <!--ServiceArea-END-->
         <!--Location-START-->
         <Menu name="LocationMenu" title="locationList.title" page="/listLocations.html"/>

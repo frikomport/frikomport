@@ -118,8 +118,8 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
 			criteria.add(Restrictions.eq("reserved", reservedOnly));
 		}
 		if (localOnly.booleanValue()) {
-			criteria.add(Restrictions.eq("municipalityid", course
-					.getMunicipalityid()));
+			criteria.add(Restrictions.eq("organizationid", course
+					.getOrganizationid()));
 		}
 
 		criteria.setProjection(Projections.rowCount());
@@ -156,7 +156,7 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
 					course, true);
 
 			// Find number of seats left reserved for the locals
-			int seatsLocalAvailable = course.getReservedMunicipal().intValue()
+			int seatsLocalAvailable = course.getReservedInternal().intValue()
 					- localAttendants.intValue();
 
 			if ((course.getMaxAttendants().intValue()
@@ -171,7 +171,7 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
 		return result;
 	}
 
-    public List getSpecificRegistrations(Long courseId, Long municipalityId,
+    public List getSpecificRegistrations(Long courseId, Long organizationId,
 			Long serviceareaId, Boolean reserved, Boolean invoiced, 
 			Boolean attended, Collection limitToCourses) {
 		// The default setup - returns everything
@@ -185,9 +185,9 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
 			criteria.add(Restrictions.eq("courseid", courseId));
 		}
 
-		// Municipality (of the applicant)
-		if ((municipalityId != null) && (municipalityId.intValue() != 0)) {
-			criteria.add(Restrictions.eq("municipalityid", municipalityId));
+		// Organization (of the applicant)
+		if ((organizationId != null) && (organizationId.intValue() != 0)) {
+			criteria.add(Restrictions.eq("organizationid", organizationId));
 		}
 
 		// Service area (of the applicant)
@@ -256,8 +256,8 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
 
 			// Are we only to include "locals" in the search
 			if (localOnly.booleanValue()) {
-				criteria.add(Restrictions.eq("municipalityid", course
-						.getMunicipalityid()));
+				criteria.add(Restrictions.eq("organizationid", course
+						.getOrganizationid()));
 			}
 
 			criteria.setProjection(Projections.rowCount());

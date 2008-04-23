@@ -36,7 +36,7 @@ public class ServiceAreaDAOHibernate extends BaseDAOHibernate
         DetachedCriteria criteria = DetachedCriteria.forClass(ServiceArea.class);
 
         // If the includeDisabled is not true, we only return enabled
-        // municipalities
+        // organizations
         if (!includeDisabled.booleanValue()) {
             criteria.add(Restrictions.eq("selectable", new Boolean("true")));
         }

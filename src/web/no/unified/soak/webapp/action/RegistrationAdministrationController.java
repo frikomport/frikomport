@@ -15,7 +15,7 @@ import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
-import no.unified.soak.service.MunicipalitiesManager;
+import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.WaitingListManager;
@@ -58,7 +58,7 @@ public class RegistrationAdministrationController extends BaseFormController {
 
 	private ServiceAreaManager serviceAreaManager = null;
 
-	private MunicipalitiesManager municipalitiesManager = null;
+	private OrganizationManager organizationManager = null;
 
 	private WaitingListManager waitingListManager = null;
 
@@ -96,8 +96,8 @@ public class RegistrationAdministrationController extends BaseFormController {
 		this.serviceAreaManager = serviceAreaManager;
 	}
 
-	public void setMunicipalitiesManager(MunicipalitiesManager municipalitiesManager) {
-		this.municipalitiesManager = municipalitiesManager;
+	public void setOrganizationManager(OrganizationManager organizationManager) {
+		this.organizationManager = organizationManager;
 	}
 
 	/**
@@ -119,11 +119,11 @@ public class RegistrationAdministrationController extends BaseFormController {
 			model.put("serviceareas", serviceAreas);
 		}
 
-		// Retrieve all municipalities into an array
-		List municipalities = municipalitiesManager.getAll();
+		// Retrieve all organization into an array
+		List organizations = organizationManager.getAll();
 
-		if (municipalities != null) {
-			model.put("municipalities", municipalities);
+		if (organizations != null) {
+			model.put("organizations", organizations);
 		}
 
 		// Retrieve the course the user wants to attend
@@ -445,8 +445,7 @@ public class RegistrationAdministrationController extends BaseFormController {
 //						.getStopTime()) + "\n");
 //		msg.append(StringEscapeUtils.unescapeHtml(getText("course.duration", locale)) + ": " + course.getDuration()
 //				+ "\n");
-//		msg.append(StringEscapeUtils.unescapeHtml(getText("course.municipality", locale)) + ": "
-//				+ course.getMunicipality().getName() + "\n");
+//		msg.append(StringEscapeUtils.unescapeHtml(getText("course.organization", locale)) + ": "
 //		msg.append(StringEscapeUtils.unescapeHtml(getText("course.serviceArea", locale)) + ": "
 //				+ course.getServiceArea().getName() + "\n");
 //		msg.append(StringEscapeUtils.unescapeHtml(getText("course.location", locale)) + ": "

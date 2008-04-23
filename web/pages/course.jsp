@@ -77,10 +77,10 @@
 
     <tr>
         <th>
-            <fmt:message key="course.municipality"/>
+            <fmt:message key="course.organization"/>
         </th>
         <td>
-            <spring:bind path="course.municipality.name">
+            <spring:bind path="course.organization.name">
             	<c:out value="${status.value}"/>
             </spring:bind>
         </td>
@@ -142,19 +142,19 @@
 	<c:if test="${!singleprice}">
     <tr>
         <th>
-            <fmt:message key="course.reservedMunicipal"/>
+            <fmt:message key="course.reservedInternal"/>
         </th>
         <td>
-        	<fmt:formatNumber value="${course.reservedMunicipal}" minFractionDigits="0"/>
+        	<fmt:formatNumber value="${course.reservedInternal}" minFractionDigits="0"/>
         </td>
     </tr>
 
     <tr>
         <th>
-            <fmt:message key="course.feeMunicipal"/>
+            <fmt:message key="course.feeInternal"/>
         </th>
         <td>
-        	<fmt:formatNumber value="${course.feeMunicipal}" minFractionDigits="2"/>
+        	<fmt:formatNumber value="${course.feeInternal}" minFractionDigits="2"/>
         </td>
     </tr>
 	</c:if>

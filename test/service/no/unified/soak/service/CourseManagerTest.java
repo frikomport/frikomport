@@ -69,7 +69,7 @@ public class CourseManagerTest extends BaseManagerTestCase {
      */
     public void testSearchCourses() throws Exception {
         course = new Course();
-        course.setMunicipalityid(new Long("1"));
+        course.setOrganizationid(new Long("1"));
         course.setServiceAreaid(new Long("1"));
 
         courseDAO.expects(once()).method("searchCourses")
@@ -127,17 +127,17 @@ public class CourseManagerTest extends BaseManagerTestCase {
         course.setServiceAreaid(new Long(1072915406));
         course.setDuration("En times tid");
         course.setFeeExternal(new Double(1.861804799761001E307));
-        course.setFeeMunicipal(new Double(7.100663138877625E307));
+        course.setFeeInternal(new Double(7.100663138877625E307));
         course.setFreezeAttendance(new Date(2005 - 12 - 15));
         course.setMaxAttendants(new Integer(329979612));
         course.setName("Test av kursnavn");
         course.setRegisterBy(new Date(2005 - 12 - 15));
         course.setRegisterStart(new Date(2005 - 12 - 15));
-        course.setReservedMunicipal(new Integer(1700392601));
+        course.setReservedInternal(new Integer(1700392601));
         course.setStartTime(new Date(2005 - 12 - 15));
         course.setStopTime(new Date(2005 - 12 - 15));
         course.setLocationid(new Long(2115135111));
-        course.setMunicipalityid(new Long(1505726338));
+        course.setOrganizationid(new Long(1505726338));
         course.setDescription("Et test kurs");
         course.setRole("Anonymous");
 

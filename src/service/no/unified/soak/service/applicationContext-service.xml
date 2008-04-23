@@ -106,9 +106,9 @@
         <property name="basename" value="ApplicationResources"/>
     </bean>
     
-    <bean id="municipalitiesManager" parent="txProxyTemplate">
+    <bean id="organizationManager" parent="txProxyTemplate">
     	<property name="target">
-   	    	<bean class="no.unified.soak.service.impl.MunicipalitiesManagerImpl" autowire="byName" />
+   	    	<bean class="no.unified.soak.service.impl.OrganizationManagerImpl" autowire="byName" />
    	    </property>
   	</bean>
     <!-- Add new Managers here -->

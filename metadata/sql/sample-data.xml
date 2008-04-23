@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dataset>
-	<table name="municipalities">
+	<table name="organization">
 		<column>id</column>
 		<column>number</column>
 		<column>name</column>
@@ -266,7 +266,7 @@
     
     <column>description</column>
 
-    <column>municipalityid</column>
+    <column>organizationid</column>
 
 	<column>selectable</column>
 
@@ -464,7 +464,7 @@
     <column>detailurl</column>
     <column>duration</column>
     <column>feexternal</column>
-    <column>feemunicipal</column>
+    <column>feeinternal</column>
     <column>freezeAttendance</column>
     <column>id</column>
     <column>maxattendants</column>
@@ -472,12 +472,12 @@
     <column>registerby</column>
     <column>registerstart</column>
     <column>reminder</column>
-    <column>reservedmunicipal</column>
+    <column>reservedinternal</column>
     <column>starttime</column>
     <column>stoptime</column>
     <column>type</column>
     <column>locationid</column>
-    <column>municipalityid</column>
+    <column>organizationid</column>
     <column>description</column>
     <column>role</column>
     <row>
@@ -616,7 +616,7 @@
     <column>jobtitle</column>
     <column>lastname</column>
     <column>mobilephone</column>
-    <column>municipalityid</column>
+    <column>organizationid</column>
     <column>phone</column>
     <column>registered</column>
     <column>reserved</column>
@@ -699,7 +699,7 @@
         <value>Adm. dir</value>	<!-- jobtitle -->
         <value>Hinreksen</value>	<!-- lastname -->
         <value>99556688</value>	<!-- mobilephone -->
-        <value>2</value>				<!-- municipalityid -->
+        <value>2</value>				<!-- organizationid -->
         <value>55123456</value>	<!-- phone -->
         <value>2006-01-15 06:00:00</value>								<!-- registered -->
         <value>0</value>								<!-- reserved  -->
@@ -720,7 +720,7 @@
         <value>Adm. dir</value>	<!-- jobtitle -->
         <value>Unified</value>	<!-- lastname -->
         <value>99556688</value>	<!-- mobilephone -->
-        <value>2</value>				<!-- municipalityid -->
+        <value>2</value>				<!-- organizationid -->
         <value>55123456</value>	<!-- phone -->
         <value>2006-01-15 07:00:00</value>								<!-- registered -->
         <value>0</value>								<!-- reserved  -->
@@ -741,7 +741,7 @@
         <value>Adm. dir</value>	<!-- jobtitle -->
         <value>RouyerGmailsen</value>	<!-- lastname -->
         <value>99556688</value>	<!-- mobilephone -->
-        <value>2</value>				<!-- municipalityid -->
+        <value>2</value>				<!-- organizationid -->
         <value>55123456</value>	<!-- phone -->
         <value>2006-01-15 08:00:00</value>								<!-- registered -->
         <value>0</value>								<!-- reserved  -->
@@ -762,7 +762,7 @@
         <value>Adm. dir</value>	<!-- jobtitle -->
         <value>JobbOgGmailsen</value>	<!-- lastname -->
         <value>99556688</value>	<!-- mobilephone -->
-        <value>1</value>				<!-- municipalityid -->
+        <value>1</value>				<!-- organizationid -->
         <value>55123456</value>	<!-- phone -->
         <value>2006-01-15 09:00:00</value>								<!-- registered -->
         <value>0</value>								<!-- reserved  -->
@@ -783,7 +783,7 @@
         <value>Adm. dir</value>	<!-- jobtitle -->
         <value>JobbOgHjemmesen</value>	<!-- lastname -->
         <value>99556688</value>	<!-- mobilephone -->
-        <value>1</value>				<!-- municipalityid -->
+        <value>1</value>				<!-- organizationid -->
         <value>55123456</value>	<!-- phone -->
         <value>2006-01-15 10:00:00</value>								<!-- registered -->
         <value>0</value>								<!-- reserved  -->
@@ -804,7 +804,7 @@
         <value>Adm. dir</value>	<!-- jobtitle -->
         <value>HarIkkeMailsen</value>	<!-- lastname -->
         <value>99556688</value>	<!-- mobilephone -->
-        <value>2</value>				<!-- municipalityid -->
+        <value>2</value>				<!-- organizationid -->
         <value>55123456</value>	<!-- phone -->
         <value>2006-01-15 11:00:00</value>								<!-- registered -->
         <value>0</value>								<!-- reserved  -->
@@ -825,7 +825,7 @@
         <value>Adm. dir</value>	<!-- jobtitle -->
         <value>Sensensensen</value>	<!-- lastname -->
         <value>99556688</value>	<!-- mobilephone -->
-        <value>2</value>				<!-- municipalityid -->
+        <value>2</value>				<!-- organizationid -->
         <value>55123456</value>	<!-- phone -->
         <value>2006-01-15 12:00:00</value>								<!-- registered -->
         <value>0</value>								<!-- reserved  -->

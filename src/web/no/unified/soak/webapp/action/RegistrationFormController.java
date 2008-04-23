@@ -27,7 +27,7 @@ import no.unified.soak.model.Notification;
 import no.unified.soak.model.Registration;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
-import no.unified.soak.service.MunicipalitiesManager;
+import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.NotificationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
@@ -54,7 +54,7 @@ public class RegistrationFormController extends BaseFormController {
 
 	private ServiceAreaManager serviceAreaManager = null;
 
-	private MunicipalitiesManager municipalitiesManager = null;
+	private OrganizationManager organizationManager = null;
 
 	private NotificationManager notificationManager = null;
 
@@ -92,9 +92,9 @@ public class RegistrationFormController extends BaseFormController {
 		this.serviceAreaManager = serviceAreaManager;
 	}
 
-	public void setMunicipalitiesManager(
-			MunicipalitiesManager municipalitiesManager) {
-		this.municipalitiesManager = municipalitiesManager;
+	public void setOrganizationManager(
+			OrganizationManager organizationManager) {
+		this.organizationManager = organizationManager;
 	}
 
 	/**
@@ -120,10 +120,10 @@ public class RegistrationFormController extends BaseFormController {
 			model.put("serviceareas", serviceAreas);
 		}
 
-		// Retrieve all municipalities into an array
-		List municipalities = municipalitiesManager.getAll();
-		if (municipalities != null) {
-			model.put("municipalities", municipalities);
+		// Retrieve all organizations into an array
+		List organizations = organizationManager.getAll();
+		if (organizations != null) {
+			model.put("organizations", organizations);
 		}
 
 		// Retrieve the course the user wants to attend
@@ -151,10 +151,10 @@ public class RegistrationFormController extends BaseFormController {
 			registration = registrationManager.getRegistration(id);
 		} else {
 			registration = new Registration();
-	        // Check if a default municipality should be applied
-	        Object omid = request.getAttribute(Constants.EZ_MUNICIPALITY);
+	        // Check if a default organization should be applied
+	        Object omid = request.getAttribute(Constants.EZ_ORGANIZATION);
 	        if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
-	            registration.setMunicipalityid(new Long(omid.toString()));
+	            registration.setOrganizationid(new Long(omid.toString()));
 	        }
 		}
 
@@ -222,8 +222,8 @@ public class RegistrationFormController extends BaseFormController {
 			// Lets find out if the course has room for this one
 			Boolean localAttendant = new Boolean(true);
 
-			if (registration.getMunicipalityid().longValue() != course
-					.getMunicipalityid().longValue()) {
+			if (registration.getOrganizationid().longValue() != course
+					.getOrganizationid().longValue()) {
 				localAttendant = new Boolean(false);
 			}
 
@@ -343,8 +343,8 @@ public class RegistrationFormController extends BaseFormController {
 				locale))
 				+ ": " + course.getDuration() + "\n");
 		msg.append(StringEscapeUtils.unescapeHtml(getText(
-				"course.municipality", locale))
-				+ ": " + course.getMunicipality().getName() + "\n");
+				"course.organization", locale))
+				+ ": " + course.getOrganization().getName() + "\n");
 		msg.append(StringEscapeUtils.unescapeHtml(getText("course.serviceArea",
 				locale))
 				+ ": " + course.getServiceArea().getName() + "\n");

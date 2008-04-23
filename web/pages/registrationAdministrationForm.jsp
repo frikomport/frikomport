@@ -66,8 +66,8 @@
 	<display:column property="lastName" sortable="true" headerClass="sortable" 
 		titleKey="registration.lastName"/>
 
-	<display:column property="municipality.name" sortable="true" headerClass="sortable" 
-		titleKey="registration.municipality"/>
+	<display:column property="organization.name" sortable="true" headerClass="sortable" 
+		titleKey="registration.organization"/>
 
 	<display:column property="jobTitle" sortable="true" headerClass="sortable" 
 		titleKey="registration.jobTitle"/>

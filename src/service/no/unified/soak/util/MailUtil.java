@@ -178,8 +178,8 @@ public class MailUtil {
 						+ getText("time.format", locale, messageSource), course.getStopTime()) + "\n");
 		msg.append(StringEscapeUtils.unescapeHtml(getText("course.duration", locale, messageSource)) + ": "
 				+ course.getDuration() + "\n");
-		msg.append(StringEscapeUtils.unescapeHtml(getText("course.municipality", locale, messageSource)) + ": "
-				+ course.getMunicipality().getName() + "\n");
+		msg.append(StringEscapeUtils.unescapeHtml(getText("course.organization", locale, messageSource)) + ": "
+				+ course.getOrganization().getName() + "\n");
 		msg.append(StringEscapeUtils.unescapeHtml(getText("course.serviceArea", locale, messageSource)) + ": "
 				+ course.getServiceArea().getName() + "\n");
 		msg.append(StringEscapeUtils.unescapeHtml(getText("course.location", locale, messageSource)) + ": "

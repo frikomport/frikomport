@@ -11,15 +11,15 @@
 
 	<table>
 	    <th>
-	        <soak:label key="location.municipality"/>
+	        <soak:label key="location.organization"/>
 	    </th>
 	    <td>
-	        <spring:bind path="location.municipalityid">
+	        <spring:bind path="location.organizationid">
 				  <select name="<c:out value="${status.expression}"/>">
-				    <c:forEach var="municipality" items="${municipalities}">
-				      <option value="<c:out value="${municipality.id}"/>"
-					      <c:if test="${municipality.id == location.municipalityid}"> selected="selected"</c:if>>
-				        <c:out value="${municipality.name}"/>
+				    <c:forEach var="organization" items="${organizations}">
+				      <option value="<c:out value="${organization.id}"/>"
+					      <c:if test="${organization.id == location.organizationid}"> selected="selected"</c:if>>
+				        <c:out value="${organization.name}"/>
 				      </option>
 				    </c:forEach>
 				  </select>            
@@ -76,8 +76,8 @@
     <display:column property="phone" sortable="true" headerClass="sortable"
          titleKey="location.phone"/>
          
-    <display:column property="municipality.name" sortable="true" headerClass="sortable"
-         titleKey="location.municipality"/>
+    <display:column property="organization.name" sortable="true" headerClass="sortable"
+         titleKey="location.organization"/>
 
     <display:column sortable="true" headerClass="sortable"
          titleKey="location.selectable">

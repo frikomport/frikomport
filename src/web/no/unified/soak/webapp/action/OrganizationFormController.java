@@ -10,8 +10,8 @@
  */
 package no.unified.soak.webapp.action;
 
-import no.unified.soak.model.Municipalities;
-import no.unified.soak.service.MunicipalitiesManager;
+import no.unified.soak.model.Organization;
+import no.unified.soak.service.OrganizationManager;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -28,17 +28,17 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Implementation of SimpleFormController that interacts with the
- * MunicipalitiesManager to retrieve/persist values to the database.
+ * OrganizationManager to retrieve/persist values to the database.
  *
  * @author hrj
  */
-public class MunicipalitiesFormController extends BaseFormController {
-    private MunicipalitiesManager mgr = null;
+public class OrganizationFormController extends BaseFormController {
+    private OrganizationManager mgr = null;
 
     /**
      * @param roleManager The roleManager to set.
      */
-    public void setMunicipalitiesManager(MunicipalitiesManager mgr) {
+    public void setOrganizationManager(OrganizationManager mgr) {
         this.mgr = mgr;
     }
 
@@ -50,15 +50,15 @@ public class MunicipalitiesFormController extends BaseFormController {
     protected Object formBackingObject(HttpServletRequest request)
         throws Exception {
         String id = request.getParameter("id");
-        Municipalities municipalities = null;
+        Organization organization = null;
 
         if (!StringUtils.isEmpty(id)) {
-            municipalities = mgr.getMunicipalities(new Long(id));
+            organization = mgr.getOrganization(new Long(id));
         } else {
-            municipalities = new Municipalities();
+            organization = new Organization();
         }
 
-        return municipalities;
+        return organization;
     }
 
     /*
@@ -92,24 +92,24 @@ public class MunicipalitiesFormController extends BaseFormController {
             log.debug("entering 'onSubmit' method...");
         }
 
-        Municipalities municipalities = (Municipalities) command;
-        boolean isNew = (municipalities.getId() == null);
+        Organization organization = (Organization) command;
+        boolean isNew = (organization.getId() == null);
         String success = getSuccessView();
         Locale locale = request.getLocale();
 
         if (request.getParameter("delete") != null) {
-            mgr.removeMunicipalities(municipalities.getId());
-            saveMessage(request, getText("municipalities.deleted", locale));
+            mgr.removeOrganization(organization.getId());
+            saveMessage(request, getText("organization.deleted", locale));
         } else {
-            mgr.saveMunicipalities(municipalities);
+            mgr.saveOrganization(organization);
 
-            String key = (isNew) ? "municipalities.added"
-                                 : "municipalities.updated";
+            String key = (isNew) ? "organization.added"
+                                 : "organization.updated";
             saveMessage(request, getText(key, locale));
 
             if (!isNew) {
-                success = "editMunicipalities.html?id=" +
-                    municipalities.getId();
+                success = "editOrganization.html?id=" +
+                    organization.getId();
             }
         }
 

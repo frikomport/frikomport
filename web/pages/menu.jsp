@@ -8,9 +8,9 @@
     <menu:displayMenu name="FileUpload"/>
     <menu:displayMenu name="FlushCache"/>
     <menu:displayMenu name="Clickstream"/>
-    <!--Municipalities-START-->
-    <menu:displayMenu name="MunicipalitiesMenu"/>
-    <!--Municipalities-END-->
+    <!--Organization-START-->
+    <menu:displayMenu name="OrganizationMenu"/>
+    <!--Organization-END-->
     <!--ServiceArea-START-->
     <menu:displayMenu name="ServiceAreaMenu"/>
     <!--ServiceArea-END-->

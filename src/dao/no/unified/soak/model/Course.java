@@ -35,8 +35,8 @@ public class Course extends BaseObject implements Serializable {
      */
     private static final long serialVersionUID = -4869033333668709720L;
     private Long id;
-    private Municipalities municipality;
-    private Long municipalityid;
+    private Organization organization;
+    private Long organizationid;
     private EzUser responsible;
     private Long responsibleid;
     private ServiceArea serviceArea;
@@ -55,9 +55,9 @@ public class Course extends BaseObject implements Serializable {
     private Date freezeAttendance;
     private Date reminder;
     private Integer maxAttendants;
-    private Integer reservedMunicipal;
+    private Integer reservedInternal;
     private String detailURL;
-    private Double feeMunicipal;
+    private Double feeInternal;
     private Double feeExternal;
     private String description;
     private String role;
@@ -182,20 +182,20 @@ public class Course extends BaseObject implements Serializable {
     }
 
     /**
-     * @return Returns the feeMunicipal.
-     * @hibernate.property column="feemunicipal" not-null="true"
+     * @return Returns the feeInternal.
+     * @hibernate.property column="feeinternal" not-null="true"
      */
-    public Double getFeeMunicipal() {
-        return feeMunicipal;
+    public Double getFeeInternal() {
+        return feeInternal;
     }
 
     /**
-     * @param feeMunicipal
-     *            The feeMunicipal to set.
+     * @param feeInternal
+     *            The feeInternal to set.
      * @spring.validator type="required"
      */
-    public void setFeeMunicipal(Double feeMunicipal) {
-        this.feeMunicipal = feeMunicipal;
+    public void setFeeInternal(Double feeInternal) {
+        this.feeInternal = feeInternal;
     }
 
     /**
@@ -318,20 +318,20 @@ public class Course extends BaseObject implements Serializable {
     }
 
     /**
-     * @return Returns the reservedMunicipal.
-     * @hibernate.property column="reservedmunicipal" not-null="true"
+     * @return Returns the reservedInternal.
+     * @hibernate.property column="reservedinternal" not-null="true"
      */
-    public Integer getReservedMunicipal() {
-        return reservedMunicipal;
+    public Integer getReservedInternal() {
+        return reservedInternal;
     }
 
     /**
-     * @param reservedMunicipal
-     *            The reservedMunicipal to set.
+     * @param reservedInternal
+     *            The reservedInternal to set.
      * @spring.validator type="required"
      */
-    public void setReservedMunicipal(Integer reservedMunicipal) {
-        this.reservedMunicipal = reservedMunicipal;
+    public void setReservedInternal(Integer reservedInternal) {
+        this.reservedInternal = reservedInternal;
     }
 
     /**
@@ -452,37 +452,37 @@ public class Course extends BaseObject implements Serializable {
     }
 
     /**
-     * @return Returns the municipality.
-     * @hibernate.many-to-one not-null="true" column="municipalityid"
+     * @return Returns the organization.
+     * @hibernate.many-to-one not-null="true" column="organizationid"
      *                        update="false" cascade="none" insert="false"
      */
-    public Municipalities getMunicipality() {
-        return municipality;
+    public Organization getOrganization() {
+        return organization;
     }
 
     /**
-     * @param municipality
-     *            The municipality to set.
+     * @param organization
+     *            The organization to set.
      */
-    public void setMunicipality(Municipalities municipality) {
-        this.municipality = municipality;
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
 
     /**
-     * @return Returns the municipalityid.
-     * @hibernate.property column="municipalityid" not-null="true"
+     * @return Returns the organizationid.
+     * @hibernate.property column="organizationid" not-null="true"
      */
-    public Long getMunicipalityid() {
-        return municipalityid;
+    public Long getOrganizationid() {
+        return organizationid;
     }
 
     /**
-     * @param municipalityid
-     *            The municipalityid to set.
+     * @param organizationid
+     *            The organizationid to set.
      * @spring.validator type="required"
      */
-    public void setMunicipalityid(Long municipalityid) {
-        this.municipalityid = municipalityid;
+    public void setOrganizationid(Long organizationid) {
+        this.organizationid = organizationid;
     }
 
     // /**
@@ -577,12 +577,12 @@ public class Course extends BaseObject implements Serializable {
     	this.setDetailURL(original.getDetailURL());
     	this.setDuration(original.getDuration());
     	this.setFeeExternal(original.getFeeExternal());
-    	this.setFeeMunicipal(original.getFeeMunicipal());
+    	this.setFeeInternal(original.getFeeInternal());
     	this.setFreezeAttendance(original.getFreezeAttendance());
     	this.setInstructor(original.getInstructor());
     	this.setInstructorid(original.getInstructorid());
-    	this.setMunicipality(original.getMunicipality());
-    	this.setMunicipalityid(original.getMunicipalityid());
+    	this.setOrganization(original.getOrganization());
+    	this.setOrganizationid(original.getOrganizationid());
     	this.setResponsible(original.getResponsible());
     	this.setResponsibleid(original.getResponsibleid());
     	this.setServiceArea(original.getServiceArea());
@@ -597,7 +597,7 @@ public class Course extends BaseObject implements Serializable {
     	this.setRegisterStart(original.getRegisterStart());
     	this.setReminder(original.getReminder());
     	this.setMaxAttendants(original.getMaxAttendants());
-    	this.setReservedMunicipal(original.getReservedMunicipal());
+    	this.setReservedInternal(original.getReservedInternal());
     	this.setRole(original.getRole());
     }
 

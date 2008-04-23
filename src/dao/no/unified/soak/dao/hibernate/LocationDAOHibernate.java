@@ -84,10 +84,10 @@ public class LocationDAOHibernate extends BaseDAOHibernate
 
         // Check for parameteres (in other words - look for restrictions)
         if (location != null) {
-            if ((location.getMunicipalityid() != null) &&
-                    (location.getMunicipalityid().longValue() != 0)) {
-                criteria.add(Restrictions.eq("municipalityid",
-                        location.getMunicipalityid()));
+            if ((location.getOrganizationid() != null) &&
+                    (location.getOrganizationid().longValue() != 0)) {
+                criteria.add(Restrictions.eq("organizationid",
+                        location.getOrganizationid()));
             }
 
             if (location.getSelectable() != null) {

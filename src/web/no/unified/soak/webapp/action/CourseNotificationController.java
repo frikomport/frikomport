@@ -35,7 +35,7 @@ import no.unified.soak.service.AttachmentManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.LocationManager;
 import no.unified.soak.service.MailEngine;
-import no.unified.soak.service.MunicipalitiesManager;
+import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.PersonManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
@@ -121,10 +121,10 @@ public class CourseNotificationController extends BaseFormController {
 			course.setId(null);
 		} else {
 			course = new Course();
-	        // Check if a default municipality should be applied
-	        Object omid = request.getAttribute(Constants.EZ_MUNICIPALITY);
+	        // Check if a default organization should be applied
+	        Object omid = request.getAttribute(Constants.EZ_ORGANIZATION);
 	        if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
-	            course.setMunicipalityid(new Long(omid.toString()));
+	            course.setOrganizationid(new Long(omid.toString()));
 	        }
 		}
 
@@ -233,8 +233,8 @@ public class CourseNotificationController extends BaseFormController {
 //				locale))
 //				+ ": " + course.getDuration() + "\n");
 //		msg.append(StringEscapeUtils.unescapeHtml(getText(
-//				"course.municipality", locale))
-//				+ ": " + course.getMunicipality().getName() + "\n");
+//				"course.organization", locale))
+//				+ ": " + course.getOrganization().getName() + "\n");
 //		msg.append(StringEscapeUtils.unescapeHtml(getText("course.serviceArea",
 //				locale))
 //				+ ": " + course.getServiceArea().getName() + "\n");

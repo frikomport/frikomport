@@ -36,7 +36,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	private Course course;
 
-	private Municipalities municipality;
+	private Organization organization;
 
 	private ServiceArea serviceArea;
 
@@ -64,7 +64,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	private Boolean invoiced;
 
-	private Long municipalityid;
+	private Long organizationid;
 
 	private Long courseid;
 
@@ -288,37 +288,37 @@ public class Registration extends BaseObject implements Serializable {
 	}
 
 	/**
-	 * @return Returns the municipality.
-	 * @hibernate.many-to-one not-null="true" column="municipalityid"
+	 * @return Returns the organization.
+	 * @hibernate.many-to-one not-null="true" column="organizationid"
 	 *                        insert="false" update="false" cascade="none"
 	 */
-	public Municipalities getMunicipality() {
-		return municipality;
+	public Organization getOrganization() {
+		return organization;
 	}
 
 	/**
-	 * @param municipality
-	 *            The municipality to set.
+	 * @param organization
+	 *            The organization to set.
 	 */
-	public void setMunicipality(Municipalities municipality) {
-		this.municipality = municipality;
+	public void setOrganization(Organization organization) {
+		this.organization = organization;
 	}
 
 	/**
-	 * @return Returns the municipalityid.
-	 * @hibernate.property column="municipalityid" not-null="true"
+	 * @return Returns the organizationid.
+	 * @hibernate.property column="organizationid" not-null="true"
 	 */
-	public Long getMunicipalityid() {
-		return municipalityid;
+	public Long getOrganizationid() {
+		return organizationid;
 	}
 
 	/**
-	 * @param municipalityid
-	 *            The municipalityid to set.
+	 * @param organizationid
+	 *            The organizationid to set.
 	 * @spring.validator type="required"
 	 */
-	public void setMunicipalityid(Long municipalityid) {
-		this.municipalityid = municipalityid;
+	public void setOrganizationid(Long organizationid) {
+		this.organizationid = organizationid;
 	}
 
 	/**
@@ -451,7 +451,7 @@ public class Registration extends BaseObject implements Serializable {
 				eZUserId).append("jobTitle", jobTitle).append("employeeNumber",
 				employeeNumber).append("firstName", firstName).append(
 				"lastName", lastName).append("reserved", reserved).append(
-				"invoiced", invoiced).append("municipalityid", municipalityid)
+				"invoiced", invoiced).append("organizationid", organizationid)
 				.append("courseid", courseid).append("serviceareaid",
 						serviceareaid).toString();
 	}

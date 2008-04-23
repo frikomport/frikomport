@@ -102,10 +102,10 @@ public class RegistrationManagerImpl extends BaseManager implements
 	 *      java.lang.Long, java.lang.Long, java.lang.Boolean,
 	 *      java.lang.Boolean)
 	 */
-	public List getSpecificRegistrations(Long courseId, Long municipalityId,
+	public List getSpecificRegistrations(Long courseId, Long organizationId,
 			Long serviceareaId, Boolean reserved, Boolean invoiced, 
 			Boolean attended, Collection limitToCourses) {
-		return dao.getSpecificRegistrations(courseId, municipalityId,
+		return dao.getSpecificRegistrations(courseId, organizationId,
 				serviceareaId, reserved, invoiced, attended, limitToCourses);
 	}
 

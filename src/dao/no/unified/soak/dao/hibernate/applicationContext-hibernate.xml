@@ -11,7 +11,7 @@
                 <value>no/unified/soak/model/Role.hbm.xml</value>
                 <value>no/unified/soak/model/User.hbm.xml</value>
                 <value>no/unified/soak/model/UserCookie.hbm.xml</value>
-	            <value>no/unified/soak/model/Municipalities.hbm.xml</value>
+	            <value>no/unified/soak/model/Organization.hbm.xml</value>
 	            <value>no/unified/soak/model/Location.hbm.xml</value>
 	            <value>no/unified/soak/model/Person.hbm.xml</value>
 	            <value>no/unified/soak/model/ServiceArea.hbm.xml</value>
@@ -63,8 +63,8 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-	<!-- MunicipalitiesDAO: Hibernate implementation -->
-	<bean id="municipalitiesDAO" class="no.unified.soak.dao.hibernate.MunicipalitiesDAOHibernate">
+	<!-- OrganizationDAO: Hibernate implementation -->
+	<bean id="organizationDAO" class="no.unified.soak.dao.hibernate.OrganizationDAOHibernate">
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
 	

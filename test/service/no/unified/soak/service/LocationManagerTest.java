@@ -69,7 +69,7 @@ public class LocationManagerTest extends BaseManagerTestCase {
      */
     public void testSearchLocations() throws Exception {
         location = new Location();
-        location.setMunicipalityid(new Long("2"));
+        location.setOrganizationid(new Long("2"));
 
         locationDAO.expects(once()).method("searchLocations")
                    .will(returnValue(new ArrayList()));
@@ -123,7 +123,7 @@ public class LocationManagerTest extends BaseManagerTestCase {
         // set required fields
         location.setAddress("Kari Karisens vei 11");
         location.setName("Karis Kurslokaler");
-        location.setMunicipalityid(new Long(1505726338));
+        location.setOrganizationid(new Long(1505726338));
 
         // set expected behavior on dao
         locationDAO.expects(once()).method("saveLocation").with(same(location))

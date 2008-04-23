@@ -90,10 +90,10 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
 
         // Check for parameteres (in other words - look for restrictions)
         if (course != null) {
-            if ((course.getMunicipalityid() != null) &&
-                    (course.getMunicipalityid().longValue() != 0)) {
-                criteria.add(Restrictions.eq("municipalityid",
-                        course.getMunicipalityid()));
+            if ((course.getOrganizationid() != null) &&
+                    (course.getOrganizationid().longValue() != 0)) {
+                criteria.add(Restrictions.eq("organizationid",
+                        course.getOrganizationid()));
             }
 
             if ((course.getServiceAreaid() != null) &&

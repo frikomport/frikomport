@@ -11,7 +11,7 @@
 package no.unified.soak.webapp.action;
 
 import no.unified.soak.Constants;
-import no.unified.soak.service.MunicipalitiesManager;
+import no.unified.soak.service.OrganizationManager;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,16 +24,16 @@ import javax.servlet.http.HttpServletResponse;
 
 
 /**
- * Controller class for Municipalities. Creates a view with a list of all
- * Municipalities.
+ * Controller class for Organizations. Creates a view with a list of all
+ * Organizations.
  *
  * @author hrj
  */
-public class MunicipalitiesController implements Controller {
-    private final Log log = LogFactory.getLog(MunicipalitiesController.class);
-    private MunicipalitiesManager mgr = null;
+public class OrganizationController implements Controller {
+    private final Log log = LogFactory.getLog(OrganizationController.class);
+    private OrganizationManager mgr = null;
 
-    public void setMunicipalitiesManager(MunicipalitiesManager mgr) {
+    public void setOrganizationManager(OrganizationManager mgr) {
         this.mgr = mgr;
     }
 
@@ -47,7 +47,7 @@ public class MunicipalitiesController implements Controller {
             log.debug("entering 'handleRequest' method...");
         }
 
-        return new ModelAndView("municipalitiesList",
-            Constants.MUNICIPALITIES_LIST, mgr.getAllIncludingDisabled());
+        return new ModelAndView("organizationList",
+            Constants.ORGANIZATION_LIST, mgr.getAllIncludingDisabled());
     }
 }

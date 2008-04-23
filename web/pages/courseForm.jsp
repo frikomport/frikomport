@@ -169,15 +169,15 @@ cal1.setTodayText("Idag");
 
     <tr>
         <th>
-            <soak:label key="course.municipality"/>
+            <soak:label key="course.organization"/>
         </th>
         <td>
-            <spring:bind path="course.municipalityid">
+            <spring:bind path="course.organizationid">
 				  <select name="<c:out value="${status.expression}"/>">
-				    <c:forEach var="municipality" items="${municipalities}">
-				      <option value="<c:out value="${municipality.id}"/>"
-					      <c:if test="${municipality.id == status.value}"> selected="selected"</c:if>>
-				        <c:out value="${municipality.name}"/>
+				    <c:forEach var="organization" items="${organizations}">
+				      <option value="<c:out value="${organization.id}"/>"
+					      <c:if test="${organization.id == status.value}"> selected="selected"</c:if>>
+				        <c:out value="${organization.name}"/>
 				      </option>
 				    </c:forEach>
 				  </select>            
@@ -217,7 +217,7 @@ cal1.setTodayText("Idag");
 				    <c:forEach var="location" items="${locations}">
 				      <option value="<c:out value="${location.id}"/>"
 					      <c:if test="${location.id == status.value}"> selected="selected"</c:if>>
-				        <c:out value="${location.name}"/> (<c:out value="${location.municipality.name}"/>)
+				        <c:out value="${location.name}"/> (<c:out value="${location.organization.name}"/>)
 				      </option>
 				    </c:forEach>
 				  </select>            
@@ -281,10 +281,10 @@ cal1.setTodayText("Idag");
 	<c:when test="${!singleprice}">
 	<tr>
         <th>
-            <soak:label key="course.reservedMunicipal"/>
+            <soak:label key="course.reservedInternal"/>
         </th>
         <td>
-            <spring:bind path="course.reservedMunicipal">
+            <spring:bind path="course.reservedInternal">
                 <input type="text" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" 
                     value="<c:out value="${status.value}"/>" />
                 <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
@@ -294,10 +294,10 @@ cal1.setTodayText("Idag");
 
     <tr>
         <th>
-            <soak:label key="course.feeMunicipal"/>
+            <soak:label key="course.feeInternal"/>
         </th>
         <td>
-            <spring:bind path="course.feeMunicipal">
+            <spring:bind path="course.feeInternal">
                 <input type="text" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" 
                     value="<c:out value="${status.value}"/>" />
                 <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
@@ -306,10 +306,10 @@ cal1.setTodayText("Idag");
     </tr>
 	</c:when>
 	<c:otherwise>
-            <spring:bind path="course.reservedMunicipal">
+            <spring:bind path="course.reservedInternal">
                 <input type="hidden" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" value="0" />
             </spring:bind>
-            <spring:bind path="course.feeMunicipal">
+            <spring:bind path="course.feeInternal">
                 <input type="hidden" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" value="0" />
             </spring:bind>
     </c:otherwise>

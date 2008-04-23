@@ -12,9 +12,9 @@ package no.unified.soak.webapp.action;
 
 import no.unified.soak.Constants;
 import no.unified.soak.model.Location;
-import no.unified.soak.model.Municipalities;
+import no.unified.soak.model.Organization;
 import no.unified.soak.service.LocationManager;
-import no.unified.soak.service.MunicipalitiesManager;
+import no.unified.soak.service.OrganizationManager;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -42,15 +42,15 @@ import javax.servlet.http.HttpSession;
  */
 public class LocationController extends BaseFormController {
     private LocationManager locationManager = null;
-    private MunicipalitiesManager municipalitiesManager = null;
+    private OrganizationManager organizationManager = null;
 
     public void setLocationManager(LocationManager locationManager) {
         this.locationManager = locationManager;
     }
 
-    public void setMunicipalitiesManager(
-        MunicipalitiesManager municipalitiesManager) {
-        this.municipalitiesManager = municipalitiesManager;
+    public void setOrganizationManager(
+        OrganizationManager organizationManager) {
+        this.organizationManager = organizationManager;
     }
 
     /**
@@ -72,19 +72,19 @@ public class LocationController extends BaseFormController {
             location = (Location) comm;
         }
         
-        // Don't modify municipality if in postback
+        // Don't modify organization if in postback
         String postback = request.getParameter("ispostbacklocationlist");
         if ((postback == null) || (postback.compareTo("1") != 0)) {
-        	// Check if a specific municipality has been requested
+        	// Check if a specific organization has been requested
 	        String mid = request.getParameter("mid");
 	        if ((mid != null) && StringUtils.isNumeric(mid)) {
-	            location.setMunicipalityid(new Long(mid));
+	            location.setOrganizationid(new Long(mid));
 	        }
         }
 
         // Set up parameters, and return them to the view
         Map model = new HashMap();
-        model = addMunicipalities(model, locale);
+        model = addOrganizations(model, locale);
         model.put("location", location);
 
         // Add all locations to the list
@@ -118,7 +118,7 @@ public class LocationController extends BaseFormController {
         Location location = (Location) command;
 
         // Set up parameters, and return them to the view
-        model = addMunicipalities(model, locale);
+        model = addOrganizations(model, locale);
         model.put("location", location);
         session.setAttribute("location", location);
 
@@ -130,32 +130,32 @@ public class LocationController extends BaseFormController {
     }
 
     /**
-     * Used to create a list of all municipalities with an option 0 that says
-     * "all municipalities" and is therefore made with search forms in mind.
+     * Used to create a list of all organization with an option 0 that says
+     * "all organization" and is therefore made with search forms in mind.
      *
      * @param model
      *            model to send to view
      * @param locale
      *            currently used locale
-     * @return map with all municipalities and one with id=0 that is "all
-     *         municipalities"
+     * @return map with all organization and one with id=0 that is "all
+     *         organization"
      */
-    private Map addMunicipalities(Map model, Locale locale) {
+    private Map addOrganizations(Map model, Locale locale) {
         if (model == null) {
             model = new HashMap();
         }
 
-        // Get all municipalities in the database
-        List municipalitiesInDB = municipalitiesManager.getAll();
-        List municipalities = new ArrayList();
-        Municipalities municipalityDummy = new Municipalities();
-        municipalityDummy.setId(new Long(0));
-        municipalityDummy.setName(getText("misc.all", locale));
-        municipalities.add(municipalityDummy);
-        municipalities.addAll(municipalitiesInDB);
+        // Get all organization in the database
+        List organizationsInDB = organizationManager.getAll();
+        List organizations = new ArrayList();
+        Organization organizationDummy = new Organization();
+        organizationDummy.setId(new Long(0));
+        organizationDummy.setName(getText("misc.all", locale));
+        organizations.add(organizationDummy);
+        organizations.addAll(organizationsInDB);
 
-        if (municipalities != null) {
-            model.put("municipalities", municipalities);
+        if (organizations != null) {
+            model.put("organizations", organizations);
         }
 
         return model;

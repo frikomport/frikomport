@@ -180,15 +180,15 @@
 
     <tr>
         <th>
-            <soak:label key="location.municipality"/>
+            <soak:label key="location.organization"/>
         </th>
         <td>
-            <spring:bind path="location.municipalityid">
+            <spring:bind path="location.organizationid">
 				  <select name="<c:out value="${status.expression}"/>">
-				    <c:forEach var="municipality" items="${municipalities}">
-				      <option value="<c:out value="${municipality.id}"/>"
-					      <c:if test="${municipality.id == status.value}"> selected="selected"</c:if>>
-				        <c:out value="${municipality.name}"/>
+				    <c:forEach var="organization" items="${organizations}">
+				      <option value="<c:out value="${organization.id}"/>"
+					      <c:if test="${organization.id == status.value}"> selected="selected"</c:if>>
+				        <c:out value="${organization.name}"/>
 				      </option>
 				    </c:forEach>
 				  </select>            

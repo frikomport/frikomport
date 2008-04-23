@@ -106,8 +106,8 @@ public class RegistrationManagerTest extends BaseManagerTestCase {
         course = new Course();
         course.setId(new Long(1));
         course.setMaxAttendants(new Integer(50));
-        course.setReservedMunicipal(new Integer(50));
-        course.setMunicipalityid(new Long(1));
+        course.setReservedInternal(new Integer(50));
+        course.setOrganizationid(new Long(1));
 
         Boolean localsOnly = new Boolean(true);
 
@@ -130,8 +130,8 @@ public class RegistrationManagerTest extends BaseManagerTestCase {
         course = new Course();
         course.setId(new Long(1));
         course.setMaxAttendants(new Integer(50));
-        course.setReservedMunicipal(new Integer(50));
-        course.setMunicipalityid(new Long(1));
+        course.setReservedInternal(new Integer(50));
+        course.setOrganizationid(new Long(1));
 
         Boolean localsOnly = new Boolean(true);
 
@@ -153,7 +153,7 @@ public class RegistrationManagerTest extends BaseManagerTestCase {
      */
     public void testGetSpecificRegistrations() throws Exception {
         Long courseId = new Long(1);
-        Long municipalityId = new Long(1);
+        Long organizationId = new Long(1);
         Long serviceareaId = new Long(1);
         Boolean reserved = new Boolean(true);
         Boolean invoiced = new Boolean(true);
@@ -162,7 +162,7 @@ public class RegistrationManagerTest extends BaseManagerTestCase {
 
         registrationDAO.expects(once()).method("getSpecificRegistrations")
                        .will(returnValue(new ArrayList()));
-        registrationManager.getSpecificRegistrations(courseId, municipalityId,
+        registrationManager.getSpecificRegistrations(courseId, organizationId,
             serviceareaId, reserved, invoiced, attended, limitToCourses);
         registrationDAO.verify();
     }
@@ -181,7 +181,7 @@ public class RegistrationManagerTest extends BaseManagerTestCase {
         // set required fields
         registration.setCourseid(new Long(1));
         registration.setInvoiced(new Boolean("false"));
-        registration.setMunicipalityid(new Long(1));
+        registration.setOrganizationid(new Long(1));
         registration.setRegistered(new Date());
         registration.setReserved(new Boolean("false"));
         registration.setServiceareaid(new Long(1));

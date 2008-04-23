@@ -148,10 +148,10 @@
 
     <tr>
         <th>
-            <fmt:message key="location.municipality"/>
+            <fmt:message key="location.organization"/>
         </th>
         <td>
-            <spring:bind path="location.municipality.name">
+            <spring:bind path="location.organization.name">
             	<c:out value="${status.value}"/>
             </spring:bind>
         </td>

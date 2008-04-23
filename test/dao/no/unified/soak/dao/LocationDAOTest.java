@@ -52,8 +52,8 @@ public class LocationDAOTest extends BaseDAOTestCase {
         String name = "Ola Nordmanns Kurssenter";
         location.setName(name);
 
-        Long municipalityid = new Long(1);
-        location.setMunicipalityid(municipalityid);
+        Long organizationid = new Long(1);
+        location.setOrganizationid(organizationid);
 
         Boolean selectable = new Boolean("true");
         location.setSelectable(selectable);
@@ -66,7 +66,7 @@ public class LocationDAOTest extends BaseDAOTestCase {
         // verify set fields are same after save
         assertEquals(address, location.getAddress());
         assertEquals(name, location.getName());
-        assertEquals(municipalityid, location.getMunicipalityid());
+        assertEquals(organizationid, location.getOrganizationid());
         assertEquals(selectable, location.getSelectable());
     }
 
@@ -113,8 +113,8 @@ public class LocationDAOTest extends BaseDAOTestCase {
         String name = "Peder Hansens Kurs";
         location.setName(name);
 
-        Long municipalityid = new Long(2);
-        location.setMunicipalityid(municipalityid);
+        Long organizationid = new Long(2);
+        location.setOrganizationid(organizationid);
 
         Boolean selectable = new Boolean("true");
         location.setSelectable(selectable);
@@ -123,7 +123,7 @@ public class LocationDAOTest extends BaseDAOTestCase {
 
         assertEquals(address, location.getAddress());
         assertEquals(name, location.getName());
-        assertEquals(municipalityid, location.getMunicipalityid());
+        assertEquals(organizationid, location.getOrganizationid());
         assertEquals(selectable, location.getSelectable());
     }
 
@@ -152,7 +152,7 @@ public class LocationDAOTest extends BaseDAOTestCase {
     /**
      * Tests the basic search functionaly for Location
      *
-     * Prerequisite: A Location with municipalityid=2
+     * Prerequisite: A Location with organizationid=2
      * where all dates are in the futur must exist in the database
      *
      * 1) Set the object
@@ -163,7 +163,7 @@ public class LocationDAOTest extends BaseDAOTestCase {
      */
     public void testSearchLocations() throws Exception {
         Location location = new Location();
-        location.setMunicipalityid(new Long("2"));
+        location.setOrganizationid(new Long("2"));
 
         List searchResults = dao.searchLocations(location);
         assertNotNull(searchResults);

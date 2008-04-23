@@ -207,17 +207,17 @@
     <!--Registration-BEAN-END-->
     <!-- Add additional controller beans here -->
 
-    <bean id="municipalitiesFormController" class="no.unified.soak.webapp.action.MunicipalitiesFormController">
-    	<property name="commandName"><value>municipalities</value></property>
-  		<property name="commandClass"><value>no.unified.soak.model.Municipalities</value></property>
+    <bean id="organizationFormController" class="no.unified.soak.webapp.action.OrganizationFormController">
+    	<property name="commandName"><value>organization</value></property>
+  		<property name="commandClass"><value>no.unified.soak.model.Organization</value></property>
 		<property name="validator"><ref bean="beanValidator"/></property>
-		<property name="formView"><value>municipalitiesForm</value></property>
-		<property name="successView" value="redirect:listMunicipalities.html"/>
-		<property name="municipalitiesManager"><ref bean="municipalitiesManager"/></property>
+		<property name="formView"><value>organizationForm</value></property>
+		<property name="successView" value="redirect:listOrganizations.html"/>
+		<property name="organizationManager"><ref bean="organizationManager"/></property>
     </bean>
 
-	<bean id="municipalitiesController" class="no.unified.soak.webapp.action.MunicipalitiesController">
-		<property name="municipalitiesManager"><ref bean="municipalitiesManager"/></property>
+	<bean id="organizationController" class="no.unified.soak.webapp.action.OrganizationController">
+		<property name="organizationManager"><ref bean="organizationManager"/></property>
 	</bean>
 
     <bean id="waitingListController" class="no.unified.soak.webapp.action.WaitingListController" autowire="byName">
@@ -246,8 +246,9 @@
                 <prop key="/uploadFile.html">fileUploadController</prop>
                 <prop key="/passwordHint.html">passwordHintController</prop>
 
-                <prop key="/editMunicipalities.html">municipalitiesFormController</prop>
-                <prop key="/listMunicipalities.html">municipalitiesController</prop>
+                <prop key="/editOrganization.html">organizationFormController</prop>
+                <prop key="/listOrganizations.html">organizationController</prop>
+                <prop key="/listMunicipalities.html">organizationController</prop>
 
                 <prop key="/listLocations.html">locationController</prop>
                 <prop key="/editLocation.html">locationFormController</prop>

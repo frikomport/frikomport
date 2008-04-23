@@ -68,7 +68,7 @@ public interface RegistrationDAO extends DAO {
 	/**
 	 * Returns the number of attendants registered to the course. If the
 	 * localsOnly parameter is set, the function returns the number of
-	 * participants that belong to the same municipality that is responsible for
+	 * participants that belong to the same organization that is responsible for
 	 * the course
 	 * 
 	 * @param localOnly
@@ -92,9 +92,9 @@ public interface RegistrationDAO extends DAO {
 	 * 
 	 * @param courseId
 	 *            Restrict list to registrations to this specific course
-     * @param municipalityId
+     * @param organizationId
 	 *            Restrict list to registrations where the registered user
-	 *            belongs to this specific municipality
+	 *            belongs to this specific organization
      * @param serviceareaId
 	 *            Restrict list to registrations where the registered user
 	 *            belongs to this service area
@@ -108,7 +108,7 @@ public interface RegistrationDAO extends DAO {
      *            attended (true) or not (false)
 	 * @return List of Courses
 	 */
-	public List getSpecificRegistrations(Long courseId, Long municipalityId,
+	public List getSpecificRegistrations(Long courseId, Long organizationId,
 			Long serviceareaId, Boolean reserved, Boolean invoiced, 
 			Boolean attended, Collection limitToCourses);
 

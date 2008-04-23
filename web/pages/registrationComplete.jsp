@@ -108,10 +108,10 @@
     </tr>
     <tr>
         <th>
-            <fmt:message key="registration.municipality"/>
+            <fmt:message key="registration.organization"/>
         </th>
         <td>
-            <spring:bind path="registration.municipality.name">
+            <spring:bind path="registration.organization.name">
             	<c:out value="${status.value}"/>
             </spring:bind>
         </td>
@@ -217,10 +217,10 @@
 
     <tr>
         <th>
-            <fmt:message key="course.municipality"/>
+            <fmt:message key="course.organization"/>
         </th>
         <td>
-            <spring:bind path="registration.course.municipality.name">
+            <spring:bind path="registration.course.organization.name">
             	<c:out value="${status.value}"/>
             </spring:bind>
         </td>
@@ -281,19 +281,19 @@
 
     <tr>
         <th>
-            <fmt:message key="course.reservedMunicipal"/>
+            <fmt:message key="course.reservedInternal"/>
         </th>
         <td>
-        	<fmt:formatNumber value="${registration.course.reservedMunicipal}" minFractionDigits="0"/>
+        	<fmt:formatNumber value="${registration.course.reservedInternal}" minFractionDigits="0"/>
         </td>
     </tr>
 
     <tr>
         <th>
-            <fmt:message key="course.feeMunicipal"/>
+            <fmt:message key="course.feeInternal"/>
         </th>
         <td>
-			<fmt:formatNumber value="${registration.course.feeMunicipal}" minFractionDigits="2"/>
+			<fmt:formatNumber value="${registration.course.feeInternal}" minFractionDigits="2"/>
         </td>
     </tr>
 

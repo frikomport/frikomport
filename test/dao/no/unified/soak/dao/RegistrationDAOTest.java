@@ -51,8 +51,8 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		Boolean invoiced = new Boolean("false");
 		registration.setInvoiced(invoiced);
 
-		Long municipalityid = new Long(1);
-		registration.setMunicipalityid(municipalityid);
+		Long organizationid = new Long(1);
+		registration.setOrganizationid(organizationid);
 
 		Date registered = new Date();
 		registration.setRegistered(registered);
@@ -92,7 +92,7 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		// verify set fields are same after save
 		assertEquals(courseid, registration.getCourseid());
 		assertEquals(invoiced, registration.getInvoiced());
-		assertEquals(municipalityid, registration.getMunicipalityid());
+		assertEquals(organizationid, registration.getOrganizationid());
 		assertEquals(registered, registration.getRegistered());
 		assertEquals(reserved, registration.getReserved());
 		assertEquals(serviceareaid, registration.getServiceareaid());
@@ -128,7 +128,7 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 
 	/**
 	 * Test the getSpecificRegistrations function. Prerequisite: A registration
-	 * in the database with - id=1 - serviceareaid=1 - municipalityid=1 -
+	 * in the database with - id=1 - serviceareaid=1 - organizationid=1 -
 	 * reserved=true - invoiced=true
 	 * 
 	 * 1. Readies all needed parameteres 2. Executes the function 3. Asserts
@@ -138,14 +138,14 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 	 */
 	public void testGetSpecificRegistrations() throws Exception {
 		Long courseId = new Long(1);
-		Long municipalityId = new Long(1);
+		Long organizationId = new Long(1);
 		Long serviceareaId = new Long(1);
 		Boolean reserved = new Boolean(true);
 		Boolean invoiced = new Boolean(true);
 		Boolean attended = new Boolean(false);
 		List limitToCourses = null;
 
-		List courses = dao.getSpecificRegistrations(courseId, municipalityId,
+		List courses = dao.getSpecificRegistrations(courseId, organizationId,
 				serviceareaId, reserved, invoiced, attended, limitToCourses);
 		assertTrue(courses.size() == 1);
 	}
@@ -166,8 +166,8 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		Boolean invoiced = new Boolean("false");
 		registration.setInvoiced(invoiced);
 
-		Long municipalityid = new Long(2);
-		registration.setMunicipalityid(municipalityid);
+		Long organizationid = new Long(2);
+		registration.setOrganizationid(organizationid);
 
 		Date registered = new Date();
 		registration.setRegistered(registered);
@@ -185,7 +185,7 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 
 		assertEquals(courseid, registration.getCourseid());
 		assertEquals(invoiced, registration.getInvoiced());
-		assertEquals(municipalityid, registration.getMunicipalityid());
+		assertEquals(organizationid, registration.getOrganizationid());
 		assertEquals(registered, registration.getRegistered());
 		assertEquals(reserved, registration.getReserved());
 		assertEquals(serviceareaid, registration.getServiceareaid());
@@ -228,8 +228,8 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		Course course = new Course();
 		course.setId(new Long(1));
 		course.setMaxAttendants(new Integer(50));
-		course.setReservedMunicipal(new Integer(50));
-		course.setMunicipalityid(new Long(1));
+		course.setReservedInternal(new Integer(50));
+		course.setOrganizationid(new Long(1));
 
 		Boolean local = new Boolean(true);
 
@@ -254,8 +254,8 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		Course course = new Course();
 		course.setId(new Long(1));
 		course.setMaxAttendants(new Integer(50));
-		course.setReservedMunicipal(new Integer(50));
-		course.setMunicipalityid(new Long(1));
+		course.setReservedInternal(new Integer(50));
+		course.setOrganizationid(new Long(1));
 
 		Boolean local = new Boolean(true);
 

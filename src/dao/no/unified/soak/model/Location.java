@@ -44,8 +44,8 @@ public class Location extends BaseObject implements Serializable {
     private Integer maxAttendants;
     private Double feePerDay;
     private String description;
-    private Long municipalityid;
-    private Municipalities municipality;
+    private Long organizationid;
+    private Organization organization;
     private Boolean selectable;
 
     /**
@@ -269,35 +269,35 @@ public class Location extends BaseObject implements Serializable {
     }
 
     /**
-     * @return Returns the municipality.
-     * @hibernate.many-to-one not-null="true" column="municipalityid"
+     * @return Returns the organization.
+     * @hibernate.many-to-one not-null="true" column="organizationid"
      *                        update="false" cascade="none" insert="false"
      */
-    public Municipalities getMunicipality() {
-        return municipality;
+    public Organization getOrganization() {
+        return organization;
     }
 
     /**
-     * @param municipality The municipality to set.
+     * @param organization The organization to set.
      */
-    public void setMunicipality(Municipalities municipality) {
-        this.municipality = municipality;
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
 
     /**
-     * @return Returns the municipalityid.
-     * @hibernate.property column="municipalityid" not-null="true"
+     * @return Returns the organizationid.
+     * @hibernate.property column="organizationid" not-null="true"
      */
-    public Long getMunicipalityid() {
-        return municipalityid;
+    public Long getOrganizationid() {
+        return organizationid;
     }
 
     /**
-     * @param municipalityid The municipalityid to set.
+     * @param organizationid The organizationid to set.
      * @spring.validator type="required"
      */
-    public void setMunicipalityid(Long municipalityid) {
-        this.municipalityid = municipalityid;
+    public void setOrganizationid(Long organizationid) {
+        this.organizationid = organizationid;
     }
 
     /**

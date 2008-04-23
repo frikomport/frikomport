@@ -106,7 +106,7 @@ public class WaitingListManagerImpl extends BaseManager
                         Integer localAttendants = registrationManager.getNumberOfAttendants(true,
                                 course);
 
-                        if (localAttendants.longValue() >= course.getReservedMunicipal()
+                        if (localAttendants.longValue() >= course.getReservedInternal()
                                                                      .longValue()) {
                             processSingleWaitingList(courseId, false);
                         } else {
@@ -174,7 +174,7 @@ public class WaitingListManagerImpl extends BaseManager
                                                                  .longValue()) {
                         currentCourse = registrations.get(i).getCourse();
                         courseId = currentCourse.getId();
-                        availableLocalSeats = currentCourse.getReservedMunicipal() -
+                        availableLocalSeats = currentCourse.getReservedInternal() -
                             registrationManager.getNumberOfOccupiedSeats(currentCourse,
                                 new Boolean(true)).intValue();
 
@@ -204,7 +204,7 @@ public class WaitingListManagerImpl extends BaseManager
 
                             // If no local was found on the waitinglist for this
                             // course, we give the seat to the first one on the
-                            // waiting list regardless of municipality
+                            // waiting list regardless of organization
                             if (j >= registrations.size()) {
                                 j = lowestPossibleRegistration;
 
@@ -370,8 +370,8 @@ public class WaitingListManagerImpl extends BaseManager
 //                    "course.duration", null, locale)) + ": " +
 //            currentRegistration.getCourse().getDuration() + "\n");
 //        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
-//                    "course.municipality", null, locale)) + ": " +
-//            currentRegistration.getCourse().getMunicipality().getName() + "\n");
+//                    "course.organization", null, locale)) + ": " +
+//            currentRegistration.getCourse().getOrganization().getName() + "\n");
 //        msg.append(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
 //                    "course.serviceArea", null, locale)) + ": " +
 //            currentRegistration.getCourse().getServiceArea().getName() + "\n");
@@ -467,7 +467,7 @@ public class WaitingListManagerImpl extends BaseManager
                 // course, if it isn't - we call it the quits
                 if (registrations.get(j).getCourseid().longValue() == courseId.longValue()) {
                     // So far - so good. Let's see if the attendant is a "local"
-                    if (registrations.get(j).getMunicipalityid().longValue() == currentCourse.getMunicipalityid()
+                    if (registrations.get(j).getOrganizationid().longValue() == currentCourse.getOrganizationid()
                                                                                                  .longValue()) {
                         // We got ourselves a local attendant. Now let's see if
                         // we've used this one earlier

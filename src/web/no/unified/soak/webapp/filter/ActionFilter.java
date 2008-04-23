@@ -173,14 +173,14 @@ public class ActionFilter implements Filter {
 		/* ezSessionid becomes null if not found. */
 		request.setAttribute(Constants.EZ_SESSIONID, eZSessionId);
 
-		/* ez_userid and ez_municipality become null if not found. */
+		/* ez_userid and ez_organization become null if not found. */
 		if (eZSessionId != null && authentificationToken.isAuthenticated()) {
 			request.setAttribute(Constants.EZ_USERID, ezUser.getId());
-			request.setAttribute(Constants.EZ_MUNICIPALITY, ezUser.getKommune());
+			request.setAttribute(Constants.EZ_ORGANIZATION, ezUser.getKommune());
 			request.setAttribute(Constants.EZ_ROLES, ezUser.getRolenames());
 		} else {
 			request.setAttribute(Constants.EZ_USERID, null);
-			request.setAttribute(Constants.EZ_MUNICIPALITY, null);
+			request.setAttribute(Constants.EZ_ORGANIZATION, null);
 			request.setAttribute(Constants.EZ_ROLES, null);
 		}
 

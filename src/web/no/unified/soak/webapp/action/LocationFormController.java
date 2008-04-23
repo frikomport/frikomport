@@ -13,7 +13,7 @@ package no.unified.soak.webapp.action;
 import no.unified.soak.Constants;
 import no.unified.soak.model.Location;
 import no.unified.soak.service.LocationManager;
-import no.unified.soak.service.MunicipalitiesManager;
+import no.unified.soak.service.OrganizationManager;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -38,7 +38,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class LocationFormController extends BaseFormController {
     private LocationManager locationManager = null;
-    private MunicipalitiesManager municipalitiesManager = null;
+    private OrganizationManager organizationManager = null;
 
     /**
     * @param roleManager
@@ -48,9 +48,9 @@ public class LocationFormController extends BaseFormController {
         this.locationManager = locationManager;
     }
 
-    public void setMunicipalitiesManager(
-        MunicipalitiesManager municipalitiesManager) {
-        this.municipalitiesManager = municipalitiesManager;
+    public void setOrganizationManager(
+        OrganizationManager organizationManager) {
+        this.organizationManager = organizationManager;
     }
 
     /*
@@ -62,11 +62,11 @@ public class LocationFormController extends BaseFormController {
         throws Exception {
         Map<String, List> parameters = new HashMap<String, List>();
 
-        // Retrieve all municipalities into an array
-        List municipalities = municipalitiesManager.getAll();
+        // Retrieve all organization into an array
+        List organization = organizationManager.getAll();
 
-        if (municipalities != null) {
-            parameters.put("municipalities", municipalities);
+        if (organization != null) {
+            parameters.put("organizations", organization);
         }
 
         return parameters;
@@ -84,10 +84,10 @@ public class LocationFormController extends BaseFormController {
             location = locationManager.getLocation(id);
         } else {
             location = new Location();
-	        // Check if a default municipality should be applied
-	        Object omid = request.getAttribute(Constants.EZ_MUNICIPALITY);
+	        // Check if a default organization should be applied
+	        Object omid = request.getAttribute(Constants.EZ_ORGANIZATION);
 	        if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
-	            location.setMunicipalityid(new Long(omid.toString()));
+	            location.setOrganizationid(new Long(omid.toString()));
 	        }
         }
 

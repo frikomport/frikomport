@@ -74,7 +74,7 @@ public interface RegistrationManager extends Manager {
     /**
      * Returns the number of attendants registered to the course. If the
      * localsOnly parameter is set, the function returns the number of
-     * participants that belong to the same municipality that is responsible for
+     * participants that belong to the same organization that is responsible for
      * the course
      *
      * @param localOnly
@@ -91,14 +91,14 @@ public interface RegistrationManager extends Manager {
      * with all the parameters set to null would return all registrations.
      *
      * @param courseId Restrict list to registrations to this specific course
-     * @param municipalityId Restrict list to registrations where the registered user belongs to this specific municipality
+     * @param organizationId Restrict list to registrations where the registered user belongs to this specific organization
      * @param serviceareaId Restrict list to registrations where the registered user belongs to this service area
      * @param reserved Restrict list to registrations where the registration is confirmed (true) or on waiting list (false)
      * @param invoiced Restrict list to registrations where the registration has been invoiced (true) or not (false)
      * @param attended Restrict list to registrations where the course is attended (true) or not (false)
      * @return List of Courses
      */
-    public List getSpecificRegistrations(Long courseId, Long municipalityId,
+    public List getSpecificRegistrations(Long courseId, Long organizationId,
         Long serviceareaId, Boolean reserved, Boolean invoiced, 
         Boolean attended, Collection limitToCourses);
 

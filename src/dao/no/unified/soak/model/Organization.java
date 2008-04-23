@@ -18,15 +18,15 @@ import java.io.Serializable;
 
 
 /**
- * This class represents the municipalities
+ * This class represents the organization
  *
  * This class is used to generate Spring Validation rules as well as the
  * Hibernate mapping file.
  *
  * @author hrj
- * @hibernate.class table="municipalities"
+ * @hibernate.class table="organization"
  */
-public class Municipalities extends BaseObject implements Serializable {
+public class Organization extends BaseObject implements Serializable {
     /**
          * Eclipse generated UID
          */
@@ -116,11 +116,11 @@ public class Municipalities extends BaseObject implements Serializable {
      * @see java.lang.Object#equals()
      */
     public boolean equals(final Object other) {
-        if (!(other instanceof Municipalities)) {
+        if (!(other instanceof Organization)) {
             return false;
         }
 
-        Municipalities castOther = (Municipalities) other;
+        Organization castOther = (Organization) other;
 
         return new EqualsBuilder().append(id, castOther.id).isEquals();
     }

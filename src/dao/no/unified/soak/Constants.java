@@ -136,13 +136,13 @@ public class Constants {
 	 */
 	public static final String CONFIG = "appConfig";
 
-	// Municipalities-START
+	// Organization-START
 	/**
-	 * The request scope attribute that holds the municipalities list
+	 * The request scope attribute that holds the organizations list
 	 */
-	public static final String MUNICIPALITIES_LIST = "municipalitiesList";
+	public static final String ORGANIZATION_LIST = "organizationList";
 
-	// Municipalities-END
+	// Organization-END
 
 	// Location-START
 	/**
@@ -225,9 +225,9 @@ public class Constants {
 	public static final String EZ_USERID = "eZUserid";
 
 	/**
-	 * Key string for transporting eZ publish user municipality id to jsp file.
+	 * Key string for transporting eZ publish user organization id to jsp file.
 	 */
-	public static final String EZ_MUNICIPALITY = "eZMunicipality";
+	public static final String EZ_ORGANIZATION = "eZOrganization";
 
 	/**
      * Key string for transporting eZ publish user roles to jsp file.

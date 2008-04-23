@@ -12,11 +12,11 @@ package no.unified.soak.webapp.action;
 
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
-import no.unified.soak.model.Municipalities;
+import no.unified.soak.model.Organization;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.ServiceArea;
 import no.unified.soak.service.CourseManager;
-import no.unified.soak.service.MunicipalitiesManager;
+import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 
@@ -48,7 +48,7 @@ import javax.servlet.http.HttpSession;
  */
 public class RegistrationController extends BaseFormController {
     private CourseManager courseManager = null;
-    private MunicipalitiesManager municipalitiesManager = null;
+    private OrganizationManager organizationManager = null;
     private ServiceAreaManager serviceAreaManager = null;
     private RegistrationManager registrationManager = null;
 
@@ -60,9 +60,9 @@ public class RegistrationController extends BaseFormController {
         this.courseManager = courseManager;
     }
 
-    public void setMunicipalitiesManager(
-        MunicipalitiesManager municipalitiesManager) {
-        this.municipalitiesManager = municipalitiesManager;
+    public void setOrganizationManager(
+        OrganizationManager organizationManager) {
+        this.organizationManager = organizationManager;
     }
 
     public void setServiceAreaManager(ServiceAreaManager serviceAreaManager) {
@@ -93,19 +93,19 @@ public class RegistrationController extends BaseFormController {
             registration = (Registration) comm;
         }
 
-        // Don't modify municipality if in postback
+        // Don't modify organization if in postback
         String postback = request.getParameter("ispostbackregistrationlist");
         if ((postback == null) || (postback.compareTo("1") != 0)) {
-	        // Check if a default municipality should be applied
-	        Object omid = request.getAttribute(Constants.EZ_MUNICIPALITY);
+	        // Check if a default organization should be applied
+	        Object omid = request.getAttribute(Constants.EZ_ORGANIZATION);
 	        if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
-	            registration.setMunicipalityid(new Long(omid.toString()));
+	            registration.setOrganizationid(new Long(omid.toString()));
 	        }
 	
-	        // Check if a specific municipality has been requested
+	        // Check if a specific organization has been requested
 	        String mid = request.getParameter("mid");
 	        if ((mid != null) && StringUtils.isNumeric(mid)) {
-	            registration.setMunicipalityid(new Long(mid));
+	            registration.setOrganizationid(new Long(mid));
 	        }
         }
 
@@ -134,7 +134,7 @@ public class RegistrationController extends BaseFormController {
         // Set up parameters, and return them to the view
         Map model = new HashMap();
         model = addServiceAreas(model, locale);
-        model = addMunicipalities(model, locale);
+        model = addOrganizations(model, locale);
         model = addReserved(model, locale);
         model = addInvoiced(model, locale);
         model = addAttended(model, locale);
@@ -161,7 +161,7 @@ public class RegistrationController extends BaseFormController {
 
         // Fetch all registrations that match the parameters
         List registrations = registrationManager.getSpecificRegistrations(registration.getCourseid(),
-                registration.getMunicipalityid(),
+                registration.getOrganizationid(),
                 registration.getServiceareaid(), reserved, invoiced, attended, courseIds);
 
         if (registrations != null) {
@@ -257,7 +257,7 @@ public class RegistrationController extends BaseFormController {
         // Set up parameters, and return them to the view
         Map model = new HashMap();
         model = addServiceAreas(model, locale);
-        model = addMunicipalities(model, locale);
+        model = addOrganizations(model, locale);
         model = addReserved(model, locale);
         model = addInvoiced(model, locale);
         model = addAttended(model, locale);
@@ -282,7 +282,7 @@ public class RegistrationController extends BaseFormController {
         // Find the courses that match the parameters
         model.put("registrationList",
             registrationManager.getSpecificRegistrations(
-                registration.getCourseid(), registration.getMunicipalityid(),
+                registration.getCourseid(), registration.getOrganizationid(),
                 registration.getServiceareaid(), registration.getReserved(),
                 registration.getInvoiced(), registration.getAttended(), courseIds));
 
@@ -305,7 +305,7 @@ public class RegistrationController extends BaseFormController {
             model = new HashMap();
         }
 
-        // Get all municipalities in the database
+        // Get all organizations in the database
         List serviceAreasInDB = serviceAreaManager.getServiceAreas();
         List serviceAreas = new ArrayList();
         ServiceArea serviceAreaDummy = new ServiceArea();
@@ -322,32 +322,32 @@ public class RegistrationController extends BaseFormController {
     }
 
     /**
-     * Used to create a list of all municipalities with an option 0 that says
-     * "all municipalities" and is therefore made with search forms in mind.
+     * Used to create a list of all organizations with an option 0 that says
+     * "all organizations" and is therefore made with search forms in mind.
      *
      * @param model
      *            model to send to the view
      * @param locale
      *            currently used locale
-     * @return map with all municipalities and one with id=0 that is "all
-     *         municipalities"
+     * @return map with all organizations and one with id=0 that is "all
+     *         organizations"
      */
-    private Map addMunicipalities(Map model, Locale locale) {
+    private Map addOrganizations(Map model, Locale locale) {
         if (model == null) {
             model = new HashMap();
         }
 
-        // Get all municipalities in the database
-        List municipalitiesInDB = municipalitiesManager.getAll();
-        List municipalities = new ArrayList();
-        Municipalities municipalityDummy = new Municipalities();
-        municipalityDummy.setId(new Long(0));
-        municipalityDummy.setName(getText("misc.all", locale));
-        municipalities.add(municipalityDummy);
-        municipalities.addAll(municipalitiesInDB);
+        // Get all organizations in the database
+        List organizationsInDB = organizationManager.getAll();
+        List organizations = new ArrayList();
+        Organization organizationDummy = new Organization();
+        organizationDummy.setId(new Long(0));
+        organizationDummy.setName(getText("misc.all", locale));
+        organizations.add(organizationDummy);
+        organizations.addAll(organizationsInDB);
 
-        if (municipalities != null) {
-            model.put("municipalities", municipalities);
+        if (organizations != null) {
+            model.put("organizations", organizations);
         }
 
         return model;

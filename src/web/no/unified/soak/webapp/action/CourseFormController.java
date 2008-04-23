@@ -33,7 +33,7 @@ import no.unified.soak.service.AttachmentManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.LocationManager;
 import no.unified.soak.service.MailEngine;
-import no.unified.soak.service.MunicipalitiesManager;
+import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.NotificationManager;
 import no.unified.soak.service.PersonManager;
 import no.unified.soak.service.RegistrationManager;
@@ -63,7 +63,7 @@ public class CourseFormController extends BaseFormController {
 
 	private LocationManager locationManager = null;
 
-	private MunicipalitiesManager municipalitiesManager = null;
+	private OrganizationManager organizationManager = null;
 
 	private AttachmentManager attachmentManager = null;
 
@@ -116,9 +116,9 @@ public class CourseFormController extends BaseFormController {
 		this.locationManager = locationManager;
 	}
 
-	public void setMunicipalitiesManager(
-			MunicipalitiesManager municipalitiesManager) {
-		this.municipalitiesManager = municipalitiesManager;
+	public void setOrganizationManager(
+			OrganizationManager organizationManager) {
+		this.organizationManager = organizationManager;
 	}
 
 	/**
@@ -156,10 +156,10 @@ public class CourseFormController extends BaseFormController {
 			model.put("locations", locations);
 		}
 
-		// Retrieve all municipalities into an array
-		List municipalities = municipalitiesManager.getAll();
-		if (municipalities != null) {
-			model.put("municipalities", municipalities);
+		// Retrieve all organization into an array
+		List organizations = organizationManager.getAll();
+		if (organizations != null) {
+			model.put("organizations", organizations);
 		}
 
 		// Current time
@@ -239,10 +239,10 @@ public class CourseFormController extends BaseFormController {
 			newCourse.copyAllButId(course);
 		} else {
 			course = new Course();
-			// Check if a default municipality should be applied
-			Object omid = request.getAttribute(Constants.EZ_MUNICIPALITY);
+			// Check if a default organization should be applied
+			Object omid = request.getAttribute(Constants.EZ_ORGANIZATION);
 			if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
-				course.setMunicipalityid(new Long(omid.toString()));
+				course.setOrganizationid(new Long(omid.toString()));
 			}
 		}
 		if (newCourse != null) {
