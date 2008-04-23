@@ -1,4 +1,4 @@
---
+﻿--
 -- Definition of table `app_user`
 --
 
@@ -38,6 +38,18 @@ CREATE TABLE `user_cookie` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Definition of table `role`
+--
+
+DROP TABLE IF EXISTS `role`;
+CREATE TABLE `role` (
+  `name` varchar(20) NOT NULL default '',
+  `version` int(11) NOT NULL default '0',
+  `description` varchar(255) default NULL,
+  PRIMARY KEY  (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
 -- Definition of table `user_role`
 --
 
@@ -72,11 +84,11 @@ CREATE TABLE `person` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Definition of table `municipalities`
+-- Definition of table `organization`
 --
 
-DROP TABLE IF EXISTS `municipalities`;
-CREATE TABLE `municipalities` (
+DROP TABLE IF EXISTS `organization`;
+CREATE TABLE `organization` (
   `id` bigint(20) NOT NULL auto_increment,
   `selectable` tinyint(1) NOT NULL default '0',
   `name` varchar(50) NOT NULL default '',
@@ -84,17 +96,6 @@ CREATE TABLE `municipalities` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Definition of table `role`
---
-
-DROP TABLE IF EXISTS `role`;
-CREATE TABLE `role` (
-  `name` varchar(20) NOT NULL default '',
-  `version` int(11) NOT NULL default '0',
-  `description` varchar(255) default NULL,
-  PRIMARY KEY  (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Definition of table `servicearea`
@@ -128,10 +129,10 @@ CREATE TABLE `location` (
   `maxattendants` int(11) default NULL,
   `feeperday` double default NULL,
   `description` text,
-  `municipalityid` bigint(20) NOT NULL default '0',
+  `organizationid` bigint(20) NOT NULL default '0',
   PRIMARY KEY  (`id`),
-  KEY `FK714F9FB5F4E66D55` (`municipalityid`),
-  CONSTRAINT `FK714F9FB5F4E66D55` FOREIGN KEY (`municipalityid`) REFERENCES `municipalities` (`id`)
+  KEY `FK714F9FB5F4E66D55` (`organizationid`),
+  CONSTRAINT `FK714F9FB5F4E66D55` FOREIGN KEY (`organizationid`) REFERENCES `organization` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -147,30 +148,30 @@ CREATE TABLE `course` (
   `detailurl` varchar(200) default NULL,
   `duration` varchar(100) NOT NULL default '',
   `feexternal` double NOT NULL default '0',
-  `feemunicipal` double NOT NULL default '0',
+  `feeinternal` double NOT NULL default '0',
   `freezeAttendance` datetime NOT NULL default '0000-00-00 00:00:00',
   `maxattendants` int(11) NOT NULL default '0',
   `name` varchar(100) NOT NULL default '',
   `registerby` datetime NOT NULL default '0000-00-00 00:00:00',
   `registerstart` datetime default NULL,
   `reminder` datetime default NULL,
-  `reservedmunicipal` int(11) NOT NULL default '0',
+  `reservedinternal` int(11) NOT NULL default '0',
   `starttime` datetime NOT NULL default '0000-00-00 00:00:00',
   `stoptime` datetime NOT NULL default '0000-00-00 00:00:00',
   `type` varchar(50) default NULL,
   `description` text,
   `locationid` bigint(20) NOT NULL default '0',
-  `municipalityid` bigint(20) NOT NULL default '0',
+  `organizationid` bigint(20) NOT NULL default '0',
   `role` varchar(50) NOT NULL default 'Anonymous',
   PRIMARY KEY  (`id`),
   KEY `FKAF42E01B179C401B` (`serviceareaid`),
   KEY `FKAF42E01BC4F84E71` (`instructorid`),
   KEY `FKAF42E01B99F3E2E9` (`locationid`),
-  KEY `FKAF42E01BF4E66D55` (`municipalityid`),
+  KEY `FKAF42E01BF4E66D55` (`organizationid`),
   CONSTRAINT `FKAF42E01B179C401B` FOREIGN KEY (`serviceareaid`) REFERENCES `servicearea` (`id`),
   CONSTRAINT `FKAF42E01B99F3E2E9` FOREIGN KEY (`locationid`) REFERENCES `location` (`id`),
   CONSTRAINT `FKAF42E01BC4F84E71` FOREIGN KEY (`instructorid`) REFERENCES `person` (`id`),
-  CONSTRAINT `FKAF42E01BF4E66D55` FOREIGN KEY (`municipalityid`) REFERENCES `municipalities` (`id`)
+  CONSTRAINT `FKAF42E01BF4E66D55` FOREIGN KEY (`organizationid`) REFERENCES `organization` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -222,7 +223,7 @@ CREATE TABLE `registration` (
   `jobtitle` varchar(30) default NULL,
   `lastname` varchar(30) NOT NULL default '',
   `mobilephone` varchar(30) default NULL,
-  `municipalityid` bigint(20) NOT NULL default '0',
+  `organizationid` bigint(20) NOT NULL default '0',
   `phone` varchar(30) default NULL,
   `registered` datetime NOT NULL default '0000-00-00 00:00:00',
   `reserved` tinyint(1) NOT NULL default '0',
@@ -234,9 +235,9 @@ CREATE TABLE `registration` (
   `attended` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `FKAF83E8B9179C401B` (`serviceareaid`),
-  KEY `FKAF83E8B9F4E66D55` (`municipalityid`),
+  KEY `FKAF83E8B9F4E66D55` (`organizationid`),
   KEY `FKAF83E8B96C3B7B35` (`courseid`),
   CONSTRAINT `FKAF83E8B9179C401B` FOREIGN KEY (`serviceareaid`) REFERENCES `servicearea` (`id`),
   CONSTRAINT `FKAF83E8B96C3B7B35` FOREIGN KEY (`courseid`) REFERENCES `course` (`id`),
-  CONSTRAINT `FKAF83E8B9F4E66D55` FOREIGN KEY (`municipalityid`) REFERENCES `municipalities` (`id`)
+  CONSTRAINT `FKAF83E8B9F4E66D55` FOREIGN KEY (`organizationid`) REFERENCES `organization` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
