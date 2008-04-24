@@ -23,7 +23,7 @@
     
     <!-- Properties for running unit tests with tomcat -->
     <property name="tomcat.server" value="localhost"/>
-    <property name="tomcat.manager.url" value="http://${tomcat.server}:5080/manager"/>
+    <property name="tomcat.manager.url" value="http://${tomcat.server}:{http.port}/manager"/>
     <property name="tomcat.username" value="admin"/>
     <property name="tomcat.password" value="admin"/>
 
