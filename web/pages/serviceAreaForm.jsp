@@ -15,24 +15,18 @@
     </c:if>
 </spring:bind>
 
-<form method="post" action="<c:url value="/editServiceArea.html"/>" id="serviceAreaForm"
-    onsubmit="return validateServiceArea(this)">
+<form:form commandName="serviceArea" onsubmit="return validateServiceArea(this)">
 <table class="detail">
 
-<spring:bind path="serviceArea.id">
-<input type="hidden" name="<c:out value="${status.expression}"/>" value="<c:out value="${status.value}"/>"/> 
-</spring:bind>
+    <form:hidden path="id"/>
 
     <tr>
         <th>
             <soak:label key="serviceArea.name"/>
         </th>
         <td>
-            <spring:bind path="serviceArea.name">
-                <input type="text" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" 
-                    value="<c:out value="${status.value}"/>" />
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="name"/>
+            <form:errors cssClass="fieldError" path="name"/>
         </td>
     </tr>
 
@@ -41,11 +35,8 @@
             <soak:label key="serviceArea.selectable"/>
         </th>
         <td>
-            <spring:bind path="serviceArea.selectable">
-				<input type="hidden" name="_<c:out value="${status.expression}"/>" value="visible"/>
-				<input type="checkbox" name="<c:out value="${status.expression}"/>" value="true" <c:if test="${status.value}">checked</c:if>>
-				<span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:checkbox path="selectable"/>
+            <form:errors cssClass="fieldError" path="selectable"/>
         </td>
     </tr>
 
@@ -66,7 +57,7 @@
         </td>
     </tr>
 </table>
-</form>
+</form:form>
 
 <v:javascript formName="serviceArea" cdata="false"
     dynamicJavascript="true" staticJavascript="false"/>

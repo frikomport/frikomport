@@ -15,24 +15,18 @@
     </c:if>
 </spring:bind>
 
-<form method="post" action="<c:url value="/editOrganization.html"/>" id="organizationForm"
-    onsubmit="return validateOrganization(this)">
+<form:form commandName="organization" onsubmit="return validateOrganization(this)">
 <table class="detail">
 
-<spring:bind path="organization.id">
-<input type="hidden" name="<c:out value="${status.expression}"/>" value="<c:out value="${status.value}"/>"/> 
-</spring:bind>
+    <form:hidden path="id"/>
 
     <tr>
         <th>
             <soak:label key="organization.name"/>
         </th>
         <td>
-            <spring:bind path="organization.name">
-                <input type="text" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" 
-                    value="<c:out value="${status.value}"/>" />
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="name"/>
+            <form:errors cssClass="fieldError" path="name"/>
         </td>
     </tr>
 
@@ -41,11 +35,8 @@
             <soak:label key="organization.number"/>
         </th>
         <td>
-            <spring:bind path="organization.number">
-                <input type="text" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" 
-                    value="<c:out value="${status.value}"/>" />
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="number"/>
+            <form:errors cssClass="fieldError" path="number"/>
         </td>
     </tr>
 
@@ -54,11 +45,8 @@
             <soak:label key="organization.selectable"/>
         </th>
         <td>
-            <spring:bind path="organization.selectable">
-				<input type="hidden" name="_<c:out value="${status.expression}"/>" value="visible"/>
-				<input type="checkbox" name="<c:out value="${status.expression}"/>" value="true" <c:if test="${status.value}">checked</c:if>>
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:checkbox path="selectable"/>
+            <form:errors cssClass="fieldError" path="selectable"/>
         </td>
     </tr>
 
@@ -79,7 +67,7 @@
         </td>
     </tr>
 </table>
-</form>
+</form:form>
 
 <v:javascript formName="organization" cdata="false"
     dynamicJavascript="true" staticJavascript="false"/>

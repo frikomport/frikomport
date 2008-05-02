@@ -15,24 +15,17 @@
     </c:if>
 </spring:bind>
 
-<form method="post" action="<c:url value="/editPerson.html"/>" id="personForm"
-    onsubmit="return validatePerson(this)">
+<form:form commandName="person" onsubmit="return validatePerson(this)">
+
 <table class="detail">
-
-	<spring:bind path="person.id">
-	<input type="hidden" name="<c:out value="${status.expression}"/>" value="<c:out value="${status.value}"/>"/> 
-	</spring:bind>
-
+    <form:hidden path="id"/>
     <tr>
         <th>
             <soak:label key="person.name"/>
         </th>
         <td>
-            <spring:bind path="person.name">
-                <input type="text" size="50" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" 
-                    value="<c:out value="${status.value}"/>" />
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="name" size="50"/>
+            <form:errors htmlEscape="false" path="name"/>
         </td>
     </tr>
 
@@ -41,11 +34,8 @@
             <soak:label key="person.email"/>
         </th>
         <td>
-            <spring:bind path="person.email">
-                <input type="text" size="50" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" 
-                    value="<c:out value="${status.value}"/>" />
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="email" size="50"/>
+            <form:errors path="email" cssClass="fieldError"/>
         </td>
     </tr>
 
@@ -54,11 +44,8 @@
             <soak:label key="person.phone"/>
         </th>
         <td>
-            <spring:bind path="person.phone">
-                <input type="text" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" 
-                    value="<c:out value="${status.value}"/>" />
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="phone"/>
+            <form:errors path="phone" cssClass="fieldError"/>
         </td>
     </tr>
 
@@ -67,11 +54,8 @@
             <soak:label key="person.mobilePhone"/>
         </th>
         <td>
-            <spring:bind path="person.mobilePhone">
-                <input type="text" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" 
-                    value="<c:out value="${status.value}"/>" />
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="mobilePhone"/>
+            <form:errors path="mobilePhone" cssClass="fieldError"/>
         </td>
     </tr>
 
@@ -80,11 +64,8 @@
             <soak:label key="person.detailURL"/>
         </th>
         <td>
-            <spring:bind path="person.detailURL">
-                <input type="text" size="50" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" 
-                    value="<c:out value="${status.value}"/>" />
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="detailURL"/>
+            <form:errors path="detailURL" cssClass="fieldError"/>
         </td>
     </tr>
 
@@ -93,11 +74,8 @@
             <soak:label key="person.mailAddress"/>
         </th>
         <td>
-            <spring:bind path="person.mailAddress">
-                <input type="text" size="50" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" 
-                    value="<c:out value="${status.value}"/>" />
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="mailAddress"/>
+            <form:errors path="mailAddress" cssClass="fieldError"/>
         </td>
     </tr>
 
@@ -106,10 +84,8 @@
             <soak:label key="person.description"/>
         </th>
         <td>
-            <spring:bind path="person.description">
-                <textarea cols="50" rows="3" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>"><c:out value="${status.value}"/></textarea>
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:textarea path="description" cols="50" rows="3"/>
+            <form:errors path="description" cssClass="fieldError"/>
         </td>
     </tr>
 
@@ -118,11 +94,8 @@
             <soak:label key="person.selectable"/>
         </th>
         <td>
-            <spring:bind path="person.selectable">
-				<input type="hidden" name="_<c:out value="${status.expression}"/>" value="visible"/>
-				<input type="checkbox" name="<c:out value="${status.expression}"/>" value="true" <c:if test="${status.value}">checked</c:if>>
-				<span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:checkbox path="selectable"/>
+            <form:errors path="selectable"/>
         </td>
     </tr>
 
@@ -143,7 +116,7 @@
         </td>
     </tr>
 </table>
-</form>
+</form:form>
 
 <v:javascript formName="person" cdata="false"
     dynamicJavascript="true" staticJavascript="false"/>
