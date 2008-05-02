@@ -36,8 +36,7 @@ cal1.setTodayText("Idag");
     </c:if>
 </spring:bind>
 
-<form method="post" action="<c:url value="/editCourse.html"/>" id="courseForm"
-    onsubmit="return validateCourse(this)">
+<form:form commandName="course" onsubmit="return validateCourse(this)">
 
 <fmt:message key="date.format" var="dateformat"/>
 <fmt:message key="time.format" var="timeformat"/>
@@ -47,20 +46,15 @@ cal1.setTodayText("Idag");
 
 <table class="detail">
 
-	<spring:bind path="course.id">
-	<input type="hidden" name="<c:out value="${status.expression}"/>" value="<c:out value="${status.value}"/>"/> 
-	</spring:bind>
+    <form:hidden path="id"/>
 
     <tr>
         <th>
             <soak:label key="course.name"/>
         </th>
         <td>
-            <spring:bind path="course.name">
-                <input type="text" size="50" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" 
-                    value="<c:out value="${status.value}"/>" />
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input size="50" path="name"/>
+            <form:errors cssClass="fieldError" htmlEscape="false" path="description"/>
         </td>
     </tr>
 
@@ -69,10 +63,8 @@ cal1.setTodayText("Idag");
             <soak:label key="course.description"/>
         </th>
         <td>
-            <spring:bind path="course.description">
-                <textarea cols="50" rows="3" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>"><c:out value="${status.value}"/></textarea>
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:textarea cols="50" rows="3"  path="description"/>
+            <form:errors cssClass="fieldError" htmlEscape="false" path="description"/>
         </td>
     </tr>
 
@@ -81,17 +73,8 @@ cal1.setTodayText("Idag");
             <soak:label key="course.role"/>
         </th>
         <td>
-            <spring:bind path="course.role">
-				  <select name="<c:out value="${status.expression}"/>">
-				    <c:forEach var="role" items="${roles}">
-				      <option value="<c:out value="${role}"/>"
-					      <c:if test="${role == status.value}"> selected="selected"</c:if>>
-				        <c:out value="${role}"/>
-				      </option>
-				    </c:forEach>
-				  </select>            
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:select path="role" items="${roles}"/>
+            <form:errors cssClass="fieldError" htmlEscape="false" path="role"/>
         </td>
     </tr>
 
@@ -100,11 +83,8 @@ cal1.setTodayText("Idag");
             <soak:label key="course.type"/>
         </th>
         <td>
-            <spring:bind path="course.type">
-                <input type="text" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" 
-                    value="<c:out value="${status.value}"/>" />
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="type" maxlength="50"/>
+            <form:errors cssClass="fieldError" htmlEscape="false" path="type"/>
         </td>
     </tr>
 
@@ -159,11 +139,8 @@ cal1.setTodayText("Idag");
             <soak:label key="course.duration"/>
         </th>
         <td>
-            <spring:bind path="course.duration">
-                <input type="text" size="50" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" 
-                    value="<c:out value="${status.value}"/>" />
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="duration" size="50"/>
+            <form:errors cssClass="fieldError" htmlEscape="false" path="duration"/>
         </td>
     </tr>
 
@@ -172,17 +149,10 @@ cal1.setTodayText("Idag");
             <soak:label key="course.organization"/>
         </th>
         <td>
-            <spring:bind path="course.organizationid">
-				  <select name="<c:out value="${status.expression}"/>">
-				    <c:forEach var="organization" items="${organizations}">
-				      <option value="<c:out value="${organization.id}"/>"
-					      <c:if test="${organization.id == status.value}"> selected="selected"</c:if>>
-				        <c:out value="${organization.name}"/>
-				      </option>
-				    </c:forEach>
-				  </select>            
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:select path="organizationid">
+                <form:options items="${organizations}" itemValue="id" itemLabel="name"/>
+            </form:select>
+            <form:errors cssClass="fieldError" htmlEscape="false" path="organizationid"/>
         </td>
     </tr>
 
@@ -191,19 +161,10 @@ cal1.setTodayText("Idag");
             <soak:label key="course.serviceArea"/>
         </th>
         <td>
-            <spring:bind path="course.serviceAreaid">
-				  <select name="<c:out value="${status.expression}"/>">
-				    <c:forEach var="serviceArea" items="${serviceareas}">
-				      <option value="<c:out value="${serviceArea.id}"/>"
-					      <c:if test="${serviceArea.id == status.value}"> selected="selected"</c:if>>
-				        <c:out value="${serviceArea.name}"/>
-				      </option>
-				    </c:forEach>
-				  </select>
-<!--                <input type="text" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" 
-                    value="<c:out value="${status.value}"/>" /> -->
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:select path="serviceAreaid">
+                <form:options items="${serviceareas}" itemValue="id" itemLabel="name"/>
+            </form:select>
+            <form:errors cssClass="fieldError" htmlEscape="false" path="serviceAreaid"/>
         </td>
     </tr>
 
@@ -212,17 +173,10 @@ cal1.setTodayText("Idag");
             <soak:label key="course.location"/>
         </th>
         <td>
-            <spring:bind path="course.locationid">
-				  <select name="<c:out value="${status.expression}"/>">
-				    <c:forEach var="location" items="${locations}">
-				      <option value="<c:out value="${location.id}"/>"
-					      <c:if test="${location.id == status.value}"> selected="selected"</c:if>>
-				        <c:out value="${location.name}"/> (<c:out value="${location.organization.name}"/>)
-				      </option>
-				    </c:forEach>
-				  </select>            
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:select path="locationid">
+                <form:options items="${locations}" itemValue="id" itemLabel="name"/>
+            </form:select>
+            <form:errors cssClass="fieldError" htmlEscape="false" path="locationid"/>
         </td>
     </tr>
 
@@ -231,17 +185,10 @@ cal1.setTodayText("Idag");
             <soak:label key="course.responsible"/>
         </th>
         <td>
-            <spring:bind path="course.responsibleid">
-				  <select name="<c:out value="${status.expression}"/>">
-				    <c:forEach var="theResponsible" items="${responsible}">
-				      <option value="<c:out value="${theResponsible.id}"/>"
-				      <c:if test="${theResponsible.id == status.value}"> selected="selected"</c:if>>
-				        <c:out value="${theResponsible.name}"/>
-				      </option>
-				    </c:forEach>
-				  </select>            
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:select path="responsibleid">
+                <form:options items="${responsible}" itemValue="id" itemLabel="name"/>
+            </form:select>
+            <form:errors cssClass="fieldError" htmlEscape="false" path="responsibleid"/>
         </td>
     </tr>
 
@@ -250,17 +197,10 @@ cal1.setTodayText("Idag");
             <soak:label key="course.instructor"/>
         </th>
         <td>
-            <spring:bind path="course.instructorid">
-				  <select name="<c:out value="${status.expression}"/>">
-				    <c:forEach var="instructor" items="${instructors}">
-				      <option value="<c:out value="${instructor.id}"/>" 
-				      <c:if test="${instructor.id == status.value}"> selected="selected"</c:if>>
-				        <c:out value="${instructor.name}"/>
-				      </option>
-				    </c:forEach>
-				  </select>            
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:select path="instructorid">
+                <form:options items="${instructors}" itemValue="id" itemLabel="name"/>
+            </form:select>
+            <form:errors cssClass="fieldError" htmlEscape="false" path="instructorid"/>
         </td>
     </tr>
 
@@ -269,11 +209,8 @@ cal1.setTodayText("Idag");
             <soak:label key="course.maxAttendants"/>
         </th>
         <td>
-            <spring:bind path="course.maxAttendants">
-                <input type="text" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" 
-                    value="<c:out value="${status.value}"/>" />
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="maxAttendants"/>
+            <form:errors cssClass="fieldError" htmlEscape="false" path="maxAttendants"/>
         </td>
     </tr>
 
@@ -284,11 +221,8 @@ cal1.setTodayText("Idag");
             <soak:label key="course.reservedInternal"/>
         </th>
         <td>
-            <spring:bind path="course.reservedInternal">
-                <input type="text" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" 
-                    value="<c:out value="${status.value}"/>" />
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="reservedInternal"/>
+            <form:errors cssClass="fieldError" htmlEscape="false" path="reservedInternal"/>
         </td>
     </tr>
 
@@ -297,21 +231,14 @@ cal1.setTodayText("Idag");
             <soak:label key="course.feeInternal"/>
         </th>
         <td>
-            <spring:bind path="course.feeInternal">
-                <input type="text" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" 
-                    value="<c:out value="${status.value}"/>" />
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="feeInternal"/>
+            <form:errors cssClass="fieldError" htmlEscape="false" path="feeInternal"/>
         </td>
     </tr>
 	</c:when>
 	<c:otherwise>
-            <spring:bind path="course.reservedInternal">
-                <input type="hidden" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" value="0" />
-            </spring:bind>
-            <spring:bind path="course.feeInternal">
-                <input type="hidden" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" value="0" />
-            </spring:bind>
+        <form:hidden path="reservedInternal"/>
+        <form:hidden path="feeInternal"/>
     </c:otherwise>
 	</c:choose>
 	
@@ -320,11 +247,8 @@ cal1.setTodayText("Idag");
             <soak:label key="course.feeExternal"/>
         </th>
         <td>
-            <spring:bind path="course.feeExternal">
-                <input type="text" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" 
-                    value="<c:out value="${status.value}"/>" />
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="feeExternal"/>
+            <form:errors cssClass="fieldError" htmlEscape="false" path="feeExternal"/>
         </td>
     </tr>
 
@@ -425,11 +349,8 @@ cal1.setTodayText("Idag");
             <soak:label key="course.detailURL"/>
         </th>
         <td>
-            <spring:bind path="course.detailURL">
-                <input type="text" size="50" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>" 
-                    value="<c:out value="${status.value}"/>" />
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input size="50" path="detailURL"/>
+            <form:errors cssClass="fieldError" htmlEscape="false" path="detailURL"/>
         </td>
     </tr>
 
@@ -476,7 +397,7 @@ cal1.setTodayText("Idag");
         </td>
     </tr>
 </table>
-</form>
+</form:form>
 
 <v:javascript formName="course" cdata="false"
     dynamicJavascript="true" staticJavascript="false"/>
