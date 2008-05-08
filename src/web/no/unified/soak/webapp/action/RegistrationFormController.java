@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import no.unified.soak.Constants;
+import no.unified.soak.ez.EzUser;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Notification;
 import no.unified.soak.model.Registration;
@@ -156,7 +157,17 @@ public class RegistrationFormController extends BaseFormController {
 	        if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
 	            registration.setOrganizationid(new Long(omid.toString()));
 	        }
-		}
+
+            // set default values
+            Locale locale = request.getLocale();
+            String userdefaults = getText("access.registration.userdefaults",locale);
+            if(userdefaults != null && userdefaults.equals("true")){
+                EzUser user = (EzUser)request.getAttribute(Constants.EZ_USER);
+                registration.setFirstName(user.getFirst_name());
+                registration.setLastName(user.getLast_name());
+                registration.setEmail(user.getEmail());
+            }
+        }
 
 		return registration;
 	}

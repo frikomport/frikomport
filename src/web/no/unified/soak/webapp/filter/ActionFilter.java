@@ -178,11 +178,13 @@ public class ActionFilter implements Filter {
 			request.setAttribute(Constants.EZ_USERID, ezUser.getId());
 			request.setAttribute(Constants.EZ_ORGANIZATION, ezUser.getKommune());
 			request.setAttribute(Constants.EZ_ROLES, ezUser.getRolenames());
-		} else {
+            request.setAttribute(Constants.EZ_USER,ezUser);
+        } else {
 			request.setAttribute(Constants.EZ_USERID, null);
 			request.setAttribute(Constants.EZ_ORGANIZATION, null);
 			request.setAttribute(Constants.EZ_ROLES, null);
-		}
+            request.setAttribute(Constants.EZ_USER,null);
+        }
 
 		if (eZSessionId != null && !authentificationToken.isAuthenticated()) {
 			request.setAttribute(Constants.MESSAGES_INFO_KEY, 

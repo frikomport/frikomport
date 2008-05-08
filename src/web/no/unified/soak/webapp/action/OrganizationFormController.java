@@ -108,8 +108,7 @@ public class OrganizationFormController extends BaseFormController {
             saveMessage(request, getText(key, locale));
 
             if (!isNew) {
-                success = "editOrganization.html?id=" +
-                    organization.getId();
+                return new ModelAndView("redirect:editOrganization.html", "id", organization.getId());
             }
         }
 

@@ -219,6 +219,11 @@ public class Constants {
 	 */
 	public static final String EZ_SESSIONID = "eZSessionid";
 
+    /**
+     * Key string for transporting eZ publish userid to jsp file.
+     */
+    public static final String EZ_USER = "eZUser";
+
 	/**
 	 * Key string for transporting eZ publish userid to jsp file.
 	 */
