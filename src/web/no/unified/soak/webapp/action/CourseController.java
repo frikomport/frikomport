@@ -146,20 +146,7 @@ public class CourseController extends BaseFormController {
         
         // Add all courses to the list
         List courses = courseManager.searchCourses(course, starttime, stoptime);
-        List<Course> filtered = new ArrayList<Course>();
-        
-        // Filter all courses not visible for the user.
-        if (roles != null) {
-            for (Iterator iterator = courses.iterator(); iterator.hasNext();) {
-                Course roleCourse = (Course) iterator.next();
-                if (roles.contains(roleCourse.getRole()) || isAdmin.booleanValue()) {
-                    roleCourse.setAvailableAttendants(registrationManager.getAvailability(true, roleCourse));
-                    filtered.add(roleCourse);
-                }
-            }
-        } else { 
-            filtered = courses;
-        }
+        List<Course> filtered = filterByRole(isAdmin, roles, courses);
 
         if (courses != null) {
             model.put("courseList", filtered);
@@ -168,6 +155,26 @@ public class CourseController extends BaseFormController {
         model.put("JSESSIONID", session.getId());
 
         return model;
+    }
+
+    private List<Course> filterByRole(Boolean admin, List<String> roles, List courses) {
+        List<Course> filtered = new ArrayList<Course>();
+        // Filter all courses not visible for the user.
+        if (roles != null) {
+            for (Iterator iterator = courses.iterator(); iterator.hasNext();) {
+                Course roleCourse = (Course) iterator.next();
+                roleCourse.setAvailableAttendants(0);
+                if (roles.contains(roleCourse.getRole()) || admin.booleanValue()) {
+                    if(roleCourse.getStopTime().after(new Date())){
+                        roleCourse.setAvailableAttendants(registrationManager.getAvailability(true, roleCourse));
+                    }
+                    filtered.add(roleCourse);
+                }
+            }
+        } else {
+            filtered = courses;
+        }
+        return filtered;
     }
 
     /**
@@ -239,20 +246,7 @@ public class CourseController extends BaseFormController {
 
         // Add all courses to the list
         List courses = courseManager.searchCourses(course, starttime, stoptime);
-        List<Course> filtered = new ArrayList<Course>();
-        
-        // Filter all courses not visible for the user.
-        if (roles != null) {
-            for (Iterator iterator = courses.iterator(); iterator.hasNext();) {
-                Course roleCourse = (Course) iterator.next();
-                if (roles.contains(roleCourse.getRole()) || isAdmin.booleanValue()) {
-                    roleCourse.setAvailableAttendants(registrationManager.getAvailability(true, roleCourse));
-                    filtered.add(roleCourse);
-                }
-            }
-        } else { 
-            filtered = courses;
-        }
+        List<Course> filtered = filterByRole(isAdmin, roles, courses);
         
         model.put("courseList", filtered);
         model.put("historic", historic);
