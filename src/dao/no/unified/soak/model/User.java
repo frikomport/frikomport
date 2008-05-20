@@ -260,9 +260,9 @@ public class User extends BaseObject implements Serializable {
      * Sets the phoneNumber.
      * @param phoneNumber The phoneNumber to set
      *
-     * @spring.validator type="mask" msgkey="errors.phone"
-     * @spring.validator-var name="mask" value="${phone}"
      */
+    // @spring.validator type="mask" msgkey="errors.phone"
+    // @spring.validator-var name="mask" value="${phone}"
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
