@@ -41,14 +41,14 @@ public class UserDAOTest extends BaseDAOTestCase {
     }
 
     public void testGetUser() throws Exception {
-        user = dao.getUser("tomcat");
+        user = dao.getUser("Anonymous User");
 
         assertNotNull(user);
         assertEquals(1, user.getRoles().size());
     }
 
     public void testUpdateUser() throws Exception {
-        user = dao.getUser("tomcat");
+        user = dao.getUser("Anonymous User");
 
         Address address = user.getAddress();
         address.setAddress("new address");
@@ -72,7 +72,7 @@ public class UserDAOTest extends BaseDAOTestCase {
     }
 
     public void testAddUserRole() throws Exception {
-        user = dao.getUser("tomcat");
+        user = dao.getUser("Anonymous User");
 
         assertEquals(1, user.getRoles().size());
 
@@ -128,7 +128,7 @@ public class UserDAOTest extends BaseDAOTestCase {
     public void testSaveAndDeleteUserCookie() throws Exception {
         String cookieId = "BA67E786-C031-EA40-2769-863BB30B31EC";
         UserCookie cookie = new UserCookie();
-        cookie.setUsername("tomcat");
+        cookie.setUsername("Anonymous User");
         cookie.setCookieId(cookieId);
         dao.saveUserCookie(cookie);
         cookie = dao.getUserCookie(cookie);

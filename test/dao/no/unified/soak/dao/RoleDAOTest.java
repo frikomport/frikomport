@@ -30,7 +30,7 @@ public class RoleDAOTest extends BaseDAOTestCase {
     }
 
     public void testUpdateRole() throws Exception {
-        role = dao.getRole("tomcat");
+        role = dao.getRole("anonymous");
         log.info(role);
         role.setDescription("test descr");
 

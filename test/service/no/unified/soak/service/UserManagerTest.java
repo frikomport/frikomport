@@ -82,8 +82,8 @@ public class UserManagerTest extends BaseManagerTestCase {
         user = (User) populate(user);
 
         // set expected behavior on role dao
-        roleDAO.expects(once()).method("getRole").with(eq("tomcat"))
-               .will(returnValue(new Role("tomcat")));
+        roleDAO.expects(once()).method("getRole").with(eq("anonymous"))
+               .will(returnValue(new Role("anonymous")));
 
         role = roleManager.getRole(Constants.USER_ROLE);
         roleDAO.verify();
@@ -116,7 +116,7 @@ public class UserManagerTest extends BaseManagerTestCase {
         // set expectations
         userDAO.expects(once()).method("saveUserCookie");
 
-        String cookieString = userManager.createLoginCookie("tomcat");
+        String cookieString = userManager.createLoginCookie("anonymous");
 
         assertNotNull(cookieString);
         userDAO.verify();
@@ -140,7 +140,7 @@ public class UserManagerTest extends BaseManagerTestCase {
 
     public void testUserExistsException() {
         // set expectations
-        user = new User("admin");
+        user = new User("Administrator User");
         user.setEmail("matt@raibledesigns.com");
 
         List users = new ArrayList();

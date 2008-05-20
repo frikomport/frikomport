@@ -279,6 +279,7 @@
                 <!-- Add additional URL mappings here -->
                 <prop key="/waitingList.html">waitingListController</prop>
 				<prop key="/detailsUser.html">userDetailsController</prop>
+				<prop key="/listUsers.html">userController</prop>
             </props>
         </property>
     </bean>

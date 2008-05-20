@@ -25,6 +25,7 @@ import no.unified.soak.Constants;
 import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
 import no.unified.soak.ez.EzUser;
 import no.unified.soak.model.User;
+import no.unified.soak.service.UserExistsException;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.webapp.util.RequestUtil;
 import no.unified.soak.webapp.util.SslUtil;
@@ -151,6 +152,7 @@ public class ActionFilter implements Filter {
 			eZSessionId = cookie.getValue();
 			ezUser = (new UserEzDaoJdbc()).findUserBySessionID(cookie
 					.getValue());
+			copyToUserTable(ezUser, session);
 		} else {
 			ezUser.setName("No cookie found.");
 		}
@@ -190,5 +192,29 @@ public class ActionFilter implements Filter {
 			request.setAttribute(Constants.MESSAGES_INFO_KEY, 
 							"Din innlogging er utg&aring;tt. Vennligst logg inn p&aring;ny.");
 		}
+	}
+
+	private void copyToUserTable(EzUser ezUser, HttpSession session)  {
+		ServletContext context = config.getServletContext();
+		ApplicationContext ctx = WebApplicationContextUtils
+		.getRequiredWebApplicationContext(context);
+		UserManager mgr = (UserManager) ctx.getBean("userManager");
+		User user = null;
+		try{
+			user = mgr.getUser(ezUser.getName());
+		}
+		catch (Exception exception) {
+			//User does not exist.
+			user = new User(ezUser.getName());
+			user.setFirstName(ezUser.getFirst_name());
+			user.setLastName(ezUser.getLast_name());
+			user.setEmail(ezUser.getEmail());
+			try {
+				mgr.saveUser(user);
+			} catch (UserExistsException e) {
+				log.error("Exception: " + e);
+			}
+		}
+		session.setAttribute(Constants.USER_KEY, user);
 	}
 }

@@ -40,14 +40,13 @@
     	<td class="buttonBar">
             <input type="submit" class="button" name="save" 
                 onclick="bCancel=false" value="<fmt:message key="button.save"/>" />
-            
-        <c:if test="${param.from == 'list'}">
+        <%-- <c:if test="${param.from == 'list'}">
             <input type="submit" class="button" name="delete"
                 onclick="bCancel=true;return confirmDelete('user')" 
                 value="<fmt:message key="button.delete"/>" />
-        </c:if>
-        
-            <input type="submit" class="button" name="cancel" onclick="bCancel=true"
+        </c:if> --%>
+    
+       	    <input type="submit" class="button" name="cancel" onclick="bCancel=true"
                 value="<fmt:message key="button.cancel"/>" />
         </td>
     </tr>
@@ -71,10 +70,11 @@
         </spring:bind>
         </td>
     </tr>
+    <%--
     <c:if test="${cookieLogin != 'true'}">
     <tr>
         <th>
-            <soak:label key="user.password"/>
+           <soak:label key="user.password"/>
         </th>
         <td>
             <spring:bind path="user.password">
@@ -97,6 +97,7 @@
         </td>
     </tr>
     </c:if>
+    --%>
     <tr>
         <th>
             <soak:label key="user.firstName"/>
@@ -210,7 +211,7 @@
             </c:if>
         </td>
     </tr>
-    <tr>
+    <%--<tr>
         <th>
             <soak:label key="user.passwordHint"/>
         </th>
@@ -220,9 +221,19 @@
             <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
             </spring:bind>
         </td>
-    </tr>
-<c:choose>
-    <c:when test="${param.from == 'list' or param.method == 'Add'}">
+    </tr> --%>
+    <tr>
+        <th>
+            <soak:label key="user.organization"/>
+        </th>
+        <td>
+            <spring:bind path="user.organization">
+            <input type="text" name="organization" value="<c:out value="${status.value}"/>" id="organization" size="50"/>
+            <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
+            </spring:bind>
+        </td>
+    </tr>    
+<c:if test="${param.from == 'list' or param.method == 'Add'}">
     <tr>
         <th>
             <label for="enabled"><fmt:message key="user.enabled"/>?</label>
@@ -235,7 +246,9 @@
             </spring:bind>
         </td>
     </tr>
-    <tr>
+</c:if>
+<%--
+   <tr>
         <td></td>
         <td>
             <fieldset class="pickList">
@@ -284,7 +297,9 @@
         </td>
     </tr>
     </c:when>
-</c:choose>
+</c:choose> 
+--%>
+
     
     <%-- Print out buttons - defined at top of form --%>
     <%-- This is so you can put them at the top and the bottom if you like --%>

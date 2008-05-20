@@ -87,7 +87,7 @@ public class Constants {
 	/**
 	 * The name of the User role, as specified in web.xml
 	 */
-	public static final String USER_ROLE = "tomcat";
+	public static final String USER_ROLE = "anonymous";
 
 	/**
 	 * The name of the user's role list, a request-scoped attribute when

@@ -47,6 +47,7 @@ public class User extends BaseObject implements Serializable {
     protected Integer version;
     protected Set roles = new HashSet();
     protected Boolean enabled;
+    private Integer organization;
 
     public User() {
     }
@@ -71,7 +72,7 @@ public class User extends BaseObject implements Serializable {
      * Returns the password.
      * @return String
      *
-     * @hibernate.property column="password" not-null="true"
+     * @hibernate.property column="password" not-null="false"
      */
     public String getPassword() {
         return password;
@@ -197,12 +198,12 @@ public class User extends BaseObject implements Serializable {
      * Sets the password.
      * @param password The password to set
      *
-     * @spring.validator type="required"
-     * @spring.validator type="twofields" msgkey="errors.twofields"
+     */
+     /* @spring.validator type="twofields" msgkey="errors.twofields"
      * @spring.validator-args arg1resource="user.password"
      * @spring.validator-args arg1resource="user.confirmPassword"
      * @spring.validator-var name="secondProperty" value="confirmPassword"
-     */
+    */
     public void setPassword(String password) {
         this.password = password;
     }
@@ -210,7 +211,6 @@ public class User extends BaseObject implements Serializable {
     /**
      * Sets the confirmedPassword.
      * @param confirmPassword The confirmed password to set
-     * @spring.validator type="required"
      */
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
@@ -278,7 +278,6 @@ public class User extends BaseObject implements Serializable {
     /**
      * @param passwordHint The password hint to set
      *
-     * @spring.validator type="required"
      */
     public void setPasswordHint(String passwordHint) {
         this.passwordHint = passwordHint;
@@ -339,8 +338,27 @@ public class User extends BaseObject implements Serializable {
 
         return userRoles;
     }
+    
+    /**
+    * Returns the organization.
+    * @return Integer
+    *
+    * @hibernate.property column="organization" 
+    */
+    public Integer getOrganization() {
+		return organization;
+	}
 
-    public boolean equals(Object o) {
+    /**
+     * Sets the organization.
+     * @param organization The organization to set
+
+     */
+	public void setOrganization(Integer organization) {
+		this.organization = organization;
+	}
+
+	public boolean equals(Object o) {
         if (this == o) {
             return true;
         }

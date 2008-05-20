@@ -44,7 +44,7 @@ public class Address extends BaseObject implements Serializable {
      * Returns the city.
      * @return String
      *
-     * @hibernate.property column="city" not-null="true" length="50"
+     * @hibernate.property column="city" not-null="false" length="50"
      */
     public String getCity() {
         return city;
@@ -55,7 +55,7 @@ public class Address extends BaseObject implements Serializable {
      * @return String
      *
     
-     * @hibernate.property column="province" length="100"
+     * @hibernate.property column="province" length="100" not-null="false" 
      */
     public String getProvince() {
         return province;
@@ -65,7 +65,7 @@ public class Address extends BaseObject implements Serializable {
      * Returns the country.
      * @return String
      *
-     * @hibernate.property column="country" length="100"
+     * @hibernate.property column="country" length="100" 
      */
     public String getCountry() {
         return country;
@@ -75,7 +75,7 @@ public class Address extends BaseObject implements Serializable {
      * Returns the postalCode.
      * @return String
      *
-     * @hibernate.property column="postal_code" not-null="true" length="15"
+     * @hibernate.property column="postal_code" not-null="false" length="15"
      */
     public String getPostalCode() {
         return postalCode;
@@ -93,7 +93,6 @@ public class Address extends BaseObject implements Serializable {
      * Sets the city.
      * @param city The city to set
      *
-     * @spring.validator type="required"
      */
     public void setCity(String city) {
         this.city = city;
@@ -103,7 +102,6 @@ public class Address extends BaseObject implements Serializable {
      * Sets the country.
      * @param country The country to set
      *
-     * @spring.validator type="required"
      */
     public void setCountry(String country) {
         this.country = country;
@@ -113,9 +111,6 @@ public class Address extends BaseObject implements Serializable {
      * Sets the postalCode.
      * @param postalCode The postalCode to set
      *
-     * @spring.validator type="required"
-     * @spring.validator type="mask" msgkey="errors.zip"
-     * @spring.validator-var name="mask" value="${zip}"
      */
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
@@ -125,7 +120,6 @@ public class Address extends BaseObject implements Serializable {
      * Sets the province.
      * @param province The province to set
      *
-     * @spring.validator type="required"
      */
     public void setProvince(String province) {
         this.province = province;
