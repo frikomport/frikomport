@@ -47,7 +47,8 @@ public class User extends BaseObject implements Serializable {
     protected Integer version;
     protected Set roles = new HashSet();
     protected Boolean enabled;
-    private Integer organization;
+    private Organization organization;
+    private Long organizationid;
 
     public User() {
     }
@@ -343,9 +344,10 @@ public class User extends BaseObject implements Serializable {
     * Returns the organization.
     * @return Integer
     *
-    * @hibernate.property column="organization" 
+     * @hibernate.many-to-one not-null="false" column="organizationid"
+     *                        update="false" cascade="none" insert="false" property-ref="number"
     */
-    public Integer getOrganization() {
+    public Organization getOrganization() {
 		return organization;
 	}
 
@@ -354,11 +356,28 @@ public class User extends BaseObject implements Serializable {
      * @param organization The organization to set
 
      */
-	public void setOrganization(Integer organization) {
+	public void setOrganization(Organization organization) {
 		this.organization = organization;
 	}
 
-	public boolean equals(Object o) {
+        /**
+     * @return Returns the organizationid.
+     * @hibernate.property column="organizationid" not-null="true"
+     */
+    public Long getOrganizationid() {
+        return organizationid;
+    }
+
+    /**
+     * @param organizationid
+     *            The organizationid to set.
+     * @spring.validator type="required"
+     */
+    public void setOrganizationid(Long organizationid) {
+        this.organizationid = organizationid;
+    }
+
+    public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
