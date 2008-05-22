@@ -201,7 +201,7 @@ public class ActionFilter implements Filter {
 			}
 		} catch (ObjectRetrievalFailureException exception) {
 			// User does not exists, make new.
-			user = new User(ezUser.getName());
+			user = new User(ezUser.getUsername());
 			updateUser(ezUser, mgr, user, true);
 			session.setAttribute(Constants.USER_KEY, user);
 		}

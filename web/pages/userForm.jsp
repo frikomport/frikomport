@@ -95,8 +95,10 @@
             <soak:label key="user.firstName"/>
         </th>
         <td>
-            <form:input path="firstName"/>
-            <form:errors cssClass="fieldError" path="firstName"/>
+            <c:out value="${user.firstName}"/>
+            <form:hidden path="firstName"/>
+            <%-- <form:input path="firstName"/>
+            <form:errors cssClass="fieldError" path="firstName"/> --%>
         </td>
     </tr>
     <tr>
@@ -104,8 +106,10 @@
             <soak:label key="user.lastName"/>
         </th>
         <td>
-            <form:input path="lastName"/>
-            <form:errors cssClass="fieldError" path="lastName"/>
+            <c:out value="${user.lastName}"/>
+            <form:hidden path="lastName"/>
+            <%-- <form:input path="lastName"/>
+            <form:errors cssClass="fieldError" path="lastName"/> --%>
         </td>
     </tr>
     <tr>
@@ -141,7 +145,7 @@
         </th>
         <td>
             <form:input path="address.country"/>
-            <form:errors cssClass="fieldError" path="address.country"/>>
+            <form:errors cssClass="fieldError" path="address.country"/>
         </td>
     </tr>
     <tr>
@@ -158,8 +162,10 @@
             <soak:label key="user.email"/>
         </th>
         <td>
-            <form:input path="email"/>
-            <form:errors cssClass="fieldError" path="email"/>
+            <c:out value="${user.email}"/>
+            <form:hidden path="email"/>
+            <%-- <form:input path="email"/>
+            <form:errors cssClass="fieldError" path="email"/> --%>
         </td>
     </tr>
     <tr>
