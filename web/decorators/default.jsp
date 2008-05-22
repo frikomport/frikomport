@@ -35,7 +35,7 @@
     <div id="screen">
 <table width="100%">
 <tr>
-    <td valign="top">
+    <td valign="top" width="167px">
         <c:import url="/WEB-INF/pages/menu.jsp"/>
     </td>
     <td>

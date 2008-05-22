@@ -12,21 +12,15 @@
     </c:if>
 </spring:bind>
 
-<form method="post" action="<c:url value="/editUser.html"/>" id="userForm"
-    onsubmit="return onFormSubmit(this)">
+<form:form commandName="user" onsubmit="return onFormSubmit(this)">
+
+<form:hidden path="version"/>
     
-<spring:bind path="user.version">
-<input type="hidden" name="version" value="<c:out value="${status.value}"/>"/> 
-</spring:bind>
 <input type="hidden" name="from" value="<c:out value="${param.from}"/>" />
 
 <c:if test="${cookieLogin == 'true'}">
-    <spring:bind path="user.password">
-    <input type="hidden" name="password" value="<c:out value="${status.value}"/>"/>
-    </spring:bind>
-    <spring:bind path="user.confirmPassword">
-    <input type="hidden" name="confirmPassword" value="<c:out value="${status.value}"/>"/>
-    </spring:bind>
+    <form:hidden path="password"/>
+    <form:hidden path="confirmPassword"/>
 </c:if>
 
 <c:if test="${empty user.username}">
@@ -56,18 +50,16 @@
             <soak:label key="user.username"/>
         </th>
         <td>
-        <spring:bind path="user.username">
         <c:choose>
             <c:when test="${empty user.username}">
-                <input type="text" name="username" value="<c:out value="${status.value}"/>" id="username"/>
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
+                <form:input path="username"/>
+                <form:errors cssClass="fieldError" path="username"/>
             </c:when>
             <c:otherwise>
                 <c:out value="${user.username}"/>
-                <input type="hidden" name="username" value="<c:out value="${status.value}"/>" id="username"/>
+                <form:hidden path="username"/>
             </c:otherwise>
         </c:choose>
-        </spring:bind>
         </td>
     </tr>
     <%--
@@ -103,10 +95,8 @@
             <soak:label key="user.firstName"/>
         </th>
         <td>
-            <spring:bind path="user.firstName">
-            <input type="text" name="firstName" value="<c:out value="${status.value}"/>" id="firstName"/>
-            <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="firstName"/>
+            <form:errors cssClass="fieldError" path="firstName"/>
         </td>
     </tr>
     <tr>
@@ -114,10 +104,8 @@
             <soak:label key="user.lastName"/>
         </th>
         <td>
-            <spring:bind path="user.lastName">
-            <input type="text" name="lastName" value="<c:out value="${status.value}"/>" id="lastName"/>
-            <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="lastName"/>
+            <form:errors cssClass="fieldError" path="lastName"/>
         </td>
     </tr>
     <tr>
@@ -125,10 +113,8 @@
             <soak:label key="user.address.address"/>
         </th>
         <td>
-            <spring:bind path="user.address.address">
-            <input type="text" name="address.address" value="<c:out value="${status.value}"/>" id="address.address" size="50"/>
-            <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="address.address"/>
+            <form:errors cssClass="fieldError" path="address.address"/>
         </td>
     </tr>
     <tr>
@@ -136,10 +122,8 @@
             <soak:label key="user.address.city"/>
         </th>
         <td>
-            <spring:bind path="user.address.city">
-            <input type="text" name="address.city" value="<c:out value="${status.value}"/>" id="address.city" size="40"/>
-            <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="address.city"/>
+            <form:errors cssClass="fieldError" path="address.city"/>
         </td>
     </tr>
     <tr>
@@ -147,10 +131,8 @@
             <soak:label key="user.address.province"/>
         </th>
         <td>
-            <spring:bind path="user.address.province">
-            <input type="text" name="address.province" value="<c:out value="${status.value}"/>" id="address.province" size="40"/>
-            <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="address.province"/>
+            <form:errors cssClass="fieldError" path="address.province"/>
         </td>
     </tr>
     <tr>
@@ -158,10 +140,8 @@
             <soak:label key="user.address.country"/>
         </th>
         <td>
-            <spring:bind path="user.address.country">
-            <soak:country name="address.country" prompt="" default="${user.address.country}"/>
-            <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="address.country"/>
+            <form:errors cssClass="fieldError" path="address.country"/>>
         </td>
     </tr>
     <tr>
@@ -169,10 +149,8 @@
             <soak:label key="user.address.postalCode"/>
         </th>
         <td>
-            <spring:bind path="user.address.postalCode">
-            <input type="text" name="address.postalCode" value="<c:out value="${status.value}"/>" id="address.postalCode" size="10"/>
-            <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="address.postalCode"/>
+            <form:errors cssClass="fieldError" path="address.postalCode"/>
         </td>
     </tr>
     <tr>
@@ -180,10 +158,8 @@
             <soak:label key="user.email"/>
         </th>
         <td>
-            <spring:bind path="user.email">
-            <input type="text" name="email" value="<c:out value="${status.value}"/>" id="email" size="50"/>
-            <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="email"/>
+            <form:errors cssClass="fieldError" path="email"/>
         </td>
     </tr>
     <tr>
@@ -191,10 +167,8 @@
             <soak:label key="user.phoneNumber"/>
         </th>
         <td>
-            <spring:bind path="user.phoneNumber">
-            <input type="text" name="phoneNumber" value="<c:out value="${status.value}"/>" id="phoneNumber"/>
-            <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="phoneNumber"/>
+            <form:errors cssClass="fieldError" path="phoneNumber"/>
         </td>
     </tr>
     <tr>
@@ -202,10 +176,8 @@
             <soak:label key="user.website"/>
         </th>
         <td>
-            <spring:bind path="user.website">
-            <input type="text" name="website" value="<c:out value="${status.value}"/>" id="website" size="50"/>
-            <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:input path="website"/>
+            <form:errors cssClass="fieldError" path="website"/>
             <c:if test="${!empty user.website}">
             <a href="<c:out value="${user.website}"/>"><fmt:message key="user.visitWebsite"/></a>
             </c:if>
@@ -227,10 +199,10 @@
             <soak:label key="user.organization"/>
         </th>
         <td>
-            <spring:bind path="user.organization">
-            <input type="text" name="organization" value="<c:out value="${status.value}"/>" id="organization" size="50"/>
-            <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
+            <form:select path="organizationid">
+                <form:options items="${organizations}" itemValue="id" itemLabel="name"/>
+            </form:select>
+            <form:errors cssClass="fieldError" htmlEscape="false" path="organizationid"/>
         </td>
     </tr>    
 <c:if test="${param.from == 'list' or param.method == 'Add'}">
@@ -259,13 +231,13 @@
 	                <tr>
 	                    <th class="pickLabel">
 	                        <soak:label key="user.availableRoles" 
-	                            colon="false" class="required"/>
+	                            colon="false" styleClass="required"/>
 	                    </th>
 	                    <td>
 	                    </td>
 	                    <th class="pickLabel">
 	                        <soak:label key="user.roles"
-	                            colon="false" class="required"/>
+	                            colon="false" styleClass="required"/>
 	                    </th>
 	                </tr>
 	                <c:set var="leftList" value="${availableRoles}" scope="request"/>
@@ -306,7 +278,7 @@
 	<c:out value="${pageButtons}" escapeXml="false" />
 
 </table>
-</form>
+</form:form>
 
 <script type="text/javascript">
 <!--

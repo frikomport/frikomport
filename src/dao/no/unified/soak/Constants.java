@@ -87,9 +87,17 @@ public class Constants {
 	/**
 	 * The name of the User role, as specified in web.xml
 	 */
-	public static final String USER_ROLE = "anonymous";
+	public static final String DEFAULT_ROLE = "anonymous";
 
-	/**
+    public static final String ANONYMOUS_ROLE = "anonymous";
+
+    public static final String EMPLOYEE_ROLE = "employee";
+
+    public static final String INSTRUCTOR_ROLE = "instructor";
+
+    public static final String EDITOR_ROLE = "editor";
+
+    /**
 	 * The name of the user's role list, a request-scoped attribute when
 	 * adding/editing a user.
 	 */

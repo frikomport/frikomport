@@ -101,7 +101,7 @@ public class UserEzDaoJdbc {
 		}
 		EzUser user = new EzUser();
 		try {
-			String sql = "select O.id, O.name, CA.identifier, A.data_int, A.data_text, U.email from ezcontentobject O \r\n"
+			String sql = "select O.id, O.name, CA.identifier, A.data_int, A.data_text, U.email, U.login from ezcontentobject O \r\n"
 					+ "inner join ezcontentclass C on O.contentclass_id = C.id\r\n"
 					+ "inner join ezcontentobject_attribute A on A.contentobject_id = O.id\r\n"
 					+ "inner join ezcontentclass_attribute CA on CA.contentclass_id = C.id and CA.id = A.contentclassattribute_id\r\n"
@@ -122,7 +122,8 @@ public class UserEzDaoJdbc {
 					user.setId(curId);
 					user.setName(rowSet.getString("name"));
 					user.setEmail(rowSet.getString("email"));
-				}
+                    user.setUsername(rowSet.getString("login"));
+                }
 				String identifier = rowSet.getString("identifier");
 				if ("first_name".equals(identifier)) {
 					user.setFirst_name(rowSet.getString("data_text"));
@@ -170,7 +171,7 @@ public class UserEzDaoJdbc {
 		List eZUsers = new ArrayList();
 
 		try {
-			String sql = "select O.id, O.name, CA.identifier, A.data_int, A.data_text, U.email from ezcontentobject O \r\n"
+			String sql = "select O.id, O.name, CA.identifier, A.data_int, A.data_text, U.email, U.login from ezcontentobject O \r\n"
 					+ "inner join ezcontentclass C on O.contentclass_id = C.id\r\n"
 					+ "inner join ezcontentobject_attribute A on A.contentobject_id = O.id\r\n"
 					+ "inner join ezcontentclass_attribute CA on CA.contentclass_id = C.id and CA.id = A.contentclassattribute_id\r\n"
@@ -192,7 +193,8 @@ public class UserEzDaoJdbc {
 					user.setId(curId);
 					user.setName(rowSet.getString("name"));
 					user.setEmail(rowSet.getString("email"));
-				}
+                    user.setUsername(rowSet.getString("login"));
+                }
 				String identifier = rowSet.getString("identifier");
 				if ("first_name".equals(identifier)) {
 					user.setFirst_name(rowSet.getString("data_text"));
