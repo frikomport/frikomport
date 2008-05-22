@@ -25,7 +25,7 @@ public class RoleDAOTest extends BaseDAOTestCase {
     }
 
     public void testGetRole() throws Exception {
-        role = dao.getRole(Constants.USER_ROLE);
+        role = dao.getRole(Constants.DEFAULT_ROLE);
         assertNotNull(role);
     }
 

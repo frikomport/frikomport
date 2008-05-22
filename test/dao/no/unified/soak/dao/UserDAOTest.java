@@ -41,14 +41,14 @@ public class UserDAOTest extends BaseDAOTestCase {
     }
 
     public void testGetUser() throws Exception {
-        user = dao.getUser("Anonymous User");
+        user = dao.getUser("anonymous");
 
         assertNotNull(user);
         assertEquals(1, user.getRoles().size());
     }
 
     public void testUpdateUser() throws Exception {
-        user = dao.getUser("Anonymous User");
+        user = dao.getUser("anonymous");
 
         Address address = user.getAddress();
         address.setAddress("new address");
@@ -72,7 +72,7 @@ public class UserDAOTest extends BaseDAOTestCase {
     }
 
     public void testAddUserRole() throws Exception {
-        user = dao.getUser("Anonymous User");
+        user = dao.getUser("anonymous");
 
         assertEquals(1, user.getRoles().size());
 
@@ -108,7 +108,8 @@ public class UserDAOTest extends BaseDAOTestCase {
         user.setAddress(address);
         user.setEmail("testuser@appfuse.org");
         user.setWebsite("http://raibledesigns.com");
-        user.addRole(rdao.getRole(Constants.USER_ROLE));
+        user.addRole(rdao.getRole(Constants.DEFAULT_ROLE));
+        user.setOrganizationid(1L);
 
         dao.saveUser(user);
 
@@ -128,7 +129,7 @@ public class UserDAOTest extends BaseDAOTestCase {
     public void testSaveAndDeleteUserCookie() throws Exception {
         String cookieId = "BA67E786-C031-EA40-2769-863BB30B31EC";
         UserCookie cookie = new UserCookie();
-        cookie.setUsername("Anonymous User");
+        cookie.setUsername("anonymous");
         cookie.setCookieId(cookieId);
         dao.saveUserCookie(cookie);
         cookie = dao.getUserCookie(cookie);
