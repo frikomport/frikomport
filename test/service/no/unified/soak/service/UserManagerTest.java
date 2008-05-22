@@ -85,7 +85,7 @@ public class UserManagerTest extends BaseManagerTestCase {
         roleDAO.expects(once()).method("getRole").with(eq("anonymous"))
                .will(returnValue(new Role("anonymous")));
 
-        role = roleManager.getRole(Constants.USER_ROLE);
+        role = roleManager.getRole(Constants.DEFAULT_ROLE);
         roleDAO.verify();
         user.addRole(role);
 

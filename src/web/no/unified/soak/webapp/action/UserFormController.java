@@ -10,9 +10,11 @@ package no.unified.soak.webapp.action;
 import no.unified.soak.Constants;
 import no.unified.soak.model.Role;
 import no.unified.soak.model.User;
+import no.unified.soak.model.Organization;
 import no.unified.soak.service.RoleManager;
 import no.unified.soak.service.UserExistsException;
 import no.unified.soak.service.UserManager;
+import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.util.StringUtil;
 import no.unified.soak.webapp.util.RequestUtil;
 
@@ -23,7 +25,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.Locale;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,12 +42,29 @@ import javax.servlet.http.HttpSession;
  */
 public class UserFormController extends BaseFormController {
     private RoleManager roleManager;
+    private OrganizationManager organizationManager = null;
+
+    /**
+     * @param organizationManager The organizationManager to set.
+     */
+    public void setOrganizationManager(OrganizationManager organizationManager) {
+		this.organizationManager = organizationManager;
+	}
 
     /**
      * @param roleManager The roleManager to set.
      */
     public void setRoleManager(RoleManager roleManager) {
         this.roleManager = roleManager;
+    }
+
+	protected Map referenceData(HttpServletRequest request) throws Exception {
+		Map<String, Object> model = new HashMap<String, Object>();
+        Locale locale = request.getLocale();
+
+        addOrganization(model,locale);
+
+        return model;
     }
 
     public ModelAndView processFormSubmission(HttpServletRequest request,
@@ -221,7 +240,7 @@ public class UserFormController extends BaseFormController {
             user = this.getUserManager().getUser(username);
         } else {
             user = new User();
-            user.addRole(new Role(Constants.USER_ROLE));
+            user.addRole(new Role(Constants.DEFAULT_ROLE));
         }
 
         user.setConfirmPassword(user.getPassword());
@@ -237,5 +256,26 @@ public class UserFormController extends BaseFormController {
         } else {
             super.setValidateOnBinding(true);
         }
+    }
+
+    private Map addOrganization(Map model, Locale locale) {
+        if (model == null) {
+            model = new HashMap();
+        }
+
+        // Get all organizations in the database
+        List organizationsInDB = organizationManager.getAll();
+        List organizations = new ArrayList();
+        Organization organizationDummy = new Organization();
+        organizationDummy.setId(new Long(0));
+        organizationDummy.setName(getText("misc.none", locale));
+        organizations.add(organizationDummy);
+        organizations.addAll(organizationsInDB);
+
+        if (organizations != null) {
+            model.put("organizations", organizations);
+        }
+
+        return model;
     }
 }

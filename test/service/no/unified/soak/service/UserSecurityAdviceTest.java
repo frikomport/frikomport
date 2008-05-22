@@ -34,7 +34,7 @@ public class UserSecurityAdviceTest extends BaseManagerTestCase {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("user",
                 "password",
                 new GrantedAuthority[] {
-                    new GrantedAuthorityImpl(Constants.USER_ROLE)
+                    new GrantedAuthorityImpl(Constants.DEFAULT_ROLE)
                 });
         token.setAuthenticated(false);
         context.setAuthentication(token);
@@ -81,7 +81,7 @@ public class UserSecurityAdviceTest extends BaseManagerTestCase {
         UserManager userManager = (UserManager) makeInterceptedTarget();
         User user = new User("user");
         ;
-        user.getRoles().add(new Role(Constants.USER_ROLE));
+        user.getRoles().add(new Role(Constants.DEFAULT_ROLE));
 
         userDAO.expects(once()).method("saveUser");
         userManager.saveUser(user);
@@ -109,7 +109,7 @@ public class UserSecurityAdviceTest extends BaseManagerTestCase {
         UserManager userManager = (UserManager) makeInterceptedTarget();
         User user = new User("user");
         user.getRoles().add(new Role(Constants.ADMIN_ROLE));
-        user.getRoles().add(new Role(Constants.USER_ROLE));
+        user.getRoles().add(new Role(Constants.DEFAULT_ROLE));
 
         try {
             userManager.saveUser(user);
@@ -135,7 +135,7 @@ public class UserSecurityAdviceTest extends BaseManagerTestCase {
         UserManager userManager = (UserManager) makeInterceptedTarget();
         User user = new User("user");
         user.getRoles().add(new Role(Constants.ADMIN_ROLE));
-        user.getRoles().add(new Role(Constants.USER_ROLE));
+        user.getRoles().add(new Role(Constants.DEFAULT_ROLE));
 
         userDAO.expects(once()).method("saveUser");
         userManager.saveUser(user);
@@ -146,7 +146,7 @@ public class UserSecurityAdviceTest extends BaseManagerTestCase {
     public void testUpdateUserWithUserRole() throws Exception {
         UserManager userManager = (UserManager) makeInterceptedTarget();
         User user = new User("user");
-        user.getRoles().add(new Role(Constants.USER_ROLE));
+        user.getRoles().add(new Role(Constants.DEFAULT_ROLE));
 
         userDAO.expects(once()).method("saveUser");
         userManager.saveUser(user);

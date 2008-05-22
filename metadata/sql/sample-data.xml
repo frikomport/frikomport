@@ -71,7 +71,7 @@
     <column>password_hint</column>
     <column>version</column>
     <column>enabled</column>
-    <column>organization</column>
+    <column>organizationid</column>
     <row>
       <value>employee</value>
       <value></value>
@@ -109,7 +109,7 @@
       <value>0</value>
     </row>
     <row>
-      <value>Administrator User</value>
+      <value>admin</value>
       <value></value>
       <value>Administrator</value>
       <value>User</value>
@@ -145,7 +145,7 @@
       <value>0</value>
     </row>
     <row>
-      <value>Anonymous User</value>
+      <value>anonymous</value>
       <value></value>
       <value>Anonymous</value>
       <value>User</value>
@@ -199,11 +199,11 @@
     <column>username</column>
     <column>role_name</column>
     <row>
-      <value>Anonymous User</value>
+      <value>anonymous</value>
       <value>anonymous</value>
     </row>
     <row>
-      <value>Administrator User</value>
+      <value>admin</value>
       <value>admin</value>
     </row>
     <row>
