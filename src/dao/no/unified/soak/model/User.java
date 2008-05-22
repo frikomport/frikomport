@@ -7,6 +7,8 @@
 */
 package no.unified.soak.model;
 
+import no.unified.soak.ez.EzUser;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -116,7 +118,7 @@ public class User extends BaseObject implements Serializable {
      *
      * @return Address
      *
-     * @hibernate.component
+     * @hibernate.component not-null="false"
      */
     public Address getAddress() {
         return address;
@@ -187,6 +189,25 @@ public class User extends BaseObject implements Serializable {
     }
 
     /**
+     * Removes a role for the user
+     *
+     * @param role
+     */
+    public void removeRole(Role role) {
+        getRoles().remove(role);
+    }
+
+    /**
+     * Removes all roles for the user
+     *
+     */
+    public void removeAllRoles() {
+    	Set allRoles = getRoles();
+    	getRoles().removeAll(allRoles);
+    }
+
+    
+    /**
      * Sets the username.
      * @param username The username to set
      * @spring.validator type="required"
@@ -240,7 +261,6 @@ public class User extends BaseObject implements Serializable {
      * Sets the address.
      * @param address The address to set
      *
-     * @spring.validator
      */
     public void setAddress(Address address) {
         this.address = address;
@@ -388,12 +408,72 @@ public class User extends BaseObject implements Serializable {
 
         final User user = (User) o;
 
-        if ((username != null) ? (!username.equals(user.getUsername()))
-                                   : (user.getUsername() != null)) {
-            return false;
-        }
+        if ((username != null) ? (!username.equals(user.getUsername())) : (user
+				.getUsername() != null)) {
+			return false;
+		}
 
-        return true;
+		if ((firstName != null) ? (!firstName.equals(user.getFirstName())) : (user
+				.getFirstName() != null)) {
+			return false;
+		}
+
+		if ((lastName != null) ? (!lastName.equals(user.getLastName())) : (user
+				.getLastName() != null)) {
+			return false;
+		}
+
+		if ((email != null) ? (!email.equals(user.getEmail())) : (user
+				.getEmail() != null)) {
+			return false;
+		}
+		
+		if ((roles != null) ? (!roles.equals(user.getRoles())) : (user
+				.getRoles() != null)) {
+			return false;
+		}
+		
+		if ((organization != null) ? (!organization.equals(user.getOrganization())) : (user
+				.getOrganization() != null)) {
+			return false;
+		}
+
+		return true;
+    }
+	
+	public boolean equals(EzUser ezUser) {
+
+        if ((username != null) ? (!username.equals(ezUser.getName())) : (ezUser
+				.getName() != null)) {
+			return false;
+		}
+
+		if ((firstName != null) ? (!firstName.equals(ezUser.getFirst_name())) : (ezUser
+				.getFirst_name() != null)) {
+			return false;
+		}
+
+		if ((lastName != null) ? (!lastName.equals(ezUser.getLast_name())) : (ezUser
+				.getLast_name() != null)) {
+			return false;
+		}
+
+		if ((email != null) ? (!email.equals(ezUser.getEmail())) : (ezUser
+				.getEmail() != null)) {
+			return false;
+		}
+		
+//		if ((roles != null) ? (!roles.equals(ezUser.getRolenames())) : (ezUser
+//				.getRolenames() != null)) {
+//			return false;
+//		}
+		
+		if ((organization != null) ? (!organization.equals(ezUser.getKommune())) : (ezUser
+				.getKommune() != null)) {
+			return false;
+		}
+
+		return true;
     }
 
     public int hashCode() {
