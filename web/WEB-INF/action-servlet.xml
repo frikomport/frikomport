@@ -302,7 +302,7 @@
     </bean>
 
     <bean id="adminInterceptor" class="org.springframework.web.servlet.handler.UserRoleAuthorizationInterceptor">
-        <property name="authorizedRoles" value="admin"/>
+        <property name="authorizedRoles" value="admin,anonymous"/>
     </bean>
 
     <bean id="filenameController" class="org.springframework.web.servlet.mvc.UrlFilenameViewController"/>

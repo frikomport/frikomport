@@ -11,10 +11,7 @@
 package no.unified.soak.webapp.action;
 
 import no.unified.soak.Constants;
-import no.unified.soak.model.Course;
-import no.unified.soak.model.Organization;
-import no.unified.soak.model.Registration;
-import no.unified.soak.model.ServiceArea;
+import no.unified.soak.model.*;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
@@ -97,10 +94,10 @@ public class RegistrationController extends BaseFormController {
         String postback = request.getParameter("ispostbackregistrationlist");
         if ((postback == null) || (postback.compareTo("1") != 0)) {
 	        // Check if a default organization should be applied
-	        Object omid = request.getAttribute(Constants.EZ_ORGANIZATION);
-	        if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
-	            registration.setOrganizationid(new Long(omid.toString()));
-	        }
+            User user = (User)session.getAttribute(Constants.USER_KEY);
+            if(user.getOrganizationid() != 0){
+                registration.setOrganizationid(user.getOrganizationid());
+            }
 	
 	        // Check if a specific organization has been requested
 	        String mid = request.getParameter("mid");
@@ -337,18 +334,7 @@ public class RegistrationController extends BaseFormController {
             model = new HashMap();
         }
 
-        // Get all organizations in the database
-        List organizationsInDB = organizationManager.getAll();
-        List organizations = new ArrayList();
-        Organization organizationDummy = new Organization();
-        organizationDummy.setId(new Long(0));
-        organizationDummy.setName(getText("misc.all", locale));
-        organizations.add(organizationDummy);
-        organizations.addAll(organizationsInDB);
-
-        if (organizations != null) {
-            model.put("organizations", organizations);
-        }
+        model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
 
         return model;
     }

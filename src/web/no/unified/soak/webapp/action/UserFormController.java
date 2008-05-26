@@ -165,7 +165,8 @@ public class UserFormController extends BaseFormController {
                     getText("user.saved", user.getFullName(), locale));
 
                 // return to main Menu
-                return new ModelAndView(new RedirectView("mainMenu.html"));
+                return showForm(request, response, errors);
+//                return new ModelAndView(new RedirectView("mainMenu.html"));
             } else {
                 if (StringUtils.isBlank(request.getParameter("version"))) {
                     saveMessage(request,
@@ -263,18 +264,7 @@ public class UserFormController extends BaseFormController {
             model = new HashMap();
         }
 
-        // Get all organizations in the database
-        List organizationsInDB = organizationManager.getAll();
-        List organizations = new ArrayList();
-        Organization organizationDummy = new Organization();
-        organizationDummy.setId(new Long(0));
-        organizationDummy.setName(getText("misc.none", locale));
-        organizations.add(organizationDummy);
-        organizations.addAll(organizationsInDB);
-
-        if (organizations != null) {
-            model.put("organizations", organizations);
-        }
+        model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.none", locale)));
 
         return model;
     }

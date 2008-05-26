@@ -364,8 +364,8 @@ public class User extends BaseObject implements Serializable {
     * Returns the organization.
     * @return Integer
     *
-     * @hibernate.many-to-one not-null="false" column="organizationid"
-     *                        update="false" cascade="none" insert="false" property-ref="number"
+     * @hibernate.many-to-any-column not-null="false" name="organizationid" unique="false"
+     *
     */
     public Organization getOrganization() {
 		return organization;
@@ -382,7 +382,7 @@ public class User extends BaseObject implements Serializable {
 
         /**
      * @return Returns the organizationid.
-     * @hibernate.property column="organizationid" not-null="true"
+     * @hibernate.property column="organizationid" not-null="false"
      */
     public Long getOrganizationid() {
         return organizationid;

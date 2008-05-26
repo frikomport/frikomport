@@ -10,22 +10,15 @@
  */
 package no.unified.soak.webapp.action;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import no.unified.soak.Constants;
 import no.unified.soak.ez.EzUser;
-import no.unified.soak.model.Course;
-import no.unified.soak.model.Notification;
-import no.unified.soak.model.Registration;
+import no.unified.soak.model.*;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.OrganizationManager;
@@ -103,8 +96,9 @@ public class RegistrationFormController extends BaseFormController {
 	 */
 	protected Map referenceData(HttpServletRequest request) throws Exception {
 		Map model = new HashMap();
+        Locale locale = request.getLocale();
 
-		String courseId = request.getParameter("courseid");
+        String courseId = request.getParameter("courseid");
 		if ((courseId == null) || !StringUtils.isNumeric(courseId)) {
 			// Redirect to error page - should never happen
 		}
@@ -122,12 +116,13 @@ public class RegistrationFormController extends BaseFormController {
 		}
 
 		// Retrieve all organizations into an array
-		List organizations = organizationManager.getAll();
-		if (organizations != null) {
-			model.put("organizations", organizations);
-		}
+//		List organizations = organizationManager.getAll();
+//		if (organizations != null) {
+//			model.put("organizations", organizations);
+//		}
+        addOrganization(model,locale);
 
-		// Retrieve the course the user wants to attend
+        // Retrieve the course the user wants to attend
 		Course course = courseManager.getCourse(courseId);
 		if (course != null) {
 			model.put("course", course);
@@ -153,18 +148,18 @@ public class RegistrationFormController extends BaseFormController {
 		} else {
 			registration = new Registration();
 	        // Check if a default organization should be applied
-	        Object omid = request.getAttribute(Constants.EZ_ORGANIZATION);
-	        if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
-	            registration.setOrganizationid(new Long(omid.toString()));
-	        }
+            HttpSession session = request.getSession(true);
+            User user = (User)session.getAttribute(Constants.USER_KEY);
+            if(user.getOrganizationid() != 0){
+                registration.setOrganizationid(user.getOrganizationid());
+            }
 
             // set default values
             Locale locale = request.getLocale();
             String userdefaults = getText("access.registration.userdefaults",locale);
             if(userdefaults != null && userdefaults.equals("true")){
-                EzUser user = (EzUser)request.getAttribute(Constants.EZ_USER);
-                registration.setFirstName(user.getFirst_name());
-                registration.setLastName(user.getLast_name());
+                registration.setFirstName(user.getFirstName());
+                registration.setLastName(user.getLastName());
                 registration.setEmail(user.getEmail());
             }
         }
@@ -449,4 +444,14 @@ public class RegistrationFormController extends BaseFormController {
 
 		return result;
 	}
+
+        private Map addOrganization(Map model, Locale locale) {
+        if (model == null) {
+            model = new HashMap();
+        }
+
+        model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
+            
+        return model;
+    }
 }

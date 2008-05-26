@@ -57,7 +57,6 @@
             </c:when>
             <c:otherwise>
                 <c:out value="${user.username}"/>
-                <form:hidden path="username"/>
             </c:otherwise>
         </c:choose>
         </td>

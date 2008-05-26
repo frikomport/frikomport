@@ -29,9 +29,9 @@
             <value>
                 CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
                 PATTERN_TYPE_APACHE_ANT
-                /signup.html=ROLE_ANONYMOUS,admin,tomcat
-                /passwordhint.html*=ROLE_ANONYMOUS,admin,tomcat
-                /**/*.html*=admin,tomcat,ROLE_ANONYMOUS
+                /signup.html=ROLE_ANONYMOUS,admin,anonymous
+                /passwordhint.html*=ROLE_ANONYMOUS,admin,anonymous
+                /**/*.html*=admin,anonymous,ROLE_ANONYMOUS
                 /clickstreams.jsp=admin,ROLE_ANONYMOUS
             </value>
         </property>
@@ -107,7 +107,7 @@
     
     <bean id="anonymousProcessingFilter" class="org.acegisecurity.providers.anonymous.AnonymousProcessingFilter">
         <property name="key" value="anonymous"/>
-        <property name="userAttribute" value="anonymous,ROLE_ANONYMOUS"/>
+        <property name="userAttribute" value="anonymous,admin,ROLE_ANONYMOUS"/>
     </bean>
     
     <bean id="exceptionTranslationFilter" class="org.acegisecurity.ui.ExceptionTranslationFilter">

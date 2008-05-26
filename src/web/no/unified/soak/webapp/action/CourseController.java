@@ -317,18 +317,7 @@ public class CourseController extends BaseFormController {
             model = new HashMap();
         }
 
-        // Get all organizations in the database
-        List organizationsInDB = organizationManager.getAll();
-        List organizations = new ArrayList();
-        Organization organizationDummy = new Organization();
-        organizationDummy.setId(new Long(0));
-        organizationDummy.setName(getText("misc.all", locale));
-        organizations.add(organizationDummy);
-        organizations.addAll(organizationsInDB);
-
-        if (organizations != null) {
-            model.put("organizations", organizations);
-        }
+        model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
 
         return model;
     }

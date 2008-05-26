@@ -306,7 +306,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the organizationid.
-	 * @hibernate.property column="organizationid" not-null="true"
+	 * @hibernate.property column="organizationid" not-null="false"
 	 */
 	public Long getOrganizationid() {
 		return organizationid;

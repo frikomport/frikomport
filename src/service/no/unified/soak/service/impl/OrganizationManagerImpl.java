@@ -15,6 +15,7 @@ import no.unified.soak.model.Organization;
 import no.unified.soak.service.OrganizationManager;
 
 import java.util.List;
+import java.util.ArrayList;
 
 
 /**
@@ -66,5 +67,15 @@ public class OrganizationManagerImpl extends BaseManager
      */
     public List getAllIncludingDisabled() {
         return dao.getAll(new Boolean(true));
+    }
+
+    public List getAllIncludingDummy(String dummy) {
+        List organizations = new ArrayList();
+        Organization organizationDummy = new Organization();
+        organizationDummy.setId(new Long(0));
+        organizationDummy.setName(dummy);
+        organizations.add(organizationDummy);
+        organizations.addAll(getAll());
+        return organizations;
     }
 }

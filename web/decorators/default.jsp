@@ -35,10 +35,10 @@
     <div id="screen">
 <table width="100%">
 <tr>
-    <td valign="top" width="167px">
+    <td valign="top">
         <c:import url="/WEB-INF/pages/menu.jsp"/>
     </td>
-    <td>
+    <td width="100%">
         <div id="content">
             <h1><decorator:getProperty property="page.heading"/></h1>
             <%@ include file="/common/messages.jsp" %>
