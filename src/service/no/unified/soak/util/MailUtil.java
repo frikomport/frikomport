@@ -14,6 +14,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.validator.EmailValidator;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.SimpleMailMessage;
 
@@ -318,7 +319,8 @@ public class MailUtil {
 				messageSource));
 		String waitingMsg = StringEscapeUtils.unescapeHtml(getText("courseNotification.phrase.waitinglist", locale,
 				messageSource));
-		for (Registration registration : registrations) {
+
+        for (Registration registration : registrations) {
 			SimpleMailMessage message = new SimpleMailMessage();
 			switch (event) {
 			case Constants.EMAIL_EVENT_COURSECHANGED:
@@ -331,7 +333,8 @@ public class MailUtil {
 							getText("courseChanged.mail.subject", course.getName(), locale, messageSource)).replaceAll(
 							"<registeredfor/>", waitingMsg).replaceAll("<coursename/>", course.getName()));
 				}
-				break;
+
+                break;
 
 			case Constants.EMAIL_EVENT_COURSEDELETED:
 				if (registration.getReserved()) {
@@ -355,7 +358,8 @@ public class MailUtil {
 							getText("courseNotification.mail.subject", course.getName(), locale, messageSource))
 							.replaceAll("<registeredfor/>", waitingMsg).replaceAll("<coursename/>", course.getName()));
 				}
-				break;
+
+                break;
 			case Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION:
 				if (registration.getReserved()) {
 					message.setSubject(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
@@ -413,11 +417,11 @@ public class MailUtil {
 			message.setText(msgIndivid.toString());
 			List<String> emails = new LinkedList<String>();
 
-			if (registration.getEmail() != null && registration.getEmail().trim().length() > 0) {
+			if (registration.getEmail() != null && registration.getEmail().trim().length() > 0 && EmailValidator.getInstance().isValid(registration.getEmail())) {
 				emails.add(registration.getEmail());
 			}
 
-			if (emails.size() == 0 && course.getInstructor().getEmail() != null) {
+			if (emails.size() == 0 && course.getInstructor().getEmail() != null && EmailValidator.getInstance().isValid(course.getInstructor().getEmail())) {
 				emails.add(course.getInstructor().getEmail());
 			}
 
