@@ -135,6 +135,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @param email
 	 *            The email to set.
 	 * @spring.validator type="required"
+     * @spring.validator type="email"
 	 */
 	public void setEmail(String email) {
 		this.email = email;
