@@ -128,7 +128,7 @@ public class CourseFormController extends BaseFormController {
 		Map<String, Object> model = new HashMap<String, Object>();
 
 		// Retrieve all serviceareas into an array
-		List serviceAreas = serviceAreaManager.getServiceAreas();
+		List serviceAreas = serviceAreaManager.getAll();
 		if (serviceAreas != null) {
 			model.put("serviceareas", serviceAreas);
 		}

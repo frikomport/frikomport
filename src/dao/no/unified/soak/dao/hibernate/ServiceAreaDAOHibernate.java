@@ -32,7 +32,7 @@ public class ServiceAreaDAOHibernate extends BaseDAOHibernate
     /**
      * @see no.unified.soak.dao.ServiceAreaDAO#getServiceAreas(no.unified.soak.model.ServiceArea)
      */
-    public List getServiceAreas(final Boolean includeDisabled) {
+    public List getAll(final Boolean includeDisabled) {
         DetachedCriteria criteria = DetachedCriteria.forClass(ServiceArea.class);
 
         // If the includeDisabled is not true, we only return enabled

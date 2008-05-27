@@ -15,6 +15,7 @@ import no.unified.soak.model.ServiceArea;
 import no.unified.soak.service.ServiceAreaManager;
 
 import java.util.List;
+import java.util.ArrayList;
 
 
 /**
@@ -39,12 +40,22 @@ public class ServiceAreaManagerImpl extends BaseManager
     /**
      * @see no.unified.soak.service.ServiceAreaManager#getServiceAreas(no.unified.soak.model.ServiceArea)
      */
-    public List getServiceAreas() {
-        return dao.getServiceAreas(new Boolean(false));
+    public List getAll() {
+        return dao.getAll(new Boolean(false));
     }
 
-    public List getServiceAreasIncludingDisabled() {
-        return dao.getServiceAreas(new Boolean(true));
+    public List getAllIncludingDisabled() {
+        return dao.getAll(new Boolean(true));
+    }
+
+    public List getAllIncludingDummy(String value) {
+        List serviceAreas = new ArrayList();
+        ServiceArea dummy = new ServiceArea();
+        dummy.setId(new Long(0));
+        dummy.setName(value);
+        serviceAreas.add(dummy);
+        serviceAreas.addAll(getAll());
+        return serviceAreas;
     }
 
     /**

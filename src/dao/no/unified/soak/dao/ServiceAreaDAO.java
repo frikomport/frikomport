@@ -27,7 +27,7 @@ public interface ServiceAreaDAO extends DAO {
      * @param includeDisabled
      *            set to 'true' to include the disabled ones
      */
-    public List getServiceAreas(Boolean includeDisabled);
+    public List getAll(Boolean includeDisabled);
 
     /**
      * Gets serviceArea's information based on primary key. An

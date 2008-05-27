@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import no.unified.soak.Constants;
-import no.unified.soak.ez.EzUser;
 import no.unified.soak.model.*;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
@@ -110,17 +109,16 @@ public class RegistrationFormController extends BaseFormController {
 		}
 
 		// Retrieve all serviceareas into an array
-		List serviceAreas = serviceAreaManager.getServiceAreas();
+		List serviceAreas = serviceAreaManager.getAllIncludingDummy(getText("misc.none",locale));
 		if (serviceAreas != null) {
 			model.put("serviceareas", serviceAreas);
 		}
 
 		// Retrieve all organizations into an array
-//		List organizations = organizationManager.getAll();
-//		if (organizations != null) {
-//			model.put("organizations", organizations);
-//		}
-        addOrganization(model,locale);
+        List organizations = organizationManager.getAllIncludingDummy(getText("misc.none",locale));
+		if (organizations != null) {
+			model.put("organizations", organizations);
+		}
 
         // Retrieve the course the user wants to attend
 		Course course = courseManager.getCourse(courseId);
@@ -444,14 +442,4 @@ public class RegistrationFormController extends BaseFormController {
 
 		return result;
 	}
-
-        private Map addOrganization(Map model, Locale locale) {
-        if (model == null) {
-            model = new HashMap();
-        }
-
-        model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
-            
-        return model;
-    }
 }

@@ -19,11 +19,8 @@ import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.WaitingListManager;
-import no.unified.soak.util.DateUtil;
 import no.unified.soak.util.MailUtil;
-import no.unified.soak.util.StringUtil;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
 import org.springframework.context.MessageSource;
@@ -113,7 +110,7 @@ public class RegistrationAdministrationController extends BaseFormController {
 		String courseId = request.getParameter("courseid");
 
 		// Retrieve all serviceareas into an array
-		List serviceAreas = serviceAreaManager.getServiceAreas();
+		List serviceAreas = serviceAreaManager.getAll();
 
 		if (serviceAreas != null) {
 			model.put("serviceareas", serviceAreas);

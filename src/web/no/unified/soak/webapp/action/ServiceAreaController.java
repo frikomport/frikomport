@@ -57,7 +57,7 @@ public class ServiceAreaController implements Controller {
         // populate object with request parameters
         BeanUtils.populate(serviceArea, request.getParameterMap());
 
-        List serviceAreas = serviceAreaManager.getServiceAreasIncludingDisabled();
+        List serviceAreas = serviceAreaManager.getAllIncludingDisabled();
 
         return new ModelAndView("serviceAreaList", Constants.SERVICEAREA_LIST,
             serviceAreas);

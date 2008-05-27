@@ -303,7 +303,7 @@ public class RegistrationController extends BaseFormController {
         }
 
         // Get all organizations in the database
-        List serviceAreasInDB = serviceAreaManager.getServiceAreas();
+        List serviceAreasInDB = serviceAreaManager.getAll();
         List serviceAreas = new ArrayList();
         ServiceArea serviceAreaDummy = new ServiceArea();
         serviceAreaDummy.setId(new Long(0));

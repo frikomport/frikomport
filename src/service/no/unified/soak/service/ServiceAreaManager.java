@@ -31,14 +31,20 @@ public interface ServiceAreaManager extends Manager {
     /**
      * Retrieves all of the serviceAreas
      */
-    public List getServiceAreas();
+    public List getAll();
 
     /**
      * Finds all service areas registered in the database, regardless of status
      *
      * @return A list of all registered serviceareas
      */
-    public List getServiceAreasIncludingDisabled();
+    public List getAllIncludingDisabled();
+
+    /**
+     * Retrieves all of the serviceAreas
+     * @param value
+     */
+    public List getAllIncludingDummy(String value);
 
     /**
      * Gets serviceArea's information based on id.

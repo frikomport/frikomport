@@ -55,10 +55,10 @@ public class ServiceAreaManagerTest extends BaseManagerTestCase {
         results.add(serviceArea);
 
         // set expected behavior on dao
-        serviceAreaDAO.expects(once()).method("getServiceAreas")
+        serviceAreaDAO.expects(once()).method("getAll")
                       .will(returnValue(results));
 
-        List serviceAreas = serviceAreaManager.getServiceAreas();
+        List serviceAreas = serviceAreaManager.getAll();
         assertTrue(serviceAreas.size() == 1);
         serviceAreaDAO.verify();
     }
@@ -75,10 +75,10 @@ public class ServiceAreaManagerTest extends BaseManagerTestCase {
         results.add(serviceArea);
 
         // set expected behavior on dao
-        serviceAreaDAO.expects(once()).method("getServiceAreas")
+        serviceAreaDAO.expects(once()).method("getAll")
                       .will(returnValue(results));
 
-        List serviceAreas = serviceAreaManager.getServiceAreasIncludingDisabled();
+        List serviceAreas = serviceAreaManager.getAllIncludingDisabled();
         assertTrue(serviceAreas.size() == 1);
         serviceAreaDAO.verify();
     }

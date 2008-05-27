@@ -82,7 +82,7 @@ public class ServiceAreaDAOTest extends BaseDAOTestCase {
         serviceArea = new ServiceArea();
 
         // The test is wider if we set the parameter to false
-        List results = dao.getServiceAreas(new Boolean(false));
+        List results = dao.getAll(new Boolean(false));
         assertTrue(results.size() > 0);
     }
 
