@@ -4,6 +4,22 @@
     <!-- import properties (app settings, classpath, jar file locations) -->
     <import file="properties.xml"/>
 
+
+    <!-- Timesettings-->
+    <tstamp>
+      <format property="now" pattern="yyyy-MM-DD hh:mm:ss"/>
+      <format property="now-1" pattern="yyyy-MM-dd HH:mm:ss" offset="-1" unit="day"/>
+      <format property="now-2" pattern="yyyy-MM-dd HH:mm:ss" offset="-2" unit="day"/>
+      <format property="now-3" pattern="yyyy-MM-dd HH:mm:ss" offset="-3" unit="day"/>
+      <format property="now-4" pattern="yyyy-MM-dd HH:mm:ss" offset="-4" unit="day"/>
+      <format property="now-5" pattern="yyyy-MM-dd HH:mm:ss" offset="-5" unit="day"/>
+      <format property="now+1" pattern="yyyy-MM-dd HH:mm:ss" offset="1" unit="day"/>
+      <format property="now+2" pattern="yyyy-MM-dd HH:mm:ss" offset="2" unit="day"/>
+      <format property="now+3" pattern="yyyy-MM-dd HH:mm:ss" offset="3" unit="day"/>
+      <format property="now+4" pattern="yyyy-MM-dd HH:mm:ss" offset="4" unit="day"/>
+      <format property="now+5" pattern="yyyy-MM-dd HH:mm:ss" offset="5" unit="day"/>
+    </tstamp>
+
     <target name="init" description="defines custom tasks">
         <!-- Taskdefs -->
         <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${ant-contrib.jar}"/>
@@ -641,10 +657,10 @@
         </dbunit>
     </target>
 
-    <target name="db-load" depends="prepare"
+    <target name="db-load" depends="prepare,db-data"
         description="Loads the database with sample data">
         <property name="operation" value="CLEAN_INSERT"/>
-        <property name="file" value="metadata/sql/sample-data.xml"/>
+        <property name="file" value="metadata/sql/sample-data-prepared.xml"/>
         <dbunit driver="${database.driver_class}"
             supportBatchStatement="false"
             url="${database.url}"
@@ -652,6 +668,23 @@
             password="${database.password}">
             <operation type="${operation}" src="${file}" format="xml"/>
         </dbunit>
+    </target>
+
+    <target name="db-data" description="Updates the sample data">
+        <copy file="metadata/sql/sample-data.xml" tofile="metadata/sql/sample-data-prepared.xml" overwrite="true">
+            <filterset>
+                <filter token="NOW-1" value="${now-1}"/>
+                <filter token="NOW-2" value="${now-2}"/>
+                <filter token="NOW-3" value="${now-3}"/>
+                <filter token="NOW-4" value="${now-4}"/>
+                <filter token="NOW-5" value="${now-5}"/>
+                <filter token="NOW+1" value="${now+1}"/>
+                <filter token="NOW+2" value="${now+2}"/>
+                <filter token="NOW+3" value="${now+3}"/>
+                <filter token="NOW+4" value="${now+4}"/>
+                <filter token="NOW+5" value="${now+5}"/>
+            </filterset>
+        </copy>
     </target>
     
     <!-- =================================================================== -->

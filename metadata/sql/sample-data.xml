@@ -473,16 +473,16 @@
         <value>Tre dager, seks timer hver dag</value>
         <value>1200.00</value>
         <value>900.00</value>
-        <value>2006-03-15 00:00:00</value>
+        <value>@NOW+2@</value>
         <value>1</value>
         <value>5</value>
         <value>Et flott og fint kurs</value>
-        <value>2007-11-30 07:00:00</value>
-        <value>2007-08-01 08:00:00</value>
-        <value>2007-05-15 08:00:00</value>
+        <value>@NOW+2@</value>
+        <value>@NOW-5@</value>
+        <value>@NOW+2@</value>
         <value>4</value>
-        <value>2007-12-15 09:00:00</value>
-        <value>2007-12-17 15:30:00</value>
+        <value>@NOW+2@</value>
+        <value>@NOW+5@</value>
         <value>Filosofer og esteter</value>
         <value>1</value>
         <value>1</value>
@@ -497,16 +497,16 @@
         <value>Fire timer</value>
         <value>1000.00</value>
         <value>500.00</value>
-        <value>2006-02-15 00:00:00</value>
+        <value>@NOW+2@</value>
         <value>2</value>
         <value>25</value>
         <value>Adferd - Tilpasset opplæring</value>
-        <value>2007-06-14 07:00:00</value>
-        <value>2006-06-01 08:00:00</value>
-        <value>2007-05-15 08:00:00</value>
+        <value>@NOW+2@</value>
+        <value>@NOW-5@</value>
+        <value>@NOW+2@</value>
         <value>15</value>
-        <value>2007-11-15 10:00:00</value>
-        <value>2007-11-15 14:00:00</value>
+        <value>@NOW+4@</value>
+        <value>@NOW+5@</value>
         <value>Lærere</value>
         <value>2</value>
         <value>2</value>
@@ -521,16 +521,16 @@
         <value>Fire timer</value>
         <value>200.00</value>
         <value>125.00</value>
-        <value>2006-03-15 00:00:00</value>
+        <value>@NOW+2@</value>
         <value>3</value>
         <value>20</value>
         <value>Barnepasserkurs</value>
-        <value>2007-03-14 07:00:00</value>
-        <value>2006-01-01 08:00:00</value>
-        <value>2007-03-15 08:00:00</value>
+        <value>@NOW+2@</value>
+        <value>@NOW-5@</value>
+        <value>@NOW+2@</value>
         <value>5</value>
-        <value>2007-03-15 12:00:00</value>
-        <value>2007-03-15 16:00:00</value>
+        <value>@NOW+4@</value>
+        <value>@NOW+5@</value>
         <value>Barnehagepersonell</value>
         <value>1</value>
         <value>2</value>
@@ -545,16 +545,16 @@
         <value>7 mandager, kl. 18.30 til ca. 21.30</value>
         <value>100</value>
         <value>143</value>
-        <value>2006-03-13 00:00:00</value>
+        <value>@NOW+2@</value>
         <value>4</value>
         <value>100</value>
         <value>Kurs for pensjonister</value>
-        <value>2007-03-12 07:00:00</value>
-        <value>2007-01-01 08:00:00</value>
-        <value>2007-05-13 08:00:00</value>
+        <value>@NOW+2@</value>
+        <value>@NOW-5@</value>
+        <value>@NOW+2@</value>
         <value>25</value>
-        <value>2007-03-13 18:30:00</value>
-        <value>2007-05-01 21:30:00</value>
+        <value>@NOW+1@</value>
+        <value>@NOW+5@</value>
         <value>Pensjonister</value>
         <value>2</value>
         <value>2</value>
@@ -569,16 +569,16 @@
         <value>5. og 6. februar, kl. 09.00 til 18.00</value>
         <value>2200.00</value>
         <value>2000.00</value>
-        <value>2005-02-05 00:00:00</value>
+        <value>@NOW+2@</value>
         <value>5</value>
         <value>25</value>
         <value>Presentasjonsteknikk</value>
-        <value>2007-04-04 07:00:00</value>
-        <value>2007-01-01 08:00:00</value>
-        <value>2007-04-05 08:00:00</value>
+        <value>@NOW+2@</value>
+        <value>@NOW-5@</value>
+        <value>@NOW+2@</value>
         <value>15</value>
-        <value>2007-02-05 09:00:00</value>
-        <value>2007-02-06 18:00:00</value>
+        <value>@NOW+4@</value>
+        <value>@NOW+5@</value>
         <value>Politisk interesserte</value>
         <value>2</value>
         <value>2</value>
@@ -623,7 +623,7 @@
         <value>99887766</value>
         <value>1</value>
         <value>55544332</value>
-        <value>2015-12-15</value>
+        <value>@NOW-5@</value>
         <value>1</value>
         <value>1</value>
         <value>Harald Haraldsensvei 11, 9999 Haraldsen</value>
@@ -644,7 +644,7 @@
         <value>99778866</value>
         <value>2</value>
         <value>55332211</value>
-        <value>2006-01-09</value>
+        <value>@NOW-5@</value>
         <value>1</value>
         <value>2</value>
         <value>Heidi Heidisensvei 99, 9998 Heidistad</value>
@@ -665,7 +665,7 @@
         <value>66887766</value>
         <value>2</value>
         <value>55221144</value>
-        <value>2006-01-15 05:00:00</value>
+        <value>@NOW-5@</value>
         <value>0</value>
         <value>1</value>
         <value>Jarle Jarlsesensvei 27, 9997 Jarlestølen</value>
@@ -674,148 +674,148 @@
         <value>0</value>
     </row>
     <row>
-        <value>2</value>				<!-- CourseId -->
-        <value>frikomport@gmail.com</value>		<!-- Email -->
-        <value>12345</value>						<!-- Employeenumber -->
-        <value>1</value>						<!-- eZuserid -->
-        <value>Hinrek</value>	<!-- firstname-->
-        <value>4</value>								<!-- id -->
-        <value>0</value>								<!-- invoiced -->
-        <value>Adm. dir</value>	<!-- jobtitle -->
-        <value>Hinreksen</value>	<!-- lastname -->
-        <value>99556688</value>	<!-- mobilephone -->
-        <value>2</value>				<!-- organizationid -->
-        <value>55123456</value>	<!-- phone -->
-        <value>2006-01-15 06:00:00</value>								<!-- registered -->
-        <value>0</value>								<!-- reserved  -->
-        <value>2</value>				<!-- serviceareaid -->
-        <value>Kari Karisdatterveg 2A, 9996 Karimoen</value> <!-- useemailaddress -->
+        <value>2</value>
+        <value>frikomport@gmail.com</value>
+        <value>12345</value>
+        <value>1</value>
+        <value>Hinrek</value>
+        <value>4</value>
+        <value>0</value>
+        <value>Adm. dir</value>
+        <value>Hinreksen</value>
+        <value>99556688</value>
+        <value>2</value>
+        <value>55123456</value>
+        <value>@NOW-5@</value>
+        <value>0</value>
+        <value>2</value>
+        <value>Kari Karisdatterveg 2A, 9996 Karimoen</value>
         <value>no</value>
         <value></value>
         <value>0</value>
     </row>
     <row>
-        <value>1</value>				<!-- CourseId -->
-        <value>frikomport@gmail.com</value>		<!-- Email -->
-        <value>54321</value>						<!-- Employeenumber -->
-        <value>1</value>						<!-- eZuserid -->
-        <value>Klausern</value>	<!-- firstname-->
-        <value>5</value>								<!-- id -->
-        <value>0</value>								<!-- invoiced -->
-        <value>Adm. dir</value>	<!-- jobtitle -->
-        <value>Unified</value>	<!-- lastname -->
-        <value>99556688</value>	<!-- mobilephone -->
-        <value>2</value>				<!-- organizationid -->
-        <value>55123456</value>	<!-- phone -->
-        <value>2006-01-15 07:00:00</value>								<!-- registered -->
-        <value>0</value>								<!-- reserved  -->
-        <value>2</value>				<!-- serviceareaid -->
-        <value>Kari Karisdatterveg 2A, 9996 Karimoen</value> <!-- useemailaddress -->
+        <value>1</value>
+        <value>frikomport@gmail.com</value>
+        <value>54321</value>
+        <value>1</value>
+        <value>Klausern</value>
+        <value>5</value>
+        <value>0</value>
+        <value>Adm. dir</value>
+        <value>Unified</value>
+        <value>99556688</value>
+        <value>2</value>
+        <value>55123456</value>
+        <value>@NOW-5@</value>
+        <value>0</value>
+        <value>2</value>
+        <value>Kari Karisdatterveg 2A, 9996 Karimoen</value>
         <value>no</value>
         <value></value>
         <value>0</value>
     </row>
     <row>
-        <value>1</value>				<!-- CourseId -->
-        <value>frikomport@unified.no</value>		<!-- Email -->
-        <value>99999</value>						<!-- Employeenumber -->
-        <value>1</value>						<!-- eZuserid -->
-        <value>Henrik</value>	<!-- firstname-->
-        <value>6</value>								<!-- id -->
-        <value>0</value>								<!-- invoiced -->
-        <value>Adm. dir</value>	<!-- jobtitle -->
-        <value>RouyerGmailsen</value>	<!-- lastname -->
-        <value>99556688</value>	<!-- mobilephone -->
-        <value>2</value>				<!-- organizationid -->
-        <value>55123456</value>	<!-- phone -->
-        <value>2006-01-15 08:00:00</value>								<!-- registered -->
-        <value>0</value>								<!-- reserved  -->
-        <value>2</value>				<!-- serviceareaid -->
-        <value>Kari Karisdatterveg 2A, 9996 Karimoen</value> <!-- useemailaddress -->
+        <value>1</value>
+        <value>frikomport@unified.no</value>
+        <value>99999</value>
+        <value>1</value>
+        <value>Henrik</value>
+        <value>6</value>
+        <value>0</value>
+        <value>Adm. dir</value>
+        <value>RouyerGmailsen</value>
+        <value>99556688</value>
+        <value>2</value>
+        <value>55123456</value>
+        <value>@NOW-5@</value>
+        <value>0</value>
+        <value>2</value>
+        <value>Kari Karisdatterveg 2A, 9996 Karimoen</value>
         <value>no</value>
         <value></value>
         <value>0</value>
     </row>
     <row>
-        <value>1</value>				<!-- CourseId -->
-        <value>acr@unified.no</value>		<!-- Email -->
-        <value>88888</value>						<!-- Employeenumber -->
-        <value>1</value>						<!-- eZuserid -->
-        <value>Henrik</value>	<!-- firstname-->
-        <value>7</value>								<!-- id -->
-        <value>0</value>								<!-- invoiced -->
-        <value>Adm. dir</value>	<!-- jobtitle -->
-        <value>JobbOgGmailsen</value>	<!-- lastname -->
-        <value>99556688</value>	<!-- mobilephone -->
-        <value>1</value>				<!-- organizationid -->
-        <value>55123456</value>	<!-- phone -->
-        <value>2006-01-15 09:00:00</value>								<!-- registered -->
-        <value>0</value>								<!-- reserved  -->
-        <value>2</value>				<!-- serviceareaid -->
-        <value>Kari Karisdatterveg 2A, 9996 Karimoen</value> <!-- useemailaddress -->
+        <value>1</value>
+        <value>acr@unified.no</value>
+        <value>88888</value>
+        <value>1</value>
+        <value>Henrik</value>
+        <value>7</value>
+        <value>0</value>
+        <value>Adm. dir</value>
+        <value>JobbOgGmailsen</value>
+        <value>99556688</value>
+        <value>1</value>
+        <value>55123456</value>
+        <value>@NOW-5@</value>
+        <value>0</value>
+        <value>2</value>
+        <value>Kari Karisdatterveg 2A, 9996 Karimoen</value>
         <value>no</value>
         <value></value>
         <value>0</value>
     </row>
     <row>
-        <value>1</value>				<!-- CourseId -->
-        <value>frikomport@gmail.com</value>		<!-- Email -->
-        <value>77777</value>						<!-- Employeenumber -->
-        <value>1</value>						<!-- eZuserid -->
-        <value>Klaus</value>	<!-- firstname-->
-        <value>8</value>								<!-- id -->
-        <value>0</value>								<!-- invoiced -->
-        <value>Adm. dir</value>	<!-- jobtitle -->
-        <value>JobbOgHjemmesen</value>	<!-- lastname -->
-        <value>99556688</value>	<!-- mobilephone -->
-        <value>1</value>				<!-- organizationid -->
-        <value>55123456</value>	<!-- phone -->
-        <value>2006-01-15 10:00:00</value>								<!-- registered -->
-        <value>0</value>								<!-- reserved  -->
-        <value>2</value>				<!-- serviceareaid -->
-        <value>Kari Karisdatterveg 2A, 9996 Karimoen</value> <!-- useemailaddress -->
+        <value>1</value>
+        <value>frikomport@gmail.com</value>
+        <value>77777</value>
+        <value>1</value>
+        <value>Klaus</value>
+        <value>8</value>
+        <value>0</value>
+        <value>Adm. dir</value>
+        <value>JobbOgHjemmesen</value>
+        <value>99556688</value>
+        <value>1</value>
+        <value>55123456</value>
+        <value>@NOW-5@</value>
+        <value>0</value>
+        <value>2</value>
+        <value>Kari Karisdatterveg 2A, 9996 Karimoen</value>
         <value>no</value>
         <value></value>
         <value>0</value>
     </row>
     <row>
-        <value>1</value>				<!-- CourseId -->
-        <value>frikomport@gmail.com</value>		<!-- Email -->
-        <value>66666</value>						<!-- Employeenumber -->
-        <value>1</value>						<!-- eZuserid -->
-        <value>Kari</value>	<!-- firstname-->
-        <value>9</value>								<!-- id -->
-        <value>0</value>								<!-- invoiced -->
-        <value>Adm. dir</value>	<!-- jobtitle -->
-        <value>HarIkkeMailsen</value>	<!-- lastname -->
-        <value>99556688</value>	<!-- mobilephone -->
-        <value>2</value>				<!-- organizationid -->
-        <value>55123456</value>	<!-- phone -->
-        <value>2006-01-15 11:00:00</value>								<!-- registered -->
-        <value>0</value>								<!-- reserved  -->
-        <value>2</value>				<!-- serviceareaid -->
-        <value>Kari Karisdatterveg 2A, 9996 Karimoen</value> <!-- useemailaddress -->
+        <value>1</value>
+        <value>frikomport@gmail.com</value>
+        <value>66666</value>
+        <value>1</value>
+        <value>Kari</value>
+        <value>9</value>
+        <value>0</value>
+        <value>Adm. dir</value>
+        <value>HarIkkeMailsen</value>
+        <value>99556688</value>
+        <value>2</value>
+        <value>55123456</value>
+        <value>@NOW-5@</value>
+        <value>0</value>
+        <value>2</value>
+        <value>Kari Karisdatterveg 2A, 9996 Karimoen</value>
         <value>no</value>
         <value></value>
         <value>0</value>
     </row>
     <row>
-        <value>1</value>				<!-- CourseId -->
-        <value>frikomport@unified.no</value>		<!-- Email -->
-        <value>55555</value>						<!-- Employeenumber -->
-        <value>1</value>						<!-- eZuserid -->
-        <value>FriKomporten</value>	<!-- firstname-->
-        <value>10</value>								<!-- id -->
-        <value>0</value>								<!-- invoiced -->
-        <value>Adm. dir</value>	<!-- jobtitle -->
-        <value>Sensensensen</value>	<!-- lastname -->
-        <value>99556688</value>	<!-- mobilephone -->
-        <value>2</value>				<!-- organizationid -->
-        <value>55123456</value>	<!-- phone -->
-        <value>2006-01-15 12:00:00</value>								<!-- registered -->
-        <value>0</value>								<!-- reserved  -->
-        <value>2</value>				<!-- serviceareaid -->
-        <value>Kari Karisdatterveg 2A, 9996 Karimoen</value> <!-- useemailaddress -->
+        <value>1</value>
+        <value>frikomport@unified.no</value>
+        <value>55555</value>
+        <value>1</value>
+        <value>FriKomporten</value>
+        <value>10</value>
+        <value>0</value>
+        <value>Adm. dir</value>
+        <value>Sensensensen</value>
+        <value>99556688</value>
+        <value>2</value>
+        <value>55123456</value>
+        <value>@NOW-5@</value>
+        <value>0</value>
+        <value>2</value>
+        <value>Kari Karisdatterveg 2A, 9996 Karimoen</value>
         <value>no</value>
         <value></value>
         <value>0</value>
