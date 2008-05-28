@@ -63,7 +63,7 @@ public class PersonManagerTest extends BaseManagerTestCase {
         personDAO.verify();
     }
 
-    /**¨
+    /**
      * Tests getting a single person using a mock DAO
      *
      * @throws Exception
