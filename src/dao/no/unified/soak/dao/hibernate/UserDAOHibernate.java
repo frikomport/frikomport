@@ -32,8 +32,7 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
      * @see no.unified.soak.dao.UserDAO#getUser(java.lang.String)
      */
     public User getUser(String username) {
-        User user = (User) getHibernateTemplate()
-                               .get(User.class, username);
+        User user = (User) getHibernateTemplate().get(User.class, username);
 
         if (user == null) {
             log.warn("uh oh, user '" + username + "' not found...");
@@ -47,8 +46,7 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
      * @see no.unified.soak.dao.UserDAO#getUsers(no.unified.soak.model.User)
      */
     public List getUsers(User user) {
-        return getHibernateTemplate()
-                   .find("from User u order by upper(u.username)");
+        return getHibernateTemplate().find("from User u order by upper(u.username)");
     }
 
     /**
@@ -78,8 +76,7 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
      * @see no.unified.soak.dao.UserDAO#getUserCookie(no.unified.soak.model.UserCookie)
      */
     public UserCookie getUserCookie(final UserCookie cookie) {
-        List cookies = getHibernateTemplate()
-                           .find("from UserCookie c where c.username=? and c.cookieId=?",
+        List cookies = getHibernateTemplate().find("from UserCookie c where c.username=? and c.cookieId=?",
                 new Object[] { cookie.getUsername(), cookie.getCookieId() });
 
         if (cookies.size() == 0) {
@@ -94,9 +91,7 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
      */
     public void removeUserCookies(String username) {
         // delete any cookies associated with this user
-        List cookies = getHibernateTemplate()
-                           .find("from UserCookie c where c.username=?",
-                username);
+        List cookies = getHibernateTemplate().find("from UserCookie c where c.username=?", username);
 
         if ((cookies.size() > 0) && log.isDebugEnabled()) {
             log.debug("deleting " + cookies.size() + " cookies for user '" +

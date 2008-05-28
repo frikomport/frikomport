@@ -109,13 +109,13 @@ public class RegistrationFormController extends BaseFormController {
 		}
 
 		// Retrieve all serviceareas into an array
-		List serviceAreas = serviceAreaManager.getAllIncludingDummy(getText("misc.none",locale));
+		List serviceAreas = serviceAreaManager.getAll();
 		if (serviceAreas != null) {
 			model.put("serviceareas", serviceAreas);
 		}
 
 		// Retrieve all organizations into an array
-        List organizations = organizationManager.getAllIncludingDummy(getText("misc.none",locale));
+        List organizations = organizationManager.getAll();
 		if (organizations != null) {
 			model.put("organizations", organizations);
 		}

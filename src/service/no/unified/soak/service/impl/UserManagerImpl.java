@@ -12,6 +12,7 @@ import no.unified.soak.model.User;
 import no.unified.soak.model.UserCookie;
 import no.unified.soak.service.UserExistsException;
 import no.unified.soak.service.UserManager;
+import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.util.RandomGUID;
 import no.unified.soak.util.StringUtil;
 
@@ -63,8 +64,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
         try {
             dao.saveUser(user);
         } catch (DataIntegrityViolationException e) {
-            throw new UserExistsException("User '" + user.getUsername() +
-                "' already exists!");
+            throw new UserExistsException("User '" + user.getUsername() + "' already exists!");
         }
     }
 

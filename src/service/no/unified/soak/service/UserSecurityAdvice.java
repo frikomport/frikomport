@@ -108,8 +108,7 @@ public class UserSecurityAdvice implements MethodBeforeAdvice {
 
                 // if they don't match - access denied
                 // users aren't allowed to change their roles
-                if (!CollectionUtils.isEqualCollection(userRoles,
-                            authorizedRoles)) {
+                if (!CollectionUtils.isEqualCollection(userRoles, authorizedRoles)) {
                     log.warn("Access Denied: '" + currentUser +
                         "' tried to change their role(s)!");
                     throw new AccessDeniedException(ACCESS_DENIED);

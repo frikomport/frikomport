@@ -166,7 +166,9 @@
          <fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
 
-    <display:column media="excel" property="stopTime" sortable="true" headerClass="sortable" titleKey="course.stopTime.export"/>
+    <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.stopTime" sortProperty="stopTime">
+         <fmt:formatDate value="${courseList.stopTime}" type="both" pattern="${dateformat} ${timeformat}"/>
+    </display:column>
     
     <display:column property="availableAttendants" sortable="true" headerClass="sortable" titleKey="course.availableAttendants"/>
 
@@ -195,19 +197,27 @@
 
     <display:column media="excel" property="maxAttendants" sortable="true" headerClass="sortable" titleKey="course.maxAttendants.export"/>
 
-    <display:column media="excel" property="reservedMunicipal" sortable="true" headerClass="sortable" titleKey="course.reservedMunicipal.export"/>
+    <display:column media="excel" property="reservedInternal" sortable="true" headerClass="sortable" titleKey="course.reservedInternal.export"/>
 
-    <display:column media="excel" property="feeMunicipal" sortable="true" headerClass="sortable" titleKey="course.feeMunicipal.export"/>
+    <display:column media="excel" property="feeInternal" sortable="true" headerClass="sortable" titleKey="course.feeInternal.export"/>
 
     <display:column media="excel" property="feeExternal" sortable="true" headerClass="sortable" titleKey="course.feeExternal.export"/>
 
-    <display:column media="excel" property="registerStart" sortable="true" headerClass="sortable" titleKey="course.registerStart.export"/>
+    <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.registerStart.export" sortProperty="registerStart">
+         <fmt:formatDate value="${courseList.registerStart}" type="both" pattern="${dateformat} ${timeformat}"/>
+    </display:column>
 
-    <display:column media="excel" property="registerBy" sortable="true" headerClass="sortable" titleKey="course.registerBy.export"/>
+    <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.registerBy.export" sortProperty="registerBy">
+         <fmt:formatDate value="${courseList.registerBy}" type="both" pattern="${dateformat} ${timeformat}"/>
+    </display:column>
 
-    <display:column media="excel" property="reminder" sortable="true" headerClass="sortable" titleKey="course.reminder.export"/>
+    <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.reminder.export" sortProperty="reminder">
+         <fmt:formatDate value="${courseList.reminder}" type="both" pattern="${dateformat} ${timeformat}"/>
+    </display:column>
 
-    <display:column media="excel" property="freezeAttendance" sortable="true" headerClass="sortable" titleKey="course.freezeAttendance.export"/>
+    <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.freezeAttendance.export" sortProperty="freezeAttendance">
+         <fmt:formatDate value="${courseList.freezeAttendance}" type="both" pattern="${dateformat} ${timeformat}"/>
+    </display:column>
 
     <display:column media="excel" property="description" sortable="true" headerClass="sortable" titleKey="course.description.export"/>
 

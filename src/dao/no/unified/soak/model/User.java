@@ -49,8 +49,9 @@ public class User extends BaseObject implements Serializable {
     protected Integer version;
     protected Set roles = new HashSet();
     protected Boolean enabled;
-    private Organization organization;
-    private Long organizationid;
+
+    protected Organization organization;
+    protected Long organizationid;
 
     public User() {
     }
@@ -362,10 +363,9 @@ public class User extends BaseObject implements Serializable {
     
     /**
     * Returns the organization.
-    * @return Integer
+    * @return Organization
     *
-     * @hibernate.many-to-any-column not-null="false" name="organizationid" unique="false"
-     *
+    * //@hibernate.many-to-one column="organizationid" insert="false" update="false" property-ref="id" not-found="ignore"
     */
     public Organization getOrganization() {
 		return organization;
@@ -380,7 +380,7 @@ public class User extends BaseObject implements Serializable {
 		this.organization = organization;
 	}
 
-        /**
+     /**
      * @return Returns the organizationid.
      * @hibernate.property column="organizationid" not-null="false"
      */
