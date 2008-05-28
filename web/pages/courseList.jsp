@@ -165,6 +165,8 @@
     <display:column sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
          <fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
+
+    <display:column media="excel" property="stopTime" sortable="true" headerClass="sortable" titleKey="course.stopTime.export"/>
     
     <display:column property="availableAttendants" sortable="true" headerClass="sortable" titleKey="course.availableAttendants"/>
 
@@ -188,6 +190,28 @@
          <a href="<c:url value="/detailsUser.html"><c:param name="id" value="${courseList.responsible.id}"/></c:url>"><c:out value="${courseList.responsible.name}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="responsible.name" sortable="true" headerClass="sortable" titleKey="course.responsible"/>
+
+    <display:column media="excel" property="instructor.name" sortable="true" headerClass="sortable" titleKey="course.instructor.export"/>
+
+    <display:column media="excel" property="maxAttendants" sortable="true" headerClass="sortable" titleKey="course.maxAttendants.export"/>
+
+    <display:column media="excel" property="reservedMunicipal" sortable="true" headerClass="sortable" titleKey="course.reservedMunicipal.export"/>
+
+    <display:column media="excel" property="feeMunicipal" sortable="true" headerClass="sortable" titleKey="course.feeMunicipal.export"/>
+
+    <display:column media="excel" property="feeExternal" sortable="true" headerClass="sortable" titleKey="course.feeExternal.export"/>
+
+    <display:column media="excel" property="registerStart" sortable="true" headerClass="sortable" titleKey="course.registerStart.export"/>
+
+    <display:column media="excel" property="registerBy" sortable="true" headerClass="sortable" titleKey="course.registerBy.export"/>
+
+    <display:column media="excel" property="reminder" sortable="true" headerClass="sortable" titleKey="course.reminder.export"/>
+
+    <display:column media="excel" property="freezeAttendance" sortable="true" headerClass="sortable" titleKey="course.freezeAttendance.export"/>
+
+    <display:column media="excel" property="description" sortable="true" headerClass="sortable" titleKey="course.description.export"/>
+
+    <display:column media="excel" property="detailURL" sortable="true" headerClass="sortable" titleKey="course.detailURL.export"/>
 
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
