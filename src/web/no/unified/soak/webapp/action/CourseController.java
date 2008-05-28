@@ -12,7 +12,6 @@ package no.unified.soak.webapp.action;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -25,7 +24,6 @@ import javax.servlet.http.HttpSession;
 
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
-import no.unified.soak.model.Organization;
 import no.unified.soak.model.ServiceArea;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.OrganizationManager;
@@ -286,7 +284,7 @@ public class CourseController extends BaseFormController {
         }
 
         // Get all organizations in the database
-        List serviceAreasInDB = serviceAreaManager.getServiceAreas();
+        List serviceAreasInDB = serviceAreaManager.getAll();
         List serviceAreas = new ArrayList<ServiceArea>();
         ServiceArea serviceAreaDummy = new ServiceArea();
         serviceAreaDummy.setId(new Long(0));
