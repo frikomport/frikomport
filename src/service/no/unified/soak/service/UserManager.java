@@ -96,10 +96,15 @@ public interface UserManager {
     /**
      * Retrieves all roles from eZ publish.
      * Should perhaps be located in a separate ezmanager.
-     * @param user
      * @return
      */
     public List getEZRoles();
+    
+    /**
+     * Retrieves all roles.
+     * @return
+     */
+    public List getRoles();
     
     /**
      * Add new user based on EzUser

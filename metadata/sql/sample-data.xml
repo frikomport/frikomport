@@ -176,27 +176,27 @@
     <column>version</column>
     <row>
       <value>anonymous</value>
-      <value><![CDATA[Anonymous role (nothing special)]]></value>
+      <value><![CDATA[Anonymous]]></value>
       <value>1</value>
     </row>
     <row>
       <value>admin</value>
-      <value><![CDATA[Administrator role (can edit Users)]]></value>
+      <value><![CDATA[Administrator]]></value>
       <value>1</value>
     </row>
     <row>
       <value>employee</value>
-      <value><![CDATA[Employee role - can sign up for classes]]></value>
+      <value><![CDATA[Ansatt]]></value>
       <value>1</value>
     </row>
     <row>
       <value>instructor</value>
-      <value><![CDATA[Instructor role - can administer courses]]></value>
+      <value><![CDATA[Kursansvarlig]]></value>
       <value>1</value>
     </row>
     <row>
       <value>editor</value>
-      <value><![CDATA[Editor role for all Users]]></value>
+      <value><![CDATA[Opplæringsansvarlig]]></value>
       <value>1</value>
     </row>
   </table>
@@ -493,7 +493,7 @@
         <value>1</value>
         <value>1</value>
         <value>Et høytsvevende kurs om filosofi, estetikk og orale tradisjoner</value>
-        <value>Anonymous</value>
+        <value>anonymous</value>
     </row>
     <row>
         <value>2</value>
@@ -517,7 +517,7 @@
         <value>2</value>
         <value>2</value>
         <value>Et kurs om tilpasset opplæring og elevadferd i skolen</value>
-        <value>Anonymous</value>
+        <value>anonymous</value>
     </row>
     <row>
         <value>2</value>
@@ -541,7 +541,7 @@
         <value>1</value>
         <value>2</value>
         <value>Gjennomgår krav og forutsetninger for kommunal støtte til barnepass i privat regi</value>
-        <value>Anonymous</value>
+        <value>anonymous</value>
     </row>
     <row>
         <value>2</value>
@@ -565,7 +565,7 @@
         <value>2</value>
         <value>2</value>
         <value>Kurs om å takle hverdagen som pensjonist i det reformerte helsenorge</value>
-        <value>Anonymous</value>
+        <value>anonymous</value>
     </row>
     <row>
         <value>2</value>
@@ -589,7 +589,7 @@
         <value>2</value>
         <value>2</value>
         <value>Videregående kurs om hvordan å presentere troverdige muntlige fremstillinger som bare løselig er forankret i virkelighetens verden. Dette er essensielt og populært materiale for medarbeidere med politiske ambisjoner</value>
-        <value>Anonymous</value>
+        <value>anonymous</value>
         </row>
   </table>
   <!--Course-END-->

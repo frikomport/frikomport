@@ -7,18 +7,17 @@
 */
 package no.unified.soak.model;
 
-import no.unified.soak.ez.EzUser;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-
 import java.io.Serializable;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import no.unified.soak.ez.EzUser;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 
 /**
@@ -362,21 +361,19 @@ public class User extends BaseObject implements Serializable {
     }
 
     /**
-     * Convert user roles to LabelValue objects for convenience.
+     * Returns a list with the rolenames
      */
-    public List getRoleList() {
-        List userRoles = new ArrayList();
+    public List <String> getRoleNameList() {
+    	List<String> rolenames = new ArrayList<String>();
 
         if (this.roles != null) {
             for (Iterator it = roles.iterator(); it.hasNext();) {
                 Role role = (Role) it.next();
-
-                // convert the user's roles to LabelValue Objects
-                userRoles.add(new LabelValue(role.getName(), role.getName()));
+                rolenames.add(role.getName());
             }
         }
 
-        return userRoles;
+        return rolenames;
     }
     
     /**
@@ -458,7 +455,7 @@ public class User extends BaseObject implements Serializable {
 
 		return true;
     }
-	
+    
 	public boolean equals(EzUser ezUser) {
 
         if ((username != null) ? (!username.equals(ezUser.getName())) : (ezUser

@@ -12,6 +12,7 @@ package no.unified.soak.webapp.action;
 
 import no.unified.soak.Constants;
 import no.unified.soak.model.Location;
+import no.unified.soak.model.User;
 import no.unified.soak.service.LocationManager;
 import no.unified.soak.service.OrganizationManager;
 
@@ -85,7 +86,8 @@ public class LocationFormController extends BaseFormController {
         } else {
             location = new Location();
 	        // Check if a default organization should be applied
-	        Object omid = request.getAttribute(Constants.EZ_ORGANIZATION);
+            User user = (User) request.getSession().getAttribute(Constants.USER_KEY);
+            Object omid = user.getOrganizationid();
 	        if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
 	            location.setOrganizationid(new Long(omid.toString()));
 	        }

@@ -73,7 +73,7 @@ cal1.setTodayText("Idag");
             <soak:label key="course.role"/>
         </th>
         <td>
-            <form:select path="role" items="${roles}"/>
+            <form:select path="role" items="${roles}" itemValue="name" itemLabel="description"/>
             <form:errors cssClass="fieldError" htmlEscape="false" path="role"/>
         </td>
     </tr>

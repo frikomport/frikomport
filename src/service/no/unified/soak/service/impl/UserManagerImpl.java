@@ -176,6 +176,11 @@ public class UserManagerImpl extends BaseManager implements UserManager {
     	return roles;
     }
     
+    public List getRoles() {
+    	List roles = roleManager.getRoles(null);
+    	return roles;
+    }
+    
     public List getResponsibles() {
 		List ezUsers = getEZResponsibles(null);
 		List users = new ArrayList();
@@ -246,6 +251,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 				user.addRole(roleManager.getRole(rolename));
 			} else {
 				no.unified.soak.model.Role role = new no.unified.soak.model.Role(rolename);
+				role.setDescription(rolename);
 				roleManager.saveRole(role);
 				user.addRole(role);
 			}

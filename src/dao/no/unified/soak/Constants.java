@@ -198,31 +198,6 @@ public class Constants {
 	// Attachment-END
 
 	/**
-	 * Key string for transporting eZ publish sessionid to jsp file.
-	 */
-	public static final String EZ_SESSIONID = "eZSessionid";
-
-    /**
-     * Key string for transporting eZ publish userid to jsp file.
-     */
-    public static final String EZ_USER = "eZUser";
-
-	/**
-	 * Key string for transporting eZ publish userid to jsp file.
-	 */
-	public static final String EZ_USERID = "eZUserid";
-
-	/**
-	 * Key string for transporting eZ publish user organization id to jsp file.
-	 */
-	public static final String EZ_ORGANIZATION = "eZOrganization";
-
-	/**
-     * Key string for transporting eZ publish user roles to jsp file.
-     */
-    public static final String EZ_ROLES = "eZroles";
-    
-	/**
 	 * Session scope attribute that holds the locale set by the user. By setting
 	 * this key to the same one that Struts uses, we get synchronization in
 	 * Struts w/o having to do extra work or have two session-level variables.

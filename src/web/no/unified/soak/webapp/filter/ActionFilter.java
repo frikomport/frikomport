@@ -8,6 +8,7 @@
 package no.unified.soak.webapp.filter;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.Filter;
@@ -156,30 +157,18 @@ public class ActionFilter implements Filter {
 
 		session.setAttribute("authenticationToken", authentificationToken);
 		
+		User user = (User) request.getSession().getAttribute(Constants.USER_KEY);
 		MessageSource messageSource = (MessageSource) getContext().getBean("messageSource");
-		Locale locale = LocaleContextHolder.getLocale();
-
-		request.setAttribute("isCourseParticipant", ezUser.hasRolename(messageSource.getMessage("role.employee", null, locale)));
-		request.setAttribute("isCourseResponsible", ezUser.hasRolename(messageSource.getMessage("role.instructor", null, locale)));
-		request.setAttribute("isEducationResponsible", ezUser.hasRolename(messageSource.getMessage("role.editor", null, locale)));
-		request.setAttribute("isAdmin", ezUser.hasRolename(messageSource.getMessage("role.admin", null, locale)));
-		// request.setAttribute("isAdmin", true);
+		Locale locale = request.getLocale();
+		
+		List<String> roleNameList = user.getRoleNameList();
+		request.setAttribute("isCourseParticipant", roleNameList.contains(Constants.EMPLOYEE_ROLE));
+		request.setAttribute("isCourseResponsible", roleNameList.contains(Constants.INSTRUCTOR_ROLE));
+		request.setAttribute("isEducationResponsible", roleNameList.contains(Constants.EDITOR_ROLE));
+		request.setAttribute("isAdmin", roleNameList.contains(Constants.ADMIN_ROLE));
 
 		/* ezSessionid becomes null if not found. */
-		request.setAttribute(Constants.EZ_SESSIONID, eZSessionId);
-
-		/* ez_userid and ez_organization become null if not found. */
-		if (eZSessionId != null && authentificationToken.isAuthenticated()) {
-			request.setAttribute(Constants.EZ_USERID, ezUser.getId());
-			request.setAttribute(Constants.EZ_ORGANIZATION, ezUser.getKommune());
-			request.setAttribute(Constants.EZ_ROLES, ezUser.getRolenames());
-			request.setAttribute(Constants.EZ_USER, ezUser);
-		} else {
-			request.setAttribute(Constants.EZ_USERID, null);
-			request.setAttribute(Constants.EZ_ORGANIZATION, null);
-			request.setAttribute(Constants.EZ_ROLES, null);
-			request.setAttribute(Constants.EZ_USER, null);
-		}
+		request.setAttribute(messageSource.getMessage("cms.sessionid", null, locale), eZSessionId);
 
 		if (eZSessionId != null && !authentificationToken.isAuthenticated()) {
 			request.setAttribute(Constants.MESSAGES_INFO_KEY,

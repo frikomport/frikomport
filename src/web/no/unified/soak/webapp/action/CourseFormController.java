@@ -28,6 +28,7 @@ import no.unified.soak.Constants;
 import no.unified.soak.model.Attachment;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.User;
 import no.unified.soak.service.AttachmentManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.LocationManager;
@@ -151,7 +152,7 @@ public class CourseFormController extends BaseFormController {
 		}
 		
 		// Retrieves visibility roles into an array
-		List roles = userManager.getEZRoles();
+		List roles = userManager.getRoles();
 		if (roles != null) {
             model.put("roles", roles);
         }
@@ -223,6 +224,7 @@ public class CourseFormController extends BaseFormController {
                 }
 			}
 		}
+		
 		return model;
 	}
 
@@ -246,7 +248,8 @@ public class CourseFormController extends BaseFormController {
 		} else {
 			course = new Course();
 			// Check if a default organization should be applied
-			Object omid = request.getAttribute(Constants.EZ_ORGANIZATION);
+			User user = (User) request.getSession().getAttribute(Constants.USER_KEY);
+			Object omid = user.getOrganizationid();
 			if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
 				course.setOrganizationid(new Long(omid.toString()));
 			}

@@ -25,6 +25,7 @@ import javax.servlet.http.HttpSession;
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.ServiceArea;
+import no.unified.soak.model.User;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
@@ -99,8 +100,10 @@ public class CourseController extends BaseFormController {
         Date starttime = new Date();
         Date stoptime = null;
         
-        Boolean isAdmin = (Boolean)request.getAttribute("isAdmin");
-        List<String> roles = (List)request.getAttribute(Constants.EZ_ROLES);
+        User user = (User) session.getAttribute(Constants.USER_KEY);
+        
+        Boolean isAdmin = (Boolean)user.getRoleNameList().contains(Constants.ADMIN_ROLE);
+        List<String> roles = (List)user.getRoleNameList();
         if (roles == null) {
             roles = new ArrayList<String>();
             roles.add(messageSource.getMessage("role.anonymous", null, locale)); // Make sure not logged in users sees anonymous courses
@@ -212,8 +215,9 @@ public class CourseController extends BaseFormController {
         Date starttime = new Date();
         Date stoptime = null;
         
-        Boolean isAdmin = (Boolean)request.getAttribute("isAdmin");
-        List<String> roles = (List)request.getAttribute(Constants.EZ_ROLES);
+        User user = (User) session.getAttribute(Constants.USER_KEY);
+        Boolean isAdmin = (Boolean)user.getRoleNameList().contains(Constants.ADMIN_ROLE);
+        List<String> roles = (List)user.getRoleNameList();
         if (roles == null) {
             roles = new ArrayList<String>();
             roles.add(messageSource.getMessage("role.anonymous", null, locale)); // Make sure not logged in users sees anonymous courses
