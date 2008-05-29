@@ -31,6 +31,7 @@ import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.context.MessageSource;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 import org.springframework.web.servlet.ModelAndView;
@@ -46,6 +47,7 @@ public class CourseController extends BaseFormController {
     private OrganizationManager organizationManager = null;
     private ServiceAreaManager serviceAreaManager = null;
     private RegistrationManager registrationManager = null;
+    private MessageSource messageSource = null;
 
     public void setCourseManager(CourseManager courseManager) {
         this.courseManager = courseManager;
@@ -63,6 +65,10 @@ public class CourseController extends BaseFormController {
     public void setRegistrationManager(RegistrationManager registrationManager) {
         this.registrationManager = registrationManager;
     }
+    
+    public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
+	}
 
     /**
      * @see org.springframework.web.servlet.mvc.SimpleFormController#referenceData(javax.servlet.http.HttpServletRequest)
@@ -97,7 +103,7 @@ public class CourseController extends BaseFormController {
         List<String> roles = (List)request.getAttribute(Constants.EZ_ROLES);
         if (roles == null) {
             roles = new ArrayList<String>();
-            roles.add(Constants.EZROLE_ANONYMOUS); // Make sure not logged in users sees anonymous courses
+            roles.add(messageSource.getMessage("role.anonymous", null, locale)); // Make sure not logged in users sees anonymous courses
         }
 
         // Don't modify organization if in postback
@@ -210,7 +216,7 @@ public class CourseController extends BaseFormController {
         List<String> roles = (List)request.getAttribute(Constants.EZ_ROLES);
         if (roles == null) {
             roles = new ArrayList<String>();
-            roles.add(Constants.EZROLE_ANONYMOUS); // Make sure not logged in users sees anonymous courses
+            roles.add(messageSource.getMessage("role.anonymous", null, locale)); // Make sure not logged in users sees anonymous courses
         }
         
         // Check whether we should display historic data as well

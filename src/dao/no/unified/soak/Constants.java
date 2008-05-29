@@ -109,31 +109,6 @@ public class Constants {
 	 */
 	public static final String AVAILABLE_ROLES = "availableRoles";
 
-	/**
-	 * User role in eZ publish for administrator.
-	 */
-	public static final String EZROLE_ADMIN = "Administrator";
-
-	/**
-	 * User role in eZ publish for education manager.
-	 */
-	public static final String EZROLE_EDUCATIONMANAGER = "Opplaringsansvarlig";
-
-	/**
-	 * User role in eZ publish for course responsible.
-	 */
-	public static final String EZROLE_COURSERESPONSIBLE = "Kursansvarlig";
-
-	/**
-	 * User role in eZ publish for course participants.
-	 */
-	public static final String EZROLE_COURSEPARTICIPANTS = "Ansatt";
-
-    /**
-     * User role in eZ publish for anonumous.
-     */
-    public static final String EZROLE_ANONYMOUS = "Anonymous";
-
     /**
 	 * Name of cookie for "Remember Me" functionality.
 	 */

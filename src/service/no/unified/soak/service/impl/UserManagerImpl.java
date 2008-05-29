@@ -7,6 +7,11 @@
 */
 package no.unified.soak.service.impl;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+
 import no.unified.soak.Constants;
 import no.unified.soak.dao.UserDAO;
 import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
@@ -17,21 +22,14 @@ import no.unified.soak.model.UserCookie;
 import no.unified.soak.service.RoleManager;
 import no.unified.soak.service.UserExistsException;
 import no.unified.soak.service.UserManager;
-import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.util.RandomGUID;
 import no.unified.soak.util.StringUtil;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectRetrievalFailureException;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
 
 
 /**

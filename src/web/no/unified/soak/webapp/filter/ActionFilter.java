@@ -8,6 +8,7 @@
 package no.unified.soak.webapp.filter;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -32,6 +33,7 @@ import no.unified.soak.webapp.util.SslUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -153,11 +155,14 @@ public class ActionFilter implements Filter {
 		EZAuthentificationToken authentificationToken = new EZAuthentificationToken(ezUser, eZSessionId);
 
 		session.setAttribute("authenticationToken", authentificationToken);
+		
+		MessageSource messageSource = (MessageSource) getContext().getBean("messageSource");
+		Locale locale = LocaleContextHolder.getLocale();
 
-		request.setAttribute("isCourseParticipant", ezUser.hasRolename(Constants.EZROLE_COURSEPARTICIPANTS));
-		request.setAttribute("isCourseResponsible", ezUser.hasRolename(Constants.EZROLE_COURSERESPONSIBLE));
-		request.setAttribute("isEducationResponsible", ezUser.hasRolename(Constants.EZROLE_EDUCATIONMANAGER));
-		request.setAttribute("isAdmin", ezUser.hasRolename(Constants.EZROLE_ADMIN));
+		request.setAttribute("isCourseParticipant", ezUser.hasRolename(messageSource.getMessage("role.employee", null, locale)));
+		request.setAttribute("isCourseResponsible", ezUser.hasRolename(messageSource.getMessage("role.instructor", null, locale)));
+		request.setAttribute("isEducationResponsible", ezUser.hasRolename(messageSource.getMessage("role.editor", null, locale)));
+		request.setAttribute("isAdmin", ezUser.hasRolename(messageSource.getMessage("role.admin", null, locale)));
 		// request.setAttribute("isAdmin", true);
 
 		/* ezSessionid becomes null if not found. */
