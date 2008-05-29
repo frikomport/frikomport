@@ -5,7 +5,7 @@
 		<column>number</column>
 		<column>name</column>
 		<column>selectable</column>
-		<row>
+        <row>
 			<value>1</value>
 			<value>0807</value>
 			<value>Notodden</value>
@@ -473,7 +473,7 @@
     <column>role</column>
     <row>
         <value>1</value>
-        <value>86</value>
+        <value>344</value>
         <value>1</value>
         <value>/ez/index.php/fkp_nob/nyheter/kurs1</value>
         <value>Tre dager, seks timer hver dag</value>
@@ -497,7 +497,7 @@
     </row>
     <row>
         <value>2</value>
-        <value>149</value>
+        <value>344</value>
         <value>6</value>
         <value>http://www.tromso.kommune.no/_utskriftsvennlig.db2?id=13358</value>
         <value>Fire timer</value>
@@ -521,7 +521,7 @@
     </row>
     <row>
         <value>2</value>
-        <value>86</value>
+        <value>344</value>
         <value>1</value>
         <value>http://www.mamut.com/homepages/Norway/1/18/barnepasseren/commdet100.htm</value>
         <value>Fire timer</value>
@@ -545,7 +545,7 @@
     </row>
     <row>
         <value>2</value>
-        <value>149</value>
+        <value>344</value>
         <value>2</value>
         <value>http://www.ski.no/PrintArticle.aspx?ID=3312</value>
         <value>7 mandager, kl. 18.30 til ca. 21.30</value>
@@ -569,7 +569,7 @@
     </row>
     <row>
         <value>2</value>
-        <value>86</value>
+        <value>344</value>
         <value>6</value>
         <value>http://www.aa.fylkesbibl.no/kurs/2003/svarstad.html</value>
         <value>5. og 6. februar, kl. 09.00 til 18.00</value>

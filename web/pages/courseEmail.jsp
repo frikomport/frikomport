@@ -40,6 +40,22 @@
 
     <tr>
         <th>
+            <soak:label key="course.mailsender"/>
+        </th>
+        <td>
+          <select name="mailsender">
+              <option value="<c:out value="${defaultfrom}"/>">
+                <c:out value="${defaultfrom}"/>
+              </option>
+              <option value="<c:out value="${responsiblefrom}"/>">
+                <c:out value="${responsiblefrom}"/>
+              </option>
+          </select>
+        </td>
+    </tr>
+
+    <tr>
+        <th>
             
         </th>
         <td colspan="2" class="buttonBar">            

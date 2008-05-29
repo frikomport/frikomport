@@ -66,7 +66,7 @@ public class MailUtil {
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
 	public static StringBuffer createStandardBody(Course course, int event, Locale locale, MessageSource messageSource,
-			String mailComment) {
+                                                  String mailComment) {
 		return createStandardBody(course, event, locale, messageSource, mailComment, false);
 	}
 
@@ -110,7 +110,7 @@ public class MailUtil {
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
 	public static StringBuffer createStandardBody(Course course, int event, Locale locale, MessageSource messageSource,
-			String mailComment, boolean reservationConfirmed) {
+                                                  String mailComment, boolean reservationConfirmed) {
 		StringBuffer msg = new StringBuffer();
 		
         // Include user defined comment if specified
@@ -188,12 +188,12 @@ public class MailUtil {
 
 		if (course.getResponsible() != null) {
 			msg.append(StringEscapeUtils.unescapeHtml(getText("course.responsible", locale, messageSource)) + ": "
-					+ course.getResponsible().getFullName() + "\n");
+					+ course.getResponsible().getFullName() + ", mailto:" + course.getResponsible().getEmail() + "\n");
 		}
 
 		msg.append(StringEscapeUtils.unescapeHtml(getText("course.instructor", locale, messageSource)) + ": "
-				+ course.getInstructor().getName() + "\n");
-		msg.append(StringEscapeUtils.unescapeHtml(getText("course.description", locale, messageSource)) + ": "
+				+ course.getInstructor().getName() + ", mailto:" + course.getInstructor().getEmail()+ "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(getText("course.description", locale, messageSource)) + ": "
 				+ course.getDescription() + "\n");
 
 		// We cannot link to a deleted course, so the link is only displayed if
@@ -290,7 +290,7 @@ public class MailUtil {
 			StringBuffer msg, MessageSource messageSource, Locale locale) {
 		List<Registration> theRegistration = new ArrayList<Registration>();
 		theRegistration.add(registration);
-		return setMailInfo(theRegistration, event, course, msg, messageSource, locale);
+		return setMailInfo(theRegistration, event, course, msg, messageSource, locale, null);
 	}
 
 	/**
@@ -298,22 +298,20 @@ public class MailUtil {
 	 * 
 	 * @param registrations
 	 *            All the registrations that are to be handled
-	 * @param event
-	 *            The event that triggered the sending of this mail: Is a course deleted, changed, is this a
-	 *            notification mail?
-	 * @param course
-	 *            the course in question
-	 * @param msg
-	 *            the body message
-	 * @param messageSource
-	 *            the source for our message
-	 * @param message
-	 *            the mail object
-	 * @param locale
-	 *            The language to fetch messages in
-	 */
+     * @param event
+ *            The event that triggered the sending of this mail: Is a course deleted, changed, is this a
+ *            notification mail?
+     * @param course
+*            the course in question
+     * @param msg
+*            the body message
+     * @param messageSource
+*            the source for our message
+     * @param locale
+     * @param mailSender
+     */
 	public static ArrayList<SimpleMailMessage> setMailInfo(List<Registration> registrations, int event, Course course,
-			StringBuffer msg, MessageSource messageSource, Locale locale) {
+                                                           StringBuffer msg, MessageSource messageSource, Locale locale, String mailSender) {
 		ArrayList<SimpleMailMessage> allEMails = new ArrayList<SimpleMailMessage>();
 		String registeredMsg = StringEscapeUtils.unescapeHtml(getText("courseNotification.phrase.registered", locale,
 				messageSource));
@@ -427,7 +425,12 @@ public class MailUtil {
 
 			// SimpleMailMessage copy = new SimpleMailMessage();
 			// message.copyTo(copy);
-			message.setFrom(StringEscapeUtils.unescapeHtml(getText("mail.default.from", locale, messageSource)));
+            if(mailSender != null && !mailSender.equals("")){
+                message.setFrom(mailSender);
+            }
+            else{
+                message.setFrom(StringEscapeUtils.unescapeHtml(getText("mail.default.from", locale, messageSource)));
+            }
 			message.setTo(StringUtil.list2Array(emails));
 			log.debug("The mail is to: " + emails);
 			allEMails.add(message);

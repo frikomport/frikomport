@@ -2,14 +2,10 @@ package no.unified.soak.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
-import org.springframework.context.MessageSourceResolvable;
 import org.springframework.mail.SimpleMailMessage;
 
 import no.unified.soak.Constants;
@@ -20,9 +16,7 @@ import no.unified.soak.dao.NotificationDao;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.NotificationManager;
 import no.unified.soak.service.RegistrationManager;
-import no.unified.soak.util.DateUtil;
 import no.unified.soak.util.MailUtil;
-import no.unified.soak.util.StringUtil;
 
 public class NotificationManagerImpl extends BaseManager implements
 		NotificationManager {
@@ -158,7 +152,7 @@ public class NotificationManagerImpl extends BaseManager implements
 						ArrayList<SimpleMailMessage> newEmails = MailUtil
 								.setMailInfo(registrations,
 										Constants.EMAIL_EVENT_NOTIFICATION,
-										course, msg, messageSource, locale);
+										course, msg, messageSource, locale, null);
 						emails.addAll(newEmails);
 						notification.setReminderSent(true);
 						dao.saveNotification(notification);

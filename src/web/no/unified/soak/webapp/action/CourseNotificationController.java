@@ -32,6 +32,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.validation.BindException;
+import org.springframework.validation.Errors;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -71,9 +72,10 @@ public class CourseNotificationController extends BaseFormController {
 	/**
 	 * @see org.springframework.web.servlet.mvc.SimpleFormController#referenceData(javax.servlet.http.HttpServletRequest)
 	 */
-	protected Map referenceData(HttpServletRequest request) throws Exception {
+	protected Map referenceData(HttpServletRequest request, Object command, Errors errors) throws Exception {
 		Map<String, Object> model = new HashMap<String, Object>();
-		String courseid = request.getParameter("id");
+        Locale locale = request.getLocale();
+        String courseid = request.getParameter("id");
 		model.put("id", courseid);
 
 		// Are we to enable mail comment field and buttons?
@@ -84,7 +86,18 @@ public class CourseNotificationController extends BaseFormController {
 		}
 		model.put("enableMail", enableMail);
 
-		return model;
+        String defaultFrom = getText("mail.default.from", locale);
+        model.put("defaultfrom", defaultFrom);
+
+        Course course = null;
+        if(command != null) {
+            course = (Course)command;
+            User responsible = course.getResponsible();
+            String responsiblefrom = responsible.getFullName() + " <" + responsible.getEmail() + ">";
+            model.put("responsiblefrom",responsiblefrom);
+        }
+
+        return model;
 	}
 
 	/**
@@ -133,7 +146,9 @@ public class CourseNotificationController extends BaseFormController {
 
 		String mailComment = request.getParameter("mailcomment");
 
-		// Are we to return to the course list?
+        String mailSender = request.getParameter("mailsender");
+
+        // Are we to return to the course list?
 		if (request.getParameter("return") != null) {
 			if (log.isDebugEnabled()) {
 				log.debug("recieved 'return' from jsp");
@@ -141,7 +156,7 @@ public class CourseNotificationController extends BaseFormController {
 			return new ModelAndView(getCancelView(), "id", course.getId().toString());
 		} // or to send out notification email?
 		else if (request.getParameter("send") != null) {
-			sendMail(locale, course, Constants.EMAIL_EVENT_COURSECHANGED, mailComment);
+			sendMail(locale, course, Constants.EMAIL_EVENT_COURSECHANGED, mailComment, mailSender);
 		}
 
 		return new ModelAndView(getSuccessView());
@@ -152,212 +167,19 @@ public class CourseNotificationController extends BaseFormController {
 	 * 
 	 * @param locale
 	 *            The locale to use
-	 * @param course
-	 *            The course the applicant has registered for
-	 */
-	protected void sendMail(Locale locale, Course course, int event, String mailComment) {
+     * @param course
+     * @param mailSender
+     */
+	protected void sendMail(Locale locale, Course course, int event, String mailComment, String mailSender) {
 		log.debug("Sending mail from CourseNotificationController");
 		List<Registration> registrations = registrationManager
 				.getSpecificRegistrations(course.getId(), null, null, null,
 						null, null, null);
 		
 		StringBuffer msg = MailUtil.createStandardBody(course, event, locale, messageSource, mailComment);
-		ArrayList<SimpleMailMessage> emails = MailUtil.setMailInfo(registrations, event, course, msg, messageSource, locale);
+		ArrayList<SimpleMailMessage> emails = MailUtil.setMailInfo(registrations, event, course, msg, messageSource, locale, mailSender);
 		MailUtil.sendMails(emails, mailEngine);
 		
-//		String registeredMsg = StringEscapeUtils.unescapeHtml(getText(
-//				"courseNotification.phrase.registered", locale));
-//		String waitingMsg = StringEscapeUtils.unescapeHtml(getText(
-//				"courseNotification.phrase.waitinglist", locale));
-//		
-//		StringBuffer msg = new StringBuffer();
-//
-//		// Build mail
-//		switch (event) {
-//		case COURSECHANGED:
-//			msg
-//					.append(StringEscapeUtils.unescapeHtml(getText(
-//							"courseChanged.mail.body", " " + course.getName(),
-//							locale)));
-//
-//			break;
-//
-//		case COURSEDELETED:
-//			msg
-//					.append(StringEscapeUtils.unescapeHtml(getText(
-//							"courseDeleted.mail.body", " " + course.getName(),
-//							locale)));
-//
-//			break;
-//		}
-//
-//		msg.append("\n\n");
-//
-//		// Include course details
-//		msg.append(StringEscapeUtils
-//				.unescapeHtml(getText("course.name", locale))
-//				+ ": " + course.getName() + "\n");
-//		msg.append(StringEscapeUtils
-//				.unescapeHtml(getText("course.type", locale))
-//				+ ": " + course.getType() + "\n");
-//		msg.append(StringEscapeUtils.unescapeHtml(getText("course.startTime",
-//				locale))
-//				+ ": "
-//				+ DateUtil
-//						.getDateTime(getText("date.format", locale) + " "
-//								+ getText("time.format", locale), course
-//								.getStartTime()) + "\n");
-//		msg.append(StringEscapeUtils.unescapeHtml(getText("course.stopTime",
-//				locale))
-//				+ ": "
-//				+ DateUtil.getDateTime(getText("date.format", locale) + " "
-//						+ getText("time.format", locale), course.getStopTime())
-//				+ "\n");
-//		msg.append(StringEscapeUtils.unescapeHtml(getText("course.duration",
-//				locale))
-//				+ ": " + course.getDuration() + "\n");
-//		msg.append(StringEscapeUtils.unescapeHtml(getText(
-//				"course.organization", locale))
-//				+ ": " + course.getOrganization().getName() + "\n");
-//		msg.append(StringEscapeUtils.unescapeHtml(getText("course.serviceArea",
-//				locale))
-//				+ ": " + course.getServiceArea().getName() + "\n");
-//		msg.append(StringEscapeUtils.unescapeHtml(getText("course.location",
-//				locale))
-//				+ ": " + course.getLocation().getName() + "\n");
-//
-//		if (course.getResponsible() != null) {
-//			msg.append(StringEscapeUtils.unescapeHtml(getText(
-//					"course.responsible", locale))
-//					+ ": " + course.getResponsible().getName() + "\n");
-//		}
-//
-//		msg.append(StringEscapeUtils.unescapeHtml(getText("course.instructor",
-//				locale))
-//				+ ": " + course.getInstructor().getName() + "\n");
-//		msg.append(StringEscapeUtils.unescapeHtml(getText("course.description",
-//				locale))
-//				+ ": " + course.getDescription() + "\n");
-//
-//		// Include user defined comment if specified
-//		if (mailComment != null && StringUtils.isNotBlank(mailComment)) {
-//			msg.append("\n");
-//			msg.append(mailComment);
-//			msg.append("\n");
-//		}
-//
-//		// We cannot link to a deleted course, so the link is only displayed if
-//		// the course still exists
-//		if (event == COURSECHANGED) {
-//			String baseurl = StringEscapeUtils.unescapeHtml(getText(
-//					"javaapp.baseurl", locale));
-//			String coursedetailurl = StringEscapeUtils.unescapeHtml(getText(
-//					"javaapp.coursedetailurl", String.valueOf(course.getId()),
-//					locale));
-//			msg.append("\n\n");
-//			msg.append(StringEscapeUtils.unescapeHtml(getText(
-//					"javaapp.findurlhere", locale))
-//					+ " " + baseurl + coursedetailurl);
-//		}
-//
-//		msg.append("\n\n");
-//
-//		switch (event) {
-//		case COURSECHANGED:
-//			msg.append(StringEscapeUtils.unescapeHtml(getText(
-//					"courseChanged.mail.footer", locale)));
-//
-//			break;
-//
-//		case COURSEDELETED:
-//			msg.append(StringEscapeUtils.unescapeHtml(getText(
-//					"courseDeleted.mail.body", " " + course.getName() + "\n\n",
-//					locale)));
-//
-//			break;
-//		}
-//
-//		msg.append("\n\n");
-//		msg.append(StringEscapeUtils.unescapeHtml(getText("mail.contactinfo",
-//				locale))
-//				+ "\n");
-//		msg.append(StringEscapeUtils.unescapeHtml(getText("mail.donotreply",
-//				getText("mail.default.from", locale), locale))
-//				+ "\n");
-//
-//		for (Registration registration : registrations) {
-//			switch (event) {
-//			case COURSECHANGED:
-//				if (registration.getReserved()) {
-//					message.setSubject(StringEscapeUtils.unescapeHtml(getText(
-//						"courseChanged.mail.subject", course.getName(), 
-//						locale)).replaceAll("<registeredfor/>", registeredMsg));
-//				} else {
-//					message.setSubject(StringEscapeUtils.unescapeHtml(getText(
-//							"courseChanged.mail.subject", course.getName(), 
-//							locale)).replaceAll("<registeredfor/>", waitingMsg));
-//				}
-//				break;
-//
-//			case COURSEDELETED:
-//				if (registration.getReserved()) {
-//					message.setSubject(StringEscapeUtils.unescapeHtml(getText(
-//						"courseDeleted.mail.subject", course.getName(), 
-//						locale)).replaceAll("<registeredfor/>", registeredMsg));
-//				} else {
-//					message.setSubject(StringEscapeUtils.unescapeHtml(getText(
-//							"courseDeleted.mail.subject", course.getName(), 
-//							locale)).replaceAll("<registeredfor/>", waitingMsg));
-//				}
-//				
-//				break;
-//			}
-//
-//			String custom = msg.toString();
-//			if (registration.getReserved()) {
-//				custom.replaceAll("<registeredfor/>", registeredMsg);
-//			} else {
-//				custom.replaceAll("<registeredfor/>", waitingMsg);
-//			}
-//			
-//			StringBuffer msgIndivid = new StringBuffer(custom);
-//			msgIndivid.insert(0, "\n\n");
-//			
-//			String employeeNoText = messageSource.getMessage("registration.employeeNumber",
-//					null, locale);
-//			if (!StringUtils.isEmpty(employeeNoText))
-//				employeeNoText = employeeNoText.toLowerCase();
-//					
-//			if (registration.getEmployeeNumber() != null)
-//			{
-//				String ansattParentes = " ("
-//						+ StringEscapeUtils.unescapeHtml(
-//								employeeNoText) + " "
-//						+ registration.getEmployeeNumber().intValue() + ")";
-//				
-//	
-//				msgIndivid.insert(0, StringUtil.ifEmpty(registration
-//						.getEmployeeNumber(), ansattParentes));
-//			}
-//			
-//			msgIndivid.insert(0, getText("misc.hello", locale) + " "
-//					+ registration.getFirstName() + " "
-//					+ registration.getLastName());
-//
-//			message.setText(msgIndivid.toString());
-//
-//			List<String> emails = new LinkedList<String>();
-//			if (registration.getEmail() != null
-//					&& registration.getEmail().trim().length() > 0) {
-//				emails.add(registration.getEmail());
-//			}
-//			if (emails.size() == 0 && course.getInstructor().getEmail() != null) {
-//				emails.add(course.getInstructor().getEmail());
-//			}
-//
-//			message.setTo(StringUtil.list2Array(emails));
-//			mailEngine.send(message);
-//		}
 	}
 
 	/**

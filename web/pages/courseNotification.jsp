@@ -41,7 +41,21 @@
             <textarea cols="50" rows="3" name="mailcomment" id="mailcomment"></textarea>
         </td>
     </tr>
-
+    <tr>
+        <th>
+            <soak:label key="course.mailsender"/>
+        </th>
+        <td>
+          <select name="mailsender">
+              <option value="<c:out value="${defaultfrom}"/>">
+                <c:out value="${defaultfrom}"/>
+              </option>
+              <option value="<c:out value="${responsiblefrom}"/>">
+                <c:out value="${responsiblefrom}"/>
+              </option>
+          </select>
+        </td>
+    </tr>
     <tr>
         <td colspan="2" class="buttonBar">            
 

@@ -514,7 +514,7 @@ public class CourseFormController extends BaseFormController {
 		// Build standard e-mail body
 		StringBuffer msg = MailUtil.createStandardBody(course, event, locale, messageSource, mailComment);
 		// Add sender etc.
-		ArrayList<SimpleMailMessage> emails = MailUtil.setMailInfo(registrations, event, course, msg, messageSource, locale);
+		ArrayList<SimpleMailMessage> emails = MailUtil.setMailInfo(registrations, event, course, msg, messageSource, locale, null);
 		MailUtil.sendMails(emails, mailEngine);		
 	}
 
