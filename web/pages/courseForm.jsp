@@ -99,7 +99,7 @@ cal1.setTodayText("Idag");
                 value="<c:out value="${startTimeDate}"/>" title="Datoformat: <fmt:message key="date.format.localized"/>"/>
             <a href="#" name="a1" id="Anch_startTimeDate" 
 				onClick="cal1.select(document.forms[0].startTimeDate,'Anch_startTimeDate','<fmt:message key="date.format"/>'); return false;" 
-				title="Vis kalender"><img src="/soak/images/iconCalendar.gif"></a>
+				title="Vis kalender"><img src="<c:url value="/images/iconCalendar.gif"/>"></a>
             <soak:label key="course.time"/>
             <input type="text" size="6" name="startTimeTime" id="startTimeTime" 
                 value="<c:out value="${startTimeTime}"/>" title="Tidsformat: <fmt:message key="time.format.localized"/>"/>
@@ -122,7 +122,7 @@ cal1.setTodayText("Idag");
                 value="<c:out value="${stopTimeDate}"/>" title="Datoformat: <fmt:message key="date.format.localized"/>"/>
             <a href="#" name="a1" id="Anch_stopTimeDate" 
 				onClick="cal1.select(document.forms[0].stopTimeDate,'Anch_stopTimeDate','<fmt:message key="date.format"/>'); return false;" 
-				title="Vis kalender"><img src="/soak/images/iconCalendar.gif"></a>
+				title="Vis kalender"><img src="<c:url value="/images/iconCalendar.gif"/>"></a>
             <soak:label key="course.time"/>
             <input type="text" size="6" name="stopTimeTime" id="stopTimeTime" 
                 value="<c:out value="${stopTimeTime}"/>" title="Tidsformat: <fmt:message key="time.format.localized"/>"/>
@@ -263,7 +263,7 @@ cal1.setTodayText("Idag");
                 value="<c:out value="${registerStartDate}"/>" title="Datoformat: <fmt:message key="date.format.localized"/>"/>
             <a href="#" name="a1" id="Anch_registerStartDate" 
 				onClick="cal1.select(document.forms[0].registerStartDate,'Anch_registerStartDate','<fmt:message key="date.format"/>'); return false;" 
-				title="Vis kalender"><img src="/soak/images/iconCalendar.gif"></a>
+				title="Vis kalender"><img src="<c:url value="/images/iconCalendar.gif"/>"></a>
             <soak:label key="course.time"/>
             <input type="text" size="6" name="registerStartTime" id="registerStartTime" 
                 value="<c:out value="${registerStartTime}"/>" title="Tidsformat: <fmt:message key="time.format.localized"/>"/>
@@ -286,7 +286,7 @@ cal1.setTodayText("Idag");
                 value="<c:out value="${reminderDate}"/>" title="Datoformat: <fmt:message key="date.format.localized"/>"/>
             <a href="#" name="a1" id="Anch_reminderDate" 
 				onClick="cal1.select(document.forms[0].reminderDate,'Anch_reminderDate','<fmt:message key="date.format"/>'); return false;" 
-				title="Vis kalender"><img src="/soak/images/iconCalendar.gif"></a>
+				title="Vis kalender"><img src="<c:url value="/images/iconCalendar.gif"/>"></a>
             <soak:label key="course.time"/>
             <input type="text" size="6" name="reminderTime" id="reminderTime" 
                 value="<c:out value="${reminderTime}"/>" title="Tidsformat: <fmt:message key="time.format.localized"/>"/>
@@ -309,7 +309,7 @@ cal1.setTodayText("Idag");
                 value="<c:out value="${registerByDate}"/>" title="Datoformat: <fmt:message key="date.format.localized"/>"/>
             <a href="#" name="a1" id="Anch_registerByDate" 
 				onClick="cal1.select(document.forms[0].registerByDate,'Anch_registerByDate','<fmt:message key="date.format"/>'); return false;" 
-				title="Vis kalender"><img src="/soak/images/iconCalendar.gif"></a>
+				title="Vis kalender"><img src="<c:url value="/images/iconCalendar.gif"/>"></a>
             <soak:label key="course.time"/>
             <input type="text" size="6" name="registerByTime" id="registerByTime" 
                 value="<c:out value="${registerByTime}"/>" title="Tidsformat: <fmt:message key="time.format.localized"/>"/>
@@ -332,7 +332,7 @@ cal1.setTodayText("Idag");
                 value="<c:out value="${freezeAttendanceDate}"/>" title="Datoformat: <fmt:message key="date.format.localized"/>"/>
             <a href="#" name="a1" id="Anch_freezeAttendanceDate" 
 				onClick="cal1.select(document.forms[0].freezeAttendanceDate,'Anch_freezeAttendanceDate','<fmt:message key="date.format"/>'); return false;" 
-				title="Vis kalender"><img src="/soak/images/iconCalendar.gif"></a>
+				title="Vis kalender"><img src="<c:url value="/images/iconCalendar.gif"/>"></a>
             <soak:label key="course.time"/>
             <input type="text" size="6" name="freezeAttendanceTime" id="freezeAttendanceTime" 
                 value="<c:out value="${freezeAttendanceTime}"/>" title="Tidsformat: <fmt:message key="time.format.localized"/>"/>

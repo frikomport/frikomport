@@ -9,5 +9,5 @@
         <c:set var="ctxPath" value="${pageContext.request.contextPath}" scope="request"/>
         <meta name="author" content="Matt Raible (matt@raibledesigns.com)"/>
         <link rel="icon" href="<c:url value="/images/favicon.ico"/>"/>
-        <script type="text/javascript" src="/soak/scripts/calendar.js"></script> 
+        <script type="text/javascript" src="<c:url value="/scripts/calendar.js"/>"/>
         
