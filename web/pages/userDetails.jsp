@@ -1,7 +1,7 @@
 <%@ include file="/common/taglibs.jsp"%>
 
 <title><fmt:message key="extuserDetail.title"/></title>
-<content tag="heading"><c:out value="${user.name}"/></content>
+<content tag="heading"><c:out value="${user.fullName}"/></content>
 
 <table class="detail">
     <tr>

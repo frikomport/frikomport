@@ -126,6 +126,9 @@
         <property name="target">
             <bean class="no.unified.soak.service.impl.UserManagerImpl">
                 <property name="userDAO" ref="userDAO"/>
+                <property name="userEzDaoJdbc" ref="userEzDaoJdbc"/>
+                <property name="roleManager" ref="roleManager"/>
+                <property name="messageSource" ref="messageSource"/>
             </bean>
         </property>
         <property name="transactionAttributes">
@@ -150,7 +153,6 @@
         <property name="accessDecisionManager" ref="accessDecisionManager"/>
         <property name="objectDefinitionSource">
              <value>
-                 no.unified.soak.service.UserManager.getUsers=admin
                  no.unified.soak.service.UserManager.removeUser=admin
              </value>
         </property>

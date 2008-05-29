@@ -15,7 +15,6 @@ import java.util.Collection;
 import java.util.List;
 
 import no.unified.soak.dao.RegistrationDAO;
-import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Notification;
 import no.unified.soak.model.Registration;
@@ -33,14 +32,7 @@ import org.springframework.orm.ObjectRetrievalFailureException;
  */
 public class RegistrationDAOHibernate extends BaseDAOHibernate implements RegistrationDAO {
     
-    private UserEzDaoJdbc userEzDaoJdbc = null;
-    
-    public void setUserEzDaoJdbc(UserEzDaoJdbc userEzDaoJdbc)
-    {
-        this.userEzDaoJdbc = userEzDaoJdbc;
-    }
-    
-	/**
+    /**
 	 * @see no.unified.soak.dao.RegistrationDAO#getRegistrations(no.unified.soak.model.Registration)
 	 */
 	public List getRegistrations(final Registration registration) {
@@ -57,17 +49,6 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
 		if (registration == null) {
 			log.warn("uh oh, registration with id '" + id + "' not found...");
 			throw new ObjectRetrievalFailureException(Registration.class, id);
-		}
-
-		Course course = (Course) getHibernateTemplate().get(Course.class,
-				registration.getCourseid());
-
-		if (course != null) {
-			if ((course != null) && (course.getResponsibleid() != null)) {
-				Integer responsibleid = course.getResponsibleid().intValue();
-				course.setResponsible(userEzDaoJdbc
-						.findKursansvarligUser(responsibleid));
-			}
 		}
 
 		return registration;

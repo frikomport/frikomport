@@ -8,9 +8,13 @@
 package no.unified.soak.service;
 
 import no.unified.soak.dao.UserDAO;
+import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
+import no.unified.soak.ez.EzUser;
 import no.unified.soak.model.User;
 
 import java.util.List;
+
+import org.springframework.context.MessageSource;
 
 
 /**
@@ -24,7 +28,10 @@ import java.util.List;
  */
 public interface UserManager {
     public void setUserDAO(UserDAO dao);
+    public void setUserEzDaoJdbc(UserEzDaoJdbc userEzDaoJdbc);
 
+    public void setRoleManager(RoleManager roleManager);
+    public void setMessageSource(MessageSource messageSource);
     /**
      * Retrieves a user by username.  An exception is thrown if now user
      * is found.
@@ -79,4 +86,33 @@ public interface UserManager {
      * @param username
      */
     public void removeLoginCookies(String username);
+    
+    /**
+     * Retrieves all responsibles from eZ publish.
+     * @return
+     */
+    public List getResponsibles();
+    
+    /**
+     * Retrieves all roles from eZ publish.
+     * Should perhaps be located in a separate ezmanager.
+     * @param user
+     * @return
+     */
+    public List getEZRoles();
+    
+    /**
+     * Add new user based on EzUser
+     * @param ezUser
+     * @return
+     */
+    public void addUser(EzUser ezUser);
+
+    /**
+     * Update user based on EzUser
+     * @param user
+     * @param ezUser
+     * @return
+     */
+    public void updateUser(User user, EzUser ezUser);
 }

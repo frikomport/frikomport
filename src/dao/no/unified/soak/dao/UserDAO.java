@@ -7,10 +7,10 @@
 */
 package no.unified.soak.dao;
 
+import java.util.List;
+
 import no.unified.soak.model.User;
 import no.unified.soak.model.UserCookie;
-
-import java.util.List;
 
 
 /**
@@ -67,4 +67,5 @@ public interface UserDAO extends DAO {
      * @param username
      */
     public void removeUserCookies(String username);
+
 }

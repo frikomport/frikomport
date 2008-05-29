@@ -7,29 +7,27 @@
 */
 package no.unified.soak.webapp.action;
 
-import no.unified.soak.Constants;
-import no.unified.soak.model.Role;
-import no.unified.soak.model.User;
-import no.unified.soak.model.Organization;
-import no.unified.soak.service.RoleManager;
-import no.unified.soak.service.UserExistsException;
-import no.unified.soak.service.UserManager;
-import no.unified.soak.service.OrganizationManager;
-import no.unified.soak.util.StringUtil;
-import no.unified.soak.webapp.util.RequestUtil;
-
-import org.apache.commons.lang.StringUtils;
-
-import org.springframework.validation.BindException;
-
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
-
-import java.util.*;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import no.unified.soak.Constants;
+import no.unified.soak.model.Role;
+import no.unified.soak.model.User;
+import no.unified.soak.service.OrganizationManager;
+import no.unified.soak.service.RoleManager;
+import no.unified.soak.service.UserExistsException;
+import no.unified.soak.service.UserManager;
+import no.unified.soak.util.StringUtil;
+import no.unified.soak.webapp.util.RequestUtil;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.validation.BindException;
+import org.springframework.web.servlet.ModelAndView;
 
 
 /**

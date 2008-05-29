@@ -186,7 +186,7 @@ cal1.setTodayText("Idag");
         </th>
         <td>
             <form:select path="responsibleid">
-                <form:options items="${responsible}" itemValue="id" itemLabel="name"/>
+                <form:options items="${responsible}" itemValue="id" itemLabel="fullName"/>
             </form:select>
             <form:errors cssClass="fieldError" htmlEscape="false" path="responsibleid"/>
         </td>

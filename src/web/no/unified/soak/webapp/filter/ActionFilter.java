@@ -8,9 +8,6 @@
 package no.unified.soak.webapp.filter;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -27,10 +24,7 @@ import javax.servlet.http.HttpSession;
 import no.unified.soak.Constants;
 import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
 import no.unified.soak.ez.EzUser;
-import no.unified.soak.model.Address;
 import no.unified.soak.model.User;
-import no.unified.soak.service.RoleManager;
-import no.unified.soak.service.UserExistsException;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.webapp.util.RequestUtil;
 import no.unified.soak.webapp.util.SslUtil;
@@ -38,7 +32,6 @@ import no.unified.soak.webapp.util.SslUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -196,65 +189,17 @@ public class ActionFilter implements Filter {
 		try {
 			user = mgr.getUser(ezUser.getUsername());
 			if (!user.equals(ezUser)) {
-				updateUser(ezUser, mgr, user, false);
+				mgr.updateUser(user, ezUser);
 				session.setAttribute(Constants.USER_KEY, user);
 			}
 		} catch (ObjectRetrievalFailureException exception) {
 			// User does not exists, make new.
-			user = new User(ezUser.getUsername());
-			updateUser(ezUser, mgr, user, true);
-			session.setAttribute(Constants.USER_KEY, user);
+			mgr.addUser(ezUser);
+			session.setAttribute(Constants.USER_KEY, mgr.getUser(ezUser.getUsername()));
 		}
 	}
 
-	private void updateUser(EzUser ezUser, UserManager mgr, User user, Boolean newUser) {
-		user.setFirstName(ezUser.getFirst_name());
-		user.setLastName(ezUser.getLast_name());
-		user.setEmail(ezUser.getEmail());
-		setRoles(ezUser, user);
-		if (newUser) {
-			Address address = new Address();
-			address.setPostalCode("0");
-			user.setAddress(address);
-		}
-		try {
-			mgr.saveUser(user);
-		} catch (UserExistsException e) {
-			log.error("Exception: " + e);
-		}
-	}
-
-	private void setRoles(EzUser ezUser, User user) {
-		ApplicationContext ctx = getContext();
-		RoleManager roleManager = (RoleManager) ctx.getBean("roleManager");
-		MessageSource m = (MessageSource) ctx.getBean("messageSource");
-		List<String> rolenames = ezUser.getRolenames();
-		// remove existing roles before new ones are added.
-		user.removeAllRoles();
-		Locale locale = LocaleContextHolder.getLocale();
-
-		for (Iterator iter = rolenames.iterator(); iter.hasNext();) {
-			String rolename = (String) iter.next();
-			if (rolename.equals(m.getMessage("role.employee", null, locale))) {
-				user.addRole(roleManager.getRole(Constants.EMPLOYEE_ROLE));
-			} else if (rolename.equals(m.getMessage("role.anonymous", null, locale))) {
-				user.addRole(roleManager.getRole(Constants.ANONYMOUS_ROLE));
-			} else if (rolename.equals(m.getMessage("role.editor", null, locale))) {
-				user.addRole(roleManager.getRole(Constants.EDITOR_ROLE));
-			} else if (rolename.equals(m.getMessage("role.admin", null, locale))) {
-				user.addRole(roleManager.getRole(Constants.ADMIN_ROLE));
-			} else if (ezUser.hasRolename(m.getMessage("role.instructor", null, locale))) {
-				user.addRole(roleManager.getRole(Constants.INSTRUCTOR_ROLE));
-			} else if (roleManager.getRole(rolename) != null) {
-				user.addRole(roleManager.getRole(rolename));
-			} else {
-				no.unified.soak.model.Role role = new no.unified.soak.model.Role(rolename);
-				roleManager.saveRole(role);
-				user.addRole(role);
-			}
-		}
-	}
-
+	
 	private ApplicationContext getContext() {
 		ServletContext context = config.getServletContext();
 		ApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(context);

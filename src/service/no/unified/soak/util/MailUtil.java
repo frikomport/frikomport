@@ -188,7 +188,7 @@ public class MailUtil {
 
 		if (course.getResponsible() != null) {
 			msg.append(StringEscapeUtils.unescapeHtml(getText("course.responsible", locale, messageSource)) + ": "
-					+ course.getResponsible().getName() + "\n");
+					+ course.getResponsible().getFullName() + "\n");
 		}
 
 		msg.append(StringEscapeUtils.unescapeHtml(getText("course.instructor", locale, messageSource)) + ": "

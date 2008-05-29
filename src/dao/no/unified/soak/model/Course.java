@@ -13,8 +13,6 @@ package no.unified.soak.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import no.unified.soak.ez.EzUser;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -37,7 +35,7 @@ public class Course extends BaseObject implements Serializable {
     private Long id;
     private Organization organization;
     private Long organizationid;
-    private EzUser responsible;
+    private User responsible;
     private Long responsibleid;
     private ServiceArea serviceArea;
     private Long serviceAreaid;
@@ -485,22 +483,22 @@ public class Course extends BaseObject implements Serializable {
         this.organizationid = organizationid;
     }
 
-    // /**
-    // * @return Returns the responsible.
-    // * @hibernate.many-to-one not-null="true" cascade="none"
-    // column="responsibleid" insert="false" update="false" cascade="none"
-    // */
-    // public Person getResponsible() {
-    // return responsible;
-    // }
+     /**
+     * @return Returns the responsible.
+     * @hibernate.many-to-one not-null="true" column="responsibleid" insert="false" update="false" cascade="none"
+     * 			property-ref="id"
+     */
+     public User getResponsible() {
+     return responsible;
+     }
 
-    // /**
-    // * @param responsible
-    // * The responsible to set.
-    // */
-    // public void setResponsible(Person responsible) {
-    // this.responsible = responsible;
-    // }
+     /**
+     * @param responsible
+     * The responsible to set.
+     */
+     public void setResponsible(User responsible) {
+     this.responsible = responsible;
+     }
 
     /**
      * @return Returns the serviceArea.
@@ -552,20 +550,20 @@ public class Course extends BaseObject implements Serializable {
         return new HashCodeBuilder().append(id).toHashCode();
     }
 
-    /**
-     * @return Returns the responsible.
-     */
-    public EzUser getResponsible() {
-        return responsible;
-    }
-
-    /**
-     * @param responsible
-     *            The responsible to set.
-     */
-    public void setResponsible(EzUser responsible) {
-        this.responsible = responsible;
-    }
+//    /**
+//     * @return Returns the responsible.
+//     */
+//    public EzUser getResponsible() {
+//        return responsible;
+//    }
+//
+//    /**
+//     * @param responsible
+//     *            The responsible to set.
+//     */
+//    public void setResponsible(EzUser responsible) {
+//        this.responsible = responsible;
+//    }
     
     /**
      * Copies all the attribues of an existing course into this instance

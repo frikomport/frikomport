@@ -7,13 +7,13 @@
 */
 package no.unified.soak.dao.hibernate;
 
+import java.util.List;
+
 import no.unified.soak.dao.UserDAO;
 import no.unified.soak.model.User;
 import no.unified.soak.model.UserCookie;
 
 import org.springframework.orm.ObjectRetrievalFailureException;
-
-import java.util.List;
 
 
 /**
@@ -107,4 +107,19 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
     public void saveUserCookie(UserCookie cookie) {
         getHibernateTemplate().saveOrUpdate(cookie);
     }
+
+//	public User getUser(int id) {
+//		DetachedCriteria criteria = DetachedCriteria.forClass(User.class);
+//        criteria.add(Restrictions.eq("id", id));
+//        List users = getHibernateTemplate().findByCriteria(criteria);
+//        User user = (User) users.get(0);
+//
+//        if (user == null) {
+//			log.warn("uh oh, user with id='" + id + "' not found...");
+//			throw new ObjectRetrievalFailureException(User.class, id);
+//		}
+//
+//		return user;
+//	}
+
 }

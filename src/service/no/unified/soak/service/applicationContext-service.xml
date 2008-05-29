@@ -35,8 +35,11 @@
          all managers, you might look into using the BeanNameAutoProxyCreator -->
     <bean id="userManager" parent="txProxyTemplate">
         <property name="target">
-            <bean class="no.unified.soak.service.impl.UserManagerImpl">
+            <bean class="no.unified.soak.service.impl.UserManagerImpl" >
                 <property name="userDAO" ref="userDAO"/>
+                <property name="userEzDaoJdbc" ref="userEzDaoJdbc"/>
+                <property name="roleManager" ref="roleManager"/>
+                <property name="messageSource" ref="messageSource"/>
             </bean>
         </property>
         <!-- Override default transaction attributes b/c of LoginCookie methods -->

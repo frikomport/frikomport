@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import no.unified.soak.Constants;
-import no.unified.soak.ez.EzUser;
 import no.unified.soak.model.Attachment;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
@@ -33,11 +32,12 @@ import no.unified.soak.service.AttachmentManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.LocationManager;
 import no.unified.soak.service.MailEngine;
-import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.NotificationManager;
+import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.PersonManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
+import no.unified.soak.service.UserManager;
 import no.unified.soak.util.MailUtil;
 import no.unified.soak.webapp.util.FileUtil;
 
@@ -60,6 +60,8 @@ public class CourseFormController extends BaseFormController {
 	private ServiceAreaManager serviceAreaManager = null;
 
 	private PersonManager personManager = null;
+	
+	private UserManager userManager = null;
 
 	private LocationManager locationManager = null;
 
@@ -112,6 +114,10 @@ public class CourseFormController extends BaseFormController {
 		this.personManager = personManager;
 	}
 
+	public void setUserManager(UserManager userManager) {
+		this.userManager = userManager;
+	}
+	
 	public void setLocationManager(LocationManager locationManager) {
 		this.locationManager = locationManager;
 	}
@@ -139,13 +145,13 @@ public class CourseFormController extends BaseFormController {
 			model.put("instructors", people);
 		}
 
-		List responsibles = personManager.getEZResponsibles((EzUser) null);
+		List responsibles = userManager.getResponsibles();
 		if (responsibles != null) {
 			model.put("responsible", responsibles);
 		}
 		
 		// Retrieves visibility roles into an array
-		List roles = personManager.getEZRoles();
+		List roles = userManager.getEZRoles();
 		if (roles != null) {
             model.put("roles", roles);
         }

@@ -7,9 +7,14 @@
 */
 package no.unified.soak.service.impl;
 
+import no.unified.soak.Constants;
 import no.unified.soak.dao.UserDAO;
+import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
+import no.unified.soak.ez.EzUser;
+import no.unified.soak.model.Address;
 import no.unified.soak.model.User;
 import no.unified.soak.model.UserCookie;
+import no.unified.soak.service.RoleManager;
 import no.unified.soak.service.UserExistsException;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.service.OrganizationManager;
@@ -18,9 +23,15 @@ import no.unified.soak.util.StringUtil;
 
 import org.apache.commons.lang.StringUtils;
 
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.orm.ObjectRetrievalFailureException;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -34,6 +45,10 @@ import java.util.List;
  */
 public class UserManagerImpl extends BaseManager implements UserManager {
     private UserDAO dao;
+    
+    private UserEzDaoJdbc userEzDaoJdbc;
+    private RoleManager roleManager;
+    private MessageSource messageSource;
 
     /**
      * Set the DAO for communication with the data layer.
@@ -42,8 +57,20 @@ public class UserManagerImpl extends BaseManager implements UserManager {
     public void setUserDAO(UserDAO dao) {
         this.dao = dao;
     }
+    
+	public void setUserEzDaoJdbc(UserEzDaoJdbc userEzDaoJdbc) {
+		this.userEzDaoJdbc = userEzDaoJdbc;
+	}
 
-    /**
+    public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
+	}
+
+	public void setRoleManager(RoleManager roleManager) {
+		this.roleManager = roleManager;
+	}
+
+	/**
      * @see no.unified.soak.service.UserManager#getUser(java.lang.String)
      */
     public User getUser(String username) {
@@ -145,4 +172,91 @@ public class UserManagerImpl extends BaseManager implements UserManager {
     public void removeLoginCookies(String username) {
         dao.removeUserCookies(username);
     }
+    
+    public List getEZRoles() {
+    	List roles = userEzDaoJdbc.findRoles();
+    	return roles;
+    }
+    
+    public List getResponsibles() {
+		List ezUsers = getEZResponsibles(null);
+		List users = new ArrayList();
+		for (Iterator iter = ezUsers.iterator(); iter.hasNext();) {
+			EzUser ezUser = (EzUser) iter.next();
+			try {
+				users.add(dao.getUser(ezUser.getUsername()));
+			} catch (ObjectRetrievalFailureException objectRetrievalFailureException) {
+				addUser(ezUser);
+				users.add(dao.getUser(ezUser.getUsername()));
+			}
+		}
+		return users;
+	}
+
+	public void addUser(EzUser ezUser) {
+		User user = new User(ezUser.getUsername());
+		user.setFirstName(ezUser.getFirst_name());
+		user.setLastName(ezUser.getLast_name());
+		user.setEmail(ezUser.getEmail());
+		user.setId(ezUser.getId());
+		setRoles(ezUser, user);
+		Address address = new Address();
+		address.setPostalCode("0");
+		user.setAddress(address);
+		try {
+			saveUser(user);
+		} catch (Exception e) {
+			log.error("Exception: " + e);
+		}
+
+	}
+	
+	public void updateUser(User user, EzUser ezUser) {
+		user.setFirstName(ezUser.getFirst_name());
+		user.setLastName(ezUser.getLast_name());
+		user.setEmail(ezUser.getEmail());
+		user.setId(ezUser.getId());
+		user.setEnabled(true);
+		setRoles(ezUser, user);
+		try {
+			saveUser(user);
+		} catch (Exception e) {
+			log.error("Exception: " + e);
+		}
+
+	}
+	
+	private void setRoles(EzUser ezUser, User user) {
+		List<String> rolenames = ezUser.getRolenames();
+		// remove existing roles before new ones are added.
+		user.removeAllRoles();
+		Locale locale = LocaleContextHolder.getLocale();
+
+		for (Iterator iter = rolenames.iterator(); iter.hasNext();) {
+			String rolename = (String) iter.next();
+			if (rolename.equals(messageSource.getMessage("role.employee", null, locale))) {
+				user.addRole(roleManager.getRole(Constants.EMPLOYEE_ROLE));
+			} else if (rolename.equals(messageSource.getMessage("role.anonymous", null, locale))) {
+				user.addRole(roleManager.getRole(Constants.ANONYMOUS_ROLE));
+			} else if (rolename.equals(messageSource.getMessage("role.editor", null, locale))) {
+				user.addRole(roleManager.getRole(Constants.EDITOR_ROLE));
+			} else if (rolename.equals(messageSource.getMessage("role.admin", null, locale))) {
+				user.addRole(roleManager.getRole(Constants.ADMIN_ROLE));
+			} else if (ezUser.hasRolename(messageSource.getMessage("role.instructor", null, locale))) {
+				user.addRole(roleManager.getRole(Constants.INSTRUCTOR_ROLE));
+			} else if (roleManager.getRole(rolename) != null) {
+				user.addRole(roleManager.getRole(rolename));
+			} else {
+				no.unified.soak.model.Role role = new no.unified.soak.model.Role(rolename);
+				roleManager.saveRole(role);
+				user.addRole(role);
+			}
+		}
+	}
+
+	private List getEZResponsibles(EzUser user) {
+		List users = userEzDaoJdbc.findKursansvarligeUser();
+		return users;
+	}
+
 }

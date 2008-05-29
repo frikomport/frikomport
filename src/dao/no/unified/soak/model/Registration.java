@@ -40,8 +40,6 @@ public class Registration extends BaseObject implements Serializable {
 
 	private ServiceArea serviceArea;
 
-	private Integer eZUserId;
-
 	private String jobTitle;
 
 	private Integer employeeNumber;
@@ -155,22 +153,6 @@ public class Registration extends BaseObject implements Serializable {
 	 */
 	public void setEmployeeNumber(Integer employeeNumber) {
 		this.employeeNumber = employeeNumber;
-	}
-
-	/**
-	 * @return Returns the eZUserId.
-	 * @hibernate.property column="ezuserid"
-	 */
-	public Integer getEZUserId() {
-		return eZUserId;
-	}
-
-	/**
-	 * @param userId
-	 *            The eZUserId to set.
-	 */
-	public void setEZUserId(Integer userId) {
-		eZUserId = userId;
 	}
 
 	/**
@@ -448,19 +430,16 @@ public class Registration extends BaseObject implements Serializable {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return new ToStringBuilder(this).append("id", id).append("eZUserId",
-				eZUserId).append("jobTitle", jobTitle).append("employeeNumber",
-				employeeNumber).append("firstName", firstName).append(
-				"lastName", lastName).append("reserved", reserved).append(
-				"invoiced", invoiced).append("organizationid", organizationid)
-				.append("courseid", courseid).append("serviceareaid",
-						serviceareaid).toString();
+		return new ToStringBuilder(this).append("id", id).append("jobTitle", jobTitle).append("employeeNumber",
+				employeeNumber).append("firstName", firstName).append("lastName", lastName)
+				.append("reserved", reserved).append("invoiced", invoiced).append("organizationid", organizationid)
+				.append("courseid", courseid).append("serviceareaid", serviceareaid).toString();
 	}
 
     /**
-     * @return the comment
-     * @hibernate.property column="comment" length="100"
-     */
+	 * @return the comment
+	 * @hibernate.property column="comment" length="100"
+	 */
     public String getComment() {
         return comment;
     }

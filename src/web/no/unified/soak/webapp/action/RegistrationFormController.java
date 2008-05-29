@@ -10,7 +10,12 @@
  */
 package no.unified.soak.webapp.action;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,10 +23,11 @@ import javax.servlet.http.HttpSession;
 
 import no.unified.soak.Constants;
 import no.unified.soak.model.*;
+import no.unified.soak.model.User;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
-import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.NotificationManager;
+import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.util.DateUtil;
@@ -138,6 +144,7 @@ public class RegistrationFormController extends BaseFormController {
 	 */
 	protected Object formBackingObject(HttpServletRequest request)
 			throws Exception {
+		HttpSession session = request.getSession(true);
 		String id = request.getParameter("id");
 		Registration registration = null;
 
@@ -146,7 +153,6 @@ public class RegistrationFormController extends BaseFormController {
 		} else {
 			registration = new Registration();
 	        // Check if a default organization should be applied
-            HttpSession session = request.getSession(true);
             User user = (User)session.getAttribute(Constants.USER_KEY);
             if(user.getOrganizationid() != 0){
                 registration.setOrganizationid(user.getOrganizationid());
@@ -357,7 +363,7 @@ public class RegistrationFormController extends BaseFormController {
 				+ ": " + course.getLocation().getName() + "\n");
 		msg.append(StringEscapeUtils.unescapeHtml(getText("course.responsible",
 				locale))
-				+ ": " + course.getResponsible().getName() + "\n");
+				+ ": " + course.getResponsible().getFullName() + "\n");
 		msg.append(StringEscapeUtils.unescapeHtml(getText("course.instructor",
 				locale))
 				+ ": " + course.getInstructor().getName() + "\n");

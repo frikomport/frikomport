@@ -10,15 +10,8 @@
  */
 package no.unified.soak.webapp.action;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -27,24 +20,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import no.unified.soak.Constants;
-import no.unified.soak.ez.EzUser;
-import no.unified.soak.model.Attachment;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
-import no.unified.soak.service.AttachmentManager;
 import no.unified.soak.service.CourseManager;
-import no.unified.soak.service.LocationManager;
 import no.unified.soak.service.MailEngine;
-import no.unified.soak.service.OrganizationManager;
-import no.unified.soak.service.PersonManager;
 import no.unified.soak.service.RegistrationManager;
-import no.unified.soak.service.ServiceAreaManager;
-import no.unified.soak.util.DateUtil;
 import no.unified.soak.util.MailUtil;
-import no.unified.soak.util.StringUtil;
-import no.unified.soak.webapp.util.FileUtil;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.SimpleMailMessage;

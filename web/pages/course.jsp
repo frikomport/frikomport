@@ -114,7 +114,7 @@
             <fmt:message key="course.responsible"/>
         </th>
         <td>
-         <a href="<c:url value="/detailsUser.html"><c:param name="id" value="${course.responsible.id}"/></c:url>"><c:out value="${course.responsible.name}"/></a>
+         <a href="<c:url value="/detailsUser.html"><c:param name="id" value="${course.responsible.id}"/></c:url>"><c:out value="${course.responsible.fullName}"/></a>
         </td>
     </tr>
 

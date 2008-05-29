@@ -11,11 +11,9 @@
 package no.unified.soak.dao.hibernate;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import no.unified.soak.dao.CourseDAO;
-import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
 import no.unified.soak.model.Course;
 
 import org.hibernate.criterion.DetachedCriteria;
@@ -30,12 +28,6 @@ import org.springframework.orm.ObjectRetrievalFailureException;
  * @author hrj
  */
 public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
-    private UserEzDaoJdbc userEzDaoJdbc = null;
-    
-    public void setUserEzDaoJdbc(UserEzDaoJdbc userEzDaoJdbc)
-    {
-        this.userEzDaoJdbc = userEzDaoJdbc;
-    }
     
     /**
      * @see no.unified.soak.dao.CourseDAO#getCourses(no.unified.soak.model.Course)
@@ -56,11 +48,6 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
         if (course == null) {
             log.warn("uh oh, course with id '" + id + "' not found...");
             throw new ObjectRetrievalFailureException(Course.class, id);
-        }
-
-        if (course.getResponsibleid() != null) {
-            course.setResponsible(userEzDaoJdbc.findKursansvarligUser(
-                    course.getResponsibleid().intValue()));
         }
 
         return course;
@@ -126,21 +113,12 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
         // Perform search
         List courses = getHibernateTemplate().findByCriteria(criteria);
 
-        for (Iterator iter = courses.iterator(); iter.hasNext();) {
-            Course courseItem = (Course) iter.next();
-
-            if (courseItem.getResponsibleid() != null) {
-                courseItem.setResponsible(userEzDaoJdbc.findKursansvarligUser(
-                        courseItem.getResponsibleid().intValue()));
-            }
-        }
-
         return courses;
     }
 
     /**
-     * @see no.unified.soak.dao.CourseDAO#getWaitingListCourses()
-     */
+	 * @see no.unified.soak.dao.CourseDAO#getWaitingListCourses()
+	 */
     public List<Course> getWaitingListCourses() {
         Date now = new Date();
 

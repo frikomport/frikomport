@@ -189,9 +189,9 @@
     <display:column media="csv excel xml pdf" property="location.name" sortable="true" headerClass="sortable" titleKey="course.location"/>
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.responsible">
-         <a href="<c:url value="/detailsUser.html"><c:param name="id" value="${courseList.responsible.id}"/></c:url>"><c:out value="${courseList.responsible.name}"/></a>
+         <a href="<c:url value="/detailsUser.html"><c:param name="id" value="${courseList.responsible.id}"/></c:url>"><c:out value="${courseList.responsible.fullName}"/></a>
     </display:column>
-    <display:column media="csv excel xml pdf" property="responsible.name" sortable="true" headerClass="sortable" titleKey="course.responsible"/>
+    <display:column media="csv excel xml pdf" property="responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible"/>
 
     <display:column media="excel" property="instructor.name" sortable="true" headerClass="sortable" titleKey="course.instructor.export"/>
 
