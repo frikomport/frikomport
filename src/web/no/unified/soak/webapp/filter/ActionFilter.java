@@ -186,13 +186,13 @@ public class ActionFilter implements Filter {
 			user = mgr.getUser(ezUser.getUsername());
 			if (!user.equals(ezUser)) {
 				mgr.updateUser(user, ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail(), ezUser.getId(), ezUser.getRolenames());
-				session.setAttribute(Constants.USER_KEY, user);
 			}
 		} catch (ObjectRetrievalFailureException exception) {
 			// User does not exists, make new.
 			user = mgr.addUser(ezUser.getUsername(),ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail(), ezUser.getId(), ezUser.getRolenames());
-			session.setAttribute(Constants.USER_KEY, user);
 		}
+		session.setAttribute(Constants.USER_KEY, user);
+		
 	}
 
 	
