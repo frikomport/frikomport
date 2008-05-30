@@ -478,20 +478,18 @@ public class User extends BaseObject implements Serializable {
 			return false;
 		}
 		
-//		if ((roles != null) ? (roles.size()!=(ezUser.getRolenames().size())) : (ezUser
-//				.getRolenames() != null)) {
-//			for (Iterator iterator = roles.iterator(); iterator.hasNext();) {
-//				Role role = (Role) iterator.next();
-//				if (!ezUser.getRolenames().contains(role.getName()))
-//			}
-//			return false;
-//		}
-		
-		if ((organization != null) ? (!organization.equals(ezUser.getKommune())) : (ezUser
-				.getKommune() != null)) {
+		if ((roles != null) ? (roles.size()!=(ezUser.getRolenames().size())) : (ezUser
+				.getRolenames() != null)) {
 			return false;
+		}else {
+			for (Iterator iterator = roles.iterator(); iterator.hasNext();) {
+				Role role = (Role) iterator.next();
+				if (!(ezUser.getRolenames().contains(role.getDescription()))){
+					return false;
+				}
+			}
 		}
-
+		
 		return true;
     }
 
