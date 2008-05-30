@@ -171,11 +171,6 @@ public class UserManagerImpl extends BaseManager implements UserManager {
         dao.removeUserCookies(username);
     }
     
-    public List getEZRoles() {
-    	List roles = userEzDaoJdbc.findRoles();
-    	return roles;
-    }
-    
     public List getRoles() {
     	List roles = roleManager.getRoles(null);
     	return roles;
@@ -189,48 +184,49 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 			try {
 				users.add(dao.getUser(ezUser.getUsername()));
 			} catch (ObjectRetrievalFailureException objectRetrievalFailureException) {
-				addUser(ezUser);
-				users.add(dao.getUser(ezUser.getUsername()));
+				User user = addUser(ezUser.getName(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail(), ezUser.getId(), ezUser.getRolenames());
+				users.add(user);
 			}
 		}
 		return users;
 	}
 
-	public void addUser(EzUser ezUser) {
-		User user = new User(ezUser.getUsername());
-		user.setFirstName(ezUser.getFirst_name());
-		user.setLastName(ezUser.getLast_name());
-		user.setEmail(ezUser.getEmail());
-		user.setId(ezUser.getId());
-		setRoles(ezUser, user);
+	public User addUser(String username, String firstName, String lastName, String email, Integer id, List<String> rolenames) {
+		User user = new User(username);
+		user.setFirstName(firstName);
+		user.setLastName(lastName);
+		user.setEmail(email);
+		user.setId(id);
+		setRoles(rolenames, user);
+		user.setEnabled(true);
 		Address address = new Address();
 		address.setPostalCode("0");
 		user.setAddress(address);
 		try {
 			saveUser(user);
+			return user;
 		} catch (Exception e) {
 			log.error("Exception: " + e);
+			return null;
 		}
 
 	}
 	
-	public void updateUser(User user, EzUser ezUser) {
-		user.setFirstName(ezUser.getFirst_name());
-		user.setLastName(ezUser.getLast_name());
-		user.setEmail(ezUser.getEmail());
-		user.setId(ezUser.getId());
+	public void updateUser(User user, String firstName, String lastName, String email, Integer id, List<String> rolenames) {
+		user.setFirstName(firstName);
+		user.setLastName(lastName);
+		user.setEmail(email);
+		user.setId(id);
 		user.setEnabled(true);
-		setRoles(ezUser, user);
+		setRoles(rolenames, user);
 		try {
 			saveUser(user);
 		} catch (Exception e) {
 			log.error("Exception: " + e);
 		}
-
 	}
 	
-	private void setRoles(EzUser ezUser, User user) {
-		List<String> rolenames = ezUser.getRolenames();
+	private void setRoles(List<String> rolenames, User user) {
 		// remove existing roles before new ones are added.
 		user.removeAllRoles();
 		Locale locale = LocaleContextHolder.getLocale();
@@ -245,7 +241,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 				user.addRole(roleManager.getRole(Constants.EDITOR_ROLE));
 			} else if (rolename.equals(messageSource.getMessage("role.admin", null, locale))) {
 				user.addRole(roleManager.getRole(Constants.ADMIN_ROLE));
-			} else if (ezUser.hasRolename(messageSource.getMessage("role.instructor", null, locale))) {
+			} else if (rolename.equals(messageSource.getMessage("role.instructor", null, locale))) {
 				user.addRole(roleManager.getRole(Constants.INSTRUCTOR_ROLE));
 			} else if (roleManager.getRole(rolename) != null) {
 				user.addRole(roleManager.getRole(rolename));

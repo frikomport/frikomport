@@ -161,11 +161,13 @@ public class ActionFilter implements Filter {
 		MessageSource messageSource = (MessageSource) getContext().getBean("messageSource");
 		Locale locale = request.getLocale();
 		
-		List<String> roleNameList = user.getRoleNameList();
-		request.setAttribute("isCourseParticipant", roleNameList.contains(Constants.EMPLOYEE_ROLE));
-		request.setAttribute("isCourseResponsible", roleNameList.contains(Constants.INSTRUCTOR_ROLE));
-		request.setAttribute("isEducationResponsible", roleNameList.contains(Constants.EDITOR_ROLE));
-		request.setAttribute("isAdmin", roleNameList.contains(Constants.ADMIN_ROLE));
+		if (user != null){
+			List<String> roleNameList = user.getRoleNameList();
+			request.setAttribute("isCourseParticipant", roleNameList.contains(Constants.EMPLOYEE_ROLE));
+			request.setAttribute("isCourseResponsible", roleNameList.contains(Constants.INSTRUCTOR_ROLE));
+			request.setAttribute("isEducationResponsible", roleNameList.contains(Constants.EDITOR_ROLE));
+			request.setAttribute("isAdmin", roleNameList.contains(Constants.ADMIN_ROLE));
+		}
 
 		/* ezSessionid becomes null if not found. */
 		request.setAttribute(messageSource.getMessage("cms.sessionid", null, locale), eZSessionId);
@@ -183,13 +185,13 @@ public class ActionFilter implements Filter {
 		try {
 			user = mgr.getUser(ezUser.getUsername());
 			if (!user.equals(ezUser)) {
-				mgr.updateUser(user, ezUser);
+				mgr.updateUser(user, ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail(), ezUser.getId(), ezUser.getRolenames());
 				session.setAttribute(Constants.USER_KEY, user);
 			}
 		} catch (ObjectRetrievalFailureException exception) {
 			// User does not exists, make new.
-			mgr.addUser(ezUser);
-			session.setAttribute(Constants.USER_KEY, mgr.getUser(ezUser.getUsername()));
+			user = mgr.addUser(ezUser.getUsername(),ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail(), ezUser.getId(), ezUser.getRolenames());
+			session.setAttribute(Constants.USER_KEY, user);
 		}
 	}
 

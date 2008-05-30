@@ -458,8 +458,8 @@ public class User extends BaseObject implements Serializable {
     
 	public boolean equals(EzUser ezUser) {
 
-        if ((username != null) ? (!username.equals(ezUser.getName())) : (ezUser
-				.getName() != null)) {
+        if ((username != null) ? (!username.equals(ezUser.getUsername())) : (ezUser
+				.getUsername() != null)) {
 			return false;
 		}
 
@@ -478,8 +478,12 @@ public class User extends BaseObject implements Serializable {
 			return false;
 		}
 		
-//		if ((roles != null) ? (!roles.equals(ezUser.getRolenames())) : (ezUser
+//		if ((roles != null) ? (roles.size()!=(ezUser.getRolenames().size())) : (ezUser
 //				.getRolenames() != null)) {
+//			for (Iterator iterator = roles.iterator(); iterator.hasNext();) {
+//				Role role = (Role) iterator.next();
+//				if (!ezUser.getRolenames().contains(role.getName()))
+//			}
 //			return false;
 //		}
 		

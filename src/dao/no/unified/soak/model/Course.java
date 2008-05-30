@@ -550,21 +550,6 @@ public class Course extends BaseObject implements Serializable {
         return new HashCodeBuilder().append(id).toHashCode();
     }
 
-//    /**
-//     * @return Returns the responsible.
-//     */
-//    public EzUser getResponsible() {
-//        return responsible;
-//    }
-//
-//    /**
-//     * @param responsible
-//     *            The responsible to set.
-//     */
-//    public void setResponsible(EzUser responsible) {
-//        this.responsible = responsible;
-//    }
-    
     /**
      * Copies all the attribues of an existing course into this instance
      * 

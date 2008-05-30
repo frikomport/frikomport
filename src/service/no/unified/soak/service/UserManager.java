@@ -7,12 +7,11 @@
 */
 package no.unified.soak.service;
 
+import java.util.List;
+
 import no.unified.soak.dao.UserDAO;
 import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
-import no.unified.soak.ez.EzUser;
 import no.unified.soak.model.User;
-
-import java.util.List;
 
 import org.springframework.context.MessageSource;
 
@@ -94,30 +93,33 @@ public interface UserManager {
     public List getResponsibles();
     
     /**
-     * Retrieves all roles from eZ publish.
-     * Should perhaps be located in a separate ezmanager.
-     * @return
-     */
-    public List getEZRoles();
-    
-    /**
      * Retrieves all roles.
      * @return
      */
     public List getRoles();
     
     /**
-     * Add new user based on EzUser
-     * @param ezUser
-     * @return
+     * Add new user 
+     * @param username username for user
+     * @param firstName firstname for user
+     * @param lastName lastname for user
+     * @param email email for user
+     * @param id id for user
+     * @param rolenames rolenames for roles to be added to user
+     * @return user
+     * @return null if the user could not be saved.
      */
-    public void addUser(EzUser ezUser);
+    public User addUser(String username, String firstName, String lastName, String email, Integer id, List <String> rolenames);
 
     /**
-     * Update user based on EzUser
+     * Update user 
      * @param user
-     * @param ezUser
-     * @return
+     * @param firstName firstname for user
+     * @param lastName lastname for user
+     * @param email email for user
+     * @param id id for user
+     * @param rolenames rolenames for roles to be added to user
+     * @return 
      */
-    public void updateUser(User user, EzUser ezUser);
+    public void updateUser(User user, String firstName, String lastName, String email, Integer id, List <String> rolenames);
 }
