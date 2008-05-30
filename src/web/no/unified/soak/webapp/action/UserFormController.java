@@ -8,6 +8,7 @@
 package no.unified.soak.webapp.action;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -20,6 +21,7 @@ import no.unified.soak.model.Role;
 import no.unified.soak.model.User;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RoleManager;
+import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.UserExistsException;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.util.StringUtil;
@@ -41,12 +43,19 @@ import org.springframework.web.servlet.ModelAndView;
 public class UserFormController extends BaseFormController {
     private RoleManager roleManager;
     private OrganizationManager organizationManager = null;
+    private ServiceAreaManager serviceAreaManager = null;
 
     /**
      * @param organizationManager The organizationManager to set.
      */
     public void setOrganizationManager(OrganizationManager organizationManager) {
 		this.organizationManager = organizationManager;
+	}
+    /**
+     * @param serviceAreaManager The serviceManager to set.
+     */
+    public void setServiceAreaManager(ServiceAreaManager serviceAreaManager) {
+		this.serviceAreaManager = serviceAreaManager;
 	}
 
     /**
@@ -61,6 +70,12 @@ public class UserFormController extends BaseFormController {
         Locale locale = request.getLocale();
 
         addOrganization(model,locale);
+        
+//      Retrieve all serviceareas into an array
+		List serviceAreas = serviceAreaManager.getAll();
+		if (serviceAreas != null) {
+			model.put("serviceareas", serviceAreas);
+		}
 
         return model;
     }

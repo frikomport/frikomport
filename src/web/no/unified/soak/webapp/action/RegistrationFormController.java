@@ -22,7 +22,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import no.unified.soak.Constants;
-import no.unified.soak.model.*;
+import no.unified.soak.model.Course;
+import no.unified.soak.model.Notification;
+import no.unified.soak.model.Registration;
 import no.unified.soak.model.User;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
@@ -101,8 +103,7 @@ public class RegistrationFormController extends BaseFormController {
 	 */
 	protected Map referenceData(HttpServletRequest request) throws Exception {
 		Map model = new HashMap();
-        Locale locale = request.getLocale();
-
+        
         String courseId = request.getParameter("courseid");
 		if ((courseId == null) || !StringUtils.isNumeric(courseId)) {
 			// Redirect to error page - should never happen
@@ -154,10 +155,14 @@ public class RegistrationFormController extends BaseFormController {
 			registration = new Registration();
 	        // Check if a default organization should be applied
             User user = (User)session.getAttribute(Constants.USER_KEY);
-            if(user.getOrganizationid() != 0){
+            if((user.getOrganizationid() != null) && (user.getOrganizationid() != 0)){
                 registration.setOrganizationid(user.getOrganizationid());
             }
 
+//            if((user.getServiceareaid() != null) && (user.getServiceareaid() != 0)){
+//                registration.setServiceareaid(user.getServiceareaid());
+//            }
+            
             // set default values
             Locale locale = request.getLocale();
             String userdefaults = getText("access.registration.userdefaults",locale);
@@ -165,6 +170,11 @@ public class RegistrationFormController extends BaseFormController {
                 registration.setFirstName(user.getFirstName());
                 registration.setLastName(user.getLastName());
                 registration.setEmail(user.getEmail());
+                registration.setPhone(user.getPhoneNumber());
+                registration.setMobilePhone(user.getMobilePhone());
+                registration.setJobTitle(user.getJobTitle());
+                registration.setWorkplace(user.getWorkplace());
+                registration.setEmployeeNumber(user.getEmployeeNumber());
             }
         }
 

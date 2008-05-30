@@ -51,7 +51,11 @@ public class User extends BaseObject implements Serializable {
     protected Organization organization;
     protected Integer id;
     protected Long organizationid;
-
+    protected String mobilePhone;
+    protected Integer employeeNumber;
+    protected String jobTitle;
+    protected String workplace;
+  
     public User() {
     }
 
@@ -412,7 +416,73 @@ public class User extends BaseObject implements Serializable {
         this.organizationid = organizationid;
     }
 
-    public boolean equals(Object o) {
+    /**
+	 * @return Returns the employeeNumber.
+	 * @hibernate.property column="employeenumber"
+	 */
+	public Integer getEmployeeNumber() {
+		return employeeNumber;
+	}
+
+	/**
+	 * @param employeeNumber
+	 *            The employeeNumber to set.
+	 */
+	public void setEmployeeNumber(Integer employeeNumber) {
+		this.employeeNumber = employeeNumber;
+	}
+
+	/**
+	 * @return Returns the jobTitle.
+	 * @hibernate.property column="jobtitle" length="30"
+	 */
+	public String getJobTitle() {
+		return jobTitle;
+	}
+
+	/**
+	 * @param jobTitle
+	 *            The jobTitle to set.
+	 */
+	public void setJobTitle(String jobTitle) {
+		this.jobTitle = jobTitle;
+	}
+
+
+	/**
+	 * @return Returns the mobilePhone.
+	 * @hibernate.property column="mobilephone" length="30"
+	 * 
+	 */
+	public String getMobilePhone() {
+		return mobilePhone;
+	}
+
+	/**
+	 * @param mobilePhone
+	 *            The mobilePhone to set.
+	 */
+	public void setMobilePhone(String mobilePhone) {
+		this.mobilePhone = mobilePhone;
+	}
+
+
+	/**
+     * @return the workplace
+     * @hibernate.property column="workplace" length="100"
+     */
+    public String getWorkplace() {
+        return workplace;
+    }
+
+    /**
+     * @param workplace the workplace to set
+     */
+    public void setWorkplace(String workplace) {
+        this.workplace = workplace;
+    }
+
+	public boolean equals(Object o) {
         if (this == o) {
             return true;
         }

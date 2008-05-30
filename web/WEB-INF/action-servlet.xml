@@ -27,7 +27,7 @@
 
     <bean id="reloadController" class="no.unified.soak.webapp.action.ReloadController"/>
 
-    <bean id="userFormController" class="no.unified.soak.webapp.action.UserFormController">
+    <bean id="userFormController" class="no.unified.soak.webapp.action.UserFormController" autowire="byName">
         <property name="commandName" value="user"/>
         <property name="commandClass" value="no.unified.soak.model.User"/>
         <property name="validator" ref="beanValidator"/>

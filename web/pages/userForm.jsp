@@ -1,67 +1,68 @@
 <%@ include file="/common/taglibs.jsp"%>
 
 <spring:bind path="user.*">
-    <c:if test="${not empty status.errorMessages}">
-    <div class="error">	
-        <c:forEach var="error" items="${status.errorMessages}">
-            <img src="<c:url value="/images/iconWarning.gif"/>"
-                alt="<fmt:message key="icon.warning"/>" class="icon" />
-            <c:out value="${error}" escapeXml="false"/><br />
-        </c:forEach>
-    </div>
-    </c:if>
+	<c:if test="${not empty status.errorMessages}">
+		<div class="error">
+			<c:forEach var="error" items="${status.errorMessages}">
+				<img src="<c:url value="/images/iconWarning.gif"/>"
+					alt="<fmt:message key="icon.warning"/>" class="icon" />
+				<c:out value="${error}" escapeXml="false" />
+				<br />
+			</c:forEach>
+		</div>
+	</c:if>
 </spring:bind>
 
 <form:form commandName="user" onsubmit="return onFormSubmit(this)">
 
-<form:hidden path="version"/>
-    
-<input type="hidden" name="from" value="<c:out value="${param.from}"/>" />
+	<form:hidden path="version" />
 
-<c:if test="${cookieLogin == 'true'}">
-    <form:hidden path="password"/>
-    <form:hidden path="confirmPassword"/>
-</c:if>
+	<input type="hidden" name="from" value="<c:out value="${param.from}"/>" />
 
-<c:if test="${empty user.username}">
-    <input type="hidden" name="encryptPass" value="true" />
-</c:if>
+	<c:if test="${cookieLogin == 'true'}">
+		<form:hidden path="password" />
+		<form:hidden path="confirmPassword" />
+	</c:if>
 
-<table class="detail">
-<c:set var="pageButtons">
-    <tr>
-    	<td></td>
-    	<td class="buttonBar">
-            <input type="submit" class="button" name="save" 
-                onclick="bCancel=false" value="<fmt:message key="button.save"/>" />
-        <%-- <c:if test="${param.from == 'list'}">
+	<c:if test="${empty user.username}">
+		<input type="hidden" name="encryptPass" value="true" />
+	</c:if>
+
+	<table class="detail">
+		<c:set var="pageButtons">
+			<tr>
+				<td></td>
+				<td class="buttonBar">
+					<input type="submit" class="button" name="save"
+						onclick="bCancel=false" value="<fmt:message key="button.save"/>" />
+					<%-- <c:if test="${param.from == 'list'}">
             <input type="submit" class="button" name="delete"
                 onclick="bCancel=true;return confirmDelete('user')" 
                 value="<fmt:message key="button.delete"/>" />
         </c:if> --%>
-    
-       	    <input type="submit" class="button" name="cancel" onclick="bCancel=true"
-                value="<fmt:message key="button.cancel"/>" />
-        </td>
-    </tr>
-</c:set>
-    <tr>
-        <th>
-            <soak:label key="user.username"/>
-        </th>
-        <td>
-        <c:choose>
-            <c:when test="${empty user.username}">
-                <form:input path="username"/>
-                <form:errors cssClass="fieldError" path="username"/>
-            </c:when>
-            <c:otherwise>
-                <c:out value="${user.username}"/>
-            </c:otherwise>
-        </c:choose>
-        </td>
-    </tr>
-    <%--
+
+					<input type="submit" class="button" name="cancel"
+						onclick="bCancel=true" value="<fmt:message key="button.cancel"/>" />
+				</td>
+			</tr>
+		</c:set>
+		<tr>
+			<th>
+				<soak:label key="user.username" />
+			</th>
+			<td>
+				<c:choose>
+					<c:when test="${empty user.username}">
+						<form:input path="username" />
+						<form:errors cssClass="fieldError" path="username" />
+					</c:when>
+					<c:otherwise>
+						<c:out value="${user.username}" />
+					</c:otherwise>
+				</c:choose>
+			</td>
+		</tr>
+		<%--
     <c:if test="${cookieLogin != 'true'}">
     <tr>
         <th>
@@ -89,106 +90,145 @@
     </tr>
     </c:if>
     --%>
-    <tr>
-        <th>
-            <soak:label key="user.firstName"/>
-        </th>
-        <td>
-            <c:out value="${user.firstName}"/>
-            <form:hidden path="firstName"/>
-            <%-- <form:input path="firstName"/>
+		<tr>
+	        <th>
+	            <soak:label key="user.employeeNumber"/>
+	        </th>
+	        <td>
+                <form:input path="employeeNumber"/>
+                <form:errors cssClass="fieldError" path="employeeNumber"/>
+	        </td>
+	    </tr>
+	    <tr>
+			<th>
+				<soak:label key="user.firstName" />
+			</th>
+			<td>
+				<c:out value="${user.firstName}" />
+				<form:hidden path="firstName" />
+				<%-- <form:input path="firstName"/>
             <form:errors cssClass="fieldError" path="firstName"/> --%>
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <soak:label key="user.lastName"/>
-        </th>
-        <td>
-            <c:out value="${user.lastName}"/>
-            <form:hidden path="lastName"/>
-            <%-- <form:input path="lastName"/>
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<soak:label key="user.lastName" />
+			</th>
+			<td>
+				<c:out value="${user.lastName}" />
+				<form:hidden path="lastName" />
+				<%-- <form:input path="lastName"/>
             <form:errors cssClass="fieldError" path="lastName"/> --%>
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <soak:label key="user.address.address"/>
-        </th>
-        <td>
-            <form:input path="address.address"/>
-            <form:errors cssClass="fieldError" path="address.address"/>
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <soak:label key="user.address.city"/>
-        </th>
-        <td>
-            <form:input path="address.city"/>
-            <form:errors cssClass="fieldError" path="address.city"/>
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <soak:label key="user.address.province"/>
-        </th>
-        <td>
-            <form:input path="address.province"/>
-            <form:errors cssClass="fieldError" path="address.province"/>
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <soak:label key="user.address.country"/>
-        </th>
-        <td>
-            <form:input path="address.country"/>
-            <form:errors cssClass="fieldError" path="address.country"/>
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <soak:label key="user.address.postalCode"/>
-        </th>
-        <td>
-            <form:input path="address.postalCode"/>
-            <form:errors cssClass="fieldError" path="address.postalCode"/>
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <soak:label key="user.email"/>
-        </th>
-        <td>
-            <c:out value="${user.email}"/>
-            <form:hidden path="email"/>
-            <%-- <form:input path="email"/>
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<soak:label key="user.address.address" />
+			</th>
+			<td>
+				<form:input path="address.address" />
+				<form:errors cssClass="fieldError" path="address.address" />
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<soak:label key="user.address.city" />
+			</th>
+			<td>
+				<form:input path="address.city" />
+				<form:errors cssClass="fieldError" path="address.city" />
+			</td>
+		</tr>
+		<%-- <tr>
+			<th>
+				<soak:label key="user.address.province" />
+			</th>
+			<td>
+				<form:input path="address.province" />
+				<form:errors cssClass="fieldError" path="address.province" />
+			</td>
+		</tr> --%>
+		<tr>
+			<th>
+				<soak:label key="user.address.country" />
+			</th>
+			<td>
+				<form:input path="address.country" />
+				<form:errors cssClass="fieldError" path="address.country" />
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<soak:label key="user.address.postalCode" />
+			</th>
+			<td>
+				<form:input path="address.postalCode" />
+				<form:errors cssClass="fieldError" path="address.postalCode" />
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<soak:label key="user.email" />
+			</th>
+			<td>
+				<c:out value="${user.email}" />
+				<form:hidden path="email" />
+				<%-- <form:input path="email"/>
             <form:errors cssClass="fieldError" path="email"/> --%>
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <soak:label key="user.phoneNumber"/>
-        </th>
-        <td>
-            <form:input path="phoneNumber"/>
-            <form:errors cssClass="fieldError" path="phoneNumber"/>
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <soak:label key="user.website"/>
-        </th>
-        <td>
-            <form:input path="website"/>
-            <form:errors cssClass="fieldError" path="website"/>
-            <c:if test="${!empty user.website}">
-            <a href="<c:out value="${user.website}"/>"><fmt:message key="user.visitWebsite"/></a>
-            </c:if>
-        </td>
-    </tr>
-    <%--<tr>
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<soak:label key="user.phoneNumber" />
+			</th>
+			<td>
+				<form:input path="phoneNumber" />
+				<form:errors cssClass="fieldError" path="phoneNumber" />
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<soak:label key="user.mobilePhone" />
+			</th>
+			<td>
+				<form:input path="mobilePhone" />
+				<form:errors cssClass="fieldError" path="mobilePhone" />
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<soak:label key="user.jobTitle" />
+			</th>
+			<td>
+				<form:input path="jobTitle" />
+				<form:errors cssClass="fieldError" path="jobTitle" />
+			</td>
+		</tr>
+
+		<tr>
+			<th>
+				<soak:label key="user.workplace" />
+			</th>
+			<td>
+				<form:input path="workplace" />
+				<form:errors cssClass="fieldError" path="workplace" />
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<soak:label key="user.website" />
+			</th>
+			<td>
+				<form:input path="website" />
+				<form:errors cssClass="fieldError" path="website" />
+				<c:if test="${!empty user.website}">
+					<a href="<c:out value="${user.website}"/>"><fmt:message
+							key="user.visitWebsite" />
+					</a>
+				</c:if>
+			</td>
+		</tr>
+		<%--<tr>
         <th>
             <soak:label key="user.passwordHint"/>
         </th>
@@ -199,32 +239,52 @@
             </spring:bind>
         </td>
     </tr> --%>
-    <tr>
-        <th>
-            <soak:label key="user.organization"/>
-        </th>
-        <td>
-            <form:select path="organizationid">
-                <form:options items="${organizations}" itemValue="id" itemLabel="name"/>
-            </form:select>
-            <form:errors cssClass="fieldError" htmlEscape="false" path="organizationid"/>
-        </td>
-    </tr>    
-<c:if test="${param.from == 'list' or param.method == 'Add'}">
-    <tr>
-        <th>
-            <label for="enabled"><fmt:message key="user.enabled"/>?</label>
-        </th>
-        <td>
-            <spring:bind path="user.enabled">
-                <input type="hidden" name="_<c:out value="${status.expression}"/>"  value="visible" /> 
-                <input type="checkbox" name="<c:out value="${status.expression}"/>" value="true" 
-                    <c:if test="${status.value}">checked="checked"</c:if> /> 
-            </spring:bind>
-        </td>
-    </tr>
-</c:if>
-<%--
+		<tr>
+			<th>
+				<soak:label key="user.organization" />
+			</th>
+			<td>
+				<form:select path="organizationid">
+					<form:options items="${organizations}" itemValue="id"
+						itemLabel="name" />
+				</form:select>
+				<form:errors cssClass="fieldError" htmlEscape="false"
+					path="organizationid" />
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<soak:label key="user.servicearea" />
+			</th>
+			<td>
+				<form:select path="serviceareaid">
+					<form:options items="${serviceareas}" itemValue="id"
+						itemLabel="name" />
+				</form:select>
+				<form:errors cssClass="fieldError" htmlEscape="false"
+					path="serviceareaid" />
+			</td>
+		</tr>
+		<c:if test="${param.from == 'list' or param.method == 'Add'}">
+			<tr>
+				<th>
+					<label for="enabled">
+						<fmt:message key="user.enabled" />
+						?
+					</label>
+				</th>
+				<td>
+					<spring:bind path="user.enabled">
+						<input type="hidden" name="_<c:out value="${status.expression}"/>"
+							value="visible" />
+						<input type="checkbox"
+							name="<c:out value="${status.expression}"/>" value="true"
+							<c:if test="${status.value}">checked="checked"</c:if> />
+					</spring:bind>
+				</td>
+			</tr>
+		</c:if>
+		<%--
    <tr>
         <td></td>
         <td>
@@ -277,12 +337,12 @@
 </c:choose> 
 --%>
 
-    
-    <%-- Print out buttons - defined at top of form --%>
-    <%-- This is so you can put them at the top and the bottom if you like --%>
-	<c:out value="${pageButtons}" escapeXml="false" />
 
-</table>
+		<%-- Print out buttons - defined at top of form --%>
+		<%-- This is so you can put them at the top and the bottom if you like --%>
+		<c:out value="${pageButtons}" escapeXml="false" />
+
+	</table>
 </form:form>
 
 <script type="text/javascript">
@@ -318,8 +378,8 @@ function onFormSubmit(theForm) {
 // -->
 </script>
 
-<v:javascript formName="user" staticJavascript="false"/>
+<v:javascript formName="user" staticJavascript="false" />
 <script type="text/javascript"
-      src="<c:url value="/scripts/validator.jsp"/>"></script>
+	src="<c:url value="/scripts/validator.jsp"/>"></script>
 
 

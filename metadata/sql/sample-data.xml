@@ -73,6 +73,10 @@
     <column>enabled</column>
     <column>organizationid</column>
     <column>id</column>
+    <column>employeenumber</column>
+    <column>jobtitle</column>
+    <column>workplace</column>
+    <column>mobilephone</column>
     <row>
       <value>employee</value>
       <value></value>
@@ -91,6 +95,10 @@
       <value>1</value>
       <value>0</value>
       <value>1</value>
+      <value>0</value>
+      <value></value>
+      <value></value>
+      <value></value>
     </row>
     <row>
       <value>instructor</value>
@@ -110,6 +118,10 @@
       <value>1</value>
       <value>0</value>
       <value>2</value>
+      <value>0</value>
+      <value></value>
+      <value></value>
+      <value></value>
     </row>
     <row>
       <value>admin</value>
@@ -129,6 +141,10 @@
       <value>1</value>
       <value>0</value>
       <value>3</value>
+      <value>0</value>
+      <value></value>
+      <value></value>
+      <value></value>
     </row>
     <row>
       <value>editor</value>
@@ -148,6 +164,10 @@
       <value>1</value>
       <value>0</value>
       <value>4</value>
+      <value>0</value>
+      <value></value>
+      <value></value>
+      <value></value>
     </row>
     <row>
       <value>anonymous</value>
@@ -167,6 +187,10 @@
       <value>1</value>
       <value>0</value>
       <value>5</value>
+      <value>0</value>
+      <value></value>
+      <value></value>
+      <value></value>
     </row>
   </table>
   
