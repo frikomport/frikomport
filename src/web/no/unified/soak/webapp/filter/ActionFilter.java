@@ -148,7 +148,8 @@ public class ActionFilter implements Filter {
 		if (cookie != null && cookie.getValue() != null && cookie.getValue().trim().length() > 0) {
 			eZSessionId = cookie.getValue();
 			ezUser = (new UserEzDaoJdbc()).findUserBySessionID(cookie.getValue());
-			copyToUserTable(ezUser, session);
+			copyToUserTable(session, ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser
+					.getEmail(), ezUser.getId(), ezUser.getRolenames());
 		} else {
 			ezUser.setName("No cookie found.");
 		}
@@ -156,17 +157,18 @@ public class ActionFilter implements Filter {
 		EZAuthentificationToken authentificationToken = new EZAuthentificationToken(ezUser, eZSessionId);
 
 		session.setAttribute("authenticationToken", authentificationToken);
-		
+
 		User user = (User) request.getSession().getAttribute(Constants.USER_KEY);
 		MessageSource messageSource = (MessageSource) getContext().getBean("messageSource");
 		Locale locale = request.getLocale();
-		
-		if (user != null){
+
+		if (user != null) {
 			List<String> roleNameList = user.getRoleNameList();
 			request.setAttribute("isCourseParticipant", roleNameList.contains(Constants.EMPLOYEE_ROLE));
 			request.setAttribute("isCourseResponsible", roleNameList.contains(Constants.INSTRUCTOR_ROLE));
 			request.setAttribute("isEducationResponsible", roleNameList.contains(Constants.EDITOR_ROLE));
 			request.setAttribute("isAdmin", roleNameList.contains(Constants.ADMIN_ROLE));
+			request.setAttribute("userId", user.getId());
 		}
 
 		/* ezSessionid becomes null if not found. */
@@ -178,24 +180,24 @@ public class ActionFilter implements Filter {
 		}
 	}
 
-	private void copyToUserTable(EzUser ezUser, HttpSession session) {
+	private void copyToUserTable(HttpSession session, String username, String firstName, String lastName, String email,
+			Integer id, List<String> rolenames) {
 		ApplicationContext ctx = getContext();
 		UserManager mgr = (UserManager) ctx.getBean("userManager");
 		User user = null;
 		try {
-			user = mgr.getUser(ezUser.getUsername());
-			if (!user.equals(ezUser)) {
-				mgr.updateUser(user, ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail(), ezUser.getId(), ezUser.getRolenames());
+			user = mgr.getUser(username);
+			if (!user.equals(username)) {
+				mgr.updateUser(user, firstName, lastName, email, id, rolenames);
 			}
 		} catch (ObjectRetrievalFailureException exception) {
 			// User does not exists, make new.
-			user = mgr.addUser(ezUser.getUsername(),ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail(), ezUser.getId(), ezUser.getRolenames());
+			user = mgr.addUser(username, firstName, lastName, email, id, rolenames);
 		}
 		session.setAttribute(Constants.USER_KEY, user);
-		
+
 	}
 
-	
 	private ApplicationContext getContext() {
 		ServletContext context = config.getServletContext();
 		ApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(context);

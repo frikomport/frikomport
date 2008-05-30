@@ -174,7 +174,7 @@
 
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible || (isCourseResponsible && eZUserid == registrationList.course.responsibleid)}">
+<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible || (isCourseResponsible && userId == registrationList.course.responsibleid)}">
 	    <button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseid" value="${registrationList.courseid}"/></c:url>'">
     	    <fmt:message key="button.edit"/>
 	    </button>

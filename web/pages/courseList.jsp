@@ -225,7 +225,7 @@
 
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && eZUserid == courseList.responsibleid)}">
+<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && userId == courseList.responsibleid)}">
 	    <button type="button" onclick="location.href='<c:url value="/editCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>'">
     	    <fmt:message key="button.edit"/>
 	    </button>

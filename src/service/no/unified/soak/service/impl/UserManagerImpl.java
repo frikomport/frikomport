@@ -184,14 +184,16 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 			try {
 				users.add(dao.getUser(ezUser.getUsername()));
 			} catch (ObjectRetrievalFailureException objectRetrievalFailureException) {
-				User user = addUser(ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail(), ezUser.getId(), ezUser.getRolenames());
+				User user = addUser(ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser
+						.getEmail(), ezUser.getId(), ezUser.getRolenames());
 				users.add(user);
 			}
 		}
 		return users;
 	}
 
-	public User addUser(String username, String firstName, String lastName, String email, Integer id, List<String> rolenames) {
+	public User addUser(String username, String firstName, String lastName, String email, Integer id,
+			List<String> rolenames) {
 		User user = new User(username);
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
@@ -209,10 +211,10 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 			log.error("Exception: " + e);
 			return null;
 		}
-
 	}
 	
-	public void updateUser(User user, String firstName, String lastName, String email, Integer id, List<String> rolenames) {
+	public void updateUser(User user, String firstName, String lastName, String email, Integer id,
+			List<String> rolenames) {
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setEmail(email);

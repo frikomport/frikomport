@@ -4,7 +4,7 @@
  * of the GPL.
  *
  * @author Unified Consulting AS
-*/
+ */
 package no.unified.soak.service;
 
 import java.util.List;
@@ -14,7 +14,6 @@ import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
 import no.unified.soak.model.User;
 
 import org.springframework.context.MessageSource;
-
 
 /**
  * Business Service Interface to handle communication between web and
@@ -26,100 +25,105 @@ import org.springframework.context.MessageSource;
  *  Modified by <a href="mailto:dan@getrolling.com">Dan Kibler </a>
  */
 public interface UserManager {
-    public void setUserDAO(UserDAO dao);
-    public void setUserEzDaoJdbc(UserEzDaoJdbc userEzDaoJdbc);
+	public void setUserDAO(UserDAO dao);
 
-    public void setRoleManager(RoleManager roleManager);
-    public void setMessageSource(MessageSource messageSource);
-    /**
-     * Retrieves a user by username.  An exception is thrown if now user
-     * is found.
-     *
-     * @param username
-     * @return User
-     */
-    public User getUser(String username);
+	public void setUserEzDaoJdbc(UserEzDaoJdbc userEzDaoJdbc);
 
-    /**
-     * Retrieves a list of users, filtering with parameters on a user object
-     * @param user parameters to filter on
-     * @return List
-     */
-    public List getUsers(User user);
+	public void setRoleManager(RoleManager roleManager);
 
-    /**
-     * Saves a user's information
-     *
-     * @param user the user's information
-     * @throws UserExistsException
-     */
-    public void saveUser(User user) throws UserExistsException;
+	public void setMessageSource(MessageSource messageSource);
 
-    /**
-     * Removes a user from the database by their username
-     *
-     * @param username the user's username
-     */
-    public void removeUser(String username);
+	/**
+	 * Retrieves a user by username.  An exception is thrown if now user
+	 * is found.
+	 *
+	 * @param username
+	 * @return User
+	 */
+	public User getUser(String username);
 
-    /**
-     * Validates a user based on a cookie value.  If successful, it returns
-     * a new cookie String.  If not, then it returns null.
-     *
-     * @param value (in format username|guid)
-     * @return indicator that this is a valid login (null == invalid)
-     */
-    public String checkLoginCookie(String value);
+	/**
+	 * Retrieves a list of users, filtering with parameters on a user object
+	 * @param user parameters to filter on
+	 * @return List
+	 */
+	public List getUsers(User user);
 
-    /**
-     * Creates a cookie string using a username - designed for use when
-     * a user logs in and wants to be remembered.
-     *
-     * @param username
-     * @return String to put in a cookie for remembering user
-     */
-    public String createLoginCookie(String username);
+	/**
+	 * Saves a user's information
+	 *
+	 * @param user the user's information
+	 * @throws UserExistsException
+	 */
+	public void saveUser(User user) throws UserExistsException;
 
-    /**
-     * Deletes all cookies for user.
-     * @param username
-     */
-    public void removeLoginCookies(String username);
-    
-    /**
-     * Retrieves all responsibles from eZ publish.
-     * @return
-     */
-    public List getResponsibles();
-    
-    /**
-     * Retrieves all roles.
-     * @return
-     */
-    public List getRoles();
-    
-    /**
-     * Add new user 
-     * @param username username for user
-     * @param firstName firstname for user
-     * @param lastName lastname for user
-     * @param email email for user
-     * @param id id for user
-     * @param rolenames rolenames for roles to be added to user
-     * @return user
-     * @return null if the user could not be saved.
-     */
-    public User addUser(String username, String firstName, String lastName, String email, Integer id, List <String> rolenames);
+	/**
+	 * Removes a user from the database by their username
+	 *
+	 * @param username the user's username
+	 */
+	public void removeUser(String username);
 
-    /**
-     * Update user 
-     * @param user
-     * @param firstName firstname for user
-     * @param lastName lastname for user
-     * @param email email for user
-     * @param id id for user
-     * @param rolenames rolenames for roles to be added to user
-     * @return 
-     */
-    public void updateUser(User user, String firstName, String lastName, String email, Integer id, List <String> rolenames);
+	/**
+	 * Validates a user based on a cookie value.  If successful, it returns
+	 * a new cookie String.  If not, then it returns null.
+	 *
+	 * @param value (in format username|guid)
+	 * @return indicator that this is a valid login (null == invalid)
+	 */
+	public String checkLoginCookie(String value);
+
+	/**
+	 * Creates a cookie string using a username - designed for use when
+	 * a user logs in and wants to be remembered.
+	 *
+	 * @param username
+	 * @return String to put in a cookie for remembering user
+	 */
+	public String createLoginCookie(String username);
+
+	/**
+	 * Deletes all cookies for user.
+	 * @param username
+	 */
+	public void removeLoginCookies(String username);
+
+	/**
+	 * Retrieves all responsibles from eZ publish.
+	 * @return
+	 */
+	public List getResponsibles();
+
+	/**
+	 * Retrieves all roles.
+	 * @return
+	 */
+	public List getRoles();
+
+	/**
+	 * Add new user 
+	 * @param username username for user
+	 * @param firstName firstname for user
+	 * @param lastName lastname for user
+	 * @param email email for user
+	 * @param id id for user
+	 * @param rolenames rolenames for roles to be added to user
+	 * @return user
+	 * @return null if the user could not be saved.
+	 */
+	public User addUser(String username, String firstName, String lastName, String email, Integer id,
+			List<String> rolenames);
+
+	/**
+	 * Update user 
+	 * @param user
+	 * @param firstName firstname for user
+	 * @param lastName lastname for user
+	 * @param email email for user
+	 * @param id id for user
+	 * @param rolenames rolenames for roles to be added to user
+	 * @return 
+	 */
+	public void updateUser(User user, String firstName, String lastName, String email, Integer id,
+			List<String> rolenames);
 }
