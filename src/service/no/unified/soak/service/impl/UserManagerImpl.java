@@ -184,7 +184,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 			try {
 				users.add(dao.getUser(ezUser.getUsername()));
 			} catch (ObjectRetrievalFailureException objectRetrievalFailureException) {
-				User user = addUser(ezUser.getName(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail(), ezUser.getId(), ezUser.getRolenames());
+				User user = addUser(ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail(), ezUser.getId(), ezUser.getRolenames());
 				users.add(user);
 			}
 		}
