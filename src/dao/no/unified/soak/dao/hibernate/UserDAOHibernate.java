@@ -108,18 +108,4 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
         getHibernateTemplate().saveOrUpdate(cookie);
     }
 
-//	public User getUser(int id) {
-//		DetachedCriteria criteria = DetachedCriteria.forClass(User.class);
-//        criteria.add(Restrictions.eq("id", id));
-//        List users = getHibernateTemplate().findByCriteria(criteria);
-//        User user = (User) users.get(0);
-//
-//        if (user == null) {
-//			log.warn("uh oh, user with id='" + id + "' not found...");
-//			throw new ObjectRetrievalFailureException(User.class, id);
-//		}
-//
-//		return user;
-//	}
-
 }

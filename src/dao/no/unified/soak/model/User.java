@@ -55,6 +55,8 @@ public class User extends BaseObject implements Serializable {
     protected Integer employeeNumber;
     protected String jobTitle;
     protected String workplace;
+    private ServiceArea serviceArea;
+    private Long serviceareaid;
   
     public User() {
     }
@@ -415,6 +417,39 @@ public class User extends BaseObject implements Serializable {
     public void setOrganizationid(Long organizationid) {
         this.organizationid = organizationid;
     }
+    
+    /**
+	 * @return Returns the serviceArea.
+	 * //@hibernate.many-to-one column="serviceareaid" insert="false" update="false" property-ref="id" not-found="ignore"
+    */
+	public ServiceArea getServiceArea() {
+		return serviceArea;
+	}
+
+	/**
+	 * @param serviceArea
+	 *            The serviceArea to set.
+	 */
+	public void setServiceArea(ServiceArea serviceArea) {
+		this.serviceArea = serviceArea;
+	}
+
+	/**
+	 * @return Returns the serviceareaid.
+	 * @hibernate.property column="serviceareaid" not-null="false"
+	 */
+	public Long getServiceareaid() {
+		return serviceareaid;
+	}
+
+	/**
+	 * @param serviceareaid The serviceareaid to set.
+	 * @spring.validator type="required"
+	 */
+	public void setServiceareaid(Long serviceareaid) {
+		this.serviceareaid = serviceareaid;
+	}
+
 
     /**
 	 * @return Returns the employeeNumber.

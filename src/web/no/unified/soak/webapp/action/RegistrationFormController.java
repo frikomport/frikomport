@@ -159,9 +159,9 @@ public class RegistrationFormController extends BaseFormController {
                 registration.setOrganizationid(user.getOrganizationid());
             }
 
-//            if((user.getServiceareaid() != null) && (user.getServiceareaid() != 0)){
-//                registration.setServiceareaid(user.getServiceareaid());
-//            }
+            if((user.getServiceareaid() != null) && (user.getServiceareaid() != 0)){
+                registration.setServiceareaid(user.getServiceareaid());
+            }
             
             // set default values
             Locale locale = request.getLocale();
