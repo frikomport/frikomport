@@ -1,24 +1,24 @@
 <%@ include file="/common/taglibs.jsp"%>
 
-<title><fmt:message key="extuserDetail.title"/></title>
+<title><fmt:message key="userDetail.title"/></title>
 <content tag="heading"><c:out value="${user.fullName}"/></content>
 
 <table class="detail">
     <tr>
         <th>
-            <fmt:message key="extuser.firstName"/>
+            <fmt:message key="user.firstName"/>
         </th>
         <td>
-	    	<c:out value="${user.first_name}"/>
+	    	<c:out value="${user.firstName}"/>
         </td>
     </tr>
     
     <tr>
         <th>
-            <fmt:message key="extuser.lastName"/>
+            <fmt:message key="user.lastName"/>
         </th>
         <td>
-	    	<c:out value="${user.last_name}"/>
+	    	<c:out value="${user.lastName}"/>
         </td>
     </tr>
 
@@ -36,7 +36,7 @@
             <fmt:message key="extuser.organisation"/>
         </th>
         <td>
-          	<c:out value="${user.kommune}"/>
+          	<c:out value="${user.organization}"/>
         </td>
     </tr>
 -->

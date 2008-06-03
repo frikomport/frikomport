@@ -60,7 +60,7 @@
 			</c:if>
 </c:if>
 
-<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && userId == course.responsibleid)}">
+<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && username == course.responsibleUsername)}">
 		    <button type="button" onclick="location.href='<c:url value="/editCourse.html"><c:param name="id" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.edit"/>
 		    </button>
@@ -87,12 +87,12 @@
 	</c:otherwise>
 </c:choose>
 
-<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && userId == course.responsibleid)}">
+<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && username == course.responsibleUsername)}">
 		    <button type="button" onclick="location.href='<c:url value="/editFileCourse.html"><c:param name="courseid" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.administerFiles"/>
 		    </button>
 </c:if>
-<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && userId == course.responsibleid)}">
+<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && username == course.responsibleUsername)}">
 		    <button type="button" onclick="location.href='<c:url value="/emailCourse.html"><c:param name="id" value="${course.id}"/><c:param name="enablemail" value="true"/></c:url>'">
 	    	    <fmt:message key="button.mail"/>
 		    </button>

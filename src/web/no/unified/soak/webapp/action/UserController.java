@@ -47,4 +47,5 @@ public class UserController implements Controller {
         return new ModelAndView("userList", Constants.USER_LIST,
             mgr.getUsers(new User()));
     }
-}
+    
+ }

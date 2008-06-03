@@ -36,7 +36,7 @@ public class Course extends BaseObject implements Serializable {
     private Organization organization;
     private Long organizationid;
     private User responsible;
-    private Long responsibleid;
+    private String responsibleUsername;
     private ServiceArea serviceArea;
     private Long serviceAreaid;
     private Location location;
@@ -96,20 +96,20 @@ public class Course extends BaseObject implements Serializable {
     }
 
     /**
-     * @hibernate.property column="responsibleid" not-null="true"
-     * @return Returns the responsibleid.
+     * @hibernate.property column="responsibleusername" not-null="true" length="20"
+     * @return Returns the responsibleUsername.
      */
-    public Long getResponsibleid() {
-        return responsibleid;
+    public String getResponsibleUsername() {
+        return responsibleUsername;
     }
 
     /**
-     * @param responsibleid
-     *            The responsibleid to set.
+     * @param responsibleUsername
+     *            The responsibleUsername to set.
      * @spring.validator type="required"
      */
-    public void setResponsibleid(Long responsibleid) {
-        this.responsibleid = responsibleid;
+    public void setResponsibleUsername(String responsibleusername) {
+        this.responsibleUsername = responsibleusername;
     }
 
     /**
@@ -485,8 +485,8 @@ public class Course extends BaseObject implements Serializable {
 
      /**
      * @return Returns the responsible.
-     * @hibernate.many-to-one not-null="true" column="responsibleid" insert="false" update="false" cascade="none"
-     * 			property-ref="id"
+     * @hibernate.many-to-one not-null="true" column="responsibleusername" insert="false" update="false" cascade="none"
+     * 			
      */
      public User getResponsible() {
      return responsible;
@@ -567,7 +567,7 @@ public class Course extends BaseObject implements Serializable {
     	this.setOrganization(original.getOrganization());
     	this.setOrganizationid(original.getOrganizationid());
     	this.setResponsible(original.getResponsible());
-    	this.setResponsibleid(original.getResponsibleid());
+    	this.setResponsibleUsername(original.getResponsibleUsername());
     	this.setServiceArea(original.getServiceArea());
     	this.setServiceAreaid(original.getServiceAreaid());
     	this.setLocation(original.getLocation());

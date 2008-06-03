@@ -123,7 +123,7 @@ public class CourseManagerTest extends BaseManagerTestCase {
 
         // set required fields
         course.setInstructorid(new Long(152051052));
-        course.setResponsibleid(new Long(737098585));
+        course.setResponsibleUsername(new String("tester"));
         course.setServiceAreaid(new Long(1072915406));
         course.setDuration("En times tid");
         course.setFeeExternal(new Double(1.861804799761001E307));

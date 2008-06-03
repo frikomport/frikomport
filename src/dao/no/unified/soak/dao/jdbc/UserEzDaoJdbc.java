@@ -162,11 +162,6 @@ public class UserEzDaoJdbc {
 		return roles;
 	}
 
-	public EzUser findKursansvarligUser(Integer userid) {
-		return findUser(userid, "\'Kursansvarlig\', \'Opplaringsansvarlig\'",
-				false);
-	}
-
 	public List findKursansvarligeUser() {
 		List eZUsers = new ArrayList();
 

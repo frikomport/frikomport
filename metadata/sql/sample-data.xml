@@ -72,7 +72,6 @@
     <column>version</column>
     <column>enabled</column>
     <column>organizationid</column>
-    <column>id</column>
     <column>employeenumber</column>
     <column>jobtitle</column>
     <column>workplace</column>
@@ -87,16 +86,15 @@
       <value></value>
       <value></value>
       <value>employeetest@nomail.nn</value>
+      <value>44885588</value>
       <value>0</value>
-      <value>0</value>
-      <value>0</value>
-      <value>0</value>
+      <value></value>
+      <value></value>
       <value></value>
       <value>1</value>
       <value>1</value>
       <value>0</value>
-      <value>1</value>
-      <value>0</value>
+      <value>123</value>
       <value></value>
       <value></value>
       <value></value>
@@ -111,16 +109,15 @@
       <value></value>
       <value></value>
       <value>instructortest@nomail.nn</value>
+      <value>77887744</value>
       <value>0</value>
-      <value>0</value>
-      <value>0</value>
-      <value>0</value>
+      <value></value>
+      <value></value>
       <value></value>
       <value>1</value>
       <value>1</value>
       <value>0</value>
-      <value>2</value>
-      <value>0</value>
+      <value>234</value>
       <value></value>
       <value></value>
       <value></value>
@@ -135,16 +132,15 @@
       <value></value>
       <value></value>
       <value>gv@objectnet.no</value>
+      <value>99668855</value>
       <value>0</value>
-      <value>0</value>
-      <value>0</value>
-      <value>0</value>
+      <value></value>
+      <value></value>
       <value></value>
       <value>1</value>
       <value>1</value>
       <value>0</value>
-      <value>3</value>
-      <value>0</value>
+      <value>456</value>
       <value></value>
       <value></value>
       <value></value>
@@ -159,16 +155,15 @@
       <value></value>
       <value></value>
       <value>editortest@nomail.nn</value>
+      <value>66552255</value>
       <value>0</value>
-      <value>0</value>
-      <value>0</value>
-      <value>0</value>
+      <value></value>
+      <value></value>
       <value></value>
       <value>1</value>
       <value>1</value>
       <value>0</value>
-      <value>4</value>
-      <value>0</value>
+      <value>567</value>
       <value></value>
       <value></value>
       <value></value>
@@ -191,8 +186,7 @@
       <value>1</value>
       <value>1</value>
       <value>0</value>
-      <value>5</value>
-      <value>0</value>
+      <value>678</value>
       <value></value>
       <value></value>
       <value></value>
@@ -480,7 +474,7 @@
   <table name='course'>
 
     <column>instructorid</column>
-    <column>responsibleid</column>
+    <column>responsibleusername</column>
     <column>serviceareaid</column>
     <column>detailurl</column>
     <column>duration</column>
@@ -503,7 +497,7 @@
     <column>role</column>
     <row>
         <value>1</value>
-        <value>344</value>
+        <value>editor</value>
         <value>1</value>
         <value>/ez/index.php/fkp_nob/nyheter/kurs1</value>
         <value>Tre dager, seks timer hver dag</value>
@@ -527,7 +521,7 @@
     </row>
     <row>
         <value>2</value>
-        <value>344</value>
+        <value>editor</value>
         <value>6</value>
         <value>http://www.tromso.kommune.no/_utskriftsvennlig.db2?id=13358</value>
         <value>Fire timer</value>
@@ -551,7 +545,7 @@
     </row>
     <row>
         <value>2</value>
-        <value>344</value>
+        <value>editor</value>
         <value>1</value>
         <value>http://www.mamut.com/homepages/Norway/1/18/barnepasseren/commdet100.htm</value>
         <value>Fire timer</value>
@@ -575,7 +569,7 @@
     </row>
     <row>
         <value>2</value>
-        <value>344</value>
+        <value>editor</value>
         <value>2</value>
         <value>http://www.ski.no/PrintArticle.aspx?ID=3312</value>
         <value>7 mandager, kl. 18.30 til ca. 21.30</value>
@@ -599,7 +593,7 @@
     </row>
     <row>
         <value>2</value>
-        <value>344</value>
+        <value>editor</value>
         <value>6</value>
         <value>http://www.aa.fylkesbibl.no/kurs/2003/svarstad.html</value>
         <value>5. og 6. februar, kl. 09.00 til 18.00</value>

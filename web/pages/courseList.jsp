@@ -187,9 +187,8 @@
          <a href="<c:url value="/detailsLocation.html"><c:param name="id" value="${courseList.location.id}"/></c:url>" title="<c:out value="${courseList.location.description}"/>"><c:out value="${courseList.location.name}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="location.name" sortable="true" headerClass="sortable" titleKey="course.location"/>
-
-    <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.responsible">
-         <a href="<c:url value="/detailsUser.html"><c:param name="id" value="${courseList.responsible.id}"/></c:url>"><c:out value="${courseList.responsible.fullName}"/></a>
+	<display:column media="html" sortable="true" headerClass="sortable" titleKey="course.responsible">
+         <a href="<c:url value="/detailsUser.html"><c:param name="username" value="${courseList.responsible.username}"/></c:url>"><c:out value="${courseList.responsible.fullName}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible"/>
 
@@ -225,7 +224,7 @@
 
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && userId == courseList.responsibleid)}">
+<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && username == courseList.responsibleUsername)}">
 	    <button type="button" onclick="location.href='<c:url value="/editCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>'">
     	    <fmt:message key="button.edit"/>
 	    </button>

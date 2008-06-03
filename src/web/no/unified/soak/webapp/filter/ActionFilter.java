@@ -168,7 +168,7 @@ public class ActionFilter implements Filter {
 			request.setAttribute("isCourseResponsible", roleNameList.contains(Constants.INSTRUCTOR_ROLE));
 			request.setAttribute("isEducationResponsible", roleNameList.contains(Constants.EDITOR_ROLE));
 			request.setAttribute("isAdmin", roleNameList.contains(Constants.ADMIN_ROLE));
-			request.setAttribute("userId", user.getId());
+			request.setAttribute("username", user.getUsername());
 		}
 
 		/* ezSessionid becomes null if not found. */

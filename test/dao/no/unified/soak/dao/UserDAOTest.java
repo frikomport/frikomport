@@ -99,8 +99,7 @@ public class UserDAOTest extends BaseDAOTestCase {
         user.setPassword("testpass");
         user.setFirstName("Test");
         user.setLastName("Last");
-        user.setId(1);
-
+        
         Address address = new Address();
         address.setCity("Denver");
         address.setProvince("CO");

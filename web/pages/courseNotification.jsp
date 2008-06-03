@@ -59,7 +59,7 @@
     <tr>
         <td colspan="2" class="buttonBar">            
 
-		<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && userId == course.responsibleid)}">
+		<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && username == course.responsibleUsername)}">
 		    <button type="button" onclick="location.href='<c:url value="/editCourse.html"><c:param name="id" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.reedit"/>
 		    </button>
@@ -81,7 +81,7 @@
     <tr>
         <td colspan="2" class="buttonBar">            
 
-		<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && userId == course.responsibleid)}">
+		<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible)}">
 		    <button type="button" onclick="location.href='<c:url value="/editCourse.html"><c:param name="id" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.reedit"/>
 		    </button>
