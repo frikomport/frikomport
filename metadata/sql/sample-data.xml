@@ -495,6 +495,7 @@
     <column>organizationid</column>
     <column>description</column>
     <column>role</column>
+    <column>status</column>
     <row>
         <value>1</value>
         <value>editor</value>
@@ -518,6 +519,7 @@
         <value>1</value>
         <value>Et høytsvevende kurs om filosofi, estetikk og orale tradisjoner</value>
         <value>anonymous</value>
+        <value>2</value>
     </row>
     <row>
         <value>2</value>
@@ -542,6 +544,7 @@
         <value>2</value>
         <value>Et kurs om tilpasset opplæring og elevadferd i skolen</value>
         <value>anonymous</value>
+        <value>2</value>
     </row>
     <row>
         <value>2</value>
@@ -566,6 +569,7 @@
         <value>2</value>
         <value>Gjennomgår krav og forutsetninger for kommunal støtte til barnepass i privat regi</value>
         <value>anonymous</value>
+        <value>2</value>
     </row>
     <row>
         <value>2</value>
@@ -590,6 +594,7 @@
         <value>2</value>
         <value>Kurs om å takle hverdagen som pensjonist i det reformerte helsenorge</value>
         <value>anonymous</value>
+        <value>2</value>
     </row>
     <row>
         <value>2</value>
@@ -614,6 +619,7 @@
         <value>2</value>
         <value>Videregående kurs om hvordan å presentere troverdige muntlige fremstillinger som bare løselig er forankret i virkelighetens verden. Dette er essensielt og populært materiale for medarbeidere med politiske ambisjoner</value>
         <value>anonymous</value>
+        <value>0</value>
         </row>
   </table>
   <!--Course-END-->
