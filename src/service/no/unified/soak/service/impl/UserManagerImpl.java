@@ -198,6 +198,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setEmail(email);
+		user.setId(id);
 		setRoles(rolenames, user);
 		user.setEnabled(true);
 		Address address = new Address();
@@ -218,6 +219,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		user.setLastName(lastName);
 		user.setEmail(email);
 		user.setEnabled(true);
+		user.setId(id);
 		setRoles(rolenames, user);
 		try {
 			saveUser(user);

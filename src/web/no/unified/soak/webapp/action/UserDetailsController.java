@@ -16,7 +16,7 @@ import no.unified.soak.service.UserManager;
  * Simple class to retrieve a list of users from the database.
  *
  * <p>
- * <a href="UserController.java.html"><i>View Source</i></a>
+ * <a href="UserDetailsController.java.html"><i>View Source</i></a>
  * </p>
  *
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>

@@ -49,6 +49,7 @@ public class User extends BaseObject implements Serializable {
     protected Set roles = new HashSet();
     protected Boolean enabled;
     protected Organization organization;
+    protected Integer id;
     protected Long organizationid;
     protected String mobilePhone;
     protected Integer employeeNumber;
@@ -182,6 +183,16 @@ public class User extends BaseObject implements Serializable {
      */
     public Set getRoles() {
         return roles;
+    }
+    
+      /**
+     * Returns the id.
+     * @return Integer
+     *
+     * @hibernate.property column="id" not-null="true"
+     */
+    public Integer getId() {
+        return id;
     }
     
     /**
@@ -332,6 +343,15 @@ public class User extends BaseObject implements Serializable {
         this.version = version;
     }
 
+
+	/**
+     * @param id The updated id to set.
+     * @spring.validator type="required"
+     */
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    
     /**
      * @return Returns the enabled.
      * @hibernate.property column="enabled"

@@ -77,6 +77,7 @@
     <column>workplace</column>
     <column>mobilephone</column>
     <column>serviceareaid</column>
+    <column>id</column>
     <row>
       <value>employee</value>
       <value></value>
@@ -99,6 +100,7 @@
       <value></value>
       <value></value>
       <value>0</value>
+      <value>1</value>
     </row>
     <row>
       <value>instructor</value>
@@ -122,6 +124,7 @@
       <value></value>
       <value></value>
       <value>1</value>
+      <value>2</value>
     </row>
     <row>
       <value>admin</value>
@@ -145,6 +148,7 @@
       <value></value>
       <value></value>
       <value>1</value>
+      <value>3</value>
     </row>
     <row>
       <value>editor</value>
@@ -168,6 +172,7 @@
       <value></value>
       <value></value>
       <value>2</value>
+      <value>4</value>
     </row>
     <row>
       <value>anonymous</value>
@@ -191,6 +196,7 @@
       <value></value>
       <value></value>
       <value>0</value>
+      <value>5</value>
     </row>
   </table>
   
@@ -475,6 +481,7 @@
 
     <column>instructorid</column>
     <column>responsibleusername</column>
+    <column>responsibleid</column>
     <column>serviceareaid</column>
     <column>detailurl</column>
     <column>duration</column>
@@ -498,7 +505,8 @@
     <column>status</column>
     <row>
         <value>1</value>
-        <value>editor</value>
+        <value></value>
+        <value>4</value>
         <value>1</value>
         <value>/ez/index.php/fkp_nob/nyheter/kurs1</value>
         <value>Tre dager, seks timer hver dag</value>
@@ -523,7 +531,8 @@
     </row>
     <row>
         <value>2</value>
-        <value>editor</value>
+        <value></value>
+        <value>4</value>
         <value>6</value>
         <value>http://www.tromso.kommune.no/_utskriftsvennlig.db2?id=13358</value>
         <value>Fire timer</value>
@@ -548,7 +557,8 @@
     </row>
     <row>
         <value>2</value>
-        <value>editor</value>
+        <value></value>
+        <value>4</value>
         <value>1</value>
         <value>http://www.mamut.com/homepages/Norway/1/18/barnepasseren/commdet100.htm</value>
         <value>Fire timer</value>
@@ -573,7 +583,8 @@
     </row>
     <row>
         <value>2</value>
-        <value>editor</value>
+        <value></value>
+        <value>4</value>
         <value>2</value>
         <value>http://www.ski.no/PrintArticle.aspx?ID=3312</value>
         <value>7 mandager, kl. 18.30 til ca. 21.30</value>
@@ -598,7 +609,8 @@
     </row>
     <row>
         <value>2</value>
-        <value>editor</value>
+        <value></value>
+        <value>4</value>
         <value>6</value>
         <value>http://www.aa.fylkesbibl.no/kurs/2003/svarstad.html</value>
         <value>5. og 6. februar, kl. 09.00 til 18.00</value>
