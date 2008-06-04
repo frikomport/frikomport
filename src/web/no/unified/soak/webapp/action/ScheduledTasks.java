@@ -2,33 +2,40 @@ package no.unified.soak.webapp.action;
 
 import java.util.Locale;
 import java.util.TimerTask;
+import java.util.Vector;
+import java.util.Iterator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import no.unified.soak.service.NotificationManager;
-import no.unified.soak.service.WaitingListManager;
-import no.unified.soak.webapp.listener.StartupListener;
+import no.unified.soak.service.Task;
 
 public class ScheduledTasks extends TimerTask {
-	WaitingListManager wlmanager = null;
-	NotificationManager nmanager = null;
-	private static final Log log = LogFactory.getLog(ScheduledTasks.class);
-	
-	public ScheduledTasks(WaitingListManager mgr, NotificationManager nmgr) {
-		if (wlmanager == null) {
-			wlmanager = mgr;
-		}
-		if (nmanager == null) {
-			nmanager = nmgr;
-		}
-	}
+    private Vector<Task> tasks = null;
+    private static final Log log = LogFactory.getLog(ScheduledTasks.class);
+
+    public ScheduledTasks()
+    {
+        this.tasks = new Vector<Task>();
+    }
+
+    public boolean addTask(Task task){
+        return tasks.add(task);
+    }
 
 	@Override
 	public void run() {
 		Locale locale = new Locale("NO");
-		wlmanager.processEntireWaitingList(locale);
-		nmanager.sendReminders();
-		log.debug("Ran notification manager and waiting list manager");
+        Iterator<Task> it = tasks.iterator();
+        while (it.hasNext()){
+            Task task = it.next();
+            try{
+                task.executeTask();
+            }
+            catch (Exception e){
+                log.error("Task failed",e);
+            }
+        }
+        log.debug("Ran tasks");
 	}
 }

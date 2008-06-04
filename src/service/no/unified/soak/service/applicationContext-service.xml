@@ -182,4 +182,12 @@
         </property>
     </bean>
     <!--Notification-END-->
+
+    <!-- CourseStatus-START-->
+    <bean id="courseStatusManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.CourseStatusManagerImpl" autowire="byName"/>
+        </property>
+    </bean>
+    <!-- CourseStatus-END-->
 </beans>

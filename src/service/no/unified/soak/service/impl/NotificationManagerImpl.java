@@ -32,7 +32,16 @@ public class NotificationManagerImpl extends BaseManager implements
 
 	private Locale locale = null;
 
-	/**
+    public void executeTask() {
+        sendReminders();
+        log.info("Ran NotificationManager");
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
+
+    /**
 	 * @param mailEngine
 	 *            the mailEngine to set
 	 */

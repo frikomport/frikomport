@@ -18,7 +18,7 @@ import java.util.Locale;
  *
  * @author hrj
  */
-public interface WaitingListManager extends Manager {
+public interface WaitingListManager extends Task {
     /**
      * Set the messagesource - used to access resourcemessages
      * @param messageSource
@@ -47,7 +47,7 @@ public interface WaitingListManager extends Manager {
      * period of time where registration is no longer available, but attendance
      * has not yet been frozen.
      */
-    public void processEntireWaitingList(Locale locale);
+    public void processEntireWaitingList();
 
     /**
      * This function checks whether or not there is a point of running the

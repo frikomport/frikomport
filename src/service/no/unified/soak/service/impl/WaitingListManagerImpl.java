@@ -35,13 +35,21 @@ import java.util.Locale;
  *
  * @author hrj
  */
-public class WaitingListManagerImpl extends BaseManager
-    implements WaitingListManager {
+public class WaitingListManagerImpl extends BaseManager implements WaitingListManager {
     private RegistrationManager registrationManager;
     private CourseManager courseManager;
     protected MailEngine mailEngine = null;
     private MessageSource messageSource = null;
     private Locale locale = null;
+
+    public void executeTask() {
+        processEntireWaitingList();
+        log.info("Ran WaitingListManager");
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
 
     public void setMessageSource(MessageSource messageSource) {
         this.messageSource = messageSource;
@@ -71,8 +79,7 @@ public class WaitingListManagerImpl extends BaseManager
     /**
      * @see no.unified.soak.service.WaitingListManager#processEntireWaitingList()
      */
-    public void processEntireWaitingList(Locale locale) {
-        this.locale = locale;
+    public void processEntireWaitingList() {
         processSingleWaitingList(null, new Boolean(false));
     }
 
@@ -123,8 +130,7 @@ public class WaitingListManagerImpl extends BaseManager
      * @see no.unified.soak.service.WaitingListManager#processSingleWaitingList(java.lang.Long,
      *      boolean)
      */
-    public void processSingleWaitingList(Long specificCourseId,
-        boolean localsFirst) {
+    public void processSingleWaitingList(Long specificCourseId, boolean localsFirst) {
         // Find all courses where
         // 1) now > registerby
         // 2) startdate < now
@@ -254,8 +260,7 @@ public class WaitingListManagerImpl extends BaseManager
      * @param currentRegistration
      *            The registration we (might) want to persist changes to
      */
-    private int saveReservation(int availableSeats,
-        Registration currentRegistration) {
+    private int saveReservation(int availableSeats, Registration currentRegistration) {
         // If there are more seats avaiable, we reserve a seat for
         // this one
         if (availableSeats > 0) {
@@ -275,8 +280,7 @@ public class WaitingListManagerImpl extends BaseManager
      * @param confirmed Is the reservation confirmed (true), or is the applicant bumped to the waiting list (false)
      * @param currentRegistration The registration in question
      */
-    private void notifyAttendant(boolean confirmed,
-        Registration currentRegistration) {
+    private void notifyAttendant(boolean confirmed, Registration currentRegistration) {
 //    	log.debug("Sending mail from WaitingListManager");
     	// Get the course we are notifying the attendant about
     	Course course = currentRegistration.getCourse();
@@ -353,6 +357,5 @@ public class WaitingListManagerImpl extends BaseManager
 	public void sayHello() {
 		log.debug("HELLO!!!");
 		// TODO Auto-generated method stub
-		
 	}
 }

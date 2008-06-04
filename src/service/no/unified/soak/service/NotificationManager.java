@@ -5,7 +5,7 @@ import java.util.List;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Notification;
 
-public interface NotificationManager extends Manager {
+public interface NotificationManager extends Task {
 	/**
 	 * Retrieves all of the notifications
 	 */

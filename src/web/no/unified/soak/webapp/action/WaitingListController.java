@@ -28,7 +28,7 @@ public class WaitingListController extends ParameterizableViewController {
 
     protected ModelAndView handleRequestInternal(HttpServletRequest request,
         HttpServletResponse response) throws Exception {
-        waitingListManager.processEntireWaitingList(request.getLocale());
+        waitingListManager.processEntireWaitingList();
         response.setContentType("text/html");
 
         return new ModelAndView();
