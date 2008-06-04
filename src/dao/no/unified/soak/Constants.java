@@ -260,9 +260,10 @@ public class Constants {
 	public static final int EMAIL_EVENT_REGISTRATION_CONFIRMED = 6;
 	
 	public static final int EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST = 7;
-	
-	// Timers
-	
-	public static final long NOTIFICATION_INTIAL_DELAY_TIMER = 900000;
-	public static final long NOTIFICATION_RUN_INTERVAL = 1800000;
+
+    public static final int EMAIL_EVENT_COURSECANCELLED = 8;
+
+    // Timers
+    public static final long TASK_INITIAL_DELAY = 10000;  // 10 sekunder
+    public static final long TASK_RUN_INTERVAL = 1800000; // 30 minutter
 }

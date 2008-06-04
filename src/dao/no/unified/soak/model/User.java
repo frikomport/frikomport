@@ -70,7 +70,7 @@ public class User extends BaseObject implements Serializable {
      *
      * @return String
      *
-     * @hibernate.id column="username" length="20" generator-class="assigned"
+     * @hibernate.id column="username" length="50" generator-class="assigned"
      *               unsaved-value="version"
      */
     public String getUsername() {
@@ -344,14 +344,14 @@ public class User extends BaseObject implements Serializable {
     }
 
 
-	/**
+    /**
      * @param id The updated id to set.
      * @spring.validator type="required"
      */
     public void setId(Integer id) {
         this.id = id;
     }
-    
+
     /**
      * @return Returns the enabled.
      * @hibernate.property column="enabled"

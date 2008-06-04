@@ -12,6 +12,7 @@ import no.unified.soak.service.LookupManager;
 import no.unified.soak.service.NotificationManager;
 import no.unified.soak.service.WaitingListManager;
 import no.unified.soak.service.CourseStatusManager;
+import no.unified.soak.service.UserSynchronizeManager;
 import no.unified.soak.webapp.action.ScheduledTasks;
 
 import org.apache.commons.logging.Log;
@@ -91,17 +92,20 @@ public class StartupListener extends ContextLoaderListener implements
 		// get list of possible roles
 		context.setAttribute(Constants.AVAILABLE_ROLES, mgr.getAllRoles());
 
-		// Start the timer for the mail sending job?
+        // Run tasks
 		NotificationManager notificationManager = (NotificationManager) ctx.getBean("notificationManager");
 		WaitingListManager waitingListManager = (WaitingListManager) ctx.getBean("waitingListManager");
         CourseStatusManager courseStatusManager = (CourseStatusManager) ctx.getBean("courseStatusManager");
+        UserSynchronizeManager userSynchronizeManager = (UserSynchronizeManager) ctx.getBean("userSynchronizeManager");
+
 
         ScheduledTasks st = new ScheduledTasks();
+        st.addTask(userSynchronizeManager);
         st.addTask(notificationManager);
         st.addTask(waitingListManager);
         st.addTask(courseStatusManager);
         // Here we set the intervals for how often
-		timer.schedule(st, Constants.NOTIFICATION_INTIAL_DELAY_TIMER, Constants.NOTIFICATION_RUN_INTERVAL);
+		timer.schedule(st, Constants.TASK_INITIAL_DELAY, Constants.TASK_RUN_INTERVAL);
 
 		if (log.isDebugEnabled()) {
 			log.debug("drop-down initialization complete [OK]");

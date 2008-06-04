@@ -8,12 +8,6 @@ package no.unified.soak.service;
  * To change this template use File | Settings | File Templates.
  */
 public interface CourseStatusManager extends Task {
-
-    /**
-     * Setter for DAO, convenient for unit testing
-     */
-    public void setCourseManager(CourseManager courseManager);
-
     /**
      * Processes all courses and sets status to finished when finished.
      */
