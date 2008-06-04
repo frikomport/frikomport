@@ -59,7 +59,8 @@ public class Course extends BaseObject implements Serializable {
     private Double feeExternal;
     private String description;
     private String role;
-    private Integer availableAttendants; 
+    private Integer availableAttendants;
+    private Integer status = 0;
     
     /**
      * @return Returns the role.
@@ -95,7 +96,7 @@ public class Course extends BaseObject implements Serializable {
         this.instructorid = instructorid;
     }
 
-    /**
+        /**
      * @hibernate.property column="responsibleusername" not-null="true" length="20"
      * @return Returns the responsibleUsername.
      */
@@ -518,6 +519,19 @@ public class Course extends BaseObject implements Serializable {
     }
 
     /**
+     *
+     * @return
+     * @hibernate.property column="status" not-null="true"
+     */
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    /**
      * @see java.lang.Object#toString()
      */
     public String toString() {
@@ -567,7 +581,7 @@ public class Course extends BaseObject implements Serializable {
     	this.setOrganization(original.getOrganization());
     	this.setOrganizationid(original.getOrganizationid());
     	this.setResponsible(original.getResponsible());
-    	this.setResponsibleUsername(original.getResponsibleUsername());
+        this.setResponsibleUsername(original.getResponsibleUsername());
     	this.setServiceArea(original.getServiceArea());
     	this.setServiceAreaid(original.getServiceAreaid());
     	this.setLocation(original.getLocation());
