@@ -12,6 +12,7 @@ package no.unified.soak.service;
 
 import no.unified.soak.dao.CourseDAO;
 import no.unified.soak.model.Course;
+import no.unified.soak.model.User;
 
 import java.util.Date;
 import java.util.List;
@@ -62,6 +63,13 @@ public interface CourseManager extends Manager {
      * @return list of all courses that applies to the given criteria
      */
     public List searchCourses(Course course, Date startTime, Date stopTime);
+
+    /**
+     * Gets all unpublished courses
+     * @return List of courses with status 0
+     * @param user
+     */
+    public List getUnpublished(User user);
 
     /**
      * Finds all courses in the timespan between registerBy and startTime

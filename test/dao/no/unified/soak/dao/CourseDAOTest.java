@@ -271,4 +271,13 @@ public class CourseDAOTest extends BaseDAOTestCase {
         List searchResults = dao.searchCourses(course, null, null);
         assertNotNull(searchResults);
     }
+
+    /**
+     * Tests to see if any courses with status 0 is present.
+     * @throws Exception
+     */
+    public void testGetUnpublished() throws Exception {
+        List unpublished = dao.getUnpublished(null);
+        assertNotNull(unpublished);
+    }
 }

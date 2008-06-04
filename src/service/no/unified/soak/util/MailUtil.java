@@ -126,10 +126,15 @@ public class MailUtil {
 			msg.append(StringEscapeUtils.unescapeHtml(getText("courseChanged.mail.body", " " + course.getName(),
 					locale, messageSource)));
 			break;
-		case Constants.EMAIL_EVENT_COURSEDELETED:
+        case Constants.EMAIL_EVENT_COURSECANCELLED:
+            msg.append(StringEscapeUtils.unescapeHtml(getText("courseCancelled.mail.body", " " + course.getName(),
+                    locale, messageSource)));
+            break;
+        case Constants.EMAIL_EVENT_COURSEDELETED:
 			msg.append(StringEscapeUtils.unescapeHtml(getText("courseDeleted.mail.body", " " + course.getName(),
 					locale, messageSource)));
-		case Constants.EMAIL_EVENT_NOTIFICATION:
+            break;
+        case Constants.EMAIL_EVENT_NOTIFICATION:
 			msg.append(StringEscapeUtils.unescapeHtml(getText("courseNotification.mail.body", " " + course.getName(),
 					locale, messageSource)));
 
@@ -214,8 +219,13 @@ public class MailUtil {
 			msg.append(StringEscapeUtils.unescapeHtml(getText("courseChanged.mail.footer", locale, messageSource)));
 
 			break;
+        case Constants.EMAIL_EVENT_COURSECANCELLED:
+			msg.append(StringEscapeUtils.unescapeHtml(getText("courseCancelled.mail.body", " " + course.getName()
+					+ "\n\n", locale, messageSource)));
 
-		case Constants.EMAIL_EVENT_COURSEDELETED:
+			break;
+
+        case Constants.EMAIL_EVENT_COURSEDELETED:
 			msg.append(StringEscapeUtils.unescapeHtml(getText("courseDeleted.mail.body", " " + course.getName()
 					+ "\n\n", locale, messageSource)));
 
@@ -333,8 +343,20 @@ public class MailUtil {
 				}
 
                 break;
+            case Constants.EMAIL_EVENT_COURSECANCELLED:
+				if (registration.getReserved()) {
+					message.setSubject(StringEscapeUtils.unescapeHtml(
+							getText("courseCancelled.mail.subject", course.getName(), locale, messageSource)).replaceAll(
+							"<registeredfor/>", registeredMsg).replaceAll("<coursename/>", course.getName()));
+				} else {
+					message.setSubject(StringEscapeUtils.unescapeHtml(
+							getText("courseCancelled.mail.subject", course.getName(), locale, messageSource)).replaceAll(
+							"<registeredfor/>", waitingMsg).replaceAll("<coursename/>", course.getName()));
+				}
 
-			case Constants.EMAIL_EVENT_COURSEDELETED:
+				break;
+
+            case Constants.EMAIL_EVENT_COURSEDELETED:
 				if (registration.getReserved()) {
 					message.setSubject(StringEscapeUtils.unescapeHtml(
 							getText("courseDeleted.mail.subject", course.getName(), locale, messageSource)).replaceAll(

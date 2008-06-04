@@ -11,6 +11,7 @@
 package no.unified.soak.dao;
 
 import no.unified.soak.model.Course;
+import no.unified.soak.model.User;
 
 import java.util.Date;
 import java.util.List;
@@ -65,4 +66,11 @@ public interface CourseDAO extends DAO {
      * @return A list of all courses that needs looking into
      */
     public List getWaitingListCourses();
+
+    /**
+     * Gets all courses with status 0
+     * @return
+     * @param user
+     */
+    public List getUnpublished(User user);
 }

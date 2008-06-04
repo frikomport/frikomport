@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import no.unified.soak.Constants;
+import no.unified.soak.util.CourseStatus;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.ServiceArea;
 import no.unified.soak.model.User;
@@ -93,15 +94,17 @@ public class CourseController extends BaseFormController {
         if (comm != null && map.size() > 1) {
             course = (Course) comm;
         }
-        
+
+        // only published courses
+        course.setStatus(CourseStatus.COURSE_PUBLISHED);
+
         Boolean historic = new Boolean(false);
         Boolean past = new Boolean(false);
         
         Date starttime = new Date();
         Date stoptime = null;
-        
+
         User user = (User) session.getAttribute(Constants.USER_KEY);
-        
         Boolean isAdmin = (Boolean)user.getRoleNameList().contains(Constants.ADMIN_ROLE);
         List<String> roles = (List)user.getRoleNameList();
         if (roles == null) {
@@ -159,6 +162,16 @@ public class CourseController extends BaseFormController {
             model.put("courseList", filtered);
         }
 
+        User responsible = null;
+        if(user != null && user.getRoleNameList().contains("instructor")){
+            responsible = user;
+        }
+
+        List unpublished = courseManager.getUnpublished(responsible);
+        if(unpublished != null){
+            model.put("unpublished",unpublished);
+        }
+
         model.put("JSESSIONID", session.getId());
 
         return model;
@@ -202,6 +215,7 @@ public class CourseController extends BaseFormController {
         Locale locale = request.getLocale();
 
         Course course = (Course) command;
+        course.setStatus(CourseStatus.COURSE_PUBLISHED);
 
         // Set up parameters, and return them to the view
         model = addServiceAreas(model, locale);

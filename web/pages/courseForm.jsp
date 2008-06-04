@@ -360,12 +360,19 @@ cal1.setTodayText("Idag");
 
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
             <input type="submit" class="button" name="save" 
-                onclick="bCancel=false" value="<fmt:message key="button.save"/>" />
-
-			<c:if test="${!empty course.id && !empty course.name && canDelete}">
+                onclick="bCancel=false" value="<fmt:message key="button.course.save"/>" />
+            <c:if test="${!isPublished}">
+            <input type="submit" class="button" name="publish"
+                onclick="bCancel=false" value="<fmt:message key="button.course.publish"/>" />
+            </c:if>
+            <c:if test="${isPublished}">
+            <input type="submit" class="button" name="cancelled"
+                onclick="bCancel=false" value="<fmt:message key="button.course.cancel"/>" />
+            </c:if>
+            <c:if test="${!empty course.id && !empty course.name && canDelete}">
 	            <input type="submit" class="button" name="delete"
 	                onclick="bCancel=true;return confirmDelete('<fmt:message key="courseList.theitem"/>')" 
-	                value="<fmt:message key="button.delete"/>" />
+	                value="<fmt:message key="button.course.delete"/>" />
             </c:if>
 </c:if>
 

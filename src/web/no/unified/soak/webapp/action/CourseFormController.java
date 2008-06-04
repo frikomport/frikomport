@@ -40,6 +40,7 @@ import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.util.MailUtil;
+import no.unified.soak.util.CourseStatus;
 import no.unified.soak.webapp.util.FileUtil;
 
 import org.apache.commons.lang.StringUtils;
@@ -222,7 +223,10 @@ public class CourseFormController extends BaseFormController {
                     // Course with registrations cannot be deleted.
                     model.put("canDelete", new Boolean(registrations.intValue() == 0));
                 }
-			}
+
+                //Check if course is published
+                model.put("isPublished", new Boolean(course.getStatus() > 0));
+            }
 		}
 		
 		return model;
@@ -338,8 +342,18 @@ public class CourseFormController extends BaseFormController {
 			sendMail(locale, course, Constants.EMAIL_EVENT_COURSECHANGED, mailComment);
 
 		} // or to save/update?
-		else {
-			log.debug("recieved 'save/update' from jsp");
+        else {
+            // Save or publish
+            if(request.getParameter("save") != null && isNew){
+                course.setStatus(CourseStatus.COURSE_CREATED);
+            }
+            if(request.getParameter("publish") != null){
+                course.setStatus(CourseStatus.COURSE_PUBLISHED);
+            }
+            if(request.getParameter("cancelled") != null){
+                course.setStatus(CourseStatus.COURSE_CANCELLED);
+            }
+            log.debug("recieved 'save/update' from jsp");
 			// Parse date and time fields together
 			String format = getText("date.format", request.getLocale()) + " " + getText("time.format", request.getLocale());
 			Object[] args = null;
@@ -444,8 +458,17 @@ public class CourseFormController extends BaseFormController {
 
 			courseManager.saveCourse(course);
 
-			String key = (isNew) ? "course.added" : "course.updated";
-			saveMessage(request, getText(key, locale));
+			String key = null;
+            if(course.getStatus() == CourseStatus.COURSE_CREATED)
+                key = "course.created";
+            else if(course.getStatus() == CourseStatus.COURSE_PUBLISHED)
+                key = "course.published";
+            else if(course.getStatus() == CourseStatus.COURSE_CANCELLED)
+                key = "course.cancelled";
+            else
+                key = "course.updated";
+
+            saveMessage(request, getText(key, locale));
 
 			// If not new, we need to send out a message to everyone registered
 			// to the course that things have changed

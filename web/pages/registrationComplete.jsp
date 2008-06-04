@@ -24,6 +24,7 @@
 
 <fmt:message key="date.format" var="dateformat"/>
 <fmt:message key="time.format" var="timeformat"/>
+<fmt:message key="access.registration.userdefaults" var="userdefaults"/>
 
 <h4><fmt:message key="registrationComplete.yourdetails"/></h4>
 
@@ -147,9 +148,11 @@
         <td class="buttonBar">            
             <input type="submit" class="button" name="return" onclick="bCancel=true"
                 value="<fmt:message key="button.return"/>" />
-			    <button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="courseid" value="${course.id}"/></c:url>'">
+            <c:if test="userdefaults == true">
+                <button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="courseid" value="${course.id}"/></c:url>'">
 		    	    <fmt:message key="button.onemore"/>
 			    </button>
+            </c:if>
         </td>
         </form>
     </tr>

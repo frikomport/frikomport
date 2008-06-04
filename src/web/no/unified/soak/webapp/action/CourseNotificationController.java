@@ -27,6 +27,7 @@ import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.util.MailUtil;
+import no.unified.soak.util.CourseStatus;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
@@ -156,8 +157,13 @@ public class CourseNotificationController extends BaseFormController {
 			return new ModelAndView(getCancelView(), "id", course.getId().toString());
 		} // or to send out notification email?
 		else if (request.getParameter("send") != null) {
-			sendMail(locale, course, Constants.EMAIL_EVENT_COURSECHANGED, mailComment, mailSender);
-		}
+            if( course.getStatus() == CourseStatus.COURSE_CANCELLED){
+                sendMail(locale, course, Constants.EMAIL_EVENT_COURSECANCELLED, mailComment, mailSender);
+            }
+            else{
+                sendMail(locale, course, Constants.EMAIL_EVENT_COURSECHANGED, mailComment, mailSender);
+            }
+        }
 
 		return new ModelAndView(getSuccessView());
 	}
@@ -172,9 +178,7 @@ public class CourseNotificationController extends BaseFormController {
      */
 	protected void sendMail(Locale locale, Course course, int event, String mailComment, String mailSender) {
 		log.debug("Sending mail from CourseNotificationController");
-		List<Registration> registrations = registrationManager
-				.getSpecificRegistrations(course.getId(), null, null, null,
-						null, null, null);
+		List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, null,null, null, null);
 		
 		StringBuffer msg = MailUtil.createStandardBody(course, event, locale, messageSource, mailComment);
 		ArrayList<SimpleMailMessage> emails = MailUtil.setMailInfo(registrations, event, course, msg, messageSource, locale, mailSender);

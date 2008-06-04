@@ -15,6 +15,8 @@ import java.util.List;
 
 import no.unified.soak.dao.CourseDAO;
 import no.unified.soak.model.Course;
+import no.unified.soak.model.User;
+import no.unified.soak.util.CourseStatus;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -93,11 +95,12 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
                 criteria.add(Restrictions.like("name",
                         "%" + course.getName() + "%").ignoreCase());
             }
-
             if ((course.getType() != null) && (course.getType().length() > 0)) {
                 criteria.add(Restrictions.like("type",
                         "%" + course.getType() + "%").ignoreCase());
             }
+            
+            criteria.add(Restrictions.ge("status",course.getStatus()));
         }
 
         if (startDate != null) {
@@ -129,6 +132,18 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
         // Only those before the course has started
         criteria.add(Restrictions.gt("freezeAttendance", now));
 
+        return getHibernateTemplate().findByCriteria(criteria);
+    }
+
+    /**
+	 * @see no.unified.soak.dao.CourseDAO#getUnpublished()
+	 */
+    public List<Course> getUnpublished(User user){
+        DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
+        criteria.add(Restrictions.eq("status",new Integer(CourseStatus.COURSE_CREATED)));
+        if(user != null){
+            criteria.add(Restrictions.eq("responsible",user));
+        }
         return getHibernateTemplate().findByCriteria(criteria);
     }
 }
