@@ -1,4 +1,4 @@
-NSTALLATION
+INSTALLATION
 Thank you for downloading FriKomPort. The latest version and information about the FriKom project can be found at https://projects.unified.no/x/AoAM.
 
 This is the Java part of the FriKom application, and this takes care of everything that has to do with the courses/classes:
