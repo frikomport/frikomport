@@ -207,8 +207,8 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		try {
 			saveUser(user);
 			return user;
-		} catch (Exception e) {
-			log.error("Exception: " + e);
+		} catch (UserExistsException e) {
+			log.error("UserExistsException: " + e);
 			return null;
 		}
 	}
@@ -223,8 +223,8 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		setRoles(rolenames, user);
 		try {
 			saveUser(user);
-		} catch (Exception e) {
-			log.error("Exception: " + e);
+		} catch (UserExistsException e) {
+			log.error("UserExistsException: " + e);
 		}
 	}
 	
