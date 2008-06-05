@@ -72,13 +72,14 @@ public class UserFormController extends BaseFormController {
         addOrganization(model,locale);
         
 //      Retrieve all serviceareas into an array
-		List serviceAreas = serviceAreaManager.getAll();
-		if (serviceAreas != null) {
-			model.put("serviceareas", serviceAreas);
-		}
+    	List serviceAreas = serviceAreaManager.getAllIncludingDummy(getText("misc.none", locale));
+    	if (serviceAreas != null) {
+    		model.put("serviceareas", serviceAreas);
+    	}
 
         return model;
     }
+	
 
     public ModelAndView processFormSubmission(HttpServletRequest request,
         HttpServletResponse response, Object command, BindException errors)
