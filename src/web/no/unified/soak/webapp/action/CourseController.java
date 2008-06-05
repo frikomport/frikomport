@@ -166,9 +166,8 @@ public class CourseController extends BaseFormController {
         if(user != null && user.getRoleNameList().contains("instructor")){
             responsible = user;
         }
-
         List unpublished = courseManager.getUnpublished(responsible);
-        if(unpublished != null){
+        if(!past && unpublished != null && !unpublished.isEmpty()){
             model.put("unpublished",unpublished);
         }
 
@@ -273,6 +272,15 @@ public class CourseController extends BaseFormController {
         model.put("courseList", filtered);
         model.put("historic", historic);
         model.put("past", past);
+
+        User responsible = null;
+        if(user != null && user.getRoleNameList().contains("instructor")){
+            responsible = user;
+        }
+        List unpublished = courseManager.getUnpublished(responsible);
+        if(!past && unpublished != null && !unpublished.isEmpty()){
+            model.put("unpublished",unpublished);
+        }
 
         return new ModelAndView(getSuccessView(), model);
     }

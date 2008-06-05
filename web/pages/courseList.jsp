@@ -271,7 +271,7 @@
     <display:column media="csv excel xml pdf" property="type" sortable="true" headerClass="sortable" titleKey="course.type.export"/>
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.location">
-         <a href="<c:url value="/detailsLocation.html"><c:param name="id" value="${unpublished.location.id}"/></c:url>" title="<c:out value="${unpublished.location.description}"/>"><c:out value="${courseList.location.name}"/></a>
+         <a href="<c:url value="/detailsLocation.html"><c:param name="id" value="${unpublished.location.id}"/></c:url>" title="<c:out value="${unpublished.location.description}"/>"><c:out value="${unpublished.location.name}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="location.name" sortable="true" headerClass="sortable" titleKey="course.location"/>
 
