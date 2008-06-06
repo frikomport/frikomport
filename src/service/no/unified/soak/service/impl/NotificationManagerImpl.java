@@ -18,8 +18,7 @@ import no.unified.soak.service.NotificationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.util.MailUtil;
 
-public class NotificationManagerImpl extends BaseManager implements
-		NotificationManager {
+public class NotificationManagerImpl extends BaseManager implements NotificationManager {
 	private NotificationDao dao;
 
 	protected MailEngine mailEngine = null;
@@ -33,8 +32,8 @@ public class NotificationManagerImpl extends BaseManager implements
 	private Locale locale = null;
 
     public void executeTask() {
+        log.info("running NotificationManager");
         sendReminders();
-        log.info("Ran NotificationManager");
     }
 
     public void setLocale(Locale locale) {

@@ -26,25 +26,25 @@ public class CourseStatusManagerImpl extends BaseManager implements CourseStatus
     }
 
     public void processCourses(){
-        Course course = new Course();
+        Course search = new Course();
         // Get only published courses
-        course.setStatus(CourseStatus.COURSE_PUBLISHED);
-        List<Course> courses = courseManager.searchCourses(course,null,null);
+        search.setStatus(CourseStatus.COURSE_PUBLISHED);
+        List<Course> courses = courseManager.searchCourses(search,null,null);
         Iterator<Course> it = courses.iterator();
         while (it.hasNext()){
-            Course c = it.next();
+            Course course = it.next();
             // if finished, change status
-            if(c.getStopTime().before(new Date())){
-                c.setStatus(CourseStatus.COURSE_FINISHED);
-                courseManager.saveCourse(c);
+            if(course.getStopTime() != null && course.getStopTime().before(new Date())){
+                log.debug("Course finished: " + course.getId());
+                course.setStatus(CourseStatus.COURSE_FINISHED);
+                courseManager.saveCourse(course);
             }
         }
-
     }
 
     public void executeTask() {
+        log.info("running courseStatusManager");
         processCourses();
-        log.info("Ran CourseStatusManager");
     }
 
     public void setLocale(Locale locale) {

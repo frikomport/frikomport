@@ -43,8 +43,8 @@ public class WaitingListManagerImpl extends BaseManager implements WaitingListMa
     private Locale locale = null;
 
     public void executeTask() {
+        log.info("running WaitingListManager");
         processEntireWaitingList();
-        log.info("Ran WaitingListManager");
     }
 
     public void setLocale(Locale locale) {

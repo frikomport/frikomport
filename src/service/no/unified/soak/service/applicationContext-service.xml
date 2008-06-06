@@ -192,13 +192,15 @@
     <!-- CourseStatus-END-->
 
     <!-- UserSynchronize-START-->
-    <bean id="userSynchronizeManager" parent="txProxyTemplate">
+    <bean id="userSynchronizeManager" class="no.unified.soak.service.impl.UserSynchronizeManagerImpl" autowire="byName"/>
+    <!-- UserSynchronize-END-->
+
+    <!-- CourseUpdater-START-->
+    <bean id="databaseUpdateManager" parent="txProxyTemplate">
         <property name="target">
-            <bean class="no.unified.soak.service.impl.UserSynchronizeManagerImpl" autowire="byName">
-                <property name="userEzDaoJdbc" ref="userEzDaoJdbc"/>
-                <property name="userManager" ref="userManager"/>
-            </bean>
+            <bean class="no.unified.soak.service.impl.DatabaseUpdateManagerImpl" autowire="byName"/>
         </property>
     </bean>
-    <!-- CourseStatus-END-->
+    <!-- CourseUpdater-END-->
+
 </beans>

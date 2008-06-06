@@ -90,8 +90,7 @@ public class UserEzDaoJdbc {
 	 *            <code>String role = "'courseresponsible','educationalresponsible','admin'";</code>
 	 * @return user fetched from eZ publish database.
 	 */
-	private EzUser findUser(Integer userid, String roleCriteria,
-			boolean findRelated) {
+	private EzUser findUser(Integer userid, String roleCriteria, boolean findRelated) {
 		if (userid == null) {
 			return null;
 		}
@@ -208,12 +207,58 @@ public class UserEzDaoJdbc {
 		return eZUsers;
 	}
 
-	public List<String> findRoles(){
+    	public List findAll() {
+		List eZUsers = new ArrayList();
+
+		try {
+			String sql = "select O.id, O.name, CA.identifier, A.data_int, A.data_text, U.email, U.login from ezcontentobject O \r\n"
+					+ "inner join ezcontentclass C on O.contentclass_id = C.id\r\n"
+					+ "inner join ezcontentobject_attribute A on A.contentobject_id = O.id\r\n"
+					+ "inner join ezcontentclass_attribute CA on CA.contentclass_id = C.id and CA.id = A.contentclassattribute_id\r\n"
+					+ "inner join ezuser U on U.contentobject_id = O.id\r\n"
+					+ "where C.identifier = \'user\' and O.current_version = A.version and CA.identifier in (\'first_name\',\'last_name\',\'kommune\')\r\n"
+					+ "and exists \r\n"
+					+ " (select null from ezcontentobject_tree OT, ezuser_role UR, ezrole R, ezcontentobject_tree OT2 \r\n"
+					+ " where OT.contentobject_id = UR.contentobject_id and OT.node_id = OT2.parent_node_id and OT2.contentobject_id = O.id and UR.role_id =  R.id )\r\n"
+					+ "order by O.id, CA.id";
+			SqlRowSet rowSet = jt.queryForRowSet(sql);
+			int curId = 0;
+
+			EzUser user = null;
+			while (rowSet.next()) {
+				if (rowSet.getInt("id") != curId) {
+					user = new EzUser();
+					eZUsers.add(user);
+					curId = rowSet.getInt("id");
+					user.setId(curId);
+					user.setName(rowSet.getString("name"));
+					user.setEmail(rowSet.getString("email"));
+                    user.setUsername(rowSet.getString("login"));
+                }
+				String identifier = rowSet.getString("identifier");
+				if ("first_name".equals(identifier)) {
+					user.setFirst_name(rowSet.getString("data_text"));
+				} else if ("last_name".equals(identifier)) {
+					user.setLast_name(rowSet.getString("data_text"));
+				} else if ("kommune".equals(identifier)) {
+					user.setKommune(NumConvert.convertToIntegerTolerant(rowSet
+							.getString("data_text")));
+				}
+			}
+		} catch (InvalidResultSetAccessException e) {
+			e.printStackTrace();
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+		}
+		return eZUsers;
+	}
+
+    public List<String> findRoles(){
 	        String sql = "select distinct R.name from ezcontentobject_tree OT, ezuser_role UR, ezrole R, ezcontentobject_tree OT2"
 	                + " where OT.contentobject_id = UR.contentobject_id and OT.node_id = OT2.parent_node_id"
 	                + " and UR.role_id = R.id"
 	                + " and R.id = 1 or R.id > 5"
-	                + " order by R.id"; 
+	                + " order by R.id";
 	        SqlRowSet rowSet = jt.queryForRowSet(sql);
 	        List<String> roles = new LinkedList();
 	        while (rowSet.next()) {

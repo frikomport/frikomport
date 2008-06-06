@@ -2,9 +2,11 @@ package no.unified.soak.service.impl;
 
 import no.unified.soak.service.UserSynchronizeManager;
 import no.unified.soak.service.UserManager;
+import no.unified.soak.service.UserExistsException;
 import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
 import no.unified.soak.ez.EzUser;
 import no.unified.soak.model.User;
+import no.unified.soak.model.Address;
 
 import java.util.Locale;
 import java.util.List;
@@ -31,13 +33,7 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
     }
 
     public void synchronizeUsers() {
-        /*
-        Get users from ez
-        Get users from local db
-        * add missing users
-        * disable disabled users
-         */
-        List<EzUser> ezUsers = userEzDaoJdbc.findKursansvarligeUser();// Make new method to get all users.
+        List<EzUser> ezUsers = userEzDaoJdbc.findAll();
         if(ezUsers != null)
         {
             Iterator<EzUser> it = ezUsers.iterator();
@@ -48,17 +44,23 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
                     user = userManager.getUser(ezUser.getUsername());
                 }
                 catch (ObjectRetrievalFailureException orfe){
-                    // No user, create
+                    // No user, add
                     user = userManager.addUser(ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail(), ezUser.getId(), ezUser.getRolenames());
                 }
+
+                // Set transaction?
+//                userManager.
+//
+//                userManager.saveUser(user);
+                // Update organization?
             }
         }
         log.debug("Synchronized users");
     }
 
     public void executeTask() {
+        log.info("running userSynchronizeManager");
         synchronizeUsers();
-        log.info("Ran userSynchronizeManager");
     }
 
     public void setLocale(Locale locale) {
