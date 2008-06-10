@@ -53,8 +53,7 @@ public class GenericDAOTest extends BaseDAOTestCase {
         user.getAddress().setCity("Denver");
         user.getAddress().setPostalCode("80465");
         user.setEmail("foo@bar.com");
-        user.setOrganizationid(new Long(0));
-
+    
         // create
         dao.saveObject(user);
         assertNotNull(user.getVersion());

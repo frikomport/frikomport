@@ -51,7 +51,7 @@ public class ServiceAreaManagerImpl extends BaseManager
     public List getAllIncludingDummy(String value) {
         List serviceAreas = new ArrayList();
         ServiceArea dummy = new ServiceArea();
-        dummy.setId(new Long(0));
+        dummy.setId(null);
         dummy.setName(value);
         serviceAreas.add(dummy);
         serviceAreas.addAll(getAll());

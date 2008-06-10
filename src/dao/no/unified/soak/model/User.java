@@ -14,8 +14,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import no.unified.soak.ez.EzUser;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -384,20 +382,26 @@ public class User extends BaseObject implements Serializable {
     }
     
     /**
-    * Returns the organization.
-    * @return Organization
-    *
-    * //@hibernate.many-to-one column="organizationid" insert="false" update="false" property-ref="id" not-found="ignore"
-    */
-    public Organization getOrganization() {
+	 * Returns the organization.
+	 * 
+	 * @return Organization
+	 * 
+	 * @hibernate.many-to-one column="organizationid" insert="false"
+	 *                        update="false" not-found="ignore" not-null="false" 
+	 *                        
+	 * 
+	 */
+	public Organization getOrganization() {
 		return organization;
 	}
 
     /**
-     * Sets the organization.
-     * @param organization The organization to set
-
-     */
+	 * Sets the organization.
+	 * 
+	 * @param organization
+	 *            The organization to set
+	 * 
+	 */
 	public void setOrganization(Organization organization) {
 		this.organization = organization;
 	}
@@ -413,7 +417,6 @@ public class User extends BaseObject implements Serializable {
     /**
      * @param organizationid
      *            The organizationid to set.
-     * @spring.validator type="required"
      */
     public void setOrganizationid(Long organizationid) {
         this.organizationid = organizationid;
@@ -421,7 +424,7 @@ public class User extends BaseObject implements Serializable {
     
     /**
 	 * @return Returns the serviceArea.
-	 * //@hibernate.many-to-one column="serviceareaid" insert="false" update="false" property-ref="id" not-found="ignore"
+	 * @hibernate.many-to-one column="serviceareaid" insert="false" update="false" not-found="ignore" not-null="false"
     */
 	public ServiceArea getServiceArea() {
 		return serviceArea;
@@ -445,7 +448,6 @@ public class User extends BaseObject implements Serializable {
 
 	/**
 	 * @param serviceareaid The serviceareaid to set.
-	 * @spring.validator type="required"
 	 */
 	public void setServiceareaid(Long serviceareaid) {
 		this.serviceareaid = serviceareaid;
@@ -554,52 +556,15 @@ public class User extends BaseObject implements Serializable {
 			return false;
 		}
 		
-		if ((organization != null) ? (!organization.equals(user.getOrganization())) : (user
-				.getOrganization() != null)) {
+		if ((organizationid != null) ? (!organizationid.equals(user.getOrganizationid())) : (user
+				.getOrganizationid() != null)) {
 			return false;
 		}
 
 		return true;
     }
     
-	public boolean equals(EzUser ezUser) {
-
-        if ((username != null) ? (!username.equals(ezUser.getUsername())) : (ezUser
-				.getUsername() != null)) {
-			return false;
-		}
-
-		if ((firstName != null) ? (!firstName.equals(ezUser.getFirst_name())) : (ezUser
-				.getFirst_name() != null)) {
-			return false;
-		}
-
-		if ((lastName != null) ? (!lastName.equals(ezUser.getLast_name())) : (ezUser
-				.getLast_name() != null)) {
-			return false;
-		}
-
-		if ((email != null) ? (!email.equals(ezUser.getEmail())) : (ezUser
-				.getEmail() != null)) {
-			return false;
-		}
-		
-		if ((roles != null) ? (roles.size()!=(ezUser.getRolenames().size())) : (ezUser
-				.getRolenames() != null)) {
-			return false;
-		}else {
-			for (Iterator iterator = roles.iterator(); iterator.hasNext();) {
-				Role role = (Role) iterator.next();
-				if (!(ezUser.getRolenames().contains(role.getDescription()))){
-					return false;
-				}
-			}
-		}
-		
-		return true;
-    }
-
-    public int hashCode() {
+	public int hashCode() {
         return ((username != null) ? username.hashCode() : 0);
     }
 

@@ -187,9 +187,7 @@ public class ActionFilter implements Filter {
 		User user = null;
 		try {
 			user = mgr.getUser(username);
-			if (!user.equals(username)) {
-				mgr.updateUser(user, firstName, lastName, email, id, rolenames);
-			}
+			mgr.updateUser(user, firstName, lastName, email, id, rolenames);
 		} catch (ObjectRetrievalFailureException exception) {
 			// User does not exists, make new.
 			user = mgr.addUser(username, firstName, lastName, email, id, rolenames);

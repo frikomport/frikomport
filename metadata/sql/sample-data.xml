@@ -71,12 +71,10 @@
     <column>password_hint</column>
     <column>version</column>
     <column>enabled</column>
-    <column>organizationid</column>
     <column>employeenumber</column>
     <column>jobtitle</column>
     <column>workplace</column>
     <column>mobilephone</column>
-    <column>serviceareaid</column>
     <column>id</column>
     <row>
       <value>employee</value>
@@ -94,12 +92,10 @@
       <value></value>
       <value>1</value>
       <value>1</value>
-      <value>0</value>
       <value>123</value>
       <value></value>
       <value></value>
       <value></value>
-      <value>0</value>
       <value>1</value>
     </row>
     <row>
@@ -118,12 +114,10 @@
       <value></value>
       <value>1</value>
       <value>1</value>
-      <value>0</value>
       <value>234</value>
       <value></value>
       <value></value>
       <value></value>
-      <value>1</value>
       <value>2</value>
     </row>
     <row>
@@ -142,12 +136,10 @@
       <value></value>
       <value>1</value>
       <value>1</value>
-      <value>0</value>
       <value>456</value>
       <value></value>
       <value></value>
       <value></value>
-      <value>1</value>
       <value>3</value>
     </row>
     <row>
@@ -166,12 +158,10 @@
       <value></value>
       <value>1</value>
       <value>1</value>
-      <value>0</value>
       <value>567</value>
       <value></value>
       <value></value>
       <value></value>
-      <value>2</value>
       <value>4</value>
     </row>
     <row>
@@ -190,12 +180,10 @@
       <value></value>
       <value>1</value>
       <value>1</value>
-      <value>0</value>
       <value>678</value>
       <value></value>
       <value></value>
       <value></value>
-      <value>0</value>
       <value>5</value>
     </row>
   </table>

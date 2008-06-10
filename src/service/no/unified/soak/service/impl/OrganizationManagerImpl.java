@@ -72,7 +72,7 @@ public class OrganizationManagerImpl extends BaseManager
     public List getAllIncludingDummy(String dummy) {
         List organizations = new ArrayList();
         Organization organizationDummy = new Organization();
-        organizationDummy.setId(new Long(0));
+        organizationDummy.setId(null);
         organizationDummy.setName(dummy);
         organizations.add(organizationDummy);
         organizations.addAll(getAll());
