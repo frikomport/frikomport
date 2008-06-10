@@ -27,7 +27,6 @@ public class EzUser extends BaseObject implements Serializable {
     private String first_name;
     private String last_name;
     private String username;
-    private Integer kommune;
     private String email;
     private List<String> rolenames = new ArrayList<String>();
 
@@ -99,14 +98,6 @@ public class EzUser extends BaseObject implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getKommune() {
-        return kommune;
-    }
-
-    public void setKommune(Integer kommune) {
-        this.kommune = kommune;
     }
 
     public String getLast_name() {
