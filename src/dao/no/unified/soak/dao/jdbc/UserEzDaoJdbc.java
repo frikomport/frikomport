@@ -22,6 +22,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import no.unified.soak.ez.EzUser;
+import no.unified.soak.util.NumConvert;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.InvalidResultSetAccessException;
@@ -104,7 +105,7 @@ public class UserEzDaoJdbc {
 					+ "inner join ezcontentobject_attribute A on A.contentobject_id = O.id\r\n"
 					+ "inner join ezcontentclass_attribute CA on CA.contentclass_id = C.id and CA.id = A.contentclassattribute_id\r\n"
 					+ "inner join ezuser U on U.contentobject_id = O.id\r\n"
-					+ "where C.identifier = \'user\' and O.current_version = A.version and CA.identifier in (\'first_name\',\'last_name\')\r\n"
+					+ "where C.identifier = \'user\' and O.current_version = A.version and CA.identifier in (\'first_name\',\'last_name\',\'kommune\')\r\n"
 					+ "and O.id = "
 					+ userid
 					+ " and exists \r\n"
@@ -127,7 +128,10 @@ public class UserEzDaoJdbc {
 					user.setFirst_name(rowSet.getString("data_text"));
 				} else if ("last_name".equals(identifier)) {
 					user.setLast_name(rowSet.getString("data_text"));
-				} 
+				} else if ("kommune".equals(identifier)) {
+					user.setKommune(NumConvert.convertToIntegerTolerant(rowSet
+							.getString("data_text")));
+                }
 			}
 
 			user.setRolenames(findRoles(user.getId()));
@@ -166,7 +170,7 @@ public class UserEzDaoJdbc {
 					+ "inner join ezcontentobject_attribute A on A.contentobject_id = O.id\r\n"
 					+ "inner join ezcontentclass_attribute CA on CA.contentclass_id = C.id and CA.id = A.contentclassattribute_id\r\n"
 					+ "inner join ezuser U on U.contentobject_id = O.id\r\n"
-					+ "where C.identifier = \'user\' and O.current_version = A.version and CA.identifier in (\'first_name\',\'last_name\')\r\n"
+					+ "where C.identifier = \'user\' and O.current_version = A.version and CA.identifier in (\'first_name\',\'last_name\',\'kommune\')\r\n"
 					+ "and exists \r\n"
 					+ " (select null from ezcontentobject_tree OT, ezuser_role UR, ezrole R, ezcontentobject_tree OT2 \r\n"
 					+ " where OT.contentobject_id = UR.contentobject_id and OT.node_id = OT2.parent_node_id and OT2.contentobject_id = O.id and UR.role_id =  R.id and R.name in (\'Kursansvarlig\', \'Opplaringsansvarlig\') )\r\n"
@@ -190,7 +194,10 @@ public class UserEzDaoJdbc {
 					user.setFirst_name(rowSet.getString("data_text"));
 				} else if ("last_name".equals(identifier)) {
 					user.setLast_name(rowSet.getString("data_text"));
-				} 
+				} else if ("kommune".equals(identifier)) {
+					user.setKommune(NumConvert.convertToIntegerTolerant(rowSet
+							.getString("data_text")));
+				}
 			}
 		} catch (InvalidResultSetAccessException e) {
 			e.printStackTrace();
@@ -209,7 +216,7 @@ public class UserEzDaoJdbc {
 					+ "inner join ezcontentobject_attribute A on A.contentobject_id = O.id\r\n"
 					+ "inner join ezcontentclass_attribute CA on CA.contentclass_id = C.id and CA.id = A.contentclassattribute_id\r\n"
 					+ "inner join ezuser U on U.contentobject_id = O.id\r\n"
-					+ "where C.identifier = \'user\' and O.current_version = A.version and CA.identifier in (\'first_name\',\'last_name\')\r\n"
+					+ "where C.identifier = \'user\' and O.current_version = A.version and CA.identifier in (\'first_name\',\'last_name\',\'kommune\')\r\n"
 					+ "and exists \r\n"
 					+ " (select null from ezcontentobject_tree OT, ezuser_role UR, ezrole R, ezcontentobject_tree OT2 \r\n"
 					+ " where OT.contentobject_id = UR.contentobject_id and OT.node_id = OT2.parent_node_id and OT2.contentobject_id = O.id and UR.role_id =  R.id )\r\n"
@@ -233,7 +240,10 @@ public class UserEzDaoJdbc {
 					user.setFirst_name(rowSet.getString("data_text"));
 				} else if ("last_name".equals(identifier)) {
 					user.setLast_name(rowSet.getString("data_text"));
-				} 
+				} else if ("kommune".equals(identifier)) {
+					user.setKommune(NumConvert.convertToIntegerTolerant(rowSet
+							.getString("data_text")));
+				}
 			}
 		} catch (InvalidResultSetAccessException e) {
 			e.printStackTrace();
@@ -264,8 +274,8 @@ public class UserEzDaoJdbc {
 		List users = userEzDaoJdbc.findKursansvarligeUser();
 		for (Iterator iter = users.iterator(); iter.hasNext();) {
 		    EzUser user = (EzUser) iter.next();
-//			System.out.println("ez User: " + user.getId() + ", " + user;
-
+//			System.out.println("ez User: " + user.getId() + ", " + user + " "
+//				+ user.getKommune());
 		}
 	}
 }
