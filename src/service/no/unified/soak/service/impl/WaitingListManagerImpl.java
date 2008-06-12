@@ -22,7 +22,9 @@ import no.unified.soak.util.MailUtil;
 import org.springframework.context.MessageSource;
 
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.MailSender;
 
+import javax.mail.internet.MimeMessage;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -39,6 +41,7 @@ public class WaitingListManagerImpl extends BaseManager implements WaitingListMa
     private RegistrationManager registrationManager;
     private CourseManager courseManager;
     protected MailEngine mailEngine = null;
+    protected MailSender mailSender = null;
     private MessageSource messageSource = null;
     private Locale locale = null;
 
@@ -74,6 +77,10 @@ public class WaitingListManagerImpl extends BaseManager implements WaitingListMa
      */
     public void setMailEngine(MailEngine mailEngine) {
         this.mailEngine = mailEngine;
+    }
+
+    public void setMailSender(MailSender mailSender) {
+        this.mailSender = mailSender;
     }
 
     /**
@@ -289,10 +296,10 @@ public class WaitingListManagerImpl extends BaseManager implements WaitingListMa
     	StringBuffer msg = MailUtil.createStandardBody(course, Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION, locale, messageSource, null, confirmed);
 
     	// Create the email
-    	ArrayList<SimpleMailMessage> theEmails = MailUtil.setMailInfo(currentRegistration, Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION, course, msg, messageSource, locale);
+    	ArrayList<MimeMessage> theEmails = MailUtil.getMailMessages(currentRegistration, Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION, course, msg, messageSource, locale, mailSender);
     	
     	// Send the email
-    	MailUtil.sendMails(theEmails, mailEngine);
+    	MailUtil.sendMimeMails(theEmails, mailEngine);
     }
 
     /**

@@ -56,13 +56,11 @@ public class MailEngine {
      * @param templateName
      * @param model
      */
-    public void sendMessage(SimpleMailMessage msg, String templateName,
-        Map model) {
+    public void sendMessage(SimpleMailMessage msg, String templateName, Map model) {
         String result = null;
 
         try {
-            result = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine,
-                    templateName, model);
+            result = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, templateName, model);
         } catch (VelocityException e) {
             e.printStackTrace();
         }
@@ -78,6 +76,19 @@ public class MailEngine {
     public void send(SimpleMailMessage msg) {
         try {
             mailSender.send(msg);
+        } catch (MailException ex) {
+            //log it and go on
+            log.error(ex.getMessage());
+        }
+    }
+
+    /**
+     * Sends a mime message with pre populated values
+     * @param message
+     */
+    public void send(MimeMessage message){
+        try {
+            ((JavaMailSenderImpl) mailSender).send(message);
         } catch (MailException ex) {
             //log it and go on
             log.error(ex.getMessage());

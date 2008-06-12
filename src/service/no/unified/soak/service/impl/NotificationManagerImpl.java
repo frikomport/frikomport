@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import org.springframework.context.MessageSource;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.MailSender;
 
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
@@ -18,6 +19,8 @@ import no.unified.soak.service.NotificationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.util.MailUtil;
 
+import javax.mail.internet.MimeMessage;
+
 public class NotificationManagerImpl extends BaseManager implements NotificationManager {
 	private NotificationDao dao;
 
@@ -26,14 +29,18 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 	private MessageSource messageSource = null;
 
 	private RegistrationManager registrationManager = null;
-	
-	private SimpleMailMessage message = null;
 
-	private Locale locale = null;
+    private MailSender mailSender = null;
+
+    private Locale locale = null;
 
     public void executeTask() {
         log.info("running NotificationManager");
         sendReminders();
+    }
+
+    public void setMailSender(MailSender mailSender) {
+        this.mailSender = mailSender;
     }
 
     public void setLocale(Locale locale) {
@@ -47,11 +54,6 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 	public void setMailEngine(MailEngine mailEngine) {
 		this.mailEngine = mailEngine;
 	}
-
-	public void setMessage(SimpleMailMessage message) {
-		this.message = message;
-	}
-
 
 	/**
 	 * @param registrationManager the registrationManager to set
@@ -125,7 +127,7 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 //		log.debug("sendReminders");
 		// Fetch all the Notifications that does not have the sent-flag set.
 		List<Notification> notifications = this.getUnsentNotifications();
-		ArrayList<SimpleMailMessage> emails = new ArrayList<SimpleMailMessage>();
+		ArrayList<MimeMessage> emails = new ArrayList<MimeMessage>();
 		if (notifications != null && notifications.size() > 0) {
 			for (int i = 0; i < notifications.size(); i++) {
 				Date today = new Date();
@@ -157,10 +159,10 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 								messageSource, null, false);
 						ArrayList<Registration> registrations = new ArrayList<Registration>();
 						registrations.add(notification.getRegistration());
-						ArrayList<SimpleMailMessage> newEmails = MailUtil
-								.setMailInfo(registrations,
+						ArrayList<MimeMessage> newEmails = MailUtil
+								.getMailMessages(registrations,
 										Constants.EMAIL_EVENT_NOTIFICATION,
-										course, msg, messageSource, locale, null);
+										course, msg, messageSource, locale, null,mailSender);
 						emails.addAll(newEmails);
 						notification.setReminderSent(true);
 						dao.saveNotification(notification);
@@ -169,7 +171,7 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 			}
 		}
 		if (emails != null && emails.size() > 0) {
-			MailUtil.sendMails(emails, mailEngine);
+			MailUtil.sendMimeMails(emails, mailEngine);
 		}
 	}
 	

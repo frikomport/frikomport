@@ -23,6 +23,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.mail.internet.MimeMessage;
 
 import no.unified.soak.Constants;
 import no.unified.soak.model.Attachment;
@@ -46,6 +47,7 @@ import no.unified.soak.webapp.util.FileUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.MailSender;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -79,7 +81,9 @@ public class CourseFormController extends BaseFormController {
 
 	protected MailEngine mailEngine = null;
 
-	protected SimpleMailMessage message = null;
+    protected MailSender mailSender = null;
+
+    protected SimpleMailMessage message = null;
 	
 	/**
 	 * @param notificationManager the notificationManager to set
@@ -537,8 +541,8 @@ public class CourseFormController extends BaseFormController {
 		// Build standard e-mail body
 		StringBuffer msg = MailUtil.createStandardBody(course, event, locale, messageSource, mailComment);
 		// Add sender etc.
-		ArrayList<SimpleMailMessage> emails = MailUtil.setMailInfo(registrations, event, course, msg, messageSource, locale, null);
-		MailUtil.sendMails(emails, mailEngine);		
+		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, messageSource, locale, null, mailSender);
+		MailUtil.sendMimeMails(emails, mailEngine);		
 	}
 
 	/**

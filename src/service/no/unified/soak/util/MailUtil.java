@@ -8,6 +8,7 @@ import java.util.Locale;
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.User;
 import no.unified.soak.service.MailEngine;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -17,12 +18,36 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.commons.validator.EmailValidator;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.core.io.ByteArrayResource;
+
+import javax.mail.internet.MimeMessage;
+import javax.mail.MessagingException;
+
+import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.Date;
+import net.fortuna.ical4j.model.DateTime;
+import net.fortuna.ical4j.model.property.ProdId;
+import net.fortuna.ical4j.model.property.Version;
+import net.fortuna.ical4j.model.property.CalScale;
+import net.fortuna.ical4j.model.property.Uid;
+import net.fortuna.ical4j.model.property.Location;
+import net.fortuna.ical4j.model.property.Description;
+import net.fortuna.ical4j.model.property.StreetAddress;
+import net.fortuna.ical4j.model.property.Organizer;
+import net.fortuna.ical4j.model.property.Url;
+import net.fortuna.ical4j.model.component.VEvent;
+import net.fortuna.ical4j.util.UidGenerator;
+import net.fortuna.ical4j.util.Uris;
 
 public class MailUtil {
-	protected static final Log log = LogFactory.getLog(MailUtil.class);
+//	public static final Log log = LogFactory.getLog(MailUtil.class);
 
 	public static void sendMails(ArrayList<SimpleMailMessage> Emails, MailEngine engine) {
-		if (Emails != null) {
+        Log log = LogFactory.getLog(MailUtil.class.toString());
+        if (Emails != null) {
 			for (int i = 0; i < Emails.size(); i++) {
 				SimpleMailMessage theEmail = Emails.get(i);
 				log.debug("Sent mail to: " + theEmail.getTo());
@@ -31,7 +56,16 @@ public class MailUtil {
 		}
 	}
 
-	/**
+    public static void sendMimeMails(ArrayList<MimeMessage> Emails, MailEngine engine) {
+		if (Emails != null) {
+			for (int i = 0; i < Emails.size(); i++) {
+				MimeMessage theEmail = Emails.get(i);
+                engine.send(theEmail);
+			}
+		}
+	}
+
+     /**
 	 * Creates a standard mail body containing all the details of a course and some information on the event that
 	 * triggered the mail to be sent.
 	 * 
@@ -296,12 +330,12 @@ public class MailUtil {
 	 * @param locale
 	 *            The language to fetch messages in
 	 */
-	public static ArrayList<SimpleMailMessage> setMailInfo(Registration registration, int event, Course course,
-			StringBuffer msg, MessageSource messageSource, Locale locale) {
-		List<Registration> theRegistration = new ArrayList<Registration>();
-		theRegistration.add(registration);
-		return setMailInfo(theRegistration, event, course, msg, messageSource, locale, null);
-	}
+//	public static ArrayList<SimpleMailMessage> setMailInfo(Registration registration, int event, Course course,
+//			StringBuffer msg, MessageSource messageSource, Locale locale) {
+//		List<Registration> theRegistration = new ArrayList<Registration>();
+//		theRegistration.add(registration);
+//		return setMailInfo(theRegistration, event, course, msg, messageSource, locale, null);
+//	}
 
 	/**
 	 * Sets the subject, recipient, sender etc. to a message object
@@ -320,147 +354,264 @@ public class MailUtil {
      * @param locale
      * @param mailSender
      */
-	public static ArrayList<SimpleMailMessage> setMailInfo(List<Registration> registrations, int event, Course course,
-                                                           StringBuffer msg, MessageSource messageSource, Locale locale, String mailSender) {
-		ArrayList<SimpleMailMessage> allEMails = new ArrayList<SimpleMailMessage>();
-		String registeredMsg = StringEscapeUtils.unescapeHtml(getText("courseNotification.phrase.registered", locale,
-				messageSource));
-		String waitingMsg = StringEscapeUtils.unescapeHtml(getText("courseNotification.phrase.waitinglist", locale,
-				messageSource));
+//	public static ArrayList<SimpleMailMessage> setMailInfo(List<Registration> registrations, int event, Course course,
+//                                                           StringBuffer msg, MessageSource messageSource, Locale locale, String mailSender) {
+//		ArrayList<SimpleMailMessage> allEMails = new ArrayList<SimpleMailMessage>();
+//
+//        String registered = StringEscapeUtils.unescapeHtml(getText("courseNotification.phrase.registered", locale, messageSource));
+//		String waiting = StringEscapeUtils.unescapeHtml(getText("courseNotification.phrase.waitinglist", locale, messageSource));
+//
+//        for (Registration registration : registrations) {
+//			SimpleMailMessage message = new SimpleMailMessage();
+//            message.setSubject(getSubject(registration,event,registered,waiting,course.getName(),messageSource,locale));
+//			message.setText(getText(registration, msg, registered, waiting, course.getName(), messageSource, locale ));
+//            List recipients = getRecipients(registration, course.getResponsible());
+//            log.debug("The mail is to: " + recipients);
+//            message.setTo(StringUtil.list2Array(recipients));
+//
+//            if(mailSender != null && !mailSender.equals(""))
+//                message.setFrom(mailSender);
+//            else
+//                message.setFrom(StringEscapeUtils.unescapeHtml(getText("mail.default.from", locale, messageSource)));
+//
+//			allEMails.add(message);
+//		}
+//		return allEMails;
+//	}
+
+    /**
+     * Sets subject, text, recipients and senders to a mail object
+     * @param registration The registrations to recieve mail
+     * @param event If this is a confirmation, cancellation e.g.
+     * @param course The course in question
+     * @param msg Content of the message
+     * @param messageSource
+     * @param locale
+     * @param sender
+     * @return A list of MimeMessage object
+     * @throws MessagingException
+     */
+    public static ArrayList<MimeMessage> getMailMessages(Registration registration, int event, Course course,
+                                                       StringBuffer msg, MessageSource messageSource, Locale locale,
+                                                       MailSender sender) {
+        List<Registration> theRegistration = new ArrayList<Registration>();
+		theRegistration.add(registration);
+        return getMailMessages(theRegistration, event, course, msg, messageSource, locale, null, sender);
+    }
+
+    /**
+     * Sets subject, text, recipients and senders to a mail object
+     * @param registrations The registrations to recieve mail
+     * @param event If this is a confirmation, cancellation e.g.
+     * @param course The course in question
+     * @param msg Content of the message
+     * @param messageSource
+     * @param locale
+     * @param from The sender of the mail
+     * @param sender
+     * @return A list of MimeMessage object
+     * @throws MessagingException 
+     */
+    public static ArrayList<MimeMessage> getMailMessages(List<Registration> registrations, int event, Course course,
+                                                           StringBuffer msg, MessageSource messageSource, Locale locale,
+                                                           String from, MailSender sender) {
+        Log log = LogFactory.getLog(MailUtil.class.toString());
+        ArrayList<MimeMessage> allEMails = new ArrayList<MimeMessage>();
+
+        String registered = StringEscapeUtils.unescapeHtml(getText("courseNotification.phrase.registered", locale, messageSource));
+		String waiting = StringEscapeUtils.unescapeHtml(getText("courseNotification.phrase.waitinglist", locale, messageSource));
 
         for (Registration registration : registrations) {
-			SimpleMailMessage message = new SimpleMailMessage();
-			switch (event) {
-			case Constants.EMAIL_EVENT_COURSECHANGED:
-				if (registration.getReserved()) {
-					message.setSubject(StringEscapeUtils.unescapeHtml(
-							getText("courseChanged.mail.subject", course.getName(), locale, messageSource)).replaceAll(
-							"<registeredfor/>", registeredMsg).replaceAll("<coursename/>", course.getName()));
-				} else {
-					message.setSubject(StringEscapeUtils.unescapeHtml(
-							getText("courseChanged.mail.subject", course.getName(), locale, messageSource)).replaceAll(
-							"<registeredfor/>", waitingMsg).replaceAll("<coursename/>", course.getName()));
-				}
+            MimeMessage message = ((JavaMailSenderImpl) sender).createMimeMessage();
+            MimeMessageHelper helper = null;
+            try {
+                helper = new MimeMessageHelper(message, true);
+                helper.setSubject(getSubject(registration,event,registered,waiting,course.getName(),messageSource,locale));
+                helper.setText(getText(registration, msg, registered, waiting, course.getName(), messageSource, locale ));
+                Calendar cal = getICalendar(course);
+                ByteArrayResource bar = new ByteArrayResource(cal.toString().getBytes());
+                helper.addAttachment("calendar.ics",bar);
+                List recipients = getRecipients(registration, course.getResponsible());
+                log.debug("The mail is to: " + recipients);
+                helper.setTo(StringUtil.list2Array(recipients));
 
-                break;
-            case Constants.EMAIL_EVENT_COURSECANCELLED:
-				if (registration.getReserved()) {
-					message.setSubject(StringEscapeUtils.unescapeHtml(
-							getText("courseCancelled.mail.subject", course.getName(), locale, messageSource)).replaceAll(
-							"<registeredfor/>", registeredMsg).replaceAll("<coursename/>", course.getName()));
-				} else {
-					message.setSubject(StringEscapeUtils.unescapeHtml(
-							getText("courseCancelled.mail.subject", course.getName(), locale, messageSource)).replaceAll(
-							"<registeredfor/>", waitingMsg).replaceAll("<coursename/>", course.getName()));
-				}
-
-				break;
-
-            case Constants.EMAIL_EVENT_COURSEDELETED:
-				if (registration.getReserved()) {
-					message.setSubject(StringEscapeUtils.unescapeHtml(
-							getText("courseDeleted.mail.subject", course.getName(), locale, messageSource)).replaceAll(
-							"<registeredfor/>", registeredMsg).replaceAll("<coursename/>", course.getName()));
-				} else {
-					message.setSubject(StringEscapeUtils.unescapeHtml(
-							getText("courseDeleted.mail.subject", course.getName(), locale, messageSource)).replaceAll(
-							"<registeredfor/>", waitingMsg).replaceAll("<coursename/>", course.getName()));
-				}
-
-				break;
-			case Constants.EMAIL_EVENT_NOTIFICATION:
-				if (registration.getReserved()) {
-					message.setSubject(StringEscapeUtils.unescapeHtml(
-							getText("courseNotification.mail.subject", course.getName(), locale, messageSource))
-							.replaceAll("<registeredfor/>", registeredMsg).replaceAll("<coursename/>", course.getName()));
-				} else {
-					message.setSubject(StringEscapeUtils.unescapeHtml(
-							getText("courseNotification.mail.subject", course.getName(), locale, messageSource))
-							.replaceAll("<registeredfor/>", waitingMsg).replaceAll("<coursename/>", course.getName()));
-				}
-
-                break;
-			case Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION:
-				if (registration.getReserved()) {
-					message.setSubject(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
-							"registrationComplete.mail.subject", new String[] { registration.getCourse().getName() },
-							locale)));
-				} else {
-					message.setSubject(StringEscapeUtils.unescapeHtml(messageSource.getMessage(
-							"registrationToWaitinglist.mail.subject",
-							new String[] { registration.getCourse().getName() }, locale)));
-				}
-				break;
-			case Constants.EMAIL_EVENT_REGISTRATION_DELETED:
-				message.setSubject(StringEscapeUtils.unescapeHtml(getText("registrationDeleted.mail.subject", course
-						.getName(), locale, messageSource)));
-
-				break;
-
-			case Constants.EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST:
-				message.setSubject(StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.subject",
-						course.getName(), locale, messageSource)));
-
-				break;
-
-			case Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED:
-				message.setSubject(StringEscapeUtils.unescapeHtml(getText("registrationConfirmed.mail.subject", course
-						.getName(), locale, messageSource)));
-
-				break;
-			}
-
-			String custom = msg.toString();
-			if (registration.getReserved()) {
-				custom.replaceAll("<registeredfor/>", registeredMsg).replaceAll("<coursename/>", course.getName());
-			} else {
-				custom.replaceAll("<registeredfor/>", waitingMsg).replaceAll("<coursename/>", course.getName());
-			}
-
-			StringBuffer msgIndivid = new StringBuffer(custom);
-			msgIndivid.insert(0, "\n\n");
-
-			String employeeNoText = messageSource.getMessage("registration.employeeNumber", null, locale);
-			if (!StringUtils.isEmpty(employeeNoText))
-				employeeNoText = employeeNoText.toLowerCase();
-
-			if (registration.getEmployeeNumber() != null) {
-				String ansattParentes = " (" + StringEscapeUtils.unescapeHtml(employeeNoText) + " "
-						+ registration.getEmployeeNumber().intValue() + ")";
-
-				msgIndivid.insert(0, StringUtil.ifEmpty(registration.getEmployeeNumber(), ansattParentes));
-			}
-
-			msgIndivid.insert(0, getText("misc.hello", locale, messageSource) + " " + registration.getFirstName() + " "
-					+ registration.getLastName());
-
-			message.setText(msgIndivid.toString());
-			List<String> emails = new LinkedList<String>();
-
-			if (registration.getEmail() != null && registration.getEmail().trim().length() > 0 && EmailValidator.getInstance().isValid(registration.getEmail())) {
-				emails.add(registration.getEmail());
-			}
-
-			if (emails.size() == 0 && course.getInstructor().getEmail() != null && EmailValidator.getInstance().isValid(course.getInstructor().getEmail())) {
-				emails.add(course.getInstructor().getEmail());
-			}
-
-			// SimpleMailMessage copy = new SimpleMailMessage();
-			// message.copyTo(copy);
-            if(mailSender != null && !mailSender.equals("")){
-                message.setFrom(mailSender);
+                if(from != null && !from.equals(""))
+                    helper.setFrom(from);
+                else
+                    helper.setFrom(StringEscapeUtils.unescapeHtml(getText("mail.default.from", locale, messageSource)));
+            } catch (MessagingException e) {
+                log.error("Could not create MimeMessage",e);
             }
-            else{
-                message.setFrom(StringEscapeUtils.unescapeHtml(getText("mail.default.from", locale, messageSource)));
-            }
-			message.setTo(StringUtil.list2Array(emails));
-			log.debug("The mail is to: " + emails);
 			allEMails.add(message);
 		}
 		return allEMails;
 	}
 
-	/**
+    public static Calendar getICalendar(Course course) {
+        Log log = LogFactory.getLog(MailUtil.class.toString());
+        Calendar cal = null;
+
+        try {
+            // Create an event
+            VEvent event = new VEvent(new DateTime(course.getStartTime()), new DateTime(course.getStopTime()),course.getName());
+
+            UidGenerator ug = new UidGenerator("1");
+            Uid uid = ug.generateUid();
+            event.getProperties().add(uid);
+
+            Description description = new Description(course.getDescription());
+            event.getProperties().add(description);
+
+            Location location = new Location(course.getLocation().getName());
+            event.getProperties().add(location);
+            StreetAddress streetAddress = new StreetAddress(course.getLocation().getAddress());
+            event.getProperties().add(streetAddress);
+
+            if(course.getResponsible() != null){
+                try{
+                    Organizer organizer = new Organizer(course.getResponsible().getFullName() + ":MAILTO:" + course.getResponsible().getEmail());
+                    event.getProperties().add(organizer);
+                }
+                catch(Exception ex){
+                    log.error("Could not create Organizer object");
+                }
+            }
+
+            if(course.getDetailURL() != null && course.getDetailURL().length() > 0){
+                try{
+                    Url url = new Url(Uris.create(course.getDetailURL()));
+                    event.getProperties().add(url);
+                }
+                catch(Exception ex){
+                    log.error("Could not create Url object");
+                }
+
+            }
+
+
+//            // Set timezone
+//            VTimeZone tz = new VTimeZone();
+//            TzId tzParam = new TzId(tz.getProperties().getProperty(Property.TZID).getValue());
+//            TzId tzParam = new TzId(tz.getProperties().add(Property.TZID));
+//            event.getProperties().getProperty(Property.DTSTART).getParameters().add(tzParam);
+
+            // Create calendar and add event
+            cal = new Calendar();
+            cal.getProperties().add(new ProdId("-//Know IT Objectnet AS//FriKomPort//NO"));
+            cal.getProperties().add(Version.VERSION_2_0);
+            cal.getProperties().add(CalScale.GREGORIAN);
+            cal.getComponents().add(event);
+
+            log.info("\n" + cal.toString());
+            
+        } catch (Exception e) {
+            log.error("Could not create calendar",e);
+        }
+
+        return cal;
+    }
+
+    public static List<String> getRecipients(Registration registration, User instructor){
+        List<String> emails = new LinkedList<String>();
+
+        if (registration.getEmail() != null && registration.getEmail().trim().length() > 0 && EmailValidator.getInstance().isValid(registration.getEmail())) {
+            emails.add(registration.getEmail());
+        }
+
+        if (emails.size() == 0 && instructor != null && instructor.getEmail() != null && EmailValidator.getInstance().isValid(instructor.getEmail())) {
+            emails.add(instructor.getEmail());
+        }
+        return emails;
+    }
+
+    public static String getSubject(Registration registration, int event, String registered, String waiting, String coursename, MessageSource messageSource, Locale locale){
+        String subject = null;
+        switch (event) {
+        case Constants.EMAIL_EVENT_COURSECHANGED:
+            if (registration.getReserved()) {
+                subject = StringEscapeUtils.unescapeHtml(
+                        getText("courseChanged.mail.subject", coursename, locale, messageSource)).replaceAll(
+                        "<registeredfor/>", registered).replaceAll("<coursename/>", coursename);
+            } else {
+                subject = StringEscapeUtils.unescapeHtml(
+                        getText("courseChanged.mail.subject", coursename, locale, messageSource)).replaceAll(
+                        "<registeredfor/>", waiting).replaceAll("<coursename/>", coursename);
+            }
+        case Constants.EMAIL_EVENT_COURSECANCELLED:
+            if (registration.getReserved()) {
+                subject = StringEscapeUtils.unescapeHtml(
+                        getText("courseCancelled.mail.subject", coursename, locale, messageSource)).replaceAll(
+                        "<registeredfor/>", registered).replaceAll("<coursename/>", coursename);
+            } else {
+                subject = StringEscapeUtils.unescapeHtml(
+                        getText("courseCancelled.mail.subject", coursename, locale, messageSource)).replaceAll(
+                        "<registeredfor/>", waiting).replaceAll("<coursename/>", coursename);
+            }
+        case Constants.EMAIL_EVENT_COURSEDELETED:
+            if (registration.getReserved()) {
+                subject = StringEscapeUtils.unescapeHtml(
+                        getText("courseDeleted.mail.subject", coursename, locale, messageSource)).replaceAll(
+                        "<registeredfor/>", registered).replaceAll("<coursename/>", coursename);
+            } else {
+                subject = StringEscapeUtils.unescapeHtml(
+                        getText("courseDeleted.mail.subject", coursename, locale, messageSource)).replaceAll(
+                        "<registeredfor/>", waiting).replaceAll("<coursename/>", coursename);
+            }
+        case Constants.EMAIL_EVENT_NOTIFICATION:
+            if (registration.getReserved()) {
+                subject = StringEscapeUtils.unescapeHtml(
+                        getText("courseNotification.mail.subject", coursename, locale, messageSource))
+                        .replaceAll("<registeredfor/>", registered).replaceAll("<coursename/>", coursename);
+            } else {
+                subject = StringEscapeUtils.unescapeHtml(
+                        getText("courseNotification.mail.subject", coursename, locale, messageSource))
+                        .replaceAll("<registeredfor/>", waiting).replaceAll("<coursename/>", coursename);
+            }
+        case Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION:
+            if (registration.getReserved()) {
+                subject = StringEscapeUtils.unescapeHtml(getText("registrationComplete.mail.subject", coursename, locale, messageSource));
+            } else {
+                subject = StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.subject", coursename, locale, messageSource));
+            }
+        case Constants.EMAIL_EVENT_REGISTRATION_DELETED:
+            subject = StringEscapeUtils.unescapeHtml(getText("registrationDeleted.mail.subject", coursename, locale, messageSource));
+        case Constants.EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST:
+            subject = StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.subject",	coursename, locale, messageSource));
+        case Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED:
+            subject = StringEscapeUtils.unescapeHtml(getText("registrationConfirmed.mail.subject", coursename, locale, messageSource));
+        }
+        return subject;
+    }
+
+    public static String getText(Registration registration, StringBuffer msg, String registeredMsg, String waitingMsg, String coursename, MessageSource messageSource, Locale locale){
+        String custom = msg.toString();
+        if (registration.getReserved()) {
+            custom.replaceAll("<registeredfor/>", registeredMsg).replaceAll("<coursename/>", coursename);
+        } else {
+            custom.replaceAll("<registeredfor/>", waitingMsg).replaceAll("<coursename/>", coursename);
+        }
+
+        StringBuffer msgIndivid = new StringBuffer(custom);
+        msgIndivid.insert(0, "\n\n");
+
+        // Employeenumber
+        String employeeNoText = messageSource.getMessage("registration.employeeNumber", null, locale);
+        if (!StringUtils.isEmpty(employeeNoText))
+            employeeNoText = employeeNoText.toLowerCase();
+
+        if (registration.getEmployeeNumber() != null) {
+            String ansattParentes = " (" + StringEscapeUtils.unescapeHtml(employeeNoText) + " "
+                    + registration.getEmployeeNumber().intValue() + ")";
+
+            msgIndivid.insert(0, StringUtil.ifEmpty(registration.getEmployeeNumber(), ansattParentes));
+        }
+
+        msgIndivid.insert(0, getText("misc.hello", locale, messageSource) + " " + registration.getFirstName() + " "
+                + registration.getLastName());
+        return msgIndivid.toString();
+    }
+
+    /**
 	 * Method for getting a key's value (with i18n support). Calling getMessageSourceAccessor() is used because the
 	 * RequestContext variable is not set in unit tests b/c there's no DispatchServlet Request.
 	 * 

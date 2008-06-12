@@ -102,6 +102,7 @@
         <path refid="hibernate.classpath"/>
         <pathelement location="${commons-lang.jar}"/>
         <pathelement location="${commons-logging.jar}"/>
+        <fileset dir="${ical4j.dir}" includes="*.jar"/>
         <fileset dir="${spring.dir}" includes="*.jar"/>
     </path>
     <path id="dao.test.classpath">
@@ -122,6 +123,7 @@
         <pathelement location="${commons-beanutils.jar}"/>
         <pathelement location="${commons-collections.jar}"/>
         <pathelement location="${commons-validator.jar}"/>
+        <fileset dir="${ical4j.dir}" includes="*.jar"/>
         <fileset dir="${spring.dir}" includes="*.jar"/>
         <fileset dir="${velocity.dir}" includes="*.jar"/>
     </path>
@@ -152,8 +154,10 @@
         <pathelement location="${commons-fileupload.jar}"/>
         <pathelement location="${commons-lang.jar}"/>
         <pathelement location="${commons-validator.jar}"/>
+        <pathelement location="${commons-codec.jar}"/>
         <pathelement location="${servletapi.jar}"/>
         <fileset dir="${javamail.dir}" includes="*.jar"/>
+        <fileset dir="${ical4j.dir}" includes="*.jar"/>
         <fileset dir="${spring.dir}" includes="*.jar"/>
         <fileset dir="${jstl.dir}/lib" includes="jstl.jar"/>
     </path>
