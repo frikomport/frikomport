@@ -272,7 +272,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the organization.
-	 * @hibernate.many-to-one not-null="true" column="organizationid"
+	 * @hibernate.many-to-one not-null="false" column="organizationid"
 	 *                        insert="false" update="false" cascade="none"
 	 */
 	public Organization getOrganization() {
@@ -298,7 +298,6 @@ public class Registration extends BaseObject implements Serializable {
 	/**
 	 * @param organizationid
 	 *            The organizationid to set.
-	 * @spring.validator type="required"
 	 */
 	public void setOrganizationid(Long organizationid) {
 		this.organizationid = organizationid;
@@ -354,7 +353,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the serviceArea.
-	 * @hibernate.many-to-one not-null="true" column="serviceareaid"
+	 * @hibernate.many-to-one not-null="false" column="serviceareaid"
 	 *                        insert="false" update="false" cascade="none"
 	 */
 	public ServiceArea getServiceArea() {
@@ -371,7 +370,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the serviceareaid.
-	 * @hibernate.property column="serviceareaid" not-null="true"
+	 * @hibernate.property column="serviceareaid" not-null="false"
 	 */
 	public Long getServiceareaid() {
 		return serviceareaid;
@@ -380,7 +379,6 @@ public class Registration extends BaseObject implements Serializable {
 	/**
 	 * @param serviceareaid
 	 *            The serviceareaid to set.
-	 * @spring.validator type="required"
 	 */
 	public void setServiceareaid(Long serviceareaid) {
 		this.serviceareaid = serviceareaid;

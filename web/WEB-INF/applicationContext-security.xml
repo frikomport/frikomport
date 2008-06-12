@@ -129,6 +129,7 @@
                 <property name="userEzDaoJdbc" ref="userEzDaoJdbc"/>
                 <property name="roleManager" ref="roleManager"/>
                 <property name="messageSource" ref="messageSource"/>
+                <property name="organizationManager" ref="organizationManager"/>
             </bean>
         </property>
         <property name="transactionAttributes">

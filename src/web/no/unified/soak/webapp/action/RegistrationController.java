@@ -95,7 +95,7 @@ public class RegistrationController extends BaseFormController {
         if ((postback == null) || (postback.compareTo("1") != 0)) {
 	        // Check if a default organization should be applied
             User user = (User)session.getAttribute(Constants.USER_KEY);
-            if(user.getOrganizationid() != 0){
+            if(user.getOrganizationid() != null){
                 registration.setOrganizationid(user.getOrganizationid());
             }
 	
@@ -301,19 +301,8 @@ public class RegistrationController extends BaseFormController {
         if (model == null) {
             model = new HashMap();
         }
-
-        // Get all organizations in the database
-        List serviceAreasInDB = serviceAreaManager.getAll();
-        List serviceAreas = new ArrayList();
-        ServiceArea serviceAreaDummy = new ServiceArea();
-        serviceAreaDummy.setId(new Long(0));
-        serviceAreaDummy.setName(getText("misc.all", locale));
-        serviceAreas.add(serviceAreaDummy);
-        serviceAreas.addAll(serviceAreasInDB);
-
-        if (serviceAreas != null) {
-            model.put("serviceareas", serviceAreas);
-        }
+        
+        model.put("organizations", serviceAreaManager.getAllIncludingDummy(getText("misc.all", locale)));model.put("serviceareas", serviceAreaManager.getAllIncludingDummy(getText("misc.all", locale)));
 
         return model;
     }

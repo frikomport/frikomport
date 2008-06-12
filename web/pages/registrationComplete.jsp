@@ -112,9 +112,11 @@
             <fmt:message key="registration.organization"/>
         </th>
         <td>
+			<c:if test="${registration.organization != null}">
             <spring:bind path="registration.organization.name">
             	<c:out value="${status.value}"/>
             </spring:bind>
+			</c:if>
         </td>
     </tr>
     <tr>
@@ -122,9 +124,11 @@
             <fmt:message key="registration.serviceArea"/>
         </th>
         <td>
+			<c:if test="${registration.serviceArea != null}">
             <spring:bind path="registration.serviceArea.name">
             	<c:out value="${status.value}"/>
             </spring:bind>
+			</c:if>
         </td>
     </tr>
     <tr>

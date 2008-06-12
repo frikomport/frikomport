@@ -108,11 +108,12 @@ public interface UserManager {
 	 * @param email email for user
 	 * @param id id for user
 	 * @param rolenames rolenames for roles to be added to user
+	 * @param kommune kommune for user
 	 * @return user
 	 * @return null if the user could not be saved.
 	 */
 	public User addUser(String username, String firstName, String lastName, String email, Integer id,
-			List<String> rolenames);
+			List<String> rolenames, Integer kommune);
 
 	/**
 	 * Update user 
@@ -122,8 +123,9 @@ public interface UserManager {
 	 * @param email email for user
 	 * @param id id for user
 	 * @param rolenames rolenames for roles to be added to user
+	 * @param kommune kommune for user
 	 * @return 
 	 */
 	public void updateUser(User user, String firstName, String lastName, String email, Integer id,
-			List<String> rolenames);
+			List<String> rolenames, Integer kommune);
 }

@@ -1,16 +1,14 @@
 package no.unified.soak.service.impl;
 
-import no.unified.soak.service.UserSynchronizeManager;
-import no.unified.soak.service.UserManager;
-import no.unified.soak.service.UserExistsException;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+
 import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
 import no.unified.soak.ez.EzUser;
 import no.unified.soak.model.User;
-import no.unified.soak.model.Address;
-
-import java.util.Locale;
-import java.util.List;
-import java.util.Iterator;
+import no.unified.soak.service.UserManager;
+import no.unified.soak.service.UserSynchronizeManager;
 
 import org.springframework.orm.ObjectRetrievalFailureException;
 
@@ -42,10 +40,11 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
                 User user = null;
                 try{
                     user = userManager.getUser(ezUser.getUsername());
+                    userManager.updateUser(user, ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
                 }
                 catch (ObjectRetrievalFailureException orfe){
                     // No user, add
-                    user = userManager.addUser(ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail(), ezUser.getId(), ezUser.getRolenames());
+                    user = userManager.addUser(ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
                 }
 
                 // Set transaction?

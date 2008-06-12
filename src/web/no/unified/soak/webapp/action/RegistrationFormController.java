@@ -103,6 +103,7 @@ public class RegistrationFormController extends BaseFormController {
 	 */
 	protected Map referenceData(HttpServletRequest request) throws Exception {
 		Map model = new HashMap();
+    	Locale locale = request.getLocale();
         
         String courseId = request.getParameter("courseid");
 		if ((courseId == null) || !StringUtils.isNumeric(courseId)) {
@@ -116,13 +117,13 @@ public class RegistrationFormController extends BaseFormController {
 		}
 
 		// Retrieve all serviceareas into an array
-		List serviceAreas = serviceAreaManager.getAll();
+		List serviceAreas = serviceAreaManager.getAllIncludingDummy(getText("misc.none", locale));
 		if (serviceAreas != null) {
 			model.put("serviceareas", serviceAreas);
 		}
 
 		// Retrieve all organizations into an array
-        List organizations = organizationManager.getAll();
+        List organizations = organizationManager.getAllIncludingDummy(getText("misc.none", locale));
 		if (organizations != null) {
 			model.put("organizations", organizations);
 		}
@@ -242,9 +243,11 @@ public class RegistrationFormController extends BaseFormController {
 			// Lets find out if the course has room for this one
 			Boolean localAttendant = new Boolean(true);
 
-			if (registration.getOrganizationid().longValue() != course
-					.getOrganizationid().longValue()) {
-				localAttendant = new Boolean(false);
+			if (registration.getOrganizationid() != null){
+				if (registration.getOrganizationid().longValue() != course
+						.getOrganizationid().longValue()) {
+					localAttendant = new Boolean(false);
+				}
 			}
 
 			Integer availability = registrationManager.getAvailability(

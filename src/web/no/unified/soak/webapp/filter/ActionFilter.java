@@ -149,7 +149,7 @@ public class ActionFilter implements Filter {
 			eZSessionId = cookie.getValue();
 			ezUser = (new UserEzDaoJdbc()).findUserBySessionID(cookie.getValue());
 			copyToUserTable(session, ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser
-					.getEmail(), ezUser.getId(), ezUser.getRolenames());
+					.getEmail(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
 		} else {
 			ezUser.setName("No cookie found.");
 		}
@@ -181,16 +181,16 @@ public class ActionFilter implements Filter {
 	}
 
 	private void copyToUserTable(HttpSession session, String username, String firstName, String lastName, String email,
-			Integer id, List<String> rolenames) {
+			Integer id, List<String> rolenames, Integer kommune) {
 		ApplicationContext ctx = getContext();
 		UserManager mgr = (UserManager) ctx.getBean("userManager");
 		User user = null;
 		try {
 			user = mgr.getUser(username);
-			mgr.updateUser(user, firstName, lastName, email, id, rolenames);
+			mgr.updateUser(user, firstName, lastName, email, id, rolenames, kommune);
 		} catch (ObjectRetrievalFailureException exception) {
 			// User does not exists, make new.
-			user = mgr.addUser(username, firstName, lastName, email, id, rolenames);
+			user = mgr.addUser(username, firstName, lastName, email, id, rolenames, kommune);
 		}
 		session.setAttribute(Constants.USER_KEY, user);
 

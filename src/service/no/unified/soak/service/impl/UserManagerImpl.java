@@ -17,8 +17,10 @@ import no.unified.soak.dao.UserDAO;
 import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
 import no.unified.soak.ez.EzUser;
 import no.unified.soak.model.Address;
+import no.unified.soak.model.Organization;
 import no.unified.soak.model.User;
 import no.unified.soak.model.UserCookie;
+import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RoleManager;
 import no.unified.soak.service.UserExistsException;
 import no.unified.soak.service.UserManager;
@@ -47,6 +49,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
     private UserEzDaoJdbc userEzDaoJdbc;
     private RoleManager roleManager;
     private MessageSource messageSource;
+    private OrganizationManager organizationManager;
 
     /**
      * Set the DAO for communication with the data layer.
@@ -66,6 +69,11 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 
 	public void setRoleManager(RoleManager roleManager) {
 		this.roleManager = roleManager;
+	}
+	
+	public void setOrganizationManager(
+			OrganizationManager organizationManager) {
+		this.organizationManager = organizationManager;
 	}
 
 	/**
@@ -185,7 +193,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 				users.add(dao.getUser(ezUser.getUsername()));
 			} catch (ObjectRetrievalFailureException objectRetrievalFailureException) {
 				User user = addUser(ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser
-						.getEmail(), ezUser.getId(), ezUser.getRolenames());
+						.getEmail(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
 				users.add(user);
 			}
 		}
@@ -193,12 +201,15 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	}
 
 	public User addUser(String username, String firstName, String lastName, String email, Integer id,
-			List<String> rolenames) {
+			List<String> rolenames, Integer kommune) {
 		User user = new User(username);
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setEmail(email);
 		user.setId(id);
+		if (kommune != null && kommune != 0){
+			setKommune(kommune, user);
+		}
 		setRoles(rolenames, user);
 		user.setEnabled(true);
 		Address address = new Address();
@@ -212,14 +223,39 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 			return null;
 		}
 	}
+
+	private void setKommune(Integer kommune, User user) {
+		List organizations = organizationManager.getAll();
+		// first search in ids
+		for (Iterator iter = organizations.iterator(); iter.hasNext();) {
+			Organization organization = (Organization) iter.next();
+			
+			if (organization.getId().equals(kommune.longValue())){
+				user.setOrganizationid(organization.getId());
+				return;
+			}
+		}
+		// if no match search in numbers.
+		for (Iterator iter = organizations.iterator(); iter.hasNext();) {
+			Organization organization = (Organization) iter.next();
+			
+			if (organization.getNumber().equals(kommune.longValue())){
+				user.setOrganizationid(organization.getId());
+				return;
+			}
+		}
+	}
 	
 	public void updateUser(User user, String firstName, String lastName, String email, Integer id,
-			List<String> rolenames) {
+			List<String> rolenames, Integer kommune) {
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
 		user.setEmail(email);
 		user.setEnabled(true);
 		user.setId(id);
+		if (kommune != null && kommune != 0){
+			setKommune(kommune, user);
+		}
 		setRoles(rolenames, user);
 		try {
 			saveUser(user);
