@@ -12,5 +12,5 @@ public interface DatabaseUpdateManager extends Task{
     /**
      * Updates courses according to new scheme
      */
-    public void updateCourses();
+    public void updateDatabase();
 }
