@@ -95,7 +95,7 @@ public class CourseController extends BaseFormController {
             course = (Course) comm;
         }
 
-        // only published courses
+        // default published courses
         course.setStatus(CourseStatus.COURSE_PUBLISHED);
 
         Boolean historic = new Boolean(false);
@@ -134,6 +134,8 @@ public class CourseController extends BaseFormController {
             if (hist.compareTo("0") != 0) {
                 starttime = null;
                 historic = new Boolean(true);
+                // also finished courses
+                course.setStatus(CourseStatus.COURSE_FINISHED);
             }
         }
 
@@ -145,6 +147,8 @@ public class CourseController extends BaseFormController {
                 stoptime = new Date();
                 historic = new Boolean(true);
                 past = new Boolean(true);
+                // also finished courses
+                course.setStatus(CourseStatus.COURSE_FINISHED);
             }
         }
         
@@ -242,6 +246,8 @@ public class CourseController extends BaseFormController {
             if (hist.compareTo("0") != 0) {
                	starttime = null;
                 historic = new Boolean(true);
+                // also finished courses
+                course.setStatus(CourseStatus.COURSE_FINISHED);
             }
         }
 
@@ -252,6 +258,8 @@ public class CourseController extends BaseFormController {
             	starttime = null;
                 stoptime = new Date();
                 past = new Boolean(true);
+                // also finished courses
+                course.setStatus(CourseStatus.COURSE_FINISHED);
             }
         }
         
