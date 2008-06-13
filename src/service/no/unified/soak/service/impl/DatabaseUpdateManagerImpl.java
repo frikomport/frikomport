@@ -2,12 +2,21 @@ package no.unified.soak.service.impl;
 
 import no.unified.soak.service.DatabaseUpdateManager;
 import no.unified.soak.service.CourseManager;
+import no.unified.soak.service.RegistrationManager;
+import no.unified.soak.service.UserManager;
 import no.unified.soak.model.Course;
+import no.unified.soak.model.Registration;
+import no.unified.soak.model.User;
 import no.unified.soak.Constants;
 
 import java.util.Locale;
 import java.util.List;
 import java.util.Iterator;
+import java.util.ArrayList;
+
+import org.springframework.validation.Validator;
+import org.springframework.orm.ObjectRetrievalFailureException;
+import org.apache.commons.validator.EmailValidator;
 
 /**
  * User: gv
@@ -17,17 +26,64 @@ import java.util.Iterator;
 public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUpdateManager {
 
     private CourseManager courseManager = null;
+    private RegistrationManager registrationManager = null;
+    private UserManager userManager = null;
 
     public void setCourseManager(CourseManager courseManager) {
         this.courseManager = courseManager;
+    }
+
+    public void setRegistrationManager(RegistrationManager registrationManager) {
+        this.registrationManager = registrationManager;
+    }
+
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
     }
 
     public void updateDatabase() {
         // Course updates
         updateResponsibleUsername();
         updateRolename();
+        // Registrations
+        updateRegistrations();
+    }
 
-        // Registrations... make users based on registrations
+    /**
+     * Checks the registrations table and creates users based on email addresses
+     */
+    private void updateRegistrations() {
+        List<Registration> registrations = registrationManager.getRegistrations(new Registration());
+        if(registrations != null && !registrations.isEmpty()){
+            Iterator<Registration> it = registrations.iterator();
+            while (it.hasNext()){
+                Registration registration = it.next();
+                // Only use valid emails
+                if((registration.getUsername() == null || registration.getUsername().length() == 0) && EmailValidator.getInstance().isValid(registration.getEmail())){
+                    User user = null;
+                    try{
+                        user = userManager.findUser(registration.getEmail());
+                    } catch (ObjectRetrievalFailureException e){
+                        // User not present, create
+                        user = userManager.addUser(registration.getEmail(), registration.getFirstName(), registration.getLastName(), registration.getEmail(), new Integer(0), getDefaultRoles(), new Integer(0));
+                    }
+                    // Connect user with registration
+                    registration.setUser(user);
+                    registration.setUsername(user.getUsername());
+                    registrationManager.saveRegistration(registration);
+                }
+                else {
+                    // User exist or email not valid, do nothing
+                }
+            }
+        }
+    }
+
+    private List<String> getDefaultRoles() {
+        List<String> roles = new ArrayList();
+        roles.add(Constants.ANONYMOUS_ROLE);
+        roles.add(Constants.EMPLOYEE_ROLE);
+        return roles;
     }
 
     private void updateRolename() {
@@ -71,7 +127,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     }
 
     public void executeTask() {
-        log.info("running courseUpdateManager");
+        log.info("running databaseUpdateManager");
         updateDatabase();
     }
 

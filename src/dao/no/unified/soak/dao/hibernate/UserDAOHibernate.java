@@ -14,6 +14,8 @@ import no.unified.soak.model.User;
 import no.unified.soak.model.UserCookie;
 
 import org.springframework.orm.ObjectRetrievalFailureException;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 
 
 /**
@@ -42,6 +44,16 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
         return user;
     }
 
+    public User findUser(String email) {
+        DetachedCriteria criteria = DetachedCriteria.forClass(User.class);
+        criteria.add(Restrictions.eq("email",email));
+        List<User> result = getHibernateTemplate().findByCriteria(criteria);
+        if(result == null || result.size() != 1){
+            throw  new ObjectRetrievalFailureException(User.class, email);
+        }
+        return result.get(0);
+    }
+
     /**
      * @see no.unified.soak.dao.UserDAO#getUsers(no.unified.soak.model.User)
      */
@@ -65,7 +77,6 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
         if (log.isDebugEnabled()) {
             log.debug("user's id: " + user.getUsername());
         }
-
         getHibernateTemplate().saveOrUpdate(user);
         // necessary to throw a DataIntegrityViolation and catch it in UserManager
         getHibernateTemplate().flush();

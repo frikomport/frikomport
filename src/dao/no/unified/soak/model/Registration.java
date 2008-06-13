@@ -36,7 +36,9 @@ public class Registration extends BaseObject implements Serializable {
 
 	private Course course;
 
-	private Organization organization;
+    private User user;
+
+    private Organization organization;
 
 	private ServiceArea serviceArea;
 
@@ -68,7 +70,9 @@ public class Registration extends BaseObject implements Serializable {
 
 	private Long serviceareaid;
 
-	private String locale;
+    private String username;
+
+    private String locale;
 	
 	private String comment;
 	
@@ -104,7 +108,23 @@ public class Registration extends BaseObject implements Serializable {
 		this.course = course;
 	}
 
-	/**
+    /**
+	 * @return Returns the user.
+	 * @hibernate.many-to-one not-null="false" column="username" insert="false" update="false" cascade="none"
+	 */
+    public User getUser() {
+        return user;
+    }
+
+    /**
+	 * @param user
+	 *            The user to set.
+	 */
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    /**
 	 * @return Returns the courseid.
 	 * @hibernate.property column="courseid" not-null="true"
 	 */
@@ -123,7 +143,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the email.
-	 * @hibernate.property column="email" length="50" not-null="true"
+	 * @hibernate.property column="email" not-null="true"
 	 */
 	public String getEmail() {
 		return email;
@@ -384,7 +404,23 @@ public class Registration extends BaseObject implements Serializable {
 		this.serviceareaid = serviceareaid;
 	}
 
-	/**
+    /**
+	 * @return Returns the username.
+	 * @hibernate.property column="username" not-null="false" length="50"
+	 */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+	 * @param username
+	 *            The usename to set.
+	 */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    /**
 	 * @return Returns the useMailAddress.
 	 * @hibernate.property column="usemailaddress" length="100"
 	 */

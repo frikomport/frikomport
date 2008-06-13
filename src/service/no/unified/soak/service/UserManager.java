@@ -42,7 +42,16 @@ public interface UserManager {
 	 */
 	public User getUser(String username);
 
-	/**
+    /**
+	 * Retrieves a user by email.  An exception is thrown if no user
+	 * is found.
+	 *
+	 * @param username
+	 * @return User
+	 */
+    public User findUser(String email);
+
+    /**
 	 * Retrieves a list of users, filtering with parameters on a user object
 	 * @param user parameters to filter on
 	 * @return List

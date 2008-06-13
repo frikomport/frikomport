@@ -69,7 +69,7 @@ public class User extends BaseObject implements Serializable {
      *
      * @return String
      *
-     * @hibernate.id column="username" length="50" generator-class="assigned"
+     * @hibernate.id column="username" length="100" generator-class="assigned"
      *               unsaved-value="version"
      */
     public String getUsername() {
@@ -135,7 +135,7 @@ public class User extends BaseObject implements Serializable {
      *
      * @return String
      *
-     * @hibernate.property name="email" not-null="true" unique="true"
+     * @hibernate.property name="email" not-null="true" unique="true" length="100"
      */
     public String getEmail() {
         return email;

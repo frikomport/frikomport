@@ -264,6 +264,7 @@ public class Constants {
     public static final int EMAIL_EVENT_COURSECANCELLED = 8;
 
     // Timers
+    public static final long TASK_IMMEDIATE = 2000;       // 2 second
     public static final long TASK_INITIAL_DELAY = 10000;  // 10 sekunder
     public static final long TASK_RUN_INTERVAL = 1800000; // 30 minutter
 }

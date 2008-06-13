@@ -634,6 +634,7 @@
 
   <table name='registration'>
     <column>courseid</column>
+    <column>username</column>
     <column>email</column>
     <column>employeenumber</column>
     <column>firstname</column>
@@ -653,6 +654,7 @@
     <column>attended</column>
     <row>
         <value>1</value>
+        <value></value>
         <value>frikomport@gmail.com</value>
         <value>12345</value>
         <value>Henrik</value>
@@ -673,6 +675,7 @@
     </row>
     <row>
         <value>2</value>
+        <value></value>
         <value>frikomport@gmail.com</value>
         <value>54321</value>
         <value>Klaus</value>
@@ -693,6 +696,7 @@
     </row>
     <row>
         <value>1</value>
+        <value></value>
         <value>frikomport@gmail.com</value>
         <value>51342</value>
         <value>Frik</value>
@@ -713,6 +717,7 @@
     </row>
     <row>
         <value>2</value>
+        <value></value>
         <value>frikomport@gmail.com</value>
         <value>12345</value>
         <value>Hinrek</value>
@@ -733,6 +738,7 @@
     </row>
     <row>
         <value>1</value>
+        <value></value>
         <value>frikomport@gmail.com</value>
         <value>54321</value>
         <value>Klausern</value>
@@ -753,6 +759,7 @@
     </row>
     <row>
         <value>1</value>
+        <value></value>
         <value>frikomport@unified.no</value>
         <value>99999</value>
         <value>Henrik</value>
@@ -773,6 +780,7 @@
     </row>
     <row>
         <value>1</value>
+        <value></value>
         <value>acr@unified.no</value>
         <value>88888</value>
         <value>Henrik</value>
@@ -793,6 +801,7 @@
     </row>
     <row>
         <value>1</value>
+        <value></value>
         <value>frikomport@gmail.com</value>
         <value>77777</value>
         <value>Klaus</value>
@@ -813,6 +822,7 @@
     </row>
     <row>
         <value>1</value>
+        <value></value>
         <value>frikomport@gmail.com</value>
         <value>66666</value>
         <value>Kari</value>
@@ -833,6 +843,7 @@
     </row>
     <row>
         <value>1</value>
+        <value></value>
         <value>frikomport@unified.no</value>
         <value>55555</value>
         <value>FriKomporten</value>

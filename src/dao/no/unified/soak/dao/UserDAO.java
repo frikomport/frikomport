@@ -31,6 +31,13 @@ public interface UserDAO extends DAO {
     public User getUser(String username);
 
     /**
+     * Gets users information based on email address.
+     * @param email the current email
+     * @return user populated user object
+     */
+    public User findUser(String email);
+
+    /**
      * Gets a list of users based on parameters passed in.
      *
      * @return List populated list of users

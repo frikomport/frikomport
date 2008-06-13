@@ -27,7 +27,6 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.MessagingException;
 
 import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.Date;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.Version;
@@ -45,16 +44,16 @@ import net.fortuna.ical4j.util.Uris;
 public class MailUtil {
 //	public static final Log log = LogFactory.getLog(MailUtil.class);
 
-	public static void sendMails(ArrayList<SimpleMailMessage> Emails, MailEngine engine) {
-        Log log = LogFactory.getLog(MailUtil.class.toString());
-        if (Emails != null) {
-			for (int i = 0; i < Emails.size(); i++) {
-				SimpleMailMessage theEmail = Emails.get(i);
-				log.debug("Sent mail to: " + theEmail.getTo());
-				engine.send(theEmail);
-			}
-		}
-	}
+//	public static void sendMails(ArrayList<SimpleMailMessage> Emails, MailEngine engine) {
+//        Log log = LogFactory.getLog(MailUtil.class.toString());
+//        if (Emails != null) {
+//			for (int i = 0; i < Emails.size(); i++) {
+//				SimpleMailMessage theEmail = Emails.get(i);
+//				log.debug("Sent mail to: " + theEmail.getTo());
+//				engine.send(theEmail);
+//			}
+//		}
+//	}
 
     public static void sendMimeMails(ArrayList<MimeMessage> Emails, MailEngine engine) {
 		if (Emails != null) {
@@ -311,74 +310,6 @@ public class MailUtil {
 		return msg;
 	}
 
-	/**
-	 * Sets the subject, recipient, sender etc. to a message object
-	 * 
-	 * @param registration
-	 *            The registration to be handled
-	 * @param event
-	 *            The event that triggered the sending of this mail: Is a course deleted, changed, is this a
-	 *            notification mail?
-	 * @param course
-	 *            the course in question
-	 * @param msg
-	 *            the body message
-	 * @param messageSource
-	 *            the source for our message
-	 * @param message
-	 *            the mail object
-	 * @param locale
-	 *            The language to fetch messages in
-	 */
-//	public static ArrayList<SimpleMailMessage> setMailInfo(Registration registration, int event, Course course,
-//			StringBuffer msg, MessageSource messageSource, Locale locale) {
-//		List<Registration> theRegistration = new ArrayList<Registration>();
-//		theRegistration.add(registration);
-//		return setMailInfo(theRegistration, event, course, msg, messageSource, locale, null);
-//	}
-
-	/**
-	 * Sets the subject, recipient, sender etc. to a message object
-	 * 
-	 * @param registrations
-	 *            All the registrations that are to be handled
-     * @param event
- *            The event that triggered the sending of this mail: Is a course deleted, changed, is this a
- *            notification mail?
-     * @param course
-*            the course in question
-     * @param msg
-*            the body message
-     * @param messageSource
-*            the source for our message
-     * @param locale
-     * @param mailSender
-     */
-//	public static ArrayList<SimpleMailMessage> setMailInfo(List<Registration> registrations, int event, Course course,
-//                                                           StringBuffer msg, MessageSource messageSource, Locale locale, String mailSender) {
-//		ArrayList<SimpleMailMessage> allEMails = new ArrayList<SimpleMailMessage>();
-//
-//        String registered = StringEscapeUtils.unescapeHtml(getText("courseNotification.phrase.registered", locale, messageSource));
-//		String waiting = StringEscapeUtils.unescapeHtml(getText("courseNotification.phrase.waitinglist", locale, messageSource));
-//
-//        for (Registration registration : registrations) {
-//			SimpleMailMessage message = new SimpleMailMessage();
-//            message.setSubject(getSubject(registration,event,registered,waiting,course.getName(),messageSource,locale));
-//			message.setText(getText(registration, msg, registered, waiting, course.getName(), messageSource, locale ));
-//            List recipients = getRecipients(registration, course.getResponsible());
-//            log.debug("The mail is to: " + recipients);
-//            message.setTo(StringUtil.list2Array(recipients));
-//
-//            if(mailSender != null && !mailSender.equals(""))
-//                message.setFrom(mailSender);
-//            else
-//                message.setFrom(StringEscapeUtils.unescapeHtml(getText("mail.default.from", locale, messageSource)));
-//
-//			allEMails.add(message);
-//		}
-//		return allEMails;
-//	}
-
     /**
      * Sets subject, text, recipients and senders to a mail object
      * @param registration The registrations to recieve mail
@@ -427,7 +358,7 @@ public class MailUtil {
             try {
                 helper = new MimeMessageHelper(message, true);
                 helper.setSubject(getSubject(registration,event,registered,waiting,course.getName(),messageSource,locale));
-                helper.setText(getText(registration, msg, registered, waiting, course.getName(), messageSource, locale ));
+                helper.setText(getBody(registration, msg, registered, waiting, course.getName(), messageSource, locale ));
                 Calendar cal = getICalendar(course);
                 ByteArrayResource bar = new ByteArrayResource(cal.toString().getBytes());
                 helper.addAttachment("calendar.ics",bar);
@@ -502,8 +433,6 @@ public class MailUtil {
             cal.getProperties().add(CalScale.GREGORIAN);
             cal.getComponents().add(event);
 
-            log.info("\n" + cal.toString());
-            
         } catch (Exception e) {
             log.error("Could not create calendar",e);
         }
@@ -583,7 +512,7 @@ public class MailUtil {
         return subject;
     }
 
-    public static String getText(Registration registration, StringBuffer msg, String registeredMsg, String waitingMsg, String coursename, MessageSource messageSource, Locale locale){
+    public static String getBody(Registration registration, StringBuffer msg, String registeredMsg, String waitingMsg, String coursename, MessageSource messageSource, Locale locale){
         String custom = msg.toString();
         if (registration.getReserved()) {
             custom.replaceAll("<registeredfor/>", registeredMsg).replaceAll("<coursename/>", coursename);

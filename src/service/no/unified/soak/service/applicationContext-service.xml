@@ -47,9 +47,6 @@
         <property name="transactionAttributes">
             <props>
                 <prop key="save*">PROPAGATION_REQUIRED,-UserExistsException</prop>
-                <prop key="remove*">PROPAGATION_REQUIRED</prop>
-                <prop key="*LoginCookie">PROPAGATION_REQUIRED</prop>
-                <prop key="*">PROPAGATION_REQUIRED</prop>
             </props>
         </property>
         <!-- This property is overriden in applicationContext-security.xml to add
@@ -109,7 +106,7 @@
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
         <property name="basename" value="ApplicationResources"/>
     </bean>
-    
+
     <bean id="organizationManager" parent="txProxyTemplate">
     	<property name="target">
    	    	<bean class="no.unified.soak.service.impl.OrganizationManagerImpl" autowire="byName" />
@@ -150,6 +147,11 @@
     <bean id="registrationManager" parent="txProxyTemplate">
         <property name="target">
             <bean class="no.unified.soak.service.impl.RegistrationManagerImpl" autowire="byName"/>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="save*">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
+            </props>
         </property>
     </bean>
     <!--Registration-END-->
@@ -193,15 +195,29 @@
     <!-- CourseStatus-END-->
 
     <!-- UserSynchronize-START-->
-    <bean id="userSynchronizeManager" class="no.unified.soak.service.impl.UserSynchronizeManagerImpl" autowire="byName"/>
-    <!-- UserSynchronize-END-->
-
-    <!-- CourseUpdater-START-->
-    <bean id="databaseUpdateManager" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="no.unified.soak.service.impl.DatabaseUpdateManagerImpl" autowire="byName"/>
+    <bean id="userSynchronizeManager" parent="txProxyTemplate">
+         <property name="target">
+            <bean class="no.unified.soak.service.impl.UserSynchronizeManagerImpl" autowire="byName"/>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="save*">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
+            </props>
         </property>
     </bean>
-    <!-- CourseUpdater-END-->
+    <!-- UserSynchronize-END-->
+
+    <!-- DatabaseUpdate-START-->
+    <bean id="databaseUpdateManager" parent="txProxyTemplate">
+         <property name="target">
+            <bean class="no.unified.soak.service.impl.DatabaseUpdateManagerImpl" autowire="byName"/>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="save*">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
+            </props>
+        </property>
+    </bean>
+    <!-- DatabaseUpdate-END-->
 
 </beans>

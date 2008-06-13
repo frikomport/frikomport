@@ -65,7 +65,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class ActionFilter implements Filter {
 	private static Boolean secure = Boolean.FALSE;
 
-	private final transient Log log = LogFactory.getLog(ActionFilter.class);
+	private final transient Log log = LogFactory.getLog(ActionFilter.class.toString());
 
 	private FilterConfig config = null;
 
@@ -90,7 +90,7 @@ public class ActionFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse) resp;
 		HttpSession session = request.getSession(true);
 
-		// notify the LocaleContextHolder what locale is being used so
+        // notify the LocaleContextHolder what locale is being used so
 		// service and data layer classes can get the locale
 		LocaleContextHolder.setLocale(request.getLocale());
 

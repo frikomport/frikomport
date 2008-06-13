@@ -39,7 +39,7 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
 		return getHibernateTemplate().find("from Registration");
 	}
 
-	/**
+    /**
 	 * @see no.unified.soak.dao.RegistrationDAO#getRegistration(Long id)
 	 */
 	public Registration getRegistration(final Long id) {
@@ -59,8 +59,9 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
 	 *      registration)
 	 */
 	public void saveRegistration(final Registration registration) {
-		getHibernateTemplate().saveOrUpdate(registration);
-	}
+        getHibernateTemplate().saveOrUpdate(registration);
+        getHibernateTemplate().flush();
+    }
 
 	/**
 	 * @see no.unified.soak.dao.RegistrationDAO#removeRegistration(Long id)
@@ -260,6 +261,5 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
 		}
 		return result;
 	}
-	
-	
+
 }

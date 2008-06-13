@@ -98,6 +98,10 @@ public class UserManagerImpl extends BaseManager implements UserManager {
         return dao.getUsers(user);
     }
 
+    public User findUser(String email) {
+        return dao.findUser(email);
+    }
+
     /**
      * @see no.unified.soak.service.UserManager#saveUser(no.unified.soak.model.User)
      */
@@ -226,7 +230,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		user.setHash(StringUtil.encodeString(username));
 		try {
 			saveUser(user);
-			return user;
+            return user;
 		} catch (UserExistsException e) {
 			log.error("UserExistsException: " + e);
 			return null;

@@ -99,7 +99,7 @@ public class StartupListener extends ContextLoaderListener implements
         // Tasks to be completed once
         ScheduledTasks once = new ScheduledTasks();
         once.addTask(databaseUpdateManager);
-        timer.schedule(once, Constants.TASK_INITIAL_DELAY);
+        timer.schedule(once, Constants.TASK_IMMEDIATE);
 
         // Recurring tasks
 		NotificationManager notificationManager = (NotificationManager) ctx.getBean("notificationManager");
