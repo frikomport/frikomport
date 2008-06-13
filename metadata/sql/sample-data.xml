@@ -76,6 +76,7 @@
     <column>workplace</column>
     <column>mobilephone</column>
     <column>id</column>
+    <column>hash</column>
     <row>
       <value>employee</value>
       <value></value>
@@ -97,6 +98,7 @@
       <value></value>
       <value></value>
       <value>1</value>
+      <value>ZW1wbG95ZWU=</value>
     </row>
     <row>
       <value>instructor</value>
@@ -119,6 +121,7 @@
       <value></value>
       <value></value>
       <value>2</value>
+      <value>aW5zdHJ1Y3Rvcg==</value>
     </row>
     <row>
       <value>admin</value>
@@ -141,6 +144,7 @@
       <value></value>
       <value></value>
       <value>3</value>
+      <value>YWRtaW4=</value>
     </row>
     <row>
       <value>editor</value>
@@ -163,6 +167,7 @@
       <value></value>
       <value></value>
       <value>4</value>
+      <value>ZWRpdG9y</value>
     </row>
     <row>
       <value>anonymous</value>
@@ -185,6 +190,7 @@
       <value></value>
       <value></value>
       <value>5</value>
+      <value>YW5vbnltb3Vz</value>
     </row>
   </table>
   

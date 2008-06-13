@@ -38,6 +38,13 @@ public interface UserDAO extends DAO {
     public List getUsers(User user);
 
     /**
+     * Gets users information based on hash.
+     * @param hash the current hash
+     * @return user populated user object
+     */
+    public User getUserByHash(String hash);
+
+    /**
      * Saves a user's information
      * @param user the object to be saved
      */

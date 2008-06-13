@@ -34,7 +34,7 @@ public interface UserManager {
 	public void setMessageSource(MessageSource messageSource);
 
 	/**
-	 * Retrieves a user by username.  An exception is thrown if now user
+	 * Retrieves a user by username.  An exception is thrown if no user
 	 * is found.
 	 *
 	 * @param username
@@ -49,6 +49,15 @@ public interface UserManager {
 	 */
 	public List getUsers(User user);
 
+	/**
+	 * Retrieves a user by hash.  An exception is thrown if no user
+	 * is found.
+	 *
+	 * @param hash
+	 * @return User
+	 */
+	public User getUserByHash(String hash);
+	
 	/**
 	 * Saves a user's information
 	 *

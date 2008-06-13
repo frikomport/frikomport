@@ -84,6 +84,14 @@ public class UserManagerImpl extends BaseManager implements UserManager {
     }
 
     /**
+     * @see no.unified.soak.service.UserManager#getUserByHash(java.lang.String)
+     */
+    public User getUserByHash(String hash) {
+        return dao.getUserByHash(hash);
+    }
+
+    
+    /**
      * @see no.unified.soak.service.UserManager#getUsers(no.unified.soak.model.User)
      */
     public List getUsers(User user) {
@@ -215,6 +223,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		Address address = new Address();
 		address.setPostalCode("0");
 		user.setAddress(address);
+		user.setHash(StringUtil.encodeString(username));
 		try {
 			saveUser(user);
 			return user;
@@ -296,5 +305,4 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		List users = userEzDaoJdbc.findKursansvarligeUser();
 		return users;
 	}
-
 }

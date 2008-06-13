@@ -55,6 +55,7 @@ public class User extends BaseObject implements Serializable {
     protected String workplace;
     protected ServiceArea serviceArea;
     protected Long serviceareaid;
+    protected String hash;
   
     public User() {
     }
@@ -519,6 +520,26 @@ public class User extends BaseObject implements Serializable {
     public void setWorkplace(String workplace) {
         this.workplace = workplace;
     }
+
+    /**
+     * @return the hash
+	 * @hibernate.property column="hash" 
+	 */
+	public String getHash() {
+		return hash;
+	}
+
+    
+    /**
+	 * Sets the hash.
+	 * 
+	 * @param hash
+	 *            The hash to set
+	 * @spring.validator type="required"
+	 */
+	public void setHash(String hash) {
+		this.hash = hash;
+	}
 
 	public boolean equals(Object o) {
         if (this == o) {
