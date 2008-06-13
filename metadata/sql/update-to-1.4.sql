@@ -29,7 +29,8 @@ ALTER TABLE app_user MODIFY COLUMN version INTEGER;
 ALTER TABLE app_user MODIFY COLUMN password VARCHAR(255);
 ALTER TABLE app_user MODIFY COLUMN city VARCHAR(50);
 ALTER TABLE app_user MODIFY COLUMN postal_code VARCHAR(15);
-
+ALTER TABLE registration MODIFY COLUMN organizationid BIGINT(20);
+ALTER TABLE registration MODIFY COLUMN serviceareaid BIGINT(20);
 ALTER TABLE registration ADD COLUMN username VARCHAR(100);
 
 -- create users based on registrations
