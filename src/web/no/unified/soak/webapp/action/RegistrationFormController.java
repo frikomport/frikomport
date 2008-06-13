@@ -237,6 +237,7 @@ public class RegistrationFormController extends BaseFormController {
 			// We need the course as reference data
 			Course course = courseManager.getCourse(registration.getCourseid().toString());
             model.put("course", course);
+            registration.setCourse(course);
 
             // Is this a valid date to register?
 			// (It is always allowed to edit the data)

@@ -17,7 +17,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.validator.EmailValidator;
 import org.springframework.context.MessageSource;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -85,7 +84,7 @@ public class MailUtil {
 	/**
 	 * Creates a standard mail body containing all the details of a course and some information on the event that
 	 * triggered the mail to be sent.
-	 * 
+	 *
 	 * @param course
 	 *            The course in question
 	 * @param event
@@ -96,7 +95,7 @@ public class MailUtil {
 	 *            The source for our messages.
 	 * @param mailComment
 	 *            Optional comment from the admin initiating the sending of this mail
-	 * @return A complete mail body ready to be inserted into an e-mail object
+     * @return A complete mail body ready to be inserted into an e-mail object
 	 */
 	public static StringBuffer createStandardBody(Course course, int event, Locale locale, MessageSource messageSource,
                                                   String mailComment) {
@@ -106,7 +105,7 @@ public class MailUtil {
 	/**
 	 * Creates a standard mail body containing all the details of a course and some information on the event that
 	 * triggered the mail to be sent.
-	 * 
+	 *
 	 * @param course
 	 *            The course in question
 	 * @param event
@@ -117,10 +116,10 @@ public class MailUtil {
 	 *            The source for our messages.
 	 * @param reservationConfirmed
 	 *            Set to true if the reservation is confirmed, and to false if the attendee is on the waiting list
-	 * @return A complete mail body ready to be inserted into an e-mail object
+     * @return A complete mail body ready to be inserted into an e-mail object
 	 */
 	public static StringBuffer createStandardBody(Course course, int event, Locale locale, MessageSource messageSource,
-			boolean reservationConfirmed) {
+                                                  boolean reservationConfirmed) {
 		return createStandardBody(course, event, locale, messageSource, null, reservationConfirmed);
 	}
 
@@ -238,8 +237,8 @@ public class MailUtil {
 		// the course still exists
 		if (event != Constants.EMAIL_EVENT_COURSEDELETED) {
 			String baseurl = StringEscapeUtils.unescapeHtml(getText("javaapp.baseurl", locale, messageSource));
-			String coursedetailurl = StringEscapeUtils.unescapeHtml(getText("javaapp.coursedetailurl", String
-					.valueOf(course.getId()), locale, messageSource));
+            String coursedetailurl = StringEscapeUtils.unescapeHtml(getText("javaapp.coursedetailurl",
+                    String.valueOf(course.getId()), locale, messageSource));
 			msg.append("\n\n");
 			msg.append(StringEscapeUtils.unescapeHtml(getText("javaapp.findurlhere", locale, messageSource)) + " "
 					+ baseurl + coursedetailurl);
@@ -357,8 +356,8 @@ public class MailUtil {
             MimeMessageHelper helper = null;
             try {
                 helper = new MimeMessageHelper(message, true);
-                helper.setSubject(getSubject(registration,event,registered,waiting,course.getName(),messageSource,locale));
-                helper.setText(getBody(registration, msg, registered, waiting, course.getName(), messageSource, locale ));
+                helper.setSubject(getSubject(registration,event,registered,waiting, messageSource,locale));
+                helper.setText(getBody(registration, msg, registered, waiting, messageSource, locale ));
                 Calendar cal = getICalendar(course);
                 ByteArrayResource bar = new ByteArrayResource(cal.toString().getBytes());
                 helper.addAttachment("calendar.ics",bar);
@@ -453,8 +452,9 @@ public class MailUtil {
         return emails;
     }
 
-    public static String getSubject(Registration registration, int event, String registered, String waiting, String coursename, MessageSource messageSource, Locale locale){
+    public static String getSubject(Registration registration, int event, String registered, String waiting, MessageSource messageSource, Locale locale){
         String subject = null;
+        String coursename = registration.getCourse().getName();
         switch (event) {
         case Constants.EMAIL_EVENT_COURSECHANGED:
             if (registration.getReserved()) {
@@ -512,13 +512,14 @@ public class MailUtil {
         return subject;
     }
 
-    public static String getBody(Registration registration, StringBuffer msg, String registeredMsg, String waitingMsg, String coursename, MessageSource messageSource, Locale locale){
+    public static String getBody(Registration registration, StringBuffer msg, String registeredMsg, String waitingMsg, MessageSource messageSource, Locale locale){
         String custom = msg.toString();
         if (registration.getReserved()) {
-            custom.replaceAll("<registeredfor/>", registeredMsg).replaceAll("<coursename/>", coursename);
+            custom = custom.replaceAll("<registeredfor/>", registeredMsg);
         } else {
-            custom.replaceAll("<registeredfor/>", waitingMsg).replaceAll("<coursename/>", coursename);
+            custom = custom.replaceAll("<registeredfor/>", waitingMsg);
         }
+        custom = custom.replaceAll("<coursename/>",registration.getCourse().getName()).replaceAll("<userhash/>",registration.getUser().getHash());
 
         StringBuffer msgIndivid = new StringBuffer(custom);
         msgIndivid.insert(0, "\n\n");
@@ -597,7 +598,7 @@ public class MailUtil {
 	 * @param messageSource
 	 *            The source of our messages
 	 */
-	public String getText(String msgKey, Object[] args, Locale locale, MessageSource messageSource) {
+	public static String getText(String msgKey, Object[] args, Locale locale, MessageSource messageSource) {
 		String result = "";
 		try {
 			result = messageSource.getMessage(msgKey, args, locale);
