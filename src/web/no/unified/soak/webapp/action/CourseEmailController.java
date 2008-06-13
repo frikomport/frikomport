@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
@@ -32,17 +33,10 @@ public class CourseEmailController extends CourseNotificationController
         }
         Map model = new HashMap();
         Locale locale = request.getLocale();
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute(Constants.USER_KEY);
 
-        String defaultFrom = getText("mail.default.from", locale);
-        model.put("defaultfrom", defaultFrom);
-
-        Course course = null;
-        if(command != null) {
-            course = (Course)command;
-            User responsible = course.getResponsible();
-            String responsiblefrom = responsible.getFullName() + " <" + responsible.getEmail() + ">";
-            model.put("responsiblefrom",responsiblefrom);
-        }
+        model.put("mailsenders",getMailSenders((Course)command, user, locale));
 
         return model;
     }

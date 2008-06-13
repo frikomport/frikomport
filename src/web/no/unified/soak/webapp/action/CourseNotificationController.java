@@ -18,6 +18,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.mail.internet.MimeMessage;
 
 import no.unified.soak.Constants;
@@ -86,8 +87,10 @@ public class CourseNotificationController extends BaseFormController {
         Locale locale = request.getLocale();
         String courseid = request.getParameter("id");
 		model.put("id", courseid);
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute(Constants.USER_KEY);
 
-		// Are we to enable mail comment field and buttons?
+        // Are we to enable mail comment field and buttons?
 		Boolean enableMail = new Boolean(false);
 		String mailParam = request.getParameter("enablemail"); 
 		if ((mailParam != null) && (mailParam.compareToIgnoreCase("true") == 0)) {
@@ -95,16 +98,7 @@ public class CourseNotificationController extends BaseFormController {
 		}
 		model.put("enableMail", enableMail);
 
-        String defaultFrom = getText("mail.default.from", locale);
-        model.put("defaultfrom", defaultFrom);
-
-        Course course = null;
-        if(command != null) {
-            course = (Course)command;
-            User responsible = course.getResponsible();
-            String responsiblefrom = responsible.getFullName() + " <" + responsible.getEmail() + ">";
-            model.put("responsiblefrom",responsiblefrom);
-        }
+        model.put("mailsenders",getMailSenders((Course)command, user, locale));
 
         return model;
 	}
@@ -189,7 +183,6 @@ public class CourseNotificationController extends BaseFormController {
 		List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, null,null, null, null);
 		
 		StringBuffer msg = MailUtil.createStandardBody(course, event, locale, messageSource, mailComment);
-//		ArrayList<SimpleMailMessage> emails = MailUtil.setMailInfo(registrations, event, course, msg, messageSource, locale, from);
 		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, messageSource, locale, from, mailSender);
 		MailUtil.sendMimeMails(emails, mailEngine);
 		
@@ -202,4 +195,20 @@ public class CourseNotificationController extends BaseFormController {
 	public void setRegistrationManager(RegistrationManager registrationManager) {
 		this.registrationManager = registrationManager;
 	}
+
+    protected List<String> getMailSenders(Course course, User user, Locale locale){
+        List senders = new ArrayList<String>();
+        String defaultFrom = getText("mail.default.from", locale);
+        senders.add(defaultFrom);
+
+        String userfrom =  user.getFullName() + " <" + user.getEmail() + ">";
+        senders.add(userfrom);
+
+        User responsible = course.getResponsible();
+        if(!user.equals(responsible)){
+            String responsiblefrom = responsible.getFullName() + " <" + responsible.getEmail() + ">";
+            senders.add(responsiblefrom);
+        }
+        return senders;
+    }
 }

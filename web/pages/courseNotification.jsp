@@ -46,13 +46,12 @@
             <soak:label key="course.mailsender"/>
         </th>
         <td>
-          <select name="mailsender">
-              <option value="<c:out value="${defaultfrom}"/>">
-                <c:out value="${defaultfrom}"/>
+            <select name="mailsender">
+            <c:forEach var="sender" items="${mailsenders}">
+              <option value="<c:out value="${sender}"/>">
+                <c:out value="${sender}"/>
               </option>
-              <option value="<c:out value="${responsiblefrom}"/>">
-                <c:out value="${responsiblefrom}"/>
-              </option>
+            </c:forEach>
           </select>
         </td>
     </tr>
