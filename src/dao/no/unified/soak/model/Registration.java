@@ -292,7 +292,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the organization.
-	 * @hibernate.many-to-one not-null="false" column="organizationid"
+	 * @hibernate.many-to-one not-null="false" column="organizationid" not-found="ignore"
 	 *                        insert="false" update="false" cascade="none"
 	 */
 	public Organization getOrganization() {
@@ -373,7 +373,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the serviceArea.
-	 * @hibernate.many-to-one not-null="false" column="serviceareaid"
+	 * @hibernate.many-to-one not-null="false" column="serviceareaid" not-found="ignore"
 	 *                        insert="false" update="false" cascade="none"
 	 */
 	public ServiceArea getServiceArea() {

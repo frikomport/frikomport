@@ -12,14 +12,15 @@ package no.unified.soak.webapp.action;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.mail.internet.MimeMessage;
 
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
@@ -32,15 +33,16 @@ import no.unified.soak.service.NotificationManager;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
+import no.unified.soak.service.UserManager;
 import no.unified.soak.util.DateUtil;
-import no.unified.soak.util.StringUtil;
+import no.unified.soak.util.MailUtil;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.MailSender;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.orm.ObjectRetrievalFailureException;
 
 /**
  * Implementation of SimpleFormController that interacts with the
@@ -59,11 +61,13 @@ public class RegistrationFormController extends BaseFormController {
 
 	private NotificationManager notificationManager = null;
 
-	private MessageSource messageSource = null;
+    private UserManager userManager = null;
+
+    private MessageSource messageSource = null;
 
 	protected MailEngine mailEngine = null;
 
-	protected SimpleMailMessage message = null;
+    protected MailSender mailSender = null;
 
 	public void setNotificationManager(NotificationManager notificationManager) {
 		this.notificationManager = notificationManager;
@@ -77,9 +81,9 @@ public class RegistrationFormController extends BaseFormController {
 		this.mailEngine = mailEngine;
 	}
 
-	public void setMessage(SimpleMailMessage message) {
-		this.message = message;
-	}
+    public void setMailSender(MailSender mailSender) {
+        this.mailSender = mailSender;
+    }
 
 	public void setRegistrationManager(RegistrationManager registrationManager) {
 		this.registrationManager = registrationManager;
@@ -98,7 +102,11 @@ public class RegistrationFormController extends BaseFormController {
 		this.organizationManager = organizationManager;
 	}
 
-	/**
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
+    }
+
+    /**
 	 * @see org.springframework.web.servlet.mvc.SimpleFormController#referenceData(javax.servlet.http.HttpServletRequest)
 	 */
 	protected Map referenceData(HttpServletRequest request) throws Exception {
@@ -227,10 +235,10 @@ public class RegistrationFormController extends BaseFormController {
 			// Perform a new registration
 
 			// We need the course as reference data
-			Course course = courseManager.getCourse(registration.getCourseid()
-					.toString());
+			Course course = courseManager.getCourse(registration.getCourseid().toString());
+            model.put("course", course);
 
-			// Is this a valid date to register?
+            // Is this a valid date to register?
 			// (It is always allowed to edit the data)
 			if ((registration.getId() == null)
 					|| (registration.getId().longValue() == 0)) {
@@ -240,18 +248,25 @@ public class RegistrationFormController extends BaseFormController {
 				}
 			}
 
-			// Lets find out if the course has room for this one
+            // Set user object for registration
+            User user = null;
+            try{
+                user = userManager.findUser(registration.getEmail());
+            } catch (ObjectRetrievalFailureException orfe){
+                user = userManager.addUser(registration);
+            }
+            registration.setUser(user);
+
+            // Lets find out if the course has room for this one
 			Boolean localAttendant = new Boolean(true);
 
 			if (registration.getOrganizationid() != null){
-				if (registration.getOrganizationid().longValue() != course
-						.getOrganizationid().longValue()) {
+				if (registration.getOrganizationid().longValue() != course.getOrganizationid().longValue()) {
 					localAttendant = new Boolean(false);
 				}
 			}
 
-			Integer availability = registrationManager.getAvailability(
-					localAttendant, course);
+			Integer availability = registrationManager.getAvailability(	localAttendant, course);
 
 			if (availability.intValue() > 0) {
 				// There's room - save the registration
@@ -264,13 +279,9 @@ public class RegistrationFormController extends BaseFormController {
 				notificationManager.saveNotification(notification);
 				key = "registrationComplete.completed";
 				saveMessage(request, getText(key, locale));
+				sendMail(locale, course, registration, Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED);
 
-				// Send an e-mail
-				// MessageSourceAccessor text =
-				// new MessageSourceAccessor(messageSource,
-				// request.getLocale());
-				sendMail(locale, course, false, registration);
-			} else {
+            } else {
 				// The course is fully booked, put the applicant on the waiting
 				// list
 				courseFull = new Boolean(true);
@@ -283,7 +294,7 @@ public class RegistrationFormController extends BaseFormController {
 				notificationManager.saveNotification(notification);
 				key = "registrationComplete.waitinglist";
 				saveMessage(request, getText(key, locale));
-				sendMail(locale, course, true, registration);
+				sendMail(locale, course, registration, Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION);
 			}
 		}
 		
@@ -303,127 +314,15 @@ public class RegistrationFormController extends BaseFormController {
 	 * 
 	 * @param locale
 	 *            The locale to use
-	 * @param course
-	 *            The course the applicant has registered for
-	 * @param registration
-	 *            TODO
-	 */
-	private void sendMail(Locale locale, Course course, boolean waitinglist,
-			Registration registration) {
-		StringBuffer msg = new StringBuffer();
-
-		msg.append(getText("misc.hello", locale) + " "
-				+ registration.getFirstName() + " "
-				+ registration.getLastName());
-
-		if (registration.getEmployeeNumber() != null)
-		{
-			String employeeNumberText = messageSource.getMessage("registration.employeeNumber",
-					null, locale);
-			if (!StringUtils.isEmpty(employeeNumberText))
-				employeeNumberText = employeeNumberText.toLowerCase();
-
-			msg.append(StringUtil.ifEmpty(registration.getEmployeeNumber(), " ("
-					+ StringEscapeUtils.unescapeHtml(employeeNumberText
-							) + " "
-					+ registration.getEmployeeNumber().intValue() + ")"));
-		}
-		
-		msg.append("\n\n");
-		// Build mail
-		if (waitinglist) {
-			msg.append(StringEscapeUtils.unescapeHtml(getText(
-					"waitinglist.mail.body", " " + course.getName(), locale))
-					+ "\n\n");
-		} else {
-			msg.append(StringEscapeUtils.unescapeHtml(getText(
-					"registrationComplete.mail.body", " " + course.getName(),
-					locale))
-					+ "\n\n");
-		}
-
-		// Include course details
-		msg.append(StringEscapeUtils
-				.unescapeHtml(getText("course.name", locale))
-				+ ": " + course.getName() + "\n");
-		msg.append(StringEscapeUtils
-				.unescapeHtml(getText("course.type", locale))
-				+ ": " + course.getType() + "\n");
-		msg.append(StringEscapeUtils.unescapeHtml(getText("course.startTime",
-				locale))
-				+ ": "
-				+ DateUtil
-						.getDateTime(getText("date.format", locale) + " "
-								+ getText("time.format", locale), course
-								.getStartTime()) + "\n");
-		msg.append(StringEscapeUtils.unescapeHtml(getText("course.stopTime",
-				locale))
-				+ ": "
-				+ DateUtil.getDateTime(getText("date.format", locale) + " "
-						+ getText("time.format", locale), course.getStopTime())
-				+ "\n");
-		msg.append(StringEscapeUtils.unescapeHtml(getText("course.duration",
-				locale))
-				+ ": " + course.getDuration() + "\n");
-		msg.append(StringEscapeUtils.unescapeHtml(getText(
-				"course.organization", locale))
-				+ ": " + course.getOrganization().getName() + "\n");
-		msg.append(StringEscapeUtils.unescapeHtml(getText("course.serviceArea",
-				locale))
-				+ ": " + course.getServiceArea().getName() + "\n");
-		msg.append(StringEscapeUtils.unescapeHtml(getText("course.location",
-				locale))
-				+ ": " + course.getLocation().getName() + "\n");
-		msg.append(StringEscapeUtils.unescapeHtml(getText("course.responsible",
-				locale))
-				+ ": " + course.getResponsible().getFullName() + "\n");
-		msg.append(StringEscapeUtils.unescapeHtml(getText("course.instructor",
-				locale))
-				+ ": " + course.getInstructor().getName() + "\n");
-		msg.append(StringEscapeUtils.unescapeHtml(getText("course.description",
-				locale))
-				+ ": " + course.getDescription() + "\n");
-
-		msg.append('\n');
-		if (waitinglist) {
-			msg.append(StringEscapeUtils.unescapeHtml(getText(
-					"waitinglist.mail.footer", locale)));
-		} else {
-			msg.append(StringEscapeUtils.unescapeHtml(getText(
-					"registrationComplete.mail.footer", locale)));
-		}
-
-		List<String> emails = new LinkedList<String>();
-		if (registration.getEmail() != null
-				&& registration.getEmail().trim().length() > 0) {
-			emails.add(registration.getEmail());
-		}
-		if (emails.size() == 0 && course.getInstructor().getEmail() != null) {
-			emails.add(course.getInstructor().getEmail());
-		}
-
-		String[] stringEmails = StringUtil.list2Array(emails);
-		message.setTo(stringEmails);
-
-		if (waitinglist) {
-			message.setSubject(StringEscapeUtils.unescapeHtml(getText(
-					"waitinglist.mail.subject", course.getName(), locale)));
-		} else {
-			message.setSubject(StringEscapeUtils.unescapeHtml(getText(
-					"registrationComplete.mail.subject", course.getName(),
-					locale)));
-		}
-
-		msg.append("\n\n");
-		msg.append(StringEscapeUtils.unescapeHtml(getText("mail.contactinfo",
-				locale))
-				+ "\n");
-		msg.append(StringEscapeUtils.unescapeHtml(getText("mail.donotreply",
-				getText("mail.default.from", locale), locale))
-				+ "\n");
-
-		message.setText(msg.toString());
-		mailEngine.send(message);
+     * @param course
+*            The course the applicant has registered for
+     * @param registration
+     * @param event
+     */
+	private void sendMail(Locale locale, Course course, Registration registration, int event) {
+        StringBuffer msg = MailUtil.createStandardBody(course, event, locale, messageSource, null, true);
+    	ArrayList<MimeMessage> theEmails = MailUtil.getMailMessages(registration, event, course, msg, messageSource, locale, mailSender);
+    	MailUtil.sendMimeMails(theEmails, mailEngine);
 	}
 
 	/**

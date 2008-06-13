@@ -20,6 +20,7 @@ import no.unified.soak.model.Address;
 import no.unified.soak.model.Organization;
 import no.unified.soak.model.User;
 import no.unified.soak.model.UserCookie;
+import no.unified.soak.model.Registration;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RoleManager;
 import no.unified.soak.service.UserExistsException;
@@ -222,7 +223,10 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		if (kommune != null && kommune != 0){
 			setKommune(kommune, user);
 		}
-		setRoles(rolenames, user);
+        if(rolenames == null){
+            rolenames = getDefaultRoles();
+        }
+        setRoles(rolenames, user);
 		user.setEnabled(true);
 		Address address = new Address();
 		address.setPostalCode("0");
@@ -269,7 +273,10 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		if (kommune != null && kommune != 0){
 			setKommune(kommune, user);
 		}
-		setRoles(rolenames, user);
+        if(user.getHash() == null || user.getHash().length() == 0){
+            user.setHash(StringUtil.encodeString(user.getUsername()));
+        }
+        setRoles(rolenames, user);
 		try {
 			saveUser(user);
 		} catch (UserExistsException e) {
@@ -305,7 +312,19 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		}
 	}
 
-	private List getEZResponsibles(EzUser user) {
+    public User addUser(Registration registration) {
+        User user = addUser(registration.getEmail(), registration.getFirstName(), registration.getLastName(), registration.getEmail(), new Integer(0), null, new Integer(0));
+        return user;
+    }
+
+    private List<String> getDefaultRoles() {
+        List<String> roles = new ArrayList();
+        roles.add(Constants.ANONYMOUS_ROLE);
+        roles.add(Constants.EMPLOYEE_ROLE);
+        return roles;
+    }
+
+    private List getEZResponsibles(EzUser user) {
 		List users = userEzDaoJdbc.findKursansvarligeUser();
 		return users;
 	}

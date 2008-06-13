@@ -65,7 +65,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                         user = userManager.findUser(registration.getEmail());
                     } catch (ObjectRetrievalFailureException e){
                         // User not present, create
-                        user = userManager.addUser(registration.getEmail(), registration.getFirstName(), registration.getLastName(), registration.getEmail(), new Integer(0), getDefaultRoles(), new Integer(0));
+                        user = userManager.addUser(registration.getEmail(), registration.getFirstName(), registration.getLastName(), registration.getEmail(), new Integer(0), null, new Integer(0));
                     }
                     // Connect user with registration
                     registration.setUser(user);
@@ -77,13 +77,6 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                 }
             }
         }
-    }
-
-    private List<String> getDefaultRoles() {
-        List<String> roles = new ArrayList();
-        roles.add(Constants.ANONYMOUS_ROLE);
-        roles.add(Constants.EMPLOYEE_ROLE);
-        return roles;
     }
 
     private void updateRolename() {

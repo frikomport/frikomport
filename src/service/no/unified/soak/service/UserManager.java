@@ -12,6 +12,7 @@ import java.util.List;
 import no.unified.soak.dao.UserDAO;
 import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
 import no.unified.soak.model.User;
+import no.unified.soak.model.Registration;
 
 import org.springframework.context.MessageSource;
 
@@ -146,4 +147,10 @@ public interface UserManager {
 	 */
 	public void updateUser(User user, String firstName, String lastName, String email, Integer id,
 			List<String> rolenames, Integer kommune);
+
+    /**
+     * Adds new user based on a registration
+     * @param registration
+     */
+    public User addUser(Registration registration);
 }

@@ -67,7 +67,7 @@ public class RegistrationAdministrationController extends BaseFormController {
 
     protected MailSender mailSender = null;
 
-    protected SimpleMailMessage message = null;
+//    protected SimpleMailMessage message = null;
 
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource = messageSource;
@@ -81,9 +81,9 @@ public class RegistrationAdministrationController extends BaseFormController {
 		this.mailEngine = mailEngine;
 	}
 
-	public void setMessage(SimpleMailMessage message) {
-		this.message = message;
-	}
+//	public void setMessage(SimpleMailMessage message) {
+//		this.message = message;
+//	}
 
 	public void setWaitingListManager(WaitingListManager waitingListManager) {
 		this.waitingListManager = waitingListManager;
@@ -391,9 +391,8 @@ public class RegistrationAdministrationController extends BaseFormController {
 	 * 
 	 * @param locale
 	 *            The locale to use
-	 * @param course
-	 *            The course the applicant has registered for
-	 */
+     * @param course
+     */
 	private void sendMail(Locale locale, Course course, int event, Registration registration) {
 		StringBuffer msg = MailUtil.createStandardBody(course, event, locale, messageSource);
 		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registration, event, course, msg, messageSource, locale, mailSender);
