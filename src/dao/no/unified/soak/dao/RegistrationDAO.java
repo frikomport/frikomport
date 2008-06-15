@@ -12,6 +12,7 @@ package no.unified.soak.dao;
 
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.User;
 
 import java.util.Collection;
 import java.util.List;
@@ -141,4 +142,11 @@ public interface RegistrationDAO extends DAO {
 	 * @return a list of all registrations for the given course
 	 */
 	public List<Registration> getCourseRegistrations(Long courseId);
+
+    /**
+     * Retrieves all registrations for a given user
+     * @param user
+     * @return
+     */
+    public List<Registration> getUserRegistrations(User user);
 }

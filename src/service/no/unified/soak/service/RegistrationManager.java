@@ -13,6 +13,7 @@ package no.unified.soak.service;
 import no.unified.soak.dao.RegistrationDAO;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.User;
 
 import java.util.Collection;
 import java.util.List;
@@ -125,4 +126,11 @@ public interface RegistrationManager extends Manager {
      * @return A list of all registrations for the given course
      */
     public List<Registration> getCourseRegistrations(Long courseId);
+
+    /**
+     * Get all registrations for specified user
+     * @param user
+     * @return List of registrations
+     */
+    public List getUserRegistrations(User user);
 }

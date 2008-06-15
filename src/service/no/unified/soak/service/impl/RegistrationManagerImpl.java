@@ -14,6 +14,7 @@ import no.unified.soak.dao.RegistrationDAO;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Notification;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.User;
 import no.unified.soak.service.RegistrationManager;
 
 import java.util.Collection;
@@ -131,4 +132,8 @@ public class RegistrationManagerImpl extends BaseManager implements
 	public List<Registration> getCourseRegistrations(Long courseId) {
 		return dao.getCourseRegistrations(courseId);
 	}
+
+    public List getUserRegistrations(User user) {
+        return dao.getUserRegistrations(user);
+    }
 }

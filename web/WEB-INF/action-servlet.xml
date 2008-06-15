@@ -42,6 +42,13 @@
         <property name="organizationManager"><ref bean="organizationManager"/></property>
     </bean>
 
+    <bean id="userRegistrationController" class="no.unified.soak.webapp.action.UserRegistrationController" autowire="byName">
+        <property name="commandName" value="user"/>
+        <property name="commandClass" value="no.unified.soak.model.User"/>
+        <property name="formView" value="userRegistrationList"/>
+        <property name="successView" value="userRegistrationList"/>
+    </bean>
+
     <bean id="fileUploadController" class="no.unified.soak.webapp.action.FileUploadController">
         <property name="commandName" value="fileUpload"/>
         <property name="commandClass" value="no.unified.soak.webapp.action.FileUpload"/>
@@ -279,6 +286,7 @@
                 <prop key="/waitingList.html">waitingListController</prop>
                 <prop key="/detailsUser.html">userDetailsController</prop>
 				<prop key="/listUsers.html">userController</prop>
+				<prop key="/listUserRegistrations.html">userRegistrationController</prop>
             </props>
         </property>
     </bean>
