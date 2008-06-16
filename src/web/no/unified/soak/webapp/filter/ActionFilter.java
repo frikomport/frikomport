@@ -31,6 +31,7 @@ import no.unified.soak.service.UserManager;
 import no.unified.soak.webapp.util.RequestUtil;
 import no.unified.soak.webapp.util.SslUtil;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
@@ -65,7 +66,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class ActionFilter implements Filter {
 	private static Boolean secure = Boolean.FALSE;
 
-	private final transient Log log = LogFactory.getLog(ActionFilter.class.toString());
+	private final transient Log log = LogFactory.getLog(ActionFilter.class);
 
 	private FilterConfig config = null;
 
@@ -89,8 +90,8 @@ public class ActionFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
 		HttpSession session = request.getSession(true);
-
-        // notify the LocaleContextHolder what locale is being used so
+		
+		// notify the LocaleContextHolder what locale is being used so
 		// service and data layer classes can get the locale
 		LocaleContextHolder.setLocale(request.getLocale());
 
@@ -169,12 +170,18 @@ public class ActionFilter implements Filter {
 			request.setAttribute("isEducationResponsible", roleNameList.contains(Constants.EDITOR_ROLE));
 			request.setAttribute("isAdmin", roleNameList.contains(Constants.ADMIN_ROLE));
 			request.setAttribute("username", user.getUsername());
-			request.setAttribute("hash", user.getHash());
 		}
 
+		String hash = request.getParameter("hash");
+		if (hash != null & !StringUtils.isBlank(hash)) {
+			UserManager mgr = (UserManager) getContext().getBean("userManager");
+			User hashuser = mgr.getUserByHash(hash);
+			session.setAttribute(Constants.ALT_USER_KEY, hashuser);
+		}
+		
 		/* ezSessionid becomes null if not found. */
 		request.setAttribute(messageSource.getMessage("cms.sessionid", null, locale), eZSessionId);
-
+		
 		if (eZSessionId != null && !authentificationToken.isAuthenticated()) {
 			request.setAttribute(Constants.MESSAGES_INFO_KEY,
 					"Din innlogging er utg&aring;tt. Vennligst logg inn p&aring;ny.");

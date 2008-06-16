@@ -66,7 +66,12 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
      * @see no.unified.soak.dao.UserDAO#getUsers(no.unified.soak.model.User)
      */
     public User getUserByHash(String hash) {
-        List users = getHibernateTemplate().find("from User u where u.hash = hash)");
+        List users = getHibernateTemplate().find("from User u where u.hash=?", new Object[] {hash});
+        
+        if (users.size() == 0) {
+            return null;
+        }
+        
         return (User) users.get(0);
     }
     

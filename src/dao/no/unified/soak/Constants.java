@@ -65,6 +65,12 @@ public class Constants {
 	public static final String USER_KEY = "currentUserForm";
 
 	/**
+	 * The session scope attribute under which the User object for the alternative 
+	 * user is stored.
+	 */
+	public static final String ALT_USER_KEY = "alternativeUserForm";
+
+	/**
 	 * The request scope attribute under which an editable user form is stored
 	 */
 	public static final String USER_EDIT_KEY = "userForm";
