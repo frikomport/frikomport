@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.net.URI;
 
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
@@ -27,15 +28,7 @@ import javax.mail.MessagingException;
 
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.DateTime;
-import net.fortuna.ical4j.model.property.ProdId;
-import net.fortuna.ical4j.model.property.Version;
-import net.fortuna.ical4j.model.property.CalScale;
-import net.fortuna.ical4j.model.property.Uid;
-import net.fortuna.ical4j.model.property.Location;
-import net.fortuna.ical4j.model.property.Description;
-import net.fortuna.ical4j.model.property.StreetAddress;
-import net.fortuna.ical4j.model.property.Organizer;
-import net.fortuna.ical4j.model.property.Url;
+import net.fortuna.ical4j.model.property.*;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.util.UidGenerator;
 import net.fortuna.ical4j.util.Uris;
@@ -358,9 +351,9 @@ public class MailUtil {
                 helper = new MimeMessageHelper(message, true);
                 helper.setSubject(getSubject(registration,event,registered,waiting, messageSource,locale));
                 helper.setText(getBody(registration, msg, registered, waiting, messageSource, locale ));
-                Calendar cal = getICalendar(course);
+                Calendar cal = getICalendar(course, registration);
                 ByteArrayResource bar = new ByteArrayResource(cal.toString().getBytes());
-                helper.addAttachment("calendar.ics",bar);
+                helper.addAttachment("calendar.ics",bar,"text/calendar; method=REQUEST");
                 List recipients = getRecipients(registration, course.getResponsible());
                 log.debug("The mail is to: " + recipients);
                 helper.setTo(StringUtil.list2Array(recipients));
@@ -377,7 +370,7 @@ public class MailUtil {
 		return allEMails;
 	}
 
-    public static Calendar getICalendar(Course course) {
+    public static Calendar getICalendar(Course course, Registration registration) {
         Log log = LogFactory.getLog(MailUtil.class.toString());
         Calendar cal = null;
 
@@ -388,6 +381,7 @@ public class MailUtil {
             UidGenerator ug = new UidGenerator("1");
             Uid uid = ug.generateUid();
             event.getProperties().add(uid);
+            event.getProperties().add(Method.PUBLISH);
 
             Description description = new Description(course.getDescription());
             event.getProperties().add(description);
@@ -399,13 +393,24 @@ public class MailUtil {
 
             if(course.getResponsible() != null){
                 try{
-                    Organizer organizer = new Organizer(course.getResponsible().getFullName() + ":MAILTO:" + course.getResponsible().getEmail());
+                    URI mailto = new URI("MAILTO",course.getResponsible().getEmail(),null);
+                    Organizer organizer = new Organizer(mailto);
                     event.getProperties().add(organizer);
                 }
                 catch(Exception ex){
                     log.error("Could not create Organizer object");
                 }
             }
+
+            try{
+                URI mailto = new URI("MAILTO",registration.getUser().getEmail(),null);
+                Attendee attendee = new Attendee(mailto);
+                event.getProperties().add(attendee);
+            }
+            catch(Exception ex){
+                log.error("Could not create Attendee object");
+            }
+
 
             if(course.getDetailURL() != null && course.getDetailURL().length() > 0){
                 try{
