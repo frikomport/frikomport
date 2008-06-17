@@ -113,7 +113,7 @@
     <display:column property="lastName" sortable="true" headerClass="sortable"
          titleKey="registration.lastName"/>
     
-    <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="name">
+    <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="course.name">
         <c:if test="${userRegistrations.course.status == 3}"><img src="<c:url value="/images/cancel.png"/>"
                		alt="<fmt:message key="icon.warning"/>" class="icon" /><fmt:message key="course.cancelled.alert"/><br/></c:if>
          <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${userRegistrations.course.id}"/></c:url>"
