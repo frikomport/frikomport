@@ -3,6 +3,8 @@
 <title><fmt:message key="userDetail.title"/></title>
 <content tag="heading"><c:out value="${user.fullName}"/></content>
 
+<fmt:message key="date.format" var="dateformat"/>
+<fmt:message key="time.format" var="timeformat"/>
 <fmt:message key="userRegistrationList.item" var="item"/>
 <fmt:message key="userRegistrationList.items" var="items"/>
 
@@ -103,7 +105,7 @@
 </table>
 
 <c:if test="${isAdmin || user.username == username}">
-<display:table name="${userRegistrations}" pagesize="25" id="userRegistrations" class="list" requestURI="listUserRegistrations.html">
+<display:table name="${userRegistrations}" pagesize="25" id="userRegistrations" class="list" requestURI="detailsUser.html">
 
     <display:column property="firstName" sortable="true" headerClass="sortable"
          titleKey="registration.firstName"/>
@@ -119,11 +121,11 @@
     </display:column>
     <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="course.name"/>
     
-    <display:column sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
+    <display:column sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="course.startTime">
          <fmt:formatDate value="${userRegistrations.course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
 
-    <display:column sortable="true" headerClass="sortable" titleKey="course.stopTime" sortProperty="stopTime">
+    <display:column sortable="true" headerClass="sortable" titleKey="course.stopTime" sortProperty="course.stopTime">
          <fmt:formatDate value="${userRegistrations.course.stopTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
 
@@ -136,17 +138,15 @@
 	<display:column media="html" sortable="true" headerClass="sortable" titleKey="course.responsible">
          <a href="<c:url value="/detailsUser.html"><c:param name="username" value="${userRegistrations.course.responsible.username}"/></c:url>"><c:out value="${userRegistrations.course.responsible.fullName}"/></a>
     </display:column>
-    <display:column media="csv excel xml pdf" property="responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible"/>
+    <display:column media="csv excel xml pdf" property="course.responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible"/>
 
     <display:column property="course.instructor.name" sortable="true" headerClass="sortable" titleKey="course.instructor.export"/>
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="registration.reserved">
-    <c:if test="${admin == false}">
         <input type="hidden" name="_reserved<c:out value="${userRegistrations.id}"/>" value="visible"/>
         <input type="hidden" name="reserved_<c:out value="${userRegistrations.id}"/>" value="${registrationList.reserved}" />
         <c:if test="${userRegistrations.reserved == true}"><fmt:message key="checkbox.checked"/></c:if>
         <c:if test="${userRegistrations.reserved == false}"><fmt:message key="checkbox.unchecked"/></c:if>
-    </c:if>
     </display:column>
     <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="registration.reserved">
         <c:if test="${userRegistrations.reserved == true}"><fmt:message key="checkbox.checked"/></c:if>

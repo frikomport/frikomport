@@ -29,8 +29,7 @@ ALTER TABLE app_user MODIFY COLUMN version INTEGER;
 ALTER TABLE app_user MODIFY COLUMN password VARCHAR(255);
 ALTER TABLE app_user MODIFY COLUMN city VARCHAR(50);
 ALTER TABLE app_user MODIFY COLUMN postal_code VARCHAR(15);
-ALTER TABLE registration MODIFY COLUMN organizationid BIGINT(20);
-ALTER TABLE registration MODIFY COLUMN serviceareaid BIGINT(20);
+
 ALTER TABLE registration ADD COLUMN username VARCHAR(100);
 
 -- create users based on registrations
@@ -39,4 +38,4 @@ ALTER TABLE registration ADD COLUMN username VARCHAR(100);
 -- add status field and set default values
 ALTER TABLE course ADD COLUMN status INTEGER DEFAULT 0;
 ALTER TABLE course ADD COLUMN responsibleusername VARCHAR(50);
-update table course set status = 2;
+update course set status = 2;

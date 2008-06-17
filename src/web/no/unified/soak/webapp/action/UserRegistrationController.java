@@ -89,12 +89,10 @@ public class UserRegistrationController extends BaseFormController{
         else{
             user = (User) session.getAttribute(Constants.ALT_USER_KEY);
         }
-//        if(user == null){
-//            throw new
-//        }
-        List registrations = registrationManager.getUserRegistrations(user.getUsername());
-        model.put("userRegistrations",registrations);
-
+        if(user != null){
+            List registrations = registrationManager.getUserRegistrations(user.getUsername());
+            model.put("userRegistrations",registrations);
+        }
         return model;
     }
 
