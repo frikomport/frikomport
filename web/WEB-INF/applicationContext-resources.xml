@@ -7,7 +7,6 @@
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
-                <value>classpath:ApplicationOverride.properties</value>
                 <value>classpath:ApplicationResources.properties</value>
             </list>
         </property>
