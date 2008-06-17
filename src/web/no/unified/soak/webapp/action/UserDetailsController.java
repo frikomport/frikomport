@@ -7,18 +7,14 @@
 */
 package no.unified.soak.webapp.action;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import no.unified.soak.service.UserManager;
-import no.unified.soak.service.RegistrationManager;
-import no.unified.soak.model.User;
-import no.unified.soak.Constants;
-
-import java.util.Map;
-import java.util.List;
-import java.util.Locale;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import no.unified.soak.service.RegistrationManager;
+import no.unified.soak.service.UserManager;
 
 
 /**
@@ -45,11 +41,9 @@ public class UserDetailsController extends BaseFormController {
     protected Map referenceData(HttpServletRequest request) throws Exception {
 //        Locale locale = request.getLocale();
         Map model = new HashMap();
-
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(Constants.USER_KEY);
-
-        List registrations = registrationManager.getUserRegistrations(user);
+ 
+        String username = request.getParameter("username");
+        List registrations = registrationManager.getUserRegistrations(username);
         model.put("userRegistrations",registrations);
         return model;
     }

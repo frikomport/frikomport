@@ -36,12 +36,58 @@
 
     <tr>
         <th>
+            <fmt:message key="user.jobTitle"/>
+        </th>
+        <td>
+	    	<c:out value="${user.jobTitle}"/>
+        </td>
+    </tr>
+
+    <tr>
+        <th>
+            <fmt:message key="user.workplace"/>
+        </th>
+        <td>
+	    	<c:out value="${user.workplace}"/>
+        </td>
+    </tr>
+
+    <tr>
+        <th>
+            <fmt:message key="user.servicearea"/>
+        </th>
+        <td>
+	    	<c:out value="${user.serviceArea.name}"/>
+        </td>
+    </tr>
+
+    <tr>
+        <th>
             <fmt:message key="user.organization"/>
         </th>
         <td>
           	<c:out value="${user.organization.name}"/>
         </td>
     </tr>
+
+    <tr>
+        <th>
+            <fmt:message key="user.phoneNumber"/>
+        </th>
+        <td>
+	    	<c:out value="${user.phoneNumber}"/>
+        </td>
+    </tr>
+
+    <tr>
+        <th>
+            <fmt:message key="user.mobilePhone"/>
+        </th>
+        <td>
+	    	<c:out value="${user.mobilePhone}"/>
+        </td>
+    </tr>
+
     <tr>
         <td class="buttonBar">            
             <input type="button" class="button" name="return" onclick="javascript:history.go(-1)"
@@ -56,9 +102,15 @@
     </tr>
 </table>
 
-<c:if test="${user.username == username}">
+<c:if test="${isAdmin || user.username == username}">
 <display:table name="${userRegistrations}" pagesize="25" id="userRegistrations" class="list" requestURI="listUserRegistrations.html">
 
+    <display:column property="firstName" sortable="true" headerClass="sortable"
+         titleKey="registration.firstName"/>
+         
+    <display:column property="lastName" sortable="true" headerClass="sortable"
+         titleKey="registration.lastName"/>
+    
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="name">
         <c:if test="${userRegistrations.course.status == 3}"><img src="<c:url value="/images/cancel.png"/>"
                		alt="<fmt:message key="icon.warning"/>" class="icon" /><fmt:message key="course.cancelled.alert"/><br/></c:if>
@@ -66,7 +118,7 @@
          title="<c:out value="${userRegistrations.course.description}"/>"><c:out value="${userRegistrations.course.name}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="course.name"/>
-
+    
     <display:column sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
          <fmt:formatDate value="${userRegistrations.course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>

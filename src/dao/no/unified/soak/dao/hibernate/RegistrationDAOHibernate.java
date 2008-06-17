@@ -18,7 +18,6 @@ import no.unified.soak.dao.RegistrationDAO;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Notification;
 import no.unified.soak.model.Registration;
-import no.unified.soak.model.User;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -263,11 +262,11 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
 		return result;
 	}
 
-    public List<Registration> getUserRegistrations(User user) {
+    public List<Registration> getUserRegistrations(String username) {
         List<Registration> result = new ArrayList<Registration>();
-        if(user != null){
+        if(username != null){
             DetachedCriteria criteria = DetachedCriteria.forClass(Registration.class);
-            criteria.add(Restrictions.eq("username",user.getUsername()));
+            criteria.add(Restrictions.eq("username",username));
             result = getHibernateTemplate().findByCriteria(criteria);
         }
         return result;

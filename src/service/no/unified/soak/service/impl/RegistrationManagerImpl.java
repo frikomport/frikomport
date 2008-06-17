@@ -10,18 +10,13 @@
  */
 package no.unified.soak.service.impl;
 
-import no.unified.soak.dao.RegistrationDAO;
-import no.unified.soak.model.Course;
-import no.unified.soak.model.Notification;
-import no.unified.soak.model.Registration;
-import no.unified.soak.model.User;
-import no.unified.soak.service.RegistrationManager;
-
 import java.util.Collection;
 import java.util.List;
 
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Restrictions;
+import no.unified.soak.dao.RegistrationDAO;
+import no.unified.soak.model.Course;
+import no.unified.soak.model.Registration;
+import no.unified.soak.service.RegistrationManager;
 
 /**
  * Implementation of RegistrationManager interface to talk to the persistence
@@ -133,7 +128,7 @@ public class RegistrationManagerImpl extends BaseManager implements
 		return dao.getCourseRegistrations(courseId);
 	}
 
-    public List getUserRegistrations(User user) {
-        return dao.getUserRegistrations(user);
+    public List getUserRegistrations(String username) {
+        return dao.getUserRegistrations(username);
     }
 }

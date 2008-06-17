@@ -27,7 +27,7 @@
 
 	<%-- Table columns --%>
 	<display:column property="username" sortable="true"
-		headerClass="sortable" url="/editUser.html?from=list"
+		headerClass="sortable" url="/detailsUser.html?from=list"
 		paramId="username" paramProperty="username" titleKey="user.username" />
 	<display:column property="firstName" sortable="true"
 		headerClass="sortable" titleKey="user.firstName" />

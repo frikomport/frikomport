@@ -10,12 +10,11 @@
  */
 package no.unified.soak.dao;
 
-import no.unified.soak.model.Course;
-import no.unified.soak.model.Registration;
-import no.unified.soak.model.User;
-
 import java.util.Collection;
 import java.util.List;
+
+import no.unified.soak.model.Course;
+import no.unified.soak.model.Registration;
 
 /**
  * User Data Access Object (DAO) interface.
@@ -145,8 +144,8 @@ public interface RegistrationDAO extends DAO {
 
     /**
      * Retrieves all registrations for a given user
-     * @param user
+     * @param username
      * @return
      */
-    public List<Registration> getUserRegistrations(User user);
+    public List<Registration> getUserRegistrations(String username);
 }

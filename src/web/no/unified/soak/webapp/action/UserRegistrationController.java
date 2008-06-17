@@ -92,7 +92,7 @@ public class UserRegistrationController extends BaseFormController{
 //        if(user == null){
 //            throw new
 //        }
-        List registrations = registrationManager.getUserRegistrations(user);
+        List registrations = registrationManager.getUserRegistrations(user.getUsername());
         model.put("userRegistrations",registrations);
 
         return model;

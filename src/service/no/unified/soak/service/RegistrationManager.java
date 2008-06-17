@@ -10,13 +10,12 @@
  */
 package no.unified.soak.service;
 
+import java.util.Collection;
+import java.util.List;
+
 import no.unified.soak.dao.RegistrationDAO;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
-import no.unified.soak.model.User;
-
-import java.util.Collection;
-import java.util.List;
 
 
 /**
@@ -129,8 +128,8 @@ public interface RegistrationManager extends Manager {
 
     /**
      * Get all registrations for specified user
-     * @param user
+     * @param username
      * @return List of registrations
      */
-    public List getUserRegistrations(User user);
+    public List getUserRegistrations(String username);
 }
