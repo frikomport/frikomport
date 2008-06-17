@@ -103,8 +103,14 @@
     </bean>
 
     <!-- Load WEB-INF/classes/ApplicationResources.properties for i18n messages using JSTL's fmt tag -->
-    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
-        <property name="basename" value="ApplicationResources"/>
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="cacheSeconds" value="10"/>
+        <property name="basenames">
+            <list>
+                <value>classpath:ApplicationOverride</value>
+                <value>classpath:ApplicationResources</value>
+            </list>
+        </property>
     </bean>
 
     <bean id="organizationManager" parent="txProxyTemplate">
@@ -151,6 +157,7 @@
         <property name="transactionAttributes">
             <props>
                 <prop key="save*">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
+                <prop key="remove*">PROPAGATION_REQUIRED</prop>
             </props>
         </property>
     </bean>

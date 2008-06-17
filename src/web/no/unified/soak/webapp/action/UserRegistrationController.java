@@ -16,6 +16,9 @@ import java.util.List;
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.validation.BindException;
+import org.springframework.orm.ObjectRetrievalFailureException;
+import org.springframework.mail.SimpleMailMessage;
+import org.apache.commons.validator.EmailValidator;
 
 /**
  * Created by IntelliJ IDEA.
@@ -49,7 +52,15 @@ public class UserRegistrationController extends BaseFormController{
         Map model = new HashMap();
 
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(Constants.USER_KEY);
+        String userdefaults = getText("access.registration.userdefaults",locale);
+
+        User user = null;
+        if(userdefaults != null && userdefaults.equals("true")){
+            user = (User) session.getAttribute(Constants.USER_KEY);
+        }
+        else{
+            user = (User) session.getAttribute(Constants.ALT_USER_KEY);
+        }
         if(user == null){
             return new ModelAndView(getFormView(), model);
         }
@@ -61,10 +72,53 @@ public class UserRegistrationController extends BaseFormController{
         return new ModelAndView(getSuccessView(), model);
     }
 
+    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object o, BindException e) throws Exception {
+        Map model = new HashMap();
+        Locale locale = request.getLocale();
+        
+        String email = request.getParameter("email");
+        if(EmailValidator.getInstance().isValid(email)){
+            try{
+                User user = userManager.findUser(email);
+                sendMail(user, locale);
+                saveMessage(request, getText("user.emailsent", user.getEmail() ,locale));
+            }
+            catch(ObjectRetrievalFailureException orfe){
+                // User not found, view error
+                saveMessage(request, getText("user.notfound", locale));
+                return new ModelAndView(getSuccessView(), model);
+            }
+        }
+        return new ModelAndView(getSuccessView(), model);
+    }
+
+    private void sendMail(User user, Locale locale) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(getText("userRegistrationForm.mail.subject",locale));
+        StringBuffer msg = new StringBuffer();
+        msg.append(getText("userRegistrationForm.mail.body",locale));
+        msg.append(getText("javaapp.baseurl",locale));
+        msg.append(getText("javaapp.profileurl",locale));
+        String body = msg.toString().replaceAll("<userhash/>",user.getHash());
+        message.setText(body);
+        this.mailEngine.send(message);
+    }
+
     protected Object formBackingObject(HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();
-        // Dersom fellesbruker, hent anna bruker.
-        User user = (User) session.getAttribute(Constants.USER_KEY);
+        Locale locale = request.getLocale();
+        String userdefaults = getText("access.registration.userdefaults",locale);
+
+        User user = null;
+        if(userdefaults != null && userdefaults.equals("true")){
+            user = (User) session.getAttribute(Constants.USER_KEY);
+        }
+        else{
+            // Dersom fellesbruker, hent anna bruker.
+            user = (User) session.getAttribute(Constants.ALT_USER_KEY);
+        }
+        if(user == null)
+            user = new User();
         return user;
     }
 }

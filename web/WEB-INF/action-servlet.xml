@@ -45,7 +45,7 @@
     <bean id="userRegistrationController" class="no.unified.soak.webapp.action.UserRegistrationController" autowire="byName">
         <property name="commandName" value="user"/>
         <property name="commandClass" value="no.unified.soak.model.User"/>
-        <property name="formView" value="userRegistrationList"/>
+        <property name="formView" value="userRegistrationForm"/>
         <property name="successView" value="userRegistrationList"/>
     </bean>
 
@@ -238,8 +238,14 @@
     </bean>
 
     <!-- Load WEB-INF/classes/ApplicationResources.properties for i18n messages using JSTL's fmt tag -->
-    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
-        <property name="basename" value="ApplicationResources"/>
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="cacheSeconds" value="10"/>
+        <property name="basenames">
+            <list>
+                <value>classpath:ApplicationOverride</value>
+                <value>classpath:ApplicationResources</value>
+            </list>
+        </property>
     </bean>
 
     <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
@@ -286,7 +292,7 @@
                 <prop key="/waitingList.html">waitingListController</prop>
                 <prop key="/detailsUser.html">userDetailsController</prop>
 				<prop key="/listUsers.html">userController</prop>
-				<prop key="/listUserRegistrations.html">userRegistrationController</prop>
+				<prop key="/profileUser.html">userRegistrationController</prop>
             </props>
         </property>
     </bean>

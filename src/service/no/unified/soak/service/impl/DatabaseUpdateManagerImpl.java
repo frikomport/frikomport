@@ -59,7 +59,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
             while (it.hasNext()){
                 Registration registration = it.next();
                 // Only use valid emails
-                if((registration.getUsername() == null || registration.getUsername().length() == 0) && EmailValidator.getInstance().isValid(registration.getEmail())){
+                if((registration.getUsername() == null || registration.getUsername().trim().length() == 0) && EmailValidator.getInstance().isValid(registration.getEmail())){
                     User user = null;
                     try{
                         user = userManager.findUser(registration.getEmail());
@@ -68,7 +68,6 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                         user = userManager.addUser(registration.getEmail(), registration.getFirstName(), registration.getLastName(), registration.getEmail(), new Integer(0), null, new Integer(0));
                     }
                     // Connect user with registration
-                    registration.setUser(user);
                     registration.setUsername(user.getUsername());
                     registrationManager.saveRegistration(registration);
                 }

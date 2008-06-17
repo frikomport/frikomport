@@ -147,9 +147,14 @@
 	                onclick="bCancel=false" value="<fmt:message key="button.save"/>" />
 				</c:if>
 				<c:if test="${!empty registration.id}">
-		            <input type="submit" class="button" name="delete"
-		                onclick="bCancel=true;return confirmDelete('<fmt:message key="registrationList.theitem"/>')" 
+                    <c:if test="${isAdmin}">
+                    <input type="submit" class="button" name="delete"
+		                onclick="bCancel=true;return confirmDeleteRegistration()"
 		                value="<fmt:message key="button.delete"/>" />
+                    </c:if>
+                    <input type="submit" class="button" name="unregister"
+                        onclick="bCancel=true;return confirmUnregistration()"
+                        value="<fmt:message key="button.unregister"/>" />
 				</c:if>
 	            <input type="submit" class="button" name="cancel" onclick="bCancel=true"
 	                value="<fmt:message key="button.cancel"/>" />        

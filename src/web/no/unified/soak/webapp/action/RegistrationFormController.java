@@ -162,16 +162,8 @@ public class RegistrationFormController extends BaseFormController {
 			registration = registrationManager.getRegistration(id);
 		} else {
 			registration = new Registration();
-	        // Check if a default organization should be applied
             User user = (User)session.getAttribute(Constants.USER_KEY);
-            if((user.getOrganizationid() != null) && (user.getOrganizationid() != 0)){
-                registration.setOrganizationid(user.getOrganizationid());
-            }
 
-            if((user.getServiceareaid() != null) && (user.getServiceareaid() != 0)){
-                registration.setServiceareaid(user.getServiceareaid());
-            }
-            
             // set default values
             Locale locale = request.getLocale();
             String userdefaults = getText("access.registration.userdefaults",locale);
@@ -184,6 +176,12 @@ public class RegistrationFormController extends BaseFormController {
                 registration.setJobTitle(user.getJobTitle());
                 registration.setWorkplace(user.getWorkplace());
                 registration.setEmployeeNumber(user.getEmployeeNumber());
+                if((user.getOrganizationid() != null) && (user.getOrganizationid() != 0)){
+                    registration.setOrganizationid(user.getOrganizationid());
+                }
+                if((user.getServiceareaid() != null) && (user.getServiceareaid() != 0)){
+                    registration.setServiceareaid(user.getServiceareaid());
+                }
             }
         }
 
@@ -208,6 +206,7 @@ public class RegistrationFormController extends BaseFormController {
 
 		// Fetch the object from the form
 		Registration registration = (Registration) command;
+        Course course = courseManager.getCourse(registration.getCourseid().toString());
 
 		// Fetch the locale for resource message
 		Locale locale = request.getLocale();
@@ -224,7 +223,7 @@ public class RegistrationFormController extends BaseFormController {
 		else if (request.getParameter("unregister") != null) {
 			registrationManager.removeRegistration(registration.getId().toString());
 			saveMessage(request, getText("registration.unregistered", locale));
-
+            sendMail(locale, course, registration, Constants.EMAIL_EVENT_REGISTRATION_DELETED);
 			return new ModelAndView(getCancelView(), "courseid", registration.getCourseid());
 		} else if (request.getParameter("delete") != null) {
             registrationManager.removeRegistration(registration.getId().toString());
@@ -235,7 +234,7 @@ public class RegistrationFormController extends BaseFormController {
 			// Perform a new registration
 
 			// We need the course as reference data
-			Course course = courseManager.getCourse(registration.getCourseid().toString());
+//			Course course = courseManager.getCourse(registration.getCourseid().toString());
             model.put("course", course);
             registration.setCourse(course);
 
@@ -257,6 +256,7 @@ public class RegistrationFormController extends BaseFormController {
                 user = userManager.addUser(registration);
             }
             registration.setUser(user);
+            registration.setUsername(user.getUsername());
 
             // Lets find out if the course has room for this one
 			Boolean localAttendant = new Boolean(true);

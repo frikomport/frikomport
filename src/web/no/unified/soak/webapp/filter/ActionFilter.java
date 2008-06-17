@@ -160,24 +160,31 @@ public class ActionFilter implements Filter {
 		session.setAttribute("authenticationToken", authentificationToken);
 
 		User user = (User) request.getSession().getAttribute(Constants.USER_KEY);
-		MessageSource messageSource = (MessageSource) getContext().getBean("messageSource");
-		Locale locale = request.getLocale();
 
+        String hash = request.getParameter("hash");
+		if (hash != null & !StringUtils.isBlank(hash)) {
+			UserManager mgr = (UserManager) getContext().getBean("userManager");
+			User hashuser = mgr.getUserByHash(hash);
+			session.setAttribute(Constants.ALT_USER_KEY, hashuser);
+		}
+
+        MessageSource messageSource = (MessageSource) getContext().getBean("messageSource");
+		Locale locale = request.getLocale();
 		if (user != null) {
 			List<String> roleNameList = user.getRoleNameList();
 			request.setAttribute("isCourseParticipant", roleNameList.contains(Constants.EMPLOYEE_ROLE));
 			request.setAttribute("isCourseResponsible", roleNameList.contains(Constants.INSTRUCTOR_ROLE));
 			request.setAttribute("isEducationResponsible", roleNameList.contains(Constants.EDITOR_ROLE));
 			request.setAttribute("isAdmin", roleNameList.contains(Constants.ADMIN_ROLE));
-			request.setAttribute("username", user.getUsername());
+            request.setAttribute("username", user.getUsername());
 		}
 
-		String hash = request.getParameter("hash");
-		if (hash != null & !StringUtils.isBlank(hash)) {
-			UserManager mgr = (UserManager) getContext().getBean("userManager");
-			User hashuser = mgr.getUserByHash(hash);
-			session.setAttribute(Constants.ALT_USER_KEY, hashuser);
-		}
+        User userhash = (User) request.getSession().getAttribute(Constants.ALT_USER_KEY);
+        if(userhash != null){
+            request.setAttribute("altusername", userhash.getUsername());
+        }
+
+
 		
 		/* ezSessionid becomes null if not found. */
 		request.setAttribute(messageSource.getMessage("cms.sessionid", null, locale), eZSessionId);

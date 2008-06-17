@@ -8,146 +8,13 @@
 <fmt:message key="userRegistrationList.item" var="item"/>
 <fmt:message key="userRegistrationList.items" var="items"/>
 
-<%--
-<table class="detail">
-    <tr>
-        <th>
-            <soak:label key="user.username" />
-        </th>
-        <td>
-            <c:out value="${user.username}" />
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <soak:label key="user.employeeNumber"/>
-        </th>
-        <td>
-            <c:out value="${employeeNumber}"/>
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <soak:label key="user.firstName" />
-        </th>
-        <td>
-            <c:out value="${user.firstName}" />
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <soak:label key="user.lastName" />
-        </th>
-        <td>
-            <c:out value="${user.lastName}" />
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <soak:label key="user.address.address" />
-        </th>
-        <td>
-            <c:out value="${address.address}"/>
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <soak:label key="user.address.city" />
-        </th>
-        <td>
-            <c:out value="${address.city}"/>
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <soak:label key="user.address.country" />
-        </th>
-        <td>
-            <c:out value="${address.country}"/>
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <soak:label key="user.address.postalCode" />
-        </th>
-        <td>
-            <c:out value="${address.postalCode}"/>
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <soak:label key="user.email" />
-        </th>
-        <td>
-            <c:out value="${email}" />
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <soak:label key="user.phoneNumber" />
-        </th>
-        <td>
-            <c:out value="${phoneNumber}"/>
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <soak:label key="user.mobilePhone" />
-        </th>
-        <td>
-            <c:out value="${mobilePhone}" />
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <soak:label key="user.jobTitle" />
-        </th>
-        <td>
-            <c:out value="${jobTitle}"/>
-        </td>
-    </tr>
-
-    <tr>
-        <th>
-            <soak:label key="user.workplace" />
-        </th>
-        <td>
-            <c:out value="${workplace}"/>
-        </td>
-    </tr>
-    <tr>
-        <th>user.organization
-            <soak:label key="user.website" />
-        </th>
-        <td>
-            <c:if test="${!empty website}">
-                <a href="<c:out value="${website}"/>"><fmt:message
-                        key="user.visitWebsite" />
-                </a>
-            </c:if>
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <soak:label key="user.organization" />
-        </th>
-        <td>
-            <c:out value="${organization.name}"/>
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <soak:label key="user.servicearea" />
-        </th>
-        <td>
-            <c:out value="${servicearea.name}"/>
-        </td>
-    </tr>
-</table>
---%>
+<c:choose>
+<c:when test="${user != null}">
+    <jsp:include page="userDetails.jsp"/>
+</c:when>
 <%-- ein form her som lar brukeren skrive inn ein epostaddresse--%>
-<c:if test="${user == null}">
-<form:form commandName="user">
+<c:otherwise>
+<form commandName="user">
     <fmt:message key="userRegistrationList.message"/>
     <table class="detail">
     <tr>
@@ -155,17 +22,21 @@
     </tr>
     <tr>
         <th>
-            <soak:label key="user.email" />
+            <fmt:message key="user.email" />
         </th>
         <td>
-            <form:input path="email" size="50"/>
-            <form:errors cssClass="fieldError" path="email"/>
+            <input type="text" name="email" size="50"/>
+            <input type="submit" class="button" name="send" onclick="bCancel=false"
+                value="<fmt:message key="button.sendmail"/>" />
         </td>
     </tr>
     </table>
-</form:form>
-</c:if>
+</form>
+</c:otherwise>
+</c:choose>
 
+<%--
+<c:if test="${user.username == username}">
 <display:table name="${userRegistrations}" pagesize="25" id="userRegistrations" class="list" requestURI="listUserRegistrations.html">
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="name">
@@ -227,3 +98,4 @@
     <display:setProperty name="paging.banner.items_name" value="${items}"/>
 
 </display:table>
+</c:if> --%>
