@@ -91,23 +91,29 @@
     </c:if>
     --%>
 		<tr>
-	        <th>
-	            <soak:label key="user.employeeNumber"/>
-	        </th>
-	        <td>
-                <form:input path="employeeNumber"/>
-                <form:errors cssClass="fieldError" path="employeeNumber"/>
-	        </td>
-	    </tr>
-	    <tr>
+			<th>
+				<soak:label key="user.employeeNumber" />
+			</th>
+			<td>
+				<form:input path="employeeNumber" />
+				<form:errors cssClass="fieldError" path="employeeNumber" />
+			</td>
+		</tr>
+		<tr>
 			<th>
 				<soak:label key="user.firstName" />
 			</th>
 			<td>
+				<c:choose>
+				<c:when test="${user.id == '0'}">
+					<form:input path="firstName" />
+					<form:errors cssClass="fieldError" path="firstName" />
+				</c:when>
+				<c:otherwise>
 				<c:out value="${user.firstName}" />
 				<form:hidden path="firstName" />
-				<%-- <form:input path="firstName"/>
-            <form:errors cssClass="fieldError" path="firstName"/> --%>
+				</c:otherwise>
+				</c:choose>
 			</td>
 		</tr>
 		<tr>
@@ -115,10 +121,16 @@
 				<soak:label key="user.lastName" />
 			</th>
 			<td>
+				<c:choose>
+				<c:when test="${user.id == '0'}">
+					<form:input path="lastName" />
+					<form:errors cssClass="fieldError" path="lastName" />
+				</c:when>
+				<c:otherwise>
 				<c:out value="${user.lastName}" />
 				<form:hidden path="lastName" />
-				<%-- <form:input path="lastName"/>
-            <form:errors cssClass="fieldError" path="lastName"/> --%>
+				</c:otherwise>
+				</c:choose>
 			</td>
 		</tr>
 		<tr>
@@ -223,8 +235,7 @@
 				<form:errors cssClass="fieldError" path="website" />
 				<c:if test="${!empty user.website}">
 					<a href="<c:out value="${user.website}"/>"><fmt:message
-							key="user.visitWebsite" />
-					</a>
+							key="user.visitWebsite" /> </a>
 				</c:if>
 			</td>
 		</tr>
