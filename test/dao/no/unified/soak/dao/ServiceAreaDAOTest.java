@@ -96,7 +96,7 @@ public class ServiceAreaDAOTest extends BaseDAOTestCase {
         serviceArea = dao.getServiceArea(serviceAreaId);
 
         // update required fields
-        String name = "Test av tjenesteområde";
+        String name = "Test av tjenesteomraade";
         serviceArea.setName(name);
 
         Boolean selectable = new Boolean("true");
