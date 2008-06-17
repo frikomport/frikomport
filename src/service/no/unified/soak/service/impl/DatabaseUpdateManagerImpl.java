@@ -60,24 +60,26 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                 Registration registration = it.next();
                 User admin = userManager.getUser("admin");
                 // Only use valid emails
-                if((registration.getUsername() == null || registration.getUsername().trim().length() == 0) && EmailValidator.getInstance().isValid(registration.getEmail())){
-                    User user = null;
-                    try{
-                        user = userManager.findUser(registration.getEmail());
-                    } catch (ObjectRetrievalFailureException e){
-                        // User not present, create
-                        user = userManager.addUser(registration.getEmail(), registration.getFirstName(), registration.getLastName(), registration.getEmail(), new Integer(0), null, new Integer(0));
+                if(registration.getUsername() == null || registration.getUsername().trim().length() == 0){
+                    if(EmailValidator.getInstance().isValid(registration.getEmail())){
+                        User user = null;
+                        try{
+                            user = userManager.findUser(registration.getEmail());
+                        } catch (ObjectRetrievalFailureException e){
+                            // User not present, create
+                            user = userManager.addUser(registration.getEmail(), registration.getFirstName(), registration.getLastName(), registration.getEmail(), new Integer(0), null, new Integer(0));
+                        }
+                        // Connect user with registration
+                        registration.setUser(user);
+                        registration.setUsername(user.getUsername());
+                        registrationManager.saveRegistration(registration);
                     }
-                    // Connect user with registration
-                    registration.setUser(user);
-                    registration.setUsername(user.getUsername());
-                    registrationManager.saveRegistration(registration);
-                }
-                else {
-                    registration.setUser(admin);
-                    registration.setUsername(admin.getUsername());
-                    registrationManager.saveRegistration(registration);
-                    // User exist or email not valid, do nothing
+                    else {
+                        // Connect with admin user
+                        registration.setUser(admin);
+                        registration.setUsername(admin.getUsername());
+                        registrationManager.saveRegistration(registration);
+                    }
                 }
             }
         }
