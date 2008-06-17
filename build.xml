@@ -230,7 +230,7 @@
         <hibernatedoclet destdir="${build.dir}/dao/gen" mergedir="metadata/dao"
             excludedtags="@version,@author" addedtags="@xdoclet-generated at ${TODAY}"
             force="${xdoclet.force}">
-            <fileset dir="src/dao" excludes="**/jdbc/*.java;**/ez/*.java" />
+            <fileset dir="src/dao" excludes="**/jdbc/*.java;**/ez/*.java"/>
             <hibernate validatexml="true" version="3.0"/>
         </hibernatedoclet>
     </target>
@@ -617,7 +617,7 @@
     <!-- =================================================================== -->
     <!--            Run all tests (tomcat not running)                       -->
     <!-- =================================================================== -->
-    <target name="test-all" depends="test-dao,test-service,test-web"
+    <target name="test-all" depends="clean,test-dao,test-service,test-web"
         description="runs all tests for dao, service, web">
         <antcall target="db-load"/>
     </target>
@@ -694,7 +694,7 @@
     <target name="db-create" depends="init"
         description="create database for ${database.type}">
         <echo level="debug">${database.jar}</echo>
-        <if>
+            <if>
             <equals arg1="${database.type}" arg2="mysql"/>
             <then>
                 <echo message="Detected MySQL, creating database..."/>
