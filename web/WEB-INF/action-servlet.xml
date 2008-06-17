@@ -45,7 +45,7 @@
     <bean id="userRegistrationController" class="no.unified.soak.webapp.action.UserRegistrationController" autowire="byName">
         <property name="commandName" value="user"/>
         <property name="commandClass" value="no.unified.soak.model.User"/>
-        <property name="formView" value="userRegistrationForm"/>
+        <property name="formView" value="userRegistrationList"/>
         <property name="successView" value="userRegistrationList"/>
     </bean>
 

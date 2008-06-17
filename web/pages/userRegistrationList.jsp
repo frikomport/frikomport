@@ -9,16 +9,16 @@
 <fmt:message key="userRegistrationList.items" var="items"/>
 
 <c:choose>
-<c:when test="${user != null}">
+<c:when test="${user.username != null}">
     <jsp:include page="userDetails.jsp"/>
 </c:when>
 <%-- ein form her som lar brukeren skrive inn ein epostaddresse--%>
 <c:otherwise>
-<form commandName="user">
-    <fmt:message key="userRegistrationList.message"/>
+<form method="post" id="userRegistrationForm" action="<c:url value="/profileUser.html" />">
+    <fmt:message key="userRegistrationForm.message"/>
     <table class="detail">
     <tr>
-        
+
     </tr>
     <tr>
         <th>
@@ -27,7 +27,7 @@
         <td>
             <input type="text" name="email" size="50"/>
             <input type="submit" class="button" name="send" onclick="bCancel=false"
-                value="<fmt:message key="button.sendmail"/>" />
+                value="<fmt:message key="button.mail"/>" />
         </td>
     </tr>
     </table>

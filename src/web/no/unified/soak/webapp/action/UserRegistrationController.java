@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.validation.BindException;
+import org.springframework.validation.Errors;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.mail.SimpleMailMessage;
 import org.apache.commons.validator.EmailValidator;
@@ -44,7 +45,35 @@ public class UserRegistrationController extends BaseFormController{
         this.courseManager = courseManager;
     }
 
-    protected ModelAndView showForm(HttpServletRequest request, HttpServletResponse response, BindException e) throws Exception {
+//    protected ModelAndView showForm(HttpServletRequest request, HttpServletResponse response, BindException e) throws Exception {
+//        if (log.isDebugEnabled()) {
+//            log.debug("entering 'referenceData' method...");
+//        }
+//        Locale locale = request.getLocale();
+//        Map model = new HashMap();
+//
+//        HttpSession session = request.getSession();
+//        String userdefaults = getText("access.registration.userdefaults",locale);
+//
+//        User user = null;
+//        if(userdefaults != null && userdefaults.equals("true")){
+//            user = (User) session.getAttribute(Constants.USER_KEY);
+//        }
+//        else{
+//            user = (User) session.getAttribute(Constants.ALT_USER_KEY);
+//        }
+//        if(user == null){
+//            return new ModelAndView(getFormView(), model);
+//        }
+//
+//        List registrations = registrationManager.getUserRegistrations(user);
+//        model.put("userRegistrations",registrations);
+//        model.put("user",user); // Er dette nødvendig?
+//
+//        return new ModelAndView(getSuccessView(), model);
+//    }
+
+    protected Map referenceData(HttpServletRequest request, Object o, Errors errors) throws Exception {
         if (log.isDebugEnabled()) {
             log.debug("entering 'referenceData' method...");
         }
@@ -53,7 +82,6 @@ public class UserRegistrationController extends BaseFormController{
 
         HttpSession session = request.getSession();
         String userdefaults = getText("access.registration.userdefaults",locale);
-
         User user = null;
         if(userdefaults != null && userdefaults.equals("true")){
             user = (User) session.getAttribute(Constants.USER_KEY);
@@ -61,15 +89,13 @@ public class UserRegistrationController extends BaseFormController{
         else{
             user = (User) session.getAttribute(Constants.ALT_USER_KEY);
         }
-        if(user == null){
-            return new ModelAndView(getFormView(), model);
-        }
-
+//        if(user == null){
+//            throw new
+//        }
         List registrations = registrationManager.getUserRegistrations(user);
         model.put("userRegistrations",registrations);
-        model.put("user",user); // Er dette nødvendig?
 
-        return new ModelAndView(getSuccessView(), model);
+        return model;
     }
 
     protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object o, BindException e) throws Exception {
@@ -94,13 +120,15 @@ public class UserRegistrationController extends BaseFormController{
 
     private void sendMail(User user, Locale locale) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(getText("userRegistrationForm.mail.subject",locale));
+        message.setTo(user.getEmail());
+        message.setSubject(getText("userRegistrationForm.mail.subject",locale));
         StringBuffer msg = new StringBuffer();
         msg.append(getText("userRegistrationForm.mail.body",locale));
         msg.append(getText("javaapp.baseurl",locale));
         msg.append(getText("javaapp.profileurl",locale));
         String body = msg.toString().replaceAll("<userhash/>",user.getHash());
         message.setText(body);
+        message.setFrom(getText("mail.default.from",locale));
         this.mailEngine.send(message);
     }
 
