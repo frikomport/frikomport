@@ -41,8 +41,13 @@
                 value="<fmt:message key="button.delete"/>" />
         </c:if> --%>
 
+					<%-- 
 					<input type="submit" class="button" name="cancel"
 						onclick="bCancel=true" value="<fmt:message key="button.cancel"/>" />
+						--%>
+				    <input type="button" class="button" name="cancel" onclick="javascript:history.go(-1)"
+                value="<fmt:message key="button.cancel"/>" />
+						
 				</td>
 			</tr>
 		</c:set>
@@ -111,7 +116,6 @@
 				</c:when>
 				<c:otherwise>
 				<c:out value="${user.firstName}" />
-				<form:hidden path="firstName" />
 				</c:otherwise>
 				</c:choose>
 			</td>
@@ -128,7 +132,6 @@
 				</c:when>
 				<c:otherwise>
 				<c:out value="${user.lastName}" />
-				<form:hidden path="lastName" />
 				</c:otherwise>
 				</c:choose>
 			</td>
