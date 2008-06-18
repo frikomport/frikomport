@@ -1,6 +1,6 @@
 <%@ include file="/common/taglibs.jsp"%>
 <fmt:message var="standalone" key="webapp.standalone"/>
-<c:if test="${empty eZSessionid || !standalone}">
+<c:if test="${empty eZSessionid || standalone}">
 <div id="menuDiv">
 <menu:useMenuDisplayer name="ListMenu" permissions="rolesAdapter">
 <%--    <menu:displayMenu name="AdminMenu"/>
