@@ -120,32 +120,31 @@ div#loginTable th {
     text-align: right;
 }
 
-div#menu {
-/*    position: relative; 
-    top: 100px;
+div#menuDiv {
+    position: absolute;
+    /*top: 100px;*/
     right: 20px;
-    float: left;*/
-    height: 100%;
     width: 190px;
-    padding: 10px;
+    padding: 0px;
     background-color: #eee;
     border: 1px solid #c0c0c0;
-    line-height: 17px;
+    /*line-height: 17px;*/
     /* Again, the ugly brilliant hack. */
     voice-family: "\"}\"";
     voice-family: inherit;
     width: 166px;
 }
 /* Again, "be nice to Opera 5". */
-body>div#menu {width: 150px;}
+body>div#menuDiv {width: 150px;}
 
-div#menu a:visited {
+div#menuDiv a:visited {
     background: transparent;
     color: black;
 }
 
-div#menu ul {
+div#menuDiv ul {
     padding-left: 10px;
+    margin: 0.7em;
 }
 
 div#readme {

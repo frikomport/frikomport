@@ -33,20 +33,12 @@
     </div>
 
     <div id="screen">
-<table width="100%">
-<tr>
-    <td valign="top">
         <c:import url="/WEB-INF/pages/menu.jsp"/>
-    </td>
-    <td width="100%">
         <div id="content">
             <h1><decorator:getProperty property="page.heading"/></h1>
             <%@ include file="/common/messages.jsp" %>
             <decorator:body/>
         </div>
-    </td>
-</tr>
-</table>
 
     </div>
 
