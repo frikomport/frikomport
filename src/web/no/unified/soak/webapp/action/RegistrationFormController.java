@@ -162,12 +162,17 @@ public class RegistrationFormController extends BaseFormController {
 			registration = registrationManager.getRegistration(id);
 		} else {
 			registration = new Registration();
-            User user = (User)session.getAttribute(Constants.USER_KEY);
-
-            // set default values
+            User user = null;
             Locale locale = request.getLocale();
             String userdefaults = getText("access.registration.userdefaults",locale);
             if(userdefaults != null && userdefaults.equals("true")){
+                user = (User)session.getAttribute(Constants.USER_KEY);
+            }
+            else {
+                user = (User)session.getAttribute(Constants.ALT_USER_KEY);
+            }
+
+            if(user != null){
                 registration.setFirstName(user.getFirstName());
                 registration.setLastName(user.getLastName());
                 registration.setEmail(user.getEmail());
