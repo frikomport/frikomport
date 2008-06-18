@@ -46,12 +46,6 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
                     // No user, add
                     user = userManager.addUser(ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
                 }
-
-                // Set transaction?
-//                userManager.
-//
-//                userManager.saveUser(user);
-                // Update organization?
             }
         }
         log.debug("Synchronized users");

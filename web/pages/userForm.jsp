@@ -256,11 +256,9 @@
 			</th>
 			<td>
 				<form:select path="organizationid">
-					<form:options items="${organizations}" itemValue="id"
-						itemLabel="name" />
+					<form:options items="${organizations}" itemValue="id" itemLabel="name" />
 				</form:select>
-				<form:errors cssClass="fieldError" htmlEscape="false"
-					path="organizationid" />
+				<form:errors cssClass="fieldError" htmlEscape="false" path="organizationid" />
 			</td>
 		</tr>
 		<tr>
@@ -269,11 +267,9 @@
 			</th>
 			<td>
 				<form:select path="serviceareaid">
-					<form:options items="${serviceareas}" itemValue="id"
-						itemLabel="name" />
+					<form:options items="${serviceareas}" itemValue="id" itemLabel="name" />
 				</form:select>
-				<form:errors cssClass="fieldError" htmlEscape="false"
-					path="serviceareaid" />
+				<form:errors cssClass="fieldError" htmlEscape="false" path="serviceareaid" />
 			</td>
 		</tr>
 		<c:if test="${param.from == 'list' or param.method == 'Add'}">

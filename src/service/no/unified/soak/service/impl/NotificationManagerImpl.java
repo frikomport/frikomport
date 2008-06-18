@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Locale;
 
 import org.springframework.context.MessageSource;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.MailSender;
 
 import no.unified.soak.Constants;
@@ -124,7 +123,6 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 	 * @see no.unified.soak.service.NotificationManager#sendReminders()
 	 */
 	public void sendReminders() {
-//		log.debug("sendReminders");
 		// Fetch all the Notifications that does not have the sent-flag set.
 		List<Notification> notifications = this.getUnsentNotifications();
 		ArrayList<MimeMessage> emails = new ArrayList<MimeMessage>();
@@ -135,8 +133,7 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 
 				// The if-test is added mostly because of bad sample data (lazy
 				// programmer)
-				if (notification.getRegistration() != null
-						&& notification.getRegistration().getCourse() != null) {
+				if (notification.getRegistration() != null && notification.getRegistration().getCourse() != null) {
 					Course course = notification.getRegistration().getCourse();
 					// Are we after the time of notification?
 					if (course.getReminder() != null && course.getReminder().before(today)) {

@@ -127,8 +127,7 @@ public class LocationFormController extends BaseFormController {
             saveMessage(request, getText(key, locale));
 
             if (!isNew) {
-                return new ModelAndView("redirect:editLocation.html", "id",
-                    location.getId());
+                return new ModelAndView("redirect:editLocation.html", "id", location.getId());
             }
         }
 

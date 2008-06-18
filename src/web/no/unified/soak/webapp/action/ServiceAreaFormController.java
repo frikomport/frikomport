@@ -83,8 +83,7 @@ public class ServiceAreaFormController extends BaseFormController {
             saveMessage(request, getText(key, locale));
 
             if (!isNew) {
-                return new ModelAndView("redirect:editServiceArea.html", "id",
-                    serviceArea.getId());
+                return new ModelAndView("redirect:editServiceArea.html", "id", serviceArea.getId());
             }
         }
 

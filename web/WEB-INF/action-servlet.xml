@@ -242,7 +242,6 @@
         <property name="cacheSeconds" value="10"/>
         <property name="basenames">
             <list>
-                <value>classpath:ApplicationOverride</value>
                 <value>classpath:ApplicationResources</value>
             </list>
         </property>

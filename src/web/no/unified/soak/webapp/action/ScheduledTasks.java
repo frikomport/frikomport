@@ -25,7 +25,6 @@ public class ScheduledTasks extends TimerTask {
 
 	@Override
 	public void run() {
-		Locale locale = new Locale("NO");
         Iterator<Task> it = tasks.iterator();
         while (it.hasNext()){
             Task task = it.next();

@@ -89,8 +89,7 @@ public class PersonFormController extends BaseFormController {
             saveMessage(request, getText(key, locale));
 
             if (!isNew) {
-                return new ModelAndView("redirect:editPerson.html", "id",
-                    person.getId());
+                return new ModelAndView("redirect:editPerson.html", "id",  person.getId());
             }
         }
 
