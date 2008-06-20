@@ -31,6 +31,8 @@ ALTER TABLE app_user MODIFY COLUMN city VARCHAR(50);
 ALTER TABLE app_user MODIFY COLUMN postal_code VARCHAR(15);
 
 ALTER TABLE registration ADD COLUMN username VARCHAR(100);
+ALTER TABLE registration MODIFY COLUMN organizationid BIGINT(20);
+ALTER TABLE registration MODIFY COLUMN serviceareaid BIGINT(20);
 
 -- create users based on registrations
 -- insert ignore into app_user ( username, first_name, last_name, email, version, postal_code) select email, firstname, lastname, email, 1, 0 from registration where email like '%@%';
