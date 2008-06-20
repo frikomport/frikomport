@@ -391,6 +391,13 @@ public class MailUtil {
             StreetAddress streetAddress = new StreetAddress(course.getLocation().getAddress());
             event.getProperties().add(streetAddress);
 
+            if(course.getStatus() == CourseStatus.COURSE_CANCELLED){
+                event.getProperties().add(Status.VEVENT_CANCELLED);
+            }
+            else {
+                event.getProperties().add(Status.VEVENT_CONFIRMED);
+            }
+
             if(course.getResponsible() != null){
                 try{
                     URI mailto = new URI("MAILTO",course.getResponsible().getEmail(),null);
@@ -411,7 +418,6 @@ public class MailUtil {
                 log.error("Could not create Attendee object");
             }
 
-
             if(course.getDetailURL() != null && course.getDetailURL().length() > 0){
                 try{
                     Url url = new Url(Uris.create(course.getDetailURL()));
@@ -420,7 +426,6 @@ public class MailUtil {
                 catch(Exception ex){
                     log.error("Could not create Url object");
                 }
-
             }
 
 

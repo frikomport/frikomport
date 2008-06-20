@@ -138,8 +138,9 @@ public class CourseFormController extends BaseFormController {
 	 */
 	protected Map referenceData(HttpServletRequest request) throws Exception {
 		Map<String, Object> model = new HashMap<String, Object>();
+        Locale locale = request.getLocale();
 
-		// Retrieve all serviceareas into an array
+        // Retrieve all serviceareas into an array
 		List serviceAreas = serviceAreaManager.getAll();
 		if (serviceAreas != null) {
 			model.put("serviceareas", serviceAreas);
@@ -203,7 +204,12 @@ public class CourseFormController extends BaseFormController {
 					allowRegistration = new Boolean(true);
 				}
 
-				model.put("allowRegistration", allowRegistration);
+                if(course.getStatus().intValue() == CourseStatus.COURSE_CANCELLED.intValue()){
+                    allowRegistration = new Boolean(false);
+                    saveMessage(request,getText("course.status.cancelled", locale));                    
+                }
+
+                model.put("allowRegistration", allowRegistration);
 
 				// Retrieve all attachments belonging to the course into an
 				// array
