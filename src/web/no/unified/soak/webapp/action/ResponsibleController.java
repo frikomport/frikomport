@@ -16,10 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import no.unified.soak.Constants;
-import no.unified.soak.model.Person;
-import no.unified.soak.service.PersonManager;
+import no.unified.soak.service.UserManager;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.servlet.ModelAndView;
@@ -32,12 +30,12 @@ import org.springframework.web.servlet.mvc.Controller;
  *
  * @author hrj
  */
-public class PersonController implements Controller {
-    private final Log log = LogFactory.getLog(PersonController.class);
-    private PersonManager personManager = null;
+public class ResponsibleController implements Controller {
+    private final Log log = LogFactory.getLog(ResponsibleController.class);
+    private UserManager userManager = null;
 
-    public void setPersonManager(PersonManager personManager) {
-        this.personManager = personManager;
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
     }
 
     /**
@@ -49,22 +47,9 @@ public class PersonController implements Controller {
             log.debug("entering 'handleRequest' method...");
         }
 
-        Person person = new Person();
-        // populate object with request parameters
-        BeanUtils.populate(person, request.getParameterMap());
-
-        List<Person> persons = getPersons();
-
-        return new ModelAndView("personList", Constants.PERSON_LIST, persons);
+        List responsibles = userManager.getResponsibles();
+        
+        return new ModelAndView("responsibleList", Constants.RESPONSIBLE_LIST, responsibles);
     }
 
-    /**
-     * Gets the list of persons
-     * @return A list of persons
-     */
-    private List<Person> getPersons() {
-        // Get all persons
-        List<Person> persons = personManager.getPersons(null, new Boolean(true));
-        return persons;
-    }
 }

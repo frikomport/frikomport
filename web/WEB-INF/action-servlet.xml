@@ -102,7 +102,12 @@
         <property name="formView" value="personDetails"/>
         <property name="successView" value="redirect:listPeople.html"/>
     </bean>
-    <!--Person-BEAN-END-->
+    <!--Responsible-BEAN-END-->
+
+    <!--Responsible-BEAN-START--><bean id="responsibleController" class="no.unified.soak.webapp.action.ResponsibleController" autowire="byName"/>
+    <!--Responsible-BEAN-END-->
+
+
     <!--ServiceArea-BEAN-START-->
     <bean id="serviceAreaController" class="no.unified.soak.webapp.action.ServiceAreaController" autowire="byName"/>
 
@@ -268,6 +273,8 @@
                 <prop key="/listPeople.html">personController</prop>
                 <prop key="/editPerson.html">personFormController</prop>
                 <prop key="/detailsPerson.html">personDetailsController</prop>
+                
+                <prop key="/listResponsibles.html">responsibleController</prop>
 
                 <prop key="/listServiceAreas.html">serviceAreaController</prop>
                 <prop key="/editServiceArea.html">serviceAreaFormController</prop>

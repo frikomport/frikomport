@@ -158,6 +158,14 @@ public class Constants {
 	public static final String PERSON_LIST = "personList";
 
 	// Person-END
+	
+	//	 Responsible-START
+	/**
+	 * The request scope attribute that holds the person list
+	 */
+	public static final String RESPONSIBLE_LIST = "responsibleList";
+
+	//	 Responsible-STOP
 
 	// ServiceArea-START
 	/**
