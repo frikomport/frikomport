@@ -16,6 +16,7 @@ import java.util.List;
 import no.unified.soak.dao.CourseDAO;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.User;
+import no.unified.soak.model.Person;
 import no.unified.soak.util.CourseStatus;
 
 import org.hibernate.criterion.DetachedCriteria;
@@ -146,4 +147,9 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
         }
         return getHibernateTemplate().findByCriteria(criteria);
     }
+
+    public List<Course> findByInstructor(Person person) {
+        DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
+        criteria.add(Restrictions.eq("instructorid",person.getId()));
+        return getHibernateTemplate().findByCriteria(criteria);    }
 }

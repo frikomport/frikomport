@@ -13,6 +13,7 @@ package no.unified.soak.service;
 import no.unified.soak.dao.CourseDAO;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.User;
+import no.unified.soak.model.Person;
 
 import java.util.Date;
 import java.util.List;
@@ -77,4 +78,6 @@ public interface CourseManager extends Manager {
      * @return A list of all courses that needs looking into
      */
     public List<Course> getWaitingListCourses();
+
+    public List<Course> findByInstructor(Person person);
 }

@@ -20,6 +20,7 @@ import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.WaitingListManager;
 import no.unified.soak.util.MailUtil;
+import no.unified.soak.util.CourseStatus;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -114,8 +115,9 @@ public class RegistrationAdministrationController extends BaseFormController {
 		}
 
 		Map model = new HashMap();
+        Locale locale = request.getLocale();
 
-		String courseId = request.getParameter("courseid");
+        String courseId = request.getParameter("courseid");
 
 		// Retrieve all serviceareas into an array
 		List serviceAreas = serviceAreaManager.getAll();
@@ -143,6 +145,10 @@ public class RegistrationAdministrationController extends BaseFormController {
                     && (course.getRegisterStart() == null || today
                             .after(course.getRegisterStart()))) {
                 allowRegistration = new Boolean(true);
+            }
+            if(course.getStatus().equals(CourseStatus.COURSE_CANCELLED)){
+                allowRegistration = new Boolean(false);
+                saveMessage(request,getText("course.status.cancelled", locale));
             }
             model.put("allowRegistration", allowRegistration);
 

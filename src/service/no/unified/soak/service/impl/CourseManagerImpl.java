@@ -18,6 +18,7 @@ import org.apache.commons.lang.StringUtils;
 import no.unified.soak.dao.CourseDAO;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.User;
+import no.unified.soak.model.Person;
 import no.unified.soak.service.CourseManager;
 
 
@@ -86,6 +87,10 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
      */
     public List getWaitingListCourses() {
         return dao.getWaitingListCourses();
+    }
+
+    public List<Course> findByInstructor(Person person) {
+        return dao.findByInstructor(person);
     }
 
     /**

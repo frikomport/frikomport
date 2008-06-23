@@ -12,6 +12,7 @@ package no.unified.soak.webapp.action;
 
 import no.unified.soak.model.Person;
 import no.unified.soak.service.PersonManager;
+import no.unified.soak.service.CourseManager;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -20,6 +21,9 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Locale;
+import java.util.Map;
+import java.util.List;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,12 +37,17 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class PersonFormController extends BaseFormController {
     private PersonManager personManager = null;
+    private CourseManager courseManager = null;
 
     /**
      * @param roleManager The roleManager to set.
      */
     public void setPersonManager(PersonManager personManager) {
         this.personManager = personManager;
+    }
+
+    public void setCourseManager(CourseManager courseManager) {
+        this.courseManager = courseManager;
     }
 
     /* (non-Javadoc)
@@ -56,6 +65,17 @@ public class PersonFormController extends BaseFormController {
         }
 
         return person;
+    }
+
+    protected Map referenceData(HttpServletRequest request) throws Exception {
+        Map<String, List> parameters = new HashMap<String, List>();
+
+        List courses = courseManager.findByInstructor((Person)formBackingObject(request));
+        if(courses != null){
+            parameters.put("courseList",courses);
+        }
+
+        return parameters;
     }
 
     /* (non-Javadoc)

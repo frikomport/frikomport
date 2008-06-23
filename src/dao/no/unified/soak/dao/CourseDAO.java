@@ -12,6 +12,7 @@ package no.unified.soak.dao;
 
 import no.unified.soak.model.Course;
 import no.unified.soak.model.User;
+import no.unified.soak.model.Person;
 
 import java.util.Date;
 import java.util.List;
@@ -73,4 +74,6 @@ public interface CourseDAO extends DAO {
      * @param user
      */
     public List getUnpublished(User user);
+
+    public List<Course> findByInstructor(Person person);
 }
