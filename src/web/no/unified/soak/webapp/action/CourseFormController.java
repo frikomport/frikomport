@@ -21,9 +21,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.mail.internet.MimeMessage;
 
 import no.unified.soak.Constants;
 import no.unified.soak.model.Attachment;
@@ -40,14 +40,14 @@ import no.unified.soak.service.PersonManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.UserManager;
-import no.unified.soak.util.MailUtil;
 import no.unified.soak.util.CourseStatus;
+import no.unified.soak.util.MailUtil;
 import no.unified.soak.webapp.util.FileUtil;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -179,7 +179,9 @@ public class CourseFormController extends BaseFormController {
 		List<Date> time = new ArrayList<Date>();
 		time.add(new Date());
 		model.put("time", time);
-
+		
+		setDefaultValues(model, locale);
+		
 		// Are we to enable mail comment field and buttons?
 		Boolean enableMail = new Boolean(false);
 		String mailParam = request.getParameter("enableMail");
@@ -240,6 +242,19 @@ public class CourseFormController extends BaseFormController {
 		}
 		
 		return model;
+	}
+
+	private void setDefaultValues(Map<String, Object> model, Locale locale) {
+		String startTimeTime = messageSource.getMessage("course.startTimeTime", null, locale);
+		model.put("startTimeTime",startTimeTime);
+		String stopTimeTime = messageSource.getMessage("course.stopTimeTime", null, locale);
+		model.put("stopTimeTime",stopTimeTime);
+
+		Date currentTime = new Date();
+		SimpleDateFormat dfDate = new SimpleDateFormat("dd.MM.yyyy");
+		model.put("registerStartDate", dfDate.format(currentTime));
+		SimpleDateFormat dfTime = new SimpleDateFormat("HH:mm");
+		model.put("registerStartTime", dfTime.format(currentTime));
 	}
 
 	/**
