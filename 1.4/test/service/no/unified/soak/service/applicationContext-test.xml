@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+    "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+    <!-- AOP Advisor -->
+    <bean id="userSecurityInterceptor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+        <property name="advice" ref="userSecurityAdvice"/>
+        <property name="patterns">
+            <list>
+                <value>.*saveUser</value>
+                <value>.*removeUser</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- Advice Class -->
+    <bean id="userSecurityAdvice" class="no.unified.soak.service.UserSecurityAdvice"/>
+
+	<bean id="userManager" class="no.unified.soak.service.impl.UserManagerImpl"/>
+
+    <bean id="target" class="org.springframework.aop.framework.ProxyFactoryBean">
+      <property name="proxyInterfaces" value="no.unified.soak.service.UserManager"/>
+      <property name="interceptorNames">
+         <list>
+            <idref local="userSecurityInterceptor"/>
+            <idref local="userManager"/>
+         </list>
+      </property>
+    </bean>
+
+</beans>
