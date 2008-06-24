@@ -242,13 +242,20 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	}
 
 	private void setKommune(Integer kommune, User user) {
+		setKommune(kommune, user, true);
+	}
+	
+	private void setKommune(Integer kommune, User user, Boolean save) {
 		List organizations = organizationManager.getAll();
 		// first search in ids
 		for (Iterator iter = organizations.iterator(); iter.hasNext();) {
 			Organization organization = (Organization) iter.next();
 			
 			if (organization.getId().equals(kommune.longValue())){
-				user.setOrganizationid(organization.getId());
+				if (user.getOrganizationid() == null || !user.getOrganizationid().equals(organization.getId())){
+					user.setOrganizationid(organization.getId());
+					save = true;
+				}
 				return;
 			}
 		}
@@ -257,7 +264,10 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 			Organization organization = (Organization) iter.next();
 			
 			if (organization.getNumber().equals(kommune.longValue())){
-				user.setOrganizationid(organization.getId());
+				if (!user.getOrganizationid().equals(organization.getId())){
+					user.setOrganizationid(organization.getId());
+					save = true;
+				}
 				return;
 			}
 		}
@@ -265,26 +275,53 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	
 	public void updateUser(User user, String firstName, String lastName, String email, Integer id,
 			List<String> rolenames, Integer kommune) {
-		user.setFirstName(firstName);
-		user.setLastName(lastName);
-		user.setEmail(email);
-		user.setEnabled(true);
-		user.setId(id);
-		if (kommune != null && kommune != 0){
-			setKommune(kommune, user);
+		Boolean save = false;
+		if (!firstName.equals(user.getFirstName())){
+			user.setFirstName(firstName);
+			save = true;
 		}
+		if (!lastName.equals(user.getLastName())){
+			user.setLastName(lastName);
+			save = true;
+		}
+		if (!email.equals(user.getEmail())){
+			user.setEmail(email);
+			save = true;
+		}
+		if (!id.equals(user.getId())){
+			user.setId(id);
+			save = true;
+		}
+		if (kommune != null && kommune != 0){
+			setKommune(kommune, user, save);
+		}
+        setRoles(rolenames, user, save);
         if(user.getHash() == null || user.getHash().length() == 0){
-            user.setHash(StringUtil.encodeString(user.getUsername()));
+        	user.setHash(StringUtil.encodeString(user.getUsername()));
+        	save = true;
         }
-        setRoles(rolenames, user);
-		try {
-			saveUser(user);
-		} catch (UserExistsException e) {
-			log.error("UserExistsException: " + e);
+		if (save){
+			user.setEnabled(true);
+			try {
+				saveUser(user);
+			} catch (UserExistsException e) {
+				log.error("UserExistsException: " + e);
+			}
 		}
 	}
 	
 	private void setRoles(List<String> rolenames, User user) {
+		setRoles(rolenames, user, true);
+	}
+	
+	private void setRoles(List<String> rolenames, User user, Boolean save) {
+		// check if roles are the same as the ones set on user.
+		if (equalRoles(user, rolenames)){
+			return;
+		}
+		// Roles are different and needs to be saved.
+		save = true;
+		
 		// remove existing roles before new ones are added.
 		user.removeAllRoles();
 		Locale locale = LocaleContextHolder.getLocale();
@@ -312,7 +349,21 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		}
 	}
 
-    public User addUser(Registration registration) {
+    private boolean equalRoles(User user, List<String> rolenames) {
+		if (user.getRoleNameList().size() != rolenames.size()){
+    		return false;
+    	}
+
+    	for (String rolename : rolenames) {
+			if (!user.getRoleNameList().contains(rolename)){
+				return false;
+			}
+		}
+    	
+		return true;
+	}
+
+	public User addUser(Registration registration) {
         User user = addUser(registration.getEmail(), registration.getFirstName(), registration.getLastName(), registration.getEmail(), new Integer(0), null, new Integer(0));
         return user;
     }
