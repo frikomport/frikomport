@@ -5,7 +5,7 @@ delete from app_user;
 insert into role values ('anonymous',1,'Anonymous');
 insert into role values ('employee',1,'Ansatt');
 insert into role values ('instructor',1,'Kursansvarlig');
-insert into role values ('editor',1,'Oppl�ringsansvarlig');
+insert into role values ('editor',1,'Opplaringsansvarlig');
 insert into role values ('admin',1,'Administrator');
 
 ALTER TABLE user_role MODIFY COLUMN username varchar(100);
@@ -33,9 +33,6 @@ ALTER TABLE app_user MODIFY COLUMN postal_code VARCHAR(15);
 ALTER TABLE registration ADD COLUMN username VARCHAR(100);
 ALTER TABLE registration MODIFY COLUMN organizationid BIGINT(20);
 ALTER TABLE registration MODIFY COLUMN serviceareaid BIGINT(20);
-
--- create users based on registrations
--- insert ignore into app_user ( username, first_name, last_name, email, version, postal_code) select email, firstname, lastname, email, 1, 0 from registration where email like '%@%';
 
 -- add status field and set default values
 ALTER TABLE course ADD COLUMN status INTEGER DEFAULT 0;
