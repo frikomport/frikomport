@@ -1,0 +1,722 @@
+<!-- ======================================================================= -->
+<!-- $Id: web-tests.xml,v 1.4 2005/12/21 16:18:34 hrj Exp $               -->
+<!-- ======================================================================= -->
+<!DOCTYPE project [
+    <!ENTITY config SYSTEM "file:./config.xml">
+    <!ENTITY login SYSTEM "file:./login.xml">
+]>
+<project basedir="." default="run-all-tests"> 
+    <!-- Include ApplicationResources.properties so we can test against 
+         keys, rather than values -->
+    <property file="web/WEB-INF/classes/ApplicationResources.properties"/>
+
+    <!-- runs all targets -->
+    <target name="run-all-tests" 
+        depends="Login,Logout,PasswordHint,Signup,UserTests,FlushCache,FileUpload,LocationTests"/>
+    
+    <!-- runs user-related tests -->
+    <target name="UserTests" 
+        depends="EditUser,SearchUser,SaveUser,AddUser,ActiveUsers"
+        description="Call and executes all person test cases (targets)">
+        <echo>Successfully ran all User JSP tests!</echo>
+    </target>
+    
+    <!-- Login to the application -->
+    <target name="Login" 
+        description="Runs login test and verifies Main Menu's Title">
+        <canoo name="login">
+            &config;
+            <steps>
+                &login;
+            </steps>
+        </canoo>
+    </target>
+
+    <!-- Logout of the application -->
+    <target name="Logout"
+        description="Runs logout test and verifies Login's Title">
+        <canoo name="login">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="get Logout Page" url="/logout.jsp"/>
+                <verifytitle stepid="we should see the login title"
+                    text="${webapp.prefix}${login.title}"/>
+            </steps>
+        </canoo>
+    </target>
+
+    <!-- Retrieve Password Hint -->
+    <target name="PasswordHint" 
+        description="Gets the user's password hint">
+        <canoo name="passwordHint">
+            &config;
+            <steps>
+                <invoke stepid="get Login Page" url="/"/>
+                <verifytitle stepid="we should see the login title" 
+                    text="${webapp.prefix}${login.title}"/>
+                <invoke stepid="click password hint link"
+                    url="/passwordHint.html?username=mraible"/>
+                <verifytitle stepid="we should see the login title again"
+                    text="${webapp.prefix}${login.title}"/>
+            </steps>
+        </canoo>
+    </target>
+    
+    <!-- Verify the edit user screen displays without errors -->
+    <target name="EditUser" 
+        description="Tests selecting the 'Edit Profile' forward">
+        <canoo name="editUser">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Edit Profile link" url="/editProfile.html"/>
+                <verifytitle stepid="we should see the user profile title" 
+                    text="${webapp.prefix}${userProfile.title}"/>
+            </steps>
+        </canoo>
+    </target>
+    
+    <!-- Verify the user list screen displays without errors -->
+    <target name="SearchUser" 
+        description="Tests search for and displaying all users">
+        <canoo name="searchUser">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click View Users link" url="/users.html"/>
+                <verifytitle stepid="we should see the user list title" 
+                    text="${webapp.prefix}${userList.title}"/>
+            </steps>
+        </canoo>
+    </target>
+    
+    <!-- Edit a user and then save -->
+    <target name="SaveUser" 
+        description="Tests editing and saving a user">
+        <canoo name="saveUser">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Edit Profile link" url="/editProfile.html"/>
+                <verifytitle stepid="we should see the user profile title" 
+                    text="${webapp.prefix}${userProfile.title}"/>
+                <setinputfield stepid="set address" name="address.address" 
+                    value="2255 Lane Avenue"/>
+                <setinputfield stepid="set zipcode" name="address.postalCode" 
+                    value="59826"/>
+                <clickbutton label="${button.save}" stepid="Click Save"/>
+                <verifytitle stepid="display Main Menu if save OK"
+                     text="${webapp.prefix}${mainMenu.title}" />
+            </steps>
+        </canoo>
+    </target>
+    
+    <!-- Add a new user after logging in -->
+    <target name="AddUser"
+        description="Adds a new user profile">
+        <canoo name="addUser">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Add Button" 
+                    url="/editUser.html?method=Add&amp;from=list"/>
+                <verifytitle stepid="we should see the user profile title" 
+                    text="${webapp.prefix}${userProfile.title}"/>
+                    
+                <setinputfield stepid="set username" name="username" value="newuser"/>
+                <setinputfield stepid="set password" name="password" value="test"/>
+                <setinputfield stepid="set confirmPassword" name="confirmPassword" value="test"/>
+                <setinputfield stepid="set firstName" name="firstName" value="Test"/>
+                <setinputfield stepid="set lastName" name="lastName" value="Name"/>
+                <setinputfield stepid="set city" name="address.city" value="Denver"/>
+                <setinputfield stepid="select province" name="address.province" value="CO"/>
+                <setselectfield stepid="select country" name="address.country" value="US"/>
+                <setinputfield stepid="set postalCode" name="address.postalCode" value="80210"/>
+                <setinputfield stepid="set email" name="email" value="newuser@raibledesigns.com"/>
+                <setinputfield stepid="set website" name="website" value="http://raibledesigns.com"/>
+                <setinputfield stepid="set passwordHint" name="passwordHint" value="test"/>
+                <setselectfield stepid="select roles in user roles list" name="userRoles" value="tomcat"/>
+                <clickbutton label="${button.save}" stepid="Click button 'Save'"/>
+                
+                <verifytitle stepid="Redisplay add user page" text="${webapp.prefix}${userProfile.title}"/>
+                <verifytext stepid="verify success message" regex="true"
+                    text='&lt;div class="message.*&gt;.*&lt;strong&gt;Test Name&lt;/strong&gt;.*&lt;/div&gt;'/>
+                    
+                <!-- Delete user -->
+                <invoke stepid="Click edit user link" url="/editUser.html?username=newuser&amp;from=list"/>
+                <clickbutton label="${button.delete}" stepid="Click button 'Delete'"/>
+                <verifytext stepid="verify success message" regex="true"
+                    text='&lt;div class="message.*&gt;.*&lt;strong&gt;Test Name&lt;/strong&gt;.*&lt;/div&gt;'/>
+                <verifytitle stepid="display user list" text="${webapp.prefix}${userList.title}"/>
+            </steps>
+        </canoo>
+    </target>
+    
+    <!-- Sign up a new user (no login) -->
+    <target name="Signup"
+        description="Signup a new user">
+        <canoo name="signup">
+            &config;
+            <steps>
+                <invoke stepid="click signup link" url="/signup.html"/>
+                <verifytitle stepid="view signup title" text="${webapp.prefix}${signup.title}"/>
+                
+                <setinputfield stepid="set username" name="username" value="signup-user"/>
+                <setinputfield stepid="set password" name="password" value="test"/>
+                <setinputfield stepid="set confirmPassword" name="confirmPassword" value="test"/>
+                <setinputfield stepid="set firstName" name="firstName" value="Test"/>
+                <setinputfield stepid="set lastName" name="lastName" value="Name"/>
+                <setinputfield stepid="set city" name="address.city" value="Denver"/>
+                <setinputfield stepid="set state" name="address.province" value="CO"/>
+                <setselectfield stepid="select country" name="address.country" value="US"/>
+                <setinputfield stepid="set postalCode" name="address.postalCode" value="80210"/>
+                <setinputfield stepid="set email" name="email" value="signup-user@raibledesigns.com"/>
+                <setinputfield stepid="set website" name="website" value="http://raibledesigns.com"/>
+                <setinputfield stepid="set passwordHint" name="passwordHint" value="test"/>
+                <clickbutton label="${button.register}" stepid="Click button 'Signup'"/>
+
+                <verifytitle stepid="view main menu" text="${webapp.prefix}${mainMenu.title}"/>
+                <verifytext stepid="verify success message" text="${user.registered}"/>
+            </steps>
+        </canoo>
+    </target>
+
+    <!-- View Active Users -->
+    <target name="ActiveUsers" 
+        description="View Active Users List">
+        <canoo name="activeUsers">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="get activeUsers URL" url="/activeUsers.html"/>
+                <verifytitle stepid="we should see the activeUsers title" 
+                    text="${webapp.prefix}${activeUsers.title}"/>
+            </steps>
+        </canoo>
+    </target>
+    
+    <!-- Flush OSCache -->
+    <target name="FlushCache" 
+        description="opens JSP to Flush Page Cache">
+        <canoo name="flushCache">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="get flushCache URL" url="/flushCache.html"/>
+                <verifytitle stepid="we should see the flush cache title" 
+                    text="${webapp.prefix}${flushCache.title}"/>
+            </steps>
+        </canoo>
+    </target>
+    
+    <!-- File Upload -->
+    <target name="FileUpload" 
+        description="Tests uploading a file">
+        <canoo name="fileUpload">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Upload a File link" url="/selectFile.html"/>
+                <verifytitle stepid="we should see file upload form" 
+                    text="${webapp.prefix}${upload.title}"/>
+                <!--setinputfield stepid="set name" name="name" 
+                    value="Canoo Test File"/>
+                <setinputfield stepid="set file" name="file" 
+                    value="${basedir}/build.properties"/>
+                <clickbutton label="${button.upload}" stepid="Click Upload"/>
+                <verifytitle stepid="show file data if upload OK"
+                     text="${webapp.prefix}${display.title}" />
+                <verifytext stepid="verify original file name displayed on page"
+                     text="build.properties" /-->
+            </steps>
+        </canoo>
+    </target>
+
+<!--Location-START-->
+    <!-- runs location-related tests -->
+    <target name="LocationTests"
+        depends="SearchLocations,EditLocation,SaveLocation,AddLocation,DeleteLocation"
+        description="Call and executes all location test cases (targets)">
+        <echo>Successfully ran all Location JSP tests!</echo>
+    </target>
+
+    <!-- Verify the edit location screen displays without errors -->
+    <target name="EditLocation"
+        description="Tests editing an existing Location's information">
+        <canoo name="editLocation">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Edit Location link" url="/editLocation.html?id=1"/>
+                <verifytitle stepid="we should see the locationDetail title"
+                    text="${webapp.prefix}${locationDetail.title}"/>
+            </steps>
+        </canoo>
+    </target>
+
+    <!-- Edit a location and then save -->
+    <target name="SaveLocation"
+        description="Tests editing and saving a location">
+        <canoo name="saveLocation">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Edit Location link" url="/editLocation.html?id=1"/>
+                <verifytitle stepid="we should see the locationDetail title"
+                    text="${webapp.prefix}${locationDetail.title}"/>
+                <!-- update some of the required fields -->
+                <setinputfield stepid="set address" name="address" value="address"/>
+                <setinputfield stepid="set name" name="name" value="name"/>
+                <clickbutton label="${button.save}" stepid="Click Save"/>
+                <verifytitle stepid="Page re-appears if save successful"
+                    text="${webapp.prefix}${locationDetail.title}"/>
+            </steps>
+        </canoo>
+    </target>
+
+    <!-- Add a new Location -->
+    <target name="AddLocation"
+        description="Adds a new Location">
+        <canoo name="addLocation">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Add Button" url="/editLocation.html"/>
+                <verifytitle stepid="we should see the locationDetail title"
+                    text="${webapp.prefix}${locationDetail.title}"/>
+                <!-- enter required fields -->
+                <setinputfield stepid="set address" name="address" value="address"/>
+                <setinputfield stepid="set name" name="name" value="name"/>
+                <clickbutton label="${button.save}" stepid="Click button 'Save'"/>
+                <verifytitle stepid="Location List appears if save successful"
+                    text="${webapp.prefix}${locationList.title}"/>
+                <verifytext stepid="verify success message" text="${location.added}"/>
+            </steps>
+        </canoo>
+    </target>
+
+    <!-- Delete existing location -->
+    <target name="DeleteLocation"
+        description="Deletes existing Location">
+        <canoo name="deleteLocation">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Edit Location link" url="/editLocation.html?id=1"/>
+                <clickbutton label="${button.delete}" stepid="Click button 'Delete'"/>
+                <verifytitle stepid="display Location List" text="${webapp.prefix}${locationList.title}"/>
+                <verifytext stepid="verify success message" text="${location.deleted}"/>
+            </steps>
+        </canoo>
+    </target>
+
+    <!-- Verify the people list screen displays without errors -->
+    <target name="SearchLocations"
+        description="Tests search for and displaying all locations">
+        <canoo name="searchLocations">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click View Locations link" url="/listLocations.html"/>
+                <verifytitle stepid="we should see the locationList title"
+                    text="${webapp.prefix}${locationList.title}"/>
+            </steps>
+        </canoo>
+    </target>
+<!--Location-END-->
+
+<!--Person-START-->
+    <!-- runs person-related tests -->
+    <target name="PersonTests"
+        depends="SearchPersons,EditPerson,SavePerson,AddPerson,DeletePerson"
+        description="Call and executes all person test cases (targets)">
+        <echo>Successfully ran all Person JSP tests!</echo>
+    </target>
+
+    <!-- Verify the edit person screen displays without errors -->
+    <target name="EditPerson"
+        description="Tests editing an existing Person's information">
+        <canoo name="editPerson">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Edit Person link" url="/editPerson.html?id=1"/>
+                <verifytitle stepid="we should see the personDetail title"
+                    text="${webapp.prefix}${personDetail.title}"/>
+            </steps>
+        </canoo>
+    </target>
+
+    <!-- Edit a person and then save -->
+    <target name="SavePerson"
+        description="Tests editing and saving a person">
+        <canoo name="savePerson">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Edit Person link" url="/editPerson.html?id=1"/>
+                <verifytitle stepid="we should see the personDetail title"
+                    text="${webapp.prefix}${personDetail.title}"/>
+                <!-- update some of the required fields -->
+                <setinputfield stepid="set email" name="email" value="email"/>
+                <setinputfield stepid="set name" name="name" value="name"/>
+                <clickbutton label="${button.save}" stepid="Click Save"/>
+                <verifytitle stepid="Page re-appears if save successful"
+                    text="${webapp.prefix}${personDetail.title}"/>
+            </steps>
+        </canoo>
+    </target>
+
+    <!-- Add a new Person -->
+    <target name="AddPerson"
+        description="Adds a new Person">
+        <canoo name="addPerson">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Add Button" url="/editPerson.html"/>
+                <verifytitle stepid="we should see the personDetail title"
+                    text="${webapp.prefix}${personDetail.title}"/>
+                <!-- enter required fields -->
+                <setinputfield stepid="set email" name="email" value="email"/>
+                <setinputfield stepid="set name" name="name" value="name"/>
+                <clickbutton label="${button.save}" stepid="Click button 'Save'"/>
+                <verifytitle stepid="Person List appears if save successful"
+                    text="${webapp.prefix}${personList.title}"/>
+                <verifytext stepid="verify success message" text="${person.added}"/>
+            </steps>
+        </canoo>
+    </target>
+
+    <!-- Delete existing person -->
+    <target name="DeletePerson"
+        description="Deletes existing Person">
+        <canoo name="deletePerson">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Edit Person link" url="/editPerson.html?id=1"/>
+                <clickbutton label="${button.delete}" stepid="Click button 'Delete'"/>
+                <verifytitle stepid="display Person List" text="${webapp.prefix}${personList.title}"/>
+                <verifytext stepid="verify success message" text="${person.deleted}"/>
+            </steps>
+        </canoo>
+    </target>
+
+    <!-- Verify the people list screen displays without errors -->
+    <target name="SearchPersons"
+        description="Tests search for and displaying all persons">
+        <canoo name="searchPersons">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click View Persons link" url="/listPersons.html"/>
+                <verifytitle stepid="we should see the personList title"
+                    text="${webapp.prefix}${personList.title}"/>
+            </steps>
+        </canoo>
+    </target>
+<!--Person-END-->
+
+<!--ServiceArea-START-->
+    <!-- runs serviceArea-related tests -->
+    <target name="ServiceAreaTests"
+        depends="SearchServiceAreas,EditServiceArea,SaveServiceArea,AddServiceArea,DeleteServiceArea"
+        description="Call and executes all serviceArea test cases (targets)">
+        <echo>Successfully ran all ServiceArea JSP tests!</echo>
+    </target>
+
+    <!-- Verify the edit serviceArea screen displays without errors -->
+    <target name="EditServiceArea"
+        description="Tests editing an existing ServiceArea's information">
+        <canoo name="editServiceArea">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Edit ServiceArea link" url="/editServiceArea.html?id=1"/>
+                <verifytitle stepid="we should see the serviceAreaDetail title"
+                    text="${webapp.prefix}${serviceAreaDetail.title}"/>
+            </steps>
+        </canoo>
+    </target>
+
+    <!-- Edit a serviceArea and then save -->
+    <target name="SaveServiceArea"
+        description="Tests editing and saving a serviceArea">
+        <canoo name="saveServiceArea">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Edit ServiceArea link" url="/editServiceArea.html?id=1"/>
+                <verifytitle stepid="we should see the serviceAreaDetail title"
+                    text="${webapp.prefix}${serviceAreaDetail.title}"/>
+                <!-- update some of the required fields -->
+                <setinputfield stepid="set name" name="name" value="name"/>
+                <clickbutton label="${button.save}" stepid="Click Save"/>
+                <verifytitle stepid="Page re-appears if save successful"
+                    text="${webapp.prefix}${serviceAreaDetail.title}"/>
+            </steps>
+        </canoo>
+    </target>
+
+    <!-- Add a new ServiceArea -->
+    <target name="AddServiceArea"
+        description="Adds a new ServiceArea">
+        <canoo name="addServiceArea">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Add Button" url="/editServiceArea.html"/>
+                <verifytitle stepid="we should see the serviceAreaDetail title"
+                    text="${webapp.prefix}${serviceAreaDetail.title}"/>
+                <!-- enter required fields -->
+                <setinputfield stepid="set name" name="name" value="name"/>
+                <setinputfield stepid="set selectable" name="selectable" value="true"/>
+                <clickbutton label="${button.save}" stepid="Click button 'Save'"/>
+                <verifytitle stepid="ServiceArea List appears if save successful"
+                    text="${webapp.prefix}${serviceAreaList.title}"/>
+                <verifytext stepid="verify success message" text="${serviceArea.added}"/>
+            </steps>
+        </canoo>
+    </target>
+
+    <!-- Delete existing serviceArea -->
+    <target name="DeleteServiceArea"
+        description="Deletes existing ServiceArea">
+        <canoo name="deleteServiceArea">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Edit ServiceArea link" url="/editServiceArea.html?id=1"/>
+                <clickbutton label="${button.delete}" stepid="Click button 'Delete'"/>
+                <verifytitle stepid="display ServiceArea List" text="${webapp.prefix}${serviceAreaList.title}"/>
+                <verifytext stepid="verify success message" text="${serviceArea.deleted}"/>
+            </steps>
+        </canoo>
+    </target>
+
+    <!-- Verify the people list screen displays without errors -->
+    <target name="SearchServiceAreas"
+        description="Tests search for and displaying all serviceAreas">
+        <canoo name="searchServiceAreas">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click View ServiceAreas link" url="/listServiceAreas.html"/>
+                <verifytitle stepid="we should see the serviceAreaList title"
+                    text="${webapp.prefix}${serviceAreaList.title}"/>
+            </steps>
+        </canoo>
+    </target>
+<!--ServiceArea-END-->
+
+
+
+<!--Course-START-->
+    <!-- runs course-related tests -->
+    <target name="CourseTests"
+        depends="SearchCourses,EditCourse,SaveCourse,AddCourse,DeleteCourse"
+        description="Call and executes all course test cases (targets)">
+        <echo>Successfully ran all Course JSP tests!</echo>
+    </target>
+
+    <!-- Verify the edit course screen displays without errors -->
+    <target name="EditCourse"
+        description="Tests editing an existing Course's information">
+        <canoo name="editCourse">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Edit Course link" url="/editCourse.html?id=1"/>
+                <verifytitle stepid="we should see the courseDetail title"
+                    text="${webapp.prefix}${courseDetail.title}"/>
+            </steps>
+        </canoo>
+    </target>
+
+    <!-- Edit a course and then save -->
+    <target name="SaveCourse"
+        description="Tests editing and saving a course">
+        <canoo name="saveCourse">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Edit Course link" url="/editCourse.html?id=1"/>
+                <verifytitle stepid="we should see the courseDetail title"
+                    text="${webapp.prefix}${courseDetail.title}"/>
+                <!-- update some of the required fields -->
+                <setinputfield stepid="set duration" name="duration" value="duration"/>
+                <setinputfield stepid="set name" name="name" value="name"/>
+                <clickbutton label="${button.save}" stepid="Click Save"/>
+                <verifytitle stepid="Page re-appears if save successful"
+                    text="${webapp.prefix}${courseDetail.title}"/>
+            </steps>
+        </canoo>
+    </target>
+
+    <!-- Add a new Course -->
+    <target name="AddCourse"
+        description="Adds a new Course">
+        <canoo name="addCourse">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Add Button" url="/editCourse.html"/>
+                <verifytitle stepid="we should see the courseDetail title"
+                    text="${webapp.prefix}${courseDetail.title}"/>
+                <!-- enter required fields -->
+                <setinputfield stepid="set instructorid" name="instructorid" value="150"/>
+                <setinputfield stepid="set responsibleid" name="responsibleid" value="150"/>
+                <setinputfield stepid="set serviceAreaid" name="serviceAreaid" value="150"/>
+                <setinputfield stepid="set duration" name="duration" value="duration"/>
+                <setinputfield stepid="set maxAttendants" name="maxAttendants" value="150"/>
+                <setinputfield stepid="set name" name="name" value="name"/>
+                <setinputfield stepid="set reservedInternal" name="reservedInternal" value="150"/>
+                <setinputfield stepid="set locationid" name="locationid" value="150"/>
+                <setinputfield stepid="set organizationid" name="organizationid" value="150"/>
+                <clickbutton label="${button.save}" stepid="Click button 'Save'"/>
+                <verifytitle stepid="Course List appears if save successful"
+                    text="${webapp.prefix}${courseList.title}"/>
+                <verifytext stepid="verify success message" text="${course.added}"/>
+            </steps>
+        </canoo>
+    </target>
+
+    <!-- Delete existing course -->
+    <target name="DeleteCourse"
+        description="Deletes existing Course">
+        <canoo name="deleteCourse">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Edit Course link" url="/editCourse.html?id=1"/>
+                <clickbutton label="${button.delete}" stepid="Click button 'Delete'"/>
+                <verifytitle stepid="display Course List" text="${webapp.prefix}${courseList.title}"/>
+                <verifytext stepid="verify success message" text="${course.deleted}"/>
+            </steps>
+        </canoo>
+    </target>
+
+    <!-- Verify the people list screen displays without errors -->
+    <target name="SearchCourses"
+        description="Tests search for and displaying all courses">
+        <canoo name="searchCourses">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click View Courses link" url="/courses.html"/>
+                <verifytitle stepid="we should see the courseList title"
+                    text="${webapp.prefix}${courseList.title}"/>
+            </steps>
+        </canoo>
+    </target>
+<!--Course-END-->
+
+
+
+
+
+<!--Registration-START-->
+    <!-- runs registration-related tests -->
+    <target name="RegistrationTests"
+        depends="SearchRegistrations,EditRegistration,SaveRegistration,AddRegistration,DeleteRegistration"
+        description="Call and executes all registration test cases (targets)">
+        <echo>Successfully ran all Registration JSP tests!</echo>
+    </target>
+
+    <!-- Verify the edit registration screen displays without errors -->
+    <target name="EditRegistration"
+        description="Tests editing an existing Registration's information">
+        <canoo name="editRegistration">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Edit Registration link" url="/editRegistration.html?id=1"/>
+                <verifytitle stepid="we should see the registrationDetail title"
+                    text="${webapp.prefix}${registrationDetail.title}"/>
+            </steps>
+        </canoo>
+    </target>
+
+    <!-- Edit a registration and then save -->
+    <target name="SaveRegistration"
+        description="Tests editing and saving a registration">
+        <canoo name="saveRegistration">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Edit Registration link" url="/editRegistration.html?id=1"/>
+                <verifytitle stepid="we should see the registrationDetail title"
+                    text="${webapp.prefix}${registrationDetail.title}"/>
+                <!-- update some of the required fields -->
+                <clickbutton label="${button.save}" stepid="Click Save"/>
+                <verifytitle stepid="Page re-appears if save successful"
+                    text="${webapp.prefix}${registrationDetail.title}"/>
+            </steps>
+        </canoo>
+    </target>
+
+    <!-- Add a new Registration -->
+    <target name="AddRegistration"
+        description="Adds a new Registration">
+        <canoo name="addRegistration">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Add Button" url="/editRegistration.html"/>
+                <verifytitle stepid="we should see the registrationDetail title"
+                    text="${webapp.prefix}${registrationDetail.title}"/>
+                <!-- enter required fields -->
+                <setinputfield stepid="set courseid" name="courseid" value="150"/>
+                <setinputfield stepid="set invoiced" name="invoiced" value="true"/>
+                <setinputfield stepid="set organizationid" name="organizationid" value="150"/>
+                <setinputfield stepid="set registered" name="registered" value="true"/>
+                <setinputfield stepid="set reserved" name="reserved" value="true"/>
+                <setinputfield stepid="set serviceareaid" name="serviceareaid" value="150"/>
+                <clickbutton label="${button.save}" stepid="Click button 'Save'"/>
+                <verifytitle stepid="Registration List appears if save successful"
+                    text="${webapp.prefix}${registrationList.title}"/>
+                <verifytext stepid="verify success message" text="${registration.added}"/>
+            </steps>
+        </canoo>
+    </target>
+
+    <!-- Delete existing registration -->
+    <target name="DeleteRegistration"
+        description="Deletes existing Registration">
+        <canoo name="deleteRegistration">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click Edit Registration link" url="/editRegistration.html?id=1"/>
+                <clickbutton label="${button.delete}" stepid="Click button 'Delete'"/>
+                <verifytitle stepid="display Registration List" text="${webapp.prefix}${registrationList.title}"/>
+                <verifytext stepid="verify success message" text="${registration.deleted}"/>
+            </steps>
+        </canoo>
+    </target>
+
+    <!-- Verify the people list screen displays without errors -->
+    <target name="SearchRegistrations"
+        description="Tests search for and displaying all registrations">
+        <canoo name="searchRegistrations">
+            &config;
+            <steps>
+                &login;
+                <invoke stepid="click View Registrations link" url="/registrations.html"/>
+                <verifytitle stepid="we should see the registrationList title"
+                    text="${webapp.prefix}${registrationList.title}"/>
+            </steps>
+        </canoo>
+    </target>
+<!--Registration-END-->
+</project>
+
+
+
+
+
+
+
+
