@@ -45,34 +45,6 @@ public class UserRegistrationController extends BaseFormController{
         this.courseManager = courseManager;
     }
 
-//    protected ModelAndView showForm(HttpServletRequest request, HttpServletResponse response, BindException e) throws Exception {
-//        if (log.isDebugEnabled()) {
-//            log.debug("entering 'referenceData' method...");
-//        }
-//        Locale locale = request.getLocale();
-//        Map model = new HashMap();
-//
-//        HttpSession session = request.getSession();
-//        String userdefaults = getText("access.registration.userdefaults",locale);
-//
-//        User user = null;
-//        if(userdefaults != null && userdefaults.equals("true")){
-//            user = (User) session.getAttribute(Constants.USER_KEY);
-//        }
-//        else{
-//            user = (User) session.getAttribute(Constants.ALT_USER_KEY);
-//        }
-//        if(user == null){
-//            return new ModelAndView(getFormView(), model);
-//        }
-//
-//        List registrations = registrationManager.getUserRegistrations(user);
-//        model.put("userRegistrations",registrations);
-//        model.put("user",user); // Er dette nødvendig?
-//
-//        return new ModelAndView(getSuccessView(), model);
-//    }
-
     protected Map referenceData(HttpServletRequest request, Object o, Errors errors) throws Exception {
         if (log.isDebugEnabled()) {
             log.debug("entering 'referenceData' method...");
@@ -82,9 +54,13 @@ public class UserRegistrationController extends BaseFormController{
 
         HttpSession session = request.getSession();
         String userdefaults = getText("access.registration.userdefaults",locale);
+        String anonymous = getText("access.registration.anonymous",locale);
         User user = null;
         if(userdefaults != null && userdefaults.equals("true")){
             user = (User) session.getAttribute(Constants.USER_KEY);
+            if(anonymous != null && anonymous.equals("true") && user.getUsername().equals(Constants.ANONYMOUS_ROLE)){
+                user = (User) session.getAttribute(Constants.ALT_USER_KEY);
+            }
         }
         else{
             user = (User) session.getAttribute(Constants.ALT_USER_KEY);
@@ -134,10 +110,14 @@ public class UserRegistrationController extends BaseFormController{
         HttpSession session = request.getSession();
         Locale locale = request.getLocale();
         String userdefaults = getText("access.registration.userdefaults",locale);
+        String anonymous = getText("access.registration.anonymous",locale);
 
         User user = null;
         if(userdefaults != null && userdefaults.equals("true")){
             user = (User) session.getAttribute(Constants.USER_KEY);
+            if(anonymous != null && anonymous.equals("true") && user.getUsername().equals(Constants.ANONYMOUS_ROLE)){
+                user = (User) session.getAttribute(Constants.ALT_USER_KEY);
+            }            
         }
         else{
             // Dersom fellesbruker, hent anna bruker.

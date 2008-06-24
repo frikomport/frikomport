@@ -165,8 +165,12 @@ public class RegistrationFormController extends BaseFormController {
             User user = null;
             Locale locale = request.getLocale();
             String userdefaults = getText("access.registration.userdefaults",locale);
+            String anonymous = getText("access.registration.anonymous",locale);
             if(userdefaults != null && userdefaults.equals("true")){
                 user = (User)session.getAttribute(Constants.USER_KEY);
+                if(anonymous != null && anonymous.equals("true") && user.getUsername().equals(Constants.ANONYMOUS_ROLE)){
+                    user = (User) session.getAttribute(Constants.ALT_USER_KEY);
+                }
             }
             else {
                 user = (User)session.getAttribute(Constants.ALT_USER_KEY);
