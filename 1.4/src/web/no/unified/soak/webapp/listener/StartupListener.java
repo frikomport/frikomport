@@ -96,16 +96,17 @@ public class StartupListener extends ContextLoaderListener implements
         // Onetimetasks
         DatabaseUpdateManager databaseUpdateManager = (DatabaseUpdateManager) ctx.getBean("databaseUpdateManager");
 
-        // Tasks to be completed once
-        ScheduledTasks once = new ScheduledTasks();
-        once.addTask(databaseUpdateManager);
-        timer.schedule(once, Constants.TASK_IMMEDIATE);
-
         // Recurring tasks
 		NotificationManager notificationManager = (NotificationManager) ctx.getBean("notificationManager");
 		WaitingListManager waitingListManager = (WaitingListManager) ctx.getBean("waitingListManager");
         CourseStatusManager courseStatusManager = (CourseStatusManager) ctx.getBean("courseStatusManager");
         UserSynchronizeManager userSynchronizeManager = (UserSynchronizeManager) ctx.getBean("userSynchronizeManager");
+
+        // Tasks to be completed once
+        ScheduledTasks once = new ScheduledTasks();
+        once.addTask(userSynchronizeManager);
+        once.addTask(databaseUpdateManager);
+        timer.schedule(once, Constants.TASK_IMMEDIATE);
 
         // Tasks to happen regularly
         ScheduledTasks recurring = new ScheduledTasks();

@@ -105,8 +105,12 @@ public class CourseController extends BaseFormController {
         Date stoptime = null;
 
         User user = (User) session.getAttribute(Constants.USER_KEY);
-        Boolean isAdmin = (Boolean)user.getRoleNameList().contains(Constants.ADMIN_ROLE);
-        List<String> roles = (List)user.getRoleNameList();
+        Boolean isAdmin = false;
+        List<String> roles = null;
+        if(user != null){
+            roles = user.getRoleNameList();
+            isAdmin = (Boolean)roles.contains(Constants.ADMIN_ROLE);
+        }
         if (roles == null) {
             roles = new ArrayList<String>();
             roles.add(messageSource.getMessage("role.anonymous", null, locale)); // Make sure not logged in users sees anonymous courses
@@ -231,10 +235,14 @@ public class CourseController extends BaseFormController {
         
         Date starttime = new Date();
         Date stoptime = null;
-        
+
         User user = (User) session.getAttribute(Constants.USER_KEY);
-        Boolean isAdmin = (Boolean)user.getRoleNameList().contains(Constants.ADMIN_ROLE);
-        List<String> roles = (List)user.getRoleNameList();
+        Boolean isAdmin = false;
+        List<String> roles = null;
+        if(user != null){
+            roles = user.getRoleNameList();
+            isAdmin = (Boolean)roles.contains(Constants.ADMIN_ROLE);
+        }
         if (roles == null) {
             roles = new ArrayList<String>();
             roles.add(messageSource.getMessage("role.anonymous", null, locale)); // Make sure not logged in users sees anonymous courses

@@ -95,7 +95,7 @@ public class RegistrationController extends BaseFormController {
         if ((postback == null) || (postback.compareTo("1") != 0)) {
 	        // Check if a default organization should be applied
             User user = (User)session.getAttribute(Constants.USER_KEY);
-            if(user.getOrganizationid() != null){
+            if(user != null && user.getOrganizationid() != null){
                 registration.setOrganizationid(user.getOrganizationid());
             }
 	
