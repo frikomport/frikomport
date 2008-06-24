@@ -44,7 +44,7 @@ public class EZAuthentificationToken implements Authentication {
         this.eZSessionId = eZSessionId;
 
         if ((eZSessionId != null) && (eZSessionId.trim().length() > 0) &&
-                (ezUser.getId() != null) && (ezUser.getId() > 0)) {
+                (ezUser != null) && (ezUser.getId() != null) && (ezUser.getId() > 0)) {
             authenticated = true;
 
             for (String rolename : ezUser.getRolenames()) {

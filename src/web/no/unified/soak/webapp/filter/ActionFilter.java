@@ -149,8 +149,10 @@ public class ActionFilter implements Filter {
 		if (cookie != null && cookie.getValue() != null && cookie.getValue().trim().length() > 0) {
 			eZSessionId = cookie.getValue();
 			ezUser = (new UserEzDaoJdbc()).findUserBySessionID(cookie.getValue());
-			copyToUserTable(session, ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser
+            if(ezUser != null){
+                copyToUserTable(session, ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser
 					.getEmail(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
+            }
 		} else {
 			ezUser.setName("No cookie found.");
 		}
