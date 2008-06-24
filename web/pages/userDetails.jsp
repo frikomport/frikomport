@@ -104,7 +104,7 @@
     </tr>
 </table>
 
-<c:if test="${isAdmin || user.username == username}">
+<c:if test="${isAdmin || user.username == username || user.username == altusername}">
 <display:table name="${userRegistrations}" pagesize="25" id="userRegistrations" class="list" requestURI="detailsUser.html">
 
     <display:column property="firstName" sortable="true" headerClass="sortable"
