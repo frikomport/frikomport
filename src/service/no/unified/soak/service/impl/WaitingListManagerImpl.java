@@ -10,6 +10,14 @@
  */
 package no.unified.soak.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+
+import javax.mail.internet.MimeMessage;
+
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
@@ -20,16 +28,7 @@ import no.unified.soak.service.WaitingListManager;
 import no.unified.soak.util.MailUtil;
 
 import org.springframework.context.MessageSource;
-
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.MailSender;
-
-import javax.mail.internet.MimeMessage;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 
 
 /**
@@ -336,7 +335,7 @@ public class WaitingListManagerImpl extends BaseManager implements WaitingListMa
                 // course, if it isn't - we call it the quits
                 if (registrations.get(j).getCourseid().longValue() == courseId.longValue()) {
                     // So far - so good. Let's see if the attendant is a "local"
-                    if (registrations.get(j).getOrganizationid().longValue() == currentCourse.getOrganizationid()
+                    if (registrations.get(j).getOrganizationid() != null && registrations.get(j).getOrganizationid().longValue() == currentCourse.getOrganizationid()
                                                                                                  .longValue()) {
                         // We got ourselves a local attendant. Now let's see if
                         // we've used this one earlier
