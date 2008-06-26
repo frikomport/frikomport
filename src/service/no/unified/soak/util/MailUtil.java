@@ -94,6 +94,27 @@ public class MailUtil {
                                                   String mailComment) {
 		return createStandardBody(course, event, locale, messageSource, mailComment, false);
 	}
+	
+	/**
+	 * Creates a changed mail body containing all the details of a course and some information on the event that
+	 * triggered the mail to be sent.
+	 *
+	 * @param course
+	 *            The course in question
+	 * @param event
+	 *            The event that triggered the sending of this mail
+	 * @param locale
+	 *            The language to fetch messages in
+	 * @param messageSource
+	 *            The source for our messages.
+	 * @param mailComment
+	 *            Optional comment from the admin initiating the sending of this mail
+     * @return A complete mail body ready to be inserted into an e-mail object
+	 */
+	public static StringBuffer createChangedBody(Course course, int event, Locale locale, MessageSource messageSource,
+                                                  String mailComment, List <String> changedList) {
+		return createChangedBody(course, event, locale, messageSource, mailComment, changedList, false);
+	}
 
 	/**
 	 * Creates a standard mail body containing all the details of a course and some information on the event that
@@ -302,7 +323,118 @@ public class MailUtil {
 		return msg;
 	}
 
-    /**
+	/**
+	 * Creates a changed mail body containing all the details of a course and some information on the event that
+	 * triggered the mail to be sent.
+	 * 
+	 * @param course
+	 *            The course in question
+	 * @param event
+	 *            The event that triggered the sending of this mail
+	 * @param locale
+	 *            The language to fetch messages in
+	 * @param messageSource
+	 *            The source for our messages.
+	 * @param mailComment
+	 *            Optional comment from the admin initiating the sending of this mail
+	 * @param reservationConfirmed
+	 *            Set to true if the reservation is confirmed, and to false if the attendee is on the waiting list
+	 * @return A complete mail body ready to be inserted into an e-mail object
+	 */
+	public static StringBuffer createChangedBody(Course course, int event, Locale locale, MessageSource messageSource,
+                                                  String mailComment, List <String> changedList, boolean reservationConfirmed) {
+		StringBuffer msg = new StringBuffer();
+		
+        // Include user defined comment if specified
+        if (mailComment != null && StringUtils.isNotBlank(mailComment)) {
+            msg.append("\n");
+            msg.append(mailComment);
+            msg.append("\n\n");
+        }
+
+		// Build mail
+		msg.append(StringEscapeUtils.unescapeHtml(getText("courseChanged.mail.body", " " + course.getName(),
+					locale, messageSource)));
+		msg.append("\n\n");
+		
+//		 Include all the course details
+		if (changedList.contains("name")){
+			msg.append(StringEscapeUtils.unescapeHtml(getText("course.name", locale, messageSource)) + ": "
+					+ course.getName() + "\n");
+		}
+		if (changedList.contains("type")){
+			msg.append(StringEscapeUtils.unescapeHtml(getText("course.type", locale, messageSource)) + ": "
+				+ course.getType() + "\n");
+		}
+		if (changedList.contains("startTime")){
+		msg.append(StringEscapeUtils.unescapeHtml(getText("course.startTime", locale, messageSource))
+				+ ": "
+				+ DateUtil.getDateTime(getText("date.format", locale, messageSource) + " "
+						+ getText("time.format", locale, messageSource), course.getStartTime()) + "\n");
+		}
+		if (changedList.contains("stopTime")){
+		msg.append(StringEscapeUtils.unescapeHtml(getText("course.stopTime", locale, messageSource))
+				+ ": "
+				+ DateUtil.getDateTime(getText("date.format", locale, messageSource) + " "
+						+ getText("time.format", locale, messageSource), course.getStopTime()) + "\n");
+		}
+		if (changedList.contains("duration")){
+			msg.append(StringEscapeUtils.unescapeHtml(getText("course.duration", locale, messageSource)) + ": "
+				+ course.getDuration() + "\n");
+		}
+		if (changedList.contains("organization")){
+			msg.append(StringEscapeUtils.unescapeHtml(getText("course.organization", locale, messageSource)) + ": "
+				+ course.getOrganization().getName() + "\n");
+		}
+		if (changedList.contains("serviceArea")){
+			msg.append(StringEscapeUtils.unescapeHtml(getText("course.serviceArea", locale, messageSource)) + ": "
+				+ course.getServiceArea().getName() + "\n");
+		}
+		if (changedList.contains("location")){
+			msg.append(StringEscapeUtils.unescapeHtml(getText("course.location", locale, messageSource)) + ": "
+				+ course.getLocation().getName() + "\n");
+		}
+		if (changedList.contains("responsible")){
+			if (course.getResponsible() != null) {
+			msg.append(StringEscapeUtils.unescapeHtml(getText("course.responsible", locale, messageSource)) + ": "
+					+ course.getResponsible().getFullName() + ", mailto:" + course.getResponsible().getEmail() + "\n");
+			}
+		}
+		if (changedList.contains("instructor")){
+			msg.append(StringEscapeUtils.unescapeHtml(getText("course.instructor", locale, messageSource)) + ": "
+				+ course.getInstructor().getName() + ", mailto:" + course.getInstructor().getEmail()+ "\n");
+		}
+		if (changedList.contains("description")){
+			msg.append(StringEscapeUtils.unescapeHtml(getText("course.description", locale, messageSource)) + ": "
+				+ course.getDescription() + "\n");
+		}
+
+		// We cannot link to a deleted course, so the link is only displayed if
+		// the course still exists
+		if (event != Constants.EMAIL_EVENT_COURSEDELETED) {
+			String baseurl = StringEscapeUtils.unescapeHtml(getText("javaapp.baseurl", locale, messageSource));
+            String coursedetailurl = StringEscapeUtils.unescapeHtml(getText("javaapp.coursedetailurl",
+                    String.valueOf(course.getId()), locale, messageSource));
+			msg.append("\n\n");
+			msg.append(StringEscapeUtils.unescapeHtml(getText("javaapp.findurlhere", locale, messageSource)) + " "
+					+ baseurl + coursedetailurl);
+		}
+
+		msg.append("\n\n");
+
+		msg.append(StringEscapeUtils.unescapeHtml(getText("courseChanged.mail.footer", locale, messageSource)));
+
+   
+		msg.append("\n\n");
+		msg.append(StringEscapeUtils.unescapeHtml(getText("mail.contactinfo", locale, messageSource)) + "\n");
+		msg.append(StringEscapeUtils.unescapeHtml(getText("mail.donotreply", getText("mail.default.from", locale,
+				messageSource), locale, messageSource))
+				+ "\n");
+
+		return msg;
+	}
+
+	/**
      * Sets subject, text, recipients and senders to a mail object
      * @param registration The registrations to recieve mail
      * @param event If this is a confirmation, cancellation e.g.
@@ -476,6 +608,7 @@ public class MailUtil {
                         getText("courseChanged.mail.subject", coursename, locale, messageSource)).replaceAll(
                         "<registeredfor/>", waiting).replaceAll("<coursename/>", coursename);
             }
+            break;
         case Constants.EMAIL_EVENT_COURSECANCELLED:
             if (registration.getReserved()) {
                 subject = StringEscapeUtils.unescapeHtml(
@@ -486,6 +619,7 @@ public class MailUtil {
                         getText("courseCancelled.mail.subject", coursename, locale, messageSource)).replaceAll(
                         "<registeredfor/>", waiting).replaceAll("<coursename/>", coursename);
             }
+            break;
         case Constants.EMAIL_EVENT_COURSEDELETED:
             if (registration.getReserved()) {
                 subject = StringEscapeUtils.unescapeHtml(
@@ -496,6 +630,7 @@ public class MailUtil {
                         getText("courseDeleted.mail.subject", coursename, locale, messageSource)).replaceAll(
                         "<registeredfor/>", waiting).replaceAll("<coursename/>", coursename);
             }
+            break;
         case Constants.EMAIL_EVENT_NOTIFICATION:
             if (registration.getReserved()) {
                 subject = StringEscapeUtils.unescapeHtml(
@@ -506,16 +641,20 @@ public class MailUtil {
                         getText("courseNotification.mail.subject", coursename, locale, messageSource))
                         .replaceAll("<registeredfor/>", waiting).replaceAll("<coursename/>", coursename);
             }
+            break;
         case Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION:
             if (registration.getReserved()) {
                 subject = StringEscapeUtils.unescapeHtml(getText("registrationComplete.mail.subject", coursename, locale, messageSource));
             } else {
                 subject = StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.subject", coursename, locale, messageSource));
             }
+            break;
         case Constants.EMAIL_EVENT_REGISTRATION_DELETED:
             subject = StringEscapeUtils.unescapeHtml(getText("registrationDeleted.mail.subject", coursename, locale, messageSource));
+            break;
         case Constants.EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST:
             subject = StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.subject",	coursename, locale, messageSource));
+            break;
         case Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED:
             subject = StringEscapeUtils.unescapeHtml(getText("registrationConfirmed.mail.subject", coursename, locale, messageSource));
         }

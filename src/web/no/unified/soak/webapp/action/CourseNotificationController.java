@@ -16,10 +16,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.mail.internet.MimeMessage;
 
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
@@ -28,13 +28,13 @@ import no.unified.soak.model.User;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.RegistrationManager;
-import no.unified.soak.util.MailUtil;
 import no.unified.soak.util.CourseStatus;
+import no.unified.soak.util.MailUtil;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 import org.springframework.web.servlet.ModelAndView;
@@ -144,6 +144,18 @@ public class CourseNotificationController extends BaseFormController {
 		}
 
 		Course course = (Course) command;
+		HttpSession session = request.getSession();
+		String format = getText("date.format", request.getLocale()) + " " + getText("time.format", request.getLocale());
+		
+		List <String> changedList = null;
+		
+		if (course.getStatus() != CourseStatus.COURSE_CANCELLED){
+			//check what has changed
+			Course originalCourse = (Course) session.getAttribute(Constants.ORG_COURSE_KEY);
+			if (originalCourse != null){
+				changedList = courseManager.getChangedList(originalCourse, course, format);
+			}
+		}
 
 		Locale locale = request.getLocale();
 
@@ -160,12 +172,14 @@ public class CourseNotificationController extends BaseFormController {
 		} // or to send out notification email?
 		else if (request.getParameter("send") != null) {
             if( course.getStatus() == CourseStatus.COURSE_CANCELLED){
-                sendMail(locale, course, Constants.EMAIL_EVENT_COURSECANCELLED, mailComment, mailSender);
+                sendMail(locale, course, Constants.EMAIL_EVENT_COURSECANCELLED, mailComment, mailSender, changedList);
             }
             else{
-                sendMail(locale, course, Constants.EMAIL_EVENT_COURSECHANGED, mailComment, mailSender);
+                sendMail(locale, course, Constants.EMAIL_EVENT_COURSECHANGED, mailComment, mailSender, changedList);
             }
         }
+		
+		session.setAttribute(Constants.ORG_COURSE_KEY, null);
 
 		return new ModelAndView(getSuccessView());
 	}
@@ -178,11 +192,17 @@ public class CourseNotificationController extends BaseFormController {
      * @param course
      * @param from
      */
-	protected void sendMail(Locale locale, Course course, int event, String mailComment, String from) {
+	protected void sendMail(Locale locale, Course course, int event, String mailComment, String from, List <String> changedList) {
 		log.debug("Sending mail from CourseNotificationController");
 		List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, null,null, null, null);
 		
-		StringBuffer msg = MailUtil.createStandardBody(course, event, locale, messageSource, mailComment);
+		StringBuffer msg; 
+		if (event == Constants.EMAIL_EVENT_COURSECHANGED){
+			msg = MailUtil.createChangedBody(course, event, locale, messageSource, mailComment, changedList); 
+		}else {
+			msg = MailUtil.createStandardBody(course, event, locale, messageSource, mailComment);
+			
+		}
 		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, messageSource, locale, from, mailSender);
 		MailUtil.sendMimeMails(emails, mailEngine);
 		
@@ -210,5 +230,18 @@ public class CourseNotificationController extends BaseFormController {
             senders.add(responsiblefrom);
         }
         return senders;
+    }
+    
+    /**
+     * Convenience method for getting a i18n key's value. Calling
+     * getMessageSourceAccessor() is used because the RequestContext variable is
+     * not set in unit tests b/c there's no DispatchServlet Request.
+     *
+     * @param msgKey
+     * @param locale
+     *            the current locale
+     */
+    public String getText(String msgKey, Locale locale) {
+        return getMessageSourceAccessor().getMessage(msgKey, locale);
     }
 }

@@ -187,6 +187,13 @@ public class Constants {
 	public static final String COURSE_KEY = "courseForm";
 
 	/**
+	 * The session scope attribute under which the course object for the original
+	 * (before change) course is stored.
+	 */
+	public static final String ORG_COURSE_KEY = "orginalCourse";
+
+	
+	/**
 	 * The request scope attribute that holds the course list
 	 */
 	public static final String COURSE_LIST = "courseList";

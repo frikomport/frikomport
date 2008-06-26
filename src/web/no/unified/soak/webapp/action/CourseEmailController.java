@@ -1,8 +1,8 @@
 package no.unified.soak.webapp.action;
 
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,21 +11,13 @@ import javax.servlet.http.HttpSession;
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.User;
-import no.unified.soak.service.CourseManager;
-import no.unified.soak.service.RegistrationManager;
 
-import org.springframework.context.MessageSource;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 import org.springframework.web.servlet.ModelAndView;
 
 public class CourseEmailController extends CourseNotificationController
 {
-    private CourseManager courseManager = null;
-
-    private RegistrationManager registrationManager = null;
-
-    private MessageSource messageSource = null;
 
     protected Map referenceData(HttpServletRequest request, Object command, Errors errors) throws Exception {
         if (log.isDebugEnabled()) {
@@ -69,7 +61,7 @@ public class CourseEmailController extends CourseNotificationController
             return new ModelAndView(getCancelView(), "id", course.getId().toString());
         } // or to send out notification email?
         else if (request.getParameter("send") != null) {
-            sendMail(locale, course, Constants.EMAIL_EVENT_NOTIFICATION, mailComment, mailSender);
+            sendMail(locale, course, Constants.EMAIL_EVENT_NOTIFICATION, mailComment, mailSender, null);
         }
 
         return new ModelAndView(getSuccessView());

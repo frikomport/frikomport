@@ -80,4 +80,15 @@ public interface CourseManager extends Manager {
     public List<Course> getWaitingListCourses();
 
     public List<Course> findByInstructor(Person person);
+    
+    /**
+     * Finds all changes relevant between original course and changed course relevant for 
+     * users registered on the course.
+     * @param originalCourse - course before change
+     * @param changedCourse - course after change
+     * @param dateFormat - format for date.
+     *
+     * @return A list of all changes 
+     */
+    public List<String> getChangedList(Course originalCourse, Course changedCourse, String dateFormat);
 }

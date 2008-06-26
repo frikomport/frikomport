@@ -6,6 +6,13 @@ cal1.setMonthNames('Januar','Februar','Mars','April','Mai','Juni','Juli','August
 cal1.setDayHeaders('S','M','T','O','T','F','L'); 
 cal1.setWeekStartDay(1); 
 cal1.setTodayText("Idag");
+
+function setStopDate() {
+	if (document.getElementById('stopTimeDate').value == ""){
+		document.getElementById('stopTimeDate').value = document.getElementById('startTimeDate').value
+	}
+}
+
 </SCRIPT>
 
 <title><fmt:message key="courseEdit.title" />
@@ -112,11 +119,11 @@ cal1.setTodayText("Idag");
 					pattern="${timeformat}" var="startTimeTime" />
 				<input type="text" size="12" name="startTimeDate" id="startTimeDate"
 					value="<c:out value="${startTimeDate}"/>"
-					onchange="document.getElementById('stopTimeDate').value = document.getElementById('startTimeDate').value"
+					onchange="setStopDate()"
 					title="Datoformat: <fmt:message key="date.format.localized"/>" />
 				<a href="#" name="a1" id="Anch_startTimeDate"
 					onClick="cal1.select(document.forms[0].startTimeDate,'Anch_startTimeDate','<fmt:message key="date.format"/>'); document.getElementById('stopTimeDate').value = Anch_startTimeDate; return false;"
-					onfocus="document.getElementById('stopTimeDate').value = document.getElementById('startTimeDate').value"
+					onfocus="setStopDate()"
 					title="Vis kalender"><img
 						src="<c:url value="/images/iconCalendar.gif"/>">
 				</a>

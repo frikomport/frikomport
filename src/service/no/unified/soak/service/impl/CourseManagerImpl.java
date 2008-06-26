@@ -10,6 +10,8 @@
  */
 package no.unified.soak.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -98,5 +100,49 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
      */
     public List getUnpublished(User user) {
         return dao.getUnpublished(user);
+    }
+    
+    /**
+     * @see no.unified.soak.service.CourseManager#getUnpublished()
+     */
+    public List <String> getChangedList(Course originalCourse, Course changedCourse, String dateFormat) {
+    	List <String> changedList = new ArrayList<String>();
+    	SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+    			
+		if (!originalCourse.getName().equals(changedCourse.getName())){
+			changedList.add("name");
+		}
+		if (!originalCourse.getType().equals(changedCourse.getType())){
+			changedList.add("type");
+		}
+		if (!sdf.format(originalCourse.getStartTime()).equals(sdf.format(changedCourse.getStartTime()))){
+			changedList.add("startTime");
+		}
+		if (!sdf.format(originalCourse.getStopTime()).equals(sdf.format(changedCourse.getStopTime()))){
+			changedList.add("stopTime");
+		}
+		if (!originalCourse.getDuration().equals(changedCourse.getDuration())){
+			changedList.add("duration");
+		}
+		if (!originalCourse.getOrganizationid().equals(changedCourse.getOrganizationid())){
+			changedList.add("organization");
+		}
+		if (!originalCourse.getServiceAreaid().equals(changedCourse.getServiceAreaid())){
+			changedList.add("serviceArea");
+		}
+		if (!originalCourse.getLocationid().equals(changedCourse.getLocationid())){
+			changedList.add("location");
+		}
+		if (!originalCourse.getResponsibleid().equals(changedCourse.getResponsibleid())){
+			changedList.add("responsible");
+		}
+		if (!originalCourse.getInstructorid().equals(changedCourse.getInstructorid())){
+			changedList.add("instructor");
+		}
+		if (!originalCourse.getDescription().equals(changedCourse.getDescription())){
+			changedList.add("description");
+		}
+
+		return changedList;
     }
 }

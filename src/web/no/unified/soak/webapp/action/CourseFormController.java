@@ -24,6 +24,7 @@ import java.util.Map;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import no.unified.soak.Constants;
 import no.unified.soak.model.Attachment;
@@ -139,7 +140,7 @@ public class CourseFormController extends BaseFormController {
 	protected Map referenceData(HttpServletRequest request) throws Exception {
 		Map<String, Object> model = new HashMap<String, Object>();
         Locale locale = request.getLocale();
-
+        
         // Retrieve all serviceareas into an array
 		List serviceAreas = serviceAreaManager.getAll();
 		if (serviceAreas != null) {
@@ -195,6 +196,9 @@ public class CourseFormController extends BaseFormController {
 		// Check whether or not we allow registrations
 		if ((courseid != null) && StringUtils.isNumeric(courseid)) {
 			Course course = courseManager.getCourse(courseid);
+			
+			HttpSession session = request.getSession(true);
+			session.setAttribute(Constants.ORG_COURSE_KEY, course);
 
 			if (course != null) {
 				Date today = new Date();
@@ -241,6 +245,7 @@ public class CourseFormController extends BaseFormController {
             }
 		}
 		
+				
 		return model;
 	}
 
@@ -305,7 +310,7 @@ public class CourseFormController extends BaseFormController {
 		Map model = new HashMap();
 		Course course = (Course) command;
 		Long courseId = course.getId();
-
+		
 		boolean isNew = (course.getId() == null);
 		Locale locale = request.getLocale();
 
@@ -361,11 +366,6 @@ public class CourseFormController extends BaseFormController {
 
 				return showForm(request, response, errors);
 			}
-		} // or to send out notification email?
-		else if (request.getParameter("send") != null) {
-			log.debug("recieved 'send' from jsp");
-			sendMail(locale, course, Constants.EMAIL_EVENT_COURSECHANGED, mailComment);
-
 		} // or to save/update?
         else {
             // Save or publish
@@ -508,7 +508,16 @@ public class CourseFormController extends BaseFormController {
 				if (registrations.isEmpty()) {
 					model.put("enablemail", "false");
 				} else {
-					model.put("enablemail", "true");
+					
+					//check if there has been a change relevant for users registered on the course
+					Course originalCourse = (Course) request.getSession().getAttribute(Constants.ORG_COURSE_KEY);
+					List <String> changedList = new ArrayList<String>();
+					if (originalCourse != null){
+						changedList = courseManager.getChangedList(originalCourse, course, format);
+						if (changedList.size() != 0){
+							model.put("enablemail", "true");
+						}
+					}
 				}
 				
 				// If the reminder is set to be after this date, we need to make sure the notifications are set as not-sent
@@ -561,6 +570,7 @@ public class CourseFormController extends BaseFormController {
 
 		// Build standard e-mail body
 		StringBuffer msg = MailUtil.createStandardBody(course, event, locale, messageSource, mailComment);
+		
 		// Add sender etc.
 		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, messageSource, locale, null, mailSender);
 		MailUtil.sendMimeMails(emails, mailEngine);		
