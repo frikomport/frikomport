@@ -5,107 +5,53 @@
 		<column>number</column>
 		<column>name</column>
 		<column>selectable</column>
-		<column>invoiceName</column>
-		<column>address</column>
-    	<column>city</column>
-    	<column>postal_code</column>
-    	<column>country</column>
-    	<column>province</column>
         <row>
 			<value>1</value>
 			<value>0807</value>
 			<value>Notodden</value>
 			<value>1</value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
 		</row>
 		<row>
 			<value>2</value>
 			<value>0604</value>
 			<value>Kongsberg</value>
 			<value>1</value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
 		</row>
 		<row>
 			<value>3</value>
 			<value>0632</value>
 			<value>Rollag</value>
 			<value>1</value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
 		</row>
 		<row>
 			<value>4</value>
 			<value>0624</value>
 			<value>Øvre Eiker</value>
 			<value>1</value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
 		</row>
 		<row>
 			<value>5</value>
 			<value>0826</value>
 			<value>Tinn</value>
 			<value>1</value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
 		</row>
 		<row>
 			<value>6</value>
 			<value>0631</value>
 			<value>Flesberg</value>
 			<value>1</value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
 		</row>
 		<row>
 			<value>7</value>
 			<value>0633</value>
 			<value>Nore og Uvdal</value>
 			<value>1</value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
 		</row>
 		<row>
 			<value>8</value>
 			<value>0633</value>
 			<value>Gamle Uvdal</value>
 			<value>0</value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
-			<value></value>
 		</row>
 	</table>
 
