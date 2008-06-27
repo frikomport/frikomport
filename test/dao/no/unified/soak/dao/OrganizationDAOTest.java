@@ -111,7 +111,7 @@ public class OrganizationDAOTest extends BaseDAOTestCase {
         organization.setName("Notodden");
         organization.setNumber(new Long(9999));
         organization.setSelectable(new Boolean(true));
-        organization.setInvoiceName("Kongsberg kommune v/økonomitjenesten");
+        organization.setInvoiceName("Kongsberg kommune");
         Address address = new Address();
         address.setAddress("Postboks 115");
         address.setPostalCode("3601");
