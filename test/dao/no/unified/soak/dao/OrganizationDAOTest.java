@@ -10,6 +10,7 @@
  */
 package no.unified.soak.dao;
 
+import no.unified.soak.model.Address;
 import no.unified.soak.model.Organization;
 
 import org.springframework.dao.DataAccessException;
@@ -45,6 +46,11 @@ public class OrganizationDAOTest extends BaseDAOTestCase {
         organization.setName("Kongsberg");
         organization.setNumber(new Long(9999));
         organization.setSelectable(new Boolean(true));
+        organization.setInvoiceName("Kongsberg kommune v/økonomitjenesten");
+        Address address = new Address();
+        address.setAddress("Postboks 115");
+        address.setPostalCode("3601");
+        address.setCity("Kongsberg");
 
         dao.saveOrganization(organization);
         assertNotNull(organization.getId());
@@ -77,6 +83,11 @@ public class OrganizationDAOTest extends BaseDAOTestCase {
         organization.setName("Kongsberg updated");
         organization.setNumber(new Long(9999));
         organization.setSelectable(new Boolean(true));
+        organization.setInvoiceName("Kongsberg kommune v/økonomitjenesten");
+        Address address = new Address();
+        address.setAddress("Postboks 115");
+        address.setPostalCode("3601");
+        address.setCity("Kongsberg");
 
         dao.saveOrganization(organization);
 
@@ -100,6 +111,11 @@ public class OrganizationDAOTest extends BaseDAOTestCase {
         organization.setName("Notodden");
         organization.setNumber(new Long(9999));
         organization.setSelectable(new Boolean(true));
+        organization.setInvoiceName("Kongsberg kommune v/økonomitjenesten");
+        Address address = new Address();
+        address.setAddress("Postboks 115");
+        address.setPostalCode("3601");
+        address.setCity("Kongsberg");
 
         dao.saveOrganization(organization);
         assertEquals(organization.getName(), "Notodden");
