@@ -35,6 +35,8 @@ public class Organization extends BaseObject implements Serializable {
     private Long number;
     private String Name;
     private Boolean selectable;
+    private String invoiceName; 
+    private Address invoiceAddress = new Address();
 
     /**
      * @return Returns the selectable.
@@ -131,4 +133,40 @@ public class Organization extends BaseObject implements Serializable {
     public int hashCode() {
         return new HashCodeBuilder().append(id).toHashCode();
     }
+
+    /**
+     * Returns the invoice address.
+     *
+     * @return Address
+     *
+     * @hibernate.component not-null="false"
+     */
+	public Address getInvoiceAddress() {
+		return invoiceAddress;
+	}
+
+	  /**
+     * Sets the invoice address.
+     * @param invoiceAddress The invoice address to set
+     *
+     */
+	public void setInvoiceAddress(Address invoiceAddress) {
+		this.invoiceAddress = invoiceAddress;
+	}
+
+	 /**
+     * @return Returns the invoice name.
+     * @hibernate.property column="invoicename" length="100" not-null="false"
+     */
+	public String getInvoiceName() {
+		return invoiceName;
+	}
+
+	/**
+     * @param invoiceName
+     *            The invoice name to set.
+     */
+	public void setInvoiceName(String invoiceName) {
+		this.invoiceName = invoiceName;
+	}
 }

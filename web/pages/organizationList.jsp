@@ -29,6 +29,17 @@
          <fmt:formatNumber value="${organizationList.number}" minFractionDigits="0"/>
     </display:column>
     
+<c:if test="${isAdmin}">
+    <display:column property="invoiceName" sortable="true" headerClass="sortable"
+         titleKey="organizationList.invoiceAddress.name"/>
+    <display:column property="invoiceAddress.address" sortable="true" headerClass="sortable"
+         titleKey="organizationList.invoiceAddress.address"/>
+    <display:column property="invoiceAddress.city" sortable="true" headerClass="sortable"
+         titleKey="organizationList.invoiceAddress.city"/>
+   <display:column property="invoiceAddress.postalCode" sortable="true" headerClass="sortable"
+         titleKey="organizationList.invoiceAddress.postalCode"/>
+</c:if>    
+    
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
     <display:column sortable="true" headerClass="sortable"
          titleKey="organization.selectable">
