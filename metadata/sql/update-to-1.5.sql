@@ -19,4 +19,3 @@ ALTER TABLE app_user ADD COLUMN invoice_country varchar(100);
 ALTER TABLE app_user ADD COLUMN invoice_postal_code varchar(15);
 ALTER TABLE app_user ADD COLUMN invoice_name varchar(100);
 
-`location` CHANGE COLUMN `municipalityid` `organizationid` 
