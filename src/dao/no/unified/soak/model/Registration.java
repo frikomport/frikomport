@@ -79,7 +79,10 @@ public class Registration extends BaseObject implements Serializable {
 	private Boolean attended;
 	
 	private String workplace;
+	
+	private String invoiceName;
 
+	private Address invoiceAddress = new Address();
 	/**
 	 * Default constructor
 	 */
@@ -515,4 +518,39 @@ public class Registration extends BaseObject implements Serializable {
     public void setWorkplace(String workplace) {
         this.workplace = workplace;
     }
+    
+    /**
+     *
+     * @return the invoice address
+     *
+     * @hibernate.component not-null="false" prefix="invoice_"
+     */
+	public Address getInvoiceAddress() {
+		return invoiceAddress;
+	}
+
+	  /**
+     * Sets the invoice address.
+     * @param invoiceAddress The invoice address to set
+     *
+     */
+	public void setInvoiceAddress(Address invoiceAddress) {
+		this.invoiceAddress = invoiceAddress;
+	}
+
+	 /**
+     * @return the invoice name.
+     * @hibernate.property column="invoice_name" not-null="false"
+     */
+	public String getInvoiceName() {
+		return invoiceName;
+	}
+
+	/**
+     * @param invoiceName
+     *            The invoice name to set.
+     */
+	public void setInvoiceName(String invoiceName) {
+		this.invoiceName = invoiceName;
+	}
 }

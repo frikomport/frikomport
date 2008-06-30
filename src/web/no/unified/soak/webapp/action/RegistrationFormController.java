@@ -140,7 +140,11 @@ public class RegistrationFormController extends BaseFormController {
 		Course course = courseManager.getCourse(courseId);
 		if (course != null) {
 			model.put("course", course);
+			if (course.getFeeExternal().equals(new Double("0"))){
+				model.put("freeCourse", new Boolean(true));
+			}
 		}
+		
 
 		if (!legalRegistrationDate(request, request.getLocale(), course)) {
 			model.put("illegalRegistration", new Boolean(true));
@@ -191,6 +195,8 @@ public class RegistrationFormController extends BaseFormController {
                 if((user.getServiceareaid() != null) && (user.getServiceareaid() != 0)){
                     registration.setServiceareaid(user.getServiceareaid());
                 }
+                registration.setInvoiceName(user.getInvoiceName());
+                registration.setInvoiceAddress(user.getInvoiceAddressCopy());
             }
         }
 

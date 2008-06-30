@@ -56,6 +56,8 @@ public class User extends BaseObject implements Serializable {
     protected ServiceArea serviceArea;
     protected Long serviceareaid;
     protected String hash;
+    protected String invoiceName;
+    protected Address invoiceAddress = new Address();
   
     public User() {
     }
@@ -520,6 +522,42 @@ public class User extends BaseObject implements Serializable {
     public void setWorkplace(String workplace) {
         this.workplace = workplace;
     }
+    
+    /**
+    *
+    * @return the invoice address
+    *
+    * @hibernate.component not-null="false" prefix="invoice_"
+    * 
+    */
+	public Address getInvoiceAddress() {
+		return invoiceAddress;
+	}
+
+	  /**
+    * Sets the invoice address.
+    * @param invoiceAddress The invoice address to set
+    *
+    */
+	public void setInvoiceAddress(Address invoiceAddress) {
+		this.invoiceAddress = invoiceAddress;
+	}
+
+	 /**
+    * @return the invoice name.
+    * @hibernate.property column="invoice_name" not-null="false"
+    */
+	public String getInvoiceName() {
+		return invoiceName;
+	}
+
+	/**
+    * @param invoiceName
+    *            The invoice name to set.
+    */
+	public void setInvoiceName(String invoiceName) {
+		this.invoiceName = invoiceName;
+	}
 
     /**
      * @return the hash
@@ -608,4 +646,15 @@ public class User extends BaseObject implements Serializable {
                                                                         .append("version",
             this.getVersion()).append("enabled", this.getEnabled()).toString();
     }
+    
+    public Address getInvoiceAddressCopy() {
+    	Address copy = new Address();
+    	copy.setAddress(invoiceAddress.getAddress());
+    	copy.setCity(invoiceAddress.getCity());
+    	copy.setCountry(invoiceAddress.getCountry());
+    	copy.setPostalCode(invoiceAddress.getPostalCode());
+    	copy.setProvince(invoiceAddress.getProvince());
+    	
+		return copy;
+	}
 }

@@ -10,19 +10,18 @@
  */
 package no.unified.soak.webapp.action;
 
-import no.unified.soak.model.Registration;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import no.unified.soak.model.Course;
-import no.unified.soak.service.RegistrationManager;
+import no.unified.soak.model.Registration;
 import no.unified.soak.service.CourseManager;
+import no.unified.soak.service.RegistrationManager;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.validation.Errors;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Locale;
 
 
 /**
@@ -45,14 +44,16 @@ public class RegistrationCompleteController extends BaseFormController {
 
     protected Map referenceData(HttpServletRequest request) throws Exception {
         Map model = new HashMap();
-        Locale locale = request.getLocale();
-
+       
         Registration reg = (Registration)formBackingObject(request);
 
         // Retrieve the course the user wants to attend
 		Course course = courseManager.getCourse(""+reg.getCourseid());
 		if (course != null) {
 			model.put("course", course);
+			if (course.getFeeExternal().equals(new Double("0"))){
+				model.put("freeCourse", new Boolean(true));
+			}
 		}
 
         return model;

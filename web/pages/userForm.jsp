@@ -275,6 +275,49 @@
 				<form:errors cssClass="fieldError" htmlEscape="false" path="serviceareaid" />
 			</td>
 		</tr>
+		  		<tr>
+			<th>
+				<soak:label key="user.invoiceAddress" />
+			</th>
+		</tr>
+
+		<tr>
+			<th>
+				<soak:label key="user.invoiceAddress.name" />
+			</th>
+			<td>
+				<form:input path="invoiceName" />
+				<form:errors cssClass="fieldError" path="invoiceName" />
+			</td>
+		</tr>
+
+		<tr>
+			<th>
+				<soak:label key="user.invoiceAddress.address" />
+			</th>
+			<td>
+				<form:input path="invoiceAddress.address" />
+				<form:errors cssClass="fieldError" path="invoiceAddress.address" />
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<soak:label key="user.invoiceAddress.city" />
+			</th>
+			<td>
+				<form:input path="invoiceAddress.city" />
+				<form:errors cssClass="fieldError" path="invoiceAddress.city" />
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<soak:label key="user.invoiceAddress.postalCode" />
+			</th>
+			<td>
+				<form:input path="invoiceAddress.postalCode" />
+				<form:errors cssClass="fieldError" path="invoiceAddress.postalCode" />
+			</td>
+		</tr>
 		<c:if test="${param.from == 'list' or param.method == 'Add'}">
 			<tr>
 				<th>

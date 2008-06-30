@@ -139,7 +139,7 @@ public class Organization extends BaseObject implements Serializable {
      *
      * @return Address
      *
-     * @hibernate.component not-null="false"
+     * @hibernate.component not-null="false" prefix="invoice_"
      */
 	public Address getInvoiceAddress() {
 		return invoiceAddress;
@@ -156,7 +156,7 @@ public class Organization extends BaseObject implements Serializable {
 
 	 /**
      * @return Returns the invoice name.
-     * @hibernate.property column="invoicename" length="100" not-null="false"
+     * @hibernate.property column="invoice_name" not-null="false"
      */
 	public String getInvoiceName() {
 		return invoiceName;

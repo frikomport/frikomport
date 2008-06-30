@@ -138,6 +138,53 @@
                 <form:errors cssClass="fieldError" path="comment"/>
 	        </td>
    		</tr>
+   		
+<c:if test="${!freeCourse}">
+   		<tr>
+			<th>
+				<soak:label key="registration.invoiceAddress" />
+			</th>
+		</tr>
+
+		<tr>
+			<th>
+				<soak:label key="registration.invoiceAddress.name" />
+			</th>
+			<td>
+				<form:input path="invoiceName" />
+				<form:errors cssClass="fieldError" path="invoiceName" />
+			</td>
+		</tr>
+
+		<tr>
+			<th>
+				<soak:label key="registration.invoiceAddress.address" />
+			</th>
+			<td>
+				<form:input path="invoiceAddress.address" />
+				<form:errors cssClass="fieldError" path="invoiceAddress.address" />
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<soak:label key="registration.invoiceAddress.city" />
+			</th>
+			<td>
+				<form:input path="invoiceAddress.city" />
+				<form:errors cssClass="fieldError" path="invoiceAddress.city" />
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<soak:label key="registration.invoiceAddress.postalCode" />
+			</th>
+			<td>
+				<form:input path="invoiceAddress.postalCode" />
+				<form:errors cssClass="fieldError" path="invoiceAddress.postalCode" />
+			</td>
+		</tr>
+</c:if>   		
+   		
 	
 	    <tr>
 	        <td></td>

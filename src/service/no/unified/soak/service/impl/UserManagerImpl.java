@@ -232,6 +232,10 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		address.setPostalCode("0");
 		user.setAddress(address);
 		user.setHash(StringUtil.encodeString(username));
+		Address invoiceAddress = new Address();
+		invoiceAddress.setPostalCode("0");
+		user.setInvoiceAddress(invoiceAddress);
+	    
 		try {
 			saveUser(user);
             return user;
@@ -300,7 +304,8 @@ public class UserManagerImpl extends BaseManager implements UserManager {
         	user.setHash(StringUtil.encodeString(user.getUsername()));
         	save = true;
         }
-		if (save){
+		
+        if (save){
 			user.setEnabled(true);
 			try {
 				saveUser(user);
@@ -308,7 +313,9 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 				log.error("UserExistsException: " + e);
 			}
 		}
+		
 	}
+
 	
 	private void setRoles(List<String> rolenames, User user) {
 		setRoles(rolenames, user, true);
