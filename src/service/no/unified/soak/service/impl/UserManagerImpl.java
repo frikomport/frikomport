@@ -405,9 +405,32 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	}
 
 	public User addUser(Registration registration) {
-		User user = addUser(registration.getEmail(), registration.getFirstName(), registration.getLastName(),
-				registration.getEmail(), new Integer(0), null, new Integer(0));
-		return user;
+		User user = new User(registration.getEmail());
+		user.setEmployeeNumber(registration.getEmployeeNumber());
+		user.setFirstName(registration.getFirstName());
+		user.setLastName(registration.getLastName());
+		user.setEmail(registration.getEmail());
+		user.setPhoneNumber(registration.getPhone());
+		user.setMobilePhone(registration.getMobilePhone());
+		user.setJobTitle(registration.getJobTitle());
+		user.setWorkplace(registration.getWorkplace());
+		user.setOrganizationid(registration.getOrganizationid());
+		user.setServiceareaid(registration.getServiceareaid());
+		user.setInvoiceName(registration.getInvoiceName());
+		user.setInvoiceAddress(registration.getInvoiceAddress());
+
+		user.setEnabled(true);
+		user.setAddress(new Address());
+		user.setId(new Integer(0));
+		setRoles(getDefaultRoles(), user);
+		user.setHash(StringUtil.encodeString(user.getUsername()));
+		try {
+			saveUser(user);
+			return user;
+		} catch (UserExistsException e) {
+			log.error("UserExistsException: " + e);
+			return null;
+		}
 	}
 
 	private List<String> getDefaultRoles() {
