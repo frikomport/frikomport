@@ -29,7 +29,15 @@ public class Address extends BaseObject implements Serializable {
     protected String province;
     protected String country;
     protected String postalCode;
-
+    
+    public Address() {
+		address = "";
+		city = "";
+		province = "";
+		country = "";
+		postalCode = "";
+	}
+    
     /**
      * Returns the address.
      * @return String

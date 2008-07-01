@@ -4,7 +4,7 @@
  * of the GPL.
  *
  * @author Unified Consulting AS
-*/
+ */
 package no.unified.soak.service.impl;
 
 import java.util.ArrayList;
@@ -34,170 +34,172 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectRetrievalFailureException;
 
-
 /**
- * Implementation of UserManager interface.</p>
- *
+ * Implementation of UserManager interface.
+ * </p>
+ * 
  * <p>
  * <a href="UserManagerImpl.java.html"><i>View Source</i></a>
  * </p>
- *
+ * 
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
  */
 public class UserManagerImpl extends BaseManager implements UserManager {
-    private UserDAO dao;
-    
-    private UserEzDaoJdbc userEzDaoJdbc;
-    private RoleManager roleManager;
-    private MessageSource messageSource;
-    private OrganizationManager organizationManager;
+	private UserDAO dao;
 
-    /**
-     * Set the DAO for communication with the data layer.
-     * @param dao
-     */
-    public void setUserDAO(UserDAO dao) {
-        this.dao = dao;
-    }
-    
+	private UserEzDaoJdbc userEzDaoJdbc;
+
+	private RoleManager roleManager;
+
+	private MessageSource messageSource;
+
+	private OrganizationManager organizationManager;
+
+	/**
+	 * Set the DAO for communication with the data layer.
+	 * 
+	 * @param dao
+	 */
+	public void setUserDAO(UserDAO dao) {
+		this.dao = dao;
+	}
+
 	public void setUserEzDaoJdbc(UserEzDaoJdbc userEzDaoJdbc) {
 		this.userEzDaoJdbc = userEzDaoJdbc;
 	}
 
-    public void setMessageSource(MessageSource messageSource) {
+	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource = messageSource;
 	}
 
 	public void setRoleManager(RoleManager roleManager) {
 		this.roleManager = roleManager;
 	}
-	
-	public void setOrganizationManager(
-			OrganizationManager organizationManager) {
+
+	public void setOrganizationManager(OrganizationManager organizationManager) {
 		this.organizationManager = organizationManager;
 	}
 
 	/**
-     * @see no.unified.soak.service.UserManager#getUser(java.lang.String)
-     */
-    public User getUser(String username) {
-        return dao.getUser(username);
-    }
+	 * @see no.unified.soak.service.UserManager#getUser(java.lang.String)
+	 */
+	public User getUser(String username) {
+		return dao.getUser(username);
+	}
 
-    /**
-     * @see no.unified.soak.service.UserManager#getUserByHash(java.lang.String)
-     */
-    public User getUserByHash(String hash) {
-        return dao.getUserByHash(hash);
-    }
+	/**
+	 * @see no.unified.soak.service.UserManager#getUserByHash(java.lang.String)
+	 */
+	public User getUserByHash(String hash) {
+		return dao.getUserByHash(hash);
+	}
 
-    
-    /**
-     * @see no.unified.soak.service.UserManager#getUsers(no.unified.soak.model.User)
-     */
-    public List getUsers(User user) {
-        return dao.getUsers(user);
-    }
+	/**
+	 * @see no.unified.soak.service.UserManager#getUsers(no.unified.soak.model.User)
+	 */
+	public List getUsers(User user) {
+		return dao.getUsers(user);
+	}
 
-    public User findUser(String email) {
-        return dao.findUser(email);
-    }
+	public User findUser(String email) {
+		return dao.findUser(email);
+	}
 
-    /**
-     * @see no.unified.soak.service.UserManager#saveUser(no.unified.soak.model.User)
-     */
-    public void saveUser(User user) throws UserExistsException {
-        try {
-            dao.saveUser(user);
-        } catch (DataIntegrityViolationException e) {
-            throw new UserExistsException("User '" + user.getUsername() + "' already exists!");
-        }
-    }
+	/**
+	 * @see no.unified.soak.service.UserManager#saveUser(no.unified.soak.model.User)
+	 */
+	public void saveUser(User user) throws UserExistsException {
+		try {
+			dao.saveUser(user);
+		} catch (DataIntegrityViolationException e) {
+			throw new UserExistsException("User '" + user.getUsername() + "' already exists!");
+		}
+	}
 
-    /**
-     * @see no.unified.soak.service.UserManager#removeUser(java.lang.String)
-     */
-    public void removeUser(String username) {
-        if (log.isDebugEnabled()) {
-            log.debug("removing user: " + username);
-        }
+	/**
+	 * @see no.unified.soak.service.UserManager#removeUser(java.lang.String)
+	 */
+	public void removeUser(String username) {
+		if (log.isDebugEnabled()) {
+			log.debug("removing user: " + username);
+		}
 
-        dao.removeUser(username);
-    }
+		dao.removeUser(username);
+	}
 
-    /**
-     * @see no.unified.soak.service.UserManager#checkLoginCookie(java.lang.String)
-     */
-    public String checkLoginCookie(String value) {
-        value = StringUtil.decodeString(value);
+	/**
+	 * @see no.unified.soak.service.UserManager#checkLoginCookie(java.lang.String)
+	 */
+	public String checkLoginCookie(String value) {
+		value = StringUtil.decodeString(value);
 
-        String[] values = StringUtils.split(value, "|");
+		String[] values = StringUtils.split(value, "|");
 
-        // in case of empty username in cookie, return null
-        if (values.length == 1) {
-            return null;
-        }
+		// in case of empty username in cookie, return null
+		if (values.length == 1) {
+			return null;
+		}
 
-        if (log.isDebugEnabled()) {
-            log.debug("looking up cookieId: " + values[1]);
-        }
+		if (log.isDebugEnabled()) {
+			log.debug("looking up cookieId: " + values[1]);
+		}
 
-        UserCookie cookie = new UserCookie();
-        cookie.setUsername(values[0]);
-        cookie.setCookieId(values[1]);
-        cookie = dao.getUserCookie(cookie);
+		UserCookie cookie = new UserCookie();
+		cookie.setUsername(values[0]);
+		cookie.setCookieId(values[1]);
+		cookie = dao.getUserCookie(cookie);
 
-        if (cookie != null) {
-            if (log.isDebugEnabled()) {
-                log.debug("cookieId lookup succeeded, generating new cookieId");
-            }
+		if (cookie != null) {
+			if (log.isDebugEnabled()) {
+				log.debug("cookieId lookup succeeded, generating new cookieId");
+			}
 
-            return saveLoginCookie(cookie);
-        } else {
-            if (log.isDebugEnabled()) {
-                log.debug("cookieId lookup failed, returning null");
-            }
+			return saveLoginCookie(cookie);
+		} else {
+			if (log.isDebugEnabled()) {
+				log.debug("cookieId lookup failed, returning null");
+			}
 
-            return null;
-        }
-    }
+			return null;
+		}
+	}
 
-    /**
-     * @see no.unified.soak.service.UserManager#createLoginCookie(java.lang.String)
-     */
-    public String createLoginCookie(String username) {
-        UserCookie cookie = new UserCookie();
-        cookie.setUsername(username);
+	/**
+	 * @see no.unified.soak.service.UserManager#createLoginCookie(java.lang.String)
+	 */
+	public String createLoginCookie(String username) {
+		UserCookie cookie = new UserCookie();
+		cookie.setUsername(username);
 
-        return saveLoginCookie(cookie);
-    }
+		return saveLoginCookie(cookie);
+	}
 
-    /**
-     * Convenience method to set a unique cookie id and save to database
-     * @param cookie
-     * @return
-     */
-    private String saveLoginCookie(UserCookie cookie) {
-        cookie.setCookieId(new RandomGUID().toString());
-        dao.saveUserCookie(cookie);
+	/**
+	 * Convenience method to set a unique cookie id and save to database
+	 * 
+	 * @param cookie
+	 * @return
+	 */
+	private String saveLoginCookie(UserCookie cookie) {
+		cookie.setCookieId(new RandomGUID().toString());
+		dao.saveUserCookie(cookie);
 
-        return StringUtil.encodeString(cookie.getUsername() + "|" +
-            cookie.getCookieId());
-    }
+		return StringUtil.encodeString(cookie.getUsername() + "|" + cookie.getCookieId());
+	}
 
-    /**
-     * @see no.unified.soak.service.UserManager#removeLoginCookies(java.lang.String)
-     */
-    public void removeLoginCookies(String username) {
-        dao.removeUserCookies(username);
-    }
-    
-    public List getRoles() {
-    	List roles = roleManager.getRoles(null);
-    	return roles;
-    }
-    
-    public List getResponsibles() {
+	/**
+	 * @see no.unified.soak.service.UserManager#removeLoginCookies(java.lang.String)
+	 */
+	public void removeLoginCookies(String username) {
+		dao.removeUserCookies(username);
+	}
+
+	public List getRoles() {
+		List roles = roleManager.getRoles(null);
+		return roles;
+	}
+
+	public List getResponsibles() {
 		List ezUsers = getEZResponsibles(null);
 		List users = new ArrayList();
 		for (Iterator iter = ezUsers.iterator(); iter.hasNext();) {
@@ -220,92 +222,125 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		user.setLastName(lastName);
 		user.setEmail(email);
 		user.setId(id);
-		if (kommune != null && kommune != 0){
-			setKommune(kommune, user);
+		if (kommune != null && kommune != 0) {
+			updateKommune(kommune, user);
 		}
-        if(rolenames == null){
-            rolenames = getDefaultRoles();
-        }
-        setRoles(rolenames, user);
+		if (rolenames == null) {
+			rolenames = getDefaultRoles();
+		}
+		setRoles(rolenames, user);
 		user.setEnabled(true);
-		Address address = new Address();
-		address.setPostalCode("0");
-		user.setAddress(address);
+		user.setAddress(new Address());
 		user.setHash(StringUtil.encodeString(username));
-		Address invoiceAddress = new Address();
-		invoiceAddress.setPostalCode("0");
-		user.setInvoiceAddress(invoiceAddress);
-	    
+		user.setInvoiceAddress(new Address());
+		updateInvoiceAddressFromOrganization(user);
+
 		try {
 			saveUser(user);
-            return user;
+			return user;
 		} catch (UserExistsException e) {
 			log.error("UserExistsException: " + e);
 			return null;
 		}
 	}
-
-	private void setKommune(Integer kommune, User user) {
-		setKommune(kommune, user, true);
-	}
 	
-	private void setKommune(Integer kommune, User user, Boolean save) {
+	private boolean updateInvoiceAddressFromOrganization(User user) {
+		boolean save = false;
+		if (user.getOrganization() != null) {
+			Address orgAddress = user.getOrganization().getInvoiceAddress();
+			if (user.getInvoiceAddress().getAddress().equals("")) {
+				user.getInvoiceAddress().setAddress(orgAddress.getAddress());
+				save = true;
+			}
+			if (user.getInvoiceAddress().getCity().equals("")) {
+				user.getInvoiceAddress().setCity(orgAddress.getCity());
+				save = true;
+			}
+			if (user.getInvoiceAddress().getCountry().equals("")) {
+				user.getInvoiceAddress().setCountry(orgAddress.getCountry());
+				save = true;
+			}
+			if (user.getInvoiceAddress().getPostalCode().equals("")) {
+				user.getInvoiceAddress().setPostalCode(orgAddress.getPostalCode());
+				save = true;
+			}
+			if (user.getInvoiceAddress().getProvince().equals("")) {
+				user.getInvoiceAddress().setProvince(orgAddress.getProvince());
+				save = true;
+			}
+			if (user.getInvoiceName() == null || user.getInvoiceName().equals("")) {
+				user.setInvoiceName(user.getOrganization().getInvoiceName());
+				save = true;
+			}
+		}
+		return save;
+	}
+
+	private boolean updateKommune(Integer kommune, User user) {
+		boolean save = false;
 		List organizations = organizationManager.getAll();
 		// first search in ids
 		for (Iterator iter = organizations.iterator(); iter.hasNext();) {
 			Organization organization = (Organization) iter.next();
-			
-			if (organization.getId().equals(kommune.longValue())){
-				if (user.getOrganizationid() == null || !user.getOrganizationid().equals(organization.getId())){
+
+			if (organization.getId().equals(kommune.longValue())) {
+				if (user.getOrganizationid() == null || !user.getOrganizationid().equals(organization.getId())) {
 					user.setOrganizationid(organization.getId());
 					save = true;
 				}
-				return;
+				return save;
 			}
 		}
 		// if no match search in numbers.
 		for (Iterator iter = organizations.iterator(); iter.hasNext();) {
 			Organization organization = (Organization) iter.next();
-			
-			if (organization.getNumber().equals(kommune.longValue())){
-				if (!user.getOrganizationid().equals(organization.getId())){
+
+			if (organization.getNumber().equals(kommune.longValue())) {
+				if (!user.getOrganizationid().equals(organization.getId())) {
 					user.setOrganizationid(organization.getId());
 					save = true;
 				}
-				return;
+				return save;
 			}
 		}
+		return save;
 	}
-	
+
 	public void updateUser(User user, String firstName, String lastName, String email, Integer id,
 			List<String> rolenames, Integer kommune) {
 		Boolean save = false;
-		if (!firstName.equals(user.getFirstName())){
+		if (!firstName.equals(user.getFirstName())) {
 			user.setFirstName(firstName);
 			save = true;
 		}
-		if (!lastName.equals(user.getLastName())){
+		if (!lastName.equals(user.getLastName())) {
 			user.setLastName(lastName);
 			save = true;
 		}
-		if (!email.equals(user.getEmail())){
+		if (!email.equals(user.getEmail())) {
 			user.setEmail(email);
 			save = true;
 		}
-		if (!id.equals(user.getId())){
+		if (!id.equals(user.getId())) {
 			user.setId(id);
 			save = true;
 		}
-		if (kommune != null && kommune != 0){
-			setKommune(kommune, user, save);
+		if (kommune != null && kommune != 0) {
+			if (updateKommune(kommune, user)){
+				save = true;
+			}
 		}
-        setRoles(rolenames, user, save);
-        if(user.getHash() == null || user.getHash().length() == 0){
-        	user.setHash(StringUtil.encodeString(user.getUsername()));
-        	save = true;
-        }
-		
-        if (save){
+		setRoles(rolenames, user, save);
+		if (user.getHash() == null || user.getHash().length() == 0) {
+			user.setHash(StringUtil.encodeString(user.getUsername()));
+			save = true;
+		}
+
+		if (updateInvoiceAddressFromOrganization(user)){
+			save = true;
+		}
+
+		if (save) {
 			user.setEnabled(true);
 			try {
 				saveUser(user);
@@ -313,22 +348,21 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 				log.error("UserExistsException: " + e);
 			}
 		}
-		
+
 	}
 
-	
 	private void setRoles(List<String> rolenames, User user) {
 		setRoles(rolenames, user, true);
 	}
-	
+
 	private void setRoles(List<String> rolenames, User user, Boolean save) {
 		// check if roles are the same as the ones set on user.
-		if (equalRoles(user, rolenames)){
+		if (equalRoles(user, rolenames)) {
 			return;
 		}
 		// Roles are different and needs to be saved.
 		save = true;
-		
+
 		// remove existing roles before new ones are added.
 		user.removeAllRoles();
 		Locale locale = LocaleContextHolder.getLocale();
@@ -356,33 +390,34 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		}
 	}
 
-    private boolean equalRoles(User user, List<String> rolenames) {
-		if (user.getRoleNameList().size() != rolenames.size()){
-    		return false;
-    	}
+	private boolean equalRoles(User user, List<String> rolenames) {
+		if (user.getRoleNameList().size() != rolenames.size()) {
+			return false;
+		}
 
-    	for (String rolename : rolenames) {
-			if (!user.getRoleNameList().contains(rolename)){
+		for (String rolename : rolenames) {
+			if (!user.getRoleNameList().contains(rolename)) {
 				return false;
 			}
 		}
-    	
+
 		return true;
 	}
 
 	public User addUser(Registration registration) {
-        User user = addUser(registration.getEmail(), registration.getFirstName(), registration.getLastName(), registration.getEmail(), new Integer(0), null, new Integer(0));
-        return user;
-    }
+		User user = addUser(registration.getEmail(), registration.getFirstName(), registration.getLastName(),
+				registration.getEmail(), new Integer(0), null, new Integer(0));
+		return user;
+	}
 
-    private List<String> getDefaultRoles() {
-        List<String> roles = new ArrayList();
-        roles.add(Constants.ANONYMOUS_ROLE);
-        roles.add(Constants.EMPLOYEE_ROLE);
-        return roles;
-    }
+	private List<String> getDefaultRoles() {
+		List<String> roles = new ArrayList();
+		roles.add(Constants.ANONYMOUS_ROLE);
+		roles.add(Constants.EMPLOYEE_ROLE);
+		return roles;
+	}
 
-    private List getEZResponsibles(EzUser user) {
+	private List getEZResponsibles(EzUser user) {
 		List users = userEzDaoJdbc.findKursansvarligeUser();
 		return users;
 	}
