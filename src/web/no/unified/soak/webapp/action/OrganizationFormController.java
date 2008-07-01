@@ -10,20 +10,17 @@
  */
 package no.unified.soak.webapp.action;
 
-import no.unified.soak.model.Organization;
-import no.unified.soak.service.OrganizationManager;
-
-import org.apache.commons.lang.StringUtils;
-
-import org.springframework.validation.BindException;
-
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
-
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import no.unified.soak.model.Organization;
+import no.unified.soak.service.OrganizationManager;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.validation.BindException;
+import org.springframework.web.servlet.ModelAndView;
 
 
 /**
@@ -94,7 +91,6 @@ public class OrganizationFormController extends BaseFormController {
 
         Organization organization = (Organization) command;
         boolean isNew = (organization.getId() == null);
-        String success = getSuccessView();
         Locale locale = request.getLocale();
 
         if (request.getParameter("delete") != null) {

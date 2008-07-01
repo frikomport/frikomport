@@ -10,6 +10,17 @@
  */
 package no.unified.soak.webapp.action;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
@@ -19,30 +30,14 @@ import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.WaitingListManager;
-import no.unified.soak.util.MailUtil;
 import no.unified.soak.util.CourseStatus;
+import no.unified.soak.util.MailUtil;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.springframework.context.MessageSource;
-
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.MailSender;
-
 import org.springframework.validation.BindException;
-
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.mail.internet.MimeMessage;
 
 /**
  * This controller handles the management of a course - where an authorized user can manage the waiting list, which

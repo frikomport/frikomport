@@ -273,7 +273,7 @@ public class UserEzDaoJdbc {
 	    UserEzDaoJdbc userEzDaoJdbc = new UserEzDaoJdbc();
 		List users = userEzDaoJdbc.findKursansvarligeUser();
 		for (Iterator iter = users.iterator(); iter.hasNext();) {
-		    EzUser user = (EzUser) iter.next();
+//		    EzUser user = (EzUser) iter.next();
 //			System.out.println("ez User: " + user.getId() + ", " + user + " "
 //				+ user.getKommune());
 		}

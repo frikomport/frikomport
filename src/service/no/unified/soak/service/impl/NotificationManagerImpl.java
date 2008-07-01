@@ -185,11 +185,11 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 		}	
 	}
 	
-	private String getText(String key, String attribute, Locale locale) {
-		return MailUtil.getText(key, attribute, locale, messageSource);
-	}
-
-	private String getText(String key, Locale locale) {
-		return MailUtil.getText(key, locale, messageSource);
-	}
+//	private String getText(String key, String attribute, Locale locale) {
+//		return MailUtil.getText(key, attribute, locale, messageSource);
+//	}
+//
+//	private String getText(String key, Locale locale) {
+//		return MailUtil.getText(key, locale, messageSource);
+//	}
 }

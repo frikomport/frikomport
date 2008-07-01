@@ -1,22 +1,20 @@
 package no.unified.soak.service.impl;
 
-import no.unified.soak.service.DatabaseUpdateManager;
-import no.unified.soak.service.CourseManager;
-import no.unified.soak.service.RegistrationManager;
-import no.unified.soak.service.UserManager;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+
+import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.User;
-import no.unified.soak.Constants;
+import no.unified.soak.service.CourseManager;
+import no.unified.soak.service.DatabaseUpdateManager;
+import no.unified.soak.service.RegistrationManager;
+import no.unified.soak.service.UserManager;
 
-import java.util.Locale;
-import java.util.List;
-import java.util.Iterator;
-import java.util.ArrayList;
-
-import org.springframework.validation.Validator;
-import org.springframework.orm.ObjectRetrievalFailureException;
 import org.apache.commons.validator.EmailValidator;
+import org.springframework.orm.ObjectRetrievalFailureException;
 
 /**
  * User: gv

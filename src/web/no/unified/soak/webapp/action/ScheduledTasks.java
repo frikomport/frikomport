@@ -1,14 +1,13 @@
 package no.unified.soak.webapp.action;
 
-import java.util.Locale;
+import java.util.Iterator;
 import java.util.TimerTask;
 import java.util.Vector;
-import java.util.Iterator;
+
+import no.unified.soak.service.Task;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import no.unified.soak.service.Task;
 
 public class ScheduledTasks extends TimerTask {
     private Vector<Task> tasks = null;

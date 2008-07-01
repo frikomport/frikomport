@@ -10,20 +10,6 @@
  */
 package no.unified.soak.webapp.action;
 
-import no.unified.soak.Constants;
-import no.unified.soak.model.Location;
-import no.unified.soak.model.Organization;
-import no.unified.soak.service.LocationManager;
-import no.unified.soak.service.OrganizationManager;
-
-import org.apache.commons.lang.StringUtils;
-
-import org.springframework.validation.BindException;
-import org.springframework.validation.Errors;
-
-import org.springframework.web.servlet.ModelAndView;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -32,6 +18,15 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import no.unified.soak.model.Location;
+import no.unified.soak.service.LocationManager;
+import no.unified.soak.service.OrganizationManager;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.validation.BindException;
+import org.springframework.validation.Errors;
+import org.springframework.web.servlet.ModelAndView;
 
 
 /**

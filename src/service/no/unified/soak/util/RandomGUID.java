@@ -224,7 +224,7 @@ public class RandomGUID extends Object {
      */
     public static void main(String[] args) {
         for (int i = 0; i < 100; i++) {
-            RandomGUID myGUID = new RandomGUID();
+//            RandomGUID myGUID = new RandomGUID();
 //            System.out.println("Seeding String=" + myGUID.valueBeforeMD5);
 //            System.out.println("rawGUID=" + myGUID.valueAfterMD5);
 //            System.out.println("RandomGUID=" + myGUID.toString());

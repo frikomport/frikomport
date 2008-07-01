@@ -2,9 +2,8 @@ package no.unified.soak.dao.hibernate;
 
 import java.util.List;
 
-import no.unified.soak.model.Notification;
-import no.unified.soak.model.Registration;
 import no.unified.soak.dao.NotificationDao;
+import no.unified.soak.model.Notification;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;

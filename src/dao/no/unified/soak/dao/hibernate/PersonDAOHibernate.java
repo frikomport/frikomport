@@ -10,18 +10,15 @@
  */
 package no.unified.soak.dao.hibernate;
 
+import java.util.List;
+
 import no.unified.soak.dao.PersonDAO;
-import no.unified.soak.model.Location;
 import no.unified.soak.model.Person;
-import no.unified.soak.model.ServiceArea;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-
 import org.springframework.orm.ObjectRetrievalFailureException;
-
-import java.util.List;
 
 
 /**

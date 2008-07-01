@@ -3,7 +3,6 @@ package no.unified.soak.dao;
 import java.util.List;
 
 import no.unified.soak.model.Notification;
-import no.unified.soak.model.Registration;
 
 public interface NotificationDao extends DAO {
 

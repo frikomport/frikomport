@@ -10,14 +10,13 @@
  */
 package no.unified.soak.dao;
 
+import java.util.Date;
+import java.util.List;
+
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
 
 import org.springframework.orm.ObjectRetrievalFailureException;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Test class for the RegistrationDAO class

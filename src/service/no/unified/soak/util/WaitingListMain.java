@@ -10,17 +10,14 @@
  */
 package no.unified.soak.util;
 
-import no.unified.soak.Constants;
-
 import java.io.FilterInputStream;
 import java.io.IOException;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-
-import java.util.Map;
 import java.util.ResourceBundle;
+
+import no.unified.soak.Constants;
 
 
 /**
@@ -53,7 +50,7 @@ public class WaitingListMain {
             urlConn.setConnectTimeout(5000); /* 5 sec timeout */
             urlConn.connect();
 
-            Map fields = urlConn.getHeaderFields();
+//            Map fields = urlConn.getHeaderFields();
 //            System.out.println("WaitingListMain.setup(): Status=" +
 //                fields.get(null));
 

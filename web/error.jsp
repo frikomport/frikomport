@@ -33,6 +33,6 @@
         src="<c:url value="/images/403.jpg"/>" 
         alt="Hawaii" /></a>
 </p>
-
+</div>
 </body>
 </html>
