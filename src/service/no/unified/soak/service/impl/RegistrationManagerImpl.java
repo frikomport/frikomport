@@ -131,4 +131,8 @@ public class RegistrationManagerImpl extends BaseManager implements
     public List getUserRegistrations(String username) {
         return dao.getUserRegistrations(username);
     }
+
+	public boolean isUserRegisteredOnCourse(String email, String firstname, String lastname, Long courseId) {
+		return dao.isUserRegisteredOnCourse(email, firstname, lastname, courseId);
+	}
 }

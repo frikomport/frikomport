@@ -148,4 +148,14 @@ public interface RegistrationDAO extends DAO {
      * @return
      */
     public List<Registration> getUserRegistrations(String username);
+    
+    /**
+     * Get all registrations for specified user
+     * @param email
+     * @param firstname
+     * @param lastname
+     * @param courseId
+     * @return true if user is registered in the course.
+     */
+    public boolean isUserRegisteredOnCourse(String email, String firstname, String lastname, Long courseId);
 }

@@ -272,4 +272,22 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
         return result;
     }
 
+	public boolean isUserRegisteredOnCourse(String email, String firstname, String lastname, Long courseId) {
+		List<Registration> result = new ArrayList<Registration>();
+        
+		DetachedCriteria criteria = DetachedCriteria.forClass(Registration.class);
+        criteria.add(Restrictions.eq("email",email));
+        criteria.add(Restrictions.eq("firstName",firstname));
+        criteria.add(Restrictions.eq("lastName",lastname));
+        criteria.add(Restrictions.eq("courseid",courseId));
+        
+        result = getHibernateTemplate().findByCriteria(criteria);
+		
+        if (result.size() > 0){
+        	return true;
+        }
+        
+		return false;
+	}
+
 }

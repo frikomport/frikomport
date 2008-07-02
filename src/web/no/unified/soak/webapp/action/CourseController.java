@@ -88,6 +88,11 @@ public class CourseController extends BaseFormController {
         HttpSession session = request.getSession();
         Object comm = session.getAttribute("course");
         
+        String alreaddyRegistered = request.getParameter("alreaddyRegistered");
+        if (alreaddyRegistered != null && alreaddyRegistered.equals("true")){
+        	model.put("alreaddyRegistered" , true);
+        }
+        
         Map map = request.getParameterMap();
         
         // if params then this is navigation in table

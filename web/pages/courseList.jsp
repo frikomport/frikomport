@@ -8,6 +8,12 @@
 <fmt:message key="courseList.item" var="item"/>
 <fmt:message key="courseList.items" var="items"/>
 
+<c:if test="${alreaddyRegistered}">
+	<div class="message" style="font-size: 12px">
+		<fmt:message key="courseList.alreaddyRegistered" />
+	</div>
+</c:if>
+
 <form method="post" action="<c:url value="/listCourses.html"/>" id="courseList">
    	<input type="hidden" id="ispostbackcourselist" name="ispostbackcourselist" value="1"/> 
 	<table>
