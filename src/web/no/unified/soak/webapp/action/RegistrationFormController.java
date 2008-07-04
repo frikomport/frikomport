@@ -251,11 +251,21 @@ public class RegistrationFormController extends BaseFormController {
 			model.put("course", course);
 			registration.setCourse(course);
 
-			// Is this a valid date to register?
+			// Get registrations on this course for this user 
+			List <Registration> userRegistraionsForCourse = registrationManager.getUserRegistrationsForCourse(registration.getEmail(), registration.getFirstName(),
+					registration.getLastName(), registration.getCourseid());
+
+			// Is this a valid date to register? Or has this user alreaddy been
+			// registered to this course?
 			// (It is always allowed to edit the data)
 			if ((registration.getId() == null) || (registration.getId().longValue() == 0)) {
 				if (!legalRegistrationDate(request, locale, course)) {
 					return new ModelAndView(getCancelView(), "courseid", registration.getCourseid());
+				}
+				if (userRegistraionsForCourse.size() > 0) {
+					alreaddyRegistered = true;
+					model.put("alreaddyRegistered", alreaddyRegistered);
+					return new ModelAndView(getCancelView(), "alreaddyRegistered", true);
 				}
 			}
 
@@ -268,14 +278,6 @@ public class RegistrationFormController extends BaseFormController {
 			}
 			registration.setUser(user);
 			registration.setUsername(user.getUsername());
-
-			// Lets see if this user has alreaddy been registered to this course
-			if (registrationManager.isUserRegisteredOnCourse(registration.getEmail(), registration.getFirstName(),
-					registration.getLastName(), registration.getCourseid())) {
-				alreaddyRegistered = true;
-				model.put("alreaddyRegistered", alreaddyRegistered);
-				return new ModelAndView(getCancelView(), "alreaddyRegistered", true);
-			}
 
 			// Lets find out if the course has room for this one
 			Boolean localAttendant = new Boolean(true);

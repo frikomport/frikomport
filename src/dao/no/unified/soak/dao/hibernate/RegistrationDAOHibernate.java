@@ -272,7 +272,7 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
         return result;
     }
 
-	public boolean isUserRegisteredOnCourse(String email, String firstname, String lastname, Long courseId) {
+	public List <Registration> getUserRegistationsForCourse(String email, String firstname, String lastname, Long courseId) {
 		List<Registration> result = new ArrayList<Registration>();
         
 		DetachedCriteria criteria = DetachedCriteria.forClass(Registration.class);
@@ -283,11 +283,7 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
         
         result = getHibernateTemplate().findByCriteria(criteria);
 		
-        if (result.size() > 0){
-        	return true;
-        }
-        
-		return false;
+ 		return result;
 	}
 
 }

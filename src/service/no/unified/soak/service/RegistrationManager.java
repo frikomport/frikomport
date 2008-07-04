@@ -134,12 +134,12 @@ public interface RegistrationManager extends Manager {
     public List getUserRegistrations(String username);
     
     /**
-     * Get all registrations for specified user
+     * Get all registration on specified course for specified user
      * @param email
      * @param firstname
      * @param lastname
      * @param courseId
-     * @return true if user is registered in the course.
+     * @return List of registrations
      */
-    public boolean isUserRegisteredOnCourse(String email, String firstname, String lastname, Long courseId);
+    public List <Registration> getUserRegistrationsForCourse(String email, String firstname, String lastname, Long courseId);
 }
