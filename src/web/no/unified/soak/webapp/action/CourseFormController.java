@@ -500,6 +500,7 @@ public class CourseFormController extends BaseFormController {
 			// and check if the notificationlist for the course needs to be reset
 			if (isNew) {
 				model.put("enablemail", "false");
+				model.put("newCourse", "true");
 				courseId = course.getId();
 			} else {
 				List<Registration> registrations = registrationManager

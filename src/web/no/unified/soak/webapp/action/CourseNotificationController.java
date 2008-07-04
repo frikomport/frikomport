@@ -92,11 +92,18 @@ public class CourseNotificationController extends BaseFormController {
 
         // Are we to enable mail comment field and buttons?
 		Boolean enableMail = new Boolean(false);
+		Boolean newCourse = new Boolean(true);
 		String mailParam = request.getParameter("enablemail"); 
+		String courseParam = request.getParameter("newCourse"); 
+		
 		if ((mailParam != null) && (mailParam.compareToIgnoreCase("true") == 0)) {
 			enableMail = new Boolean(true);
 		}
+		if ((courseParam != null) && (courseParam.compareToIgnoreCase("true") == 0)) {
+			newCourse = new Boolean(true);
+		}
 		model.put("enableMail", enableMail);
+		model.put("newCourse", newCourse);
 
         model.put("mailsenders",getMailSenders((Course)command, user, locale));
 

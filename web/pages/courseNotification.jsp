@@ -72,8 +72,11 @@
 
 </c:if>
 <c:if test="${!enableMail}">
-
-<div class="message" style="font-size: 12px"><fmt:message key="courseNotification.nomailnotification"/></div>
+	<c:if test="${!newCourse}">
+		<div class="message" style="font-size: 12px">
+			<fmt:message key="courseNotification.nomailnotification" />
+		</div>
+	</c:if>
 
 <h4><fmt:message key="courseNotification.confirmheading"/></h4>
 <table class="detail">
