@@ -280,11 +280,11 @@ public class RegistrationFormController extends BaseFormController {
 			registration.setUsername(user.getUsername());
 
 			// Lets find out if the course has room for this one
-			Boolean localAttendant = new Boolean(true);
+			Boolean localAttendant = new Boolean(false);
 
 			if (registration.getOrganizationid() != null) {
-				if (registration.getOrganizationid().longValue() != course.getOrganizationid().longValue()) {
-					localAttendant = new Boolean(false);
+				if (registration.getOrganizationid().longValue() == course.getOrganizationid().longValue()) {
+					localAttendant = new Boolean(true);
 				}
 			}
 
