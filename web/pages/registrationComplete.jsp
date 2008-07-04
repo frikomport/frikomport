@@ -100,6 +100,16 @@
 	</tr>
 	<tr>
 		<th>
+			<fmt:message key="registration.closestLeader" />
+		</th>
+		<td>
+			<spring:bind path="registration.closestLeader">
+				<c:out value="${status.value}" />
+			</spring:bind>
+		</td>
+	</tr>
+	<tr>
+		<th>
 			<fmt:message key="registration.jobTitle" />
 		</th>
 		<td>

@@ -193,6 +193,7 @@ public class RegistrationFormController extends BaseFormController {
 				}
 				registration.setInvoiceName(user.getInvoiceName());
 				registration.setInvoiceAddress(user.getInvoiceAddressCopy());
+				registration.setClosestLeader(user.getClosestLeader());
 			}
 		}
 

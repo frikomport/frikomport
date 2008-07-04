@@ -210,6 +210,17 @@
 				<form:errors cssClass="fieldError" path="mobilePhone" />
 			</td>
 		</tr>
+		
+		<tr>
+			<th>
+				<soak:label key="user.closestLeader" />
+			</th>
+			<td>
+				<form:input path="closestLeader" />
+				<form:errors cssClass="fieldError" path="closestLeader" />
+			</td>
+		</tr>
+		
 		<tr>
 			<th>
 				<soak:label key="user.jobTitle" />

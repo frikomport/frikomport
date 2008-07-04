@@ -58,6 +58,7 @@ public class User extends BaseObject implements Serializable {
     protected String hash;
     protected String invoiceName;
     protected Address invoiceAddress = new Address();
+    protected String closestLeader;
   
     public User() {
     }
@@ -557,6 +558,22 @@ public class User extends BaseObject implements Serializable {
     */
 	public void setInvoiceName(String invoiceName) {
 		this.invoiceName = invoiceName;
+	}
+	
+	 /**
+     * @return the closest leader name.
+     * @hibernate.property column="closest_leader" not-null="false"
+     */
+	public String getClosestLeader() {
+		return closestLeader;
+	}
+
+	/**
+     * @param closestLeader
+     *            The closestLeader to set.
+     */
+	public void setClosestLeader(String closestLeader) {
+		this.closestLeader = closestLeader;
 	}
 
     /**

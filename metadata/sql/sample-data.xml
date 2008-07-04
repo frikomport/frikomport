@@ -782,6 +782,7 @@
 		<column>firstname</column>
 		<column>id</column>
 		<column>invoiced</column>
+		<column>closest_leader</column>
 		<column>jobtitle</column>
 		<column>lastname</column>
 		<column>mobilephone</column>
@@ -808,6 +809,7 @@
 			<value>1</value>
 			<value>1</value>
 			<value>Barnehageassistent</value>
+			<value>Hans Hansen</value>
 			<value>Gmailsen</value>
 			<value>99887766</value>
 			<value>1</value>
@@ -835,6 +837,7 @@
 			<value>2</value>
 			<value>0</value>
 			<value>Assisterende assistent</value>
+			<value>Hans Hansen</value>
 			<value>Staftatoo</value>
 			<value>99778866</value>
 			<value>2</value>
@@ -861,6 +864,7 @@
 			<value>3</value>
 			<value>1</value>
 			<value>Sjefssjef</value>
+			<value>Hans Hansen</value>
 			<value>Omport</value>
 			<value>66887766</value>
 			<value>2</value>
@@ -887,6 +891,7 @@
 			<value>4</value>
 			<value>0</value>
 			<value>Adm. dir</value>
+			<value>Hans Hansen</value>
 			<value>Hinreksen</value>
 			<value>99556688</value>
 			<value>2</value>
@@ -913,6 +918,7 @@
 			<value>5</value>
 			<value>0</value>
 			<value>Adm. dir</value>
+			<value>Hans Hansen</value>
 			<value>Unified</value>
 			<value>99556688</value>
 			<value>2</value>
@@ -939,6 +945,7 @@
 			<value>6</value>
 			<value>0</value>
 			<value>Adm. dir</value>
+			<value>Hans Hansen</value>
 			<value>RouyerGmailsen</value>
 			<value>99556688</value>
 			<value>2</value>
@@ -965,6 +972,7 @@
 			<value>7</value>
 			<value>0</value>
 			<value>Adm. dir</value>
+			<value>Hans Hansen</value>
 			<value>JobbOgGmailsen</value>
 			<value>99556688</value>
 			<value>1</value>
@@ -991,6 +999,7 @@
 			<value>8</value>
 			<value>0</value>
 			<value>Adm. dir</value>
+			<value>Hans Hansen</value>
 			<value>JobbOgHjemmesen</value>
 			<value>99556688</value>
 			<value>1</value>
@@ -1017,6 +1026,7 @@
 			<value>9</value>
 			<value>0</value>
 			<value>Adm. dir</value>
+			<value>Hans Hansen</value>
 			<value>HarIkkeMailsen</value>
 			<value>99556688</value>
 			<value>2</value>
@@ -1043,6 +1053,7 @@
 			<value>10</value>
 			<value>0</value>
 			<value>Adm. dir</value>
+			<value>Hans Hansen</value>
 			<value>Sensensensen</value>
 			<value>99556688</value>
 			<value>2</value>
