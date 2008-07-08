@@ -283,6 +283,8 @@ public class Constants {
 	public static final int EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST = 7;
 
     public static final int EMAIL_EVENT_COURSECANCELLED = 8;
+    
+    public static final int EMAIL_EVENT_NEW_COURSE_NOTIFICATION = 9;
 
     // Timers
     public static final long TASK_IMMEDIATE = 2000;       // 2 second

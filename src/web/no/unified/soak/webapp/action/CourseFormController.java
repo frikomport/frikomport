@@ -279,6 +279,7 @@ public class CourseFormController extends BaseFormController {
 			course = courseManager.getCourse(copyid);
 			newCourse = new Course();
 			newCourse.copyAllButId(course);
+			newCourse.setCopyid(new Long(copyid));
 		} else {
 			course = new Course();
 			// Check if a default organization should be applied
@@ -492,6 +493,9 @@ public class CourseFormController extends BaseFormController {
                 key = "course.cancelled";
             else
                 key = "course.updated";
+            
+            boolean enablemail = false;
+            boolean waitinglist = false;
 
             saveMessage(request, getText(key, locale));
 
@@ -499,7 +503,18 @@ public class CourseFormController extends BaseFormController {
 			// to the course that things have changed
 			// and check if the notificationlist for the course needs to be reset
 			if (isNew) {
-				model.put("enablemail", "false");
+				//check if this course is a copy and is being published
+				if ((course.getCopyid() != null) && (request.getParameter("publish") != null)){
+					List <Long> ids = new ArrayList<Long>();
+					ids.add(course.getCopyid());
+					List<Registration> registrationsOnOrginalCourse = registrationManager
+					.getWaitingListRegistrations(ids);
+					//check if the original course has a waiting list
+					if (!registrationsOnOrginalCourse.isEmpty()){
+						enablemail=true;
+						waitinglist= true;
+					}
+				}
 				model.put("newCourse", "true");
 				courseId = course.getId();
 			} else {
@@ -507,7 +522,18 @@ public class CourseFormController extends BaseFormController {
 						.getSpecificRegistrations(course.getId(), null, null,
 								null, null, null, null);
 				if (registrations.isEmpty()) {
-					model.put("enablemail", "false");
+					//check if this course is a copy and is being published
+					if ((course.getCopyid() != null) && (request.getParameter("publish") != null)){
+						List <Long> ids = new ArrayList<Long>();
+						ids.add(course.getCopyid());
+						List<Registration> registrationsOnOrginalCourse = registrationManager
+						.getWaitingListRegistrations(ids);
+						//check if the original course has a waiting list
+						if (!registrationsOnOrginalCourse.isEmpty()){
+							enablemail=true;
+							waitinglist=true;
+						}
+					}
 				} else {
 					
 					//check if there has been a change relevant for users registered on the course
@@ -516,7 +542,7 @@ public class CourseFormController extends BaseFormController {
 					if (originalCourse != null){
 						changedList = courseManager.getChangedList(originalCourse, course, format);
 						if (changedList.size() != 0){
-							model.put("enablemail", "true");
+							enablemail=true;
 						}
 					}
 				}
@@ -529,6 +555,8 @@ public class CourseFormController extends BaseFormController {
 					}
 				}
 			}
+			model.put("enablemail", enablemail);
+			model.put("waitinglist", waitinglist);
 		}
 
 		// Let the next page know what course we were editing here

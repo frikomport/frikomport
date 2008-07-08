@@ -92,9 +92,11 @@ public class CourseNotificationController extends BaseFormController {
 
         // Are we to enable mail comment field and buttons?
 		Boolean enableMail = new Boolean(false);
-		Boolean newCourse = new Boolean(true);
+		Boolean newCourse = new Boolean(false);
+		Boolean waitinglist = new Boolean(false);
 		String mailParam = request.getParameter("enablemail"); 
 		String courseParam = request.getParameter("newCourse"); 
+		String waitinglistParam = request.getParameter("waitinglist"); 
 		
 		if ((mailParam != null) && (mailParam.compareToIgnoreCase("true") == 0)) {
 			enableMail = new Boolean(true);
@@ -102,6 +104,13 @@ public class CourseNotificationController extends BaseFormController {
 		if ((courseParam != null) && (courseParam.compareToIgnoreCase("true") == 0)) {
 			newCourse = new Boolean(true);
 		}
+		
+		if ((waitinglistParam != null) && (waitinglistParam.compareToIgnoreCase("true") == 0)) {
+			 waitinglist = new Boolean(true);
+		}
+		
+		model.put("waitinglist", waitinglist);
+		
 		model.put("enableMail", enableMail);
 		model.put("newCourse", newCourse);
 
@@ -124,6 +133,7 @@ public class CourseNotificationController extends BaseFormController {
 			course = courseManager.getCourse(id);
 		} else if (!StringUtils.isEmpty(copyid)) {
 			course = courseManager.getCourse(copyid);
+			course.setCopyid(new Long(copyid));
 			course.setId(null);
 		} else {
 			course = new Course();
@@ -178,7 +188,9 @@ public class CourseNotificationController extends BaseFormController {
 			return new ModelAndView(getCancelView(), "id", course.getId().toString());
 		} // or to send out notification email?
 		else if (request.getParameter("send") != null) {
-            if( course.getStatus() == CourseStatus.COURSE_CANCELLED){
+			if (course.getCopyid()!= null){
+				sendMailToWaitingList(locale, course, Constants.EMAIL_EVENT_NEW_COURSE_NOTIFICATION, mailComment, mailSender, changedList);
+			}else if( course.getStatus() == CourseStatus.COURSE_CANCELLED){
                 sendMail(locale, course, Constants.EMAIL_EVENT_COURSECANCELLED, mailComment, mailSender, changedList);
             }
             else{
@@ -214,6 +226,28 @@ public class CourseNotificationController extends BaseFormController {
 		MailUtil.sendMimeMails(emails, mailEngine);
 		
 	}
+	
+
+	/**
+	 * Sends mail to the users on the waitinglist on the orginal course
+	 * 
+	 * @param locale
+	 *            The locale to use
+     * @param course
+     * @param from
+     */
+	protected void sendMailToWaitingList(Locale locale, Course course, int event, String mailComment, String from, List <String> changedList) {
+		log.debug("Sending mail from CourseNotificationController");
+		List ids = new ArrayList<Long> ();
+		ids.add(course.getCopyid());
+		List<Registration> registrations = registrationManager.getWaitingListRegistrations(ids);
+		
+		StringBuffer msg = MailUtil.createStandardBody(course, event, locale, messageSource, mailComment);
+		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, messageSource, locale, from, mailSender);
+		MailUtil.sendMimeMails(emails, mailEngine);
+		
+	}
+
 
 	/**
 	 * @param registrationManager

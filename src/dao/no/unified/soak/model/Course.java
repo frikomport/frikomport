@@ -33,6 +33,7 @@ public class Course extends BaseObject implements Serializable {
      */
     private static final long serialVersionUID = -4869033333668709720L;
     private Long id;
+    private Long copyid;
     private Organization organization;
     private Long organizationid;
     private User responsible;
@@ -245,6 +246,22 @@ public class Course extends BaseObject implements Serializable {
      */
     public void setId(Long id) {
         this.id = id;
+    }
+    
+    /**
+     * @return Returns the copyid.
+     * @hibernate.property column="copyid" not-null="false"
+     */
+    public Long getCopyid() {
+        return copyid;
+    }
+
+    /**
+     * @param copyid
+     *            The copyid to set.
+     */
+    public void setCopyid(Long copyid) {
+        this.copyid = copyid;
     }
 
     /**
