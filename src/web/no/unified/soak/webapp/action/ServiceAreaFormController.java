@@ -10,19 +10,20 @@
  */
 package no.unified.soak.webapp.action;
 
-import no.unified.soak.model.ServiceArea;
-import no.unified.soak.service.ServiceAreaManager;
-
-import org.apache.commons.lang.StringUtils;
-
-import org.springframework.validation.BindException;
-
-import org.springframework.web.servlet.ModelAndView;
-
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import no.unified.soak.model.ServiceArea;
+import no.unified.soak.service.OrganizationManager;
+import no.unified.soak.service.ServiceAreaManager;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.validation.BindException;
+import org.springframework.web.servlet.ModelAndView;
 
 
 /**
@@ -33,13 +34,22 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ServiceAreaFormController extends BaseFormController {
     private ServiceAreaManager serviceAreaManager = null;
+    private OrganizationManager organizationManager = null;
 
     /**
-     * @param roleManager The roleManager to set.
+     * @param serviceAreaManager 
      */
     public void setServiceAreaManager(ServiceAreaManager serviceAreaManager) {
         this.serviceAreaManager = serviceAreaManager;
     }
+    
+    /**
+     * @param organizationManager 
+     */
+    public void setOrganizationManager(OrganizationManager organizationManager) {
+        this.organizationManager = organizationManager;
+    }
+
 
     /* (non-Javadoc)
      * @see org.springframework.web.servlet.mvc.AbstractFormController#formBackingObject(javax.servlet.http.HttpServletRequest)
@@ -57,6 +67,16 @@ public class ServiceAreaFormController extends BaseFormController {
 
         return serviceArea;
     }
+    
+	protected Map referenceData(HttpServletRequest request) throws Exception {
+		Map<String, Object> model = new HashMap<String, Object>();
+
+        model.put("organizations", organizationManager.getAll());
+        
+        return model;
+    }
+
+
 
     /* (non-Javadoc)
      * @see org.springframework.web.servlet.mvc.SimpleFormController#onSubmit(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object, org.springframework.validation.BindException)

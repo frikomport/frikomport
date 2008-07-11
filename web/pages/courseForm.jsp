@@ -13,6 +13,28 @@ function setStopDate() {
 	}
 }
 
+// Code to change the select list for service aera based on organization id.
+function fillSelect(obj){
+ var orgid=obj.options[obj.selectedIndex].value;
+ var temp= document.course.serviceAreaid;
+  
+ while(temp.firstChild){
+ 	temp.removeChild(temp.firstChild);
+ }
+ 
+ var j = 0;
+	<c:forEach var="servicearea" items="${serviceareas}">
+		if ("<c:out value="${servicearea.id}"/>" == ""){
+			temp.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>", true);
+			j++
+		}
+		else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
+			temp.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>");
+			j++ 
+		}
+	</c:forEach>
+}
+
 </SCRIPT>
 
 <title><fmt:message key="courseEdit.title" />
@@ -53,7 +75,7 @@ function setStopDate() {
 	</c:if>
 </spring:bind>
 
-<form:form commandName="course" onsubmit="return validateCourse(this)">
+<form:form commandName="course" onsubmit="return validateCourse(this)" name="course">
 
 	<fmt:message key="date.format" var="dateformat" />
 	<fmt:message key="time.format" var="timeformat" />
@@ -118,15 +140,12 @@ function setStopDate() {
 				<fmt:formatDate value="${course.startTime}" type="time"
 					pattern="${timeformat}" var="startTimeTime" />
 				<input type="text" size="12" name="startTimeDate" id="startTimeDate"
-					value="<c:out value="${startTimeDate}"/>"
-					onchange="setStopDate()"
+					value="<c:out value="${startTimeDate}"/>" onchange="setStopDate()"
 					title="Datoformat: <fmt:message key="date.format.localized"/>" />
 				<a href="#" name="a1" id="Anch_startTimeDate"
 					onClick="cal1.select(document.forms[0].startTimeDate,'Anch_startTimeDate','<fmt:message key="date.format"/>'); document.getElementById('stopTimeDate').value = Anch_startTimeDate; return false;"
-					onfocus="setStopDate()"
-					title="Vis kalender"><img
-						src="<c:url value="/images/iconCalendar.gif"/>">
-				</a>
+					onfocus="setStopDate()" title="Vis kalender"><img
+						src="<c:url value="/images/iconCalendar.gif"/>"> </a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="startTimeTime" id="startTimeTime"
 					value="<c:out value="${startTimeTime}"/>"
@@ -136,8 +155,7 @@ function setStopDate() {
 						id="<c:out value="${status.expression}"/>"
 						value="<fmt:formatDate value="${time[0]}" type="date" pattern="${dateformat}"/>" />
 					<span class="fieldError"><c:out
-							value="${status.errorMessage}" escapeXml="false" />
-					</span>
+							value="${status.errorMessage}" escapeXml="false" /> </span>
 				</spring:bind>
 			</td>
 		</tr>
@@ -157,8 +175,7 @@ function setStopDate() {
 				<a href="#" name="a1" id="Anch_stopTimeDate"
 					onClick="cal1.select(document.forms[0].stopTimeDate,'Anch_stopTimeDate','<fmt:message key="date.format"/>'); return false;"
 					title="Vis kalender"><img
-						src="<c:url value="/images/iconCalendar.gif"/>">
-				</a>
+						src="<c:url value="/images/iconCalendar.gif"/>"> </a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="stopTimeTime" id="stopTimeTime"
 					value="<c:out value="${stopTimeTime}"/>"
@@ -168,8 +185,7 @@ function setStopDate() {
 						id="<c:out value="${status.expression}"/>"
 						value="<fmt:formatDate value="${time[0]}" type="date" pattern="${dateformat}"/>" />
 					<span class="fieldError"><c:out
-							value="${status.errorMessage}" escapeXml="false" />
-					</span>
+							value="${status.errorMessage}" escapeXml="false" /> </span>
 				</spring:bind>
 			</td>
 		</tr>
@@ -190,7 +206,7 @@ function setStopDate() {
 				<soak:label key="course.organization" />
 			</th>
 			<td>
-				<form:select path="organizationid">
+				<form:select path="organizationid" onchange="fillSelect(this);">
 					<form:options items="${organizations}" itemValue="id"
 						itemLabel="name" />
 				</form:select>
@@ -204,15 +220,33 @@ function setStopDate() {
 				<soak:label key="course.serviceArea" />
 			</th>
 			<td>
-				<form:select path="serviceAreaid">
-					<form:options items="${serviceareas}" itemValue="id"
-						itemLabel="name" />
-				</form:select>
-				<form:errors cssClass="fieldError" htmlEscape="false"
-					path="serviceAreaid" />
+				<spring:bind path="course.serviceAreaid">
+					<select name="<c:out value="${status.expression}"/>">
+						<c:forEach var="servicearea" items="${serviceareas}">
+							<c:choose>
+								<c:when test="${empty servicearea.id}">
+									<option value="<c:out value="${servicearea.id}"/>"
+										<c:if test="${servicearea.id == course.serviceAreaid}"> selected="selected"</c:if>>
+										<c:out value="${servicearea.name}" />
+									</option>
+								</c:when>
+								<c:otherwise>
+									<c:if
+										test="${servicearea.organizationid == course.organizationid}">
+										<option value="<c:out value="${servicearea.id}"/>"
+											<c:if test="${servicearea.id == course.serviceAreaid}"> selected="selected"</c:if>>
+											<c:out value="${servicearea.name}" />
+										</option>
+									</c:if>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+					</select>
+					<span class="fieldError"><c:out
+							value="${status.errorMessage}" escapeXml="false" /> </span>
+				</spring:bind>
 			</td>
 		</tr>
-
 		<tr>
 			<th>
 				<soak:label key="course.location" />
@@ -322,8 +356,7 @@ function setStopDate() {
 				<a href="#" name="a1" id="Anch_registerStartDate"
 					onClick="cal1.select(document.forms[0].registerStartDate,'Anch_registerStartDate','<fmt:message key="date.format"/>'); return false;"
 					title="Vis kalender"><img
-						src="<c:url value="/images/iconCalendar.gif"/>">
-				</a>
+						src="<c:url value="/images/iconCalendar.gif"/>"> </a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="registerStartTime"
 					id="registerStartTime"
@@ -334,8 +367,7 @@ function setStopDate() {
 						id="<c:out value="${status.expression}"/>"
 						value="<c:out value="${status.value}"/>" />
 					<span class="fieldError"><c:out
-							value="${status.errorMessage}" escapeXml="false" />
-					</span>
+							value="${status.errorMessage}" escapeXml="false" /> </span>
 				</spring:bind>
 			</td>
 		</tr>
@@ -355,8 +387,7 @@ function setStopDate() {
 				<a href="#" name="a1" id="Anch_reminderDate"
 					onClick="cal1.select(document.forms[0].reminderDate,'Anch_reminderDate','<fmt:message key="date.format"/>'); return false;"
 					title="Vis kalender"><img
-						src="<c:url value="/images/iconCalendar.gif"/>">
-				</a>
+						src="<c:url value="/images/iconCalendar.gif"/>"> </a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="reminderTime" id="reminderTime"
 					value="<c:out value="${reminderTime}"/>"
@@ -366,8 +397,7 @@ function setStopDate() {
 						id="<c:out value="${status.expression}"/>"
 						value="<c:out value="${status.value}"/>" />
 					<span class="fieldError"><c:out
-							value="${status.errorMessage}" escapeXml="false" />
-					</span>
+							value="${status.errorMessage}" escapeXml="false" /> </span>
 				</spring:bind>
 			</td>
 		</tr>
@@ -387,8 +417,7 @@ function setStopDate() {
 				<a href="#" name="a1" id="Anch_registerByDate"
 					onClick="cal1.select(document.forms[0].registerByDate,'Anch_registerByDate','<fmt:message key="date.format"/>'); return false;"
 					title="Vis kalender"><img
-						src="<c:url value="/images/iconCalendar.gif"/>">
-				</a>
+						src="<c:url value="/images/iconCalendar.gif"/>"> </a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="registerByTime"
 					id="registerByTime" value="<c:out value="${registerByTime}"/>"
@@ -398,8 +427,7 @@ function setStopDate() {
 						id="<c:out value="${status.expression}"/>"
 						value="<fmt:formatDate value="${time[0]}" type="date" pattern="${dateformat}"/>" />
 					<span class="fieldError"><c:out
-							value="${status.errorMessage}" escapeXml="false" />
-					</span>
+							value="${status.errorMessage}" escapeXml="false" /> </span>
 				</spring:bind>
 			</td>
 		</tr>
@@ -420,8 +448,7 @@ function setStopDate() {
 				<a href="#" name="a1" id="Anch_freezeAttendanceDate"
 					onClick="cal1.select(document.forms[0].freezeAttendanceDate,'Anch_freezeAttendanceDate','<fmt:message key="date.format"/>'); return false;"
 					title="Vis kalender"><img
-						src="<c:url value="/images/iconCalendar.gif"/>">
-				</a>
+						src="<c:url value="/images/iconCalendar.gif"/>"> </a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="freezeAttendanceTime"
 					id="freezeAttendanceTime"
@@ -432,8 +459,7 @@ function setStopDate() {
 						id="<c:out value="${status.expression}"/>"
 						value="<fmt:formatDate value="${time[0]}" type="date" pattern="${dateformat}"/>" />
 					<span class="fieldError"><c:out
-							value="${status.errorMessage}" escapeXml="false" />
-					</span>
+							value="${status.errorMessage}" escapeXml="false" /> </span>
 				</spring:bind>
 			</td>
 		</tr>

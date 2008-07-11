@@ -154,7 +154,7 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
 	}
 
     public List getSpecificRegistrations(Long courseId, Long organizationId,
-			Long serviceareaId, Boolean reserved, Boolean invoiced, 
+			Long serviceAreaId, Boolean reserved, Boolean invoiced, 
 			Boolean attended, Collection limitToCourses) {
 		// The default setup - returns everything
 		DetachedCriteria criteria = DetachedCriteria
@@ -173,8 +173,8 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
 		}
 
 		// Service area (of the applicant)
-		if ((serviceareaId != null) && (serviceareaId.intValue() != 0)) {
-			criteria.add(Restrictions.eq("serviceareaid", serviceareaId));
+		if ((serviceAreaId != null) && (serviceAreaId.intValue() != 0)) {
+			criteria.add(Restrictions.eq("serviceAreaid", serviceAreaId));
 		}
 
 		// Applicant has reservation or is on waiting list

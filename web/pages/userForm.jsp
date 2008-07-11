@@ -1,5 +1,6 @@
 <%@ include file="/common/taglibs.jsp"%>
 
+
 <spring:bind path="user.*">
 	<c:if test="${not empty status.errorMessages}">
 		<div class="error">
@@ -13,7 +14,8 @@
 	</c:if>
 </spring:bind>
 
-<form:form commandName="user" onsubmit="return onFormSubmit(this)">
+<form:form commandName="user" onsubmit="return onFormSubmit(this)"
+	name="user">
 
 	<form:hidden path="version" />
 
@@ -35,19 +37,10 @@
 				<td class="buttonBar">
 					<input type="submit" class="button" name="save"
 						onclick="bCancel=false" value="<fmt:message key="button.save"/>" />
-					<%-- <c:if test="${param.from == 'list'}">
-            <input type="submit" class="button" name="delete"
-                onclick="bCancel=true;return confirmDelete('user')" 
-                value="<fmt:message key="button.delete"/>" />
-        </c:if> --%>
+					<input type="button" class="button" name="cancel"
+						onclick="javascript:history.go(-1)"
+						value="<fmt:message key="button.cancel"/>" />
 
-					<%-- 
-					<input type="submit" class="button" name="cancel"
-						onclick="bCancel=true" value="<fmt:message key="button.cancel"/>" />
-						--%>
-				    <input type="button" class="button" name="cancel" onclick="javascript:history.go(-1)"
-                value="<fmt:message key="button.cancel"/>" />
-						
 				</td>
 			</tr>
 		</c:set>
@@ -67,34 +60,6 @@
 				</c:choose>
 			</td>
 		</tr>
-		<%--
-    <c:if test="${cookieLogin != 'true'}">
-    <tr>
-        <th>
-           <soak:label key="user.password"/>
-        </th>
-        <td>
-            <spring:bind path="user.password">
-            <input type="password" id="password" name="password" size="40" 
-                value="<c:out value="${status.value}"/>" onchange="passwordChanged(this)"/>
-            <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
-        </td>
-    </tr>
-    <tr>
-        <th>
-            <soak:label key="user.confirmPassword"/>
-        </th>
-        <td>
-            <spring:bind path="user.confirmPassword">
-            <input type="password" name="confirmPassword" id="confirmPassword"
-                value="<c:out value="${status.value}"/>" size="40"/>
-            <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
-        </td>
-    </tr>
-    </c:if>
-    --%>
 		<tr>
 			<th>
 				<soak:label key="user.employeeNumber" />
@@ -110,13 +75,13 @@
 			</th>
 			<td>
 				<c:choose>
-				<c:when test="${user.id == '0'}">
-					<form:input path="firstName" />
-					<form:errors cssClass="fieldError" path="firstName" />
-				</c:when>
-				<c:otherwise>
-				<c:out value="${user.firstName}" />
-				</c:otherwise>
+					<c:when test="${user.id == '0'}">
+						<form:input path="firstName" />
+						<form:errors cssClass="fieldError" path="firstName" />
+					</c:when>
+					<c:otherwise>
+						<c:out value="${user.firstName}" />
+					</c:otherwise>
 				</c:choose>
 			</td>
 		</tr>
@@ -126,13 +91,13 @@
 			</th>
 			<td>
 				<c:choose>
-				<c:when test="${user.id == '0'}">
-					<form:input path="lastName" />
-					<form:errors cssClass="fieldError" path="lastName" />
-				</c:when>
-				<c:otherwise>
-				<c:out value="${user.lastName}" />
-				</c:otherwise>
+					<c:when test="${user.id == '0'}">
+						<form:input path="lastName" />
+						<form:errors cssClass="fieldError" path="lastName" />
+					</c:when>
+					<c:otherwise>
+						<c:out value="${user.lastName}" />
+					</c:otherwise>
 				</c:choose>
 			</td>
 		</tr>
@@ -154,15 +119,6 @@
 				<form:errors cssClass="fieldError" path="address.city" />
 			</td>
 		</tr>
-		<%-- <tr>
-			<th>
-				<soak:label key="user.address.province" />
-			</th>
-			<td>
-				<form:input path="address.province" />
-				<form:errors cssClass="fieldError" path="address.province" />
-			</td>
-		</tr> --%>
 		<tr>
 			<th>
 				<soak:label key="user.address.country" />
@@ -210,7 +166,7 @@
 				<form:errors cssClass="fieldError" path="mobilePhone" />
 			</td>
 		</tr>
-		
+
 		<tr>
 			<th>
 				<soak:label key="user.closestLeader" />
@@ -220,7 +176,7 @@
 				<form:errors cssClass="fieldError" path="closestLeader" />
 			</td>
 		</tr>
-		
+
 		<tr>
 			<th>
 				<soak:label key="user.jobTitle" />
@@ -253,26 +209,17 @@
 				</c:if>
 			</td>
 		</tr>
-		<%--<tr>
-        <th>
-            <soak:label key="user.passwordHint"/>
-        </th>
-        <td>
-            <spring:bind path="user.passwordHint">
-            <input type="text" name="passwordHint" value="<c:out value="${status.value}"/>" id="passwordHint" size="50"/>
-            <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
-        </td>
-    </tr> --%>
 		<tr>
 			<th>
-				<soak:label key="user.organization" />
+				<soak:label key="course.organization" />
 			</th>
 			<td>
-				<form:select path="organizationid">
-					<form:options items="${organizations}" itemValue="id" itemLabel="name" />
+				<form:select path="organizationid" onchange="fillSelect(this);">
+					<form:options items="${organizations}" itemValue="id"
+						itemLabel="name" />
 				</form:select>
-				<form:errors cssClass="fieldError" htmlEscape="false" path="organizationid" />
+				<form:errors cssClass="fieldError" htmlEscape="false"
+					path="organizationid" />
 			</td>
 		</tr>
 		<tr>
@@ -280,13 +227,35 @@
 				<soak:label key="user.servicearea" />
 			</th>
 			<td>
-				<form:select path="serviceareaid">
-					<form:options items="${serviceareas}" itemValue="id" itemLabel="name" />
-				</form:select>
-				<form:errors cssClass="fieldError" htmlEscape="false" path="serviceareaid" />
+				<spring:bind path="user.serviceAreaid">
+					<select name="<c:out value="${status.expression}"/>">
+						<c:forEach var="servicearea" items="${serviceareas}">
+							<c:choose>
+								<c:when test="${empty servicearea.id}">
+									<option value="<c:out value="${servicearea.id}"/>"
+										<c:if test="${servicearea.id == user.serviceAreaid}"> selected="selected"</c:if>>
+										<c:out value="${servicearea.name}" />
+									</option>
+								</c:when>
+								<c:otherwise>
+									<c:if
+										test="${servicearea.organizationid == user.organizationid}">
+										<option value="<c:out value="${servicearea.id}"/>"
+											<c:if test="${servicearea.id == user.serviceAreaid}"> selected="selected"</c:if>>
+											<c:out value="${servicearea.name}" />
+										</option>
+									</c:if>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+					</select>
+					<span class="fieldError"><c:out
+							value="${status.errorMessage}" escapeXml="false" /> </span>
+				</spring:bind>
 			</td>
 		</tr>
-		  		<tr>
+
+		<tr>
 			<th>
 				<soak:label key="user.invoiceAddress" />
 			</th>
@@ -348,59 +317,6 @@
 				</td>
 			</tr>
 		</c:if>
-		<%--
-   <tr>
-        <td></td>
-        <td>
-            <fieldset class="pickList">
-                <legend>
-                    <fmt:message key="userProfile.assignRoles"/>
-                </legend>
-	            <table class="pickList">
-	                <tr>
-	                    <th class="pickLabel">
-	                        <soak:label key="user.availableRoles" 
-	                            colon="false" styleClass="required"/>
-	                    </th>
-	                    <td>
-	                    </td>
-	                    <th class="pickLabel">
-	                        <soak:label key="user.roles"
-	                            colon="false" styleClass="required"/>
-	                    </th>
-	                </tr>
-	                <c:set var="leftList" value="${availableRoles}" scope="request"/>
-	                <c:set var="rightList" value="${user.roleList}" scope="request"/>
-	                <c:import url="/WEB-INF/pages/pickList.jsp">
-	                    <c:param name="listCount" value="1"/>
-	                    <c:param name="leftId" value="availableRoles"/>
-	                    <c:param name="rightId" value="userRoles"/>
-	                </c:import>
-	            </table>
-            </fieldset>
-        </td>
-    </tr>
-    </c:when>
-    <c:when test="${not empty user.username}">
-    <tr>
-        <th>
-            <soak:label key="user.roles"/>
-        </th>
-        <td>
-        <c:forEach var="role" items="${user.roleList}" varStatus="status">
-            <c:out value="${role.label}"/><c:if test="${!status.last}">,</c:if>
-            <input type="hidden" name="userRoles" 
-                value="<c:out value="${role.label}"/>" />
-        </c:forEach>
-            <spring:bind path="user.enabled">
-            <input type="hidden" name="<c:out value="${status.expression}"/>" value="<c:out value="${status.value}"/>" /> 
-            </spring:bind>
-        </td>
-    </tr>
-    </c:when>
-</c:choose> 
---%>
-
 
 		<%-- Print out buttons - defined at top of form --%>
 		<%-- This is so you can put them at the top and the bottom if you like --%>
@@ -417,11 +333,11 @@ highlightFormElements();
 <c:when test="${cookieLogin == 'true'}"><c:set var="focus" value="firstName"/></c:when>
 <c:otherwise><c:set var="focus" value="password"/></c:otherwise></c:choose>
 
-var focusControl = document.forms["userForm"].elements["<c:out value="${focus}"/>"];
+// var focusControl = document.forms["userForm"].elements["<c:out value="${focus}"/>"];
 
-if (focusControl.type != "hidden" && !focusControl.disabled) {
-    focusControl.focus();
-}
+// if (focusControl.type != "hidden" && !focusControl.disabled) {
+//    focusControl.focus();
+// }
 
 function passwordChanged(passwordField) {
     var origPassword = "<c:out value="${user.password}"/>";
@@ -439,7 +355,33 @@ function onFormSubmit(theForm) {
 </c:if>
     return validateUser(theForm);
 }
+
+// Code to change the select list for service aera based on organization id.
+function fillSelect(obj){
+ var orgid=obj.options[obj.selectedIndex].value;
+ // var tempopt = document.form.serviceaeraid.options
+ var temp= document.user.serviceAreaid;
+  
+ while(temp.firstChild){
+ 	temp.removeChild(temp.firstChild);
+ }
+ 
+ var j = 0;
+	<c:forEach var="servicearea" items="${serviceareas}">
+		if ("<c:out value="${servicearea.id}"/>" == ""){
+			temp.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>", true);
+			j++
+		}
+		else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
+			temp.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>");
+			j++ 
+		}
+	</c:forEach>
+}
+
 // -->
+
+
 </script>
 
 <v:javascript formName="user" staticJavascript="false" />

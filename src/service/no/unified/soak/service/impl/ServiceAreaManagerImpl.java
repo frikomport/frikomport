@@ -52,6 +52,7 @@ public class ServiceAreaManagerImpl extends BaseManager
         List serviceAreas = new ArrayList();
         ServiceArea dummy = new ServiceArea();
         dummy.setId(null);
+        dummy.setOrganizationid(new Long("0"));
         dummy.setName(value);
         serviceAreas.add(dummy);
         serviceAreas.addAll(getAll());

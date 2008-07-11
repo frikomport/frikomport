@@ -23,3 +23,5 @@ ALTER TABLE app_user ADD COLUMN closest_leader varchar(150);
 
 ALTER TABLE course ADD COLUMN copyid bigint(20);
 
+ALTER TABLE servicearea ADD COLUMN organizationid bigint (20) NOT NULL;
+

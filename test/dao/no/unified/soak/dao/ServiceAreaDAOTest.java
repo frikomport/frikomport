@@ -50,6 +50,7 @@ public class ServiceAreaDAOTest extends BaseDAOTestCase {
 
         Boolean selectable = new Boolean("true");
         serviceArea.setSelectable(selectable);
+        serviceArea.setOrganizationid(new Long(1));
 
         dao.saveServiceArea(serviceArea);
 

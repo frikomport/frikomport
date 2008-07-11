@@ -109,7 +109,7 @@ public interface RegistrationDAO extends DAO {
 	 * @return List of Courses
 	 */
 	public List getSpecificRegistrations(Long courseId, Long organizationId,
-			Long serviceareaId, Boolean reserved, Boolean invoiced, 
+			Long serviceAreaId, Boolean reserved, Boolean invoiced, 
 			Boolean attended, Collection limitToCourses);
 
 	/**

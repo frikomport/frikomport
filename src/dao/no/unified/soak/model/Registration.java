@@ -68,7 +68,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	private Long courseid;
 
-	private Long serviceareaid;
+	private Long serviceAreaid;
 
     private String username;
 
@@ -394,19 +394,19 @@ public class Registration extends BaseObject implements Serializable {
 	}
 
 	/**
-	 * @return Returns the serviceareaid.
+	 * @return Returns the serviceAreaid.
 	 * @hibernate.property column="serviceareaid" not-null="false"
 	 */
-	public Long getServiceareaid() {
-		return serviceareaid;
+	public Long getServiceAreaid() {
+		return serviceAreaid;
 	}
 
 	/**
-	 * @param serviceareaid
-	 *            The serviceareaid to set.
+	 * @param serviceAreaid
+	 *            The serviceAreaid to set.
 	 */
-	public void setServiceareaid(Long serviceareaid) {
-		this.serviceareaid = serviceareaid;
+	public void setServiceAreaid(Long serviceAreaid) {
+		this.serviceAreaid = serviceAreaid;
 	}
 
     /**
@@ -472,7 +472,7 @@ public class Registration extends BaseObject implements Serializable {
 		return new ToStringBuilder(this).append("id", id).append("jobTitle", jobTitle).append("employeeNumber",
 				employeeNumber).append("firstName", firstName).append("lastName", lastName)
 				.append("reserved", reserved).append("invoiced", invoiced).append("organizationid", organizationid)
-				.append("courseid", courseid).append("serviceareaid", serviceareaid).toString();
+				.append("courseid", courseid).append("serviceareaid", serviceAreaid).toString();
 	}
 
     /**

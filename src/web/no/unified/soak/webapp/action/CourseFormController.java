@@ -142,7 +142,7 @@ public class CourseFormController extends BaseFormController {
         Locale locale = request.getLocale();
         
         // Retrieve all serviceareas into an array
-		List serviceAreas = serviceAreaManager.getAll();
+		List serviceAreas = serviceAreaManager.getAllIncludingDummy(getText("misc.none", locale));
 		if (serviceAreas != null) {
 			model.put("serviceareas", serviceAreas);
 		}

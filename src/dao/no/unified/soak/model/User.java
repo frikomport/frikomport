@@ -54,7 +54,7 @@ public class User extends BaseObject implements Serializable {
     protected String jobTitle;
     protected String workplace;
     protected ServiceArea serviceArea;
-    protected Long serviceareaid;
+    protected Long serviceAreaid;
     protected String hash;
     protected String invoiceName;
     protected Address invoiceAddress = new Address();
@@ -443,18 +443,18 @@ public class User extends BaseObject implements Serializable {
 	}
 
 	/**
-	 * @return Returns the serviceareaid.
+	 * @return Returns the serviceAreaid.
 	 * @hibernate.property column="serviceareaid" not-null="false"
 	 */
-	public Long getServiceareaid() {
-		return serviceareaid;
+	public Long getServiceAreaid() {
+		return serviceAreaid;
 	}
 
 	/**
-	 * @param serviceareaid The serviceareaid to set.
+	 * @param serviceAreaid The serviceAreaid to set.
 	 */
-	public void setServiceareaid(Long serviceareaid) {
-		this.serviceareaid = serviceareaid;
+	public void setServiceAreaid(Long serviceAreaid) {
+		this.serviceAreaid = serviceAreaid;
 	}
 
 

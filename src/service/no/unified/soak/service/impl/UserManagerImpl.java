@@ -415,7 +415,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		user.setJobTitle(registration.getJobTitle());
 		user.setWorkplace(registration.getWorkplace());
 		user.setOrganizationid(registration.getOrganizationid());
-		user.setServiceareaid(registration.getServiceareaid());
+		user.setServiceAreaid(registration.getServiceAreaid());
 		user.setInvoiceName(registration.getInvoiceName());
 		user.setInvoiceAddress(registration.getInvoiceAddress());
 		user.setClosestLeader(registration.getClosestLeader());

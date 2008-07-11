@@ -113,7 +113,7 @@ public class RegistrationController extends BaseFormController {
 
         String serviceareaid = request.getParameter("sid");
         if ((serviceareaid != null) && StringUtils.isNumeric(serviceareaid)) {
-            registration.setServiceareaid(new Long(serviceareaid));
+            registration.setServiceAreaid(new Long(serviceareaid));
         }
 
         // String reserved = request.getParameter("reserved");
@@ -159,7 +159,7 @@ public class RegistrationController extends BaseFormController {
         // Fetch all registrations that match the parameters
         List registrations = registrationManager.getSpecificRegistrations(registration.getCourseid(),
                 registration.getOrganizationid(),
-                registration.getServiceareaid(), reserved, invoiced, attended, courseIds);
+                registration.getServiceAreaid(), reserved, invoiced, attended, courseIds);
 
         if (registrations != null) {
             model.put("registrationList", registrations);
@@ -280,7 +280,7 @@ public class RegistrationController extends BaseFormController {
         model.put("registrationList",
             registrationManager.getSpecificRegistrations(
                 registration.getCourseid(), registration.getOrganizationid(),
-                registration.getServiceareaid(), registration.getReserved(),
+                registration.getServiceAreaid(), registration.getReserved(),
                 registration.getInvoiced(), registration.getAttended(), courseIds));
 
         return new ModelAndView(getSuccessView(), model);

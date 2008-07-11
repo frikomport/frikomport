@@ -60,7 +60,7 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		registration.setReserved(reserved);
 
 		Long serviceareaid = new Long(1);
-		registration.setServiceareaid(serviceareaid);
+		registration.setServiceAreaid(serviceareaid);
 		
 		String firstname = new String("fn");
 		registration.setFirstName(firstname);
@@ -94,7 +94,7 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		assertEquals(organizationid, registration.getOrganizationid());
 		assertEquals(registered, registration.getRegistered());
 		assertEquals(reserved, registration.getReserved());
-		assertEquals(serviceareaid, registration.getServiceareaid());
+		assertEquals(serviceareaid, registration.getServiceAreaid());
 		assertEquals(locale, registration.getLocale());
 		assertEquals(comment, registration.getComment());
 		assertEquals(attended, registration.getAttended());
@@ -138,14 +138,14 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 	public void testGetSpecificRegistrations() throws Exception {
 		Long courseId = new Long(1);
 		Long organizationId = new Long(1);
-		Long serviceareaId = new Long(1);
+		Long serviceAreaId = new Long(1);
 		Boolean reserved = new Boolean(true);
 		Boolean invoiced = new Boolean(true);
 		Boolean attended = new Boolean(false);
 		List limitToCourses = null;
 
 		List courses = dao.getSpecificRegistrations(courseId, organizationId,
-				serviceareaId, reserved, invoiced, attended, limitToCourses);
+				serviceAreaId, reserved, invoiced, attended, limitToCourses);
 		assertTrue(courses.size() == 1);
 	}
 
@@ -174,8 +174,8 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		Boolean reserved = new Boolean("false");
 		registration.setReserved(reserved);
 
-		Long serviceareaid = new Long(2);
-		registration.setServiceareaid(serviceareaid);
+		Long serviceAreaid = new Long(2);
+		registration.setServiceAreaid(serviceAreaid);
 		
 		Boolean attended = new Boolean("false");
 		registration.setAttended(attended);
@@ -187,7 +187,7 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		assertEquals(organizationid, registration.getOrganizationid());
 		assertEquals(registered, registration.getRegistered());
 		assertEquals(reserved, registration.getReserved());
-		assertEquals(serviceareaid, registration.getServiceareaid());
+		assertEquals(serviceAreaid, registration.getServiceAreaid());
 		assertEquals(attended, registration.getAttended());
 	}
 

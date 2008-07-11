@@ -34,6 +34,8 @@ public class ServiceArea extends BaseObject implements Serializable {
     private Long Id;
     private String name;
     private Boolean selectable;
+    private Organization organization;
+    private Long organizationid;
 
     /**
      * @return Returns the id.
@@ -83,6 +85,47 @@ public class ServiceArea extends BaseObject implements Serializable {
      */
     public void setSelectable(Boolean selectable) {
         this.selectable = selectable;
+    }
+    
+    /**
+	 * Returns the organization.
+	 * 
+	 * @return Organization
+	 * 
+	 * @hibernate.many-to-one column="organizationid" insert="false"
+	 *                        update="false" not-found="ignore" not-null="true" 
+	 *                        
+	 * 
+	 */
+	public Organization getOrganization() {
+		return organization;
+	}
+
+    /**
+	 * Sets the organization.
+	 * 
+	 * @param organization
+	 *            The organization to set
+	 * 
+	 */
+	public void setOrganization(Organization organization) {
+		this.organization = organization;
+	}
+
+     /**
+     * @return Returns the organizationid.
+     * @hibernate.property column="organizationid" not-null="true"
+     */
+    public Long getOrganizationid() {
+        return organizationid;
+    }
+
+    /**
+     * @param organizationid
+     *            The organizationid to set.
+     */
+    public void setOrganizationid(Long organizationid) {
+        this.organizationid = organizationid;
     }
 
     /**

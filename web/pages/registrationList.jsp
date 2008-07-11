@@ -34,11 +34,11 @@
 		        <soak:label key="registration.serviceArea"/>
 		    </th>
 		    <td>
-		        <spring:bind path="registration.serviceareaid">
+		        <spring:bind path="registration.serviceAreaid">
 					  <select name="<c:out value="${status.expression}"/>">
 					    <c:forEach var="servicearea" items="${serviceareas}">
 					      <option value="<c:out value="${servicearea.id}"/>"
-						      <c:if test="${servicearea.id == registration.serviceareaid}"> selected="selected"</c:if>>
+						      <c:if test="${servicearea.id == registration.serviceAreaid}"> selected="selected"</c:if>>
 					        <c:out value="${servicearea.name}"/>
 					      </option>
 					    </c:forEach>

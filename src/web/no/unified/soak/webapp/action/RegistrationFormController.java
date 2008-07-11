@@ -188,8 +188,8 @@ public class RegistrationFormController extends BaseFormController {
 				if ((user.getOrganizationid() != null) && (user.getOrganizationid() != 0)) {
 					registration.setOrganizationid(user.getOrganizationid());
 				}
-				if ((user.getServiceareaid() != null) && (user.getServiceareaid() != 0)) {
-					registration.setServiceareaid(user.getServiceareaid());
+				if ((user.getServiceAreaid() != null) && (user.getServiceAreaid() != 0)) {
+					registration.setServiceAreaid(user.getServiceAreaid());
 				}
 				registration.setInvoiceName(user.getInvoiceName());
 				registration.setInvoiceAddress(user.getInvoiceAddressCopy());

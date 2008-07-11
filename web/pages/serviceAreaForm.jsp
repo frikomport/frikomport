@@ -39,6 +39,19 @@
             <form:errors cssClass="fieldError" path="selectable"/>
         </td>
     </tr>
+    <tr>
+			<th>
+				<soak:label key="serviceArea.organization" />
+			</th>
+			<td>
+				<form:select path="organizationid">
+					<form:options items="${organizations}" itemValue="id"
+						itemLabel="name" />
+				</form:select>
+				<form:errors cssClass="fieldError" htmlEscape="false"
+					path="organizationid" />
+			</td>
+		</tr>
 
     <tr>
         <td></td>
