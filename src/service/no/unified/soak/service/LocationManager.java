@@ -58,4 +58,11 @@ public interface LocationManager extends Manager {
      * @return list of all locations that applies to the given criteria
      */
     public List searchLocations(Location location);
+    
+    /**
+     * Gets all locations including a dummy
+     * @param Value of the dummy organization
+     * @return
+     */
+    public List getAllIncludingDummy(Location location, Boolean includeDisabled, String dummy);
 }

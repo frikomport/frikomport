@@ -13,6 +13,17 @@ function setStopDate() {
 	}
 }
 
+function setMaxAttendants(obj) {
+	var locid= obj.options[obj.selectedIndex].value;
+ 	
+	<c:forEach var="location" items="${locations}">
+		if (("<c:out value="${location.id}"/>" != "") && ("<c:out value="${location.id}"/>" == locid)){
+			document.getElementById('maxAttendants').value = <c:out value="${location.maxAttendants}"/>
+		}
+	</c:forEach>
+
+}
+
 // Code to change the select list for service aera based on organization id.
 function fillSelect(obj){
  var orgid=obj.options[obj.selectedIndex].value;
@@ -252,7 +263,7 @@ function fillSelect(obj){
 				<soak:label key="course.location" />
 			</th>
 			<td>
-				<form:select path="locationid">
+				<form:select path="locationid" onchange="setMaxAttendants(this)">
 					<form:options items="${locations}" itemValue="id" itemLabel="name" />
 				</form:select>
 				<form:errors cssClass="fieldError" htmlEscape="false"
@@ -267,7 +278,7 @@ function fillSelect(obj){
 			<td>
 				<form:select path="responsibleid">
 					<form:options items="${responsible}" itemValue="id"
-						itemLabel="fullName" />
+						itemLabel="fullName"  />
 				</form:select>
 				<form:errors cssClass="fieldError" htmlEscape="false"
 					path="responsibleid" />

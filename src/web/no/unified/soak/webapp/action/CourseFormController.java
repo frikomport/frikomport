@@ -29,6 +29,7 @@ import javax.servlet.http.HttpSession;
 import no.unified.soak.Constants;
 import no.unified.soak.model.Attachment;
 import no.unified.soak.model.Course;
+import no.unified.soak.model.Location;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.User;
 import no.unified.soak.service.AttachmentManager;
@@ -165,7 +166,7 @@ public class CourseFormController extends BaseFormController {
         }
 
 		// Retrieve all locations into an array
-		List locations = locationManager.getLocations(null, new Boolean(false));
+		List <Location> locations = locationManager.getAllIncludingDummy(null, new Boolean(false), getText("misc.none", locale));
 		if (locations != null) {
 			model.put("locations", locations);
 		}

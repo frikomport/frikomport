@@ -10,11 +10,12 @@
  */
 package no.unified.soak.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import no.unified.soak.dao.LocationDAO;
 import no.unified.soak.model.Location;
 import no.unified.soak.service.LocationManager;
-
-import java.util.List;
 
 
 /**
@@ -69,5 +70,16 @@ public class LocationManagerImpl extends BaseManager implements LocationManager 
      */
     public List searchLocations(Location location) {
         return dao.searchLocations(location);
+    }
+    
+    public List getAllIncludingDummy(Location location, Boolean includeDisabled, String dummy) {
+        List locations = new ArrayList();
+        Location locationDummy = new Location();
+        locationDummy.setId(null);
+        locationDummy.setName(dummy);
+        locationDummy.setMaxAttendants(0);
+        locations.add(locationDummy);
+        locations.addAll(getLocations(location, includeDisabled));
+        return locations;
     }
 }
