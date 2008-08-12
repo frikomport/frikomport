@@ -10,16 +10,15 @@
  */
 package no.unified.soak.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import no.unified.soak.dao.OrganizationDAO;
 import no.unified.soak.model.Organization;
 import no.unified.soak.service.impl.OrganizationManagerImpl;
 
 import org.jmock.Mock;
-
 import org.springframework.orm.ObjectRetrievalFailureException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -156,4 +155,19 @@ public class OrganizationManagerTest extends BaseManagerTestCase {
         assertTrue(organizationlist.size() == 1);
         organizationDAO.verify();
     }
+    
+    public void testGetAllIncludingDummy() throws Exception {
+        List results = new ArrayList();
+        organization = new Organization();
+        results.add(organization);
+
+        // set expected behavior on dao
+        organizationDAO.expects(once()).method("getAll")
+                         .will(returnValue(results));
+
+        List organizationlist = organizationManager.getAllIncludingDummy("Dummy");
+        assertTrue(organizationlist.size() == 2);
+        organizationDAO.verify();
+    }
+
 }

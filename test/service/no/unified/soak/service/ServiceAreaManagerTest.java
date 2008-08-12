@@ -82,6 +82,21 @@ public class ServiceAreaManagerTest extends BaseManagerTestCase {
         assertTrue(serviceAreas.size() == 1);
         serviceAreaDAO.verify();
     }
+    
+    public void testGetServiceAreasIncludingDummy()
+    throws Exception {
+    List results = new ArrayList();
+    serviceArea = new ServiceArea();
+    results.add(serviceArea);
+
+    // set expected behavior on dao
+    serviceAreaDAO.expects(once()).method("getAll")
+                  .will(returnValue(results));
+
+    List serviceAreas = serviceAreaManager.getAllIncludingDummy("Dummy");
+    assertTrue(serviceAreas.size() == 2);
+    serviceAreaDAO.verify();
+}
 
     /**
      * Test getting a single Service Area using a mock DAO

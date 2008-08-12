@@ -10,16 +10,15 @@
  */
 package no.unified.soak.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import no.unified.soak.dao.LocationDAO;
 import no.unified.soak.model.Location;
 import no.unified.soak.service.impl.LocationManagerImpl;
 
 import org.jmock.Mock;
-
 import org.springframework.orm.ObjectRetrievalFailureException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -160,4 +159,19 @@ public class LocationManagerTest extends BaseManagerTestCase {
 
         locationDAO.verify();
     }
+    
+    public void testGetAllIncludingDummy() throws Exception {
+        List results = new ArrayList();
+        location = new Location();
+        results.add(location);
+
+        // set expected behavior on dao
+        locationDAO.expects(once()).method("getLocations")
+                         .will(returnValue(results));
+
+        List locationlist = locationManager.getAllIncludingDummy(null, true,"Dummy");
+        assertTrue(locationlist.size() == 2);
+        locationDAO.verify();
+    }
+
 }
