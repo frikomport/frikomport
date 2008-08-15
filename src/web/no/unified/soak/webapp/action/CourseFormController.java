@@ -172,7 +172,7 @@ public class CourseFormController extends BaseFormController {
 		}
 
 		// Retrieve all organization into an array
-		List organizations = organizationManager.getAll();
+		List organizations = organizationManager.getAllIncludingDummy(getText("misc.none", locale));
 		if (organizations != null) {
 			model.put("organizations", organizations);
 		}
