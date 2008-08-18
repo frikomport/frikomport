@@ -54,7 +54,7 @@
 
 <c:if test="${(isAdmin || isEducationResponsible || isCourseResponsible || isCourseParticipant) && isPublished}">
             <c:if test="${allowRegistration == true}">
-			    <button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="courseid" value="${course.id}"/></c:url>'">
+			    <button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 		    	    <fmt:message key="button.signup"/>
 			    </button>
 			</c:if>
@@ -74,13 +74,13 @@
 
 <c:choose>
 	<c:when test="${(isAdmin || isEducationResponsible || isCourseResponsible) && isPublished}">
-		    <button type="button" onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseid" value="${course.id}"/></c:url>'">
+		    <button type="button" onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.administerRegistrations"/>
 		    </button>
 	</c:when>
 	<c:otherwise>
 		<c:if test="${isCourseParticipant}">
-		    <button type="button" onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseid" value="${course.id}"/></c:url>'">
+		    <button type="button" onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.displayRegistrations"/>
 		    </button>
 		</c:if>
@@ -88,7 +88,7 @@
 </c:choose>
 
 <c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && username == course.responsibleUsername)}">
-		    <button type="button" onclick="location.href='<c:url value="/editFileCourse.html"><c:param name="courseid" value="${course.id}"/></c:url>'">
+		    <button type="button" onclick="location.href='<c:url value="/editFileCourse.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.administerFiles"/>
 		    </button>
 </c:if>

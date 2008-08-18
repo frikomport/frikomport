@@ -587,42 +587,60 @@
 		</row>
 		<row>
 			<value>6</value>
+			<value>Administrasjon</value>
+			<value>1</value>
+			<value>6</value>
+		</row>
+		<row>
+			<value>7</value>
+			<value>Kultur</value>
+			<value>1</value>
+			<value>6</value>
+		</row>
+		<row>
+			<value>8</value>
+			<value>Helse</value>
+			<value>0</value>
+			<value>6</value>
+		</row>
+		<row>
+			<value>9</value>
 			<value>Skole</value>
 			<value>1</value>
 			<value>2</value>
 		</row>
 		<row>
-			<value>7</value>
+			<value>10</value>
 			<value>Barn og unge</value>
 			<value>1</value>
 			<value>1</value>
 		</row>
 		<row>
-			<value>8</value>
+			<value>11</value>
 			<value>Pleie- omsorg</value>
 			<value>1</value>
 			<value>1</value>
 		</row>
 		<row>
-			<value>9</value>
+			<value>12</value>
 			<value>Administrasjon</value>
 			<value>1</value>
 			<value>1</value>
 		</row>
 		<row>
-			<value>10</value>
+			<value>13</value>
 			<value>Kultur</value>
 			<value>1</value>
 			<value>1</value>
 		</row>
 		<row>
-			<value>11</value>
+			<value>14</value>
 			<value>Helse</value>
 			<value>0</value>
 			<value>1</value>
 		</row>
 		<row>
-			<value>12</value>
+			<value>15</value>
 			<value>Skole</value>
 			<value>1</value>
 			<value>1</value>
@@ -821,11 +839,11 @@
 		<column>email</column>
 		<column>employeenumber</column>
 		<column>firstname</column>
+		<column>lastname</column>
 		<column>id</column>
 		<column>invoiced</column>
 		<column>closest_leader</column>
 		<column>jobtitle</column>
-		<column>lastname</column>
 		<column>mobilephone</column>
 		<column>organizationid</column>
 		<column>phone</column>
@@ -847,11 +865,11 @@
 			<value>frikomport@gmail.com</value>
 			<value>12345</value>
 			<value>Henrik</value>
-			<value>1</value>
-			<value>1</value>
-			<value>Barnehageassistent</value>
-			<value>Hans Hansen</value>
 			<value>Gmailsen</value>
+			<value>1</value>
+			<value>1</value>
+			<value>Hans Hansen</value>
+			<value>Barnehageassistent</value>
 			<value>99887766</value>
 			<value>1</value>
 			<value>55544332</value>
@@ -875,11 +893,11 @@
 			<value>frikomport@gmail.com</value>
 			<value>54321</value>
 			<value>Klaus</value>
+			<value>Staftatoo</value>
 			<value>2</value>
 			<value>0</value>
-			<value>Assisterende assistent</value>
 			<value>Hans Hansen</value>
-			<value>Staftatoo</value>
+			<value>Assisterende assistent</value>
 			<value>99778866</value>
 			<value>2</value>
 			<value>55332211</value>
@@ -902,11 +920,11 @@
 			<value>frikomport@gmail.com</value>
 			<value>51342</value>
 			<value>Frik</value>
+			<value>Omport</value>
 			<value>3</value>
 			<value>1</value>
-			<value>Sjefssjef</value>
 			<value>Hans Hansen</value>
-			<value>Omport</value>
+			<value>Sjefssjef</value>
 			<value>66887766</value>
 			<value>2</value>
 			<value>55221144</value>
@@ -929,11 +947,11 @@
 			<value>frikomport@gmail.com</value>
 			<value>12345</value>
 			<value>Hinrek</value>
+			<value>Hinreksen</value>
 			<value>4</value>
 			<value>0</value>
-			<value>Adm. dir</value>
 			<value>Hans Hansen</value>
-			<value>Hinreksen</value>
+			<value>Adm. dir</value>
 			<value>99556688</value>
 			<value>2</value>
 			<value>55123456</value>
@@ -956,11 +974,11 @@
 			<value>frikomport@gmail.com</value>
 			<value>54321</value>
 			<value>Klausern</value>
+			<value>Unified</value>
 			<value>5</value>
 			<value>0</value>
-			<value>Adm. dir</value>
 			<value>Hans Hansen</value>
-			<value>Unified</value>
+			<value>Adm. dir</value>
 			<value>99556688</value>
 			<value>2</value>
 			<value>55123456</value>
@@ -983,11 +1001,11 @@
 			<value>frikomport@gmail.com</value>
 			<value>99999</value>
 			<value>Henrik</value>
+			<value>RouyerGmailsen</value>
 			<value>6</value>
 			<value>0</value>
-			<value>Adm. dir</value>
 			<value>Hans Hansen</value>
-			<value>RouyerGmailsen</value>
+			<value>Adm. dir</value>
 			<value>99556688</value>
 			<value>2</value>
 			<value>55123456</value>
@@ -1010,11 +1028,11 @@
 			<value>acr@unified.no</value>
 			<value>88888</value>
 			<value>Henrik</value>
+			<value>JobbOgGmailsen</value>
 			<value>7</value>
 			<value>0</value>
-			<value>Adm. dir</value>
 			<value>Hans Hansen</value>
-			<value>JobbOgGmailsen</value>
+			<value>Adm. dir</value>
 			<value>99556688</value>
 			<value>1</value>
 			<value>55123456</value>
@@ -1037,11 +1055,11 @@
 			<value>frikomport@gmail.com</value>
 			<value>77777</value>
 			<value>Klaus</value>
+			<value>JobbOgHjemmesen</value>
 			<value>8</value>
 			<value>0</value>
-			<value>Adm. dir</value>
 			<value>Hans Hansen</value>
-			<value>JobbOgHjemmesen</value>
+			<value>Adm. dir</value>
 			<value>99556688</value>
 			<value>1</value>
 			<value>55123456</value>
@@ -1064,11 +1082,11 @@
 			<value>frikomport@gmail.com</value>
 			<value>66666</value>
 			<value>Kari</value>
+			<value>HarIkkeMailsen</value>
 			<value>9</value>
 			<value>0</value>
-			<value>Adm. dir</value>
 			<value>Hans Hansen</value>
-			<value>HarIkkeMailsen</value>
+			<value>Adm. dir</value>
 			<value>99556688</value>
 			<value>2</value>
 			<value>55123456</value>
@@ -1091,11 +1109,11 @@
 			<value>frikomport@gmail.com</value>
 			<value>55555</value>
 			<value>FriKomporten</value>
+			<value>Sensensensen</value>
 			<value>10</value>
 			<value>0</value>
-			<value>Adm. dir</value>
 			<value>Hans Hansen</value>
-			<value>Sensensensen</value>
+			<value>Adm. dir</value>
 			<value>99556688</value>
 			<value>2</value>
 			<value>55123456</value>

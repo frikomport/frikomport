@@ -224,7 +224,7 @@
 				onclick="bCancel=true" value="<fmt:message key="button.return"/>" />
 			<c:if test="userdefaults == true">
 				<button type="button"
-					onclick="location.href='<c:url value="/performRegistration.html"><c:param name="courseid" value="${course.id}"/></c:url>'">
+					onclick="location.href='<c:url value="/performRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 					<fmt:message key="button.onemore" />
 				</button>
 			</c:if>

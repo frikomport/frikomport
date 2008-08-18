@@ -145,7 +145,7 @@
 
 	<c:if test="${(admin == true || canDelete == true) && allowEditRegistration == true}">
 	<display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-		<button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseid" value="${registrationList.courseid}"/></c:url>'">
+		<button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseId" value="${registrationList.courseid}"/></c:url>'">
 			<fmt:message key="button.edit"/>
 		</button>
 		<button type="submit" name="unregister"	onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmUnregistration()">
@@ -175,7 +175,7 @@
 	
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible || isCourseParticipant}">
 	<c:if test="${allowRegistration == true}">
-		<button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="courseid" value="${course.id}"/></c:url>'">
+		<button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 	    	<fmt:message key="button.signup"/>
 		</button>
 	</c:if>

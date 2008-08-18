@@ -520,14 +520,14 @@ function fillSelect(obj){
 						<c:when
 							test="${isAdmin || isEducationResponsible || isCourseResponsible}">
 							<button type="button"
-								onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseid" value="${course.id}"/></c:url>'">
+								onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 								<fmt:message key="button.administerRegistrations" />
 							</button>
 						</c:when>
 						<c:otherwise>
 							<c:if test="${isCourseParticipant}">
 								<button type="button"
-									onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseid" value="${course.id}"/></c:url>'">
+									onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 									<fmt:message key="button.displayRegistrations" />
 								</button>
 							</c:if>
@@ -537,7 +537,7 @@ function fillSelect(obj){
 					<c:if
 						test="${isAdmin || isEducationResponsible || isCourseResponsible}">
 						<button type="button"
-							onclick="location.href='<c:url value="/editFileCourse.html"><c:param name="courseid" value="${course.id}"/></c:url>'">
+							onclick="location.href='<c:url value="/editFileCourse.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 							<fmt:message key="button.administerFiles" />
 						</button>
 					</c:if>

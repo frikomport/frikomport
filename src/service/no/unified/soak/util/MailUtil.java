@@ -517,7 +517,7 @@ public class MailUtil {
 			MimeMessageHelper helper = null;
 			try {
 				helper = new MimeMessageHelper(message, true);
-				helper.setSubject(getSubject(registration, event, registered, waiting, messageSource, locale));
+				helper.setSubject(getSubject(registration, event, registered, waiting, messageSource, locale, course));
 				helper.setText(getBody(registration, msg, registered, waiting, messageSource, locale));
 				Calendar cal = getICalendar(course, registration);
 				ByteArrayResource bar = new ByteArrayResource(cal.toString().getBytes());
@@ -630,9 +630,9 @@ public class MailUtil {
 	}
 
 	public static String getSubject(Registration registration, int event, String registered, String waiting,
-			MessageSource messageSource, Locale locale) {
+			MessageSource messageSource, Locale locale, Course course) {
 		String subject = null;
-		String coursename = registration.getCourse().getName();
+		String coursename = course.getName();
 		switch (event) {
 		case Constants.EMAIL_EVENT_COURSECHANGED:
 			if (registration.getReserved()) {

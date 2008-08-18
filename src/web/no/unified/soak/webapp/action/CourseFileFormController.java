@@ -59,7 +59,7 @@ public class CourseFileFormController extends BaseFormController {
         throws Exception {
         Map<String, Object> model = new HashMap<String, Object>();
         Course course = null;
-        String courseid = request.getParameter("courseid");
+        String courseid = request.getParameter("courseId");
         course = courseManager.getCourse(courseid);
         model.put("course", course);
 
@@ -99,7 +99,7 @@ public class CourseFileFormController extends BaseFormController {
 
         Map<String, Object> model = new HashMap<String, Object>();
         FileUpload fileUpload = (FileUpload) command;
-        String courseid = request.getParameter("courseid");
+        String courseid = request.getParameter("courseId");
         Locale locale = request.getLocale();
 
         // Are we to cancel?

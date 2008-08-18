@@ -112,7 +112,7 @@ public class RegistrationAdministrationController extends BaseFormController {
 		Map model = new HashMap();
         Locale locale = request.getLocale();
 
-        String courseId = request.getParameter("courseid");
+        String courseId = request.getParameter("courseId");
 
 		// Retrieve all serviceareas into an array
 		List serviceAreas = serviceAreaManager.getAll();
@@ -176,7 +176,7 @@ public class RegistrationAdministrationController extends BaseFormController {
 		RegistrationsBackingObject registrationsBackingObject = new RegistrationsBackingObject();
 
 		// Get the courseId to administrer registrations for
-		String courseId = request.getParameter("courseid");
+		String courseId = request.getParameter("courseId");
 
 		if ((courseId == null) || !StringUtils.isNumeric(courseId)) {
 			// TODO:Redirect to error page - should never happen
@@ -205,8 +205,8 @@ public class RegistrationAdministrationController extends BaseFormController {
 
 		// Remember which course we are working with
 		Map model = new HashMap();
-		String courseId = request.getParameter("courseid");
-		model.put("courseid", new Long(courseId));
+		String courseId = request.getParameter("courseId");
+		model.put("courseId", new Long(courseId));
 
 		// Are we to cancel?
 		if (request.getParameter("docancel") != null) {

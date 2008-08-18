@@ -38,8 +38,8 @@
 	<form:form commandName="registration"
 		onsubmit="return validateRegistration(this)" name="registration">
 		<table class="detail">
-			<form:hidden path="courseid" />
 			<form:hidden path="id" />
+			<form:hidden path="courseid" />
 			<tr>
 				<th>
 					<soak:label key="registration.employeeNumber" />
@@ -49,7 +49,6 @@
 					<form:errors cssClass="fieldError" path="employeeNumber" />
 				</td>
 			</tr>
-
 			<tr>
 				<th>
 					<soak:label key="registration.firstName" />
@@ -231,6 +230,82 @@
 					</td>
 				</tr>
 			</c:if>
+			<c:if test="${!empty courseList}">
+			<tr>
+				<th>
+					<soak:label key="registration.changeCourse" />
+				</th>
+					<td>
+				<c:if
+					test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+					<display:table name="${courseList}" cellspacing="0" cellpadding="0"
+						id="courseList" pagesize="25" class="list" export="false"
+						requestURI="listCourses.html">
+
+						<display:column media="html" sortable="false"
+							headerClass="sortable" titleKey="button.heading">
+							<input type="radio" name="changeCourse" value="${courseList.id}"
+								onclick="chooseCourse(<c:out value="${courseList.id}"/>);" />
+						</display:column>
+
+						<display:column media="html" sortable="true"
+							headerClass="sortable" titleKey="course.name" sortProperty="name">
+							<c:if test="${courseList.status == 3}">
+								<img src="<c:url value="/images/cancel.png"/>"
+									alt="<fmt:message key="icon.warning"/>" class="icon" />
+								<fmt:message key="course.cancelled.alert" />
+								<br />
+							</c:if>
+							<a
+								href="<c:url value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>"
+								title="<c:out value="${courseList.description}"/>"><c:out
+									value="${courseList.name}" /> </a>
+						</display:column>
+
+						<display:column sortable="true" headerClass="sortable"
+							titleKey="course.startTime" sortProperty="startTime">
+							<fmt:formatDate value="${courseList.startTime}" type="both"
+								pattern="${dateformat} ${timeformat}" />
+						</display:column>
+
+						<display:column property="availableAttendants" sortable="true"
+							headerClass="sortable" titleKey="course.availableAttendants" />
+
+						<display:column property="duration" sortable="true"
+							headerClass="sortable" titleKey="course.duration" />
+
+						<display:column property="organization.name" sortable="true"
+							headerClass="sortable" titleKey="course.organization" />
+
+						<display:column property="serviceArea.name" sortable="true"
+							headerClass="sortable" titleKey="course.serviceArea" />
+
+						<display:column media="html" sortable="true"
+							headerClass="sortable" titleKey="course.location">
+							<a
+								href="<c:url value="/detailsLocation.html"><c:param name="id" value="${courseList.location.id}"/></c:url>"
+								title="<c:out value="${courseList.location.description}"/>"><c:out
+									value="${courseList.location.name}" /> </a>
+						</display:column>
+						<display:column media="html" sortable="true"
+							headerClass="sortable" titleKey="course.responsible">
+							<a
+								href="<c:url value="/detailsUser.html"><c:param name="username" value="${courseList.responsible.username}"/></c:url>"><c:out
+									value="${courseList.responsible.fullName}" /> </a>
+						</display:column>
+
+						<display:setProperty name="paging.banner.item_name"
+							value="${item}" />
+						<display:setProperty name="paging.banner.items_name"
+							value="${items}" />
+
+					</display:table>
+				</c:if>
+				</td>
+
+
+			</tr>
+			</c:if>
 
 
 			<tr>
@@ -260,7 +335,7 @@
 </c:if>
 
 <h4>
-	<fmt:message key="registrationComplete.coursedetails" />
+	<fmt:message key="registrationComplete.coursedetails" /> 
 </h4>
 
 <table class="detail">
@@ -268,6 +343,7 @@
 		<jsp:param name="course" value="${course}" />
 	</jsp:include>
 </table>
+
 
 <script type="text/javascript">
 <!--
@@ -292,6 +368,10 @@ function fillSelect(obj){
 			j++ 
 		}
 	</c:forEach>
+}
+
+function chooseCourse(courseId){
+	document.getElementById('courseid').value = courseId;
 }
 
 // -->

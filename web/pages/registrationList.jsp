@@ -182,7 +182,7 @@
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible || (isCourseResponsible)}">
-	    <button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseid" value="${registrationList.courseid}"/></c:url>'">
+	    <button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseId" value="${registrationList.courseid}"/></c:url>'">
     	    <fmt:message key="button.edit"/>
 	    </button>
 </c:if>

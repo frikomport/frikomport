@@ -106,7 +106,7 @@ public class RegistrationController extends BaseFormController {
 	        }
         }
 
-        String courseid = request.getParameter("courseid");
+        String courseid = request.getParameter("courseId");
         if ((courseid != null) && StringUtils.isNumeric(courseid)) {
             registration.setCourseid(new Long(courseid));
         }

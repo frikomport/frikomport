@@ -12,6 +12,7 @@ package no.unified.soak.webapp.action;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -34,6 +35,7 @@ import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.UserManager;
+import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.DateUtil;
 import no.unified.soak.util.MailUtil;
 
@@ -112,7 +114,7 @@ public class RegistrationFormController extends BaseFormController {
 		Map model = new HashMap();
 		Locale locale = request.getLocale();
 
-		String courseId = request.getParameter("courseid");
+		String courseId = request.getParameter("courseId");
 		if ((courseId == null) || !StringUtils.isNumeric(courseId)) {
 			// Redirect to error page - should never happen
 		}
@@ -120,8 +122,30 @@ public class RegistrationFormController extends BaseFormController {
 		String registrationId = request.getParameter("id");
 		if ((registrationId != null) && StringUtils.isNumeric(registrationId) && StringUtils.isNotEmpty(registrationId)) {
 			model.put("registration", registrationManager.getRegistration(registrationId));
-		}
+			
+			// This is an existing registration, so get courses in case the user want to switch course.
+			HttpSession session = request.getSession();
+			User user = (User) session.getAttribute(Constants.USER_KEY);
+			Boolean isAdmin = false;
+			List<String> roles = null;
+			if (user != null) {
+				roles = user.getRoleNameList();
+				isAdmin = (Boolean) roles.contains(Constants.ADMIN_ROLE);
+			}
+			
+			// Retrieve the all published courses
+			// and add them to the list
+			Course courseForSearch = new Course();
+			courseForSearch.setStatus(CourseStatus.COURSE_PUBLISHED);
+			List courses = courseManager.searchCourses(courseForSearch, null, null);
+			List<Course> filtered = filterByRole(isAdmin, roles, courses);
 
+			if (courses != null) {
+				model.put("courseList", filtered);
+			}
+
+		}
+		
 		// Retrieve all serviceareas into an array
 		List serviceAreas = serviceAreaManager.getAllIncludingDummy(getText("misc.none", locale));
 		if (serviceAreas != null) {
@@ -156,12 +180,14 @@ public class RegistrationFormController extends BaseFormController {
 	protected Object formBackingObject(HttpServletRequest request) throws Exception {
 		HttpSession session = request.getSession(true);
 		String id = request.getParameter("id");
+		String courseId = request.getParameter("courseId");
 		Registration registration = null;
 
 		if (!StringUtils.isEmpty(id)) {
 			registration = registrationManager.getRegistration(id);
 		} else {
 			registration = new Registration();
+			registration.setCourseid(new Long(courseId));
 			User user = null;
 			Locale locale = request.getLocale();
 			String userdefaults = getText("access.registration.userdefaults", locale);
@@ -215,10 +241,22 @@ public class RegistrationFormController extends BaseFormController {
 		Map model = new HashMap();
 		Boolean courseFull = null;
 		Boolean alreaddyRegistered = false;
+		Boolean changedCourse = false;
 
 		// Fetch the object from the form
 		Registration registration = (Registration) command;
 		Course course = courseManager.getCourse(registration.getCourseid().toString());
+		Course originalCourse = null;
+		Registration originalRegistration = null;
+		//Check if course has been changed
+		String courseId = request.getParameter("courseId");
+		if (!courseId.equals(course.getId().toString())){
+			changedCourse=true;
+			originalCourse = courseManager.getCourse(courseId);
+			if ((registration.getId() != null) && (registration.getId().longValue() != 0)){
+				originalRegistration = registrationManager.getRegistration(registration.getId().toString());
+			}
+		}
 
 		// Fetch the locale for resource message
 		Locale locale = request.getLocale();
@@ -251,16 +289,17 @@ public class RegistrationFormController extends BaseFormController {
 			model.put("course", course);
 			registration.setCourse(course);
 
-			// Get registrations on this course for this user 
-			List <Registration> userRegistraionsForCourse = registrationManager.getUserRegistrationsForCourse(registration.getEmail(), registration.getFirstName(),
-					registration.getLastName(), registration.getCourseid());
+			// Get registrations on this course for this user
+			List<Registration> userRegistraionsForCourse = registrationManager.getUserRegistrationsForCourse(
+					registration.getEmail(), registration.getFirstName(), registration.getLastName(), registration
+							.getCourseid());
 
 			// Is this a valid date to register? Or has this user alreaddy been
 			// registered to this course?
 			// (It is always allowed to edit the data)
 			if ((registration.getId() == null) || (registration.getId().longValue() == 0)) {
 				if (!legalRegistrationDate(request, locale, course)) {
-					return new ModelAndView(getCancelView(), "courseid", registration.getCourseid());
+					return new ModelAndView(getCancelView(), "courseId", registration.getCourseid());
 				}
 				if (userRegistraionsForCourse.size() > 0) {
 					alreaddyRegistered = true;
@@ -268,7 +307,12 @@ public class RegistrationFormController extends BaseFormController {
 					return new ModelAndView(getCancelView(), "alreaddyRegistered", true);
 				}
 			}
-
+			
+			//If course has been changed, send deleted mail for original course.  
+			if (changedCourse && (originalCourse != null) && (originalRegistration != null)){
+				sendMail(locale, originalCourse, originalRegistration, Constants.EMAIL_EVENT_REGISTRATION_DELETED);
+			}
+			
 			// Set user object for registration
 			User user = null;
 			try {
@@ -379,5 +423,25 @@ public class RegistrationFormController extends BaseFormController {
 		}
 
 		return result;
+	}
+
+	private List<Course> filterByRole(Boolean admin, List<String> roles, List courses) {
+		List<Course> filtered = new ArrayList<Course>();
+		// Filter all courses not visible for the user.
+		if (roles != null) {
+			for (Iterator iterator = courses.iterator(); iterator.hasNext();) {
+				Course roleCourse = (Course) iterator.next();
+				roleCourse.setAvailableAttendants(0);
+				if (roles.contains(roleCourse.getRole()) || admin.booleanValue()) {
+					if (roleCourse.getStopTime().after(new Date())) {
+						roleCourse.setAvailableAttendants(registrationManager.getAvailability(true, roleCourse));
+					}
+					filtered.add(roleCourse);
+				}
+			}
+		} else {
+			filtered = courses;
+		}
+		return filtered;
 	}
 }
