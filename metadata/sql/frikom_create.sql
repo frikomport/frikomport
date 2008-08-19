@@ -1,4 +1,4 @@
-﻿--
+--
 -- Definition of table `app_user`
 --
 

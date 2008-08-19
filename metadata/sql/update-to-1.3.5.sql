@@ -1,4 +1,4 @@
-﻿ALTER TABLE `municipalities` RENAME TO `organization`;
+ALTER TABLE `municipalities` RENAME TO `organization`;
 
 ALTER TABLE `location` DROP FOREIGN KEY `FK714F9FB5F4E66D55`;
 
