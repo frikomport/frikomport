@@ -78,12 +78,12 @@ public class UserRegistrationController extends BaseFormController{
         
         String email = request.getParameter("email");
         if(EmailValidator.getInstance().isValid(email)){
-            try{
-                User user = userManager.findUser(email);
+            User user = userManager.findUser(email);
+            if(user != null){
                 sendMail(user, locale);
                 saveMessage(request, getText("user.emailsent", user.getEmail() ,locale));
             }
-            catch(ObjectRetrievalFailureException orfe){
+            else {
                 // User not found, view error
                 saveMessage(request, getText("user.notfound", locale));
                 return new ModelAndView(getSuccessView(), model);

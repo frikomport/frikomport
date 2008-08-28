@@ -16,6 +16,7 @@ import java.util.List;
 import no.unified.soak.dao.RegistrationDAO;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.User;
 
 
 /**
@@ -142,4 +143,11 @@ public interface RegistrationManager extends Manager {
      * @return List of registrations
      */
     public List <Registration> getUserRegistrationsForCourse(String email, String firstname, String lastname, Long courseId);
+
+    /**
+     * Moves registraions from old user to new user
+     * @param olduser
+     * @param newuser
+     */
+    void moveRegistrations(User olduser, User newuser);
 }

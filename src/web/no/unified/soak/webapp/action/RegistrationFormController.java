@@ -314,12 +314,10 @@ public class RegistrationFormController extends BaseFormController {
 			}
 			
 			// Set user object for registration
-			User user = null;
-			try {
-				user = userManager.findUser(registration.getEmail());
-			} catch (ObjectRetrievalFailureException orfe) {
-				user = userManager.addUser(registration);
-			}
+			User user = userManager.findUser(registration.getEmail());
+            if(user == null){
+                user = userManager.addUser(registration);
+            }
 			registration.setUser(user);
 			registration.setUsername(user.getUsername());
 

@@ -28,6 +28,8 @@ import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
 import no.unified.soak.ez.EzUser;
 import no.unified.soak.model.User;
 import no.unified.soak.service.UserManager;
+import no.unified.soak.service.RegistrationManager;
+import no.unified.soak.service.UserExistsException;
 import no.unified.soak.webapp.util.RequestUtil;
 import no.unified.soak.webapp.util.SslUtil;
 
@@ -200,15 +202,32 @@ public class ActionFilter implements Filter {
 	private void copyToUserTable(HttpSession session, String username, String firstName, String lastName, String email,
 			Integer id, List<String> rolenames, Integer kommune) {
 		ApplicationContext ctx = getContext();
-		UserManager mgr = (UserManager) ctx.getBean("userManager");
-		User user = null;
+		UserManager userManager = (UserManager) ctx.getBean("userManager");
+        RegistrationManager registrationManager = (RegistrationManager) ctx.getBean("registrationManager");
+        User user = null;
 		try {
-			user = mgr.getUser(username);
-			mgr.updateUser(user, firstName, lastName, email, id, rolenames, kommune);
+			user = userManager.getUser(username);
+			userManager.updateUser(user, firstName, lastName, email, id, rolenames, kommune);
 		} catch (ObjectRetrievalFailureException exception) {
-			// User does not exists, make new.
-			user = mgr.addUser(username, firstName, lastName, email, id, rolenames, kommune);
-		}
+			// User may be registered with email.
+            user = userManager.findUser(email);
+            if(user != null){
+                // Endre epost til nokke som ikkje finnes
+                userManager.updateUser(user, firstName, lastName, username + "@nonexist.no", id, rolenames, kommune);
+                // Ny bruker basert på riktig brukernavn
+                User newuser = userManager.addUser(username, firstName, lastName, email, id, rolenames, kommune);
+                // Oppdater hash fra gammal user
+                newuser.setHash(user.getHash());
+                userManager.updateUser(newuser);
+                // Flytt påmeldinger
+                registrationManager.moveRegistrations(user, newuser);
+//                 disable gammal bruker
+                userManager.disableUser(user);
+            }
+            else{
+			    user = userManager.addUser(username, firstName, lastName, email, id, rolenames, kommune);
+		    }
+        }
 		session.setAttribute(Constants.USER_KEY, user);
 
 	}

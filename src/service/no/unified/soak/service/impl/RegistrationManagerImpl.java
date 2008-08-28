@@ -12,10 +12,12 @@ package no.unified.soak.service.impl;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Iterator;
 
 import no.unified.soak.dao.RegistrationDAO;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.User;
 import no.unified.soak.service.RegistrationManager;
 
 /**
@@ -128,11 +130,22 @@ public class RegistrationManagerImpl extends BaseManager implements
 		return dao.getCourseRegistrations(courseId);
 	}
 
-    public List getUserRegistrations(String username) {
+    public List<Registration> getUserRegistrations(String username) {
         return dao.getUserRegistrations(username);
     }
 
 	public List <Registration> getUserRegistrationsForCourse(String email, String firstname, String lastname, Long courseId) {
 		return dao.getUserRegistationsForCourse(email, firstname, lastname, courseId);
 	}
+
+    public void moveRegistrations(User olduser, User newuser){
+        List<Registration> registrations = getUserRegistrations(olduser.getUsername());
+        Iterator<Registration> it = registrations.iterator();
+        while(it.hasNext()){
+            Registration registration = it.next();
+            registration.setUser(newuser);
+            registration.setUsername(newuser.getUsername());
+            saveRegistration(registration);
+        }
+    }
 }

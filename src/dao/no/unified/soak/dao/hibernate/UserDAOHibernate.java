@@ -49,7 +49,7 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
         criteria.add(Restrictions.eq("email",email));
         List<User> result = getHibernateTemplate().findByCriteria(criteria);
         if(result == null || result.size() != 1){
-            throw  new ObjectRetrievalFailureException(User.class, email);
+            return null;
         }
         return result.get(0);
     }
@@ -66,7 +66,7 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
      * @see no.unified.soak.dao.UserDAO#getUsers(no.unified.soak.model.User)
      */
     public User getUserByHash(String hash) {
-        List users = getHibernateTemplate().find("from User u where u.hash=?", new Object[] {hash});
+        List users = getHibernateTemplate().find("from User u where u.hash=? and u.enabled = 1", new Object[] {hash});
         
         if (users.size() == 0) {
             return null;
@@ -84,6 +84,14 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
         }
         getHibernateTemplate().saveOrUpdate(user);
         // necessary to throw a DataIntegrityViolation and catch it in UserManager
+        getHibernateTemplate().flush();
+    }
+
+    public void updateUser(User user) {
+                if (log.isDebugEnabled()) {
+            log.debug("user's id: " + user.getUsername());
+        }
+        getHibernateTemplate().update(user);
         getHibernateTemplate().flush();
     }
 

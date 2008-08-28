@@ -148,7 +148,7 @@ public class UserEzDaoJdbc {
 		if (userid == null) {
 			return null;
 		}
-		String sql = "select R.name from ezcontentobject_tree OT, ezuser_role UR, ezrole R, ezcontentobject_tree OT2"
+		String sql = "select distinct R.name from ezcontentobject_tree OT, ezuser_role UR, ezrole R, ezcontentobject_tree OT2"
 				+ " where OT.contentobject_id = UR.contentobject_id and OT.node_id = OT2.parent_node_id"
 				+ " and OT2.contentobject_id = "
 				+ userid

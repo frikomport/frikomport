@@ -1,20 +1,22 @@
 package no.unified.soak.service.impl;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-
-import no.unified.soak.Constants;
+import no.unified.soak.service.DatabaseUpdateManager;
+import no.unified.soak.service.CourseManager;
+import no.unified.soak.service.RegistrationManager;
+import no.unified.soak.service.UserManager;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.User;
-import no.unified.soak.service.CourseManager;
-import no.unified.soak.service.DatabaseUpdateManager;
-import no.unified.soak.service.RegistrationManager;
-import no.unified.soak.service.UserManager;
+import no.unified.soak.Constants;
 
-import org.apache.commons.validator.EmailValidator;
+import java.util.Locale;
+import java.util.List;
+import java.util.Iterator;
+import java.util.ArrayList;
+
+import org.springframework.validation.Validator;
 import org.springframework.orm.ObjectRetrievalFailureException;
+import org.apache.commons.validator.EmailValidator;
 
 /**
  * User: gv
@@ -60,11 +62,8 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                 // Only use valid emails
                 if(registration.getUsername() == null || registration.getUsername().trim().length() == 0){
                     if(EmailValidator.getInstance().isValid(registration.getEmail())){
-                        User user = null;
-                        try{
-                            user = userManager.findUser(registration.getEmail());
-                        } catch (ObjectRetrievalFailureException e){
-                            // User not present, create
+                        User user = userManager.findUser(registration.getEmail());
+                        if(user == null){
                             user = userManager.addUser(registration.getEmail(), registration.getFirstName(), registration.getLastName(), registration.getEmail(), new Integer(0), null, new Integer(0));
                         }
                         // Connect user with registration

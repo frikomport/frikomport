@@ -76,7 +76,13 @@ public interface UserManager {
 	 */
 	public void saveUser(User user) throws UserExistsException;
 
-	/**
+    /**
+     * Updates a user's information
+     * @param user the user to be updated
+     */
+    public void updateUser(User user);
+
+    /**
 	 * Removes a user from the database by their username
 	 *
 	 * @param username the user's username
@@ -153,4 +159,18 @@ public interface UserManager {
      * @param registration
      */
     public User addUser(Registration registration);
+
+    /**
+     * Sets the enabled flag to false
+     * @param user
+     * @return
+     */
+    public void disableUser(User user);
+
+    /**
+     * Sets the enabled flag to true
+     * @param user
+     * @return
+     */
+    public void enableUser(User user);
 }

@@ -9,6 +9,8 @@ import no.unified.soak.ez.EzUser;
 import no.unified.soak.model.User;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.service.UserSynchronizeManager;
+import no.unified.soak.service.RegistrationManager;
+import no.unified.soak.service.UserExistsException;
 
 import org.springframework.orm.ObjectRetrievalFailureException;
 
@@ -21,6 +23,7 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 
     private UserEzDaoJdbc userEzDaoJdbc = null;
     private UserManager userManager = null;
+    private RegistrationManager registrationManager = null;
 
     public void setUserEzDaoJdbc(UserEzDaoJdbc userEzDaoJdbc) {
         this.userEzDaoJdbc = userEzDaoJdbc;
@@ -28,6 +31,10 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 
     public void setUserManager(UserManager userManager) {
         this.userManager = userManager;
+    }
+
+    public void setRegistrationManager(RegistrationManager registrationManager) {
+        this.registrationManager = registrationManager;
     }
 
     public void synchronizeUsers() {
@@ -40,11 +47,28 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
                 User user = null;
                 try{
                     user = userManager.getUser(ezUser.getUsername());
-                    userManager.updateUser(user, ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
+                    userManager.updateUser(user, ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail().toLowerCase(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
                 }
                 catch (ObjectRetrievalFailureException orfe){
-                    // No user, add
-                    user = userManager.addUser(ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
+                    // No user, might be registered by email
+                    user = userManager.findUser(ezUser.getEmail().toLowerCase());
+                    if(user != null){
+                        // Endre epost til nokke som ikkje finnes
+                        userManager.updateUser(user, ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getUsername() + "@nonexist.no", ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
+                        // Ny bruker basert på riktig brukernavn
+                        User newuser = userManager.addUser(ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail().toLowerCase(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
+                        // Oppdater hash fra gammal user
+                        newuser.setHash(user.getHash());
+                        userManager.updateUser(newuser);
+                        // Flytt påmeldinger
+                        registrationManager.moveRegistrations(user, newuser);
+                        // disable gammal bruker
+                        userManager.disableUser(user);
+                    }
+                    else{
+                        // definitly no user
+                        user = userManager.addUser(ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail().toLowerCase(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
+                    }
                 }
             }
         }

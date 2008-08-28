@@ -116,7 +116,11 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		}
 	}
 
-	/**
+    public void updateUser(User user) {
+        dao.updateUser(user);
+    }
+
+    /**
 	 * @see no.unified.soak.service.UserManager#removeUser(java.lang.String)
 	 */
 	public void removeUser(String username) {
@@ -220,7 +224,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		User user = new User(username);
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
-		user.setEmail(email);
+        user.setEmail(email);
 		user.setId(id);
 		if (kommune != null && kommune != 0) {
 			updateKommune(kommune, user);
@@ -296,7 +300,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 			Organization organization = (Organization) iter.next();
 
 			if (organization.getNumber().equals(kommune.longValue())) {
-				if (!user.getOrganizationid().equals(organization.getId())) {
+				if (user.getOrganizationid() == null || !user.getOrganizationid().equals(organization.getId())) {
 					user.setOrganizationid(organization.getId());
 					save = true;
 				}
@@ -445,4 +449,21 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		List users = userEzDaoJdbc.findKursansvarligeUser();
 		return users;
 	}
+
+    public void disableUser(User user) {
+        setEnabledStatus(user,false);
+    }
+
+    public void enableUser(User user) {
+        setEnabledStatus(user,true);
+    }
+
+    private void setEnabledStatus(User user, boolean status){
+        user.setEnabled(status);
+        try{
+            saveUser(user);
+        } catch (UserExistsException e) {
+            log.error("UserExistsException: " + e);
+        }
+    }
 }

@@ -58,6 +58,12 @@ public interface UserDAO extends DAO {
     public void saveUser(User user);
 
     /**
+     * Updates a user's information
+     * @param user the object to be updated
+     */
+    public void updateUser(User user);
+
+    /**
      * Removes a user from the database by id
      * @param username the user's username
      */
