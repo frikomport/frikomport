@@ -36,6 +36,10 @@ public class RoleManagerImpl extends BaseManager implements RoleManager {
         return dao.getRole(rolename);
     }
 
+    public Role findRole(String description) {
+        return dao.findRole(description);
+    }
+
     public void saveRole(Role role) {
         dao.saveRole(role);
     }

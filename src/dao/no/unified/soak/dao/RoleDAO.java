@@ -30,6 +30,13 @@ public interface RoleDAO extends DAO {
     public Role getRole(String rolename);
 
     /**
+     * Gets role based on rolename
+     * @param description
+     * @return role populated role object
+     */
+    public Role findRole(String description);
+
+    /**
      * Gets a list of roles based on parameters passed in.
      *
      * @return List populated list of roles

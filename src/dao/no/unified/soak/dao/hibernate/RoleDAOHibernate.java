@@ -12,8 +12,11 @@ import no.unified.soak.model.Role;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
+import java.util.ArrayList;
 
 
 /**
@@ -31,6 +34,17 @@ public class RoleDAOHibernate extends BaseDAOHibernate implements RoleDAO {
 
     public List getRoles(Role role) {
         return getHibernateTemplate().find("from Role");
+    }
+
+    public Role findRole(String description) {
+        DetachedCriteria dc = DetachedCriteria.forClass(Role.class);
+        dc.add(Restrictions.eq("description", description));
+        List roles = getHibernateTemplate().findByCriteria(dc);
+        if(roles != null && roles.size() == 1)
+        {
+            return (Role)roles.get(0);
+        }
+        return null;
     }
 
     public Role getRole(String rolename) {

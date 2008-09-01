@@ -383,10 +383,10 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 				user.addRole(roleManager.getRole(Constants.ADMIN_ROLE));
 			} else if (rolename.equals(messageSource.getMessage("role.instructor", null, locale))) {
 				user.addRole(roleManager.getRole(Constants.INSTRUCTOR_ROLE));
-			} else if (roleManager.getRole(rolename) != null) {
-				user.addRole(roleManager.getRole(rolename));
+			} else if (roleManager.findRole(rolename) != null) {
+				user.addRole(roleManager.findRole(rolename));
 			} else {
-				no.unified.soak.model.Role role = new no.unified.soak.model.Role(rolename);
+				no.unified.soak.model.Role role = new no.unified.soak.model.Role("role_" + rolename);
 				role.setDescription(rolename);
 				roleManager.saveRole(role);
 				user.addRole(role);
@@ -439,9 +439,10 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	}
 
 	private List<String> getDefaultRoles() {
-		List<String> roles = new ArrayList();
-		roles.add(Constants.ANONYMOUS_ROLE);
-		roles.add(Constants.EMPLOYEE_ROLE);
+        Locale locale = LocaleContextHolder.getLocale();
+        List<String> roles = new ArrayList();
+        roles.add(messageSource.getMessage("role.anonymous", null, locale));
+        roles.add(messageSource.getMessage("role.employee", null, locale));
 		return roles;
 	}
 

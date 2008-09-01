@@ -28,6 +28,8 @@ public interface RoleManager {
 
     public Role getRole(String rolename);
 
+    public Role findRole(String description);
+
     public void saveRole(Role role);
 
     public void removeRole(String rolename);
