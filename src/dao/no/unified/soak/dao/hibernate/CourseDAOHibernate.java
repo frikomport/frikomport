@@ -47,12 +47,11 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
      */
     public Course getCourse(final Long id) {
         Course course = (Course) getHibernateTemplate().get(Course.class, id);
-
         if (course == null) {
             log.warn("uh oh, course with id '" + id + "' not found...");
             throw new ObjectRetrievalFailureException(Course.class, id);
         }
-
+        getHibernateTemplate().initialize(course);
         return course;
     }
 
