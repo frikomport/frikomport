@@ -236,7 +236,7 @@
 	<td>
 		<a
 			href="<fmt:message key="javaapp.baseurl"/><fmt:message key="javaapp.courseurl"/><c:out value="${course.id}"/>"
-			target="_blank"><fmt:message key="javaapp.baseurl" /> <fmt:message
-				key="javaapp.courseurl" /> <c:out value="${course.id}" /> </a>
+			target="_blank"><fmt:message key="javaapp.baseurl" /><fmt:message
+				key="javaapp.courseurl" /><c:out value="${course.id}" /> </a>
 	</td>
 </tr>

@@ -188,10 +188,13 @@ public class MailUtil {
 					locale, messageSource)));
 			break;
 		case Constants.EMAIL_EVENT_NOTIFICATION:
-			msg.append(StringEscapeUtils.unescapeHtml(getText("courseNotification.mail.body", " " + course.getName(),
-					locale, messageSource)));
-
-			break;
+            if(reservationConfirmed){
+                msg.append(StringEscapeUtils.unescapeHtml(getText("courseNotification.mail.body.reserved", locale, messageSource)));
+            }
+            else{
+                msg.append(StringEscapeUtils.unescapeHtml(getText("courseNotification.mail.body.waitinglist", locale, messageSource)));
+            }
+            break;
 		case Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION:
 			// TODO: Test - Is this right? Previously:
 			// getText("registrationComplete.mail.body", null, locale,
@@ -221,8 +224,7 @@ public class MailUtil {
 
 			break;
 		case Constants.EMAIL_EVENT_NEW_COURSE_NOTIFICATION:
-			msg.append(StringEscapeUtils.unescapeHtml(getText("registrationNewCourse.mail.body", course.getName(),
-					locale, messageSource))
+			msg.append(StringEscapeUtils.unescapeHtml(getText("registrationNewCourse.mail.body", locale, messageSource))
 					+ "\n\n");
 
 			break;
@@ -292,10 +294,14 @@ public class MailUtil {
 
 			break;
 		case Constants.EMAIL_EVENT_NOTIFICATION:
-			msg
-					.append(StringEscapeUtils.unescapeHtml(getText("courseNotification.mail.footer", locale,
+            if(reservationConfirmed){
+                msg.append(StringEscapeUtils.unescapeHtml(getText("courseNotification.mail.footer.registered", locale,
 							messageSource)));
-			break;
+            } else {
+                msg.append(StringEscapeUtils.unescapeHtml(getText("courseNotification.mail.footer.waitinglist", locale,
+							messageSource)));
+            }
+            break;
 		case Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION:
 			// TODO: Test if right. Previously:
 			// "registrationComplete.mail.footer", null,locale)
@@ -317,22 +323,19 @@ public class MailUtil {
 
 		case Constants.EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST:
 			msg.append("\n"
-					+ StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.body", " "
-							+ course.getName(), locale, messageSource)) + "\n\n");
+					+ StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.footer", locale, messageSource)) + "\n\n");
 
 			break;
 
 		case Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED:
 			msg.append("\n"
-					+ StringEscapeUtils.unescapeHtml(getText("registrationConfirmed.mail.body", " " + course.getName(),
-							locale, messageSource)) + "\n\n");
+					+ StringEscapeUtils.unescapeHtml(getText("registrationConfirmed.mail.footer", locale, messageSource)) + "\n\n");
 
 			break;
 
 		case Constants.EMAIL_EVENT_NEW_COURSE_NOTIFICATION:
 			msg.append("\n"
-					+ StringEscapeUtils.unescapeHtml(getText("registrationNewCourse.mail.footer", " " + course.getName(),
-							locale, messageSource)) + "\n\n");
+					+ StringEscapeUtils.unescapeHtml(getText("registrationNewCourse.mail.footer", locale, messageSource)) + "\n\n");
 
 			break;
 		}
@@ -516,7 +519,7 @@ public class MailUtil {
 			MimeMessage message = ((JavaMailSenderImpl) sender).createMimeMessage();
 			MimeMessageHelper helper = null;
 			try {
-				helper = new MimeMessageHelper(message, true);
+				helper = new MimeMessageHelper(message, true, (getText("mail.encoding", locale,messageSource)));
 				helper.setSubject(getSubject(registration, event, registered, waiting, messageSource, locale, course));
 				helper.setText(getBody(registration, msg, registered, waiting, messageSource, locale));
 				Calendar cal = getICalendar(course, registration);

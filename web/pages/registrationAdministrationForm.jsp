@@ -163,7 +163,8 @@
 </display:table>
 </c:if> 
 
-<input type="hidden" id="regid" name="regid" value="0"/> 
+<input type="hidden" id="regid" name="regid" value="0"/>
+<input type="hidden" id="courseId" name="courseId" value="<c:out value="${course.id}"/>"/>
 
 <c:if test="${admin == true}">
 <input type="submit" class="button" name="save" 
