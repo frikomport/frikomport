@@ -157,7 +157,6 @@
 </c:set>
 
 <c:out value="${buttons}" escapeXml="false"/>
-
 <display:table name="${courseList}" cellspacing="0" cellpadding="0"
     id="courseList" pagesize="25" class="list" 
     export="true" requestURI="listCourses.html">
@@ -232,7 +231,7 @@
 
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && username == courseList.responsibleUsername)}">
+<c:if test="${username == courseList.responsible.username}">
 	    <button type="button" onclick="location.href='<c:url value="/editCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>'">
     	    <fmt:message key="button.edit"/>
 	    </button>

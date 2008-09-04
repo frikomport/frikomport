@@ -1,7 +1,7 @@
 <%@ include file="/common/taglibs.jsp"%>
 
 <c:set var="admin" value="${false}"/>
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && course.responsible.username == username)}">
 	<c:set var="admin" value="${true}"/>
 </c:if>
 <fmt:message var="canDelete" key="access.registration.delete"/>
@@ -53,7 +53,7 @@
 
 <form method="post" action="<c:url value="/administerRegistration.html"/>" name="registrationAdministrationForm" id="registrationAdministrationForm">
 
-<input type="hidden" name="<c:out value="courseid"/>" value="<c:out value="${course.id}"/>"/>
+<input type="hidden" name="<c:out value="courseId"/>" value="<c:out value="${course.id}"/>"/>
 
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible || isCourseParticipant}">
 <display:table name="${registrationsBackingObject.registrations}" cellspacing="0" cellpadding="0" 
@@ -164,7 +164,6 @@
 </c:if> 
 
 <input type="hidden" id="regid" name="regid" value="0"/>
-<input type="hidden" id="courseId" name="courseId" value="<c:out value="${course.id}"/>"/>
 
 <c:if test="${admin == true}">
 <input type="submit" class="button" name="save" 

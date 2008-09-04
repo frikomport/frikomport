@@ -1,4 +1,8 @@
 <%@ include file="/common/taglibs.jsp"%>
+<c:set var="admin" value="${false}"/>
+<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && course.responsible.username == username)}">
+	<c:set var="admin" value="${true}"/>
+</c:if>
 
 <title><fmt:message key="courseDetail.title"/></title>
 <content tag="heading"><fmt:message key="courseDetail.heading"/></content>
@@ -17,23 +21,23 @@
 
 <form method="post" action="<c:url value="/editCourse.html"/>" id="courseForm"
     onsubmit="return validateCourse(this)">
-    
+
 <fmt:message key="date.format" var="dateformat"/>
 <fmt:message key="time.format" var="timeformat"/>
 <fmt:message key="attachmentList.item" var="item"/>
 <fmt:message key="attachmentList.items" var="items"/>
-    
+
 <table class="detail">
 
     <spring:bind path="course.id">
-    <input type="hidden" name="<c:out value="${status.expression}"/>" value="<c:out value="${status.value}"/>"/> 
+    <input type="hidden" name="<c:out value="${status.expression}"/>" value="<c:out value="${status.value}"/>"/>
     </spring:bind>
 
 	<jsp:include page="course.jsp">
 		<jsp:param name="course" value="${course}"/>
 	</jsp:include>
-	
-	
+
+
 <c:if test="${allowRegistration == true && isCourseFull == true}">
     <tr>
         <td colspan="2">
@@ -47,7 +51,7 @@
 </c:if>
 
     <tr>
-        <td colspan="2" class="buttonBar">            
+        <td colspan="2" class="buttonBar">
 
             <input type="submit" class="button" name="return" onclick="bCancel=true"
                 value="<fmt:message key="button.return"/>" />
@@ -60,7 +64,7 @@
 			</c:if>
 </c:if>
 
-<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && username == course.responsibleUsername)}">
+<c:if test="${admin == true}">
 		    <button type="button" onclick="location.href='<c:url value="/editCourse.html"><c:param name="id" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.edit"/>
 		    </button>
@@ -73,7 +77,7 @@
 </c:if>
 
 <c:choose>
-	<c:when test="${(isAdmin || isEducationResponsible || isCourseResponsible) && isPublished}">
+	<c:when test="${admin == true && isPublished}">
 		    <button type="button" onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.administerRegistrations"/>
 		    </button>
@@ -87,12 +91,12 @@
 	</c:otherwise>
 </c:choose>
 
-<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && username == course.responsibleUsername)}">
+<c:if test="${admin == true}">
 		    <button type="button" onclick="location.href='<c:url value="/editFileCourse.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.administerFiles"/>
 		    </button>
 </c:if>
-<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && username == course.responsibleUsername)}">
+<c:if test="${admin == true}">
 		    <button type="button" onclick="location.href='<c:url value="/emailCourse.html"><c:param name="id" value="${course.id}"/><c:param name="enablemail" value="true"/></c:url>'">
 	    	    <fmt:message key="button.mail"/>
 		    </button>
@@ -106,25 +110,25 @@
 
 <form method="post" id="courseFileListForm" name="courseFileListForm" action="<c:url value="/editCourse.html"/>"
     enctype="multipart/form-data" onsubmit="return validateFileUpload(this)">
-    
+
 <display:table name="${attachments}" cellspacing="0" cellpadding="0"
     id="attachmentsList" pagesize="25" class="list"
     export="true" requestURI="">
-    
+
     <display:column property="filename" sortable="true" headerClass="sortable"
          titleKey="attachment.filename"/>
-         
+
     <display:column sortable="true" headerClass="sortable"
          titleKey="attachment.size">
 		<fmt:formatNumber value="${attachmentsList.size}" minFractionDigits="0"/>
     </display:column>
-    
+
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
 	            <input type="submit" class="button" name="download"
-                onclick="document.courseFileListForm.attachmentid.value=<c:out value="${attachmentsList.id}"/>;bCancel=true;" 
+                onclick="document.courseFileListForm.attachmentid.value=<c:out value="${attachmentsList.id}"/>;bCancel=true;"
                 value="<fmt:message key="button.download"/>" />
 	</display:column>
-	
+
     <display:setProperty name="paging.banner.item_name" value="${item}"/>
     <display:setProperty name="paging.banner.items_name" value="${items}"/>
 </display:table>
@@ -135,5 +139,5 @@
 
 <v:javascript formName="course" cdata="false"
     dynamicJavascript="true" staticJavascript="false"/>
-<script type="text/javascript" 
+<script type="text/javascript"
     src="<c:url value="/scripts/validator.jsp"/>"></script>

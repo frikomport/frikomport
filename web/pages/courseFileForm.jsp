@@ -35,7 +35,7 @@
     enctype="multipart/form-data" onsubmit="return validateFileUpload(this)">
 
 <table>
-	<input type="hidden" name="courseid" value="<c:out value="${course.id}"/>"/>
+	<input type="hidden" name="courseId" value="<c:out value="${course.id}"/>"/>
     <tr>
         <th>
             <soak:label key="courseFile.chosenFile"/>
