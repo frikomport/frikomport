@@ -30,8 +30,8 @@
         <td>
 			<c:choose>
 				<c:when test="${not empty location.detailURL}">
-		          	<a href="<c:out value="${location.detailURL}"/>" title="<c:out value="${location.description}"/>"><c:out value="${location.name}"/></a>
-        		  	<button type="button" onclick="location.href='<c:out value="${location.detailURL}"/>'">
+		          	<a href="<c:out value="${location.detailURL}"/>" target="_blank" title="<c:out value="${location.description}"/>"><c:out value="${location.name}"/></a>
+        		  	<button type="button" onclick="javascript:window.open('<c:out value="${location.detailURL}"/>','')">
 	    	    		<fmt:message key="button.more"/>
 				    </button>
 				</c:when>
@@ -91,8 +91,8 @@
         <td>
         	<c:choose>
 		    	<c:when test="${not empty location.mapURL}">
-	          		<a href="<c:out value="${location.mapURL}"/>"><c:out value="${location.address}"/></a>
-	    	      	<button type="button" onclick="location.href='<c:out value="${location.mapURL}"/>'">
+	          		<a href="<c:out value="${location.mapURL}"/>" target="_blank"><c:out value="${location.address}"/></a>
+	    	      	<button type="button" onclick="window.open('<c:out value="${location.mapURL}"/>','')">
 		    		    <fmt:message key="button.map"/>
 			    	</button>
 		    	</c:when>

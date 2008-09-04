@@ -12,11 +12,11 @@
 	<td>
 		<c:choose>
 			<c:when test="${not empty course.detailURL}">
-				<a href="<c:out value="${course.detailURL}"/>"
+				<a href="<c:out value="${course.detailURL}"/>" target="_blank"
 					title="<c:out value="${course.description}"/>"><c:out
 						value="${course.name}" /> </a>
 				<button type="button"
-					onclick="location.href='<c:out value="${course.detailURL}"/>'">
+					onclick="window.open('<c:out value="${course.detailURL}"/>','')">
 					<fmt:message key="button.more" />
 				</button>
 			</c:when>

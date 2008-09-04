@@ -35,8 +35,8 @@
         <td>
 			<c:choose>
 				<c:when test="${not empty person.detailURL}">
-		          	<a href="<c:out value="${person.detailURL}"/>" title="<c:out value="${person.description}"/>"><c:out value="${person.name}"/></a>
-        		  	<button type="button" onclick="location.href='<c:out value="${person.detailURL}"/>'">
+		          	<a href="<c:out value="${person.detailURL}"/>" target="_blank" title="<c:out value="${person.description}"/>"><c:out value="${person.name}"/></a>
+        		  	<button type="button" onclick="window.open('<c:out value="${person.detailURL}"/>','')">
 	    	    		<fmt:message key="button.more"/>
 				    </button>
 				</c:when>
