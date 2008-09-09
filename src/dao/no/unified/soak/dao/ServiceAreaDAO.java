@@ -55,4 +55,11 @@ public interface ServiceAreaDAO extends DAO {
      *            the serviceArea's id
      */
     public void removeServiceArea(final Long id);
+
+    /**
+     * Searches serviceAreas
+     * @param serviceArea
+     * @return
+     */
+    public List<ServiceArea> searchServiceAreas(ServiceArea serviceArea);
 }

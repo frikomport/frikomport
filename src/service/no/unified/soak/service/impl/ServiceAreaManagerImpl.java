@@ -40,15 +40,15 @@ public class ServiceAreaManagerImpl extends BaseManager
     /**
      * @see no.unified.soak.service.ServiceAreaManager#getServiceAreas(no.unified.soak.model.ServiceArea)
      */
-    public List getAll() {
+    public List<ServiceArea> getAll() {
         return dao.getAll(new Boolean(false));
     }
 
-    public List getAllIncludingDisabled() {
+    public List<ServiceArea> getAllIncludingDisabled() {
         return dao.getAll(new Boolean(true));
     }
 
-    public List getAllIncludingDummy(String value) {
+    public List<ServiceArea> getAllIncludingDummy(String value) {
         List serviceAreas = new ArrayList();
         ServiceArea dummy = new ServiceArea();
         dummy.setId(null);
@@ -80,5 +80,9 @@ public class ServiceAreaManagerImpl extends BaseManager
      */
     public void removeServiceArea(final String id) {
         dao.removeServiceArea(new Long(id));
+    }
+
+    public List<ServiceArea> searchServiceAreas(ServiceArea serviceArea) {
+        return dao.searchServiceAreas(serviceArea);
     }
 }

@@ -70,4 +70,11 @@ public interface ServiceAreaManager extends Manager {
      *            the serviceArea's id
      */
     public void removeServiceArea(final String id);
+
+    /**
+     * Searches serviceAreas for given parameters
+     * @param serviceArea
+     * @return
+     */
+    public List<ServiceArea> searchServiceAreas(ServiceArea serviceArea);
 }

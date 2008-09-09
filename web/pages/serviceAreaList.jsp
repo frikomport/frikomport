@@ -9,6 +9,33 @@
 <fmt:message key="serviceAreaList.item" var="item" />
 <fmt:message key="serviceAreaList.items" var="items" />
 
+<form method="post" action="<c:url value="/listServiceAreas.html"/>" id="serviceAreaList">
+   	<input type="hidden" id="ispostbackservicearealist" name="ispostbackservicearealist" value="1"/>
+
+	<table>
+	    <th>
+	        <soak:label key="serviceArea.organization"/>
+	    </th>
+	    <td>
+	        <spring:bind path="serviceArea.organizationid">
+				  <select name="<c:out value="${status.expression}"/>">
+				    <c:forEach var="organization" items="${organizations}">
+				      <option value="<c:out value="${organization.id}"/>"
+					      <c:if test="${organization.id == serviceArea.organizationid}"> selected="selected"</c:if>>
+				        <c:out value="${organization.name}"/>
+				      </option>
+				    </c:forEach>
+				  </select>
+	            <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
+	        </spring:bind>
+	    </td>
+        <td class="buttonBar">
+		<button type="submit" name="search" onclick="bCancel=false" style="margin-right: 5px">
+			<fmt:message key="button.search"/>
+		</button>
+	</table>
+</form>
+
 <c:set var="buttons">
 	<c:if test="${isAdmin}">
 		<button type="button" style="margin-right: 5px"

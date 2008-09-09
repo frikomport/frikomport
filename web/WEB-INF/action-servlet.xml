@@ -109,7 +109,12 @@
 
 
     <!--ServiceArea-BEAN-START-->
-    <bean id="serviceAreaController" class="no.unified.soak.webapp.action.ServiceAreaController" autowire="byName"/>
+    <bean id="serviceAreaController" class="no.unified.soak.webapp.action.ServiceAreaController" autowire="byName">
+        <property name="commandName" value="serviceArea"/>
+        <property name="commandClass" value="no.unified.soak.model.ServiceArea"/>
+        <property name="formView" value="serviceAreaList"/>
+        <property name="successView" value="serviceAreaList"/>
+    </bean>
 
     <bean id="serviceAreaFormController" class="no.unified.soak.webapp.action.ServiceAreaFormController" autowire="byName">
         <property name="commandName" value="serviceArea"/>

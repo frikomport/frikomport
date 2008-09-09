@@ -75,4 +75,27 @@ public class ServiceAreaDAOHibernate extends BaseDAOHibernate
     public void removeServiceArea(final Long id) {
         getHibernateTemplate().delete(getServiceArea(id));
     }
+
+    /**
+     * @see no.unified.soak.dao.ServiceAreaDAO#searchServiceAreas(no.unified.soak.model.ServiceArea) 
+     * @param serviceArea
+     * @return
+     */
+    public List<ServiceArea> searchServiceAreas(ServiceArea serviceArea) {
+        DetachedCriteria criteria = DetachedCriteria.forClass(ServiceArea.class);
+        if(serviceArea != null){
+            if ((serviceArea.getOrganizationid() != null) &&
+                    (serviceArea.getOrganizationid().longValue() != 0)) {
+                criteria.add(Restrictions.eq("organizationid",
+                        serviceArea.getOrganizationid()));
+            }
+            if (serviceArea.getSelectable() != null) {
+                criteria.add(Restrictions.eq("selectable",
+                        serviceArea.getSelectable()));
+            }
+        }
+        criteria.addOrder(Order.asc("name"));
+
+        return getHibernateTemplate().findByCriteria(criteria);
+    }
 }
