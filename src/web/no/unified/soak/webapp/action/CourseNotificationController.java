@@ -160,7 +160,8 @@ public class CourseNotificationController extends BaseFormController {
 			log.debug("entering 'onSubmit' method...");
 		}
 
-		Course course = (Course) command;
+        Map model = new HashMap();
+        Course course = (Course) command;
 		HttpSession session = request.getSession();
 		String format = getText("date.format", request.getLocale()) + " " + getText("time.format", request.getLocale());
 		
@@ -197,10 +198,11 @@ public class CourseNotificationController extends BaseFormController {
                 sendMail(locale, course, Constants.EMAIL_EVENT_COURSECHANGED, mailComment, mailSender, changedList);
             }
         }
-		
-		session.setAttribute(Constants.ORG_COURSE_KEY, null);
 
-		return new ModelAndView(getSuccessView());
+        model.put("course",course);
+        session.setAttribute(Constants.ORG_COURSE_KEY, null);
+
+		return new ModelAndView(getSuccessView(),model);
 	}
 
 	/**

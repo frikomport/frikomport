@@ -149,7 +149,7 @@
         <property name="commandName" value="course"/>
         <property name="commandClass" value="no.unified.soak.model.Course"/>
         <property name="formView" value="courseNotification"/>
-        <property name="successView" value="redirect:listCourses.html"/>
+        <property name="successView" value="courseDetails"/>
         <property name="cancelView" value="redirect:editCourse.html"/>
         <property name="mailEngine" ref="mailEngine"/>
         <property name="message" ref="mailMessage"/>
@@ -160,7 +160,7 @@
         <property name="commandName" value="course"/>
         <property name="commandClass" value="no.unified.soak.model.Course"/>
         <property name="formView" value="courseEmail"/>
-        <property name="successView" value="redirect:listCourses.html"/>
+        <property name="successView" value="courseDetails"/>
         <property name="cancelView" value="redirect:detailsCourse.html"/>
         <property name="mailEngine" ref="mailEngine"/>
         <property name="message" ref="mailMessage"/>

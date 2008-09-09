@@ -45,6 +45,8 @@ public class CourseEmailController extends CourseNotificationController
             log.debug("entering 'onSubmit' method...");
         }
 
+        Map model = new HashMap();
+
         Course course = (Course) command;
 
         Locale locale = request.getLocale();
@@ -64,6 +66,8 @@ public class CourseEmailController extends CourseNotificationController
             sendMail(locale, course, Constants.EMAIL_EVENT_NOTIFICATION, mailComment, mailSender, null);
         }
 
-        return new ModelAndView(getSuccessView());
+        model.put("course",course);
+
+        return new ModelAndView(getSuccessView(),model);
     }
 }
