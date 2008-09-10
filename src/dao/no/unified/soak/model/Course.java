@@ -63,6 +63,7 @@ public class Course extends BaseObject implements Serializable {
     private String role;
     private Integer availableAttendants;
     private Integer status = 0;
+    private Boolean restricted = false;
     
     /**
      * @return Returns the role.
@@ -646,5 +647,18 @@ public class Course extends BaseObject implements Serializable {
      */
     public void setAvailableAttendants(Integer availableAttendants) {
         this.availableAttendants = availableAttendants;
+    }
+
+    /**
+     * Sets if attendees are visible to other attendees
+     * @return
+     * @hibernate.property column="restricted" not-null="false"
+     */
+    public Boolean getRestricted() {
+        return restricted;
+    }
+
+    public void setRestricted(Boolean restricted) {
+        this.restricted = restricted;
     }
 }

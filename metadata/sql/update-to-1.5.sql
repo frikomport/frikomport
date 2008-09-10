@@ -22,6 +22,7 @@ ALTER TABLE app_user ADD COLUMN invoice_name varchar(100);
 ALTER TABLE app_user ADD COLUMN closest_leader varchar(150);
 
 ALTER TABLE course ADD COLUMN copyid bigint(20);
+ALTER TABLE course ADD COLUMN restricted tinyint(1) DEFAULT 0;
 
 ALTER TABLE servicearea ADD COLUMN organizationid bigint (20) NOT NULL;
 

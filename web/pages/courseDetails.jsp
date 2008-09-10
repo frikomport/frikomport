@@ -83,7 +83,7 @@
 		    </button>
 	</c:when>
 	<c:otherwise>
-		<c:if test="${isCourseParticipant}">
+		<c:if test="${isCourseParticipant && !course.restricted}">
 		    <button type="button" onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.displayRegistrations"/>
 		    </button>

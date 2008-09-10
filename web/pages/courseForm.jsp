@@ -141,7 +141,17 @@ function fillSelect(obj){
 			</td>
 		</tr>
 
-		<tr>
+        <tr>
+			<th>
+				<soak:label key="course.restricted" />
+			</th>
+			<td>
+				<form:checkbox path="restricted" />
+				<form:errors cssClass="fieldError" htmlEscape="false" path="restricted" />
+			</td>
+		</tr>
+
+        <tr>
 			<th>
 				<soak:label key="course.startTime" />
 			</th>
@@ -156,7 +166,7 @@ function fillSelect(obj){
 				<a href="#" name="a1" id="Anch_startTimeDate"
 					onClick="cal1.select(document.forms[0].startTimeDate,'Anch_startTimeDate','<fmt:message key="date.format"/>'); document.getElementById('stopTimeDate').value = Anch_startTimeDate; return false;"
 					onfocus="setStopDate()" title="Vis kalender"><img
-						src="<c:url value="/images/iconCalendar.gif"/>"> </a>
+						src="<c:url value="/images/iconCalendar.gif"/>"></a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="startTimeTime" id="startTimeTime"
 					value="<c:out value="${startTimeTime}"/>"
@@ -186,7 +196,7 @@ function fillSelect(obj){
 				<a href="#" name="a1" id="Anch_stopTimeDate"
 					onClick="cal1.select(document.forms[0].stopTimeDate,'Anch_stopTimeDate','<fmt:message key="date.format"/>'); return false;"
 					title="Vis kalender"><img
-						src="<c:url value="/images/iconCalendar.gif"/>"> </a>
+						src="<c:url value="/images/iconCalendar.gif"/>"></a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="stopTimeTime" id="stopTimeTime"
 					value="<c:out value="${stopTimeTime}"/>"
@@ -367,7 +377,7 @@ function fillSelect(obj){
 				<a href="#" name="a1" id="Anch_registerStartDate"
 					onClick="cal1.select(document.forms[0].registerStartDate,'Anch_registerStartDate','<fmt:message key="date.format"/>'); return false;"
 					title="Vis kalender"><img
-						src="<c:url value="/images/iconCalendar.gif"/>"> </a>
+						src="<c:url value="/images/iconCalendar.gif"/>"></a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="registerStartTime"
 					id="registerStartTime"
@@ -398,7 +408,7 @@ function fillSelect(obj){
 				<a href="#" name="a1" id="Anch_reminderDate"
 					onClick="cal1.select(document.forms[0].reminderDate,'Anch_reminderDate','<fmt:message key="date.format"/>'); return false;"
 					title="Vis kalender"><img
-						src="<c:url value="/images/iconCalendar.gif"/>"> </a>
+						src="<c:url value="/images/iconCalendar.gif"/>"></a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="reminderTime" id="reminderTime"
 					value="<c:out value="${reminderTime}"/>"
@@ -428,7 +438,7 @@ function fillSelect(obj){
 				<a href="#" name="a1" id="Anch_registerByDate"
 					onClick="cal1.select(document.forms[0].registerByDate,'Anch_registerByDate','<fmt:message key="date.format"/>'); return false;"
 					title="Vis kalender"><img
-						src="<c:url value="/images/iconCalendar.gif"/>"> </a>
+						src="<c:url value="/images/iconCalendar.gif"/>"></a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="registerByTime"
 					id="registerByTime" value="<c:out value="${registerByTime}"/>"
@@ -459,9 +469,9 @@ function fillSelect(obj){
 				<a href="#" name="a1" id="Anch_freezeAttendanceDate"
 					onClick="cal1.select(document.forms[0].freezeAttendanceDate,'Anch_freezeAttendanceDate','<fmt:message key="date.format"/>'); return false;"
 					title="Vis kalender"><img
-						src="<c:url value="/images/iconCalendar.gif"/>"> </a>
+						src="<c:url value="/images/iconCalendar.gif"/>"></a>
 				<soak:label key="course.time" />
-				<input type="text" size="6" name="freezeAttendanceTime"
+|				<input type="text" size="6" name="freezeAttendanceTime"
 					id="freezeAttendanceTime"
 					value="<c:out value="${freezeAttendanceTime}"/>"
 					title="Tidsformat: <fmt:message key="time.format.localized"/>" />

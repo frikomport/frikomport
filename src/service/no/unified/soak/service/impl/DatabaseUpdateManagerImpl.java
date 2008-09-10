@@ -45,6 +45,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         // Course updates
         updateResponsibleUsername();
         updateRolename();
+        updateRestrictions();
         // Registrations
         updateRegistrations();
     }
@@ -98,7 +99,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                     course.setRole(Constants.INSTRUCTOR_ROLE);
                 } else if(course.getRole().equals("Opplaringsansvarlig")){
                     course.setRole(Constants.EDITOR_ROLE);
-                } else if(course.getRole().equals("Opplæringsansvarlig")){
+                } else if(course.getRole().equals("Opplï¿½ringsansvarlig")){
                     course.setRole(Constants.EDITOR_ROLE);
                 } else if(course.getRole().equals("Admin")){
                     course.setRole(Constants.ADMIN_ROLE);
@@ -116,6 +117,20 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                 Course course = it.next();
                 if(course.getResponsible() != null && course.getResponsibleUsername() == null){
                     course.setResponsibleUsername(course.getResponsible().getUsername());
+                    courseManager.saveCourse(course);
+                }
+            }
+        }
+    }
+
+    private void updateRestrictions(){
+        List<Course> courses = courseManager.getCourses(new Course());
+        if(courses != null && !courses.isEmpty()){
+            Iterator<Course> it = courses.iterator();
+            while (it.hasNext()){
+                Course course = it.next();
+                if(course.getRestricted() == null){
+                    course.setRestricted(false);
                     courseManager.saveCourse(course);
                 }
             }
