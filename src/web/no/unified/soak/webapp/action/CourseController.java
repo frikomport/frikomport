@@ -171,22 +171,29 @@ public class CourseController extends BaseFormController {
         List courses = courseManager.searchCourses(course, starttime, stoptime);
         List<Course> filtered = filterByRole(isAdmin, roles, courses);
 
-        if (courses != null) {
-            model.put("courseList", filtered);
-        }
-
         User responsible = null;
-        if(user != null && user.getRoleNameList().contains("instructor")){
+        if(user != null && roles.contains(Constants.INSTRUCTOR_ROLE)){
             responsible = user;
         }
         List unpublished = courseManager.getUnpublished(responsible);
-        if(!past && unpublished != null && !unpublished.isEmpty()){
-            model.put("unpublished",unpublished);
+        if(!past && unpublished != null && !unpublished.isEmpty() && isAdmin(roles)){
+            filtered.addAll(unpublished);
+        }
+
+        if (courses != null) {
+            model.put("courseList", filtered);
         }
 
         model.put("JSESSIONID", session.getId());
 
         return model;
+    }
+
+    private boolean isAdmin(List<String> roles){
+        if(roles.contains(Constants.INSTRUCTOR_ROLE) || roles.contains(Constants.EDITOR_ROLE) || roles.contains(Constants.ADMIN_ROLE)){
+            return true;
+        }
+        return false;
     }
 
     private List<Course> filterByRole(Boolean admin, List<String> roles, List courses) {
@@ -289,19 +296,19 @@ public class CourseController extends BaseFormController {
         // Add all courses to the list
         List courses = courseManager.searchCourses(course, starttime, stoptime);
         List<Course> filtered = filterByRole(isAdmin, roles, courses);
-        
-        model.put("courseList", filtered);
-        model.put("historic", historic);
-        model.put("past", past);
 
         User responsible = null;
-        if(user != null && user.getRoleNameList().contains("instructor")){
+        if(user != null && roles.contains(Constants.INSTRUCTOR_ROLE)){
             responsible = user;
         }
         List unpublished = courseManager.getUnpublished(responsible);
-        if(!past && unpublished != null && !unpublished.isEmpty()){
-            model.put("unpublished",unpublished);
+        if(!past && unpublished != null && !unpublished.isEmpty() && isAdmin(roles)){
+            filtered.addAll(unpublished);
         }
+
+        model.put("historic", historic);
+        model.put("past", past);
+        model.put("courseList", filtered);
 
         return new ModelAndView(getSuccessView(), model);
     }

@@ -58,19 +58,18 @@ public interface CourseManager extends Manager {
     /**
      * Searches for all courses that apples to the conditions given
      * @param course contains the parameteres used for searching
-     * @param historic if this is not set, only future courses will be returned
      * @param startTime Course has to have the start date by this date
      * @param stopTime Course has to have the stop date by this date
      * @return list of all courses that applies to the given criteria
      */
-    public List searchCourses(Course course, Date startTime, Date stopTime);
+    public List<Course> searchCourses(Course course, Date startTime, Date stopTime);
 
     /**
      * Gets all unpublished courses
      * @return List of courses with status 0
      * @param user
      */
-    public List getUnpublished(User user);
+    public List<Course> getUnpublished(User user);
 
     /**
      * Finds all courses in the timespan between registerBy and startTime

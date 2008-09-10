@@ -168,7 +168,15 @@
          title="<c:out value="${courseList.description}"/>"><c:out value="${courseList.name}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="course.name"/>
-    
+
+    <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+    <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.status">
+        <c:if test="${courseList.status == 0}"><img src="<c:url value="/images/add.png"/>" alt="<fmt:message key="course.status.created"/>" title="<fmt:message key="course.status.created"/>" class="icon"/></c:if>
+        <c:if test="${courseList.status == 2}"><img src="<c:url value="/images/accept.png"/>" alt="<fmt:message key="course.status.published"/>" title="<fmt:message key="course.status.published"/>" class="icon"/></c:if>
+        <c:if test="${courseList.status == 3}"><img src="<c:url value="/images/cancel.png"/>" alt="<fmt:message key="course.status.cancelled"/>" title="<fmt:message key="course.status.cancelled"/>" class="icon"/></c:if>
+    </display:column>
+    </c:if>
+
     <display:column sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
          <fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
@@ -231,7 +239,7 @@
 
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-<c:if test="${username == courseList.responsible.username}">
+<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible && username == courseList.responsible.username}">
 	    <button type="button" onclick="location.href='<c:url value="/editCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>'">
     	    <fmt:message key="button.edit"/>
 	    </button>
@@ -244,90 +252,6 @@
 </display:table>
 
 <c:out value="${buttons}" escapeXml="false"/>
-
-<c:if test="${unpublished != null && (isAdmin || isEducationResponsible || isCourseResponsible)}">
-    <h1><fmt:message key="unpublished.heading"/></h1>
-    <display:table name="${unpublished}" id="unpublished" pagesize="5" class="list">
-    <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="name">
-         <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${unpublished.id}"/></c:url>"
-         title="<c:out value="${unpublished.description}"/>"><c:out value="${unpublished.name}"/></a>
-    </display:column>
-    <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="course.name"/>
-
-    <display:column sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
-         <fmt:formatDate value="${unpublished.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
-    </display:column>
-
-    <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.stopTime" sortProperty="stopTime">
-         <fmt:formatDate value="${unpublished.stopTime}" type="both" pattern="${dateformat} ${timeformat}"/>
-    </display:column>
-
-    <display:column property="availableAttendants" sortable="true" headerClass="sortable" titleKey="course.availableAttendants"/>
-
-    <display:column property="duration" sortable="true" headerClass="sortable"
-         titleKey="course.duration"/>
-
-    <display:column property="organization.name" sortable="true" headerClass="sortable"
-         titleKey="course.organization"/>
-
-    <display:column property="serviceArea.name" sortable="true" headerClass="sortable"
-         titleKey="course.serviceArea"/>
-
-    <display:column media="csv excel xml pdf" property="type" sortable="true" headerClass="sortable" titleKey="course.type.export"/>
-
-    <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.location">
-         <a href="<c:url value="/detailsLocation.html"><c:param name="id" value="${unpublished.location.id}"/></c:url>" title="<c:out value="${unpublished.location.description}"/>"><c:out value="${unpublished.location.name}"/></a>
-    </display:column>
-    <display:column media="csv excel xml pdf" property="location.name" sortable="true" headerClass="sortable" titleKey="course.location"/>
-
-    <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.responsible">
-         <a href="<c:url value="/detailsUser.html"><c:param name="username" value="${unpublished.responsible.username}"/></c:url>"><c:out value="${unpublished.responsible.fullName}"/></a>
-    </display:column>
-    <display:column media="csv excel xml pdf" property="responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible"/>
-
-    <display:column media="excel" property="instructor.name" sortable="true" headerClass="sortable" titleKey="course.instructor.export"/>
-
-    <display:column media="excel" property="maxAttendants" sortable="true" headerClass="sortable" titleKey="course.maxAttendants.export"/>
-
-    <display:column media="excel" property="reservedInternal" sortable="true" headerClass="sortable" titleKey="course.reservedInternal.export"/>
-
-    <display:column media="excel" property="feeInternal" sortable="true" headerClass="sortable" titleKey="course.feeInternal.export"/>
-
-    <display:column media="excel" property="feeExternal" sortable="true" headerClass="sortable" titleKey="course.feeExternal.export"/>
-
-    <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.registerStart.export" sortProperty="registerStart">
-         <fmt:formatDate value="${unpublished.registerStart}" type="both" pattern="${dateformat} ${timeformat}"/>
-    </display:column>
-
-    <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.registerBy.export" sortProperty="registerBy">
-         <fmt:formatDate value="${unpublished.registerBy}" type="both" pattern="${dateformat} ${timeformat}"/>
-    </display:column>
-
-    <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.reminder.export" sortProperty="reminder">
-         <fmt:formatDate value="${unpublished.reminder}" type="both" pattern="${dateformat} ${timeformat}"/>
-    </display:column>
-
-    <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.freezeAttendance.export" sortProperty="freezeAttendance">
-         <fmt:formatDate value="${unpublished.freezeAttendance}" type="both" pattern="${dateformat} ${timeformat}"/>
-    </display:column>
-
-    <display:column media="excel" property="description" sortable="true" headerClass="sortable" titleKey="course.description.export"/>
-
-    <display:column media="excel" property="detailURL" sortable="true" headerClass="sortable" titleKey="course.detailURL.export"/>
-
-    <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && userId == courseList.responsibleid)}">
-	    <button type="button" onclick="location.href='<c:url value="/editCourse.html"><c:param name="id" value="${unpublished.id}"/></c:url>'">
-    	    <fmt:message key="button.edit"/>
-	    </button>
-</c:if>
-    </display:column>
-
-    <display:setProperty name="paging.banner.item_name" value="${item}"/>
-    <display:setProperty name="paging.banner.items_name" value="${items}"/>
-    </display:table>
-</c:if>
-
 <%--
 <script type="text/javascript">
 highlightTableRows("courseList");

@@ -253,8 +253,7 @@ public class CourseFileFormController extends BaseFormController {
         model.put("course", course);
 
         // Fetch the new file list
-        AttachmentsBackingObject abo = getAttachmentsBackingObjects(new Long(
-                    courseid));
+        AttachmentsBackingObject abo = getAttachmentsBackingObjects(new Long(courseid));
         model.put("attachmentsBackingObject", abo);
 
         // Reset the fileUpload-object

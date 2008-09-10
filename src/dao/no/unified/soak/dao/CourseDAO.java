@@ -27,7 +27,7 @@ public interface CourseDAO extends DAO {
     /**
      * Retrieves all of the courses
      */
-    public List getCourses(Course course);
+    public List<Course> getCourses(Course course);
 
     /**
      * Gets course's information based on primary key. An
@@ -54,26 +54,25 @@ public interface CourseDAO extends DAO {
     /**
      * Searches for all courses that apples to the conditions given
      * @param course contains the parameteres used for searching
-     * @param historic if this is not set, only future courses will be returned
-     * @param startTime Course has to have the start date by this date
-     * @param stopTime Course has to have the stop date by this date
+     * @param startDate Course has to have the start date by this date
+     * @param stopDate Course has to have the stop date by this date
      * @return list of all courses that applies to the given criteria
      */
-    public List searchCourses(Course course, Date startDate, Date stopDate);
+    public List<Course> searchCourses(Course course, Date startDate, Date stopDate);
 
     /**
      * Finds all courses in the timespan between registerBy and startTime
      *
      * @return A list of all courses that needs looking into
      */
-    public List getWaitingListCourses();
+    public List<Course> getWaitingListCourses();
 
     /**
      * Gets all courses with status 0
-     * @return
-     * @param user
+     * @return list of all courses with status 0
+     * @param user user responisble for courses
      */
-    public List getUnpublished(User user);
+    public List<Course> getUnpublished(User user);
 
     public List<Course> findByInstructor(Person person);
 }

@@ -12,6 +12,7 @@ package no.unified.soak.dao.hibernate;
 
 import java.util.Date;
 import java.util.List;
+import java.util.ArrayList;
 
 import no.unified.soak.dao.CourseDAO;
 import no.unified.soak.model.Course;
@@ -70,10 +71,9 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
     }
 
     /**
-     * @see no.unified.soak.dao.CourseDAO#searchCourses(no.unified.soak.model.Course,
-     *      boolean)
+     * @see no.unified.soak.dao.CourseDAO#searchCourses(no.unified.soak.model.Course, Date, Date)
      */
-    public List searchCourses(Course course, Date startDate, Date stopDate) {
+    public List<Course> searchCourses(Course course, Date startDate, Date stopDate) {
         // Default search is "find all"
         DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
 
@@ -113,10 +113,7 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
 
         criteria.addOrder(Order.asc("startTime"));
 
-        // Perform search
-        List courses = getHibernateTemplate().findByCriteria(criteria);
-
-        return courses;
+        return getHibernateTemplate().findByCriteria(criteria);
     }
 
     /**
@@ -136,7 +133,7 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
     }
 
     /**
-	 * @see no.unified.soak.dao.CourseDAO#getUnpublished()
+	 * @see no.unified.soak.dao.CourseDAO#getUnpublished(User user)
 	 */
     public List<Course> getUnpublished(User user){
         DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
