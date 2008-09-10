@@ -141,6 +141,7 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
         if(user != null){
             criteria.add(Restrictions.eq("responsible",user));
         }
+        criteria.addOrder(Order.asc("startTime"));
         return getHibernateTemplate().findByCriteria(criteria);
     }
 

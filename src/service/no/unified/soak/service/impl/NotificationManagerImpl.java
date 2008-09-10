@@ -148,8 +148,7 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 
 						// Store that it has been successfully sent - cleanup by
 						// cleanup manager
-						String localeLanguage = notification.getRegistration()
-								.getLocale();
+						String localeLanguage = notification.getRegistration().getLocale();
 						Locale locale = new Locale(localeLanguage);
 						StringBuffer msg = MailUtil.createStandardBody(course,
 								Constants.EMAIL_EVENT_NOTIFICATION, locale,

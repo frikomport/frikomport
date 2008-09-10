@@ -177,7 +177,7 @@ public class CourseController extends BaseFormController {
         }
         List unpublished = courseManager.getUnpublished(responsible);
         if(!past && unpublished != null && !unpublished.isEmpty() && isAdmin(roles)){
-            filtered.addAll(unpublished);
+            filtered.addAll(0,unpublished);
         }
 
         if (courses != null) {
@@ -303,7 +303,7 @@ public class CourseController extends BaseFormController {
         }
         List unpublished = courseManager.getUnpublished(responsible);
         if(!past && unpublished != null && !unpublished.isEmpty() && isAdmin(roles)){
-            filtered.addAll(unpublished);
+            filtered.addAll(0,unpublished);
         }
 
         model.put("historic", historic);

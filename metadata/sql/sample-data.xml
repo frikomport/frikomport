@@ -735,7 +735,7 @@
 			</value>
 			<value>anonymous</value>
 			<value>2</value>
-		</row>
+        </row>
 		<row>
 			<value>2</value>
 			<value></value>
@@ -766,7 +766,7 @@
 			</value>
 			<value>anonymous</value>
 			<value>2</value>
-		</row>
+        </row>
 		<row>
 			<value>2</value>
 			<value></value>
@@ -795,7 +795,7 @@
 			</value>
 			<value>anonymous</value>
 			<value>2</value>
-		</row>
+        </row>
 		<row>
 			<value>2</value>
 			<value></value>
@@ -828,7 +828,7 @@
 			</value>
 			<value>anonymous</value>
 			<value>0</value>
-		</row>
+        </row>
 	</table>
 	<!--Course-END-->
 
@@ -1025,7 +1025,7 @@
 		</row>
 		<row>
 			<value>1</value>
-			<value>acr@unified.no</value>
+			<value>henrik@frikomport.no</value>
 			<value>88888</value>
 			<value>Henrik</value>
 			<value>JobbOgGmailsen</value>
