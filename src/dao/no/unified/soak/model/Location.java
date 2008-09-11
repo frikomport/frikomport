@@ -24,7 +24,7 @@ import java.io.Serializable;
  * Hibernate mapping file.
  *
  * @author hrj
- * @hibernate.class table="location"
+ * @hibernate.class table="location" lazy="false"
  */
 public class Location extends BaseObject implements Serializable {
     /**

@@ -252,30 +252,37 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		boolean save = false;
 		if (user.getOrganization() != null) {
 			Address orgAddress = user.getOrganization().getInvoiceAddress();
-			if (user.getInvoiceAddress().getAddress().equals("")) {
-				user.getInvoiceAddress().setAddress(orgAddress.getAddress());
-				save = true;
-			}
-			if (user.getInvoiceAddress().getCity().equals("")) {
-				user.getInvoiceAddress().setCity(orgAddress.getCity());
-				save = true;
-			}
-			if (user.getInvoiceAddress().getCountry().equals("")) {
-				user.getInvoiceAddress().setCountry(orgAddress.getCountry());
-				save = true;
-			}
-			if (user.getInvoiceAddress().getPostalCode().equals("")) {
-				user.getInvoiceAddress().setPostalCode(orgAddress.getPostalCode());
-				save = true;
-			}
-			if (user.getInvoiceAddress().getProvince().equals("")) {
-				user.getInvoiceAddress().setProvince(orgAddress.getProvince());
-				save = true;
-			}
-			if (user.getInvoiceName() == null || user.getInvoiceName().equals("")) {
-				user.setInvoiceName(user.getOrganization().getInvoiceName());
-				save = true;
-			}
+            Address invoiceAddress = user.getInvoiceAddress();
+            if(invoiceAddress == null){
+                invoiceAddress = orgAddress;
+                save = true;
+            }
+            else{
+                if ("".equals(invoiceAddress.getAddress())) {
+                    invoiceAddress.setAddress(orgAddress.getAddress());
+                    save = true;
+                }
+                if ("".equals(invoiceAddress.getCity())) {
+                    invoiceAddress.setCity(orgAddress.getCity());
+                    save = true;
+                }
+                if ("".equals(invoiceAddress.getCountry())) {
+                    invoiceAddress.setCountry(orgAddress.getCountry());
+                    save = true;
+                }
+                if ("".equals(invoiceAddress.getPostalCode())) {
+                    invoiceAddress.setPostalCode(orgAddress.getPostalCode());
+                    save = true;
+                }
+                if ("".equals(invoiceAddress.getProvince())) {
+                    invoiceAddress.setProvince(orgAddress.getProvince());
+                    save = true;
+                }
+                if ("".equals(user.getInvoiceName())) {
+                    user.setInvoiceName(user.getOrganization().getInvoiceName());
+                    save = true;
+                }
+            }
 		}
 		return save;
 	}

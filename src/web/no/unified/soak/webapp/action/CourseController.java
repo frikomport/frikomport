@@ -88,9 +88,9 @@ public class CourseController extends BaseFormController {
         HttpSession session = request.getSession();
         Object comm = session.getAttribute("course");
         
-        String alreaddyRegistered = request.getParameter("alreaddyRegistered");
-        if (alreaddyRegistered != null && alreaddyRegistered.equals("true")){
-        	model.put("alreaddyRegistered" , true);
+        String alreadyRegistered = request.getParameter("alreadyRegistered");
+        if (alreadyRegistered != null && alreadyRegistered.equals("true")){
+        	model.put("alreadyRegistered" , true);
         }
         
         Map map = request.getParameterMap();

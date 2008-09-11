@@ -240,7 +240,7 @@ public class RegistrationFormController extends BaseFormController {
 		String key = null;
 		Map model = new HashMap();
 		Boolean courseFull = null;
-		Boolean alreaddyRegistered = false;
+		Boolean alreadyRegistered = false;
 		Boolean changedCourse = false;
 
 		// Fetch the object from the form
@@ -294,7 +294,7 @@ public class RegistrationFormController extends BaseFormController {
 					registration.getEmail(), registration.getFirstName(), registration.getLastName(), registration
 							.getCourseid());
 
-			// Is this a valid date to register? Or has this user alreaddy been
+			// Is this a valid date to register? Or has this user already been
 			// registered to this course?
 			// (It is always allowed to edit the data)
 			if ((registration.getId() == null) || (registration.getId().longValue() == 0)) {
@@ -302,9 +302,9 @@ public class RegistrationFormController extends BaseFormController {
 					return new ModelAndView(getCancelView(), "courseId", registration.getCourseid());
 				}
 				if (userRegistraionsForCourse.size() > 0) {
-					alreaddyRegistered = true;
-					model.put("alreaddyRegistered", alreaddyRegistered);
-					return new ModelAndView(getCancelView(), "alreaddyRegistered", true);
+					alreadyRegistered = true;
+					model.put("alreadyRegistered", alreadyRegistered);
+					return new ModelAndView(getCancelView(), "alreadyRegistered", true);
 				}
 			}
 			

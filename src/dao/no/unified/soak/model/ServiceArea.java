@@ -24,7 +24,7 @@ import java.io.Serializable;
  * Hibernate mapping file.
  *
  * @author hrj
- * @hibernate.class table="servicearea"
+ * @hibernate.class table="servicearea" lazy="false"
  */
 public class ServiceArea extends BaseObject implements Serializable {
     /**
@@ -155,4 +155,5 @@ public class ServiceArea extends BaseObject implements Serializable {
     public int hashCode() {
         return new HashCodeBuilder().append(Id).toHashCode();
     }
+
 }

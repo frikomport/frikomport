@@ -283,7 +283,8 @@ public class CourseFormController extends BaseFormController {
 			newCourse.setCopyid(new Long(copyid));
 		} else {
 			course = new Course();
-			// Check if a default organization should be applied
+            course.setRole(Constants.ANONYMOUS_ROLE);
+            // Check if a default organization should be applied
 			User user = (User) request.getSession().getAttribute(Constants.USER_KEY);
 			Object omid = user.getOrganizationid();
 			if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
@@ -569,7 +570,7 @@ public class CourseFormController extends BaseFormController {
     private Date parseDateAndTime(HttpServletRequest request, String fieldName, String format) throws ParseException {
 		SimpleDateFormat formatter = new SimpleDateFormat(format);
 		formatter.setLenient(false);
-//		formatter.set2DigitYearStart(formatter.parse("01.01.2000 00:00"));
+		formatter.set2DigitYearStart(formatter.parse("01.01.2000 00:00"));
 		String date = request.getParameter(fieldName + "Date");
 		String time = request.getParameter(fieldName + "Time");
 

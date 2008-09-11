@@ -24,7 +24,7 @@ import java.io.Serializable;
  * Hibernate mapping file.
  *
  * @author hrj
- * @hibernate.class table="organization"
+ * @hibernate.class table="organization" lazy="true"
  */
 public class Organization extends BaseObject implements Serializable {
     /**

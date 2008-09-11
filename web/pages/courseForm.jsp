@@ -1,5 +1,12 @@
 <%@ include file="/common/taglibs.jsp"%>
 
+<fmt:message key="date.format" var="dateformat" />
+<fmt:message key="time.format" var="timeformat" />
+<fmt:message key="date.format.localized" var="datelocalized" />
+<fmt:message key="time.format.localized" var="timelocalized" />
+<fmt:message key="access.course.singleprice" var="singleprice" />
+<fmt:message key="access.course.filterlocation" var="filterlocation" />
+
 <SCRIPT LANGUAGE="JavaScript" ID="js1">
 var cal1 = new CalendarPopup();
 cal1.setMonthNames('Januar','Februar','Mars','April','Mai','Juni','Juli','August','September','Oktober','November','Desember'); 
@@ -17,33 +24,53 @@ function setMaxAttendants(obj) {
 	var locid= obj.options[obj.selectedIndex].value;
  	
 	<c:forEach var="location" items="${locations}">
-		if (("<c:out value="${location.id}"/>" != "") && ("<c:out value="${location.id}"/>" == locid)){
-			document.getElementById('maxAttendants').value = <c:out value="${location.maxAttendants}"/>
+        <c:if test="${location.maxAttendants != null}">
+        if (("<c:out value="${location.id}"/>" != "") && ("<c:out value="${location.id}"/>" == locid)){
+			document.getElementById('maxAttendants').value = <c:out value="${location.maxAttendants}"/>;
 		}
-	</c:forEach>
+        </c:if>
+    </c:forEach>
 
 }
 
 // Code to change the select list for service aera based on organization id.
 function fillSelect(obj){
  var orgid=obj.options[obj.selectedIndex].value;
- var temp= document.course.serviceAreaid;
-  
- while(temp.firstChild){
- 	temp.removeChild(temp.firstChild);
- }
- 
- var j = 0;
-	<c:forEach var="servicearea" items="${serviceareas}">
-		if ("<c:out value="${servicearea.id}"/>" == ""){
-			temp.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>", true);
-			j++
-		}
-		else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
-			temp.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>");
-			j++ 
-		}
-	</c:forEach>
+ var serviceArea= document.course.serviceAreaid;
+
+    while(serviceArea.firstChild){
+        serviceArea.removeChild(serviceArea.firstChild);
+    }
+
+    var j = 0;
+<c:forEach var="servicearea" items="${serviceareas}">
+    if ("<c:out value="${servicearea.id}"/>" == ""){
+        serviceArea.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>", true);
+        j++;
+    }
+else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
+        serviceArea.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>");
+        j++ ;
+    }
+</c:forEach>
+
+<c:if test="${filterlocation}">
+    var location= document.course.locationid;
+    while(location.firstChild){
+        location.removeChild(location.firstChild);
+    }
+    var k = 0;
+<c:forEach var="location" items="${locations}">
+    if ("<c:out value="${location.id}"/>" == ""){
+        location.options[k]=new Option("<c:out value="${location.name}"/>", "<c:out value="${location.id}"/>", true);
+        k++;
+    }
+    else if ("<c:out value="${location.organizationid}"/>" == orgid){
+        location.options[k]=new Option("<c:out value="${location.name}"/>", "<c:out value="${location.id}"/>");
+        k++ ;
+    }
+</c:forEach>
+ </c:if>
 }
 
 </SCRIPT>
@@ -88,13 +115,10 @@ function fillSelect(obj){
 
 <form:form commandName="course" onsubmit="return validateCourse(this)" name="course">
 
-	<fmt:message key="date.format" var="dateformat" />
-	<fmt:message key="time.format" var="timeformat" />
-	<fmt:message key="date.format.localized" var="datelocalized" />
-	<fmt:message key="time.format.localized" var="timelocalized" />
-	<fmt:message key="access.course.singleprice" var="singleprice" />
 
-	<table class="detail">
+
+
+    <table class="detail">
 
 		<form:hidden path="id" />
 
@@ -161,12 +185,11 @@ function fillSelect(obj){
 				<fmt:formatDate value="${course.startTime}" type="time"
 					pattern="${timeformat}" var="startTimeTime" />
 				<input type="text" size="12" name="startTimeDate" id="startTimeDate"
-					value="<c:out value="${startTimeDate}"/>" onchange="setStopDate()"
+					value="<c:out value="${startTimeDate}"/>" 
 					title="Datoformat: <fmt:message key="date.format.localized"/>" />
 				<a href="#" name="a1" id="Anch_startTimeDate"
-					onClick="cal1.select(document.forms[0].startTimeDate,'Anch_startTimeDate','<fmt:message key="date.format"/>'); document.getElementById('stopTimeDate').value = Anch_startTimeDate; return false;"
-					onfocus="setStopDate()" title="Vis kalender"><img
-						src="<c:url value="/images/iconCalendar.gif"/>"></a>
+					onClick="cal1.select(document.forms[0].startTimeDate,'Anch_startTimeDate','<fmt:message key="date.format"/>'); return false;"
+					title="Vis kalender"><img src="<c:url value="/images/iconCalendar.gif"/>"></a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="startTimeTime" id="startTimeTime"
 					value="<c:out value="${startTimeTime}"/>"
@@ -273,12 +296,41 @@ function fillSelect(obj){
 				<soak:label key="course.location" />
 			</th>
 			<td>
-				<form:select path="locationid" onchange="setMaxAttendants(this)">
+                <c:choose>
+                    <c:when test="${filterlocation == true}">
+                <spring:bind path="course.locationid">
+					<select name="<c:out value="${status.expression}"/>">
+						<c:forEach var="location" items="${locations}">
+							<c:choose>
+								<c:when test="${empty location.id}">
+									<option value="<c:out value="${location.id}"/>"
+										<c:if test="${location.id == course.locationid}"> selected="selected"</c:if>>
+										<c:out value="${location.name}" />
+									</option>
+								</c:when>
+								<c:otherwise>
+									<c:if
+										test="${location.organizationid == course.organizationid}">
+										<option value="<c:out value="${location.id}"/>"
+											<c:if test="${location.id == course.locationid}"> selected="selected"</c:if>>
+											<c:out value="${location.name}" />
+										</option>
+									</c:if>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+					</select>
+					<span class="fieldError"><c:out	value="${status.errorMessage}" escapeXml="false" />
+                </spring:bind>
+                    </c:when>
+                    <c:otherwise>
+                <form:select path="locationid" onchange="setMaxAttendants(this)">
 					<form:options items="${locations}" itemValue="id" itemLabel="name" />
 				</form:select>
-				<form:errors cssClass="fieldError" htmlEscape="false"
-					path="locationid" />
-			</td>
+				<form:errors cssClass="fieldError" htmlEscape="false" path="locationid" />
+                    </c:otherwise>
+                </c:choose>
+            </td>
 		</tr>
 
 		<tr>

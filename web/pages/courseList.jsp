@@ -8,9 +8,9 @@
 <fmt:message key="courseList.item" var="item"/>
 <fmt:message key="courseList.items" var="items"/>
 
-<c:if test="${alreaddyRegistered}">
+<c:if test="${alreadyRegistered}">
 	<div class="message" style="font-size: 12px">
-		<fmt:message key="courseList.alreaddyRegistered" />
+		<fmt:message key="courseList.alreadyRegistered" />
 	</div>
 </c:if>
 

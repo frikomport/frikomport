@@ -25,7 +25,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * Hibernate mapping file.
  *
  * @author hrj
- * @hibernate.class table="course"
+ * @hibernate.class table="course" lazy="false"
  */
 public class Course extends BaseObject implements Serializable {
     /**
@@ -108,7 +108,7 @@ public class Course extends BaseObject implements Serializable {
     }
 
     /**
-     * @param responsibleUsername
+     * @param responsibleusername
      *            The responsibleUsername to set.
      */
     public void setResponsibleUsername(String responsibleusername) {
@@ -581,7 +581,7 @@ public class Course extends BaseObject implements Serializable {
     }
 
     /**
-     * @see java.lang.Object#equals()
+     * @see java.lang.Object#equals(Object) ()
      */
     public boolean equals(final Object other) {
         if (!(other instanceof Course)) {
