@@ -17,10 +17,7 @@ import no.unified.soak.Constants;
 import java.util.Locale;
 import java.util.List;
 import java.util.Iterator;
-import java.util.ArrayList;
 
-import org.springframework.validation.Validator;
-import org.springframework.orm.ObjectRetrievalFailureException;
 import org.apache.commons.validator.EmailValidator;
 
 /**
@@ -60,94 +57,26 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         // ServiceArea updates
         updateServiceAreas();
         // User updates
-        updateUserInvoiceAddress();
-        updateUserServiceAreas();
+        updateUsers();
         // Organization updates
-        updateOrganizationInvoiceAddress();
+        updateOrganizations();
         // Course updates
-        updateResponsibleUsername();
-        updateRolename();
-        updateRestrictions();
-        updateCourseServiceAreas();
+        updateCourses();
         // Registration updates
         updateRegistrations();
-        updateRegistrationsServiceAreas();
-    }
-
-    /**
-     * Updates servicearea for registrations
-     * @since 1.5
-     */
-    private void updateRegistrationsServiceAreas() {
-        List<Registration> registrations = registrationManager.getRegistrations(new Registration());
-        if(registrations != null && !registrations.isEmpty()){
-            Iterator<Registration> it = registrations.iterator();
-            while(it.hasNext()){
-                Registration registration = it.next();
-                if(registration.getOrganization() != null && registration.getServiceArea() != null){
-                    if(!registration.getOrganization().equals(registration.getServiceArea().getOrganization())){
-                        ServiceArea search = new ServiceArea();
-                        search.setOrganizationid(registration.getOrganizationid());
-                        List<ServiceArea> serviceAreas = serviceAreaManager.searchServiceAreas(search);
-                        Iterator<ServiceArea> sit = serviceAreas.iterator();
-                        while (sit.hasNext()){
-                            ServiceArea serviceArea = sit.next();
-                            if(registration.getServiceArea().getName().equals(serviceArea.getName())){
-                                registration.setServiceArea(serviceArea);
-                                registration.setServiceAreaid(serviceArea.getId());
-                                registrationManager.saveRegistration(registration);
-                                break;
-                            }
-                        }
-
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Updates serviceareas for users
-     * @since 1.5
-     */
-    private void updateUserServiceAreas() {
-        List<User> users = userManager.getUsers(new User());
-        if(users != null && !users.isEmpty()){
-            Iterator<User> it = users.iterator();
-            while(it.hasNext()){
-                User user = it.next();
-                if(user.getOrganization() != null && user.getServiceArea() != null){
-                    if(!user.getOrganization().equals(user.getServiceArea().getOrganization())){
-                        ServiceArea search = new ServiceArea();
-                        search.setOrganizationid(user.getOrganizationid());
-                        List<ServiceArea> serviceAreas = serviceAreaManager.searchServiceAreas(search);
-                        Iterator<ServiceArea> sit = serviceAreas.iterator();
-                        while (sit.hasNext()){
-                            ServiceArea serviceArea = sit.next();
-                            if(user.getServiceArea().getName().equals(serviceArea.getName())){
-                                user.setServiceArea(serviceArea);
-                                user.setServiceAreaid(serviceArea.getId());
-                                userManager.updateUser(user);
-                                break;
-                            }
-                        }
-
-                    }
-                }
-            }
-        }
     }
 
     /**
      * Updates invoiceaddress for organization
      * @since 1.5
      */
-    private void updateOrganizationInvoiceAddress(){
+    private void updateOrganizations(){
         List<Organization> organizations = organizationManager.getAllIncludingDisabled();
         if(organizations != null && !organizations.isEmpty()){
             Iterator<Organization> it = organizations.iterator();
             while(it.hasNext()){
                 Organization organization = it.next();
+                // update invoiceaddress
                 if(organization.getInvoiceAddress() == null){
                     Address invoice = new Address();
                     invoice.setPostalCode("0");
@@ -162,16 +91,39 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
      * Updates invoiceaddress for user
      * @since 1.5
      */
-    private void updateUserInvoiceAddress(){
+    private void updateUsers(){
         List<User> users = userManager.getUsers(new User());
         if(users != null && !users.isEmpty()){
             Iterator<User> it = users.iterator();
             while(it.hasNext()){
+                boolean save = false;
                 User user = it.next();
+                // Updates invoice address
                 if(user.getInvoiceAddress() == null){
                     Address invoice = new Address();
                     invoice.setPostalCode("0");
                     user.setInvoiceAddress(invoice);
+                    save = true;
+                }
+                // updates serviceareas
+                if(user.getOrganization() != null && user.getServiceArea() != null){
+                    if(!user.getOrganization().equals(user.getServiceArea().getOrganization())){
+                        ServiceArea search = new ServiceArea();
+                        search.setOrganizationid(user.getOrganizationid());
+                        List<ServiceArea> serviceAreas = serviceAreaManager.searchServiceAreas(search);
+                        Iterator<ServiceArea> sit = serviceAreas.iterator();
+                        while (sit.hasNext()){
+                            ServiceArea serviceArea = sit.next();
+                            if(user.getServiceArea().getName().equals(serviceArea.getName())){
+                                user.setServiceArea(serviceArea);
+                                user.setServiceAreaid(serviceArea.getId());
+                                save = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if(save){
                     userManager.updateUser(user);
                 }
             }
@@ -187,9 +139,10 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         if(registrations != null && !registrations.isEmpty()){
             Iterator<Registration> it = registrations.iterator();
             while (it.hasNext()){
+                boolean save = false;
                 Registration registration = it.next();
                 User admin = userManager.getUser("admin");
-                // Only use valid emails
+                // Checks the registrations table and creates users based on email addresses
                 if(registration.getUsername() == null || registration.getUsername().trim().length() == 0){
                     if(EmailValidator.getInstance().isValid(registration.getEmail())){
                         User user = userManager.findUser(registration.getEmail());
@@ -199,14 +152,42 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                         // Connect user with registration
                         registration.setUser(user);
                         registration.setUsername(user.getUsername());
-                        registrationManager.saveRegistration(registration);
+                        save = true;
                     }
                     else {
                         // Connect with admin user
                         registration.setUser(admin);
                         registration.setUsername(admin.getUsername());
-                        registrationManager.saveRegistration(registration);
+                        save = true;
                     }
+                }
+                // updates the invoice address
+                if(registration.getInvoiceAddress() == null){
+                    Address invoice = new Address();
+                    invoice.setPostalCode("0");
+                    registration.setInvoiceAddress(invoice);
+                    save = true;
+                }
+                // updates serviceareas
+                if(registration.getOrganization() != null && registration.getServiceArea() != null){
+                    if(!registration.getOrganization().equals(registration.getServiceArea().getOrganization())){
+                        ServiceArea search = new ServiceArea();
+                        search.setOrganizationid(registration.getOrganizationid());
+                        List<ServiceArea> serviceAreas = serviceAreaManager.searchServiceAreas(search);
+                        Iterator<ServiceArea> sit = serviceAreas.iterator();
+                        while (sit.hasNext()){
+                            ServiceArea serviceArea = sit.next();
+                            if(registration.getServiceArea().getName().equals(serviceArea.getName())){
+                                registration.setServiceArea(serviceArea);
+                                registration.setServiceAreaid(serviceArea.getId());
+                                save = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if(save){
+                    registrationManager.saveRegistration(registration);
                 }
             }
         }
@@ -215,60 +196,63 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     /**
      * @since 1.4
      */
-    private void updateRolename() {
+    private void updateCourses() {
         List<Course> courses = courseManager.getCourses(new Course());
         if(courses != null && !courses.isEmpty()){
             Iterator<Course> it = courses.iterator();
             while (it.hasNext()){
+                boolean save = false;
                 Course course = it.next();
                 if(course.getRole().equals("Anonymous")){
                     course.setRole(Constants.ANONYMOUS_ROLE);
+                    save = true;
                 } else if(course.getRole().equals("Ansatt")){
                     course.setRole(Constants.EMPLOYEE_ROLE);
+                    save = true;
                 } else if(course.getRole().equals("Kommuneansatt")){
                     course.setRole(Constants.EMPLOYEE_ROLE);
+                    save = true;
                 } else if(course.getRole().equals("Kursansvarlig")){
                     course.setRole(Constants.INSTRUCTOR_ROLE);
+                    save = true;
                 } else if(course.getRole().equals("Opplaringsansvarlig")){
                     course.setRole(Constants.EDITOR_ROLE);
+                    save = true;
                 } else if(course.getRole().equals("Oppl�ringsansvarlig")){
                     course.setRole(Constants.EDITOR_ROLE);
+                    save = true;
                 } else if(course.getRole().equals("Admin")){
                     course.setRole(Constants.ADMIN_ROLE);
+                    save = true;
                 }
-                courseManager.saveCourse(course);
-            }
-        }
-    }
-
-    /**
-     * @since 1.4
-     */
-    private void updateResponsibleUsername() {
-        List<Course> courses = courseManager.getCourses(new Course());
-        if(courses != null && !courses.isEmpty()){
-            Iterator<Course> it = courses.iterator();
-            while (it.hasNext()){
-                Course course = it.next();
+                // responsible username
                 if(course.getResponsible() != null && course.getResponsibleUsername() == null){
                     course.setResponsibleUsername(course.getResponsible().getUsername());
-                    courseManager.saveCourse(course);
+                    save = true;
                 }
-            }
-        }
-    }
-
-    /**
-     * @since 1.5
-     */
-    private void updateRestrictions(){
-        List<Course> courses = courseManager.getCourses(new Course());
-        if(courses != null && !courses.isEmpty()){
-            Iterator<Course> it = courses.iterator();
-            while (it.hasNext()){
-                Course course = it.next();
+                // restrictions
                 if(course.getRestricted() == null){
                     course.setRestricted(false);
+                    save = true;
+                }
+                // service areas
+                if(!course.getServiceArea().getOrganization().equals(course.getOrganization())){
+                    // må hente servicearea som passer
+                    ServiceArea search = new ServiceArea();
+                    search.setOrganizationid(course.getOrganizationid());
+                    List<ServiceArea> serviceAreas = serviceAreaManager.searchServiceAreas(search);
+                    Iterator<ServiceArea> sit = serviceAreas.iterator();
+                    while (sit.hasNext()){
+                        ServiceArea serviceArea = sit.next();
+                        if(course.getServiceArea().getName().equals(serviceArea.getName())){
+                            course.setServiceArea(serviceArea);
+                            course.setServiceAreaid(serviceArea.getId());
+                            save = true;
+                            break;
+                        }
+                    }
+                }
+                if(save){
                     courseManager.saveCourse(course);
                 }
             }
@@ -299,35 +283,6 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                             newServiceArea.setOrganization(organization);
                             newServiceArea.setOrganizationid(organization.getId());
                             serviceAreaManager.saveServiceArea(newServiceArea);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * @since 1.5
-     */
-    private void updateCourseServiceAreas(){
-        List<Course> courses = courseManager.getCourses(new Course());
-        if(courses != null && !courses.isEmpty()){
-            Iterator<Course> it = courses.iterator();
-            while (it.hasNext()){
-                Course course = it.next();
-                if(!course.getServiceArea().getOrganization().equals(course.getOrganization())){
-                    // må hente servicearea som passer
-                    ServiceArea search = new ServiceArea();
-                    search.setOrganizationid(course.getOrganizationid());
-                    List<ServiceArea> serviceAreas = serviceAreaManager.searchServiceAreas(search);
-                    Iterator<ServiceArea> sit = serviceAreas.iterator();
-                    while (sit.hasNext()){
-                        ServiceArea serviceArea = sit.next();
-                        if(course.getServiceArea().getName().equals(serviceArea.getName())){
-                            course.setServiceArea(serviceArea);
-                            course.setServiceAreaid(serviceArea.getId());
-                            courseManager.saveCourse(course);
-                            break;
                         }
                     }
                 }
