@@ -24,7 +24,7 @@ import java.io.Serializable;
  * Hibernate mapping file.
  *
  * @author hrj
- * @hibernate.class table="person"
+ * @hibernate.class table="person" lazy="false" 
  */
 public class Person extends BaseObject implements Serializable {
     private Long id;

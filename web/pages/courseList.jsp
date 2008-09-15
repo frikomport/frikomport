@@ -8,13 +8,37 @@
 <fmt:message key="courseList.item" var="item"/>
 <fmt:message key="courseList.items" var="items"/>
 
+<script type="text/javascript">
+// Code to change the select list for service aera based on organization id.
+function fillSelect(obj){
+ var orgid=obj.options[obj.selectedIndex].value;
+ var serviceArea= document.courseList.serviceAreaid;
+
+    while(serviceArea.firstChild){
+        serviceArea.removeChild(serviceArea.firstChild);
+    }
+
+    var j = 0;
+<c:forEach var="servicearea" items="${serviceareas}">
+    if ("<c:out value="${servicearea.id}"/>" == ""){
+        serviceArea.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>", true);
+        j++;
+    }
+else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
+        serviceArea.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>");
+        j++ ;
+    }
+</c:forEach>
+}
+</script>
+
 <c:if test="${alreadyRegistered}">
 	<div class="message" style="font-size: 12px">
 		<fmt:message key="courseList.alreadyRegistered" />
 	</div>
 </c:if>
 
-<form method="post" action="<c:url value="/listCourses.html"/>" id="courseList">
+<form method="post" action="<c:url value="/listCourses.html"/>" id="courseList" name="courseList">
    	<input type="hidden" id="ispostbackcourselist" name="ispostbackcourselist" value="1"/> 
 	<table>
 		<tr>
@@ -23,7 +47,7 @@
 		    </th>
 		    <td>
 		        <spring:bind path="course.organizationid">
-					  <select name="<c:out value="${status.expression}"/>">
+					  <select name="<c:out value="${status.expression}"/>" onchange="fillSelect(this);">
 					    <c:forEach var="organization" items="${organizations}">
 					      <option value="<c:out value="${organization.id}"/>"
 						      <c:if test="${organization.id == course.organizationid}"> selected="selected"</c:if>>
@@ -38,17 +62,31 @@
 		        <soak:label key="course.serviceArea"/>
 		    </th>
 		    <td>
-		        <spring:bind path="course.serviceAreaid">
-					  <select name="<c:out value="${status.expression}"/>">
-					    <c:forEach var="servicearea" items="${serviceareas}">
-					      <option value="<c:out value="${servicearea.id}"/>"
-						      <c:if test="${servicearea.id == course.serviceAreaid}"> selected="selected"</c:if>>
-					        <c:out value="${servicearea.name}"/>
-					      </option>
-					    </c:forEach>
-					  </select>
-		            <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-		        </spring:bind>
+				<spring:bind path="course.serviceAreaid">
+					<select name="<c:out value="${status.expression}"/>">
+						<c:forEach var="servicearea" items="${serviceareas}">
+							<c:choose>
+								<c:when test="${empty servicearea.id}">
+									<option value="<c:out value="${servicearea.id}"/>"
+										<c:if test="${servicearea.id == course.serviceAreaid}"> selected="selected"</c:if>>
+										<c:out value="${servicearea.name}" />
+									</option>
+								</c:when>
+								<c:otherwise>
+									<c:if
+										test="${servicearea.organizationid == course.organizationid}">
+										<option value="<c:out value="${servicearea.id}"/>"
+											<c:if test="${servicearea.id == course.serviceAreaid}"> selected="selected"</c:if>>
+											<c:out value="${servicearea.name}" />
+										</option>
+									</c:if>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+					</select>
+					<span class="fieldError"><c:out
+							value="${status.errorMessage}" escapeXml="false" /> </span>
+				</spring:bind>
 		    </td>
 
 		    <th>

@@ -199,34 +199,24 @@ public class MailUtil {
 			// TODO: Test - Is this right? Previously:
 			// getText("registrationComplete.mail.body", null, locale,
 			// messageSource)));
-			msg
-					.append(StringEscapeUtils.unescapeHtml(getText("registrationComplete.mail.body", locale,
-							messageSource)));
+			msg.append(StringEscapeUtils.unescapeHtml(getText("registrationComplete.mail.body", locale,	messageSource)));
 			break;
 		case Constants.EMAIL_EVENT_REGISTRATION_DELETED:
 			msg.append(StringEscapeUtils.unescapeHtml(getText("registrationDeleted.mail.body", course.getName(),
-					locale, messageSource))
-					+ "\n\n");
+					locale, messageSource))	+ "\n\n");
 
 			break;
-
 		case Constants.EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST:
 			msg.append(StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.body", course.getName(),
-					locale, messageSource))
-					+ "\n\n");
-
+					locale, messageSource))	+ "\n\n");
 			break;
-
 		case Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED:
 			msg.append(StringEscapeUtils.unescapeHtml(getText("registrationConfirmed.mail.body", course.getName(),
-					locale, messageSource))
-					+ "\n\n");
-
+					locale, messageSource))	+ "\n\n");
 			break;
 		case Constants.EMAIL_EVENT_NEW_COURSE_NOTIFICATION:
 			msg.append(StringEscapeUtils.unescapeHtml(getText("registrationNewCourse.mail.body", locale, messageSource))
 					+ "\n\n");
-
 			break;
 		}
 
@@ -285,13 +275,10 @@ public class MailUtil {
 		case Constants.EMAIL_EVENT_COURSECANCELLED:
 			msg.append(StringEscapeUtils.unescapeHtml(getText("courseCancelled.mail.body", " " + course.getName()
 					+ "\n\n", locale, messageSource)));
-
 			break;
-
 		case Constants.EMAIL_EVENT_COURSEDELETED:
 			msg.append(StringEscapeUtils.unescapeHtml(getText("courseDeleted.mail.body", " " + course.getName()
 					+ "\n\n", locale, messageSource)));
-
 			break;
 		case Constants.EMAIL_EVENT_NOTIFICATION:
             if(reservationConfirmed){
@@ -314,38 +301,24 @@ public class MailUtil {
 			}
 			break;
 		case Constants.EMAIL_EVENT_REGISTRATION_DELETED:
-			msg
-					.append("\n"
-							+ StringEscapeUtils.unescapeHtml(getText("registrationDeleted.mail.footer", locale,
-									messageSource)));
-
+			msg.append("\n"	+ StringEscapeUtils.unescapeHtml(getText("registrationDeleted.mail.footer", locale,
+				messageSource)));
 			break;
-
 		case Constants.EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST:
-			msg.append("\n"
-					+ StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.footer", locale, messageSource)) + "\n\n");
-
+			msg.append("\n"	+ StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.footer", locale, messageSource)) + "\n\n");
 			break;
-
 		case Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED:
-			msg.append("\n"
-					+ StringEscapeUtils.unescapeHtml(getText("registrationConfirmed.mail.footer", locale, messageSource)) + "\n\n");
-
+			msg.append("\n"	+ StringEscapeUtils.unescapeHtml(getText("registrationConfirmed.mail.footer", locale, messageSource)) + "\n\n");
 			break;
-
 		case Constants.EMAIL_EVENT_NEW_COURSE_NOTIFICATION:
-			msg.append("\n"
-					+ StringEscapeUtils.unescapeHtml(getText("registrationNewCourse.mail.footer", locale, messageSource)) + "\n\n");
-
+			msg.append("\n" + StringEscapeUtils.unescapeHtml(getText("registrationNewCourse.mail.footer", locale, messageSource)) + "\n\n");
 			break;
 		}
 
 		msg.append("\n\n");
 		msg.append(StringEscapeUtils.unescapeHtml(getText("mail.contactinfo", locale, messageSource)) + "\n");
 		msg.append(StringEscapeUtils.unescapeHtml(getText("mail.donotreply", getText("mail.default.from", locale,
-				messageSource), locale, messageSource))
-				+ "\n");
-
+				messageSource), locale, messageSource))	+ "\n");
 		return msg;
 	}
 

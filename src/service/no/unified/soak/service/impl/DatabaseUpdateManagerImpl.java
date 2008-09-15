@@ -107,7 +107,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                 }
                 // updates serviceareas
                 if(user.getOrganization() != null && user.getServiceArea() != null){
-                    if(!user.getOrganization().equals(user.getServiceArea().getOrganization())){
+                    if(!user.getOrganizationid().equals(user.getServiceArea().getOrganizationid())){
                         ServiceArea search = new ServiceArea();
                         search.setOrganizationid(user.getOrganizationid());
                         List<ServiceArea> serviceAreas = serviceAreaManager.searchServiceAreas(search);
@@ -170,7 +170,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                 }
                 // updates serviceareas
                 if(registration.getOrganization() != null && registration.getServiceArea() != null){
-                    if(!registration.getOrganization().equals(registration.getServiceArea().getOrganization())){
+                    if(!registration.getOrganizationid().equals(registration.getServiceArea().getOrganizationid())){
                         ServiceArea search = new ServiceArea();
                         search.setOrganizationid(registration.getOrganizationid());
                         List<ServiceArea> serviceAreas = serviceAreaManager.searchServiceAreas(search);
@@ -236,7 +236,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                     save = true;
                 }
                 // service areas
-                if(!course.getServiceArea().getOrganization().equals(course.getOrganization())){
+                if(!course.getServiceArea().getOrganizationid().equals(course.getOrganizationid())){
                     // må hente servicearea som passer
                     ServiceArea search = new ServiceArea();
                     search.setOrganizationid(course.getOrganizationid());

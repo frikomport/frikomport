@@ -83,6 +83,7 @@
         <property name="host" value="${mail.host}"/>
         <property name="username" value="${mail.username}"/>
         <property name="password" value="${mail.password}"/>
+        <property name="defaultEncoding" value="${mail.encoding}"/>
     </bean>
 
     <!-- Configure Velocity for sending e-mail -->
