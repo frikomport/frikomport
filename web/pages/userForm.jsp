@@ -142,10 +142,16 @@
 				<soak:label key="user.email" />
 			</th>
 			<td>
-				<c:out value="${user.email}" />
-				<form:hidden path="email" />
-				<%-- <form:input path="email"/>
-            <form:errors cssClass="fieldError" path="email"/> --%>
+                <c:choose>
+					<c:when test="${user.id == '0'}">
+						<form:input path="email" />
+						<form:errors cssClass="fieldError" path="email" />
+					</c:when>
+					<c:otherwise>
+						<c:out value="${user.email}" />
+				        <form:hidden path="email" />
+					</c:otherwise>
+				</c:choose>
 			</td>
 		</tr>
 		<tr>
