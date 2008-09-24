@@ -24,7 +24,7 @@ import java.util.Set;
  *  Version by Dan Kibler dan@getrolling.com
  *
  * @struts.form extends="BaseForm"
- * @hibernate.class table="role"
+ * @hibernate.class table="role" lazy="false"
  */
 public class Role extends BaseObject implements Serializable {
     private static final long serialVersionUID = 3690197650654049848L;

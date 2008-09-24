@@ -24,7 +24,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * Hibernate mapping file.
  * 
  * @author hrj
- * @hibernate.class table="registration"
+ * @hibernate.class table="registration" lazy="false"
  */
 public class Registration extends BaseObject implements Serializable {
 	/**

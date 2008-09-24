@@ -29,7 +29,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
  *         Updated by Dan Kibler (dan@getrolling.com)
  *
- * @hibernate.class table="app_user" lazy="false"
+ * @hibernate.class table="app_user" lazy="true"
  */
 public class User extends BaseObject implements Serializable {
     private static final long serialVersionUID = 3832626162173359411L;
