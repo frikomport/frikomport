@@ -12,11 +12,9 @@ package no.unified.soak.dao.hibernate;
 
 import java.util.Date;
 import java.util.List;
-import java.util.ArrayList;
 
 import no.unified.soak.dao.CourseDAO;
 import no.unified.soak.model.Course;
-import no.unified.soak.model.User;
 import no.unified.soak.model.Person;
 import no.unified.soak.util.CourseStatus;
 
@@ -52,7 +50,7 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
             log.warn("uh oh, course with id '" + id + "' not found...");
             throw new ObjectRetrievalFailureException(Course.class, id);
         }
-        getHibernateTemplate().initialize(course);
+//        getHibernateTemplate().initialize(course);
         return course;
     }
 
@@ -133,13 +131,17 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
     }
 
     /**
-	 * @see no.unified.soak.dao.CourseDAO#getUnpublished(User user)
+	 * @see no.unified.soak.dao.CourseDAO#getUnpublished(no.unified.soak.model.Course)
+     * @param course
 	 */
-    public List<Course> getUnpublished(User user){
+    public List<Course> getUnpublished(Course course){
         DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
         criteria.add(Restrictions.eq("status",new Integer(CourseStatus.COURSE_CREATED)));
-        if(user != null){
-            criteria.add(Restrictions.eq("responsible",user));
+        if(course.getResponsible() != null){
+            criteria.add(Restrictions.eq("responsible", course.getResponsible()));
+        }
+        if(course.getOrganizationid() != null){
+            criteria.add(Restrictions.eq("organizationid", course.getOrganizationid()));
         }
         criteria.addOrder(Order.asc("startTime"));
         return getHibernateTemplate().findByCriteria(criteria);

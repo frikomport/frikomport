@@ -25,7 +25,6 @@ import javax.servlet.http.HttpSession;
 import no.unified.soak.Constants;
 import no.unified.soak.util.CourseStatus;
 import no.unified.soak.model.Course;
-import no.unified.soak.model.ServiceArea;
 import no.unified.soak.model.User;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.OrganizationManager;
@@ -81,20 +80,21 @@ public class CourseController extends BaseFormController {
         }
         Locale locale = request.getLocale();
         Map model = new HashMap();
-        
+
         Course course = new Course();
+        Course unpublished = new Course();
 
         // use course from session if set
         HttpSession session = request.getSession();
         Object comm = session.getAttribute("course");
-        
+
         String alreadyRegistered = request.getParameter("alreadyRegistered");
         if (alreadyRegistered != null && alreadyRegistered.equals("true")){
-        	model.put("alreadyRegistered" , true);
+            model.put("alreadyRegistered" , true);
         }
-        
+
         Map map = request.getParameterMap();
-        
+
         // if params then this is navigation in table
         if (comm != null && map.size() > 1) {
             course = (Course) comm;
@@ -105,7 +105,7 @@ public class CourseController extends BaseFormController {
 
         Boolean historic = new Boolean(false);
         Boolean past = new Boolean(false);
-        
+
         Date starttime = new Date();
         Date stoptime = null;
 
@@ -124,17 +124,18 @@ public class CourseController extends BaseFormController {
         // Don't modify organization if in postback
         String postback = request.getParameter("ispostbackcourselist");
         if ((postback == null) || (postback.compareTo("1") != 0)) {
-        	// Promote inter organization cooperation by not setting organization here
-	        // Object omid = request.getAttribute(Constants.EZ_ORGANIZATION);
-	        // if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
-	        //     course.setOrganizationid(new Long(omid.toString()));
-	        // }
+            // Promote inter organization cooperation by not setting organization here
+            // Object omid = request.getAttribute(Constants.EZ_ORGANIZATION);
+            // if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
+            //     course.setOrganizationid(new Long(omid.toString()));
+            // }
 
-        	// Check if a specific organization has been requested
-	        String mid = request.getParameter("mid");
-	        if ((mid != null) && StringUtils.isNumeric(mid)) {
-	            course.setOrganizationid(new Long(mid));
-	        }
+            // Check if a specific organization has been requested
+            String mid = request.getParameter("mid");
+            if ((mid != null) && StringUtils.isNumeric(mid)) {
+                course.setOrganizationid(new Long(mid));
+                unpublished.setOrganizationid(new Long(mid));
+            }
         }
 
         // Check whether we should display historic data as well
@@ -152,7 +153,7 @@ public class CourseController extends BaseFormController {
         String pastreq = request.getParameter("past");
         if ((pastreq != null) && StringUtils.isNumeric(pastreq)) {
             if (pastreq.compareTo("0") != 0) {
-            	starttime = null;
+                starttime = null;
                 stoptime = new Date();
                 historic = new Boolean(true);
                 past = new Boolean(true);
@@ -160,24 +161,26 @@ public class CourseController extends BaseFormController {
                 course.setStatus(CourseStatus.COURSE_FINISHED);
             }
         }
-        
+
         // Set up parameters, and return them to the view
         model = addServiceAreas(model, locale);
         model = addOrganization(model, locale);
         model.put("historic", historic);
         model.put("past", past);
-        
+
         // Add all courses to the list
         List courses = courseManager.searchCourses(course, starttime, stoptime);
         List<Course> filtered = filterByRole(isAdmin, roles, courses);
 
+
         User responsible = null;
         if(user != null && roles.contains(Constants.INSTRUCTOR_ROLE)){
             responsible = user;
+            unpublished.setResponsible(responsible);
         }
-        List unpublished = courseManager.getUnpublished(responsible);
-        if(!past && unpublished != null && !unpublished.isEmpty() && isAdmin(roles)){
-            filtered.addAll(0,unpublished);
+        List unpubCourses = courseManager.getUnpublished(unpublished);// Søke på samme måte som på kurs.
+        if(!past && unpubCourses != null && !unpubCourses.isEmpty() && isAdmin(roles)){
+            filtered.addAll(0,unpubCourses);
         }
 
         if (courses != null) {
@@ -234,6 +237,8 @@ public class CourseController extends BaseFormController {
         Locale locale = request.getLocale();
 
         Course course = (Course) command;
+        Course unpublished = new Course();
+        
         course.setStatus(CourseStatus.COURSE_PUBLISHED);
 
         // Set up parameters, and return them to the view
@@ -297,13 +302,18 @@ public class CourseController extends BaseFormController {
         List courses = courseManager.searchCourses(course, starttime, stoptime);
         List<Course> filtered = filterByRole(isAdmin, roles, courses);
 
+        if(course.getOrganizationid() != null){
+            unpublished.setOrganizationid(course.getOrganizationid());
+        }
+
         User responsible = null;
         if(user != null && roles.contains(Constants.INSTRUCTOR_ROLE)){
             responsible = user;
+            unpublished.setResponsible(responsible);
         }
-        List unpublished = courseManager.getUnpublished(responsible);
-        if(!past && unpublished != null && !unpublished.isEmpty() && isAdmin(roles)){
-            filtered.addAll(0,unpublished);
+        List unpubCourses = courseManager.getUnpublished(unpublished);
+        if(!past && unpubCourses != null && !unpubCourses.isEmpty() && isAdmin(roles)){
+            filtered.addAll(0,unpubCourses);
         }
 
         model.put("historic", historic);
@@ -344,13 +354,7 @@ public class CourseController extends BaseFormController {
         }
 
         // Get all organizations in the database
-        List serviceAreasInDB = serviceAreaManager.getAll();
-        List serviceAreas = new ArrayList<ServiceArea>();
-        ServiceArea serviceAreaDummy = new ServiceArea();
-        serviceAreaDummy.setId(new Long(0));
-        serviceAreaDummy.setName(getText("misc.all", locale));
-        serviceAreas.add(serviceAreaDummy);
-        serviceAreas.addAll(serviceAreasInDB);
+        List serviceAreas = serviceAreaManager.getAllIncludingDummy(getText("misc.all", locale));
 
         if (serviceAreas != null) {
             model.put("serviceareas", serviceAreas);

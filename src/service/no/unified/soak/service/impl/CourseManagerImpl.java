@@ -19,7 +19,6 @@ import org.apache.commons.lang.StringUtils;
 
 import no.unified.soak.dao.CourseDAO;
 import no.unified.soak.model.Course;
-import no.unified.soak.model.User;
 import no.unified.soak.model.Person;
 import no.unified.soak.service.CourseManager;
 
@@ -98,8 +97,8 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
     /**
      * @see no.unified.soak.service.CourseManager#getUnpublished()
      */
-    public List<Course> getUnpublished(User user) {
-        return dao.getUnpublished(user);
+    public List<Course> getUnpublished(Course course) {
+        return dao.getUnpublished(course);
     }
     
     /**

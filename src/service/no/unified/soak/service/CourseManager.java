@@ -66,10 +66,9 @@ public interface CourseManager extends Manager {
 
     /**
      * Gets all unpublished courses
-     * @return List of courses with status 0
-     * @param user
+     * @return List of courses with status 0 @param user @param course
      */
-    public List<Course> getUnpublished(User user);
+    public List<Course> getUnpublished(Course course);
 
     /**
      * Finds all courses in the timespan between registerBy and startTime
