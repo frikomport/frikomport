@@ -92,7 +92,7 @@ public class CourseEmailController extends CourseNotificationController
         return new ModelAndView(getSuccessView(),model);
     }
 
-    	/**
+    /**
 	 * Sends mail to the registered users
 	 *
 	 * @param locale

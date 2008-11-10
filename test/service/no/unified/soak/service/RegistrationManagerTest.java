@@ -222,4 +222,5 @@ public class RegistrationManagerTest extends BaseManagerTestCase {
 
         registrationDAO.verify();
     }
+
 }

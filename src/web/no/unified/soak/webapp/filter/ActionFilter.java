@@ -30,6 +30,7 @@ import no.unified.soak.model.User;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.UserExistsException;
+import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.webapp.util.RequestUtil;
 import no.unified.soak.webapp.util.SslUtil;
 
@@ -115,6 +116,8 @@ public class ActionFilter implements Filter {
 
 		doEZAccessing(request, session);
 
+        doConfiguration(request, session);
+
 		User user = (User) session.getAttribute(Constants.USER_KEY);
 		String username = request.getRemoteUser();
 
@@ -138,6 +141,14 @@ public class ActionFilter implements Filter {
 		chain.doFilter(request, response);
 	}
 
+    private void doConfiguration(HttpServletRequest request, HttpSession session){
+        ConfigurationManager configurationManager = (ConfigurationManager)getContext().getBean("configurationManager");
+
+        session.setAttribute("showMenu",configurationManager.getValue("show.menu","false"));
+        session.setAttribute("canDelete",configurationManager.getValue("access.registration.delete","false"));
+        session.setAttribute("userdefaults",configurationManager.getValue("access.registration.userdefaults","false"));
+    }
+
 	private void doEZAccessing(HttpServletRequest request, HttpSession session) {
 		EzUser ezUser = new EzUser();
 
@@ -151,7 +162,7 @@ public class ActionFilter implements Filter {
 		if (cookie != null && cookie.getValue() != null && cookie.getValue().trim().length() > 0) {
 			eZSessionId = cookie.getValue();
 			ezUser = (new UserEzDaoJdbc()).findUserBySessionID(cookie.getValue());
-            if(ezUser != null){
+            if(ezUser != null && ezUser.getUsername() != null ){
                 copyToUserTable(session, ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser
 					.getEmail(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
             }

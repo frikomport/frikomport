@@ -228,4 +228,11 @@
     </bean>
     <!-- DatabaseUpdate-END-->
 
+    <!-- Configuration-START-->
+    <bean id="configurationManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.ConfigurationManagerImpl" autowire="byName"/>
+        </property>
+    </bean>
+    <!-- Configuration-END-->
 </beans>

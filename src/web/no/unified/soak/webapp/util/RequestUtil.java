@@ -195,7 +195,7 @@ public class RequestUtil {
         for (int i = 0; i < cookies.length; i++) {
             Cookie thisCookie = cookies[i];
 
-            if (thisCookie.getName().equals(name)) {
+            if (thisCookie.getName().startsWith(name)) {
                 // cookies with no value do me no good!
                 if (!thisCookie.getValue().equals("")) {
                     returnCookie = thisCookie;

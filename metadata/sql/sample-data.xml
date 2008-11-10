@@ -679,7 +679,7 @@
 		<column>status</column>
 		<row>
 			<value>1</value>
-			<value></value>
+			<value>instructor</value>
 			<value>344</value>
 			<value>1</value>
 			<value>/ez/index.php/fkp_nob/nyheter/kurs1</value>
@@ -700,15 +700,14 @@
 			<value>2</value>
 			<value>2</value>
 			<value>
-				Et høytsvevende kurs om filosofi, estetikk og orale
-				tradisjoner
+				Et høytsvevende kurs om filosofi, estetikk og orale tradisjoner
 			</value>
 			<value>anonymous</value>
 			<value>2</value>
 		</row>
 		<row>
 			<value>2</value>
-			<value></value>
+			<value>instructor</value>
 			<value>344</value>
 			<value>6</value>
 			<value>
@@ -738,7 +737,7 @@
         </row>
 		<row>
 			<value>2</value>
-			<value></value>
+			<value>instructor</value>
 			<value>344</value>
 			<value>1</value>
 			<value>
@@ -761,15 +760,14 @@
 			<value>1</value>
 			<value>2</value>
 			<value>
-				Gjennomgår krav og forutsetninger for kommunal støtte
-				til barnepass i privat regi
+				Gjennomgår krav og forutsetninger for kommunal støtte til barnepass i privat regi
 			</value>
 			<value>anonymous</value>
 			<value>2</value>
         </row>
 		<row>
 			<value>2</value>
-			<value></value>
+			<value>editor</value>
 			<value>344</value>
 			<value>2</value>
 			<value>http://www.ski.no/PrintArticle.aspx?ID=3312</value>
@@ -790,15 +788,14 @@
 			<value>2</value>
 			<value>2</value>
 			<value>
-				Kurs om å takle hverdagen som pensjonist i det
-				reformerte helsenorge
+				Kurs om å takle hverdagen som pensjonist i det reformerte helsenorge
 			</value>
 			<value>anonymous</value>
 			<value>2</value>
         </row>
 		<row>
 			<value>2</value>
-			<value></value>
+			<value>editor</value>
 			<value>344</value>
 			<value>6</value>
 			<value>
@@ -821,10 +818,7 @@
 			<value>2</value>
 			<value>2</value>
 			<value>
-				Videregående kurs om hvordan å presentere troverdige
-				muntlige fremstillinger som bare løselig er forankret i
-				virkelighetens verden. Dette er essensielt og populært
-				materiale for medarbeidere med politiske ambisjoner
+				Videregående kurs om hvordan å presentere troverdige muntlige fremstillinger som bare løselig er forankret i virkelighetens verden. Dette er essensielt og populært materiale for medarbeidere med politiske ambisjoner
 			</value>
 			<value>anonymous</value>
 			<value>0</value>
@@ -1208,5 +1202,35 @@
 		</row>
 	</table>
 	<!--Notification-END-->
+	<!--Configuration-START-->
+    <table name="configuration">
+        <column>cfg_key</column>
+        <column>value</column>
+        <row>
+            <value>show.menu</value>
+            <value>true</value>
+        </row>
+        <row>
+            <value>access.registration.delete</value>
+            <value>false</value>
+        </row>
+        <row>
+            <value>access.course.singleprice</value>
+            <value>false</value>
+        </row>
+        <row>
+            <value>access.registration.userdefaults</value>
+            <value>false</value>
+        </row>
+        <row>
+            <value>access.registration.anonymous</value>
+            <value>false</value>
+        </row>
+        <row>
+            <value>access.course.filterlocation</value>
+            <value>false</value>
+        </row>
+    </table>
+    <!--Configuration-END-->
 </dataset>
 

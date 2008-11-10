@@ -35,8 +35,7 @@
 		<fmt:message key="registrationDetail.emailexplanation" />
 	</div>
 
-	<form:form commandName="registration"
-		onsubmit="return validateRegistration(this)" name="registration">
+	<form:form commandName="registration" onsubmit="return validateRegistration(this)" name="registration">
 		<table class="detail">
 			<form:hidden path="id" />
 			<form:hidden path="courseid" />

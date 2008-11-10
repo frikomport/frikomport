@@ -13,6 +13,7 @@ package no.unified.soak.service;
 import no.unified.soak.dao.CourseDAO;
 import no.unified.soak.model.Course;
 import no.unified.soak.service.impl.CourseManagerImpl;
+import no.unified.soak.util.CourseStatus;
 
 import org.jmock.Mock;
 
@@ -78,6 +79,22 @@ public class CourseManagerTest extends BaseManagerTestCase {
         List searchResults = courseManager.searchCourses(course, null, null);
         assertNotNull(searchResults);
         courseDAO.verify();
+    }
+
+    public void testSearchPublished(){
+        List results = new ArrayList();
+        course = new Course();
+        course.setStatus(CourseStatus.COURSE_PUBLISHED);
+        results.add(course);
+        
+        courseDAO.expects(once()).method("searchCourses").will(returnValue(results));
+
+        List courses = courseManager.searchCourses(course,null,null);
+        assertNotNull(courses);
+        assertEquals(1, courses.size());
+
+        Course first = (Course)courses.get(0);
+        assert(first.getStatus() == course.getStatus());
     }
 
     /**

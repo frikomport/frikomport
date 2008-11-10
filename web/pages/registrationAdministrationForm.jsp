@@ -4,8 +4,6 @@
 <c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && course.responsible.username == username)}">
 	<c:set var="admin" value="${true}"/>
 </c:if>
-<fmt:message var="canDelete" key="access.registration.delete"/>
-
 
 <title><fmt:message key="registrationAdministration.title"/></title>
 <content tag="heading">

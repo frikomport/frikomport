@@ -45,7 +45,7 @@ public class Role extends BaseObject implements Serializable {
      * @return String
      *
      * @struts.validator type="required"
-     * @hibernate.id column="name" length="20"
+     * @hibernate.id column="name" length="100"
      *   generator-class="assigned" unsaved-value="version"
      */
     public String getName() {

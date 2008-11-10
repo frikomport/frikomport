@@ -8,6 +8,7 @@
 package no.unified.soak.service;
 
 import no.unified.soak.Constants;
+import no.unified.soak.util.StringUtil;
 import no.unified.soak.dao.RoleDAO;
 import no.unified.soak.dao.UserDAO;
 import no.unified.soak.model.Role;
@@ -160,4 +161,5 @@ public class UserManagerTest extends BaseManagerTestCase {
             assertNotNull(e);
         }
     }
+    
 }

@@ -19,6 +19,7 @@
 	            <value>no/unified/soak/model/Registration.hbm.xml</value>
 	            <value>no/unified/soak/model/Attachment.hbm.xml</value>
 	            <value>no/unified/soak/model/Notification.hbm.xml</value>
+	            <value>no/unified/soak/model/Configuration.hbm.xml</value>
             </list>
         </property>
         <!-- The property below is commented out b/c it doesn't work when run via
@@ -100,5 +101,8 @@
     <!--Notification-START-->
     <bean id="notificationDao" class="no.unified.soak.dao.hibernate.NotificationDaoHibernate" autowire="byName"/>
     <!--Notification-END-->
-    
+
+    <!--Configuration-START-->
+    <bean id="configurationDao" class="no.unified.soak.dao.hibernate.ConfigurationDAOHibernate" autowire="byName"/>
+    <!--Configuration-END-->
 </beans>

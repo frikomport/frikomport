@@ -35,6 +35,7 @@ import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.UserManager;
+import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.DateUtil;
 import no.unified.soak.util.MailUtil;
@@ -54,60 +55,49 @@ import org.springframework.orm.ObjectRetrievalFailureException;
  */
 public class RegistrationFormController extends BaseFormController {
 	private RegistrationManager registrationManager = null;
-
 	private CourseManager courseManager = null;
-
 	private ServiceAreaManager serviceAreaManager = null;
-
 	private OrganizationManager organizationManager = null;
-
 	private NotificationManager notificationManager = null;
-
+    private ConfigurationManager configurationManager = null;
 	private UserManager userManager = null;
-
 	private MessageSource messageSource = null;
-
 	protected MailEngine mailEngine = null;
-
 	protected MailSender mailSender = null;
 
 	public void setNotificationManager(NotificationManager notificationManager) {
 		this.notificationManager = notificationManager;
 	}
-
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource = messageSource;
 	}
-
 	public void setMailEngine(MailEngine mailEngine) {
 		this.mailEngine = mailEngine;
 	}
-
 	public void setMailSender(MailSender mailSender) {
 		this.mailSender = mailSender;
 	}
-
 	public void setRegistrationManager(RegistrationManager registrationManager) {
 		this.registrationManager = registrationManager;
 	}
-
 	public void setCourseManager(CourseManager courseManager) {
 		this.courseManager = courseManager;
 	}
-
 	public void setServiceAreaManager(ServiceAreaManager serviceAreaManager) {
 		this.serviceAreaManager = serviceAreaManager;
 	}
-
 	public void setOrganizationManager(OrganizationManager organizationManager) {
 		this.organizationManager = organizationManager;
 	}
-
 	public void setUserManager(UserManager userManager) {
 		this.userManager = userManager;
 	}
 
-	/**
+    public void setConfigurationManager(ConfigurationManager configurationManager) {
+        this.configurationManager = configurationManager;
+    }
+
+    /**
 	 * @see org.springframework.web.servlet.mvc.SimpleFormController#referenceData(javax.servlet.http.HttpServletRequest)
 	 */
 	protected Map referenceData(HttpServletRequest request) throws Exception {
@@ -195,12 +185,10 @@ public class RegistrationFormController extends BaseFormController {
             }
             User regUser = null;
             Locale locale = request.getLocale();
-			String userdefaults = getText("access.registration.userdefaults", locale);
-			String anonymous = getText("access.registration.anonymous", locale);
+            String userdefaults = configurationManager.getValue("access.registration.userdefaults","false");
 			if (userdefaults != null && userdefaults.equals("true")) {
 				regUser = user;
-				if (anonymous != null && anonymous.equals("true")
-						&& user != null && user.getUsername().equals(Constants.ANONYMOUS_ROLE)) {
+				if (user != null && user.getUsername().equals(Constants.ANONYMOUS_ROLE)) {
 					regUser = (User) session.getAttribute(Constants.ALT_USER_KEY);
 				}
 			} else {

@@ -28,6 +28,7 @@ import no.unified.soak.model.User;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.RegistrationManager;
+import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.MailUtil;
 
@@ -48,15 +49,11 @@ import org.springframework.web.servlet.ModelAndView;
 public class CourseNotificationController extends BaseFormController {
 	
 	private CourseManager courseManager = null;
-
 	private RegistrationManager registrationManager = null;
-
+    private ConfigurationManager configurationManager = null;
 	private MessageSource messageSource = null;
-
     private MailSender mailSender = null;
-
     protected MailEngine mailEngine = null;
-
 	protected SimpleMailMessage message = null;
 
 	public void setMessageSource(MessageSource messageSource) {
@@ -79,7 +76,11 @@ public class CourseNotificationController extends BaseFormController {
 		this.courseManager = courseManager;
 	}
 
-	/**
+    public void setConfigurationManager(ConfigurationManager configurationManager) {
+        this.configurationManager = configurationManager;
+    }
+
+    /**
 	 * @see org.springframework.web.servlet.mvc.SimpleFormController#referenceData(javax.servlet.http.HttpServletRequest)
 	 */
 	public Map referenceData(HttpServletRequest request, Object command, Errors errors) throws Exception {
@@ -261,7 +262,7 @@ public class CourseNotificationController extends BaseFormController {
 
     protected List<String> getMailSenders(Course course, User user, Locale locale){
         List senders = new ArrayList<String>();
-        String defaultFrom = getText("mail.default.from", locale);
+        String defaultFrom = getText("mail.default.from",locale);
         senders.add(defaultFrom);
 
         String userfrom =  user.getFullName() + " <" + user.getEmail() + ">";

@@ -3,6 +3,7 @@ package no.unified.soak.webapp.action;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.service.CourseManager;
+import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.model.User;
 import no.unified.soak.Constants;
 
@@ -32,17 +33,20 @@ public class UserRegistrationController extends BaseFormController{
     private RegistrationManager registrationManager = null;
     private UserManager userManager = null;
     private CourseManager courseManager = null;
+    private ConfigurationManager configurationManager = null;
 
     public void setRegistrationManager(RegistrationManager registrationManager) {
         this.registrationManager = registrationManager;
     }
-
     public void setUserManager(UserManager userManager) {
         this.userManager = userManager;
     }
-
     public void setCourseManager(CourseManager courseManager) {
         this.courseManager = courseManager;
+    }
+
+    public void setConfigurationManager(ConfigurationManager configurationManager) {
+        this.configurationManager = configurationManager;
     }
 
     protected Map referenceData(HttpServletRequest request, Object o, Errors errors) throws Exception {
@@ -53,12 +57,11 @@ public class UserRegistrationController extends BaseFormController{
         Map model = new HashMap();
 
         HttpSession session = request.getSession();
-        String userdefaults = getText("access.registration.userdefaults",locale);
-        String anonymous = getText("access.registration.anonymous",locale);
+        String userdefaults = configurationManager.getValue("access.registration.userdefaults","false");
         User user = null;
         if(userdefaults != null && userdefaults.equals("true")){
             user = (User) session.getAttribute(Constants.USER_KEY);
-            if(anonymous != null && anonymous.equals("true") && user != null && user.getUsername().equals(Constants.ANONYMOUS_ROLE)){
+            if(user != null && user.getUsername().equals(Constants.ANONYMOUS_ROLE)){
                 user = (User) session.getAttribute(Constants.ALT_USER_KEY);
             }
         }
@@ -109,13 +112,12 @@ public class UserRegistrationController extends BaseFormController{
     protected Object formBackingObject(HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();
         Locale locale = request.getLocale();
-        String userdefaults = getText("access.registration.userdefaults",locale);
-        String anonymous = getText("access.registration.anonymous",locale);
+        String userdefaults = configurationManager.getValue("access.registration.userdefaults","false");
 
         User user = null;
         if(userdefaults != null && userdefaults.equals("true")){
             user = (User) session.getAttribute(Constants.USER_KEY);
-            if(anonymous != null && anonymous.equals("true") && user != null && user.getUsername().equals(Constants.ANONYMOUS_ROLE)){
+            if(user != null && user.getUsername().equals(Constants.ANONYMOUS_ROLE)){
                 user = (User) session.getAttribute(Constants.ALT_USER_KEY);
             }            
         }

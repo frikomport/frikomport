@@ -380,6 +380,7 @@ public class CourseFormController extends BaseFormController {
             }
             if(request.getParameter("cancelled") != null){
                 course.setStatus(CourseStatus.COURSE_CANCELLED);
+//                enablemail = true;
             }
             log.debug("recieved 'save/update' from jsp");
 			// Parse date and time fields together
@@ -485,19 +486,14 @@ public class CourseFormController extends BaseFormController {
 			}
 
 			courseManager.saveCourse(course);
-
-			String key = null;
-            if(course.getStatus() == CourseStatus.COURSE_CREATED)
-                key = "course.created";
-            else if(course.getStatus() == CourseStatus.COURSE_PUBLISHED)
-                key = "course.published";
-            else if(course.getStatus() == CourseStatus.COURSE_CANCELLED)
-                key = "course.cancelled";
-            else
-                key = "course.updated";
-            
             boolean enablemail = false;
             boolean waitinglist = false;
+
+            String key = null;
+            if(course.getStatus() == CourseStatus.COURSE_CREATED) {key = "course.created";}
+            else if(course.getStatus() == CourseStatus.COURSE_PUBLISHED) {key = "course.published";}
+            else if(course.getStatus() == CourseStatus.COURSE_CANCELLED) {key = "course.cancelled"; enablemail = true;}
+            else {key = "course.updated";}
 
             saveMessage(request, getText(key, locale));
 

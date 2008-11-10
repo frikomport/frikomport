@@ -182,7 +182,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the firstName.
-	 * @hibernate.property column="firstname" length="30" not-null="true"
+	 * @hibernate.property column="firstname" length="100" not-null="true"
 	 */
 	public String getFirstName() {
 		return firstName;
@@ -231,7 +231,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the jobTitle.
-	 * @hibernate.property column="jobtitle" length="30"
+	 * @hibernate.property column="jobtitle" length="100"
 	 */
 	public String getJobTitle() {
 		return jobTitle;
@@ -247,7 +247,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the lastName.
-	 * @hibernate.property column="lastname" length="30" not-null="true"
+	 * @hibernate.property column="lastname" length="100" not-null="true"
 	 */
 	public String getLastName() {
 		return lastName;
@@ -477,7 +477,7 @@ public class Registration extends BaseObject implements Serializable {
 
     /**
 	 * @return the comment
-	 * @hibernate.property column="comment" length="100"
+	 * @hibernate.property column="comment" length="255"
 	 */
     public String getComment() {
         return comment;

@@ -32,7 +32,6 @@
 
 <fmt:message key="date.format" var="dateformat" />
 <fmt:message key="time.format" var="timeformat" />
-<fmt:message key="access.registration.userdefaults" var="userdefaults" />
 
 <h4>
 	<fmt:message key="registrationComplete.yourdetails" />
