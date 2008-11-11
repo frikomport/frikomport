@@ -14,6 +14,7 @@ import java.io.Serializable;
  */
 public class Configuration extends BaseObject implements Serializable {
 
+    private static final long serialVersionUID = 2027089783395343906L;    
     private String key;
     private String value;
 
@@ -71,7 +72,7 @@ public class Configuration extends BaseObject implements Serializable {
         return new HashCodeBuilder().append(key).toHashCode();
     }
 
-    
+
     /**
      * @see java.lang.Object#toString()
      */

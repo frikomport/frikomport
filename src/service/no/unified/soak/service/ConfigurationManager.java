@@ -1,6 +1,5 @@
 package no.unified.soak.service;
 
-import no.unified.soak.model.Configuration;
 import no.unified.soak.dao.ConfigurationDAO;
 
 /**

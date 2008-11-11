@@ -10,7 +10,7 @@ import no.unified.soak.dao.ConfigurationDAO;
  * Date: 10.nov.2008
  * Time: 12:01:05
  */
-public class ConfigurationManagerImpl extends BaseManager implements ConfigurationManager{
+public class ConfigurationManagerImpl extends BaseManager implements ConfigurationManager {
 
     private ConfigurationDAO dao;
 
