@@ -655,7 +655,6 @@
 
 		<column>instructorid</column>
 		<column>responsibleusername</column>
-		<column>responsibleid</column>
 		<column>serviceareaid</column>
 		<column>detailurl</column>
 		<column>duration</column>
@@ -680,7 +679,6 @@
 		<row>
 			<value>1</value>
 			<value>instructor</value>
-			<value></value>
 			<value>1</value>
 			<value>/ez/index.php/fkp_nob/nyheter/kurs1</value>
 			<value>Tre dager, seks timer hver dag</value>
@@ -708,7 +706,6 @@
 		<row>
 			<value>2</value>
 			<value>instructor</value>
-			<value></value>
 			<value>6</value>
 			<value>
 				http://www.tromso.kommune.no/_utskriftsvennlig.db2?id=13358
@@ -738,7 +735,6 @@
 		<row>
 			<value>2</value>
 			<value>instructor</value>
-			<value></value>
 			<value>1</value>
 			<value>
 				http://www.mamut.com/homepages/Norway/1/18/barnepasseren/commdet100.htm
@@ -768,7 +764,6 @@
 		<row>
 			<value>2</value>
 			<value>editor</value>
-			<value></value>
 			<value>2</value>
 			<value>http://www.ski.no/PrintArticle.aspx?ID=3312</value>
 			<value>7 mandager, kl. 18.30 til ca. 21.30</value>
@@ -796,7 +791,6 @@
 		<row>
 			<value>2</value>
 			<value>editor</value>
-			<value></value>
 			<value>6</value>
 			<value>
 				http://www.aa.fylkesbibl.no/kurs/2003/svarstad.html
