@@ -99,8 +99,8 @@ public class Course extends BaseObject implements Serializable {
         this.instructorid = instructorid;
     }
 
-        /**
-     * @hibernate.property column="responsibleusername" not-null="false" length="20"
+    /**
+     * @hibernate.property column="responsibleusername" not-null="false" length="100"
      * @return Returns the responsibleUsername.
      */
     public String getResponsibleUsername() {
@@ -110,13 +110,14 @@ public class Course extends BaseObject implements Serializable {
     /**
      * @param responsibleusername
      *            The responsibleUsername to set.
+     * @spring.validator type="required"
      */
     public void setResponsibleUsername(String responsibleusername) {
         this.responsibleUsername = responsibleusername;
     }
-    
+
     /**
-     * @hibernate.property column="responsibleid" not-null="true"
+     * @hibernate.property column="responsibleid" not-null="false"
      * @return Returns the responsibleid.
      */
     public Long getResponsibleid() {
@@ -126,7 +127,6 @@ public class Course extends BaseObject implements Serializable {
     /**
      * @param responsibleid
      *            The responsibleid to set.
-     * @spring.validator type="required"
      */
     public void setResponsibleid(Long responsibleid) {
         this.responsibleid = responsibleid;
@@ -521,9 +521,7 @@ public class Course extends BaseObject implements Serializable {
 
      /**
      * @return Returns the responsible.
-     * @hibernate.many-to-one not-null="true" column="responsibleid" insert="false" update="false" cascade="none"
-     * 				property-ref="id"
-     * 			
+     * @hibernate.many-to-one not-null="true" column="responsibleusername" insert="false" update="false" cascade="none"
      */
      public User getResponsible() {
      return responsible;

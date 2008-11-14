@@ -7,6 +7,9 @@ ALTER TABLE app_user MODIFY COLUMN jobtitle varchar(100);
 ALTER TABLE app_user MODIFY COLUMN first_name varchar(100);
 ALTER TABLE app_user MODIFY COLUMN last_name varchar(100);
 
+ALTER TABLE course MODIFY COLUMN responsibleusername VARCHAR(100) NOT NULL;
+ALTER TABLE course MODIFY COLUMN responsibleid bigint(20);
+
 CREATE TABLE configuration (cfg_key VARCHAR(100) NOT NULL, value VARCHAR(100) NOT NULL, PRIMARY KEY (cfg_key));
 INSERT INTO configuration VALUES ('show.menu','false');
 INSERT INTO configuration VALUES ('access.registration.userdefaults','false');

@@ -337,12 +337,12 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 				<soak:label key="course.responsible" />
 			</th>
 			<td>
-				<form:select path="responsibleid">
-					<form:options items="${responsible}" itemValue="id"
+				<form:select path="responsibleUsername">
+					<form:options items="${responsible}" itemValue="username"
 						itemLabel="fullName"  />
 				</form:select>
 				<form:errors cssClass="fieldError" htmlEscape="false"
-					path="responsibleid" />
+					path="responsibleUsername" />
 			</td>
 		</tr>
 
