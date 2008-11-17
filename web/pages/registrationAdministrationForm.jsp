@@ -75,17 +75,16 @@
 
 	<display:column property="workplace" sortable="true" headerClass="sortable" 
 		titleKey="registration.workplace"/>
-		
+
+    <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
 	<display:column property="phone" sortable="true" headerClass="sortable" 
 		titleKey="registration.phone"/>
 
 	<display:column property="mobilePhone" sortable="true" headerClass="sortable" 
 		titleKey="registration.mobilePhone"/>
-		
-	<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
-	<display:column property="comment" sortable="true" headerClass="sortable" 
+
+	<display:column property="comment" sortable="true" headerClass="sortable"
 		titleKey="registration.comment"/>
-	</c:if>
 
 	<display:column media="html" sortable="true" headerClass="sortable" titleKey="registration.invoiced">
 	<c:if test="${admin == true}">
@@ -140,6 +139,7 @@
 		<c:if test="${registrationList.attended == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${registrationList.attended == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 	</display:column>
+    </c:if>
 
 	<c:if test="${(admin == true || canDelete == true) && allowEditRegistration == true}">
 	<display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
