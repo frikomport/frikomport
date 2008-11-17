@@ -1,243 +1,32 @@
---
--- Definition of table `app_user`
---
-
-DROP TABLE IF EXISTS `app_user`;
-CREATE TABLE `app_user` (
-  `username` varchar(20) NOT NULL default '',
-  `version` int(11) NOT NULL default '0',
-  `password` varchar(255) NOT NULL default '',
-  `first_name` varchar(50) NOT NULL default '',
-  `last_name` varchar(50) NOT NULL default '',
-  `address` varchar(150) default NULL,
-  `city` varchar(50) NOT NULL default '',
-  `province` varchar(100) default NULL,
-  `country` varchar(100) default NULL,
-  `postal_code` varchar(15) NOT NULL default '',
-  `email` varchar(255) NOT NULL default '',
-  `phone_number` varchar(255) default NULL,
-  `website` varchar(255) default NULL,
-  `password_hint` varchar(255) default NULL,
-  `enabled` tinyint(1) default NULL,
-  PRIMARY KEY  (`username`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Definition of table `user_cookie`
---
-
-DROP TABLE IF EXISTS `user_cookie`;
-CREATE TABLE `user_cookie` (
-  `id` bigint(20) NOT NULL default '0',
-  `username` varchar(30) NOT NULL default '',
-  `cookie_id` varchar(100) NOT NULL default '',
-  `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
-  PRIMARY KEY  (`id`),
-  KEY `user_cookie_username_cookie_id` (`username`,`cookie_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Definition of table `role`
---
-
-DROP TABLE IF EXISTS `role`;
-CREATE TABLE `role` (
-  `name` varchar(20) NOT NULL default '',
-  `version` int(11) NOT NULL default '0',
-  `description` varchar(255) default NULL,
-  PRIMARY KEY  (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Definition of table `user_role`
---
-
-DROP TABLE IF EXISTS `user_role`;
-CREATE TABLE `user_role` (
-  `username` varchar(20) NOT NULL default '',
-  `role_name` varchar(20) NOT NULL default '',
-  PRIMARY KEY  (`username`,`role_name`),
-  KEY `FK143BF46A928F9645` (`username`),
-  KEY `FK143BF46AB6692ECE` (`role_name`),
-  CONSTRAINT `FK143BF46A928F9645` FOREIGN KEY (`username`) REFERENCES `app_user` (`username`),
-  CONSTRAINT `FK143BF46AB6692ECE` FOREIGN KEY (`role_name`) REFERENCES `role` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
---
--- Definition of table `person`
---
-
-DROP TABLE IF EXISTS `person`;
-CREATE TABLE `person` (
-  `id` bigint(20) NOT NULL auto_increment,
-  `selectable` tinyint(1) NOT NULL default '0',
-  `detailurl` varchar(200) default NULL,
-  `email` varchar(50) NOT NULL default '',
-  `mailaddress` varchar(100) default NULL,
-  `name` varchar(50) NOT NULL default '',
-  `phone` varchar(30) default NULL,
-  `mobilephone` varchar(30) default NULL,
-  `description` text,
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Definition of table `organization`
---
-
-DROP TABLE IF EXISTS `organization`;
-CREATE TABLE `organization` (
-  `id` bigint(20) NOT NULL auto_increment,
-  `selectable` tinyint(1) NOT NULL default '0',
-  `name` varchar(50) NOT NULL default '',
-  `number` bigint(20) NOT NULL default '0',
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
---
--- Definition of table `servicearea`
---
-
-DROP TABLE IF EXISTS `servicearea`;
-CREATE TABLE `servicearea` (
-  `id` bigint(20) NOT NULL auto_increment,
-  `name` varchar(30) NOT NULL default '',
-  `selectable` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Definition of table `location`
---
-
-DROP TABLE IF EXISTS `location`;
-CREATE TABLE `location` (
-  `id` bigint(20) NOT NULL auto_increment,
-  `selectable` tinyint(1) NOT NULL default '0',
-  `address` varchar(50) NOT NULL default '',
-  `mailaddress` varchar(100) default NULL,
-  `contactname` varchar(50) default NULL,
-  `email` varchar(50) default NULL,
-  `detailurl` varchar(200) default NULL,
-  `mapurl` varchar(200) default NULL,
-  `name` varchar(50) NOT NULL default '',
-  `phone` varchar(30) default NULL,
-  `owner` varchar(50) default NULL,
-  `maxattendants` int(11) default NULL,
-  `feeperday` double default NULL,
-  `description` text,
-  `organizationid` bigint(20) NOT NULL default '0',
-  PRIMARY KEY  (`id`),
-  KEY `FK714F9FB5F4E66D55` (`organizationid`),
-  CONSTRAINT `FK714F9FB5F4E66D55` FOREIGN KEY (`organizationid`) REFERENCES `organization` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Definition of table `course`
---
-
-DROP TABLE IF EXISTS `course`;
-CREATE TABLE `course` (
-  `id` bigint(20) NOT NULL auto_increment,
-  `instructorid` bigint(20) NOT NULL default '0',
-  `responsibleid` bigint(20) NOT NULL default '0',
-  `serviceareaid` bigint(20) NOT NULL default '0',
-  `detailurl` varchar(200) default NULL,
-  `duration` varchar(100) NOT NULL default '',
-  `feexternal` double NOT NULL default '0',
-  `feeinternal` double NOT NULL default '0',
-  `freezeAttendance` datetime NOT NULL default '0000-00-00 00:00:00',
-  `maxattendants` int(11) NOT NULL default '0',
-  `name` varchar(100) NOT NULL default '',
-  `registerby` datetime NOT NULL default '0000-00-00 00:00:00',
-  `registerstart` datetime default NULL,
-  `reminder` datetime default NULL,
-  `reservedinternal` int(11) NOT NULL default '0',
-  `starttime` datetime NOT NULL default '0000-00-00 00:00:00',
-  `stoptime` datetime NOT NULL default '0000-00-00 00:00:00',
-  `type` varchar(50) default NULL,
-  `description` text,
-  `locationid` bigint(20) NOT NULL default '0',
-  `organizationid` bigint(20) NOT NULL default '0',
-  `role` varchar(50) NOT NULL default 'Anonymous',
-  PRIMARY KEY  (`id`),
-  KEY `FKAF42E01B179C401B` (`serviceareaid`),
-  KEY `FKAF42E01BC4F84E71` (`instructorid`),
-  KEY `FKAF42E01B99F3E2E9` (`locationid`),
-  KEY `FKAF42E01BF4E66D55` (`organizationid`),
-  CONSTRAINT `FKAF42E01B179C401B` FOREIGN KEY (`serviceareaid`) REFERENCES `servicearea` (`id`),
-  CONSTRAINT `FKAF42E01B99F3E2E9` FOREIGN KEY (`locationid`) REFERENCES `location` (`id`),
-  CONSTRAINT `FKAF42E01BC4F84E71` FOREIGN KEY (`instructorid`) REFERENCES `person` (`id`),
-  CONSTRAINT `FKAF42E01BF4E66D55` FOREIGN KEY (`organizationid`) REFERENCES `organization` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Definition of table `attachment`
---
-
-DROP TABLE IF EXISTS `attachment`;
-CREATE TABLE `attachment` (
-  `id` bigint(20) NOT NULL auto_increment,
-  `contenttype` varchar(100) default NULL,
-  `courseid` bigint(20) default NULL,
-  `filename` varchar(100) default NULL,
-  `locationid` bigint(20) default NULL,
-  `size` bigint(20) default NULL,
-  `storedname` varchar(255) default NULL,
-  PRIMARY KEY  (`id`),
-  KEY `FK8AF7592399F3E2E9` (`locationid`),
-  KEY `FK8AF759236C3B7B35` (`courseid`),
-  CONSTRAINT `FK8AF759236C3B7B35` FOREIGN KEY (`courseid`) REFERENCES `course` (`id`),
-  CONSTRAINT `FK8AF7592399F3E2E9` FOREIGN KEY (`locationid`) REFERENCES `location` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Definition of table `notification`
---
-
-DROP TABLE IF EXISTS `notification`;
-CREATE TABLE `notification` (
-  `id` bigint(20) NOT NULL auto_increment,
-  `registrationid` bigint(20) NOT NULL,
-  `reminderSent` bit(1) NOT NULL,
-  PRIMARY KEY  (`id`),
-  KEY `FK237A88EB5F05D1F1` (`registrationid`)
-) ENGINE=MyISAM AUTO_INCREMENT=513 DEFAULT CHARSET=utf8;
-
---
--- Definition of table `registration`
---
-
-DROP TABLE IF EXISTS `registration`;
-CREATE TABLE `registration` (
-  `id` bigint(20) NOT NULL auto_increment,
-  `courseid` bigint(20) NOT NULL default '0',
-  `email` varchar(50) NOT NULL default '',
-  `employeenumber` int(11) default NULL,
-  `ezuserid` int(11) default NULL,
-  `firstname` varchar(30) NOT NULL default '',
-  `invoiced` tinyint(1) NOT NULL default '0',
-  `jobtitle` varchar(30) default NULL,
-  `lastname` varchar(30) NOT NULL default '',
-  `mobilephone` varchar(30) default NULL,
-  `organizationid` bigint(20) NOT NULL default '0',
-  `phone` varchar(30) default NULL,
-  `registered` datetime NOT NULL default '0000-00-00 00:00:00',
-  `reserved` tinyint(1) NOT NULL default '0',
-  `serviceareaid` bigint(20) NOT NULL default '0',
-  `usemailaddress` varchar(100) default NULL,
-  `locale` varchar(10) default NULL,
-  `comment` varchar(100) default NULL,
-  `workplace` varchar(100) default NULL,
-  `attended` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (`id`),
-  KEY `FKAF83E8B9179C401B` (`serviceareaid`),
-  KEY `FKAF83E8B9F4E66D55` (`organizationid`),
-  KEY `FKAF83E8B96C3B7B35` (`courseid`),
-  CONSTRAINT `FKAF83E8B9179C401B` FOREIGN KEY (`serviceareaid`) REFERENCES `servicearea` (`id`),
-  CONSTRAINT `FKAF83E8B96C3B7B35` FOREIGN KEY (`courseid`) REFERENCES `course` (`id`),
-  CONSTRAINT `FKAF83E8B9F4E66D55` FOREIGN KEY (`organizationid`) REFERENCES `organization` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+create table app_user (username varchar(100) not null, version integer not null, password varchar(255), first_name varchar(100) not null, last_name varchar(100) not null, address varchar(255), city varchar(255), province varchar(255), country varchar(255), postal_code varchar(255), email varchar(100) not null unique, phone_number varchar(255), website varchar(255), password_hint varchar(255), id integer not null, enabled bit, organizationid bigint, serviceareaid bigint, employeenumber integer, jobtitle varchar(100), mobilephone varchar(30), workplace varchar(100), invoice_address varchar(255), invoice_city varchar(255), invoice_province varchar(255), invoice_country varchar(255), invoice_postal_code varchar(255), invoice_name varchar(255), closest_leader varchar(255), hash varchar(255), primary key (username)) type=InnoDB;
+create table attachment (id bigint not null auto_increment, contenttype varchar(100), courseid bigint, filename varchar(100), locationid bigint, size bigint, storedname varchar(255), primary key (id)) type=InnoDB;
+create table configuration (cfg_key varchar(100) not null, value varchar(100) not null, primary key (cfg_key)) type=InnoDB;
+create table course (id bigint not null auto_increment, role varchar(50) not null, instructorid bigint not null, responsibleusername varchar(100), responsibleid bigint, serviceareaid bigint not null, detailurl varchar(200), duration varchar(100) not null, feexternal double precision not null, feeinternal double precision not null, freezeAttendance datetime not null, copyid bigint, maxattendants integer not null, name varchar(100) not null, registerby datetime not null, registerstart datetime, reminder datetime, reservedinternal integer not null, starttime datetime not null, stoptime datetime not null, type varchar(50), description text, locationid bigint not null, organizationid bigint not null, status integer not null, restricted bit, primary key (id)) type=InnoDB;
+create table location (id bigint not null auto_increment, selectable bit not null, address varchar(50) not null, mailaddress varchar(100), contactname varchar(50), email varchar(50), detailurl varchar(200), mapurl varchar(200), name varchar(50) not null, phone varchar(30), owner varchar(50), maxattendants integer, feeperday double precision, description text, organizationid bigint not null, primary key (id)) type=InnoDB;
+create table notification (id bigint not null auto_increment, registrationid bigint not null, reminderSent bit not null, primary key (id)) type=InnoDB;
+create table organization (id bigint not null auto_increment, selectable bit not null, name varchar(50) not null, number bigint not null, invoice_address varchar(255), invoice_city varchar(255), invoice_province varchar(255), invoice_country varchar(255), invoice_postal_code varchar(255), invoice_name varchar(255), primary key (id)) type=InnoDB;
+create table person (id bigint not null auto_increment, selectable bit not null, detailurl varchar(200), email varchar(50) not null, mailaddress varchar(100), name varchar(50) not null, phone varchar(30), mobilephone varchar(30), description text, primary key (id)) type=InnoDB;
+create table registration (id bigint not null auto_increment, courseid bigint not null, username varchar(100), email varchar(255) not null, employeenumber integer, firstname varchar(100) not null, invoiced bit not null, jobtitle varchar(100), lastname varchar(100) not null, mobilephone varchar(30), locale varchar(10) not null, organizationid bigint, phone varchar(30), registered datetime not null, reserved bit not null, serviceareaid bigint, usemailaddress varchar(100), comment varchar(255), attended bit not null, workplace varchar(100), invoice_address varchar(255), invoice_city varchar(255), invoice_province varchar(255), invoice_country varchar(255), invoice_postal_code varchar(255), invoice_name varchar(255), closest_leader varchar(255), primary key (id)) type=InnoDB;
+create table role (name varchar(100) not null, version integer not null, description varchar(255), primary key (name)) type=InnoDB;
+create table servicearea (id bigint not null auto_increment, name varchar(100) not null, selectable bit not null, organizationid bigint not null, primary key (id)) type=InnoDB;
+create table user_cookie (id bigint not null, username varchar(30) not null, cookie_id varchar(100) not null, date_created datetime not null, primary key (id)) type=InnoDB;
+create table user_role (username varchar(100) not null, role_name varchar(100) not null, primary key (username, role_name)) type=InnoDB;
+alter table app_user add index FK459C5729E058A465 (organizationid), add constraint FK459C5729E058A465 foreign key (organizationid) references organization (id);
+alter table app_user add index FK459C5729179C401B (serviceareaid), add constraint FK459C5729179C401B foreign key (serviceareaid) references servicearea (id);
+alter table attachment add index FK8AF759236C3B7B35 (courseid), add constraint FK8AF759236C3B7B35 foreign key (courseid) references course (id);
+alter table attachment add index FK8AF7592399F3E2E9 (locationid), add constraint FK8AF7592399F3E2E9 foreign key (locationid) references location (id);
+alter table course add index FKAF42E01BC4F84E71 (instructorid), add constraint FKAF42E01BC4F84E71 foreign key (instructorid) references person (id);
+alter table course add index FKAF42E01BE058A465 (organizationid), add constraint FKAF42E01BE058A465 foreign key (organizationid) references organization (id);
+alter table course add index FKAF42E01B99F3E2E9 (locationid), add constraint FKAF42E01B99F3E2E9 foreign key (locationid) references location (id);
+alter table course add index FKAF42E01B7FCD873B (responsibleusername), add constraint FKAF42E01B7FCD873B foreign key (responsibleusername) references app_user (username);
+alter table course add index FKAF42E01B179C401B (serviceareaid), add constraint FKAF42E01B179C401B foreign key (serviceareaid) references servicearea (id);
+alter table location add index FK714F9FB5E058A465 (organizationid), add constraint FK714F9FB5E058A465 foreign key (organizationid) references organization (id);
+alter table notification add index FK237A88EB5F05D1F1 (registrationid), add constraint FK237A88EB5F05D1F1 foreign key (registrationid) references registration (id);
+alter table registration add index FKAF83E8B96C3B7B35 (courseid), add constraint FKAF83E8B96C3B7B35 foreign key (courseid) references course (id);
+alter table registration add index FKAF83E8B9E058A465 (organizationid), add constraint FKAF83E8B9E058A465 foreign key (organizationid) references organization (id);
+alter table registration add index FKAF83E8B9928F9645 (username), add constraint FKAF83E8B9928F9645 foreign key (username) references app_user (username);
+alter table registration add index FKAF83E8B9179C401B (serviceareaid), add constraint FKAF83E8B9179C401B foreign key (serviceareaid) references servicearea (id);
+alter table servicearea add index FK8D1534C2E058A465 (organizationid), add constraint FK8D1534C2E058A465 foreign key (organizationid) references organization (id);
+create index user_cookie_username_cookie_id on user_cookie (username, cookie_id);
+alter table user_role add index FK143BF46AB6692ECE (role_name), add constraint FK143BF46AB6692ECE foreign key (role_name) references role (name);
+alter table user_role add index FK143BF46A928F9645 (username), add constraint FK143BF46A928F9645 foreign key (username) references app_user (username);

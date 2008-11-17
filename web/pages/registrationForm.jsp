@@ -78,6 +78,16 @@
 				</td>
 			</tr>
 
+            <tr>
+                <th>
+                    <soak:label key="registration.emailRepeat" />
+                </th>
+                <td>
+                    <form:input path="emailRepeat" />
+                    <form:errors cssClass="fieldError" path="emailRepeat" />
+                </td>
+            </tr>
+
 			<tr>
 				<th>
 					<soak:label key="registration.phone" />

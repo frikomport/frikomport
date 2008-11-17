@@ -45,7 +45,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.mail.MailSender;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.orm.ObjectRetrievalFailureException;
 
 /**
  * Implementation of SimpleFormController that interacts with the
@@ -65,7 +64,7 @@ public class RegistrationFormController extends BaseFormController {
 	protected MailEngine mailEngine = null;
 	protected MailSender mailSender = null;
 
-	public void setNotificationManager(NotificationManager notificationManager) {
+    public void setNotificationManager(NotificationManager notificationManager) {
 		this.notificationManager = notificationManager;
 	}
 	public void setMessageSource(MessageSource messageSource) {
@@ -276,6 +275,14 @@ public class RegistrationFormController extends BaseFormController {
 			return new ModelAndView(getCancelView(), "courseid", registration.getCourseid());
 		} else {
 			// Perform a new registration
+
+            // Check email
+            if(!registration.getEmail().equals(registration.getEmailRepeat())){
+                String error = "errors.email.notSame";
+				errors.rejectValue("email", "errors.email.notSame",  new Object[] { registration.getEmail(), registration.getEmailRepeat() }, "Email addresses not equal.");
+
+                return showForm(request,response, errors);
+            }
 
 			// We need the course as reference data
 			// Course course =

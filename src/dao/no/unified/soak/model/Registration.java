@@ -52,6 +52,8 @@ public class Registration extends BaseObject implements Serializable {
 
 	private String email;
 
+    private String emailRepeat;
+
 	private String phone;
 
 	private String mobilePhone;
@@ -164,7 +166,26 @@ public class Registration extends BaseObject implements Serializable {
 		this.email = email;
 	}
 
-	/**
+    /**
+     *
+     * @return the email repeated
+     */
+    public String getEmailRepeat() {
+        return emailRepeat;
+    }
+
+    /**
+     *
+     * @param emailRepeat The email repeated
+     * 
+     * @spring.validator type="required"
+     * @spring.validator type="email"
+     */
+    public void setEmailRepeat(String emailRepeat) {
+        this.emailRepeat = emailRepeat;
+    }
+
+    /**
 	 * @return Returns the employeeNumber.
 	 * @hibernate.property column="employeenumber"
 	 */
