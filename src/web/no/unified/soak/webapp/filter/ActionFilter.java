@@ -29,7 +29,6 @@ import no.unified.soak.ez.EzUser;
 import no.unified.soak.model.User;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.service.RegistrationManager;
-import no.unified.soak.service.UserExistsException;
 import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.webapp.util.RequestUtil;
 import no.unified.soak.webapp.util.SslUtil;
@@ -144,9 +143,10 @@ public class ActionFilter implements Filter {
     private void doConfiguration(HttpServletRequest request, HttpSession session){
         ConfigurationManager configurationManager = (ConfigurationManager)getContext().getBean("configurationManager");
 
-        session.setAttribute("showMenu",configurationManager.getValue("show.menu","false"));
-        session.setAttribute("canDelete",configurationManager.getValue("access.registration.delete","false"));
-        session.setAttribute("userdefaults",configurationManager.getValue("access.registration.userdefaults","false"));
+        session.setAttribute("showMenu", configurationManager.getValue("show.menu","false"));
+        session.setAttribute("canDelete", configurationManager.getValue("access.registration.delete","false"));
+        session.setAttribute("userdefaults", configurationManager.getValue("access.registration.userdefaults","false"));
+        session.setAttribute("emailrepeat", configurationManager.getValue("access.registration.emailrepeat","false"));
     }
 
 	private void doEZAccessing(HttpServletRequest request, HttpSession session) {
@@ -216,24 +216,28 @@ public class ActionFilter implements Filter {
 		UserManager userManager = (UserManager) ctx.getBean("userManager");
         RegistrationManager registrationManager = (RegistrationManager) ctx.getBean("registrationManager");
         User user = null;
+        User user2 = null;
 		try {
 			user = userManager.getUser(username);
+            user2 = userManager.findUser(email.toLowerCase());
+            if(user2 != null && user2.getEnabled() && !user.getUsername().equals(user2.getUsername())){
+                // user2 skal disablast og user overta påmeldinger
+                registrationManager.moveRegistrations(user2, user);
+                byttNavnOgDisable(user2, userManager);
+            }
 			userManager.updateUser(user, firstName, lastName, email, id, rolenames, kommune);
 		} catch (ObjectRetrievalFailureException exception) {
 			// User may be registered with email.
             user = userManager.findUser(email);
             if(user != null){
                 // Endre epost til nokke som ikkje finnes
-                userManager.updateUser(user, firstName, lastName, username + "@nonexist.no", id, rolenames, kommune);
+                byttNavnOgDisable(user, userManager);
                 // Ny bruker basert på riktig brukernavn
                 User newuser = userManager.addUser(username, firstName, lastName, email, id, rolenames, kommune);
-                // Oppdater hash fra gammal user
                 newuser.setHash(user.getHash());
                 userManager.updateUser(newuser);
                 // Flytt påmeldinger
                 registrationManager.moveRegistrations(user, newuser);
-//                 disable gammal bruker
-                userManager.disableUser(user);
             }
             else{
 			    user = userManager.addUser(username, firstName, lastName, email, id, rolenames, kommune);
@@ -242,6 +246,13 @@ public class ActionFilter implements Filter {
 		session.setAttribute(Constants.USER_KEY, user);
 
 	}
+
+    private void byttNavnOgDisable(User user, UserManager userManager) {
+        String useremail = user.getEmail();
+        user.setEmail(useremail.substring(0,useremail.indexOf('@')) + "@nonexist.no");
+        user.setEnabled(false);
+        userManager.updateUser(user);
+    }
 
 	private ApplicationContext getContext() {
 		ServletContext context = config.getServletContext();

@@ -1,6 +1,10 @@
 @import url(messages.css);
 @import url(displaytag.css);
 
+* {
+    padding: 0;
+    margin: 0;
+}
 
 table {
 	font-size: 100%; //1.0em; /* IE5.x fix */
@@ -35,6 +39,7 @@ body {
 button {
   font-size: 1.1em;
   background-image: url(../images/btn_bg.png);
+  padding: 1px 8px 1px 8px;
 }
 
 div#activeUsers {
@@ -56,6 +61,14 @@ div#content>p {margin:10px 0px}
 div#content button {
 	margin-top: 0.3em;
 	margin-bottom: 0.3em;
+}
+
+.searchForm ul li {
+    display: inline;
+    white-space: nowrap;
+}
+.searchForm ul li label {
+    margin-left: 5px;
 }
 
 div#footer {
@@ -213,6 +226,7 @@ input.button {
     color: #000;
     padding-left: 1px;
     background-image: url(../images/btn_bg.png);
+
 }
 
 input.button {
@@ -273,7 +287,7 @@ img.badge {
 }
 
 p {
-    font: 12px/20px;
+    font: 12px;
     margin: 0px 0px 16px 0px;
     padding: 0px;
 }
@@ -288,7 +302,6 @@ span.attention {
 label {
     font-weight: normal;
     cursor: pointer;
-    cursor: hand;
 }
 
 label.required {

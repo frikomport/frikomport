@@ -177,8 +177,7 @@ public class Registration extends BaseObject implements Serializable {
     /**
      *
      * @param emailRepeat The email repeated
-     * 
-     * @spring.validator type="required"
+     *
      * @spring.validator type="email"
      */
     public void setEmailRepeat(String emailRepeat) {

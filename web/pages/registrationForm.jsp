@@ -77,7 +77,7 @@
 					<form:errors cssClass="fieldError" path="email" />
 				</td>
 			</tr>
-
+<c:if test="${emailrepeat}">
             <tr>
                 <th>
                     <soak:label key="registration.emailRepeat" />
@@ -87,7 +87,7 @@
                     <form:errors cssClass="fieldError" path="emailRepeat" />
                 </td>
             </tr>
-
+</c:if>
 			<tr>
 				<th>
 					<soak:label key="registration.phone" />

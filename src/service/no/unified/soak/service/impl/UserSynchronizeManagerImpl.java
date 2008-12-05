@@ -45,8 +45,15 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
             while (it.hasNext()){
                 EzUser ezUser = it.next();
                 User user = null;
+                User user2 = null;
                 try{
                     user = userManager.getUser(ezUser.getUsername());
+                    user2 = userManager.findUser(ezUser.getEmail().toLowerCase());
+                    if(user2 != null && user2.getEnabled() && !user.getUsername().equals(user2.getUsername())){
+                        // user2 skal disablast og user overta påmeldinger
+                        byttNavnOgDisable(user2);
+                        registrationManager.moveRegistrations(user2, user);
+                    }
                     userManager.updateUser(user, ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail().toLowerCase(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
                 }
                 catch (ObjectRetrievalFailureException orfe){
@@ -54,16 +61,13 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
                     user = userManager.findUser(ezUser.getEmail().toLowerCase());
                     if(user != null){
                         // Endre epost til nokke som ikkje finnes
-                        userManager.updateUser(user, ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getUsername() + "@nonexist.no", ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
+                        byttNavnOgDisable(user);
                         // Ny bruker basert på riktig brukernavn
                         User newuser = userManager.addUser(ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail().toLowerCase(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
-                        // Oppdater hash fra gammal user
                         newuser.setHash(user.getHash());
                         userManager.updateUser(newuser);
                         // Flytt påmeldinger
                         registrationManager.moveRegistrations(user, newuser);
-                        // disable gammal bruker
-                        userManager.disableUser(user);
                     }
                     else{
                         // definitly no user
@@ -73,6 +77,13 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
             }
         }
         log.debug("Synchronized users");
+    }
+
+    private void byttNavnOgDisable(User user) {
+        String useremail = user.getEmail();
+        user.setEmail(useremail.substring(0,useremail.indexOf('@')) + "@nonexist.no");
+        user.setEnabled(false);
+        userManager.updateUser(user);
     }
 
     public void executeTask() {

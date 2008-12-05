@@ -277,7 +277,7 @@ public class RegistrationFormController extends BaseFormController {
 			// Perform a new registration
 
             // Check email
-            if(!registration.getEmail().equals(registration.getEmailRepeat())){
+            if(configurationManager.getValue("access.registration.emailrepeat","false").equals("true") &&  !registration.getEmail().equals(registration.getEmailRepeat())){
                 String error = "errors.email.notSame";
 				errors.rejectValue("email", "errors.email.notSame",  new Object[] { registration.getEmail(), registration.getEmailRepeat() }, "Email addresses not equal.");
 
@@ -362,8 +362,6 @@ public class RegistrationFormController extends BaseFormController {
 				saveMessage(request, getText(key, locale));
 				sendMail(locale, course, registration, Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION);
 			}
-
-			notificationManager.sendReminders();
 
 			// Let the next page know what registration we were editing here
 			model.put("registrationid", registration.getId().toString());
