@@ -101,7 +101,7 @@ public class User extends BaseObject implements Serializable {
      * Returns the firstName.
      * @return String
      *
-     * @hibernate.property column="first_name" not-null="true" length="50"
+     * @hibernate.property column="first_name" not-null="true" length="100"
      */
     public String getFirstName() {
         return firstName;
@@ -111,7 +111,7 @@ public class User extends BaseObject implements Serializable {
      * Returns the lastName.
      * @return String
      *
-     * @hibernate.property column="last_name" not-null="true" length="50"
+     * @hibernate.property column="last_name" not-null="true" length="100"
      */
     public String getLastName() {
         return lastName;
@@ -476,7 +476,7 @@ public class User extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the jobTitle.
-	 * @hibernate.property column="jobtitle" length="30"
+	 * @hibernate.property column="jobtitle" length="100"
 	 */
 	public String getJobTitle() {
 		return jobTitle;

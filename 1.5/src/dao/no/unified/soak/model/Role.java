@@ -24,7 +24,7 @@ import java.util.Set;
  *  Version by Dan Kibler dan@getrolling.com
  *
  * @struts.form extends="BaseForm"
- * @hibernate.class table="role"
+ * @hibernate.class table="role" lazy="false"
  */
 public class Role extends BaseObject implements Serializable {
     private static final long serialVersionUID = 3690197650654049848L;
@@ -45,7 +45,7 @@ public class Role extends BaseObject implements Serializable {
      * @return String
      *
      * @struts.validator type="required"
-     * @hibernate.id column="name" length="20"
+     * @hibernate.id column="name" length="100"
      *   generator-class="assigned" unsaved-value="version"
      */
     public String getName() {

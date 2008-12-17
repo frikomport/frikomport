@@ -82,7 +82,7 @@ public class CourseNotificationController extends BaseFormController {
 	/**
 	 * @see org.springframework.web.servlet.mvc.SimpleFormController#referenceData(javax.servlet.http.HttpServletRequest)
 	 */
-	protected Map referenceData(HttpServletRequest request, Object command, Errors errors) throws Exception {
+	public Map referenceData(HttpServletRequest request, Object command, Errors errors) throws Exception {
 		Map<String, Object> model = new HashMap<String, Object>();
         Locale locale = request.getLocale();
         String courseid = request.getParameter("id");
@@ -213,7 +213,7 @@ public class CourseNotificationController extends BaseFormController {
      * @param course
      * @param from
      */
-	protected void sendMail(Locale locale, Course course, int event, String mailComment, String from, List <String> changedList) {
+	private void sendMail(Locale locale, Course course, int event, String mailComment, String from, List <String> changedList) {
 		log.debug("Sending mail from CourseNotificationController");
 		List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, null,null, null, null);
 		
@@ -238,7 +238,7 @@ public class CourseNotificationController extends BaseFormController {
      * @param course
      * @param from
      */
-	protected void sendMailToWaitingList(Locale locale, Course course, int event, String mailComment, String from, List <String> changedList) {
+	private void sendMailToWaitingList(Locale locale, Course course, int event, String mailComment, String from, List <String> changedList) {
 		log.debug("Sending mail from CourseNotificationController");
 		List ids = new ArrayList<Long> ();
 		ids.add(course.getCopyid());
