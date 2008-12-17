@@ -95,5 +95,5 @@
 </display:table>
 
 <input type="hidden" name="attachmentid" id="attachmentid" value="0"/>
-<input type="hidden" name="courseid" value="<c:out value="${course.id}"/>"/>
+<input type="hidden" name="courseId" value="<c:out value="${course.id}"/>"/>
 </form>

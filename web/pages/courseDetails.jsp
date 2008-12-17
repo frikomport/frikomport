@@ -56,7 +56,7 @@
             <input type="submit" class="button" name="return" onclick="bCancel=true"
                 value="<fmt:message key="button.return"/>" />
 
-<c:if test="${(isAdmin || isEducationResponsible || isCourseResponsible || isCourseParticipant) && isPublished}">
+<c:if test="${isPublished}">
             <c:if test="${allowRegistration == true}">
 			    <button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 		    	    <fmt:message key="button.signup"/>
@@ -83,7 +83,7 @@
 		    </button>
 	</c:when>
 	<c:otherwise>
-		<c:if test="${isCourseParticipant && !course.restricted}">
+		<c:if test="${!course.restricted}">
 		    <button type="button" onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.displayRegistrations"/>
 		    </button>

@@ -311,11 +311,8 @@
 			<tr>
 				<td></td>
 				<td class="buttonBar">
-					<c:if
-						test="${isAdmin || isEducationResponsible || isCourseResponsible || isCourseParticipant}">
 						<input type="submit" class="button" name="save"
 							onclick="bCancel=false" value="<fmt:message key="button.save"/>" />
-					</c:if>
 					<c:if test="${!empty registration.id}">
 						<c:if test="${isAdmin}">
 							<input type="submit" class="button" name="delete"

@@ -188,38 +188,44 @@ public class RegistrationFormController extends BaseFormController {
 		} else {
 			registration = new Registration();
 			registration.setCourseid(new Long(courseId));
-			User user = null;
+			User user = (User) session.getAttribute(Constants.USER_KEY);
+            if(user != null && user.getOrganization() != null){
+                registration.setOrganization(user.getOrganization());
+                registration.setOrganizationid(user.getOrganization().getId());
+            }
+            User regUser = null;
 			Locale locale = request.getLocale();
 			String userdefaults = getText("access.registration.userdefaults", locale);
 			String anonymous = getText("access.registration.anonymous", locale);
 			if (userdefaults != null && userdefaults.equals("true")) {
-				user = (User) session.getAttribute(Constants.USER_KEY);
+				regUser = user;
 				if (anonymous != null && anonymous.equals("true")
 						&& user != null && user.getUsername().equals(Constants.ANONYMOUS_ROLE)) {
-					user = (User) session.getAttribute(Constants.ALT_USER_KEY);
+					regUser = (User) session.getAttribute(Constants.ALT_USER_KEY);
 				}
 			} else {
-				user = (User) session.getAttribute(Constants.ALT_USER_KEY);
+				regUser = (User) session.getAttribute(Constants.ALT_USER_KEY);
 			}
 
-			if (user != null) {
-				registration.setFirstName(user.getFirstName());
-				registration.setLastName(user.getLastName());
-				registration.setEmail(user.getEmail());
-				registration.setPhone(user.getPhoneNumber());
-				registration.setMobilePhone(user.getMobilePhone());
-				registration.setJobTitle(user.getJobTitle());
-				registration.setWorkplace(user.getWorkplace());
-				registration.setEmployeeNumber(user.getEmployeeNumber());
-				if ((user.getOrganizationid() != null) && (user.getOrganizationid() != 0)) {
-					registration.setOrganizationid(user.getOrganizationid());
+			if (regUser != null) {
+                registration.setFirstName(regUser.getFirstName());
+                registration.setLastName(regUser.getLastName());
+                registration.setEmail(regUser.getEmail());
+                registration.setPhone(regUser.getPhoneNumber());
+                registration.setMobilePhone(regUser.getMobilePhone());
+                registration.setJobTitle(regUser.getJobTitle());
+                registration.setWorkplace(regUser.getWorkplace());
+                registration.setEmployeeNumber(regUser.getEmployeeNumber());
+                if ((regUser.getOrganizationid() != null) && (regUser.getOrganizationid() != 0)) {
+                    // Sett alltid organisasjon dersom denne finnes
+                    registration.setOrganizationid(regUser.getOrganizationid());
 				}
-				if ((user.getServiceAreaid() != null) && (user.getServiceAreaid() != 0)) {
-					registration.setServiceAreaid(user.getServiceAreaid());
+                if ((regUser.getServiceAreaid() != null) && (regUser.getServiceAreaid() != 0)) {
+                    registration.setServiceAreaid(regUser.getServiceAreaid());
 				}
-				registration.setInvoiceName(user.getInvoiceName());
-				registration.setInvoiceAddress(user.getInvoiceAddressCopy());
-				registration.setClosestLeader(user.getClosestLeader());
+                registration.setInvoiceName(regUser.getInvoiceName());
+                registration.setInvoiceAddress(regUser.getInvoiceAddressCopy());
+                registration.setClosestLeader(regUser.getClosestLeader());
 			}
 		}
 
@@ -236,6 +242,8 @@ public class RegistrationFormController extends BaseFormController {
 		if (log.isDebugEnabled()) {
 			log.debug("entering 'onSubmit' method...");
 		}
+
+        HttpSession session = request.getSession();
 
 		String key = null;
 		Map model = new HashMap();
@@ -318,6 +326,8 @@ public class RegistrationFormController extends BaseFormController {
             if(user == null){
                 user = userManager.addUser(registration);
             }
+            session.setAttribute(Constants.ALT_USER_KEY, user);
+            
 			registration.setUser(user);
 			registration.setUsername(user.getUsername());
 
@@ -361,8 +371,6 @@ public class RegistrationFormController extends BaseFormController {
 				saveMessage(request, getText(key, locale));
 				sendMail(locale, course, registration, Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION);
 			}
-
-			notificationManager.sendReminders();
 
 			// Let the next page know what registration we were editing here
 			model.put("registrationid", registration.getId().toString());

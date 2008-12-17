@@ -55,7 +55,7 @@ public class ServiceArea extends BaseObject implements Serializable {
 
     /**
      * @return Returns the name.
-     * @hibernate.property column="name" length="30" not-null="true"
+     * @hibernate.property column="name" length="100" not-null="true"
      */
     public String getName() {
         return name;

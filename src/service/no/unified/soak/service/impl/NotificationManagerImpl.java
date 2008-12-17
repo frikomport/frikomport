@@ -152,7 +152,7 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 						Locale locale = new Locale(localeLanguage);
 						StringBuffer msg = MailUtil.createStandardBody(course,
 								Constants.EMAIL_EVENT_NOTIFICATION, locale,
-								messageSource, null, false);
+								messageSource, null, notification.getRegistration().getReserved());
 						ArrayList<Registration> registrations = new ArrayList<Registration>();
 						registrations.add(notification.getRegistration());
 						ArrayList<MimeMessage> newEmails = MailUtil

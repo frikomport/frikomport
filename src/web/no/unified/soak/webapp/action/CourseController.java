@@ -344,13 +344,7 @@ public class CourseController extends BaseFormController {
         }
 
         // Get all organizations in the database
-        List serviceAreasInDB = serviceAreaManager.getAll();
-        List serviceAreas = new ArrayList<ServiceArea>();
-        ServiceArea serviceAreaDummy = new ServiceArea();
-        serviceAreaDummy.setId(new Long(0));
-        serviceAreaDummy.setName(getText("misc.all", locale));
-        serviceAreas.add(serviceAreaDummy);
-        serviceAreas.addAll(serviceAreasInDB);
+        List serviceAreas = serviceAreaManager.getAllIncludingDummy(getText("misc.all", locale));
 
         if (serviceAreas != null) {
             model.put("serviceareas", serviceAreas);

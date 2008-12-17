@@ -55,7 +55,6 @@
 
 <input type="hidden" name="<c:out value="courseId"/>" value="<c:out value="${course.id}"/>"/>
 
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible || isCourseParticipant}">
 <display:table name="${registrationsBackingObject.registrations}" cellspacing="0" cellpadding="0" 
 	pagesize="25" class="list"
 	export="true" id="registrationList" requestURI="">
@@ -78,16 +77,15 @@
 	<display:column property="workplace" sortable="true" headerClass="sortable" 
 		titleKey="registration.workplace"/>
 		
+    <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
 	<display:column property="phone" sortable="true" headerClass="sortable" 
 		titleKey="registration.phone"/>
 
 	<display:column property="mobilePhone" sortable="true" headerClass="sortable" 
 		titleKey="registration.mobilePhone"/>
 		
-	<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
 	<display:column property="comment" sortable="true" headerClass="sortable" 
 		titleKey="registration.comment"/>
-	</c:if>
 
 	<display:column media="html" sortable="true" headerClass="sortable" titleKey="registration.invoiced">
 	<c:if test="${admin == true}">
@@ -142,6 +140,7 @@
 		<c:if test="${registrationList.attended == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${registrationList.attended == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 	</display:column>
+    </c:if>
 
 	<c:if test="${(admin == true || canDelete == true) && allowEditRegistration == true}">
 	<display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
@@ -161,7 +160,6 @@
 	<display:setProperty name="paging.banner.item_name" value="${item}"/>
 	<display:setProperty name="paging.banner.items_name" value="${items}"/>
 </display:table>
-</c:if> 
 
 <input type="hidden" id="regid" name="regid" value="0"/>
 
@@ -173,11 +171,9 @@
 <input type="submit" class="button" name="docancel"	onclick="bCancel=true" 
 	value="<fmt:message key="button.cancel"/>" />
 	
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible || isCourseParticipant}">
 	<c:if test="${allowRegistration == true}">
 		<button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 	    	<fmt:message key="button.signup"/>
 		</button>
 	</c:if>
-</c:if>
 </form>
