@@ -7,12 +7,20 @@
         <url-pattern>*.jsp</url-pattern>
     </filter-mapping>
     <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>*.ics</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
         <filter-name>localeFilter</filter-name>
         <url-pattern>*.html</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>localeFilter</filter-name>
         <url-pattern>*.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>localeFilter</filter-name>
+        <url-pattern>*.ics</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>securityFilter</filter-name>
@@ -26,6 +34,10 @@
         <filter-name>securityFilter</filter-name>
         <url-pattern>*.jsp</url-pattern>
     </filter-mapping>    
+    <filter-mapping>
+        <filter-name>securityFilter</filter-name>
+        <url-pattern>*.ics</url-pattern>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>loginFilter</filter-name>
         <url-pattern>/login.jsp</url-pattern>
@@ -52,8 +64,16 @@
         <url-pattern>*.html</url-pattern>
     </filter-mapping>
     <filter-mapping>
+        <filter-name>hibernateFilter</filter-name>
+        <url-pattern>*.ics</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
         <filter-name>actionFilter</filter-name>
         <url-pattern>*.html</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>actionFilter</filter-name>
+        <url-pattern>*.ics</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>clickstreamFilter</filter-name>

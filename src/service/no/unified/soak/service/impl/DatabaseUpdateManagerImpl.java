@@ -1,24 +1,32 @@
 package no.unified.soak.service.impl;
 
-import no.unified.soak.service.DatabaseUpdateManager;
-import no.unified.soak.service.CourseManager;
-import no.unified.soak.service.RegistrationManager;
-import no.unified.soak.service.UserManager;
-import no.unified.soak.service.ServiceAreaManager;
-import no.unified.soak.service.OrganizationManager;
-import no.unified.soak.model.Course;
-import no.unified.soak.model.Registration;
-import no.unified.soak.model.User;
-import no.unified.soak.model.ServiceArea;
-import no.unified.soak.model.Organization;
-import no.unified.soak.model.Address;
 import no.unified.soak.Constants;
-
-import java.util.Locale;
-import java.util.List;
-import java.util.Iterator;
-
+import no.unified.soak.model.Address;
+import no.unified.soak.model.Course;
+import no.unified.soak.model.Organization;
+import no.unified.soak.model.Registration;
+import no.unified.soak.model.ServiceArea;
+import no.unified.soak.model.User;
+import no.unified.soak.model.Category;
+import no.unified.soak.service.CourseManager;
+import no.unified.soak.service.DatabaseUpdateManager;
+import no.unified.soak.service.OrganizationManager;
+import no.unified.soak.service.RegistrationManager;
+import no.unified.soak.service.ServiceAreaManager;
+import no.unified.soak.service.UserManager;
 import org.apache.commons.validator.EmailValidator;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
+
+import javax.naming.NamingException;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * User: gv
@@ -27,11 +35,19 @@ import org.apache.commons.validator.EmailValidator;
  */
 public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUpdateManager {
 
+    private JdbcTemplate jt = new JdbcTemplate();
+    private DataSource dataSource = null;
     private CourseManager courseManager = null;
     private RegistrationManager registrationManager = null;
     private UserManager userManager = null;
     private ServiceAreaManager serviceAreaManager = null;
     private OrganizationManager organizationManager = null;
+    private CategoryManager categoryManager = null;
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+        jt.setDataSource(dataSource);
+    }
 
     public void setCourseManager(CourseManager courseManager) {
         this.courseManager = courseManager;
@@ -53,7 +69,13 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         this.organizationManager = organizationManager;
     }
 
+    public void setCategoryManager(CategoryManager categoryManager) {
+        this.categoryManager = categoryManager;
+    }
+
     public void updateDatabase() {
+        // Schmema updates preactions
+        updateDatabaseSchemaBefore();
         // ServiceArea updates
         updateServiceAreas();
         // User updates
@@ -64,6 +86,55 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         updateCourses();
         // Registration updates
         updateRegistrations();
+        // Schema updates postactions
+        updateDatabaseSchemaAfter();
+    }
+
+    /**
+     * Updates databaseschema
+     * @since 1.6
+     */
+    private void updateDatabaseSchemaBefore(){
+        updateCategorySchema();
+        updateCourseSchema();
+    }
+
+    private void updateCategorySchema() {
+        String sql = "";
+        try{
+            sql = "select * from category";
+            SqlRowSet rowSet = jt.queryForRowSet(sql);
+            if(rowSet.next()){
+                log.debug(rowSet.toString());
+            }
+        }
+        catch(Exception e){
+            log.debug("Create table category");
+            sql = "create table category (id integer not null default 0, name varchar(100) not null, selectable tinyint(1) default 1)";
+            jt.execute(sql);
+            sql = "insert into category values (1,'Kurs',true)";
+            jt.execute(sql);
+        }
+    }
+
+    private void updateCourseSchema(){
+        String sql = "";
+        sql = "select * from course";
+        SqlRowSet rowSet =  jt.queryForRowSet(sql);
+        if(rowSet.next()){
+            int categoryid = 0;
+            try{
+                categoryid = rowSet.getInt("categoryid");
+            }
+            catch(Exception e){
+                sql = "ALTER TABLE course ADD COLUMN categoryid BIGINT(20)";
+                jt.execute(sql);
+            }
+        }
+    }
+
+    private void updateDatabaseSchemaAfter(){
+        
     }
 
     /**
@@ -251,6 +322,12 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                             break;
                         }
                     }
+                }
+                if(course.getCategory() == null || course.getCategoryid() == 0){
+                    Category category = categoryManager.getCategory(new Long(1));
+                    course.setCategory(category);
+                    course.setCategoryid(category.getId());
+                    save = true;
                 }
                 if(save){
                     courseManager.saveCourse(course);

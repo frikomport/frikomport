@@ -30,6 +30,8 @@ import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
+import no.unified.soak.service.RoleManager;
+import no.unified.soak.service.impl.CategoryManager;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
@@ -48,6 +50,8 @@ public class CourseController extends BaseFormController {
     private OrganizationManager organizationManager = null;
     private ServiceAreaManager serviceAreaManager = null;
     private RegistrationManager registrationManager = null;
+    private CategoryManager categoryManager = null;
+    private RoleManager roleManager = null;
     private MessageSource messageSource = null;
 
     public void setCourseManager(CourseManager courseManager) {
@@ -66,7 +70,15 @@ public class CourseController extends BaseFormController {
     public void setRegistrationManager(RegistrationManager registrationManager) {
         this.registrationManager = registrationManager;
     }
-    
+
+    public void setCategoryManager(CategoryManager categoryManager) {
+        this.categoryManager = categoryManager;
+    }
+
+    public void setRoleManager(RoleManager roleManager) {
+        this.roleManager = roleManager;
+    }
+
     public void setMessageSource(MessageSource messageSource) {
 		this.messageSource = messageSource;
 	}
@@ -118,7 +130,7 @@ public class CourseController extends BaseFormController {
         }
         if (roles == null) {
             roles = new ArrayList<String>();
-            roles.add(messageSource.getMessage("role.anonymous", null, locale)); // Make sure not logged in users sees anonymous courses
+            roles.add(Constants.ANONYMOUS_ROLE);
         }
 
         // Don't modify organization if in postback
@@ -165,6 +177,7 @@ public class CourseController extends BaseFormController {
         // Set up parameters, and return them to the view
         model = addServiceAreas(model, locale);
         model = addOrganization(model, locale);
+        model = addCategories(model, locale);
         model.put("historic", historic);
         model.put("past", past);
 
@@ -244,6 +257,7 @@ public class CourseController extends BaseFormController {
         // Set up parameters, and return them to the view
         model = addServiceAreas(model, locale);
         model = addOrganization(model, locale);
+        model = addCategories(model,locale);
         model.put("course", course);
         session.setAttribute("course", course);
 
@@ -380,6 +394,16 @@ public class CourseController extends BaseFormController {
         }
 
         model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
+
+        return model;
+    }
+
+    private Map addCategories(Map model, Locale locale) {
+        if (model == null) {
+            model = new HashMap();
+        }
+
+        model.put("categories", categoryManager.getAllIncludingDummy(getText("misc.all", locale)));
 
         return model;
     }

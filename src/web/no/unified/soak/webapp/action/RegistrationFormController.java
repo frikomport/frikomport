@@ -230,6 +230,8 @@ public class RegistrationFormController extends BaseFormController {
 			log.debug("entering 'onSubmit' method...");
 		}
 
+        HttpSession session = request.getSession();
+
 		String key = null;
 		Map model = new HashMap();
 		Boolean courseFull = null;
@@ -319,6 +321,8 @@ public class RegistrationFormController extends BaseFormController {
             if(user == null){
                 user = userManager.addUser(registration);
             }
+            session.setAttribute(Constants.ALT_USER_KEY, user);
+            
 			registration.setUser(user);
 			registration.setUsername(user.getUsername());
 

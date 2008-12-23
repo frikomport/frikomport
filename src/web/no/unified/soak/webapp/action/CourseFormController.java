@@ -32,6 +32,7 @@ import no.unified.soak.model.Course;
 import no.unified.soak.model.Location;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.User;
+import no.unified.soak.model.Category;
 import no.unified.soak.service.AttachmentManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.LocationManager;
@@ -42,6 +43,7 @@ import no.unified.soak.service.PersonManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.UserManager;
+import no.unified.soak.service.impl.CategoryManager;
 import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.MailUtil;
 import no.unified.soak.webapp.util.FileUtil;
@@ -62,6 +64,8 @@ import org.springframework.web.servlet.ModelAndView;
 public class CourseFormController extends BaseFormController {
 
 	private CourseManager courseManager = null;
+
+    private CategoryManager categoryManager = null;
 
 	private ServiceAreaManager serviceAreaManager = null;
 
@@ -135,12 +139,21 @@ public class CourseFormController extends BaseFormController {
 		this.organizationManager = organizationManager;
 	}
 
-	/**
+    public void setCategoryManager(CategoryManager categoryManager) {
+        this.categoryManager = categoryManager;
+    }
+
+    /**
 	 * @see org.springframework.web.servlet.mvc.SimpleFormController#referenceData(javax.servlet.http.HttpServletRequest)
 	 */
 	protected Map referenceData(HttpServletRequest request) throws Exception {
 		Map<String, Object> model = new HashMap<String, Object>();
         Locale locale = request.getLocale();
+
+        List categories = categoryManager.getCategories(new Category(),new Boolean(false));
+        if(categories != null){
+            model.put("categories",categories);
+        }
         
         // Retrieve all serviceareas into an array
 		List serviceAreas = serviceAreaManager.getAllIncludingDummy(getText("misc.none", locale));

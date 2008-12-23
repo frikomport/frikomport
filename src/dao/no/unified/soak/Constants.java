@@ -213,6 +213,11 @@ public class Constants {
 
 	// Registration-END
 
+    /**
+     * The request scope attribute that holds the category list
+     */
+    public static final String CATEGORY_LIST = "categoryList";
+
 	// Attachment-START
 	public static final String ATTACHMENT_FILE_PREFIX = "attach_";
 

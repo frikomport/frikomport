@@ -132,6 +132,13 @@
         <property name="formView" value="courseList"/>
         <property name="successView" value="courseList"/>
     </bean>
+
+    <bean id="calCourseController" class="no.unified.soak.webapp.action.CourseController" autowire="byName">
+        <property name="commandName" value="course"/>
+        <property name="commandClass" value="no.unified.soak.model.Course"/>
+        <property name="formView" value="calCourseList"/>
+        <property name="successView" value="calCourseList"/>
+    </bean>
     
     <bean id="courseFormController" class="no.unified.soak.webapp.action.CourseFormController" autowire="byName">
         <property name="commandName" value="course"/>
@@ -217,7 +224,7 @@
         <property name="commandName" value="registration"/>
         <property name="commandClass" value="no.unified.soak.model.Registration"/>
         <property name="formView" value="registrationComplete"/>
-        <property name="successView" value="redirect:listCourses.html"/>
+        <property name="successView" value="redirect:detailsCourse.html"/>
     </bean>
     
     <!--Registration-BEAN-END-->
@@ -245,6 +252,18 @@
         <property name="commandClass" value="no.unified.soak.model.User"/>
         <property name="formView" value="userDetails"/>
         <property name="successView" value="redirect:listCourse.html"/>
+    </bean>
+
+    <bean id="categoryController" class="no.unified.soak.webapp.action.CategoryController" autowire="byName">
+        <property name="categoryManager" ref="categoryManager"/>
+    </bean>
+
+    <bean id="categoryDetailsController" class="no.unified.soak.webapp.action.CategoryController" autowire="byName">
+        <property name="categoryManager" ref="categoryManager"/>
+    </bean>
+
+    <bean id="categoryFormController" class="no.unified.soak.webapp.action.CategoryController" autowire="byName">
+        <property name="categoryManager" ref="categoryManager"/>
     </bean>
 
     <!-- Load WEB-INF/classes/ApplicationResources.properties for i18n messages using JSTL's fmt tag -->
@@ -286,6 +305,7 @@
                 
                 <!--Course-URL-START-->
                 <prop key="/listCourses.html">courseController</prop>
+                <prop key="/listCourses.ics">calCourseController</prop>
                 <prop key="/editCourse.html">courseFormController</prop>
                 <prop key="/notifyCourse.html">courseNotificationController</prop>
                 <prop key="/detailsCourse.html">courseDetailsController</prop>
@@ -304,6 +324,10 @@
                 <prop key="/detailsUser.html">userDetailsController</prop>
 				<prop key="/listUsers.html">userController</prop>
 				<prop key="/profileUser.html">userRegistrationController</prop>
+
+                <prop key="/listCategories.html">categoryController</prop>
+                <prop key="/detailsCategory.html">categoryDetailsController</prop>
+                <prop key="/editCategory.html">categoryFormController</prop>
             </props>
         </property>
     </bean>

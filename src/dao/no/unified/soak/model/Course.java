@@ -34,6 +34,8 @@ public class Course extends BaseObject implements Serializable {
     private static final long serialVersionUID = -4869033333668709720L;
     private Long id;
     private Long copyid;
+    private Category category;
+    private Long categoryid;
     private Organization organization;
     private Long organizationid;
     private User responsible;
@@ -64,7 +66,39 @@ public class Course extends BaseObject implements Serializable {
     private Integer availableAttendants;
     private Integer status = 0;
     private Boolean restricted = false;
-    
+
+    /**
+     * @return
+     * @hibernate.many-to-one not-null="false" column="categoryid"
+     *                        insert="false" update="false" cascade="none"
+     */
+    public Category getCategory() {
+        return category;
+    }
+
+    /**
+     * @param category
+     */
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    /**
+     * @return The categoryid
+     * @hibernate.property column="categoryid" not-null="false"
+     */
+    public Long getCategoryid() {
+        return categoryid;
+    }
+
+    /**
+     * @param categoryid
+     * @spring.validator type="required"
+     */
+    public void setCategoryid(Long categoryid) {
+        this.categoryid = categoryid;
+    }
+
     /**
      * @return Returns the role.
      * @hibernate.property column="role" length="50" not-null="true"

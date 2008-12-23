@@ -309,7 +309,7 @@ public class Location extends BaseObject implements Serializable {
     }
 
     /**
-     * @see java.lang.Object#equals()
+     * @see java.lang.Object#equals(Object) ()
      */
     public boolean equals(final Object other) {
         if (!(other instanceof Location)) {

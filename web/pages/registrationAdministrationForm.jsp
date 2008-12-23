@@ -53,8 +53,7 @@
 
 <input type="hidden" name="<c:out value="courseId"/>" value="<c:out value="${course.id}"/>"/>
 
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible || isCourseParticipant}">
-<display:table name="${registrationsBackingObject.registrations}" cellspacing="0" cellpadding="0" 
+<display:table name="${registrationsBackingObject.registrations}" cellspacing="0" cellpadding="0"
 	pagesize="25" class="list"
 	export="true" id="registrationList" requestURI="">
 
@@ -159,7 +158,6 @@
 	<display:setProperty name="paging.banner.item_name" value="${item}"/>
 	<display:setProperty name="paging.banner.items_name" value="${items}"/>
 </display:table>
-</c:if> 
 
 <input type="hidden" id="regid" name="regid" value="0"/>
 
@@ -171,11 +169,9 @@
 <input type="submit" class="button" name="docancel"	onclick="bCancel=true" 
 	value="<fmt:message key="button.cancel"/>" />
 	
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible || isCourseParticipant}">
 	<c:if test="${allowRegistration == true}">
 		<button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 	    	<fmt:message key="button.signup"/>
 		</button>
 	</c:if>
-</c:if>
 </form>

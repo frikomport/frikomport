@@ -18,7 +18,6 @@ import java.util.List;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
-import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.mail.SimpleMailMessage;
 import org.apache.commons.validator.EmailValidator;
 

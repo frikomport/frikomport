@@ -3,3 +3,7 @@
         <servlet-name>action</servlet-name>
         <url-pattern>*.html</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>action</servlet-name>
+        <url-pattern>*.ics</url-pattern>
+    </servlet-mapping>

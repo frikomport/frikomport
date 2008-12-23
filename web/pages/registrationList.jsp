@@ -27,133 +27,108 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 }
 </script>
 
-<form method="post" action="<c:url value="/listRegistrations.html"/>" id="registrationList" name="registrationList">
-   	<INPUT type="hidden" id="ispostbackregistrationlist" name="ispostbackregistrationlist" value="1"/> 
-
 <fmt:message key="date.format" var="dateformat"/>
 <fmt:message key="time.format" var="timeformat"/>
 <fmt:message key="registrationList.item" var="item"/>
 <fmt:message key="registrationList.items" var="items"/>
-
-	<table>
-		<tr>
-		    <th>
-		        <soak:label key="registration.organization"/>
-		    </th>
-		    <td>
-		        <spring:bind path="registration.organizationid">
-					  <select name="<c:out value="${status.expression}"/>"  onchange="fillSelect(this);">
-					    <c:forEach var="organization" items="${organizations}">
-					      <option value="<c:out value="${organization.id}"/>"
-						      <c:if test="${organization.id == registration.organizationid}"> selected="selected"</c:if>>
-					        <c:out value="${organization.name}"/>
-					      </option>
-					    </c:forEach>
-					  </select>            
-		            <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-		        </spring:bind>
-		    </td>
-
-		    <th>
-		        <soak:label key="registration.serviceArea"/>
-		    </th>
-		    <td>
-		        <spring:bind path="registration.serviceAreaid">
-                    <select name="<c:out value="${status.expression}"/>">
-						<c:forEach var="servicearea" items="${serviceareas}">
-							<c:choose>
-								<c:when test="${empty servicearea.id}">
-									<option value="<c:out value="${servicearea.id}"/>"
-										<c:if test="${servicearea.id == registration.serviceAreaid}"> selected="selected"</c:if>>
-										<c:out value="${servicearea.name}" />
-									</option>
-								</c:when>
-								<c:otherwise>
-									<c:if
-										test="${servicearea.organizationid == registration.organizationid}">
-										<option value="<c:out value="${servicearea.id}"/>"
-											<c:if test="${servicearea.id == registration.serviceAreaid}"> selected="selected"</c:if>>
-											<c:out value="${servicearea.name}" />
-										</option>
-									</c:if>
-								</c:otherwise>
-							</c:choose>
-						</c:forEach>
-					</select>
-					<span class="fieldError"><c:out
-							value="${status.errorMessage}" escapeXml="false" /> </span>
-		        </spring:bind>
-		    </td>	
-		</tr>
-		<tr>
-		    <th>
-		        <soak:label key="registration.course"/>
-		    </th>
-		    <td colspan="3">
-		        <spring:bind path="registration.courseid">
-					  <select name="<c:out value="${status.expression}"/>">
-					    <c:forEach var="theCourse" items="${courses}">
-					      <option value="<c:out value="${theCourse.id}"/>"
-						      <c:if test="${theCourse.id == registration.courseid}"> selected="selected"</c:if>>
-						      <fmt:formatDate value="${theCourse.startTime}" type="both" pattern="${dateformat} - "/><c:out value="${theCourse.name}"/>
-					      </option>
-					    </c:forEach>
-					  </select>
-		            <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-		        </spring:bind>
-		    </td>	
-
-		</tr>
-		<tr>
-		    <th>
-		        <soak:label key="registration.reserved"/>
-		    </th>
-		    <td>
-				  <select id="reservedField" name="reservedField">
-				      <option value="2" <c:if test="${reservedValue == 2}"> selected </c:if> /> <c:out value='${reserved["null"]}'/></option>
-				      <option value="1" <c:if test="${reservedValue == 1}"> selected </c:if> /> <c:out value='${reserved["true"]}'/></option>
-				      <option value="0" <c:if test="${reservedValue == 0}"> selected </c:if> /> <c:out value='${reserved["false"]}'/></option>
-				  </select>
-		    </td>
-	
-		    <th>
-		        <soak:label key="registration.invoiced"/>
-		    </th>
-		    <td>
-				  <select id="invoicedField" name="invoicedField">
-				      <option value="2" <c:if test="${invoicedValue == 2}"> selected </c:if> /> <c:out value='${invoiced["null"]}'/></option>
-				      <option value="1" <c:if test="${invoicedValue == 1}"> selected </c:if> /> <c:out value='${invoiced["true"]}'/></option>
-				      <option value="0" <c:if test="${invoicedValue == 0}"> selected </c:if> /> <c:out value='${invoiced["false"]}'/></option>
-				  </select>
-		    </td>
-		</tr>
-		<tr>
-		   	<th>
-				<soak:label key="registration.attended"/>
-		    </th>
-		    <td>
-				  <select id="attendedField" name="attendedField">
-				      <option value="2" <c:if test="${attendedValue == 2}"> selected </c:if> /> <c:out value='${attended["null"]}'/></option>
-				      <option value="1" <c:if test="${attendedValue == 1}"> selected </c:if> /> <c:out value='${attended["true"]}'/></option>
-				      <option value="0" <c:if test="${attendedValue == 0}"> selected </c:if> /> <c:out value='${attended["false"]}'/></option>
-				  </select>
-		    </td>
-		    <th>
-				<soak:label key="course.includeHistoric"/>
-		    </th>
-		    <td>
-		    	<INPUT type="hidden" name="_historic" value="0"/>
-		    	<INPUT type="checkbox" id="historic" name="historic" value="1" 
-		    	<c:if test="${historic == true}"> checked </c:if> />
-		    </td>
- 
-	        <td class="buttonBar">            
-			<button type="submit" name="search" onclick="bCancel=false" style="margin-right: 5px">
+<div class="searchForm">
+    <form method="post" action="<c:url value="/listRegistrations.html"/>" id="registrationList" name="registrationList">
+    <INPUT type="hidden" id="ispostbackregistrationlist" name="ispostbackregistrationlist" value="1"/> 
+    <ul>
+        <li>
+            <soak:label key="registration.organization" styleClass="required"/>
+            <spring:bind path="registration.organizationid">
+                  <select name="<c:out value="${status.expression}"/>"  onchange="fillSelect(this);">
+                    <c:forEach var="organization" items="${organizations}">
+                      <option value="<c:out value="${organization.id}"/>"
+                          <c:if test="${organization.id == registration.organizationid}"> selected="selected"</c:if>>
+                        <c:out value="${organization.name}"/>
+                      </option>
+                    </c:forEach>
+                  </select>
+                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
+            </spring:bind>
+        </li>
+        <li>
+            <soak:label key="registration.serviceArea" styleClass="required"/>
+            <spring:bind path="registration.serviceAreaid">
+                <select name="<c:out value="${status.expression}"/>">
+                    <c:forEach var="servicearea" items="${serviceareas}">
+                        <c:choose>
+                            <c:when test="${empty servicearea.id}">
+                                <option value="<c:out value="${servicearea.id}"/>"
+                                    <c:if test="${servicearea.id == registration.serviceAreaid}"> selected="selected"</c:if>>
+                                    <c:out value="${servicearea.name}" />
+                                </option>
+                            </c:when>
+                            <c:otherwise>
+                                <c:if
+                                    test="${servicearea.organizationid == registration.organizationid}">
+                                    <option value="<c:out value="${servicearea.id}"/>"
+                                        <c:if test="${servicearea.id == registration.serviceAreaid}"> selected="selected"</c:if>>
+                                        <c:out value="${servicearea.name}" />
+                                    </option>
+                                </c:if>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+                </select>
+                <span class="fieldError"><c:out
+                        value="${status.errorMessage}" escapeXml="false" /> </span>
+		    </spring:bind>
+        </li>
+        <li>
+            <soak:label key="registration.course" styleClass="required"/>
+            <spring:bind path="registration.courseid">
+                  <select name="<c:out value="${status.expression}"/>">
+                    <c:forEach var="theCourse" items="${courses}">
+                      <option value="<c:out value="${theCourse.id}"/>"
+                          <c:if test="${theCourse.id == registration.courseid}"> selected="selected"</c:if>>
+                          <fmt:formatDate value="${theCourse.startTime}" type="both" pattern="${dateformat} - "/><c:out value="${theCourse.name}"/>
+                      </option>
+                    </c:forEach>
+                  </select>
+                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
+            </spring:bind>
+        </li>
+        <li>
+            <soak:label key="registration.reserved" styleClass="required"/>
+            <select id="reservedField" name="reservedField">
+                <option value="2" <c:if test="${reservedValue == 2}"> selected </c:if> /> <c:out value='${reserved["null"]}'/></option>
+                <option value="1" <c:if test="${reservedValue == 1}"> selected </c:if> /> <c:out value='${reserved["true"]}'/></option>
+                <option value="0" <c:if test="${reservedValue == 0}"> selected </c:if> /> <c:out value='${reserved["false"]}'/></option>
+            </select>
+        </li>
+        <li>
+            <soak:label key="registration.invoiced" styleClass="required"/>
+            <select id="invoicedField" name="invoicedField">
+                <option value="2" <c:if test="${invoicedValue == 2}"> selected </c:if> /> <c:out value='${invoiced["null"]}'/></option>
+                <option value="1" <c:if test="${invoicedValue == 1}"> selected </c:if> /> <c:out value='${invoiced["true"]}'/></option>
+                <option value="0" <c:if test="${invoicedValue == 0}"> selected </c:if> /> <c:out value='${invoiced["false"]}'/></option>
+            </select>
+        </li>
+        <li>
+            <soak:label key="registration.attended" styleClass="required"/>
+            <select id="attendedField" name="attendedField">
+				<option value="2" <c:if test="${attendedValue == 2}"> selected </c:if> /> <c:out value='${attended["null"]}'/></option>
+				<option value="1" <c:if test="${attendedValue == 1}"> selected </c:if> /> <c:out value='${attended["true"]}'/></option>
+				<option value="0" <c:if test="${attendedValue == 0}"> selected </c:if> /> <c:out value='${attended["false"]}'/></option>
+			</select>
+        </li>
+        <li>
+            <soak:label key="course.includeHistoric" styleClass="required"/>
+            <INPUT type="hidden" name="_historic" value="0"/>
+		    <INPUT type="checkbox" id="historic" name="historic" value="1"
+		    <c:if test="${historic == true}"> checked </c:if> />
+        </li>
+        <li>
+            <button type="submit" name="search" onclick="bCancel=false" style="margin-right: 5px">
 				<fmt:message key="button.search"/>
 			</button>
-		</tr>
-	</table>
-</form>
+        </li>
+    </ul>
+    </form>
+</div>
 
 <c:set var="buttons">
 </c:set>

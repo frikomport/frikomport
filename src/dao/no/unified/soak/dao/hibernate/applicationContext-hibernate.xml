@@ -20,6 +20,7 @@
 	            <value>no/unified/soak/model/Attachment.hbm.xml</value>
 	            <value>no/unified/soak/model/Notification.hbm.xml</value>
 	            <value>no/unified/soak/model/Configuration.hbm.xml</value>
+	            <value>no/unified/soak/model/Category.hbm.xml</value>
             </list>
         </property>
         <!-- The property below is commented out b/c it doesn't work when run via
@@ -73,7 +74,7 @@
 	<bean id="userEzDaoJdbc" class="no.unified.soak.dao.jdbc.UserEzDaoJdbc">
     	<property name="dataSource" ref="userEzDataSource"/>
     </bean>
-    
+
     <!-- Add new DAOs here -->
 
      <!--Location-START-->
@@ -105,4 +106,8 @@
     <!--Configuration-START-->
     <bean id="configurationDao" class="no.unified.soak.dao.hibernate.ConfigurationDAOHibernate" autowire="byName"/>
     <!--Configuration-END-->
+
+    <!--Category-START-->
+    <bean id="categoryDao" class="no.unified.soak.dao.hibernate.CategoryDAOHibernate" autowire="byName"/>
+    <!--Category-END-->
 </beans>

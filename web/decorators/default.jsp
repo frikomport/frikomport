@@ -39,7 +39,6 @@
             <%@ include file="/common/messages.jsp" %>
             <decorator:body/>
         </div>
-        <div id="footer">&copy;2008 <a href="http://www.frikomport.no" target="_blank">FriKomPort</a> | Ikoner <a href="http://www.famfamfam.com" target="_blank">FamFamFam</a></div>
     </div>
 
 </body>

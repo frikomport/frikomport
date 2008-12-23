@@ -132,7 +132,18 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 					path="description" />
 			</td>
 		</tr>
-
+<c:if test="${categories[1] != null}">
+		<tr>
+			<th>
+				<soak:label key="course.category" />
+			</th>
+			<td>
+				<form:select path="categoryid" items="${categories}" itemValue="id"
+					itemLabel="name" />
+				<form:errors cssClass="fieldError" htmlEscape="false" path="categoryid" />
+			</td>
+		</tr>
+</c:if>
 		<tr>
 			<th>
 				<soak:label key="course.description" />

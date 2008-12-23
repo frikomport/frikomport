@@ -2,8 +2,11 @@
     <excludes>
         <pattern>/demos/*</pattern>
         <pattern>/resources/*</pattern>
-    </excludes> 
+    </excludes>
+    <decorator name="ical" page="ical.jsp">
+        <pattern>/*.ics</pattern>
+    </decorator>
     <decorator name="default" page="default.jsp">
-        <pattern>/*</pattern>
+        <pattern>/*.html</pattern>
     </decorator>
 </decorators>
