@@ -19,4 +19,7 @@ INSERT INTO configuration VALUES ('access.registration.emailrepeat','false');
 INSERT INTO configuration VALUES ('access.course.filterlocation','false');
 INSERT INTO configuration VALUES ('access.course.singleprice','false');
 
+create table category (id integer not null default 0, name varchar(100) not null, selectable tinyint(1) default 1);
+ALTER TABLE course ADD COLUMN categoryid BIGINT(20)
+
 
