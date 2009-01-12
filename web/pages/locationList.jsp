@@ -34,7 +34,7 @@
 </form>
 
 <c:set var="buttons">
-<c:if test="${isAdmin || isEducationResponsible}">
+<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
     <button type="button" style="margin-right: 5px"
         onclick="location.href='<c:url value="/editLocation.html"/>'">
         <fmt:message key="button.add"/>

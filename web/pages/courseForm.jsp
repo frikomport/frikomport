@@ -127,7 +127,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 				<soak:label key="course.name" />
 			</th>
 			<td>
-				<form:input size="50" path="name" />
+				<form:input size="50" maxlength="100" path="name" />
 				<form:errors cssClass="fieldError" htmlEscape="false"
 					path="description" />
 			</td>
@@ -176,7 +176,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 				<soak:label key="course.type" />
 			</th>
 			<td>
-				<form:input path="type" maxlength="50" />
+				<form:input path="type" size="50" maxlength="50" />
 				<form:errors cssClass="fieldError" htmlEscape="false" path="type" />
 			</td>
 		</tr>
@@ -254,7 +254,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 				<soak:label key="course.duration" />
 			</th>
 			<td>
-				<form:input path="duration" size="50" />
+				<form:input path="duration" size="50" maxlength="100"/>
 				<form:errors cssClass="fieldError" htmlEscape="false"
 					path="duration" />
 			</td>
@@ -553,7 +553,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 				<soak:label key="course.detailURL" />
 			</th>
 			<td>
-				<form:input size="50" path="detailURL" />
+				<form:input size="50" path="detailURL" maxlength="200"/>
 				<form:errors cssClass="fieldError" htmlEscape="false"
 					path="detailURL" />
 			</td>

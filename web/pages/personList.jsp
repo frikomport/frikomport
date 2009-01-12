@@ -7,7 +7,7 @@
 <fmt:message key="personList.items" var="items"/>
 
 <c:set var="buttons">
-<c:if test="${isAdmin || isEducationResponsible}">
+<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
     <button type="button" style="margin-right: 5px"
         onclick="location.href='<c:url value="/editPerson.html"/>'">
         <fmt:message key="button.add"/>

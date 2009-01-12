@@ -53,7 +53,7 @@
 					<soak:label key="registration.firstName" />
 				</th>
 				<td>
-					<form:input path="firstName" />
+					<form:input path="firstName" maxlength="100"/>
 					<form:errors cssClass="fieldError" path="firstName" />
 				</td>
 			</tr>
@@ -63,7 +63,7 @@
 					<soak:label key="registration.lastName" />
 				</th>
 				<td>
-					<form:input path="lastName" />
+					<form:input path="lastName" maxlength="100"/>
 					<form:errors cssClass="fieldError" path="lastName" />
 				</td>
 			</tr>
@@ -73,7 +73,7 @@
 					<soak:label key="registration.email" />
 				</th>
 				<td>
-					<form:input path="email" />
+					<form:input path="email" maxlength="50"/>
 					<form:errors cssClass="fieldError" path="email" />
 				</td>
 			</tr>
@@ -83,7 +83,7 @@
                     <soak:label key="registration.emailRepeat" />
                 </th>
                 <td>
-                    <form:input path="emailRepeat" />
+                    <form:input path="emailRepeat" maxlength="50"/>
                     <form:errors cssClass="fieldError" path="emailRepeat" />
                 </td>
             </tr>
@@ -93,7 +93,7 @@
 					<soak:label key="registration.phone" />
 				</th>
 				<td>
-					<form:input path="phone" />
+					<form:input path="phone" maxlength="30"/>
 					<form:errors cssClass="fieldError" path="phone" />
 				</td>
 			</tr>
@@ -103,7 +103,7 @@
 					<soak:label key="registration.mobilePhone" />
 				</th>
 				<td>
-					<form:input path="mobilePhone" />
+					<form:input path="mobilePhone" maxlength="30"/>
 					<form:errors cssClass="fieldError" path="mobilePhone" />
 				</td>
 			</tr>
@@ -113,7 +113,7 @@
 					<soak:label key="registration.closestLeader" />
 				</th>
 				<td>
-					<form:input path="closestLeader" />
+					<form:input path="closestLeader" maxlength="150"/>
 					<form:errors cssClass="fieldError" path="closestLeader" />
 				</td>
 			</tr>
@@ -123,7 +123,7 @@
 					<soak:label key="registration.jobTitle" />
 				</th>
 				<td>
-					<form:input path="jobTitle" />
+					<form:input path="jobTitle" maxlength="100"/>
 					<form:errors cssClass="fieldError" path="jobTitle" />
 				</td>
 			</tr>
@@ -133,7 +133,7 @@
 					<soak:label key="registration.workplace" />
 				</th>
 				<td>
-					<form:input path="workplace" />
+					<form:input path="workplace" maxlength="100"/>
 					<form:errors cssClass="fieldError" path="workplace" />
 				</td>
 			</tr>
@@ -205,7 +205,7 @@
 						<soak:label key="registration.invoiceAddress.name" />
 					</th>
 					<td>
-						<form:input path="invoiceName" />
+						<form:input path="invoiceName" maxlength="100"/>
 						<form:errors cssClass="fieldError" path="invoiceName" />
 					</td>
 				</tr>
@@ -215,7 +215,7 @@
 						<soak:label key="registration.invoiceAddress.address" />
 					</th>
 					<td>
-						<form:input path="invoiceAddress.address" />
+						<form:input path="invoiceAddress.address" maxlength="100"/>
 						<form:errors cssClass="fieldError" path="invoiceAddress.address" />
 					</td>
 				</tr>
@@ -224,7 +224,7 @@
 						<soak:label key="registration.invoiceAddress.city" />
 					</th>
 					<td>
-						<form:input path="invoiceAddress.city" />
+						<form:input path="invoiceAddress.city" maxlength="50"/>
 						<form:errors cssClass="fieldError" path="invoiceAddress.city" />
 					</td>
 				</tr>
@@ -233,7 +233,7 @@
 						<soak:label key="registration.invoiceAddress.postalCode" />
 					</th>
 					<td>
-						<form:input path="invoiceAddress.postalCode" />
+						<form:input path="invoiceAddress.postalCode" maxlength="15"/>
 						<form:errors cssClass="fieldError"
 							path="invoiceAddress.postalCode" />
 					</td>
@@ -321,7 +321,7 @@
 				<td></td>
 				<td class="buttonBar">
                     <input type="submit" class="button" name="save"
-                        onclick="bCancel=false" value="<fmt:message key="button.save"/>" />
+                        onclick="bCancel=false" value="<fmt:message key="button.register.save"/>" />
 					<c:if test="${!empty registration.id}">
 						<c:if test="${isAdmin}">
 							<input type="submit" class="button" name="delete"
