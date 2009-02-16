@@ -45,7 +45,9 @@ public class CourseDAOTest extends BaseDAOTestCase {
         Long responsibleid = new Long(1);
         course.setResponsibleid(responsibleid);
 
-
+		String responsibleusername = "editor";
+        course.setResponsibleUsername(responsibleusername);
+		
         Long serviceAreaid = new Long(1);
         course.setServiceAreaid(serviceAreaid);
 
@@ -101,7 +103,7 @@ public class CourseDAOTest extends BaseDAOTestCase {
 
         // verify set fields are same after save
         assertEquals(instructorid, course.getInstructorid());
-        assertEquals(responsibleid, course.getResponsibleid());
+        assertEquals(responsibleusername, course.getResponsibleUsername());
         assertEquals(serviceAreaid, course.getServiceAreaid());
         assertEquals(duration, course.getDuration());
         assertEquals(feeExternal, course.getFeeExternal());
@@ -159,6 +161,9 @@ public class CourseDAOTest extends BaseDAOTestCase {
 
         Long responsibleid = new Long(2);
         course.setResponsibleid(responsibleid);
+		
+		String responsible = "admin";
+        course.setResponsibleUsername(responsible);
 
         Long serviceAreaid = new Long(2);
         course.setServiceAreaid(serviceAreaid);
@@ -211,7 +216,7 @@ public class CourseDAOTest extends BaseDAOTestCase {
         dao.saveCourse(course);
 
         assertEquals(instructorid, course.getInstructorid());
-        assertEquals(responsibleid, course.getResponsibleid());
+        assertEquals(responsible, course.getResponsibleUsername());
         assertEquals(serviceAreaid, course.getServiceAreaid());
         assertEquals(duration, course.getDuration());
         assertEquals(feeExternal, course.getFeeExternal());
