@@ -28,11 +28,11 @@ import javax.servlet.http.HttpSession;
 
 import no.unified.soak.Constants;
 import no.unified.soak.model.Attachment;
+import no.unified.soak.model.Category;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Location;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.User;
-import no.unified.soak.model.Category;
 import no.unified.soak.service.AttachmentManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.LocationManager;
@@ -224,7 +224,7 @@ public class CourseFormController extends BaseFormController {
 					allowRegistration = new Boolean(true);
 				}
 
-                if(course.getStatus().intValue() == CourseStatus.COURSE_CANCELLED.intValue()){
+                if(course.getStatus().equals(CourseStatus.COURSE_CANCELLED)){
                     allowRegistration = new Boolean(false);
                     saveMessage(request,getText("course.status.cancelled", locale));                    
                 }
@@ -297,6 +297,8 @@ public class CourseFormController extends BaseFormController {
 		} else {
 			course = new Course();
             course.setRole(Constants.ANONYMOUS_ROLE);
+            course.setCategoryid(1L);
+            course.setCategory(categoryManager.getCategory(1L));
             // Check if a default organization should be applied
 			User user = (User) request.getSession().getAttribute(Constants.USER_KEY);
 			Object omid = user.getOrganizationid();
@@ -395,7 +397,7 @@ public class CourseFormController extends BaseFormController {
                 course.setStatus(CourseStatus.COURSE_CANCELLED);
 //                enablemail = true;
             }
-            log.debug("recieved 'save/update' from jsp");
+            log.debug("recieved 'save/publish/cancel' from jsp");
 			// Parse date and time fields together
 			String format = getText("date.format", request.getLocale()) + " " + getText("time.format", request.getLocale());
 			Object[] args = null;
@@ -499,14 +501,19 @@ public class CourseFormController extends BaseFormController {
 			}
 
 			courseManager.saveCourse(course);
+
+			String key = null;
+            if(course.getStatus().equals(CourseStatus.COURSE_CREATED))
+                key = "course.created";
+            else if(course.getStatus().equals(CourseStatus.COURSE_PUBLISHED))
+                key = "course.published";
+            else if(course.getStatus().equals(CourseStatus.COURSE_CANCELLED))
+                key = "course.cancelled";
+            else
+                key = "course.updated";
+            
             boolean enablemail = false;
             boolean waitinglist = false;
-
-            String key = null;
-            if(course.getStatus() == CourseStatus.COURSE_CREATED) {key = "course.created";}
-            else if(course.getStatus() == CourseStatus.COURSE_PUBLISHED) {key = "course.published";}
-            else if(course.getStatus() == CourseStatus.COURSE_CANCELLED) {key = "course.cancelled"; enablemail = true;}
-            else {key = "course.updated";}
 
             saveMessage(request, getText(key, locale));
 
@@ -576,7 +583,7 @@ public class CourseFormController extends BaseFormController {
 		return new ModelAndView(getSuccessView(), model);
 	}
 
-    private Date parseDateAndTime(HttpServletRequest request, String fieldName, String format) throws ParseException {
+    protected Date parseDateAndTime(HttpServletRequest request, String fieldName, String format) throws ParseException {
 		SimpleDateFormat formatter = new SimpleDateFormat(format);
 		formatter.setLenient(false);
 		formatter.set2DigitYearStart(formatter.parse("01.01.2000 00:00"));

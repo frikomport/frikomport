@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.net.URI;
+import java.net.SocketException;
 
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
@@ -520,8 +521,7 @@ public class MailUtil {
 
 		try {
 			// Create an event
-			VEvent event = new VEvent(new DateTime(course.getStartTime()), new DateTime(course.getStopTime()), course
-					.getName());
+            VEvent event = getVEvent(course);
 
 			UidGenerator ug = new UidGenerator("1");
 			Uid uid = ug.generateUid();
@@ -536,7 +536,7 @@ public class MailUtil {
 			StreetAddress streetAddress = new StreetAddress(course.getLocation().getAddress());
 			event.getProperties().add(streetAddress);
 
-			if (course.getStatus() == CourseStatus.COURSE_CANCELLED) {
+			if (course.getStatus().equals(CourseStatus.COURSE_CANCELLED)) {
 				event.getProperties().add(Status.VEVENT_CANCELLED);
 			} else {
 				event.getProperties().add(Status.VEVENT_CONFIRMED);
@@ -577,10 +577,7 @@ public class MailUtil {
 			// event.getProperties().getProperty(Property.DTSTART).getParameters().add(tzParam);
 
 			// Create calendar and add event
-			cal = new Calendar();
-			cal.getProperties().add(new ProdId("-//Know IT Objectnet AS//FriKomPort//NO"));
-			cal.getProperties().add(Version.VERSION_2_0);
-			cal.getProperties().add(CalScale.GREGORIAN);
+            cal = createCalendar();
 			cal.getComponents().add(event);
 
 		} catch (Exception e) {
@@ -590,7 +587,51 @@ public class MailUtil {
 		return cal;
 	}
 
-	public static List<String> getRecipients(Registration registration, User instructor) {
+    public static Calendar createCalendar() {
+        Calendar cal;
+        cal = new Calendar();
+        cal.getProperties().add(new ProdId("-//Know IT Objectnet AS//FriKomPort//NO"));
+        cal.getProperties().add(Version.VERSION_2_0);
+        cal.getProperties().add(CalScale.GREGORIAN);
+        return cal;
+    }
+
+    public static VEvent getVEvent(Course course) throws SocketException {
+        Log log = LogFactory.getLog(MailUtil.class.toString());
+        VEvent event = new VEvent(new DateTime(course.getStartTime()), new DateTime(course.getStopTime()), course
+                .getName());
+
+        UidGenerator ug = new UidGenerator("1");
+        Uid uid = ug.generateUid();
+        event.getProperties().add(uid);
+        event.getProperties().add(Method.PUBLISH);
+
+        Description description = new Description(course.getDescription());
+        event.getProperties().add(description);
+
+        Location location = new Location(course.getLocation().getName());
+        event.getProperties().add(location);
+        StreetAddress streetAddress = new StreetAddress(course.getLocation().getAddress());
+        event.getProperties().add(streetAddress);
+
+        if (course.getStatus().equals(CourseStatus.COURSE_CANCELLED)) {
+            event.getProperties().add(Status.VEVENT_CANCELLED);
+        } else {
+            event.getProperties().add(Status.VEVENT_CONFIRMED);
+        }
+        if (course.getResponsible() != null) {
+            try {
+                URI mailto = new URI("MAILTO", course.getResponsible().getEmail(), null);
+                Organizer organizer = new Organizer(mailto);
+                event.getProperties().add(organizer);
+            } catch (Exception ex) {
+                log.error("Could not create Organizer object");
+            }
+        }
+        return event;
+    }
+
+    public static List<String> getRecipients(Registration registration, User instructor) {
 		List<String> emails = new LinkedList<String>();
 
 		if (registration.getEmail() != null && registration.getEmail().trim().length() > 0

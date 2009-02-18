@@ -168,7 +168,7 @@ public class CourseNotificationController extends BaseFormController {
 		
 		List <String> changedList = null;
 		
-		if (course.getStatus() != CourseStatus.COURSE_CANCELLED){
+		if (!course.getStatus().equals(CourseStatus.COURSE_CANCELLED)){
 			//check what has changed
 			Course originalCourse = (Course) session.getAttribute(Constants.ORG_COURSE_KEY);
 			if (originalCourse != null){
@@ -190,9 +190,9 @@ public class CourseNotificationController extends BaseFormController {
 			return new ModelAndView(getCancelView(), "id", course.getId().toString());
 		} // or to send out notification email?
 		else if (request.getParameter("send") != null) {
-			if (course.getCopyid()!= null){
+			if (course.getStatus().equals(CourseStatus.COURSE_PUBLISHED) && course.getCopyid() != null){// FKM-517
 				sendMailToWaitingList(locale, course, Constants.EMAIL_EVENT_NEW_COURSE_NOTIFICATION, mailComment, mailSender, changedList);
-			}else if( course.getStatus() == CourseStatus.COURSE_CANCELLED){
+			}else if( course.getStatus().equals(CourseStatus.COURSE_CANCELLED)){
                 sendMail(locale, course, Constants.EMAIL_EVENT_COURSECANCELLED, mailComment, mailSender, changedList);
             }
             else{
