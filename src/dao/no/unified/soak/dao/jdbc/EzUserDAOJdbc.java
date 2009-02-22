@@ -21,6 +21,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import no.unified.soak.dao.EzUserDAO;
 import no.unified.soak.ez.EzUser;
 import no.unified.soak.util.NumConvert;
 
@@ -33,7 +34,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
  * @author kst
  * 
  */
-public class UserEzDaoJdbc {
+public class EzUserDAOJdbc implements EzUserDAO {
 	DataSource dataSource = null;
 	
 	public void setDataSource(DataSource dataSource) {
@@ -43,7 +44,7 @@ public class UserEzDaoJdbc {
 
 	JdbcTemplate jt = new JdbcTemplate();
 
-	public UserEzDaoJdbc() {
+	public EzUserDAOJdbc() {
         try {
             Context env = (Context) new InitialContext().lookup("java:comp/env/");
             dataSource = (DataSource) env.lookup("jdbc/ezdb");
@@ -54,6 +55,9 @@ public class UserEzDaoJdbc {
         }
 	}
 
+	/* (non-Javadoc)
+     * @see no.unified.soak.dao.jdbc.EzUserDAO#findUserBySessionID(java.lang.String)
+     */
 	public EzUser findUserBySessionID(String sessionId) {
 		String sql = "select user_id, expiration_time from ezsession where session_key = \'"
 				+ sessionId + "\'";
@@ -161,9 +165,18 @@ public class UserEzDaoJdbc {
 		return roles;
 	}
 
-	public List findKursansvarligeUser() {
-		List eZUsers = new ArrayList();
+	/* (non-Javadoc)
+     * @see no.unified.soak.dao.jdbc.EzUserDAO#findKursansvarligeUser()
+     */
+	public List findUsers(List<String> roles) {
+		
+		String roleNames = "''";
+		for (int i = 0; i < roles.size(); i++) {
+		    String name = roles.get(i);
+            roleNames += ",\'" + name +  "\'";
+        }
 
+		List eZUsers = new ArrayList();
 		try {
 			String sql = "select O.id, O.name, CA.identifier, A.data_int, A.data_text, U.email, U.login from ezcontentobject O \r\n"
 					+ "inner join ezcontentclass C on O.contentclass_id = C.id\r\n"
@@ -173,8 +186,9 @@ public class UserEzDaoJdbc {
 					+ "where C.identifier = \'user\' and O.current_version = A.version and CA.identifier in (\'first_name\',\'last_name\',\'kommune\')\r\n"
 					+ "and exists \r\n"
 					+ " (select null from ezcontentobject_tree OT, ezuser_role UR, ezrole R, ezcontentobject_tree OT2 \r\n"
-					+ " where OT.contentobject_id = UR.contentobject_id and OT.node_id = OT2.parent_node_id and OT2.contentobject_id = O.id and UR.role_id =  R.id and R.name in (\'Kursansvarlig\', \'Opplaringsansvarlig\') )\r\n"
-					+ "order by O.id, CA.id";
+					+ " where OT.contentobject_id = UR.contentobject_id and OT.node_id = OT2.parent_node_id and OT2.contentobject_id = O.id"
+					+ " and UR.role_id =  R.id and R.name in (" + roleNames + ") )\r\n"
+					+ " order by O.id, CA.id";
 			SqlRowSet rowSet = jt.queryForRowSet(sql);
 			int curId = 0;
 
@@ -207,6 +221,9 @@ public class UserEzDaoJdbc {
 		return eZUsers;
 	}
 
+    	/* (non-Javadoc)
+         * @see no.unified.soak.dao.jdbc.EzUserDAO#findAll()
+         */
     	public List findAll() {
 		List eZUsers = new ArrayList();
 
@@ -253,6 +270,9 @@ public class UserEzDaoJdbc {
 		return eZUsers;
 	}
 
+    /* (non-Javadoc)
+     * @see no.unified.soak.dao.jdbc.EzUserDAO#findRoles()
+     */
     public List<String> findRoles(){
 	        String sql = "select distinct R.name from ezcontentobject_tree OT, ezuser_role UR, ezrole R, ezcontentobject_tree OT2"
 	                + " where OT.contentobject_id = UR.contentobject_id and OT.node_id = OT2.parent_node_id"
@@ -266,12 +286,13 @@ public class UserEzDaoJdbc {
 	        }
 	        return roles;
 	}
+    
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-	    UserEzDaoJdbc userEzDaoJdbc = new UserEzDaoJdbc();
-		List users = userEzDaoJdbc.findKursansvarligeUser();
+	    EzUserDAO userEzDaoJdbc = new EzUserDAOJdbc();
+		List users = userEzDaoJdbc.findUsers(null);
 		for (Iterator iter = users.iterator(); iter.hasNext();) {
 //		    EzUser user = (EzUser) iter.next();
 //			System.out.println("ez User: " + user.getId() + ", " + user + " "

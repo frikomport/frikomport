@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Locale;
 
 import no.unified.soak.Constants;
+import no.unified.soak.dao.EzUserDAO;
 import no.unified.soak.dao.UserDAO;
-import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
 import no.unified.soak.ez.EzUser;
 import no.unified.soak.model.Address;
 import no.unified.soak.model.Organization;
@@ -47,7 +47,7 @@ import org.springframework.orm.ObjectRetrievalFailureException;
 public class UserManagerImpl extends BaseManager implements UserManager {
 	private UserDAO dao;
 
-	private UserEzDaoJdbc userEzDaoJdbc;
+	private EzUserDAO ezUserDAO;
 
 	private RoleManager roleManager;
 
@@ -64,8 +64,8 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		this.dao = dao;
 	}
 
-	public void setUserEzDaoJdbc(UserEzDaoJdbc userEzDaoJdbc) {
-		this.userEzDaoJdbc = userEzDaoJdbc;
+	public void setEzUserDAO(EzUserDAO ezUserDAO) {
+		this.ezUserDAO = ezUserDAO;
 	}
 
 	public void setMessageSource(MessageSource messageSource) {
@@ -454,7 +454,11 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	}
 
 	private List getEZResponsibles(EzUser user) {
-		List users = userEzDaoJdbc.findKursansvarligeUser();
+	    Locale locale = LocaleContextHolder.getLocale();
+        List<String> roles = new ArrayList();
+        roles.add(messageSource.getMessage("role.instructor", null, locale));
+        roles.add(messageSource.getMessage("role.editor", null, locale));
+		List users = ezUserDAO.findUsers(roles);
 		return users;
 	}
 

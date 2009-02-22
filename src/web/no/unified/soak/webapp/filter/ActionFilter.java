@@ -24,12 +24,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import no.unified.soak.Constants;
-import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
+import no.unified.soak.dao.jdbc.EzUserDAOJdbc;
 import no.unified.soak.ez.EzUser;
 import no.unified.soak.model.User;
-import no.unified.soak.service.UserManager;
-import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ConfigurationManager;
+import no.unified.soak.service.RegistrationManager;
+import no.unified.soak.service.UserManager;
 import no.unified.soak.webapp.util.RequestUtil;
 import no.unified.soak.webapp.util.SslUtil;
 
@@ -151,6 +151,7 @@ public class ActionFilter implements Filter {
 
 	private void doEZAccessing(HttpServletRequest request, HttpSession session) {
 		EzUser ezUser = new EzUser();
+        boolean anonymous = true;
 
 		/*
 		 * eZ publish reuses the session id when logging out and in as a
@@ -161,10 +162,11 @@ public class ActionFilter implements Filter {
 		String eZSessionId = null;
 		if (cookie != null && cookie.getValue() != null && cookie.getValue().trim().length() > 0) {
 			eZSessionId = cookie.getValue();
-			ezUser = (new UserEzDaoJdbc()).findUserBySessionID(cookie.getValue());
+			ezUser = (new EzUserDAOJdbc()).findUserBySessionID(cookie.getValue());
             if(ezUser != null && ezUser.getUsername() != null ){
                 copyToUserTable(session, ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser
 					.getEmail(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
+                anonymous = false;
             }
 		} else {
 			ezUser.setName("No cookie found.");

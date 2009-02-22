@@ -9,8 +9,8 @@ package no.unified.soak.service;
 
 import java.util.List;
 
+import no.unified.soak.dao.EzUserDAO;
 import no.unified.soak.dao.UserDAO;
-import no.unified.soak.dao.jdbc.UserEzDaoJdbc;
 import no.unified.soak.model.User;
 import no.unified.soak.model.Registration;
 
@@ -28,7 +28,7 @@ import org.springframework.context.MessageSource;
 public interface UserManager {
 	public void setUserDAO(UserDAO dao);
 
-	public void setUserEzDaoJdbc(UserEzDaoJdbc userEzDaoJdbc);
+	public void setEzUserDAO(EzUserDAO userEzDAO);
 
 	public void setRoleManager(RoleManager roleManager);
 

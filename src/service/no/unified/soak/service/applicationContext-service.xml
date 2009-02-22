@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
-    "http://www.springframework.org/dtd/spring-beans.dtd">
 
-<beans>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
     <bean id="lookupManager" class="no.unified.soak.service.impl.LookupManagerImpl">
         <property name="lookupDAO" ref="lookupDAO"/>
     </bean>
@@ -37,7 +38,7 @@
         <property name="target">
             <bean class="no.unified.soak.service.impl.UserManagerImpl" >
                 <property name="userDAO" ref="userDAO"/>
-                <property name="userEzDaoJdbc" ref="userEzDaoJdbc"/>
+                <property name="ezUserDAO" ref="ezUserDAO"/>
                 <property name="roleManager" ref="roleManager"/>
                 <property name="messageSource" ref="messageSource"/>
                 <property name="organizationManager" ref="organizationManager"/>
@@ -99,7 +100,7 @@
         </property>
     </bean>
 
-    <bean id="mailMessage" class="org.springframework.mail.SimpleMailMessage" singleton="false">
+    <bean id="mailMessage" class="org.springframework.mail.SimpleMailMessage" scope="prototype">
         <property name="from" value="${mail.default.from}"/>
     </bean>
 
