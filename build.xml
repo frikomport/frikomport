@@ -418,6 +418,7 @@
             <lib dir="${poi.dir}" includes="*.jar"/>
         	<lib dir="${ical4j.dir}" includes="*.jar"/>
         	<lib dir="${ical-taglib.dir}" includes="*.jar"/>
+        	<lib dir="${axis.dir}" includes="*.jar"/>
             <lib file="${hibernate.jar}"/>
             <lib dir="${hibernate.dir}/lib" includes="*.jar" excludes="jta.jar"/>
             <lib dir="${spring.dir}" includes="*.jar" excludes="*mock.jar"/>
@@ -1305,9 +1306,9 @@
     <target name="install-tapestry" depends="clean" 
         description="Installs Tapestry, removes Struts">
         <ant dir="${extras.dir}/tapestry" target="install"/>
-    </target>
-    
-    <!--target name="remove-options" 
+    </target> 
+	
+	<!--target name="remove-options" 
         description="Removes unneeded files in 'extras' folder">
         <delete dir="${extras.dir}/ibatis"/>
         <delete dir="${extras.dir}/jsf"/>
