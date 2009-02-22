@@ -39,7 +39,7 @@
     <property name="database.admin.url" value="jdbc:${database.type}://${database.host}/mysql?autoReconnect=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8"/>
     <property name="database.admin.username" value="root"/>
     <property name="database.admin.password" value="sysadm"/>
-    <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+    <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLInnoDBDialect"/>
     <property name="database.driver_class" value="com.mysql.jdbc.Driver"/>
     <property name="database.url" 
         value="jdbc:${database.type}://${database.host}/${database.name}?autoReconnect=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8"/>
@@ -103,6 +103,7 @@
         <pathelement location="${commons-lang.jar}"/>
         <pathelement location="${commons-logging.jar}"/>
         <fileset dir="${ical4j.dir}" includes="*.jar"/>
+        <fileset dir="${axis.dir}" includes="*.jar"/>
         <fileset dir="${spring.dir}" includes="*.jar"/>
     </path>
     <path id="dao.test.classpath">
