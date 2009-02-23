@@ -14,11 +14,7 @@
 			<c:when test="${not empty course.detailURL}">
 				<a href="<c:out value="${course.detailURL}"/>" target="_blank"
 					title="<c:out value="${course.description}"/>"><c:out
-						value="${course.name}" /> </a>
-				<button type="button"
-					onclick="window.open('<c:out value="${course.detailURL}"/>','')">
-					<fmt:message key="button.more" />
-				</button>
+						value="${course.name}" /><img src="<c:url value="/images/link_go.png"/>"></a>
 			</c:when>
 			<c:otherwise>
 				<c:out value="${course.name}" />
@@ -110,11 +106,7 @@
 		<a
 			href="<c:url value="/detailsLocation.html"><c:param name="id" value="${course.location.id}"/></c:url>"
 			title="<c:out value="${course.location.description}"/>"><c:out
-				value="${course.location.name}" /> </a>
-		<button type="button"
-			onclick="location.href='<c:url value="/detailsLocation.html"><c:param name="id" value="${course.location.id}"/></c:url>'">
-			<fmt:message key="button.details" />
-		</button>
+				value="${course.location.name}" /></a>
 	</td>
 </tr>
 
@@ -137,11 +129,7 @@
 		<a
 			href="<c:url value="/detailsPerson.html"><c:param name="id" value="${course.instructor.id}"/></c:url>"
 			title="<c:out value="${course.instructor.description}"/>"><c:out
-				value="${course.instructor.name}" /> </a>
-		<button type="button"
-			onclick="location.href='<c:url value="/detailsPerson.html"><c:param name="id" value="${course.instructor.id}"/></c:url>'">
-			<fmt:message key="button.details" />
-		</button>
+				value="${course.instructor.name}" /></a>
 	</td>
 </tr>
 
@@ -237,6 +225,6 @@
 		<a
 			href="<fmt:message key="javaapp.baseurl"/><fmt:message key="javaapp.courseurl"/><c:out value="${course.id}"/>"
 			target="_blank"><fmt:message key="javaapp.baseurl" /><fmt:message
-				key="javaapp.courseurl" /><c:out value="${course.id}" /> </a>
+				key="javaapp.courseurl" /><c:out value="${course.id}" /><img src="<c:url value="/images/link_go.png"/>"></a>
 	</td>
 </tr>

@@ -91,6 +91,8 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
                 <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
             </spring:bind>
         </li>
+    </ul>
+    <ul>
         <li>
             <soak:label key="registration.reserved" styleClass="required"/>
             <select id="reservedField" name="reservedField">
