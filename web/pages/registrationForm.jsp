@@ -23,10 +23,6 @@
 <fmt:message key="time.format" var="timeformat" />
 
 <c:if test="${!illegalRegistration}">
-	<div class="message" style="font-size: 12px">
-		<fmt:message key="registrationDetail.responsibility" />
-	</div>
-
 	<h4>
 		<fmt:message key="registrationComplete.yourdetails" />
 	</h4>
@@ -340,6 +336,7 @@
 	</form:form>
 </c:if>
 
+<%--  
 <h4>
 	<fmt:message key="registrationComplete.coursedetails" /> 
 </h4>
@@ -349,6 +346,7 @@
 		<jsp:param name="course" value="${course}" />
 	</jsp:include>
 </table>
+--%>
 
 
 <script type="text/javascript">
