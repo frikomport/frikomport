@@ -106,6 +106,7 @@
 </table>
 </form>
 
+<c:if test="${attachments != null && attachments[0] != null}">
 <h4><fmt:message key="attachment.list"/></h4>
 
 <form method="post" id="courseFileListForm" name="courseFileListForm" action="<c:url value="/editCourse.html"/>"
@@ -136,6 +137,7 @@
 <input type="hidden" name="attachmentid" id="attachmentid" value="0"/>
 <input type="hidden" name="id" value="<c:out value="${course.id}"/>"/>
 </form>
+</c:if>
 
 <v:javascript formName="course" cdata="false"
     dynamicJavascript="true" staticJavascript="false"/>
