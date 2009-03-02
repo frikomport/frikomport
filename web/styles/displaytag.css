@@ -20,21 +20,24 @@ div.exportlinks span {
 }
 
 span.csv {
-	background-image: url(../images/icon_csv.gif);
+    background-image: url(../images/page_white_text.png);
 }
 
 span.excel {
-	background-image: url(../images/icon_excel.gif);
+    background-image: url(../images/page_white_excel.png);
 }
 
 span.pdf {
-	background-image: url(../images/icon_pdf.gif);
+    background-image: url(../images/page_white_acrobat.png);
 }
 
 span.xml {
-	background-image: url(../images/icon_xml.gif);
+    background-image: url(../images/page_white_code.png);
 }
 
+span.ics {
+    background-image: url(../images/calendar.png);
+}
 span.export {
 	cursor: pointer;
 	display: inline;
@@ -162,7 +165,6 @@ table.list tr.over {
 	border-top: 1px solid #C0C0C0;
 	color: #000000;
 	cursor: pointer;
-	cursor: hand; /* IE 5.5 non-compliant workaround */
 }
 
 /* override width for user list */

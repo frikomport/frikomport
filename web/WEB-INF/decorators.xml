@@ -3,9 +3,6 @@
         <pattern>/demos/*</pattern>
         <pattern>/resources/*</pattern>
     </excludes>
-    <decorator name="ical" page="ical.jsp">
-        <pattern>/*.ics</pattern>
-    </decorator>
     <decorator name="default" page="default.jsp">
         <pattern>/*.html</pattern>
     </decorator>

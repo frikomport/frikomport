@@ -132,13 +132,6 @@
         <property name="formView" value="courseList"/>
         <property name="successView" value="courseList"/>
     </bean>
-
-    <bean id="calCourseController" class="no.unified.soak.webapp.action.CourseController" autowire="byName">
-        <property name="commandName" value="course"/>
-        <property name="commandClass" value="no.unified.soak.model.Course"/>
-        <property name="formView" value="calCourseList"/>
-        <property name="successView" value="calCourseList"/>
-    </bean>
     
     <bean id="courseFormController" class="no.unified.soak.webapp.action.CourseFormController" autowire="byName">
         <property name="commandName" value="course"/>
@@ -305,7 +298,6 @@
                 
                 <!--Course-URL-START-->
                 <prop key="/listCourses.html">courseController</prop>
-                <prop key="/listCourses.ics">calCourseController</prop>
                 <prop key="/editCourse.html">courseFormController</prop>
                 <prop key="/notifyCourse.html">courseNotificationController</prop>
                 <prop key="/detailsCourse.html">courseDetailsController</prop>

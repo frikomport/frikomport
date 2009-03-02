@@ -6,6 +6,10 @@
     margin: 0;
 }
 
+.hidden {
+    visibility: hidden;
+}
+
 table {
 	font-size: 100%; //1.0em; /* IE5.x fix */
 }
@@ -40,10 +44,6 @@ button {
   font-size: 1.1em;
   background-image: url(../images/btn_bg.png);
   padding: 1px 8px 1px 8px;
-}
-
-div#ical-export {
-    float: right;
 }
 
 div#activeUsers {
@@ -213,7 +213,7 @@ div.separator {
 }
 
 div.standardsNote {
-    display: none;
+    display: block;
 }
 
 form, table {
@@ -272,7 +272,7 @@ h2 {
 }
 
 h3 {
-    color: #ccc;
+    color: #7A786E;
     font-size: 20px;
     font-weight: 900;
     line-height: 20px;
@@ -281,7 +281,7 @@ h3 {
 }
 
 h4 {
-    color: #ccc;
+    color: #7A786E;
     font-size: 16px;
     font-weight: 900;
     line-height: 16px;
