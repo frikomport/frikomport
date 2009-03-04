@@ -12,9 +12,9 @@
 	<td>
 		<c:choose>
 			<c:when test="${not empty course.detailURL}">
-				<a href="<c:out value="${course.detailURL}"/>" target="_blank"
+				<a class="external" href="<c:out value="${course.detailURL}"/>" target="_blank"
 					title="<c:out value="${course.description}"/>"><c:out
-						value="${course.name}" /><img src="<c:url value="/images/link_go.png"/>"></a>
+						value="${course.name}" /></a>
 			</c:when>
 			<c:otherwise>
 				<c:out value="${course.name}" />
@@ -221,10 +221,10 @@
 		<fmt:message key="course.url" />
 	</th>
 	<td>
-		<a
+		<a class="external"
 			href="<fmt:message key="javaapp.baseurl"/><fmt:message key="javaapp.courseurl"/><c:out value="${course.id}"/>"
 			target="_blank"><fmt:message key="javaapp.baseurl" /><fmt:message
-				key="javaapp.courseurl" /><c:out value="${course.id}" /><img src="<c:url value="/images/link_go.png"/>"></a>
+				key="javaapp.courseurl" /><c:out value="${course.id}" /></a>
 	</td>
 </tr>
 </c:if>

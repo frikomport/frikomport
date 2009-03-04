@@ -30,6 +30,10 @@ a:hover {
 
 a img { border: 0 }
 
+a.external{
+    background: transparent url(../images/External.png) no-repeat scroll right center;
+    padding-right: 13px;
+}
 /* 0 means zero regardless of measurement */
 body {
     background: #FFFFFF;
