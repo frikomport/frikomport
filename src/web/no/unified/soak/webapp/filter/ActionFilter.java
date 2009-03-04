@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import no.unified.soak.Constants;
-import no.unified.soak.dao.jdbc.EzUserDAOJdbc;
+import no.unified.soak.dao.EzUserDAO;
 import no.unified.soak.ez.EzUser;
 import no.unified.soak.model.User;
 import no.unified.soak.service.ConfigurationManager;
@@ -71,7 +71,7 @@ public class ActionFilter implements Filter {
 	private final transient Log log = LogFactory.getLog(ActionFilter.class);
 
 	private FilterConfig config = null;
-
+	
 	public void init(FilterConfig config) throws ServletException {
 		this.config = config;
 
@@ -162,7 +162,8 @@ public class ActionFilter implements Filter {
 		String eZSessionId = null;
 		if (cookie != null && cookie.getValue() != null && cookie.getValue().trim().length() > 0) {
 			eZSessionId = cookie.getValue();
-			ezUser = (new EzUserDAOJdbc()).findUserBySessionID(cookie.getValue());
+			EzUserDAO ezUserDAO = (EzUserDAO)getContext().getBean("ezUserDAO");
+			ezUser = ezUserDAO.findUserBySessionID(cookie.getValue());
             if(ezUser != null && ezUser.getUsername() != null ){
                 copyToUserTable(session, ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser
 					.getEmail(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
