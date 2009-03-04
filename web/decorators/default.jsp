@@ -28,9 +28,11 @@
     </head>
 <body<decorator:getProperty property="body.id" writeEntireProperty="true"/>>
 
+    <!--[if lte IE 6]>
     <div class="standardsNote">
         <fmt:message key="errors.browser.warning"/>
     </div>
+    <![endif]-->  
 
     <div id="screen">
         <c:import url="/WEB-INF/pages/menu.jsp"/>

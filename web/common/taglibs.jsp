@@ -12,4 +12,3 @@
 <%@ taglib uri="http://www.opensymphony.com/sitemesh/page" prefix="page"%>
 <%@ taglib uri="/WEB-INF/soak.tld" prefix="soak" %>
 <%@ taglib uri="http://acegisecurity.org/authz" prefix="authz" %>
-<%@ taglib uri="http://franchu.net/ical-taglib" prefix="ical" %>

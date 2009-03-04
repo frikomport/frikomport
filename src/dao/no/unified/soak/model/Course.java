@@ -438,7 +438,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the type.
-     * @hibernate.property column="type" length="50"
+     * @hibernate.property column="type" length="100"
      */
     public String getType() {
         return type;

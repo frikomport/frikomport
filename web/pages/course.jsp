@@ -184,15 +184,15 @@
 </tr>
 
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
-	<tr>
-		<th>
-			<fmt:message key="course.reminder" />
-		</th>
-		<td>
-			<fmt:formatDate value="${course.reminder}" type="both"
-				pattern="${dateformat} ${timeformat}" />
-		</td>
-	</tr>
+<tr>
+	<th>
+		<fmt:message key="course.reminder" />
+	</th>
+	<td>
+		<fmt:formatDate value="${course.reminder}" type="both"
+			pattern="${dateformat} ${timeformat}" />
+	</td>
+</tr>
 </c:if>
 
 <tr>
@@ -206,16 +206,15 @@
 </tr>
 
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
-	<tr>
-		<th>
-			<fmt:message key="course.freezeAttendance" />
-		</th>
-		<td>
-			<fmt:formatDate value="${course.freezeAttendance}" type="both"
-				pattern="${dateformat} ${timeformat}" />
-		</td>
-	</tr>
-</c:if>
+<tr>
+	<th>
+		<fmt:message key="course.freezeAttendance" />
+	</th>
+	<td>
+		<fmt:formatDate value="${course.freezeAttendance}" type="both"
+			pattern="${dateformat} ${timeformat}" />
+	</td>
+</tr>
 
 <tr>
 	<th>
@@ -228,3 +227,4 @@
 				key="javaapp.courseurl" /><c:out value="${course.id}" /><img src="<c:url value="/images/link_go.png"/>"></a>
 	</td>
 </tr>
+</c:if>

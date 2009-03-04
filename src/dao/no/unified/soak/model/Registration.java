@@ -150,7 +150,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the email.
-	 * @hibernate.property column="email" not-null="true"
+	 * @hibernate.property column="email" not-null="true" length="50"
 	 */
 	public String getEmail() {
 		return email;

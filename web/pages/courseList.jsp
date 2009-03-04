@@ -231,8 +231,8 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 
     <display:setProperty name="paging.banner.item_name" value="${item}"/>
     <display:setProperty name="paging.banner.items_name" value="${items}"/>
+    <display:setProperty name="export.ics" value="true"/>
 </display:table>
-<div id="ical-export"><a href="listCourses.ics"><fmt:message key="export.calendar"/></a></div>
 
 <c:out value="${buttons}" escapeXml="false"/>
 <%--

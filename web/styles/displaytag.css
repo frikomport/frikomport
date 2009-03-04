@@ -42,7 +42,7 @@ span.export {
 	cursor: pointer;
 	display: inline;
 	display: inline-block;
-	padding: 0 4px 1px 20px;
+	padding: 0 4px 4px 20px;
 }
 
 span.pagebanner {
