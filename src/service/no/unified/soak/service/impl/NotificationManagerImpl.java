@@ -16,6 +16,7 @@ import no.unified.soak.dao.NotificationDao;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.NotificationManager;
 import no.unified.soak.service.RegistrationManager;
+import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.MailUtil;
 
 import javax.mail.internet.MimeMessage;
@@ -136,7 +137,9 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 				if (notification.getRegistration() != null && notification.getRegistration().getCourse() != null) {
 					Course course = notification.getRegistration().getCourse();
 					// Are we after the time of notification?
-					if (course.getReminder() != null && course.getReminder().before(today)) {
+					if (course.getStatus().equals(CourseStatus.COURSE_PUBLISHED) 
+					        && course.getReminder() != null 
+					        && course.getReminder().before(today)) {
 						// Yupp, we are: Send notification email
 //						log
 //								.debug("We've got one: "
