@@ -174,6 +174,7 @@ public class RegistrationFormController extends BaseFormController {
 
 		if (!StringUtils.isEmpty(id)) {
 			registration = registrationManager.getRegistration(id);
+			registration.setEmailRepeat(registration.getEmail());
 		} else {
 			registration = new Registration();
 			registration.setCourseid(new Long(courseId));
