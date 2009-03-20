@@ -153,8 +153,8 @@ div#menuDiv {
     right: 20px;
     width: 190px;
     padding: 0px;
-    background-color: #eee;
-    border: 1px solid #c0c0c0;
+    background-color: #fff;
+    border: 1px dotted #c0c0c0;
     /*line-height: 17px;*/
     /* Again, the ugly brilliant hack. */
     voice-family: "\"}\"";
@@ -261,7 +261,7 @@ h1 {
 	margin: 0;
 	font-size: 1.25em;
 	font-weight: bold;
-	color: #8d8d8d;
+	color: #5A5A5A;
 	border-bottom: 1px dotted #888;
 	padding-bottom: 0.9em;
 	margin-bottom: 0.4em;

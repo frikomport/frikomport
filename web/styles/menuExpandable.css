@@ -27,12 +27,12 @@ li.menubar {
 }
 
 .menu li, .submenu li  {
-    background: url(../images/square.gif) no-repeat 0em 0.3em;
+    background: url(../images/bullet_go.png) no-repeat 0em 0em;
     list-style: none outside;
 }
 
 li.menubar a.standalone {
-    background: url(../images/square.gif) no-repeat 0em 0.2em !important;
+    background: url(../images/bullet_go.png) no-repeat 0em 0em !important;
 }
 
 a.actuator, a.standalone {
