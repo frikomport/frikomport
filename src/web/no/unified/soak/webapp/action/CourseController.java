@@ -173,6 +173,12 @@ public class CourseController extends BaseFormController {
                 course.setStatus(CourseStatus.COURSE_FINISHED);
             }
         }
+        
+        // Check whether a specific search is requested
+        String name = request.getParameter("name");
+        if (name != null) {
+            course.setName(name);
+        }
 
         // Set up parameters, and return them to the view
         model = addServiceAreas(model, locale);
@@ -300,6 +306,12 @@ public class CourseController extends BaseFormController {
                 // also finished courses
                 course.setStatus(CourseStatus.COURSE_FINISHED);
             }
+        }
+        
+        // Check whether a specific search is requested
+        String name = request.getParameter("name");
+        if (name != null) {
+            course.setName(name);
         }
         
         Date startInterval = course.getStartTime();
