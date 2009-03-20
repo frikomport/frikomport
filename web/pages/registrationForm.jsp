@@ -245,7 +245,7 @@
 					test="${isAdmin || isEducationResponsible || isCourseResponsible}">
 					<display:table name="${courseList}" cellspacing="0" cellpadding="0"
 						id="courseList" pagesize="25" class="list" export="false"
-						requestURI="listCourses.html">
+						requestURI="performRegistration.html">
 
 						<display:column media="html" sortable="false"
 							headerClass="sortable" titleKey="button.heading">
