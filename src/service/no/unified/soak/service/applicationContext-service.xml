@@ -246,11 +246,6 @@
                 <property name="categoryDAO" ref="categoryDao"/>
             </bean>
         </property>
-        <property name="transactionAttributes">
-            <props>
-                <prop key="save*">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
-            </props>
-        </property>
     </bean>
     <!-- Category-END-->
 </beans>

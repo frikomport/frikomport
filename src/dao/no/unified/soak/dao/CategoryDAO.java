@@ -17,4 +17,6 @@ public interface CategoryDAO extends DAO {
     public List<Category> getCategories(Category category, Boolean includeDisabled);
 
     public void saveCategory(Category category);
+
+    public void removeCategory(Long id);
 }

@@ -25,4 +25,6 @@ public interface CategoryManager extends Manager {
     public List<Category> getAllIncludingDummy(String dummy);
 
     public void saveCategory(Category category);
+    
+    public void removeCategory(Category category);
 }

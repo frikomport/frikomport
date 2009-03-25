@@ -251,12 +251,21 @@
         <property name="categoryManager" ref="categoryManager"/>
     </bean>
 
-    <bean id="categoryDetailsController" class="no.unified.soak.webapp.action.CategoryController" autowire="byName">
+    <bean id="categoryDetailsController" class="no.unified.soak.webapp.action.CategoryFormController" autowire="byName">
         <property name="categoryManager" ref="categoryManager"/>
+        <property name="commandName" value="category"/>
+        <property name="commandClass" value="no.unified.soak.model.Category"/>
+        <property name="formView" value="categoryDetails"/>
+        <property name="successView" value="redirect:listCategories.html"/>
     </bean>
 
-    <bean id="categoryFormController" class="no.unified.soak.webapp.action.CategoryController" autowire="byName">
+    <bean id="categoryFormController" class="no.unified.soak.webapp.action.CategoryFormController" autowire="byName">
         <property name="categoryManager" ref="categoryManager"/>
+        <property name="commandName" value="category"/>
+        <property name="commandClass" value="no.unified.soak.model.Category"/>
+        <property name="formView" value="categoryForm"/>
+        <property name="successView" value="redirect:listCategories.html"/>
+        <property name="cancelView" value="redirect:listCategories.html"/>
     </bean>
 
     <!-- Load WEB-INF/classes/ApplicationResources.properties for i18n messages using JSTL's fmt tag -->
@@ -353,6 +362,7 @@
         <property name="prefix" value="/WEB-INF/pages/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
+    
         
     <bean id="ezUserDAO" class="no.unified.soak.dao.jdbc.EzUserDAOJdbc">
     	<property name="dataSource" ref="userEzDataSource"/>

@@ -55,4 +55,9 @@ public class CategoryDAOHibernate extends BaseDAOHibernate implements CategoryDA
     public void saveCategory(Category category) {
         getHibernateTemplate().saveOrUpdate(category);
     }
+    
+    public void removeCategory(Long id) {
+        getHibernateTemplate().delete(getCategory(id));
+        
+    }
 }

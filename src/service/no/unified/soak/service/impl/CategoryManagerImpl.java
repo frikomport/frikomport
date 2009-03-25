@@ -45,4 +45,8 @@ public class CategoryManagerImpl extends BaseManager implements CategoryManager 
     public void saveCategory(Category category) {
         categoryDAO.saveCategory(category);
     }
+    
+    public void removeCategory(Category category) {
+        categoryDAO.removeCategory(category.getId());
+    }
 }
