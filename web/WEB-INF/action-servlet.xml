@@ -16,6 +16,10 @@
 
     <bean id="userController" class="no.unified.soak.webapp.action.UserController">
         <property name="userManager" ref="userManager"/>
+        <property name="commandName" value="user"/>
+        <property name="commandClass" value="no.unified.soak.model.User"/>
+        <property name="formView" value="userList"/>
+        <property name="successView" value="userList"/>
     </bean>
 
     <bean id="passwordHintController" class="no.unified.soak.webapp.action.PasswordHintController">
