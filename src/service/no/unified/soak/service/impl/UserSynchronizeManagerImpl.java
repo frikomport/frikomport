@@ -10,6 +10,7 @@ import no.unified.soak.model.User;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.service.UserSynchronizeManager;
+import no.unified.soak.util.UserUtil;
 
 import org.springframework.orm.ObjectRetrievalFailureException;
 
@@ -79,8 +80,7 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
     }
 
     private void byttNavnOgDisable(User user) {
-        String useremail = user.getEmail();
-        user.setEmail(useremail.substring(0,useremail.indexOf('@')) + "@nonexist.no");
+        user = UserUtil.transformEmail(user, "@nonexist.no");
         user.setEnabled(false);
         userManager.updateUser(user);
     }

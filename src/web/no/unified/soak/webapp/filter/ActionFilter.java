@@ -30,6 +30,7 @@ import no.unified.soak.model.User;
 import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.UserManager;
+import no.unified.soak.util.UserUtil;
 import no.unified.soak.webapp.util.RequestUtil;
 import no.unified.soak.webapp.util.SslUtil;
 
@@ -250,9 +251,8 @@ public class ActionFilter implements Filter {
 
 	}
 
-    private void byttNavnOgDisable(User user, UserManager userManager) {
-        String useremail = user.getEmail();
-        user.setEmail(useremail.substring(0,useremail.indexOf('@')) + "@nonexist.no");
+    protected void byttNavnOgDisable(User user, UserManager userManager) {
+        user = UserUtil.transformEmail(user, "@nonexist.no");
         user.setEnabled(false);
         userManager.updateUser(user);
     }
