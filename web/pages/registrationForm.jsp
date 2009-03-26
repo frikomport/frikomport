@@ -22,6 +22,7 @@
 <fmt:message key="date.format" var="dateformat" />
 <fmt:message key="time.format" var="timeformat" />
 
+
 <c:if test="${!illegalRegistration}">
 	<h4>
 		<fmt:message key="registrationComplete.yourdetails" />
@@ -35,6 +36,7 @@
 		<table class="detail">
 			<form:hidden path="id" />
 			<form:hidden path="courseid" />
+			<c:if test="${!hideEmployeeFields}">
 			<tr>
 				<th>
 					<soak:label key="registration.employeeNumber" />
@@ -44,6 +46,7 @@
 					<form:errors cssClass="fieldError" path="employeeNumber" />
 				</td>
 			</tr>
+			</c:if>
 			<tr>
 				<th>
 					<soak:label key="registration.firstName" />
@@ -73,7 +76,7 @@
 					<form:errors cssClass="fieldError" path="email" />
 				</td>
 			</tr>
-<c:if test="${emailrepeat}">
+            <c:if test="${emailrepeat}">
             <tr>
                 <th>
                     <soak:label key="registration.emailRepeat" />
@@ -83,7 +86,7 @@
                     <form:errors cssClass="fieldError" path="emailRepeat" />
                 </td>
             </tr>
-</c:if>
+            </c:if>
 			<tr>
 				<th>
 					<soak:label key="registration.phone" />
@@ -103,7 +106,7 @@
 					<form:errors cssClass="fieldError" path="mobilePhone" />
 				</td>
 			</tr>
-
+            <c:if test="${!hideEmployeeFields}">
 			<tr>
 				<th>
 					<soak:label key="registration.closestLeader" />
@@ -113,7 +116,7 @@
 					<form:errors cssClass="fieldError" path="closestLeader" />
 				</td>
 			</tr>
-
+            </c:if>
 			<tr>
 				<th>
 					<soak:label key="registration.jobTitle" />

@@ -148,6 +148,7 @@ public class ActionFilter implements Filter {
         session.setAttribute("canDelete", configurationManager.getValue("access.registration.delete","false"));
         session.setAttribute("userdefaults", configurationManager.getValue("access.registration.userdefaults","false"));
         session.setAttribute("emailrepeat", configurationManager.getValue("access.registration.emailrepeat","false"));
+        session.setAttribute("hideEmployeeFields", configurationManager.getValue("access.registration.hideEmployeeFields","false"));
     }
 
 	private void doEZAccessing(HttpServletRequest request, HttpSession session) {

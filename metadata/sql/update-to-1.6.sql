@@ -17,6 +17,7 @@ INSERT INTO configuration VALUES ('access.registration.userdefaults','false');
 INSERT INTO configuration VALUES ('access.registration.anonymous','false');
 INSERT INTO configuration VALUES ('access.registration.candelete','false');
 INSERT INTO configuration VALUES ('access.registration.emailrepeat','false');
+INSERT INTO configuration VALUES ('access.registration.hideEmployeeFields','false');
 INSERT INTO configuration VALUES ('access.course.filterlocation','false');
 INSERT INTO configuration VALUES ('access.course.singleprice','false');
 
