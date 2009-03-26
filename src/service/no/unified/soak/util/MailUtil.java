@@ -496,9 +496,7 @@ public class MailUtil {
 				helper = new MimeMessageHelper(message, true, (getText("mail.encoding", locale,messageSource)));
 				helper.setSubject(getSubject(registration, event, registered, waiting, messageSource, locale, course));
 				helper.setText(getBody(registration, msg, registered, waiting, messageSource, locale));
-				Calendar cal = getICalendar(course, registration);
-				ByteArrayResource bar = new ByteArrayResource(cal.toString().getBytes());
-				helper.addAttachment("calendar.ics", bar, "text/calendar; method=REQUEST");
+				addCalendar(helper,event,course, registration);                
 				List recipients = getRecipients(registration, course.getResponsible());
 				log.debug("The mail is to: " + recipients);
 				helper.setTo(StringUtil.list2Array(recipients));
@@ -515,7 +513,27 @@ public class MailUtil {
 		return allEMails;
 	}
 
-	public static Calendar getICalendar(Course course, Registration registration) {
+	/**
+	 * Adds ics file if registration OK, course changed or course cancelled.
+	 * @param helper
+	 * @param event
+	 * @param course
+	 * @param registration
+	 * @throws MessagingException
+	 */
+	private static void addCalendar(MimeMessageHelper helper, int event, Course course, Registration registration) throws MessagingException {
+        switch (event) {
+        case Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED:
+        case Constants.EMAIL_EVENT_COURSECHANGED:
+        case Constants.EMAIL_EVENT_COURSECANCELLED:
+            Calendar cal = getICalendar(course, registration);
+            ByteArrayResource bar = new ByteArrayResource(cal.toString().getBytes());
+            helper.addAttachment("calendar.ics", bar, "text/calendar; method=REQUEST");  
+            break;
+        }
+    }
+
+    public static Calendar getICalendar(Course course, Registration registration) {
 		Log log = LogFactory.getLog(MailUtil.class.toString());
 		Calendar cal = null;
 
@@ -632,19 +650,19 @@ public class MailUtil {
     }
 
     public static List<String> getRecipients(Registration registration, User instructor) {
-		List<String> emails = new LinkedList<String>();
+        List<String> emails = new LinkedList<String>();
 
-		if (registration.getEmail() != null && registration.getEmail().trim().length() > 0
-				&& EmailValidator.getInstance().isValid(registration.getEmail())) {
-			emails.add(registration.getEmail());
-		}
+        if (registration.getUser() != null && registration.getUser().getEmail().trim().length() > 0
+                && EmailValidator.getInstance().isValid(registration.getUser().getEmail())) {
+            emails.add(registration.getEmail());
+        }
 
-		if (emails.size() == 0 && instructor != null && instructor.getEmail() != null
-				&& EmailValidator.getInstance().isValid(instructor.getEmail())) {
-			emails.add(instructor.getEmail());
-		}
-		return emails;
-	}
+        if (emails.size() == 0 && instructor != null && instructor.getEmail() != null
+                && EmailValidator.getInstance().isValid(instructor.getEmail())) {
+            emails.add(instructor.getEmail());
+        }
+        return emails;
+    }
 
 	public static String getSubject(Registration registration, int event, String registered, String waiting,
 			MessageSource messageSource, Locale locale, Course course) {
