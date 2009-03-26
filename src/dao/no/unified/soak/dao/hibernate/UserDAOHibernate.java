@@ -10,11 +10,13 @@ package no.unified.soak.dao.hibernate;
 import java.util.List;
 
 import no.unified.soak.dao.UserDAO;
+import no.unified.soak.model.Course;
 import no.unified.soak.model.User;
 import no.unified.soak.model.UserCookie;
 
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 
@@ -58,7 +60,25 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
      * @see no.unified.soak.dao.UserDAO#getUsers(no.unified.soak.model.User)
      */
     public List getUsers(User user) {
-        return getHibernateTemplate().find("from User u order by upper(u.username)");
+        DetachedCriteria criteria = DetachedCriteria.forClass(User.class);
+        
+        if(user != null) {
+            if(user.getUsername() != null && !"".equals(user.getUsername())) {
+                criteria.add(Restrictions.like("username", "%" + user.getUsername() + "%").ignoreCase());
+            }
+            if(user.getFirstName() != null && !"".equals(user.getFirstName())) {
+                criteria.add(Restrictions.like("firstName", "%" + user.getFirstName() + "%").ignoreCase());
+            }
+            if(user.getLastName() != null && !"".equals(user.getLastName())) {
+                criteria.add(Restrictions.like("lastName", "%" + user.getLastName() + "%").ignoreCase());
+            }
+            if(user.getEmail() != null && !"".equals(user.getEmail())) {
+                criteria.add(Restrictions.like("email", "%" + user.getEmail() + "%").ignoreCase());
+            }
+        }
+        
+        criteria.addOrder(Order.asc("username"));
+        return getHibernateTemplate().findByCriteria(criteria);
     }
 
     
