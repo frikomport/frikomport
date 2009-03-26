@@ -202,14 +202,14 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 					pattern="${timeformat}" var="startTimeTime" />
 				<input type="text" size="12" name="startTimeDate" id="startTimeDate"
 					value="<c:out value="${startTimeDate}"/>" 
-					title="Datoformat: <fmt:message key="date.format.localized"/>" />
+					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
 				<a href="#" name="a1" id="Anch_startTimeDate"
 					onClick="cal1.select(document.forms[0].startTimeDate,'Anch_startTimeDate','<fmt:message key="date.format"/>'); return false;"
-					title="Vis kalender"><img src="<c:url value="/images/iconCalendar.gif"/>"></a>
+					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="startTimeTime" id="startTimeTime"
 					value="<c:out value="${startTimeTime}"/>"
-					title="Tidsformat: <fmt:message key="time.format.localized"/>" />
+					title="<fmt:message key="time.format.title"/>: <fmt:message key="time.format.localized"/>" />
 				<spring:bind path="course.startTime">
 					<input type="hidden" name="<c:out value="${status.expression}"/>"
 						id="<c:out value="${status.expression}"/>"
@@ -231,14 +231,14 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 					pattern="${timeformat}" var="stopTimeTime" />
 				<input type="text" size="12" name="stopTimeDate" id="stopTimeDate"
 					value="<c:out value="${stopTimeDate}"/>"
-					title="Datoformat: <fmt:message key="date.format.localized"/>" />
+					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
 				<a href="#" name="a1" id="Anch_stopTimeDate"
 					onClick="cal1.select(document.forms[0].stopTimeDate,'Anch_stopTimeDate','<fmt:message key="date.format"/>'); return false;"
-					title="Vis kalender"><img src="<c:url value="/images/iconCalendar.gif"/>"></a>
+					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="stopTimeTime" id="stopTimeTime"
 					value="<c:out value="${stopTimeTime}"/>"
-					title="Tidsformat: <fmt:message key="time.format.localized"/>" />
+					title="<fmt:message key="time.format.title"/>: <fmt:message key="time.format.localized"/>" />
 				<spring:bind path="course.stopTime">
 					<input type="hidden" name="<c:out value="${status.expression}"/>"
 						id="<c:out value="${status.expression}"/>"
@@ -440,15 +440,15 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 				<input type="text" size="12" name="registerStartDate"
 					id="registerStartDate"
 					value="<c:out value="${registerStartDate}"/>"
-					title="Datoformat: <fmt:message key="date.format.localized"/>" />
+					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
 				<a href="#" name="a1" id="Anch_registerStartDate"
 					onClick="cal1.select(document.forms[0].registerStartDate,'Anch_registerStartDate','<fmt:message key="date.format"/>'); return false;"
-					title="Vis kalender"><img src="<c:url value="/images/iconCalendar.gif"/>"></a>
+					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="registerStartTime"
 					id="registerStartTime"
 					value="<c:out value="${registerStartTime}"/>"
-					title="Tidsformat: <fmt:message key="time.format.localized"/>" />
+					title="<fmt:message key="time.format.title"/>: <fmt:message key="time.format.localized"/>" />
 				<spring:bind path="course.registerStart">
 					<input type="hidden" name="<c:out value="${status.expression}"/>"
 						id="<c:out value="${status.expression}"/>"
@@ -470,14 +470,14 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 					pattern="${timeformat}" var="reminderTime" />
 				<input type="text" size="12" name="reminderDate" id="reminderDate"
 					value="<c:out value="${reminderDate}"/>"
-					title="Datoformat: <fmt:message key="date.format.localized"/>" />
+					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
 				<a href="#" name="a1" id="Anch_reminderDate"
 					onClick="cal1.select(document.forms[0].reminderDate,'Anch_reminderDate','<fmt:message key="date.format"/>'); return false;"
-					title="Vis kalender"><img src="<c:url value="/images/iconCalendar.gif"/>"></a>
+					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="reminderTime" id="reminderTime"
 					value="<c:out value="${reminderTime}"/>"
-					title="Tidsformat: <fmt:message key="time.format.localized"/>" />
+					title="<fmt:message key="time.format.title"/>: <fmt:message key="time.format.localized"/>" />
 				<spring:bind path="course.reminder">
 					<input type="hidden" name="<c:out value="${status.expression}"/>"
 						id="<c:out value="${status.expression}"/>"
@@ -499,14 +499,14 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 					pattern="${timeformat}" var="registerByTime" />
 				<input type="text" size="12" name="registerByDate"
 					id="registerByDate" value="<c:out value="${registerByDate}"/>"
-					title="Datoformat: <fmt:message key="date.format.localized"/>" />
+					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
 				<a href="#" name="a1" id="Anch_registerByDate"
 					onClick="cal1.select(document.forms[0].registerByDate,'Anch_registerByDate','<fmt:message key="date.format"/>'); return false;"
-					title="Vis kalender"><img src="<c:url value="/images/iconCalendar.gif"/>"></a>
+					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="registerByTime"
 					id="registerByTime" value="<c:out value="${registerByTime}"/>"
-					title="Tidsformat: <fmt:message key="time.format.localized"/>" />
+					title="<fmt:message key="time.format.title"/>: <fmt:message key="time.format.localized"/>" />
 				<spring:bind path="course.registerBy">
 					<input type="hidden" name="<c:out value="${status.expression}"/>"
 						id="<c:out value="${status.expression}"/>"
@@ -529,15 +529,15 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 				<input type="text" size="12" name="freezeAttendanceDate"
 					id="freezeAttendanceDate"
 					value="<c:out value="${freezeAttendanceDate}"/>"
-					title="Datoformat: <fmt:message key="date.format.localized"/>" />
+					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
 				<a href="#" name="a1" id="Anch_freezeAttendanceDate"
 					onClick="cal1.select(document.forms[0].freezeAttendanceDate,'Anch_freezeAttendanceDate','<fmt:message key="date.format"/>'); return false;"
-					title="Vis kalender"><img src="<c:url value="/images/iconCalendar.gif"/>"></a>
+					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="freezeAttendanceTime"
 					id="freezeAttendanceTime"
 					value="<c:out value="${freezeAttendanceTime}"/>"
-					title="Tidsformat: <fmt:message key="time.format.localized"/>" />
+					title="<fmt:message key="time.format.title"/>: <fmt:message key="time.format.localized"/>" />
 				<spring:bind path="course.freezeAttendance">
 					<input type="hidden" name="<c:out value="${status.expression}"/>"
 						id="<c:out value="${status.expression}"/>"
@@ -568,16 +568,21 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 					<input type="submit" class="button" name="save"
 						onclick="bCancel=false"
 						value="<fmt:message key="button.course.save"/>" />
-					<c:if test="${!isPublished}">
+					<c:if test="${!isPublished || isCancelled}">
 						<input type="submit" class="button" name="publish"
 							onclick="bCancel=false"
 							value="<fmt:message key="button.course.publish"/>" />
 					</c:if>
-					<c:if test="${isPublished}">
+					<c:if test="${isPublished && !isCancelled}">
 						<input type="submit" class="button" name="cancelled"
 							onclick="bCancel=false"
 							value="<fmt:message key="button.course.cancel"/>" />
 					</c:if>
+					<c:if test="${isPublished && canUnpublish}">
+                        <input type="submit" class="button" name="unpublish"
+                            onclick="bCancel=false"
+                            value="<fmt:message key="button.course.unpublish"/>" />
+                    </c:if>
 					<c:if test="${!empty course.id && !empty course.name && canDelete}">
 						<input type="submit" class="button" name="delete"
 							onclick="bCancel=true;return confirmDelete('<fmt:message key="courseList.theitem"/>')"

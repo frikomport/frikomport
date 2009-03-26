@@ -250,12 +250,15 @@ public class CourseFormController extends BaseFormController {
                     Integer available = registrationManager.getAvailability(true, course);
                     model.put("isCourseFull", new Boolean(available.intValue() == 0 ));
                     Integer registrations = registrationManager.getNumberOfAttendants(false, course);
+                    Integer attachments = attachmentManager.getCourseAttachments(course.getId()).size();
                     // Course with registrations cannot be deleted.
-                    model.put("canDelete", new Boolean(registrations.intValue() == 0));
+                    model.put("canDelete", Boolean.valueOf(registrations.intValue() == 0 && attachments.intValue() == 0));
+                    model.put("canUnpublish", Boolean.valueOf(registrations.intValue() == 0));
                 }
 
                 //Check if course is published
-                model.put("isPublished", new Boolean(course.getStatus() > 0));
+                model.put("isPublished", Boolean.valueOf(course.getStatus().intValue() > CourseStatus.COURSE_CREATED.intValue()));
+                model.put("isCancelled", Boolean.valueOf(course.getStatus().equals(CourseStatus.COURSE_CANCELLED)));
             }
 		}
 		
@@ -388,6 +391,9 @@ public class CourseFormController extends BaseFormController {
         else {
             // Save or publish
             if(request.getParameter("save") != null && isNew){
+                course.setStatus(CourseStatus.COURSE_CREATED);
+            }
+            if(request.getParameter("unpublish") != null){
                 course.setStatus(CourseStatus.COURSE_CREATED);
             }
             if(request.getParameter("publish") != null){
