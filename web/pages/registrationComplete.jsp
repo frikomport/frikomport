@@ -232,14 +232,14 @@
 	</tr>
 
 </table>
+<%-- 
 
 <h4>
 	<fmt:message key="registrationComplete.coursedetails" />
 </h4>
-
 <table class="detail">
 	<jsp:include page="course.jsp">
 		<jsp:param name="course" value="${course}" />
 	</jsp:include>
 </table>
-
+--%>

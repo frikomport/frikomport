@@ -26,7 +26,9 @@ import javax.mail.internet.MimeMessage;
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Notification;
+import no.unified.soak.model.Organization;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.ServiceArea;
 import no.unified.soak.model.User;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
@@ -99,8 +101,8 @@ public class RegistrationFormController extends BaseFormController {
     /**
 	 * @see org.springframework.web.servlet.mvc.SimpleFormController#referenceData(javax.servlet.http.HttpServletRequest)
 	 */
-	protected Map referenceData(HttpServletRequest request) throws Exception {
-		Map model = new HashMap();
+	protected Map<String,Object> referenceData(HttpServletRequest request) throws Exception {
+		Map<String,Object> model = new HashMap<String,Object>();
 		Locale locale = request.getLocale();
 
 		String courseId = request.getParameter("courseId");
@@ -108,25 +110,27 @@ public class RegistrationFormController extends BaseFormController {
 			// Redirect to error page - should never happen
 		}
 
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute(Constants.USER_KEY);
+		User altUser = (User) session.getAttribute(Constants.ALT_USER_KEY);
+
+		Boolean isAdmin = false;
+		List<String> roles = null;
+		if (user != null) {
+		    roles = user.getRoleNameList();
+		    isAdmin = (Boolean) roles.contains(Constants.ADMIN_ROLE);
+		}
+
 		String registrationId = request.getParameter("id");
 		if ((registrationId != null) && StringUtils.isNumeric(registrationId) && StringUtils.isNotEmpty(registrationId)) {
 			model.put("registration", registrationManager.getRegistration(registrationId));
 			
 			// This is an existing registration, so get courses in case the user want to switch course.
-			HttpSession session = request.getSession();
-			User user = (User) session.getAttribute(Constants.USER_KEY);
-			Boolean isAdmin = false;
-			List<String> roles = null;
-			if (user != null) {
-				roles = user.getRoleNameList();
-				isAdmin = (Boolean) roles.contains(Constants.ADMIN_ROLE);
-			}
-			
 			// Retrieve the all published courses
 			// and add them to the list
 			Course courseForSearch = new Course();
 			courseForSearch.setStatus(CourseStatus.COURSE_PUBLISHED);
-			List courses = courseManager.searchCourses(courseForSearch, null, null);
+			List<Course> courses = courseManager.searchCourses(courseForSearch, null, null);
 			List<Course> filtered = filterByRole(isAdmin, roles, courses);
 
 			if (courses != null) {
@@ -136,16 +140,27 @@ public class RegistrationFormController extends BaseFormController {
 		}
 		
 		// Retrieve all serviceareas into an array
-		List serviceAreas = serviceAreaManager.getAllIncludingDummy(getText("misc.none", locale));
+		List<ServiceArea> serviceAreas = serviceAreaManager.getAllIncludingDummy(getText("misc.none", locale));
 		if (serviceAreas != null) {
 			model.put("serviceareas", serviceAreas);
 		}
-
-		// Retrieve all organizations into an array
-		List organizations = organizationManager.getAllIncludingDummy(getText("misc.none", locale));
-		if (organizations != null) {
-			model.put("organizations", organizations);
-		}
+		
+		// Get all organizations
+		List<Organization> organizations = organizationManager.getAllIncludingDummy(getText("misc.none", locale));
+		if (organizations == null) {
+            organizations = new ArrayList<Organization>();
+        }
+		// If user not admin, show only registered org
+		if (user != null && user.getOrganization() != null && !isAdmin) {
+            organizations.clear();
+            organizations.add(user.getOrganization());
+        }
+		// If cached user, show only users org
+		if (altUser != null &&  altUser.getOrganization() != null) {
+            organizations.clear();
+            organizations.add(altUser.getOrganization());
+        }
+		model.put("organizations", organizations);
 
 		// Retrieve the course the user wants to attend
 		Course course = courseManager.getCourse(courseId);
@@ -184,7 +199,7 @@ public class RegistrationFormController extends BaseFormController {
                 registration.setOrganizationid(user.getOrganization().getId());
             }
             User regUser = null;
-            Locale locale = request.getLocale();
+//            Locale locale = request.getLocale();
             String userdefaults = configurationManager.getValue("access.registration.userdefaults","false");
 			if (userdefaults != null && userdefaults.equals("true")) {
 				regUser = user;
@@ -234,7 +249,7 @@ public class RegistrationFormController extends BaseFormController {
         HttpSession session = request.getSession();
 
 		String key = null;
-		Map model = new HashMap();
+		Map<String,Object> model = new HashMap<String,Object>();
 		Boolean courseFull = null;
 		Boolean alreadyRegistered = false;
 		Boolean changedCourse = false;
@@ -281,7 +296,7 @@ public class RegistrationFormController extends BaseFormController {
 
             // Check email
             if(configurationManager.getValue("access.registration.emailrepeat","false").equals("true") &&  !registration.getEmail().equals(registration.getEmailRepeat())){
-                String error = "errors.email.notSame";
+//                String error = "errors.email.notSame";
 				errors.rejectValue("email", "errors.email.notSame",  new Object[] { registration.getEmail(), registration.getEmailRepeat() }, "Email addresses not equal.");
 
                 return showForm(request,response, errors);
@@ -427,12 +442,12 @@ public class RegistrationFormController extends BaseFormController {
 		return result;
 	}
 
-	private List<Course> filterByRole(Boolean admin, List<String> roles, List courses) {
+	private List<Course> filterByRole(Boolean admin, List<String> roles, List<Course> courses) {
 		List<Course> filtered = new ArrayList<Course>();
 		// Filter all courses not visible for the user.
 		if (roles != null) {
-			for (Iterator iterator = courses.iterator(); iterator.hasNext();) {
-				Course roleCourse = (Course) iterator.next();
+			for (Iterator<Course> iterator = courses.iterator(); iterator.hasNext();) {
+				Course roleCourse = iterator.next();
 				roleCourse.setAvailableAttendants(0);
 				if (roles.contains(roleCourse.getRole()) || admin.booleanValue()) {
 					if (roleCourse.getStopTime().after(new Date())) {

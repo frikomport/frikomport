@@ -53,19 +53,19 @@ public interface OrganizationManager {
      *
      * @return List of all enabled organizations
      */
-    public List getAll();
+    public List<Organization> getAll();
 
     /**
      * Gets all organizations ever registered, disabled or not
      *
      * @return List of all organizations
      */
-    public List getAllIncludingDisabled();
+    public List<Organization> getAllIncludingDisabled();
 
     /**
      * Gets all enabled organizations including a dummy
      * @param dummy of the dummy organization
      * @return
      */
-    public List getAllIncludingDummy(String dummy);
+    public List<Organization> getAllIncludingDummy(String dummy);
 }
