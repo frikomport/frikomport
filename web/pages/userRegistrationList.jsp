@@ -37,7 +37,7 @@
 
 <%--
 <c:if test="${user.username == username}">
-<display:table name="${userRegistrations}" pagesize="25" id="userRegistrations" class="list" requestURI="listUserRegistrations.html">
+<display:table name="${userRegistrations}" pagesize="${itemCount}" id="userRegistrations" class="list" requestURI="listUserRegistrations.html">
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="name">
         <c:if test="${userRegistrations.course.status == 3}"><img src="<c:url value="/images/cancel.png"/>"

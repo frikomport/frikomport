@@ -45,7 +45,7 @@
 <c:out value="${buttons}" escapeXml="false"/>
 
 <display:table name="${locationList}" cellspacing="0" cellpadding="0"
-    id="locationList" pagesize="25" class="list" 
+    id="locationList" pagesize="${itemCount}" class="list" 
     export="true" requestURI="">
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="location.name" sortProperty="name">

@@ -139,7 +139,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
 <display:table name="${registrationList}" cellspacing="0" cellpadding="0"
-    id="registrationList" pagesize="25" class="list" 
+    id="registrationList" pagesize="${itemCount}" class="list" 
     export="true" requestURI="">
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="course.name">

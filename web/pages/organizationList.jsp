@@ -18,7 +18,7 @@
 <c:out value="${buttons}" escapeXml="false"/>
 
 <display:table name="${organizationList}" cellspacing="0" cellpadding="0"
-    id="organizationList" pagesize="25" class="list" 
+    id="organizationList" pagesize="${itemCount}" class="list" 
     export="true" requestURI="">
 
     <display:column property="name" sortable="true" headerClass="sortable"

@@ -50,7 +50,7 @@
 </form:form>
 
 <display:table name="${userList}" cellspacing="0" cellpadding="0"
-    requestURI="listUsers.html" defaultsort="1" id="userList" pagesize="25"
+    requestURI="listUsers.html" defaultsort="1" id="userList" pagesize="${itemCount}"
     class="list userList" export="true">
 
     <%-- Table columns --%>

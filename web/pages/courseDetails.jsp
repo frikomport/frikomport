@@ -113,7 +113,7 @@
     enctype="multipart/form-data" onsubmit="return validateFileUpload(this)">
 
 <display:table name="${attachments}" cellspacing="0" cellpadding="0"
-    id="attachmentsList" pagesize="25" class="list"
+    id="attachmentsList" pagesize="${itemCount}" class="list"
     export="true" requestURI="">
 
     <display:column property="filename" sortable="true" headerClass="sortable"

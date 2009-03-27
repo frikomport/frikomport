@@ -18,7 +18,7 @@
 <c:out value="${buttons}" escapeXml="false" />
 
 <display:table name="${categoryList}" cellspacing="0" cellpadding="0"
-    requestURI="" defaultsort="1" id="category" pagesize="25"
+    requestURI="" defaultsort="1" id="category" pagesize="${itemCount}"
     class="list" export="true">
 
     <%-- Table columns --%>

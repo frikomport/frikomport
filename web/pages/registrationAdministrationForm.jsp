@@ -54,7 +54,7 @@
 <input type="hidden" name="<c:out value="courseId"/>" value="<c:out value="${course.id}"/>"/>
 
 <display:table name="${registrationsBackingObject.registrations}" cellspacing="0" cellpadding="0"
-	pagesize="25" class="list"
+	pagesize="${itemCount}" class="list"
 	export="true" id="registrationList" requestURI="">
 
 	<display:column property="firstName" sortable="true" headerClass="sortable" 

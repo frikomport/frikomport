@@ -247,7 +247,7 @@
 				<c:if
 					test="${isAdmin || isEducationResponsible || isCourseResponsible}">
 					<display:table name="${courseList}" cellspacing="0" cellpadding="0"
-						id="courseList" pagesize="25" class="list" export="false"
+						id="courseList" pagesize="${itemCount}" class="list" export="false"
 						requestURI="performRegistration.html">
 
 						<display:column media="html" sortable="false"

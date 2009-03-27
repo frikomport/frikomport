@@ -139,7 +139,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 
 <c:out value="${buttons}" escapeXml="false"/>
 <display:table name="${courseList}" cellspacing="0" cellpadding="0"
-    id="courseList" pagesize="25" class="list" 
+    id="courseList" pagesize="${itemCount}" class="list" 
     export="true" requestURI="listCourses.html">
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="name">

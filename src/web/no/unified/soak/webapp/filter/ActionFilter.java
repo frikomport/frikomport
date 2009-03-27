@@ -149,6 +149,7 @@ public class ActionFilter implements Filter {
         session.setAttribute("userdefaults", configurationManager.getValue("access.registration.userdefaults","false"));
         session.setAttribute("emailrepeat", configurationManager.getValue("access.registration.emailrepeat","false"));
         session.setAttribute("hideEmployeeFields", configurationManager.getValue("access.registration.hideEmployeeFields","false"));
+        session.setAttribute("itemCount", configurationManager.getValue("list.itemCount", "25"));
     }
 
 	private void doEZAccessing(HttpServletRequest request, HttpSession session) {

@@ -7,7 +7,7 @@
 <fmt:message key="responsibleList.items" var="items"/>
 
 <display:table name="${responsibleList}" cellspacing="0" cellpadding="0"
-    id="responsibleList" pagesize="25" class="list" 
+    id="responsibleList" pagesize="${itemCount}" class="list" 
     export="true" requestURI="">
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="user.fullname" sortProperty="fullName">

@@ -48,7 +48,7 @@
 <c:out value="${buttons}" escapeXml="false" />
 
 <display:table name="${serviceAreaList}" cellspacing="0" cellpadding="0"
-	id="serviceAreaList" pagesize="25" class="list" export="true"
+	id="serviceAreaList" pagesize="${itemCount}" class="list" export="true"
 	requestURI="">
 
 	<display:column property="name" sortable="true" headerClass="sortable"

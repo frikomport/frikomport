@@ -13,7 +13,7 @@
 </button>
     
 <display:table name="${userNames}" id="user" cellspacing="0" cellpadding="0"
-    defaultsort="1" class="list activeUserList" pagesize="50" requestURI="">
+    defaultsort="1" class="list activeUserList" pagesize="${itemCount}" requestURI="">
   
     <%-- Table columns --%>
     <display:column property="username" width="30%" headerClass="sortable"
