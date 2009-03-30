@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+import no.unified.soak.model.User;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.UserManager;
 
@@ -39,11 +41,10 @@ public class UserDetailsController extends BaseFormController {
     }
 
     protected Map referenceData(HttpServletRequest request) throws Exception {
-//        Locale locale = request.getLocale();
         Map model = new HashMap();
  
-        String username = request.getParameter("username");
-        List registrations = registrationManager.getUserRegistrations(username);
+        User user = (User)formBackingObject(request);
+        List registrations = registrationManager.getUserRegistrations(user.getUsername());
         model.put("userRegistrations",registrations);
         return model;
     }
@@ -52,7 +53,11 @@ public class UserDetailsController extends BaseFormController {
     * @see org.springframework.web.servlet.mvc.AbstractFormController#formBackingObject(javax.servlet.http.HttpServletRequest)
     */
     protected Object formBackingObject(HttpServletRequest request) throws Exception {
+        HttpSession session = request.getSession();
         String username = request.getParameter("username");
+        if(username == null || "".equals(username)) {
+            username = (String)session.getAttribute("username");
+        }
         return mgr.getUser(username);
     }
     

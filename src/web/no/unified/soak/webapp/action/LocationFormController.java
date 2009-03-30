@@ -115,6 +115,7 @@ public class LocationFormController extends BaseFormController {
             if (log.isDebugEnabled()) {
                 log.debug("recieved 'return' from jsp");
             }
+            
         } // or to delete?
         else if (request.getParameter("delete") != null) {
             locationManager.removeLocation(location.getId().toString());
@@ -126,8 +127,8 @@ public class LocationFormController extends BaseFormController {
             String key = (isNew) ? "location.added" : "location.updated";
             saveMessage(request, getText(key, locale));
 
-            if (!isNew) {
-                return new ModelAndView("redirect:editLocation.html", "id", location.getId());
+            if (!"list".equals(request.getParameter("from"))) {
+                return new ModelAndView("redirect:detailsLocation.html", "id", location.getId());
             }
         }
 

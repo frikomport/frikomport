@@ -102,6 +102,7 @@ public class UserFormController extends BaseFormController {
             log.debug("entering 'onSubmit' method...");
         }
 
+        HttpSession session = request.getSession();
         User user = (User) command;
         Locale locale = request.getLocale();
 
@@ -145,6 +146,7 @@ public class UserFormController extends BaseFormController {
 
             try {
                 this.getUserManager().saveUser(user);
+                session.setAttribute("username", user.getUsername());
             } catch (UserExistsException e) {
                 log.warn(e.getMessage());
 
@@ -159,7 +161,6 @@ public class UserFormController extends BaseFormController {
             }
 
             if (!StringUtils.equals(request.getParameter("from"), "list")) {
-                HttpSession session = request.getSession();
                 session.setAttribute(Constants.USER_KEY, user);
 
                 // update the user's remember me cookie if they didn't login
@@ -175,12 +176,11 @@ public class UserFormController extends BaseFormController {
                         autoLogin, request.getContextPath());
                 }
 
-                saveMessage(request,
-                    getText("user.saved", user.getFullName(), locale));
+                saveMessage(request, getText("user.saved", user.getFullName(), locale));
 
                 // return to main Menu
-                return showForm(request, response, errors);
-//                return new ModelAndView(new RedirectView("mainMenu.html"));
+//                return showForm(request, response, errors);
+                return new ModelAndView(getSuccessView());
             } else {
                 if (StringUtils.isBlank(request.getParameter("version"))) {
                     saveMessage(request,
@@ -200,8 +200,8 @@ public class UserFormController extends BaseFormController {
                 }
             }
         }
-
-        return showForm(request, response, errors);
+        return new ModelAndView(getCancelView());
+//        return showForm(request, response, errors);
     }
 
     protected ModelAndView showForm(HttpServletRequest request,

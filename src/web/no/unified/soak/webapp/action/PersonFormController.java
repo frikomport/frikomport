@@ -108,8 +108,8 @@ public class PersonFormController extends BaseFormController {
             String key = (isNew) ? "person.added" : "person.updated";
             saveMessage(request, getText(key, locale));
 
-            if (!isNew) {
-                return new ModelAndView("redirect:editPerson.html", "id",  person.getId());
+            if (!"list".equals(request.getAttribute("from"))) {
+                return new ModelAndView("redirect:detailsPerson.html", "id",  person.getId());
             }
         }
 

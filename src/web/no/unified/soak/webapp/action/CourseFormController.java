@@ -308,6 +308,9 @@ public class CourseFormController extends BaseFormController {
 			if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
 				course.setOrganizationid(new Long(omid.toString()));
 			}
+			// Default responsible
+			course.setResponsibleUsername(user.getUsername());
+			
 		}
 		if (newCourse != null) {
 			return newCourse;

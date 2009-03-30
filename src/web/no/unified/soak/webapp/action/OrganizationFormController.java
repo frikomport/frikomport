@@ -102,10 +102,10 @@ public class OrganizationFormController extends BaseFormController {
             String key = (isNew) ? "organization.added"
                                  : "organization.updated";
             saveMessage(request, getText(key, locale));
-
-            if (!isNew) {
-                return new ModelAndView("redirect:editOrganization.html", "id", organization.getId());
-            }
+//
+//            if (!"list".equals(request.getAttribute("from"))) {
+//                return new ModelAndView("redirect:detailsOrganization.html", "id", organization.getId());
+//            }
         }
 
         return new ModelAndView(getSuccessView());

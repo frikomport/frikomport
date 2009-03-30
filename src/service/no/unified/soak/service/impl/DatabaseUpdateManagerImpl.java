@@ -1,32 +1,29 @@
 package no.unified.soak.service.impl;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+
+import javax.sql.DataSource;
+
 import no.unified.soak.Constants;
 import no.unified.soak.model.Address;
+import no.unified.soak.model.Category;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Organization;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.ServiceArea;
 import no.unified.soak.model.User;
-import no.unified.soak.model.Category;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.DatabaseUpdateManager;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.UserManager;
+
 import org.apache.commons.validator.EmailValidator;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
-
-import javax.naming.NamingException;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 /**
  * User: gv
@@ -75,7 +72,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
     public void updateDatabase() {
         // Schmema updates preactions
-        updateDatabaseSchemaBefore();
+//        updateDatabaseSchemaBefore();
         // ServiceArea updates
         updateServiceAreas();
         // User updates
@@ -134,7 +131,6 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     }
 
     private void updateDatabaseSchemaAfter(){
-        
     }
 
     /**
