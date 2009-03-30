@@ -35,10 +35,7 @@
         <td>
 			<c:choose>
 				<c:when test="${not empty person.detailURL}">
-		          	<a href="<c:out value="${person.detailURL}"/>" target="_blank" title="<c:out value="${person.description}"/>"><c:out value="${person.name}"/></a>
-        		  	<button type="button" onclick="window.open('<c:out value="${person.detailURL}"/>','')">
-	    	    		<fmt:message key="button.more"/>
-				    </button>
+		          	<a class="external" href="<c:out value="${person.detailURL}"/>" target="_blank" title="<c:out value="${person.description}"/>"><c:out value="${person.name}"/></a>
 				</c:when>
 				<c:otherwise>
 	          		<c:out value="${person.name}"/>
@@ -119,7 +116,7 @@
     <tr>
         <td class="buttonBar">            
             <input type="submit" class="button" name="return" onclick="bCancel=true"
-                value="<fmt:message key="button.return"/>" />
+                value="<fmt:message key="button.person.list"/>" />
 <c:if test="${isAdmin || isEducationResponsible}">
 		    <button type="button" onclick="location.href='<c:url value="/editPerson.html"><c:param name="id" value="${person.id}"/></c:url>'">
 	    	    <fmt:message key="button.edit"/>

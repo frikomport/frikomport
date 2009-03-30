@@ -63,6 +63,13 @@
         headerClass="sortable" titleKey="user.lastName" />
     <display:column property="email" sortable="true" headerClass="sortable"
         autolink="true" titleKey="user.mail" />
+    <c:if test="${isAdmin || isEducationResponsible}">
+    <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
+        <button type="button" onclick="location.href='<c:url value="/editUser.html"><c:param name="username" value="${userList.username}"/><c:param name="from" value="list"/></c:url>'">
+            <fmt:message key="button.edit"/>
+        </button>
+    </display:column>
+</c:if>
 
     <fmt:message var="user" key="userList.user" />
     <fmt:message var="users" key="userList.users" />

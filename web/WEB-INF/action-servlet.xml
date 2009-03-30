@@ -36,14 +36,8 @@
         <property name="commandClass" value="no.unified.soak.model.User"/>
         <property name="validator" ref="beanValidator"/>
         <property name="formView" value="userProfile"/>
-        <property name="successView" value="redirect:listUsers.html"/>
-        <property name="cancelView" value="redirect:listCourses.html"/>
-        <property name="userManager" ref="userManager"/>
-        <property name="roleManager" ref="roleManager"/>
-        <property name="mailEngine" ref="mailEngine"/>
-        <property name="message" ref="mailMessage"/>
-        <property name="templateName" value="accountCreated.vm"/>
-        <property name="organizationManager"><ref bean="organizationManager"/></property>
+        <property name="successView" value="redirect:detailsUser.html"/>
+        <property name="cancelView" value="redirect:listUsers.html"/>
     </bean>
 
     <bean id="userRegistrationController" class="no.unified.soak.webapp.action.UserRegistrationController" autowire="byName">
@@ -79,7 +73,7 @@
         <property name="commandClass" value="no.unified.soak.model.Location"/>
         <property name="validator" ref="beanValidator"/>
         <property name="formView" value="locationForm"/>
-        <property name="successView" value="redirect:listLocations.html"/>
+        <property name="successView" value="redirect:listLocations.html"/> 
     </bean>
     
     <bean id="locationDetailsController" class="no.unified.soak.webapp.action.LocationFormController" autowire="byName">

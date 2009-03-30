@@ -1226,5 +1226,13 @@
         </row>
     </table>
     <!--Configuration-END-->
+        <table name="category">
+        <column>name</column>
+        <column>selectable</column>
+        <row>
+            <value>Kurs</value>
+            <value>true</value>
+        </row>
+    </table>
 </dataset>
 

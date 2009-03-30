@@ -51,7 +51,7 @@
 
 <c:if test="${isAdmin || isEducationResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-	    <button type="button" onclick="location.href='<c:url value="/editPerson.html"><c:param name="id" value="${personList.id}"/></c:url>'">
+	    <button type="button" onclick="location.href='<c:url value="/editPerson.html"><c:param name="id" value="${personList.id}"/><c:param name="from" value="list"/></c:url>'">
     	    <fmt:message key="button.edit"/>
 	    </button>
     </display:column>

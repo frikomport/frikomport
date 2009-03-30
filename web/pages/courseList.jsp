@@ -222,7 +222,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible && username == courseList.responsible.username}">
-	    <button type="button" onclick="location.href='<c:url value="/editCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>'">
+	    <button type="button" onclick="location.href='<c:url value="/editCourse.html"><c:param name="id" value="${courseList.id}"/><c:param name="from" value="list"/></c:url>'">
     	    <fmt:message key="button.edit"/>
 	    </button>
 </c:if>

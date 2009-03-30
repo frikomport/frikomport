@@ -92,9 +92,6 @@
 
     <tr>
         <td class="buttonBar">            
-            <input type="button" class="button" name="return" onclick="javascript:history.go(-1)"
-                value="<fmt:message key="button.return"/>" />
-
             <c:if test="${isAdmin || user.username == username || user.username == altusername}">
             	<button type="button" onclick="location.href='<c:url value="/editUser.html"><c:param name="username" value="${user.username}"/></c:url>'">
     	            <fmt:message key="button.edit"/>

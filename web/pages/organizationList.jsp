@@ -50,7 +50,7 @@
 
 <c:if test="${isAdmin}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-	    <button type="button" onclick="location.href='<c:url value="/editOrganization.html"><c:param name="id" value="${organizationList.id}"/></c:url>'">
+	    <button type="button" onclick="location.href='<c:url value="/editOrganization.html"><c:param name="id" value="${organizationList.id}"/><c:param name="from" value="list"/></c:url>'">
     	    <fmt:message key="button.edit"/>
 	    </button>
     </display:column>

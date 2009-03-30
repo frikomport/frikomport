@@ -77,7 +77,7 @@ div#content>p {margin:10px 0px}
 }
 
 .searchForm ul li {
-    display: inline-table;
+    display: inline;
     white-space: nowrap;
     line-height: 20px;
 }

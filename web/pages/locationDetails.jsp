@@ -30,10 +30,7 @@
         <td>
 			<c:choose>
 				<c:when test="${not empty location.detailURL}">
-		          	<a href="<c:out value="${location.detailURL}"/>" target="_blank" title="<c:out value="${location.description}"/>"><c:out value="${location.name}"/></a>
-        		  	<button type="button" onclick="javascript:window.open('<c:out value="${location.detailURL}"/>','')">
-	    	    		<fmt:message key="button.more"/>
-				    </button>
+		          	<a class="external" href="<c:out value="${location.detailURL}"/>" target="_blank" title="<c:out value="${location.description}"/>"><c:out value="${location.name}"/></a>
 				</c:when>
 				<c:otherwise>
 	          		<c:out value="${location.name}"/>
@@ -91,10 +88,7 @@
         <td>
         	<c:choose>
 		    	<c:when test="${not empty location.mapURL}">
-	          		<a href="<c:out value="${location.mapURL}"/>" target="_blank"><c:out value="${location.address}"/></a>
-	    	      	<button type="button" onclick="window.open('<c:out value="${location.mapURL}"/>','')">
-		    		    <fmt:message key="button.map"/>
-			    	</button>
+	          		<a class="external" href="<c:out value="${location.mapURL}"/>" target="_blank"><c:out value="${location.address}"/></a>
 		    	</c:when>
 		    	<c:otherwise>
 	          		<c:out value="${location.address}"/>
@@ -173,7 +167,7 @@
     <tr>
         <td class="buttonBar">            
             <input type="submit" class="button" name="return" onclick="bCancel=true"
-                value="<fmt:message key="button.return"/>" />
+                value="<fmt:message key="button.location.list"/>" />
 <c:if test="${isAdmin || isEducationResponsible}">
 		    <button type="button" onclick="location.href='<c:url value="/editLocation.html"><c:param name="id" value="${location.id}"/></c:url>'">
 	    	    <fmt:message key="button.edit"/>
