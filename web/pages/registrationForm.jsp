@@ -147,7 +147,7 @@
 					<form:errors cssClass="fieldError" path="organizationid" />
 				</td>
 			</tr>
-
+            <c:if test="${!hideServiceArea}">
 			<tr>
 				<th>
 					<soak:label key="registration.serviceArea" />
@@ -180,8 +180,8 @@
 					</spring:bind>
 				</td>
 			</tr>
-
-
+            </c:if>
+            <c:if test="${!hideComment}">
 			<tr>
 				<th>
 					<soak:label key="registration.comment" />
@@ -191,7 +191,7 @@
 					<form:errors cssClass="fieldError" path="comment" />
 				</td>
 			</tr>
-
+            </c:if>
 			<c:if test="${!freeCourse}">
 				<tr>
 					<th>

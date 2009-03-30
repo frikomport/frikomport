@@ -30,6 +30,7 @@ import no.unified.soak.model.User;
 import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.UserManager;
+import no.unified.soak.service.UserSynchronizeManager;
 import no.unified.soak.util.UserUtil;
 import no.unified.soak.webapp.util.RequestUtil;
 import no.unified.soak.webapp.util.SslUtil;
@@ -149,6 +150,8 @@ public class ActionFilter implements Filter {
         session.setAttribute("userdefaults", configurationManager.getValue("access.registration.userdefaults","false"));
         session.setAttribute("emailrepeat", configurationManager.getValue("access.registration.emailrepeat","false"));
         session.setAttribute("hideEmployeeFields", configurationManager.getValue("access.registration.hideEmployeeFields","false"));
+        session.setAttribute("hideServiceArea", configurationManager.getValue("access.registration.hideServiceArea","false"));
+        session.setAttribute("hideComment", configurationManager.getValue("access.registration.hideComment","false"));
         session.setAttribute("itemCount", configurationManager.getValue("list.itemCount", "25"));
     }
 
@@ -168,8 +171,8 @@ public class ActionFilter implements Filter {
 			EzUserDAO ezUserDAO = (EzUserDAO)getContext().getBean("ezUserDAO");
 			ezUser = ezUserDAO.findUserBySessionID(cookie.getValue());
             if(ezUser != null && ezUser.getUsername() != null ){
-                copyToUserTable(session, ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser
-					.getEmail(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
+                User user = copyToLocal(ezUser);
+                session.setAttribute(Constants.USER_KEY, user);
                 anonymous = false;
             }
 		} else {
@@ -215,42 +218,11 @@ public class ActionFilter implements Filter {
 					"Din innlogging er utg&aring;tt. Vennligst logg inn p&aring;ny.");
 		}
 	}
-
-	private void copyToUserTable(HttpSession session, String username, String firstName, String lastName, String email,
-			Integer id, List<String> rolenames, Integer kommune) {
-		ApplicationContext ctx = getContext();
-		UserManager userManager = (UserManager) ctx.getBean("userManager");
-        RegistrationManager registrationManager = (RegistrationManager) ctx.getBean("registrationManager");
-        User user = null;
-        User user2 = null;
-		try {
-			user = userManager.getUser(username);
-            user2 = userManager.findUser(email.toLowerCase());
-            if(user2 != null && user2.getEnabled() && !user.getUsername().equals(user2.getUsername())){
-                // user2 skal disablast og user overta påmeldinger
-                registrationManager.moveRegistrations(user2, user);
-                byttNavnOgDisable(user2, userManager);
-            }
-			userManager.updateUser(user, firstName, lastName, email, id, rolenames, kommune);
-		} catch (ObjectRetrievalFailureException exception) {
-			// User may be registered with email.
-            user = userManager.findUser(email);
-            if(user != null){
-                // Endre epost til nokke som ikkje finnes
-                byttNavnOgDisable(user, userManager);
-                // Ny bruker basert på riktig brukernavn
-                User newuser = userManager.addUser(username, firstName, lastName, email, id, rolenames, kommune);
-                newuser.setHash(user.getHash());
-                userManager.updateUser(newuser);
-                // Flytt påmeldinger
-                registrationManager.moveRegistrations(user, newuser);
-            }
-            else{
-			    user = userManager.addUser(username, firstName, lastName, email, id, rolenames, kommune);
-		    }
-        }
-		session.setAttribute(Constants.USER_KEY, user);
-
+	
+	private User copyToLocal(EzUser user) {
+	    ApplicationContext ctx = getContext();
+        UserSynchronizeManager userSynchronizeManager = (UserSynchronizeManager)ctx.getBean("userSynchronizeManager");
+        return userSynchronizeManager.processUser(user);
 	}
 
     protected void byttNavnOgDisable(User user, UserManager userManager) {

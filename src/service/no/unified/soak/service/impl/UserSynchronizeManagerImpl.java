@@ -43,40 +43,47 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
         {
             Iterator<EzUser> it = ezUsers.iterator();
             while (it.hasNext()){
-                EzUser ezUser = it.next();
-                User user = null;
-                User user2 = null;
-                try{
-                    user = userManager.getUser(ezUser.getUsername());
-                    user2 = userManager.findUser(ezUser.getEmail().toLowerCase());
-                    if(user2 != null && user2.getEnabled() && !user.getUsername().equals(user2.getUsername())){
-                        // user2 skal disablast og user overta påmeldinger
-                        byttNavnOgDisable(user2);
-                        registrationManager.moveRegistrations(user2, user);
-                    }
-                    userManager.updateUser(user, ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail().toLowerCase(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
-                }
-                catch (ObjectRetrievalFailureException orfe){
-                    // No user, might be registered by email
-                    user = userManager.findUser(ezUser.getEmail().toLowerCase());
-                    if(user != null){
-                        // Endre epost til nokke som ikkje finnes
-                        byttNavnOgDisable(user);
-                        // Ny bruker basert på riktig brukernavn
-                        User newuser = userManager.addUser(ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail().toLowerCase(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
-                        newuser.setHash(user.getHash());
-                        userManager.updateUser(newuser);
-                        // Flytt påmeldinger
-                        registrationManager.moveRegistrations(user, newuser);
-                    }
-                    else{
-                        // definitly no user
-                        user = userManager.addUser(ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser.getEmail().toLowerCase(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
-                    }
-                }
+                EzUser current = it.next();
+                processUser(current);
             }
         }
         log.debug("Synchronized users");
+    }
+
+    public User processUser(EzUser current) {
+        
+        User emailuser = null;
+        User ezUser = null;
+        // sjekker om epostaddressa er brukt som usernane
+        try {
+            emailuser = userManager.getUser(current.getEmail().toLowerCase());
+        } catch (ObjectRetrievalFailureException e) {
+            User user = userManager.findUser(current.getEmail().toLowerCase());
+            if((user != null) && !user.getUsername().equals(current.getUsername())) {
+                emailuser = user;
+            }
+        }
+
+        if(emailuser != null) {
+            byttNavnOgDisable(emailuser);
+        }
+        
+        try {
+            ezUser = userManager.getUser(current.getUsername());
+            userManager.updateUser(ezUser,current.getFirst_name(),current.getLast_name(),current.getEmail().toLowerCase(),current.getId(),current.getRolenames(),current.getKommune());
+        } catch (Exception e) {
+            // ezUser finnes ikkje og m� opprettes
+            ezUser = userManager.addUser(current.getUsername(), current.getFirst_name(), current.getLast_name(), current.getEmail().toLowerCase(), current.getId(), current.getRolenames(), current.getKommune());
+        }
+        
+        // Flytt registreringer
+        if (emailuser != null) {
+            ezUser.setHash(emailuser.getHash());
+            userManager.updateUser(ezUser);
+            registrationManager.moveRegistrations(emailuser, ezUser);
+        }
+        
+        return ezUser;
     }
 
     private void byttNavnOgDisable(User user) {
