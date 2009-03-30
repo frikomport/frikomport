@@ -117,7 +117,7 @@
         <td class="buttonBar">            
             <input type="submit" class="button" name="return" onclick="bCancel=true"
                 value="<fmt:message key="button.person.list"/>" />
-<c:if test="${isAdmin || isEducationResponsible}">
+<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
 		    <button type="button" onclick="location.href='<c:url value="/editPerson.html"><c:param name="id" value="${person.id}"/></c:url>'">
 	    	    <fmt:message key="button.edit"/>
 		    </button>
