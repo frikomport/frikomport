@@ -82,7 +82,25 @@ div#content>p {margin:10px 0px}
     line-height: 20px;
 }
 .searchForm ul li label {
-    margin-left: 5px;
+    margin-left: 4px;
+    margin-right: 2px;
+}
+
+select#organizationid {
+    width: 100px;
+    max-width: 100px;
+}
+select#serviceAreaid {
+    width: 100px;
+    max-width: 100px;
+}
+select#categoryid {
+    width: 100px;
+    max-width: 100px;
+}
+input#name {
+    width: 100px;
+    max-width: 100px;
 }
 
 div#footer {

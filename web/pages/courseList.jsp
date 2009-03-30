@@ -44,7 +44,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
             <li>
                 <soak:label key="course.organization" styleClass="required"/>
                 <spring:bind path="course.organizationid">
-                      <select name="<c:out value="${status.expression}"/>" onchange="fillSelect(this);">
+                      <select id="<c:out value="${status.expression}"/>" name="<c:out value="${status.expression}"/>" onchange="fillSelect(this);">
                         <c:forEach var="organization" items="${organizations}">
                           <option value="<c:out value="${organization.id}"/>"
                               <c:if test="${organization.id == course.organizationid}"> selected="selected"</c:if>>
@@ -58,7 +58,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
             <li>
                 <soak:label key="course.serviceArea" styleClass="required"/>
                 <spring:bind path="course.serviceAreaid">
-					<select name="<c:out value="${status.expression}"/>">
+					<select id="<c:out value="${status.expression}"/>" name="<c:out value="${status.expression}"/>">
 						<c:forEach var="servicearea" items="${serviceareas}">
 							<c:choose>
 								<c:when test="${empty servicearea.id}">
@@ -87,7 +87,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
             <li>
                 <soak:label key="course.category" styleClass="required"/>
                 <spring:bind path="course.categoryid">
-                      <select name="<c:out value="${status.expression}"/>"">
+                      <select id="<c:out value="${status.expression}"/>" name="<c:out value="${status.expression}"/>">
                         <c:forEach var="category" items="${categories}">
                           <option value="<c:out value="${category.id}"/>"
                               <c:if test="${category.id == course.categoryid}"> selected="selected"</c:if>>
