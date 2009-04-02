@@ -38,22 +38,15 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 	</div>
 </c:if>
 
-<form method="post" action="<c:url value="/listCourses.html"/>" id="courseList" name="courseList">
+<form:form commandName="course" name="courseList" action="listCourses.html">
     <div class="searchForm">
         <ul>
             <li>
                 <soak:label key="course.organization" styleClass="required"/>
-                <spring:bind path="course.organizationid">
-                      <select id="<c:out value="${status.expression}"/>" name="<c:out value="${status.expression}"/>" onchange="fillSelect(this);">
-                        <c:forEach var="organization" items="${organizations}">
-                          <option value="<c:out value="${organization.id}"/>"
-                              <c:if test="${organization.id == course.organizationid}"> selected="selected"</c:if>>
-                            <c:out value="${organization.name}"/>
-                          </option>
-                        </c:forEach>
-                      </select>
-                    <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-                </spring:bind>
+                <form:select path="organizationid" onchange="fillSelect(this);">
+                    <form:options items="${organizations}" itemValue="id" itemLabel="name" />
+                </form:select>
+                <form:errors cssClass="fieldError" htmlEscape="false" path="organizationid" />
             </li>
             <li>
                 <soak:label key="course.serviceArea" styleClass="required"/>
@@ -86,25 +79,20 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 <c:if test="${categories[2] != null}">
             <li>
                 <soak:label key="course.category" styleClass="required"/>
-                <spring:bind path="course.categoryid">
-                      <select id="<c:out value="${status.expression}"/>" name="<c:out value="${status.expression}"/>">
-                        <c:forEach var="category" items="${categories}">
-                          <option value="<c:out value="${category.id}"/>"
-                              <c:if test="${category.id == course.categoryid}"> selected="selected"</c:if>>
-                            <c:out value="${category.name}"/>
-                          </option>
-                        </c:forEach>
-                      </select>
-                    <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-                </spring:bind>
+                <form:select path="categoryid" items="${categories}" itemLabel="name" itemValue="id">
+                    <form:options items="${categories}" itemLabel="name" itemValue="id"/>
+                </form:select>
+                <form:errors cssClass="fieldError" htmlEscape="false" path="categoryid" />
             </li>
 </c:if>
             <li>
                 <soak:label key="courseSearch.name" styleClass="required"/>
-                <spring:bind path="course.name">
-		    		<input type="text" id="<c:out value="${status.expression}"/>" name="<c:out value="${status.expression}"/>" value="<c:out value="${status.value}"/>" size="15"/>
-		    	</spring:bind>
+                <form:input path="name"/>
+                <form:errors cssClass="fieldError" htmlEscape="false" path="name" />
             </li>
+            <input type="hidden" id="past" name="past" 
+            <c:if test="${past == true}"> value="1" </c:if>
+            <c:if test="${past == false}"> value="0" </c:if> />
 <c:if test="${past == true}">
 	    	<input type="hidden" id="historic" name="historic"
 	    	<c:if test="${historic == true}"> value="1" </c:if>
@@ -126,8 +114,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
             </li>
         </ul>
     </div>
-</form>
-
+</form:form>
 <c:set var="buttons">
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
     <button type="button" style="margin-right: 5px"

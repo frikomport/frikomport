@@ -23,15 +23,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import no.unified.soak.Constants;
-import no.unified.soak.util.CourseStatus;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.User;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
-import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.RoleManager;
+import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.impl.CategoryManager;
+import no.unified.soak.util.CourseStatus;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
@@ -93,23 +93,15 @@ public class CourseController extends BaseFormController {
         Locale locale = request.getLocale();
         Map model = new HashMap();
 
-        Course course = new Course();
+        Course course = (Course)command;
         Course unpublished = new Course();
 
         // use course from session if set
         HttpSession session = request.getSession();
-        Object comm = session.getAttribute("course");
 
         String alreadyRegistered = request.getParameter("alreadyRegistered");
         if (alreadyRegistered != null && alreadyRegistered.equals("true")){
             model.put("alreadyRegistered" , true);
-        }
-
-        Map map = request.getParameterMap();
-
-        // if params then this is navigation in table
-        if (comm != null && map.size() > 1) {
-            course = (Course) comm;
         }
 
         // default published courses
@@ -265,7 +257,6 @@ public class CourseController extends BaseFormController {
         model = addOrganization(model, locale);
         model = addCategories(model,locale);
         model.put("course", course);
-        session.setAttribute("course", course);
 
         Boolean historic = new Boolean(false);
         Boolean past = new Boolean(false);
@@ -349,18 +340,37 @@ public class CourseController extends BaseFormController {
         return new ModelAndView(getSuccessView(), model);
     }
     
+    /**
+     * Bygger opp bakgrunnsobjekt
+     */
     protected Object formBackingObject(HttpServletRequest request) throws Exception {
-        // Get course from session
-        HttpSession session = request.getSession();
-        Object comm = session.getAttribute("course");
-        
-        Map map = request.getParameterMap();
-        
-        // if no params, use new course
-        if (comm == null || map.size() < 2) {
-            comm = new Course();
+        Course course = new Course();
+       
+        String mid = request.getParameter("mid");
+        if ((mid != null) && StringUtils.isNumeric(mid)) {
+            course.setOrganizationid(new Long(mid));
         }
-        return comm;
+        String orgid = request.getParameter("organizationid");
+        if (isNumber(orgid)) {
+            course.setOrganizationid(new Long(orgid));
+        }
+        String areaid = request.getParameter("serviceAreaid");
+        if (isNumber(areaid)) {
+            course.setServiceAreaid(new Long(areaid));
+        }
+        String catid = request.getParameter("categoryid");
+        if (isNumber(catid)) {
+            course.setCategoryid(new Long(catid));
+        }
+        String name = request.getParameter("name");
+        if (name != null) {
+            course.setName(name);
+        }
+        return course;
+    }
+
+    private boolean isNumber(String orgid) {
+        return (orgid != null) && (!orgid.equals("")) && StringUtils.isNumeric(orgid);
     } 
 
     /**
