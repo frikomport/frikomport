@@ -98,6 +98,10 @@ select#categoryid {
     width: 100px;
     max-width: 100px;
 }
+select#courseid {
+    width: 280px;
+    max-width: 280px;
+}
 input#name {
     width: 100px;
     max-width: 100px;
