@@ -638,6 +638,8 @@ public class Course extends BaseObject implements Serializable {
      * @param original The course from which we copy the attributes
      */
     public void copyAllButId(Course original) {
+        this.setCategory(original.getCategory());
+        this.setCategoryid(original.getCategoryid());
     	this.setDescription(original.getDescription());
     	this.setDetailURL(original.getDetailURL());
     	this.setDuration(original.getDuration());
