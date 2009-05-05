@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import java.net.URI;
 import java.net.SocketException;
+import java.net.URISyntaxException;
 
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
@@ -197,10 +198,7 @@ public class MailUtil {
             }
             break;
 		case Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION:
-			// TODO: Test - Is this right? Previously:
-			// getText("registrationComplete.mail.body", null, locale,
-			// messageSource)));
-			msg.append(StringEscapeUtils.unescapeHtml(getText("registrationComplete.mail.body", locale,	messageSource)));
+			msg.append(StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.body", locale, messageSource)));
 			break;
 		case Constants.EMAIL_EVENT_REGISTRATION_DELETED:
 			msg.append(StringEscapeUtils.unescapeHtml(getText("registrationDeleted.mail.body", course.getName(),
@@ -631,6 +629,13 @@ public class MailUtil {
         event.getProperties().add(location);
         StreetAddress streetAddress = new StreetAddress(course.getLocation().getAddress());
         event.getProperties().add(streetAddress);
+        
+        try {
+            Url url = new Url(new URI(null,"http://www.vg.no",null));
+            event.getProperties().add(url);
+        } catch (URISyntaxException e) {
+            // Wrong format
+        }
 
         if (course.getStatus().equals(CourseStatus.COURSE_CANCELLED)) {
             event.getProperties().add(Status.VEVENT_CANCELLED);
