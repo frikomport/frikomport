@@ -210,7 +210,7 @@
 		</tr>
 	</c:if>
 	<tr>
-		<td></td>
+		<td class="buttonBar">
 		<form method="post" action="<c:url value="/listCourses.html"/>"
 			id="registrationCompleteForm">
 
@@ -218,17 +218,17 @@
 				<input type="hidden" name="<c:out value="${status.expression}"/>"
 					value="<c:out value="${status.value}"/>" />
 			</spring:bind>
-		<td class="buttonBar">
 			<input type="submit" class="button" name="return"
-				onclick="bCancel=true" value="<fmt:message key="button.return"/>" />
+				onclick="bCancel=true" value="<fmt:message key="button.course.list"/>" />
 			<c:if test="userdefaults == true">
 				<button type="button"
 					onclick="location.href='<c:url value="/performRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 					<fmt:message key="button.onemore" />
 				</button>
 			</c:if>
-		</td>
 		</form>
+		</td>
+		<td></td>
 	</tr>
 
 </table>

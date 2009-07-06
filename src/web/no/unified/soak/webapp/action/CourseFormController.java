@@ -63,166 +63,166 @@ import org.springframework.web.servlet.ModelAndView;
  */
 public class CourseFormController extends BaseFormController {
 
-	private CourseManager courseManager = null;
+    private CourseManager courseManager = null;
 
     private CategoryManager categoryManager = null;
 
-	private ServiceAreaManager serviceAreaManager = null;
+    private ServiceAreaManager serviceAreaManager = null;
 
-	private PersonManager personManager = null;
-	
-	private UserManager userManager = null;
+    private PersonManager personManager = null;
 
-	private LocationManager locationManager = null;
+    private UserManager userManager = null;
 
-	private OrganizationManager organizationManager = null;
+    private LocationManager locationManager = null;
 
-	private AttachmentManager attachmentManager = null;
+    private OrganizationManager organizationManager = null;
 
-	private RegistrationManager registrationManager = null;
+    private AttachmentManager attachmentManager = null;
 
-	private NotificationManager notificationManager = null;
+    private RegistrationManager registrationManager = null;
 
-	private MessageSource messageSource = null;
+    private NotificationManager notificationManager = null;
 
-	protected MailEngine mailEngine = null;
+    private MessageSource messageSource = null;
+
+    protected MailEngine mailEngine = null;
 
     protected MailSender mailSender = null;
 
     protected SimpleMailMessage message = null;
-	
-	/**
-	 * @param notificationManager the notificationManager to set
-	 */
-	public void setNotificationManager(NotificationManager notificationManager) {
-		this.notificationManager = notificationManager;
-	}
 
-	public void setMessageSource(MessageSource messageSource) {
-		this.messageSource = messageSource;
-	}
+    /**
+     * @param notificationManager the notificationManager to set
+     */
+    public void setNotificationManager(NotificationManager notificationManager) {
+        this.notificationManager = notificationManager;
+    }
 
-	public void setMailEngine(MailEngine mailEngine) {
-		this.mailEngine = mailEngine;
-	}
+    public void setMessageSource(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
 
-	public void setMessage(SimpleMailMessage message) {
-		this.message = message;
-	}
+    public void setMailEngine(MailEngine mailEngine) {
+        this.mailEngine = mailEngine;
+    }
 
-	public void setCourseManager(CourseManager courseManager) {
-		this.courseManager = courseManager;
-	}
+    public void setMessage(SimpleMailMessage message) {
+        this.message = message;
+    }
 
-	public void setAttachmentManager(AttachmentManager attachmentManager) {
-		this.attachmentManager = attachmentManager;
-	}
+    public void setCourseManager(CourseManager courseManager) {
+        this.courseManager = courseManager;
+    }
 
-	public void setServiceAreaManager(ServiceAreaManager serviceAreaManager) {
-		this.serviceAreaManager = serviceAreaManager;
-	}
+    public void setAttachmentManager(AttachmentManager attachmentManager) {
+        this.attachmentManager = attachmentManager;
+    }
 
-	public void setPersonManager(PersonManager personManager) {
-		this.personManager = personManager;
-	}
+    public void setServiceAreaManager(ServiceAreaManager serviceAreaManager) {
+        this.serviceAreaManager = serviceAreaManager;
+    }
 
-	public void setUserManager(UserManager userManager) {
-		this.userManager = userManager;
-	}
-	
-	public void setLocationManager(LocationManager locationManager) {
-		this.locationManager = locationManager;
-	}
+    public void setPersonManager(PersonManager personManager) {
+        this.personManager = personManager;
+    }
 
-	public void setOrganizationManager(
-			OrganizationManager organizationManager) {
-		this.organizationManager = organizationManager;
-	}
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
+    }
+
+    public void setLocationManager(LocationManager locationManager) {
+        this.locationManager = locationManager;
+    }
+
+    public void setOrganizationManager(
+            OrganizationManager organizationManager) {
+        this.organizationManager = organizationManager;
+    }
 
     public void setCategoryManager(CategoryManager categoryManager) {
         this.categoryManager = categoryManager;
     }
 
     /**
-	 * @see org.springframework.web.servlet.mvc.SimpleFormController#referenceData(javax.servlet.http.HttpServletRequest)
-	 */
-	protected Map referenceData(HttpServletRequest request) throws Exception {
-		Map<String, Object> model = new HashMap<String, Object>();
+     * @see org.springframework.web.servlet.mvc.SimpleFormController#referenceData(javax.servlet.http.HttpServletRequest)
+     */
+    protected Map referenceData(HttpServletRequest request) throws Exception {
+        Map<String, Object> model = new HashMap<String, Object>();
         Locale locale = request.getLocale();
 
         List categories = categoryManager.getCategories(new Category(),new Boolean(false));
         if(categories != null){
             model.put("categories",categories);
         }
-        
+
         // Retrieve all serviceareas into an array
-		List serviceAreas = serviceAreaManager.getAllIncludingDummy(getText("misc.none", locale));
-		if (serviceAreas != null) {
-			model.put("serviceareas", serviceAreas);
-		}
+        List serviceAreas = serviceAreaManager.getAllIncludingDummy(getText("misc.none", locale));
+        if (serviceAreas != null) {
+            model.put("serviceareas", serviceAreas);
+        }
 
-		// Retrieve all people into an array
-		List people = personManager.getPersons(null, new Boolean(false));
-		if (people != null) {
-			model.put("instructors", people);
-		}
+        // Retrieve all people into an array
+        List people = personManager.getPersons(null, new Boolean(false));
+        if (people != null) {
+            model.put("instructors", people);
+        }
 
-		List responsibles = userManager.getResponsibles();
-		if (responsibles != null) {
-			model.put("responsible", responsibles);
-		}
-		
-		// Retrieves visibility roles into an array
-		List roles = userManager.getRoles();
-		if (roles != null) {
+        List responsibles = userManager.getResponsibles();
+        if (responsibles != null) {
+            model.put("responsible", responsibles);
+        }
+
+        // Retrieves visibility roles into an array
+        List roles = userManager.getRoles();
+        if (roles != null) {
             model.put("roles", roles);
         }
 
-		// Retrieve all locations into an array
-		List <Location> locations = locationManager.getAllIncludingDummy(null, new Boolean(false), getText("misc.none", locale));
-		if (locations != null) {
-			model.put("locations", locations);
-		}
+        // Retrieve all locations into an array
+        List <Location> locations = locationManager.getAllIncludingDummy(null, new Boolean(false), getText("misc.none", locale));
+        if (locations != null) {
+            model.put("locations", locations);
+        }
 
-		// Retrieve all organization into an array
-		List organizations = organizationManager.getAllIncludingDummy(getText("misc.none", locale));
-		if (organizations != null) {
-			model.put("organizations", organizations);
-		}
+        // Retrieve all organization into an array
+        List organizations = organizationManager.getAllIncludingDummy(getText("misc.none", locale));
+        if (organizations != null) {
+            model.put("organizations", organizations);
+        }
 
-		// Current time
-		List<Date> time = new ArrayList<Date>();
-		time.add(new Date());
-		model.put("time", time);
-		
-		setDefaultValues(model, locale);
-		
-		// Are we to enable mail comment field and buttons?
-		Boolean enableMail = new Boolean(false);
-		String mailParam = request.getParameter("enableMail");
-		if (mailParam != null && mailParam.compareToIgnoreCase("true") == 0) {
-			enableMail = new Boolean(true);
-		}
-		model.put("enableMail", enableMail);
+        // Current time
+        List<Date> time = new ArrayList<Date>();
+        time.add(new Date());
+        model.put("time", time);
 
-		String courseid = request.getParameter("id");
+        setDefaultValues(model, locale);
 
-		// Check whether or not we allow registrations
-		if ((courseid != null) && StringUtils.isNumeric(courseid)) {
-			Course course = courseManager.getCourse(courseid);
-			
-			HttpSession session = request.getSession(true);
-			session.setAttribute(Constants.ORG_COURSE_KEY, course);
+        // Are we to enable mail comment field and buttons?
+        Boolean enableMail = new Boolean(false);
+        String mailParam = request.getParameter("enableMail");
+        if (mailParam != null && mailParam.compareToIgnoreCase("true") == 0) {
+            enableMail = new Boolean(true);
+        }
+        model.put("enableMail", enableMail);
 
-			if (course != null) {
-				Date today = new Date();
-				Boolean allowRegistration = new Boolean(false);
+        String courseid = request.getParameter("id");
 
-				if (today.before(course.getRegisterBy())
-						&& (course.getRegisterStart() == null || today
-								.after(course.getRegisterStart()))) {
-					allowRegistration = new Boolean(true);
-				}
+        // Check whether or not we allow registrations
+        if ((courseid != null) && StringUtils.isNumeric(courseid)) {
+            Course course = courseManager.getCourse(courseid);
+
+            HttpSession session = request.getSession(true);
+            session.setAttribute(Constants.ORG_COURSE_KEY, course);
+
+            if (course != null) {
+                Date today = new Date();
+                Boolean allowRegistration = new Boolean(false);
+
+                if (today.before(course.getRegisterBy())
+                        && (course.getRegisterStart() == null || today
+                                .after(course.getRegisterStart()))) {
+                    allowRegistration = new Boolean(true);
+                }
 
                 if(course.getStatus().equals(CourseStatus.COURSE_CANCELLED)){
                     allowRegistration = new Boolean(false);
@@ -231,19 +231,19 @@ public class CourseFormController extends BaseFormController {
 
                 model.put("allowRegistration", allowRegistration);
 
-				// Retrieve all attachments belonging to the course into an
-				// array
-				if ((courseid != null) && StringUtils.isNumeric(courseid)
-						&& StringUtils.isNotBlank(courseid)
-						&& (Long.parseLong(courseid) != 0)) {
-					List attachments = attachmentManager
-							.getCourseAttachments(new Long(courseid));
+                // Retrieve all attachments belonging to the course into an
+                // array
+                if ((courseid != null) && StringUtils.isNumeric(courseid)
+                        && StringUtils.isNotBlank(courseid)
+                        && (Long.parseLong(courseid) != 0)) {
+                    List attachments = attachmentManager
+                    .getCourseAttachments(new Long(courseid));
 
-					if (attachments != null) {
-						model.put("attachments", attachments);
-					}
-				}
-				
+                    if (attachments != null) {
+                        model.put("attachments", attachments);
+                    }
+                }
+
                 if ((courseid != null) && StringUtils.isNumeric(courseid)
                         && StringUtils.isNotBlank(courseid)
                         && (Long.parseLong(courseid) != 0)) {
@@ -260,137 +260,137 @@ public class CourseFormController extends BaseFormController {
                 model.put("isPublished", Boolean.valueOf(course.getStatus().intValue() > CourseStatus.COURSE_CREATED.intValue()));
                 model.put("isCancelled", Boolean.valueOf(course.getStatus().equals(CourseStatus.COURSE_CANCELLED)));
             }
-		}
-		
-				
-		return model;
-	}
+        }
 
-	private void setDefaultValues(Map<String, Object> model, Locale locale) {
-		String startTimeTime = messageSource.getMessage("course.startTimeTime", null, locale);
-		model.put("startTimeTime",startTimeTime);
-		String stopTimeTime = messageSource.getMessage("course.stopTimeTime", null, locale);
-		model.put("stopTimeTime",stopTimeTime);
 
-		Date currentTime = new Date();
-		SimpleDateFormat dfDate = new SimpleDateFormat("dd.MM.yyyy");
-		model.put("registerStartDate", dfDate.format(currentTime));
-		SimpleDateFormat dfTime = new SimpleDateFormat("HH:mm");
-		model.put("registerStartTime", dfTime.format(currentTime));
-	}
+        return model;
+    }
 
-	/**
-	 * 
-	 * @see org.springframework.web.servlet.mvc.AbstractFormController#formBackingObject(javax.servlet.http.HttpServletRequest)
-	 */
-	protected Object formBackingObject(HttpServletRequest request)
-			throws Exception {
-		String id = request.getParameter("id");
-		String copyid = request.getParameter("copyid");
-		Course course = null;
-		Course newCourse = null;
+    private void setDefaultValues(Map<String, Object> model, Locale locale) {
+        String startTimeTime = messageSource.getMessage("course.startTimeTime", null, locale);
+        model.put("startTimeTime",startTimeTime);
+        String stopTimeTime = messageSource.getMessage("course.stopTimeTime", null, locale);
+        model.put("stopTimeTime",stopTimeTime);
 
-		if (!StringUtils.isEmpty(id)) {
-			course = courseManager.getCourse(id);
-		} else if (!StringUtils.isEmpty(copyid)) {
-			course = courseManager.getCourse(copyid);
-			newCourse = new Course();
-			newCourse.copyAllButId(course);
-			newCourse.setCopyid(new Long(copyid));
-		} else {
-			course = new Course();
+        Date currentTime = new Date();
+        SimpleDateFormat dfDate = new SimpleDateFormat("dd.MM.yyyy");
+        model.put("registerStartDate", dfDate.format(currentTime));
+        SimpleDateFormat dfTime = new SimpleDateFormat("HH:mm");
+        model.put("registerStartTime", dfTime.format(currentTime));
+    }
+
+    /**
+     * 
+     * @see org.springframework.web.servlet.mvc.AbstractFormController#formBackingObject(javax.servlet.http.HttpServletRequest)
+     */
+    protected Object formBackingObject(HttpServletRequest request)
+    throws Exception {
+        String id = request.getParameter("id");
+        String copyid = request.getParameter("copyid");
+        Course course = null;
+        Course newCourse = null;
+
+        if (!StringUtils.isEmpty(id)) {
+            course = courseManager.getCourse(id);
+        } else if (!StringUtils.isEmpty(copyid)) {
+            course = courseManager.getCourse(copyid);
+            newCourse = new Course();
+            newCourse.copyAllButId(course);
+            newCourse.setCopyid(new Long(copyid));
+        } else {
+            course = new Course();
             course.setRole(Constants.ANONYMOUS_ROLE);
             course.setCategoryid(1L);
             course.setCategory(categoryManager.getCategory(1L));
             // Check if a default organization should be applied
-			User user = (User) request.getSession().getAttribute(Constants.USER_KEY);
-			Object omid = user.getOrganizationid();
-			if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
-				course.setOrganizationid(new Long(omid.toString()));
-			}
-			// Default responsible
-			course.setResponsibleUsername(user.getUsername());
-			
-		}
-		if (newCourse != null) {
-			return newCourse;
-		} else {
-			return course;
-		}
-	}
+            User user = (User) request.getSession().getAttribute(Constants.USER_KEY);
+            Object omid = user.getOrganizationid();
+            if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
+                course.setOrganizationid(new Long(omid.toString()));
+            }
+            // Default responsible
+            course.setResponsibleUsername(user.getUsername());
 
-	/**
-	 * @see org.springframework.web.servlet.mvc.SimpleFormController#onSubmit(javax.servlet.http.HttpServletRequest,
-	 *      javax.servlet.http.HttpServletResponse, java.lang.Object,
-	 *      org.springframework.validation.BindException)
-	 */
-	public ModelAndView onSubmit(HttpServletRequest request,
-			HttpServletResponse response, Object command, BindException errors)
-			throws Exception {
-		if (log.isDebugEnabled()) {
-			log.debug("entering 'onSubmit' method...");
-		}
+        }
+        if (newCourse != null) {
+            return newCourse;
+        } else {
+            return course;
+        }
+    }
 
-		Map model = new HashMap();
-		Course course = (Course) command;
-		Long courseId = course.getId();
-		
-		boolean isNew = (course.getId() == null);
-		Locale locale = request.getLocale();
+    /**
+     * @see org.springframework.web.servlet.mvc.SimpleFormController#onSubmit(javax.servlet.http.HttpServletRequest,
+     *      javax.servlet.http.HttpServletResponse, java.lang.Object,
+     *      org.springframework.validation.BindException)
+     */
+    public ModelAndView onSubmit(HttpServletRequest request,
+            HttpServletResponse response, Object command, BindException errors)
+    throws Exception {
+        if (log.isDebugEnabled()) {
+            log.debug("entering 'onSubmit' method...");
+        }
 
-		String mailComment = request.getParameter("mailcomment");
+        Map<String,Object> model = new HashMap<String,Object>();
+        Course course = (Course) command;
+        Long courseId = course.getId();
 
-		// Are we to return to the course list?
-		if (request.getParameter("return") != null) {
-			if (log.isDebugEnabled()) {
-				log.debug("recieved 'return' from jsp");
-			}
-			return new ModelAndView(getCancelView());
-		} // or to delete the course?
-		else if (request.getParameter("delete") != null) {
-			log.debug("recieved 'delete' from jsp");
-			// First (try to) delete the course
-			courseManager.removeCourse(course.getId().toString());
-			// Then send mail (in case the deletion was rejected)
-			sendMail(locale, course, Constants.EMAIL_EVENT_COURSEDELETED, mailComment);
-			saveMessage(request, getText("course.deleted", locale));
-			// Finally go to the course list
-			return new ModelAndView(getCancelView());
-		} // or to download files?
-		else if (request.getParameter("download") != null) {
-			log.debug("recieved 'download' from jsp");
-			try {
-				String attachmentId = request.getParameter("attachmentid");
+        boolean isNew = (course.getId() == null);
+        Locale locale = request.getLocale();
 
-				if ((attachmentId != null)
-						&& StringUtils.isNumeric(attachmentId)
-						&& (new Integer(attachmentId).intValue() != 0)) {
-					Attachment attachment = attachmentManager
-							.getAttachment(new Long(attachmentId));
-					String filename = getServletContext().getRealPath(
-							"/resources")
-							+ "/" + attachment.getStoredname();
+        String mailComment = request.getParameter("mailcomment");
 
-					FileUtil.downloadFile(request, response, attachment
-							.getContentType(), filename, attachment
-							.getFilename());
-				}
-			} catch (FileNotFoundException fnfe) {
-				log.error(fnfe);
+        // Are we to return to the course list?
+        if (request.getParameter("return") != null) {
+            if (log.isDebugEnabled()) {
+                log.debug("recieved 'return' from jsp");
+            }
+            return new ModelAndView(getCancelView());
+        } // or to delete the course?
+        else if (request.getParameter("delete") != null) {
+            log.debug("recieved 'delete' from jsp");
+            // First (try to) delete the course
+            courseManager.removeCourse(course.getId().toString());
+            // Then send mail (in case the deletion was rejected)
+            sendMail(locale, course, Constants.EMAIL_EVENT_COURSEDELETED, mailComment);
+            saveMessage(request, getText("course.deleted", locale));
+            // Finally go to the course list
+            return new ModelAndView(getCancelView());
+        } // or to download files?
+        else if (request.getParameter("download") != null) {
+            log.debug("recieved 'download' from jsp");
+            try {
+                String attachmentId = request.getParameter("attachmentid");
 
-				String key = "attachment.sendError";
-				errors.reject(getText(key, request.getLocale()));
+                if ((attachmentId != null)
+                        && StringUtils.isNumeric(attachmentId)
+                        && (new Integer(attachmentId).intValue() != 0)) {
+                    Attachment attachment = attachmentManager
+                    .getAttachment(new Long(attachmentId));
+                    String filename = getServletContext().getRealPath(
+                    "/resources")
+                    + "/" + attachment.getStoredname();
 
-				return showForm(request, response, errors);
-			} catch (IOException ioe) {
-				log.error(ioe);
+                    FileUtil.downloadFile(request, response, attachment
+                            .getContentType(), filename, attachment
+                            .getFilename());
+                }
+            } catch (FileNotFoundException fnfe) {
+                log.error(fnfe);
 
-				String key = "errors.ioerror";
-				errors.reject(getText(key, request.getLocale()));
+                String key = "attachment.sendError";
+                errors.reject(getText(key, request.getLocale()));
 
-				return showForm(request, response, errors);
-			}
-		} // or to save/update?
+                return showForm(request, response, errors);
+            } catch (IOException ioe) {
+                log.error(ioe);
+
+                String key = "errors.ioerror";
+                errors.reject(getText(key, request.getLocale()));
+
+                return showForm(request, response, errors);
+            }
+        } // or to save/update?
         else {
             // Save or publish
             if(request.getParameter("save") != null && isNew){
@@ -404,239 +404,242 @@ public class CourseFormController extends BaseFormController {
             }
             if(request.getParameter("cancelled") != null){
                 course.setStatus(CourseStatus.COURSE_CANCELLED);
-//                enablemail = true;
             }
             log.debug("recieved 'save/publish/cancel' from jsp");
-			// Parse date and time fields together
-			String format = getText("date.format", request.getLocale()) + " " + getText("time.format", request.getLocale());
-			Object[] args = null;
+            // Parse date and time fields together
+            String format = getText("date.format", request.getLocale()) + " " + getText("time.format", request.getLocale());
+            Object[] args = null;
 
-			try {
-				Date time = parseDateAndTime(request, "startTime", format);
+            try {
+                Date time = parseDateAndTime(request, "startTime", format);
 
-				if (time != null) {
-					course.setStartTime(time);
-				} else {
-					throw new BindException(course, "startTime");
-				}
-			} catch (Exception e) {
-				args = new Object[] {
-						getText("course.startTime", request.getLocale()),
-						getText("date.format.localized", request.getLocale()),
-						getText("time.format.localized", request.getLocale()) };
-				errors.rejectValue("startTime", "errors.dateformat", args,
-						"Invalid date or time");
-			}
+                if (time != null) {
+                    course.setStartTime(time);
+                } else {
+                    throw new BindException(course, "startTime");
+                }
+            } catch (Exception e) {
+                args = new Object[] {
+                        getText("course.startTime", request.getLocale()),
+                        getText("date.format.localized", request.getLocale()),
+                        getText("time.format.localized", request.getLocale()) };
+                errors.rejectValue("startTime", "errors.dateformat", args,
+                "Invalid date or time");
+            }
 
-			try {
-				Date time = parseDateAndTime(request, "stopTime", format);
+            try {
+                Date time = parseDateAndTime(request, "stopTime", format);
 
-				if (time != null) {
-					course.setStopTime(time);
-				} else {
-					throw new BindException(course, "stopTime");
-				}
-			} catch (Exception e) {
-				args = new Object[] {
-						getText("course.stopTime", request.getLocale()),
-						getText("date.format.localized", request.getLocale()),
-						getText("time.format.localized", request.getLocale()) };
-				errors.rejectValue("stopTime", "errors.dateformat", args,
-						"Invalid date or time");
-			}
+                if (time != null) {
+                    course.setStopTime(time);
+                } else {
+                    throw new BindException(course, "stopTime");
+                }
+            } catch (Exception e) {
+                args = new Object[] {
+                        getText("course.stopTime", request.getLocale()),
+                        getText("date.format.localized", request.getLocale()),
+                        getText("time.format.localized", request.getLocale()) };
+                errors.rejectValue("stopTime", "errors.dateformat", args,
+                "Invalid date or time");
+            }
 
-			try {
-				course.setRegisterStart(parseDateAndTime(request,
-						"registerStart", format));
-			} catch (Exception e) {
-				args = new Object[] {
-						getText("course.registerStart", request.getLocale()),
-						getText("date.format.localized", request.getLocale()),
-						getText("time.format.localized", request.getLocale()) };
-				errors.rejectValue("registerStart", "errors.dateformat", args,
-						"Invalid date or time");
-			}
+            try {
+                course.setRegisterStart(parseDateAndTime(request,
+                        "registerStart", format));
+            } catch (Exception e) {
+                args = new Object[] {
+                        getText("course.registerStart", request.getLocale()),
+                        getText("date.format.localized", request.getLocale()),
+                        getText("time.format.localized", request.getLocale()) };
+                errors.rejectValue("registerStart", "errors.dateformat", args,
+                "Invalid date or time");
+            }
 
-			try {
-				course
-						.setReminder(parseDateAndTime(request, "reminder",
-								format));
-			} catch (Exception e) {
-				args = new Object[] {
-						getText("course.reminder", request.getLocale()),
-						getText("date.format.localized", request.getLocale()),
-						getText("time.format.localized", request.getLocale()) };
-				errors.rejectValue("reminder", "errors.dateformat", args,
-						"Invalid date or time");
-			}
+            try {
+                course
+                .setReminder(parseDateAndTime(request, "reminder",
+                        format));
+            } catch (Exception e) {
+                args = new Object[] {
+                        getText("course.reminder", request.getLocale()),
+                        getText("date.format.localized", request.getLocale()),
+                        getText("time.format.localized", request.getLocale()) };
+                errors.rejectValue("reminder", "errors.dateformat", args,
+                "Invalid date or time");
+            }
 
-			try {
-				Date time = parseDateAndTime(request, "registerBy", format);
+            try {
+                Date time = parseDateAndTime(request, "registerBy", format);
 
-				if (time != null) {
-					course.setRegisterBy(time);
-				} else {
-					throw new BindException(course, "registerBy");
-				}
-			} catch (Exception e) {
-				args = new Object[] {
-						getText("course.registerBy", request.getLocale()),
-						getText("date.format.localized", request.getLocale()),
-						getText("time.format.localized", request.getLocale()) };
-				errors.rejectValue("registerBy", "errors.dateformat", args,
-						"Invalid date or time");
-			}
+                if (time != null) {
+                    course.setRegisterBy(time);
+                } else {
+                    throw new BindException(course, "registerBy");
+                }
+            } catch (Exception e) {
+                args = new Object[] {
+                        getText("course.registerBy", request.getLocale()),
+                        getText("date.format.localized", request.getLocale()),
+                        getText("time.format.localized", request.getLocale()) };
+                errors.rejectValue("registerBy", "errors.dateformat", args,
+                "Invalid date or time");
+            }
 
-			try {
-				Date time = parseDateAndTime(request, "freezeAttendance",
-						format);
+            try {
+                Date time = parseDateAndTime(request, "freezeAttendance",
+                        format);
 
-				if (time != null) {
-					course.setFreezeAttendance(time);
-				} else {
-					throw new BindException(course, "freezeAttendance");
-				}
-			} catch (Exception e) {
-				args = new Object[] {
-						getText("course.freezeAttendance", request.getLocale()),
-						getText("date.format.localized", request.getLocale()),
-						getText("time.format.localized", request.getLocale()) };
-				errors.rejectValue("freezeAttendance", "errors.dateformat",
-						args, "Invalid date or time");
-			}
+                if (time != null) {
+                    course.setFreezeAttendance(time);
+                } else {
+                    throw new BindException(course, "freezeAttendance");
+                }
+            } catch (Exception e) {
+                args = new Object[] {
+                        getText("course.freezeAttendance", request.getLocale()),
+                        getText("date.format.localized", request.getLocale()),
+                        getText("time.format.localized", request.getLocale()) };
+                errors.rejectValue("freezeAttendance", "errors.dateformat",
+                        args, "Invalid date or time");
+            }
 
-			if (args != null) {
-				return showForm(request, response, errors);
-			}
+            if (args != null) {
+                return showForm(request, response, errors);
+            }
 
-			courseManager.saveCourse(course);
+            courseManager.saveCourse(course);
 
-			String key = null;
-            if(course.getStatus().equals(CourseStatus.COURSE_CREATED))
+            String key = null;
+            if(course.getStatus().equals(CourseStatus.COURSE_CREATED)) {
                 key = "course.created";
-            else if(course.getStatus().equals(CourseStatus.COURSE_PUBLISHED))
+            }
+            else if(course.getStatus().equals(CourseStatus.COURSE_PUBLISHED)) {
                 key = "course.published";
-            else if(course.getStatus().equals(CourseStatus.COURSE_CANCELLED))
+            }
+            else if(course.getStatus().equals(CourseStatus.COURSE_CANCELLED)) {
                 key = "course.cancelled";
-            else
+            }
+            else {
                 key = "course.updated";
-            
+            }
+
             boolean enablemail = false;
             boolean waitinglist = false;
 
             saveMessage(request, getText(key, locale));
 
-			// If not new, we need to send out a message to everyone registered
-			// to the course that things have changed
-			// and check if the notificationlist for the course needs to be reset
-			if (isNew) {
-				//check if this course is a copy and is being published
-				if ((course.getCopyid() != null) && (request.getParameter("publish") != null)){
-					List <Long> ids = new ArrayList<Long>();
-					ids.add(course.getCopyid());
-					List<Registration> registrationsOnOrginalCourse = registrationManager
-					.getWaitingListRegistrations(ids);
-					//check if the original course has a waiting list
-					if (!registrationsOnOrginalCourse.isEmpty()){
-						enablemail=true;
-						waitinglist= true;
-					}
-				}
-				model.put("newCourse", "true");
-				courseId = course.getId();
-			} else {
-				List<Registration> registrations = registrationManager
-						.getSpecificRegistrations(course.getId(), null, null,
-								null, null, null, null);
-				if (registrations.isEmpty()) {
-					//check if this course is a copy and is being published
-					if ((course.getCopyid() != null) && (request.getParameter("publish") != null)){
-						List <Long> ids = new ArrayList<Long>();
-						ids.add(course.getCopyid());
-						List<Registration> registrationsOnOrginalCourse = registrationManager
-						.getWaitingListRegistrations(ids);
-						//check if the original course has a waiting list
-						if (!registrationsOnOrginalCourse.isEmpty()){
-							enablemail=true;
-							waitinglist=true;
-						}
-					}
-				} else {
-					
-					//check if there has been a change relevant for users registered on the course
-					Course originalCourse = (Course) request.getSession().getAttribute(Constants.ORG_COURSE_KEY);
-					List <String> changedList = new ArrayList<String>();
-					if (originalCourse != null){
-						changedList = courseManager.getChangedList(originalCourse, course, format);
-						if (changedList.size() != 0){
-							enablemail=true;
-						}
-					}
-				}
-				
-				// If the reminder is set to be after this date, we need to make sure the notifications are set as not-sent
-				if (course.getReminder() != null) {
-					if (course.getReminder().after(new Date())) {
-						log.debug("Resetting notifications");
-						notificationManager.resetCourse(course);
-					}
-				}
-			}
-			model.put("enablemail", enablemail);
-			model.put("waitinglist", waitinglist);
-		}
+            // If not new, we need to send out a message to everyone registered
+            // to the course that things have changed
+            // and check if the notificationlist for the course needs to be reset
+            if (isNew) {
+                //check if this course is a copy and is being published
+                if ((course.getCopyid() != null) && (request.getParameter("publish") != null)){
+                    List <Long> ids = new ArrayList<Long>();
+                    ids.add(course.getCopyid());
+                    List<Registration> registrationsOnOrginalCourse = registrationManager
+                    .getWaitingListRegistrations(ids);
+                    //check if the original course has a waiting list
+                    if (!registrationsOnOrginalCourse.isEmpty()){
+                        enablemail=true;
+                        waitinglist= true;
+                    }
+                }
+                model.put("newCourse", "true");
+                courseId = course.getId();
+            } else {
+                List<Registration> registrations = registrationManager
+                .getSpecificRegistrations(course.getId(), null, null,
+                        null, null, null, null);
+                if (registrations.isEmpty()) {
+                    //check if this course is a copy and is being published
+                    if ((course.getCopyid() != null) && (request.getParameter("publish") != null)){
+                        List <Long> ids = new ArrayList<Long>();
+                        ids.add(course.getCopyid());
+                        List<Registration> registrationsOnOrginalCourse = registrationManager
+                        .getWaitingListRegistrations(ids);
+                        //check if the original course has a waiting list
+                        if (!registrationsOnOrginalCourse.isEmpty()){
+                            enablemail=true;
+                            waitinglist=true;
+                        }
+                    }
+                } else {
 
-		// Let the next page know what course we were editing here
-		model.put("id", courseId.toString());
+                    //check if there has been a change relevant for users registered on the course
+                    Course originalCourse = (Course) request.getSession().getAttribute(Constants.ORG_COURSE_KEY);
+                    List <String> changedList = new ArrayList<String>();
+                    if (originalCourse != null){
+                        changedList = courseManager.getChangedList(originalCourse, course, format);
+                        if (changedList.size() != 0){
+                            enablemail=true;
+                        }
+                    }
+                }
 
-		return new ModelAndView(getSuccessView(), model);
-	}
+                // If the reminder is set to be after this date, we need to make sure the notifications are set as not-sent
+                if (course.getReminder() != null) {
+                    if (course.getReminder().after(new Date())) {
+                        log.debug("Resetting notifications");
+                        notificationManager.resetCourse(course);
+                    }
+                }
+            }
+            model.put("enablemail", enablemail);
+            model.put("waitinglist", waitinglist);
+        }
+
+        // Let the next page know what course we were editing here
+        model.put("id", courseId.toString());
+
+        return new ModelAndView(getSuccessView(), model);
+    }
 
     protected Date parseDateAndTime(HttpServletRequest request, String fieldName, String format) throws ParseException {
-		SimpleDateFormat formatter = new SimpleDateFormat(format);
-		formatter.setLenient(false);
-		formatter.set2DigitYearStart(formatter.parse("01.01.2000 00:00"));
-		String date = request.getParameter(fieldName + "Date");
-		String time = request.getParameter(fieldName + "Time");
+        SimpleDateFormat formatter = new SimpleDateFormat(format);
+        formatter.setLenient(false);
+        formatter.set2DigitYearStart(formatter.parse("01.01.2000 00:00"));
+        String date = request.getParameter(fieldName + "Date");
+        String time = request.getParameter(fieldName + "Time");
 
-		if (StringUtils.isEmpty(date)) {
-			return null;
-		} else if (StringUtils.isEmpty(time)) {
-			return (Date) formatter.parse(date + " 00:00");
-		} else {
-			return (Date) formatter.parse(date + " " + time + ":00");
-		}
-	}
+        if (StringUtils.isEmpty(date)) {
+            return null;
+        } else if (StringUtils.isEmpty(time)) {
+            return (Date) formatter.parse(date + " 00:00");
+        } else {
+            return (Date) formatter.parse(date + " " + time + ":00");
+        }
+    }
 
-	/**
-	 * Sends mail to the user
-	 * 
-	 * @param locale
-	 *            The locale to use
-	 * @param course
-	 *            The course the applicant has registered for
-	 */
-	private void sendMail(Locale locale, Course course, int event,
-			String mailComment) {
-		log.debug("Sending mail from CourseFormController");
-		// Get all registrations
-		List<Registration> registrations = registrationManager
-		.getSpecificRegistrations(course.getId(), null, null, null,
-				null, null, null);
+    /**
+     * Sends mail to the user
+     * 
+     * @param locale
+     *            The locale to use
+     * @param course
+     *            The course the applicant has registered for
+     */
+    private void sendMail(Locale locale, Course course, int event,
+            String mailComment) {
+        log.debug("Sending mail from CourseFormController");
+        // Get all registrations
+        List<Registration> registrations = registrationManager
+        .getSpecificRegistrations(course.getId(), null, null, null,
+                null, null, null);
 
-		// Build standard e-mail body
-		StringBuffer msg = MailUtil.createStandardBody(course, event, locale, messageSource, mailComment);
-		
-		// Add sender etc.
-		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, messageSource, locale, null, mailSender);
-		MailUtil.sendMimeMails(emails, mailEngine);		
-	}
+        // Build standard e-mail body
+        StringBuffer msg = MailUtil.createStandardBody(course, event, locale, messageSource, mailComment);
 
-	/**
-	 * @param registrationManager
-	 *            The registrationManager to set.
-	 */
-	public void setRegistrationManager(RegistrationManager registrationManager) {
-		this.registrationManager = registrationManager;
-	}
+        // Add sender etc.
+        ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, messageSource, locale, null, mailSender);
+        MailUtil.sendMimeMails(emails, mailEngine);		
+    }
+
+    /**
+     * @param registrationManager
+     *            The registrationManager to set.
+     */
+    public void setRegistrationManager(RegistrationManager registrationManager) {
+        this.registrationManager = registrationManager;
+    }
 }

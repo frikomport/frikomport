@@ -107,7 +107,10 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
     public List <String> getChangedList(Course originalCourse, Course changedCourse, String dateFormat) {
     	List <String> changedList = new ArrayList<String>();
     	SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
-    			
+    	
+        if (originalCourse.getStatus().intValue() != changedCourse.getStatus().intValue()){
+            changedList.add("status");
+        }
 		if (!originalCourse.getName().equals(changedCourse.getName())){
 			changedList.add("name");
 		}

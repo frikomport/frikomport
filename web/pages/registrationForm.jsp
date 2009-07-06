@@ -24,10 +24,6 @@
 
 
 <c:if test="${!illegalRegistration}">
-	<h4>
-		<fmt:message key="registrationComplete.yourdetails" />
-	</h4>
-
 	<div class="message" style="font-size: 12px">
 		<fmt:message key="registrationDetail.emailexplanation" />
 	</div>
