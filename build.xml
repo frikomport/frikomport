@@ -413,6 +413,7 @@
             </lib>
             <lib dir="${javamail.dir}" includes="*.jar"/>   
             <lib file="${log4j.jar}"/>
+			<lib file="${dom4j.jar}"/>
             <lib file="${strutsmenu.jar}"/>
             <lib dir="${displaytag.dir}" includes="*.jar"/>
             <lib dir="${poi.dir}" includes="*.jar"/>

@@ -157,6 +157,7 @@
         <pathelement location="${commons-validator.jar}"/>
         <pathelement location="${commons-codec.jar}"/>
         <pathelement location="${servletapi.jar}"/>
+        <pathelement location="${dom4j.jar}"/>
         <fileset dir="${javamail.dir}" includes="*.jar"/>
         <fileset dir="${ical4j.dir}" includes="*.jar"/>
         <fileset dir="${spring.dir}" includes="*.jar"/>
