@@ -42,6 +42,6 @@
             <decorator:body/>
         </div>
     </div>
-
+    <%@ include file="/common/tracker.jsp" %>
 </body>
 </html>
