@@ -1,0 +1,177 @@
+div.exportlinks {
+    width: 100%;
+    background-color: #FFFFFF;
+    font-size: 1.0em; //10px;
+    font-weight: normal;
+    color: #000;
+    margin: 0 0 0 0;
+    padding-top: 0.9em;
+    padding-left: 5px;  
+    padding-bottom: 4px;
+    border-top: 1px dotted #888;
+}
+
+div.exportlinks a {
+    text-decoration: none;
+}
+
+div.exportlinks span {
+    background-repeat: no-repeat;
+}
+
+span.csv {
+    background-image: url(../images/page_white_text.png);
+}
+
+span.excel {
+    background-image: url(../images/page_white_excel.png);
+}
+
+span.pdf {
+    background-image: url(../images/page_white_acrobat.png);
+}
+
+span.xml {
+    background-image: url(../images/page_white_code.png);
+}
+
+span.ics {
+    background-image: url(../images/calendar.png);
+}
+span.export {
+    cursor: pointer;
+    display: inline;
+    display: inline-block;
+    padding: 0 4px 4px 20px;
+}
+
+span.pagebanner {
+    display: block;
+    width: 100%;
+    background-color: #FFFFFF;
+    margin: 0;
+    font-size: 1.0em; //10px;
+    font-weight: normal;
+    color: #000;
+    padding-top: 3px;
+    padding-left: 5px;  
+    padding-bottom: 4px;
+}
+
+span.pagelinks {
+    display: block;
+    font-size: .95em;
+    margin-bottom: 5px;
+    margin-top: -18px;
+    padding: 2px 0px 2px 0px;
+    text-align: right;
+    width: 100%;
+}
+
+table.list {
+    border-collapse: collapse;
+    margin: 10px;
+    margin-top: 0px;
+    width: 100%;
+}
+
+table.list td {
+    padding: 3px;
+}
+
+table.list th {
+    background-color: #C0C0C0;
+    color: #000000;
+    padding: 3px;
+    text-align: left;
+}
+
+table.list th a, table.list th a:visited {
+    background-color: transparent;
+    color: #000000;
+    text-decoration: none;
+}
+
+table.list th a:hover {
+    background-color: transparent;
+    color: #008000 !important;
+    text-decoration: overline underline;
+}
+
+th.sorted a, th.sortable a {
+    background-position: right;
+    display: block;
+}
+
+table.list th.sortable a {
+  padding-right: 7px;
+    background-image: url(../images/arrow_off.png);
+}
+
+table.list th.order1 a {
+    background-image: url(../images/arrow_down.png) !important;
+}
+
+table.list th.order2 a {
+    background-image: url(../images/arrow_up.png) !important;
+}
+
+table.list th.sorted {
+    background-color: #ddf;
+    color: #000000;
+}
+
+table.list th.sorted a, table.list th.sortable a {
+    background-position: right;
+    background-repeat: no-repeat;
+    display: block;
+}
+
+table.list th.sortable:hover {
+    background-color: #B3B3FF;
+    color: #008000;
+}
+
+table.list thead tr {
+    background-color: #FFCC00;
+}
+
+table.list tr.even {
+    background-color: #f0f0f0;
+    margin: 0;
+    font-size: 1.0em; //10px;
+    font-weight: normal;
+    color: #000;
+    padding-top: 3px;
+    padding-left: 5px;  
+    padding-bottom: 4px;
+}
+
+table.list tr.odd {
+    background-color: #FFFFFF;
+    margin: 0;
+    font-size: 1.0em; //10px;
+    font-weight: normal;
+    color: #000;
+    padding-top: 3px;
+    padding-left: 5px;  
+    padding-bottom: 4px;
+}
+
+/* highlight table row onmouseover */
+table.list tr.over {
+    background-color: #B3B3FF;
+    border-bottom: 1px solid #C0C0C0;
+    border-top: 1px solid #C0C0C0;
+    color: #000000;
+    cursor: pointer;
+}
+
+/* override width for user list */
+table.userList {
+    width: 80% !important;
+}
+
+table.activeUserList, body#activeUsers span.pagelinks {
+    width: 450px !important;
+}
