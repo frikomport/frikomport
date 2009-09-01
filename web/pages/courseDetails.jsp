@@ -62,6 +62,11 @@
 		    	    <fmt:message key="button.signup"/>
 			    </button>
 			</c:if>
+            <c:if test="${altusername ne null}">
+                <button type="button" onclick="location.href='<c:url value="/profileUser.html"></c:url>'">
+                    <fmt:message key="button.signoff"/>
+                </button>
+            </c:if>
 </c:if>
 
 <c:if test="${admin == true}">

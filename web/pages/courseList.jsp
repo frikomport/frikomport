@@ -43,7 +43,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
         <ul>
             <li>
                 <soak:label key="course.organization" styleClass="required"/>
-                <form:select path="organizationid" onchange="fillSelect(this);">
+                <form:select  path="organizationid" onchange="fillSelect(this);">
                     <form:options items="${organizations}" itemValue="id" itemLabel="name" />
                 </form:select>
                 <form:errors cssClass="fieldError" htmlEscape="false" path="organizationid" />
@@ -222,6 +222,21 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 </display:table>
 
 <c:out value="${buttons}" escapeXml="false"/>
+
+<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<c:set var="parameters">
+	<fmt:message key="javaapp.baseurl"/><fmt:message key="javaapp.courselisturl"/>
+	<c:if test="${course.name != null && course.name ne ''}">name=<c:out value="${course.name}"/>%26</c:if>
+	<c:if test="${course.organizationid > 0}">organizationid=<c:out value="${course.organizationid}"/>%26</c:if>
+	<c:if test="${course.serviceAreaid > 0}">serviceArea=<c:out value="${course.serviceAreaid}"/>%26</c:if>
+	<c:if test="${course.categoryid > 0}">categoryid=<c:out value="${course.categoryid}"/>%26</c:if>
+	<c:if test="${past == true}">past=1</c:if>
+	<c:if test="${historic == true}">historic=1</c:if>
+</c:set>
+<div class="searchUrl" style="padding:3px;">
+    <fmt:message key="url-to-this-search"/>: <a class="external" href="<c:out value="${parameters}"/>" target="_blank"><c:out value="${parameters}"/></a>
+</div>
+</c:if>
 <%--
 <script type="text/javascript">
 highlightTableRows("courseList");
