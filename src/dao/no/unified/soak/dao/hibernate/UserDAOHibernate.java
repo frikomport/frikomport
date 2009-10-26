@@ -86,7 +86,8 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
      * @see no.unified.soak.dao.UserDAO#getUsers(no.unified.soak.model.User)
      */
     public User getUserByHash(String hash) {
-        List users = getHibernateTemplate().find("from User u where u.hash=? and u.enabled = 1", new Object[] {hash});
+        hash = removeTrailingEquals(hash);  //FKM-546 Removing trailing equals signs
+        List users = getHibernateTemplate().find("from User u where u.hash like ?% and u.enabled = 1", new Object[] {hash});
         
         if (users.size() == 0) {
             return null;
@@ -95,6 +96,13 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
         return (User) users.get(0);
     }
     
+    private String removeTrailingEquals(String hash) {
+        while (hash.endsWith("=")){
+            hash = hash.substring(0, hash.length()-2);
+        }
+        return hash;
+    }
+
     /**
      * @see no.unified.soak.dao.UserDAO#saveUser(no.unified.soak.model.User)
      */
