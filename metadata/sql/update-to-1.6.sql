@@ -1,4 +1,4 @@
-﻿ALTER TABLE registration MODIFY COLUMN jobtitle varchar(100);
+ALTER TABLE registration MODIFY COLUMN jobtitle varchar(100);
 ALTER TABLE registration MODIFY COLUMN firstname varchar(100);
 ALTER TABLE registration MODIFY COLUMN lastname varchar(100);
 ALTER TABLE registration MODIFY COLUMN comment varchar(255);

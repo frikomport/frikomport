@@ -1,4 +1,4 @@
-﻿ALTER TABLE organization ADD COLUMN invoice_address varchar(150);
+ALTER TABLE organization ADD COLUMN invoice_address varchar(150);
 ALTER TABLE organization ADD COLUMN invoice_city varchar(50);
 ALTER TABLE organization ADD COLUMN invoice_province varchar(100);
 ALTER TABLE organization ADD COLUMN invoice_country varchar(100);
