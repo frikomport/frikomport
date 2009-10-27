@@ -319,7 +319,7 @@
 		<row>
 			<value>editor</value>
 			<value>
-				<![CDATA[Opplæringsansvarlig]]>
+				<![CDATA[Opplaringsansvarlig]]>
 			</value>
 			<value>1</value>
 		</row>
@@ -676,6 +676,7 @@
 		<column>description</column>
 		<column>role</column>
 		<column>status</column>
+        <column>categoryid</column>
 		<row>
 			<value>1</value>
 			<value>instructor</value>
@@ -702,6 +703,7 @@
 			</value>
 			<value>anonymous</value>
 			<value>2</value>
+            <value>1</value>
 		</row>
 		<row>
 			<value>2</value>
@@ -731,6 +733,7 @@
 			</value>
 			<value>anonymous</value>
 			<value>2</value>
+            <value>1</value>
         </row>
 		<row>
 			<value>2</value>
@@ -760,6 +763,7 @@
 			</value>
 			<value>anonymous</value>
 			<value>2</value>
+            <value>1</value>
         </row>
 		<row>
 			<value>2</value>
@@ -787,6 +791,7 @@
 			</value>
 			<value>anonymous</value>
 			<value>2</value>
+            <value>1</value>
         </row>
 		<row>
 			<value>2</value>
@@ -816,6 +821,7 @@
 			</value>
 			<value>anonymous</value>
 			<value>0</value>
+            <value>1</value>
         </row>
 	</table>
 	<!--Course-END-->
@@ -1227,9 +1233,11 @@
     </table>
     <!--Configuration-END-->
         <table name="category">
+        <column>id</column>
         <column>name</column>
         <column>selectable</column>
         <row>
+            <value>1</value>
             <value>Kurs</value>
             <value>true</value>
         </row>

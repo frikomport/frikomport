@@ -32,10 +32,10 @@ public class RoleDAOTest extends BaseDAOTestCase {
     public void testUpdateRole() throws Exception {
         role = dao.getRole("anonymous");
         log.info(role);
-        role.setDescription("test descr");
+        role.setDescription("Anonymous");
 
         dao.saveRole(role);
-        assertEquals(role.getDescription(), "test descr");
+        assertEquals(role.getDescription(), "Anonymous");
     }
 
     public void testAddAndRemoveRole() throws Exception {

@@ -7,6 +7,7 @@
 */
 package no.unified.soak.dao;
 
+import no.unified.soak.model.Category;
 import no.unified.soak.model.Course;
 
 import org.springframework.orm.ObjectRetrievalFailureException;
@@ -97,6 +98,11 @@ public class CourseDAOTest extends BaseDAOTestCase {
         String role = "Anonymous";
         course.setRole(role);
 
+        Category category = new Category();
+        category.setName("Kurs");
+        course.setCategory(category);
+        course.setCategoryid(1L);
+        
         dao.saveCourse(course);
 
         // verify a primary key was assigned
