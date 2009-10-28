@@ -45,7 +45,7 @@ public class ServiceAreaDAOTest extends BaseDAOTestCase {
         serviceArea = new ServiceArea();
 
         // set required fields
-        String name = "Testtejenesten";
+        String name = "Testtjenesten";
         serviceArea.setName(name);
 
         Boolean selectable = new Boolean("true");
