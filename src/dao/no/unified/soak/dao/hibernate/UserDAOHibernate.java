@@ -87,7 +87,7 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
      */
     public User getUserByHash(String hash) {
         hash = removeTrailingEquals(hash);  //FKM-546 Removing trailing equals signs
-        List users = getHibernateTemplate().find("from User u where u.hash like ?% and u.enabled = 1", new Object[] {hash});
+        List users = getHibernateTemplate().find("from User u where u.hash like '" + hash + "%' and u.enabled = 1");
         
         if (users.size() == 0) {
             return null;
