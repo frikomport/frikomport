@@ -407,9 +407,7 @@
 			<value>Vinjesgate 1, 3616 Kongsberg</value>
 			<value>Kirsten Brath</value>
 			<value>http://www.kongsberg-vandrerhjem.no/</value>
-			<value>
-				http://www.kongsberg-vandrerhjem.no/beliggenhet.html
-			</value>
+			<value>http://www.kongsberg-vandrerhjem.no/beliggenhet.html</value>
 			<value>2</value>
 			<value>Kongsberg Vandrerhjem</value>
 			<value>kongsberg.hostel@vandrerhjem.no.no</value>
@@ -423,10 +421,7 @@
 		</row>
 		<row>
 			<value>Youngs Gate 11, 0181 Oslo</value>
-			<value>
-				Oslo Kongressenter, Folkets Hus BA, Youngs Gate 11, 0181
-				Oslo
-			</value>
+			<value>Oslo Kongressenter, Folkets Hus BA, Youngs Gate 11, 0181	Oslo</value>
 			<value>Sissel Lindland</value>
 			<value>http://www.oslo.kongressenter.no/</value>
 			<value></value>
@@ -454,10 +449,7 @@
 			<value>Notodden Kommune</value>
 			<value>50</value>
 			<value>1000</value>
-			<value>
-				Intime og rimelige lokaler for kommunal bruk sentralt i
-				Notodden
-			</value>
+			<value>Intime og rimelige lokaler for kommunal bruk sentralt i Notodden</value>
 			<value>1</value>
 			<value>1</value>
 		</row>
@@ -487,14 +479,10 @@
 		<column>selectable</column>
 
 		<row>
-			<value>
-				/ez/index.php/fkp_nob/users/kursansvarlig/kursansvarlig1_test2
-			</value>
+			<value>/ez/index.php/fkp_nob/users/kursansvarlig/kursansvarlig1_test2</value>
 			<value>acr@unified.no</value>
 			<value>1</value>
-			<value>
-				Unified Consulting, Ruseløkkveien 14, 0251 Oslo
-			</value>
+			<value>Unified Consulting, Ruseløkkveien 14, 0251 Oslo</value>
 			<value>Kurse Ansvarligsen</value>
 			<value>99887766</value>
 			<value>99887766</value>
@@ -505,9 +493,7 @@
 			<value>http://www.nerdcissus.com</value>
 			<value>frikomport@gmail.com</value>
 			<value>2</value>
-			<value>
-				Unified Consulting, Ruseløkkveien 14, 0251 Oslo
-			</value>
+			<value>Unified Consulting, Ruseløkkveien 14, 0251 Oslo</value>
 			<value>Hans Pettersen</value>
 			<value>44556677</value>
 			<value>44556677</value>
@@ -518,9 +504,7 @@
 			<value>http://www.ola.no</value>
 			<value>frikomport@gmail.com</value>
 			<value>3</value>
-			<value>
-				Unified Consulting, Ruseløkkveien 14, 0251 Oslo
-			</value>
+			<value>Unified Consulting, Ruseløkkveien 14, 0251 Oslo</value>
 			<value>Ola Nordmann</value>
 			<value>99778899</value>
 			<value>99778899</value>
@@ -531,16 +515,11 @@
 			<value>http://www.unified.no/</value>
 			<value>frikomport@gmail.com</value>
 			<value>4</value>
-			<value>
-				Unified Consulting, Ruseløkkveien 14, 0251 Oslo
-			</value>
+			<value>Unified Consulting, Ruseløkkveien 14, 0251 Oslo</value>
 			<value>Harald Olsen</value>
 			<value>12345678</value>
 			<value>99345678</value>
-			<value>
-				Utvikler med relevant erfaring som teknisk
-				kursinstruktør
-			</value>
+			<value>Utvikler med relevant erfaring som teknisk kursinstruktør</value>
 			<value>0</value>
 		</row>
 	</table>
@@ -698,9 +677,7 @@
 			<value>Filosofer og esteter</value>
 			<value>2</value>
 			<value>2</value>
-			<value>
-				Et høytsvevende kurs om filosofi, estetikk og orale tradisjoner
-			</value>
+			<value>Et høytsvevende kurs om filosofi, estetikk og orale tradisjoner</value>
 			<value>anonymous</value>
 			<value>2</value>
             <value>1</value>
@@ -709,9 +686,7 @@
 			<value>2</value>
 			<value>instructor</value>
 			<value>6</value>
-			<value>
-				http://www.tromso.kommune.no/_utskriftsvennlig.db2?id=13358
-			</value>
+			<value>http://www.tromso.kommune.no/_utskriftsvennlig.db2?id=13358</value>
 			<value>Fire timer</value>
 			<value>1000.00</value>
 			<value>500.00</value>
@@ -728,9 +703,7 @@
 			<value>Lærere</value>
 			<value>2</value>
 			<value>2</value>
-			<value>
-				Et kurs om tilpasset opplæring og elevadferd i skolen
-			</value>
+			<value>Et kurs om tilpasset opplæring og elevadferd i skolen</value>
 			<value>anonymous</value>
 			<value>2</value>
             <value>1</value>
@@ -739,9 +712,7 @@
 			<value>2</value>
 			<value>instructor</value>
 			<value>1</value>
-			<value>
-				http://www.mamut.com/homepages/Norway/1/18/barnepasseren/commdet100.htm
-			</value>
+			<value>http://www.mamut.com/homepages/Norway/1/18/barnepasseren/commdet100.htm</value>
 			<value>Fire timer</value>
 			<value>200.00</value>
 			<value>125.00</value>
@@ -758,9 +729,7 @@
 			<value>Barnehagepersonell</value>
 			<value>1</value>
 			<value>2</value>
-			<value>
-				Gjennomgår krav og forutsetninger for kommunal støtte til barnepass i privat regi
-			</value>
+			<value>Gjennomgår krav og forutsetninger for kommunal støtte til barnepass i privat regi</value>
 			<value>anonymous</value>
 			<value>2</value>
             <value>1</value>
@@ -786,9 +755,7 @@
 			<value>Pensjonister</value>
 			<value>2</value>
 			<value>2</value>
-			<value>
-				Kurs om å takle hverdagen som pensjonist i det reformerte helsenorge
-			</value>
+			<value>Kurs om å takle hverdagen som pensjonist i det reformerte helsenorge</value>
 			<value>anonymous</value>
 			<value>2</value>
             <value>1</value>
@@ -797,9 +764,7 @@
 			<value>2</value>
 			<value>editor</value>
 			<value>6</value>
-			<value>
-				http://www.aa.fylkesbibl.no/kurs/2003/svarstad.html
-			</value>
+			<value>http://www.aa.fylkesbibl.no/kurs/2003/svarstad.html</value>
 			<value>5. og 6. februar, kl. 09.00 til 18.00</value>
 			<value>2200.00</value>
 			<value>2000.00</value>
@@ -816,9 +781,7 @@
 			<value>Politisk interesserte</value>
 			<value>2</value>
 			<value>2</value>
-			<value>
-				Videregående kurs om hvordan å presentere troverdige muntlige fremstillinger som bare løselig er forankret i virkelighetens verden. Dette er essensielt og populært materiale for medarbeidere med politiske ambisjoner
-			</value>
+			<value>Videregående kurs om hvordan å presentere troverdige muntlige fremstillinger som bare løselig er forankret i virkelighetens verden. Dette er essensielt og populært materiale for medarbeidere med politiske ambisjoner</value>
 			<value>anonymous</value>
 			<value>0</value>
             <value>1</value>
