@@ -25,10 +25,10 @@ import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.User;
+import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.RegistrationManager;
-import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.MailUtil;
 
@@ -190,9 +190,11 @@ public class CourseNotificationController extends BaseFormController {
 			return new ModelAndView(getCancelView(), "id", course.getId().toString());
 		} // or to send out notification email?
 		else if (request.getParameter("send") != null) {
-			if (course.getStatus().equals(CourseStatus.COURSE_PUBLISHED) && course.getCopyid() != null){// FKM-517
+			if (course.getStatus().equals(CourseStatus.COURSE_PUBLISHED) && course.getCopyid() != null){
+				// FKM-517
 				sendMailToWaitingList(locale, course, Constants.EMAIL_EVENT_NEW_COURSE_NOTIFICATION, mailComment, mailSender, changedList);
-			}else if( course.getStatus().equals(CourseStatus.COURSE_CANCELLED)){
+			}
+			else if( course.getStatus().equals(CourseStatus.COURSE_CANCELLED)){
                 sendMail(locale, course, Constants.EMAIL_EVENT_COURSECANCELLED, mailComment, mailSender, changedList);
             }
             else{
@@ -218,12 +220,16 @@ public class CourseNotificationController extends BaseFormController {
 		log.debug("Sending mail from CourseNotificationController");
 		List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, null,null, null, null);
 		
-		StringBuffer msg; 
-		if (event == Constants.EMAIL_EVENT_COURSECHANGED){
-			msg = MailUtil.createChangedBody(course, event, locale, messageSource, mailComment, changedList); 
-		}else {
-			msg = MailUtil.createStandardBody(course, event, locale, messageSource, mailComment);
-			
+		StringBuffer msg = null;
+		switch(event) {
+			case Constants.EMAIL_EVENT_COURSECHANGED:
+				msg = MailUtil.createChangedBody(course, locale, messageSource, mailComment, changedList); 
+				break;
+			case Constants.EMAIL_EVENT_COURSECANCELLED:
+				msg = MailUtil.create_EMAIL_EVENT_COURSECANCELLED_body(course, locale, messageSource, mailComment);
+				break;
+			default:
+				if(log.isDebugEnabled()) log.debug("sendMail: Handling of event:" + event + " not implemented..!");
 		}
 		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, messageSource, locale, from, mailSender);
 		MailUtil.sendMimeMails(emails, mailEngine);
@@ -245,7 +251,15 @@ public class CourseNotificationController extends BaseFormController {
 		ids.add(course.getCopyid());
 		List<Registration> registrations = registrationManager.getWaitingListRegistrations(ids);
 		
-		StringBuffer msg = MailUtil.createStandardBody(course, event, locale, messageSource, mailComment);
+		StringBuffer msg = null;
+		switch(event) {
+			case Constants.EMAIL_EVENT_NEW_COURSE_NOTIFICATION:
+				msg = MailUtil.create_EMAIL_EVENT_NEW_COURSE_NOTIFICATION_body(course, locale, messageSource, mailComment);
+				break;
+			default:
+				if(log.isDebugEnabled()) log.debug("sendMailToWaitingList: Handling of event:" + event + " not implemented..!");
+		}
+		
 		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, messageSource, locale, from, mailSender);
 		MailUtil.sendMimeMails(emails, mailEngine);
 		

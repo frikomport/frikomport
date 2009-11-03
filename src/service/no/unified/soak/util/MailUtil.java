@@ -1,6 +1,7 @@
 package no.unified.soak.util;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -38,19 +39,6 @@ import net.fortuna.ical4j.util.Uris;
 public class MailUtil {
     // public static final Log log = LogFactory.getLog(MailUtil.class);
 
-    // public static void sendMails(ArrayList<SimpleMailMessage> Emails,
-    // MailEngine
-    // engine) {
-    // Log log = LogFactory.getLog(MailUtil.class.toString());
-    // if (Emails != null) {
-    // for (int i = 0; i < Emails.size(); i++) {
-    // SimpleMailMessage theEmail = Emails.get(i);
-    // log.debug("Sent mail to: " + theEmail.getTo());
-    // engine.send(theEmail);
-    // }
-    // }
-    // }
-
     public static void sendMimeMails(ArrayList<MimeMessage> Emails, MailEngine engine) {
         if (Emails != null) {
             for (int i = 0; i < Emails.size(); i++) {
@@ -60,171 +48,457 @@ public class MailUtil {
         }
     }
 
-    /**
-     * Creates a standard mail body containing all the details of a course and
-     * some information on the event that triggered the mail to be sent.
-     * 
-     * @param course
-     *            The course in question
-     * @param event
-     *            The event that triggered the sending of this mail
-     * @param locale
-     *            The language to fetch messages in
-     * @param messageSource
-     *            The source for our messages.
-     * @return A complete mail body ready to be inserted into an e-mail object
-     */
-    public static StringBuffer createStandardBody(Course course, int event, Locale locale, MessageSource messageSource) {
-        return createStandardBody(course, event, locale, messageSource, null, false);
-    }
-
-    /**
-     * Creates a standard mail body containing all the details of a course and
-     * some information on the event that triggered the mail to be sent.
-     * 
-     * @param course
-     *            The course in question
-     * @param event
-     *            The event that triggered the sending of this mail
-     * @param locale
-     *            The language to fetch messages in
-     * @param messageSource
-     *            The source for our messages.
-     * @param mailComment
-     *            Optional comment from the admin initiating the sending of this
-     *            mail
-     * @return A complete mail body ready to be inserted into an e-mail object
-     */
-    public static StringBuffer createStandardBody(Course course, int event, Locale locale, MessageSource messageSource,
+	/**
+	 * Creates a course cancelled mail body containing all the details of a course
+	 * 
+	 * @param course
+	 *            The course in question
+	 * @param locale
+	 *            The language to fetch messages in
+	 * @param messageSource
+	 *            The source for our messages.
+	 * @param mailComment
+	 *            Optional comment from the admin initiating the sending of this mail
+	 * @return A complete mail body ready to be inserted into an e-mail object
+	 */
+    public static StringBuffer create_EMAIL_EVENT_COURSECANCELLED_body(Course course, Locale locale, MessageSource messageSource,
             String mailComment) {
-        return createStandardBody(course, event, locale, messageSource, mailComment, false);
+        StringBuffer msg = new StringBuffer();
+
+        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.contactinfo", locale, messageSource)) + "\n");
+
+        msg.append("\n"); // empty line
+
+        addMailComment(mailComment, msg);
+
+        msg.append(StringEscapeUtils.unescapeHtml(getText("courseCancelled.mail.body", " " + course.getName(),
+                locale, messageSource)));
+
+        msg.append("\n");
+
+        // coursedetails are appended in separate method
+        appendCourseDetails(course, locale, messageSource, msg);
+
+        msg.append("\n\n"); // empty lines
+        
+        addDetailsLink(course, locale, messageSource, msg);
+
+        msg.append("\n\n"); // empty lines
+
+        msg.append(StringEscapeUtils.unescapeHtml(getText("courseCancelled.mail.body", " " + course.getName()
+                + "\n", locale, messageSource)));
+
+        msg.append("\n\n");
+        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.donotreply", getText("mail.default.from", locale, messageSource), locale, messageSource))	+ "\n");
+        return msg;
     }
 
-    /**
-     * Creates a changed mail body containing all the details of a course and
-     * some information on the event that triggered the mail to be sent.
-     * 
-     * @param course
-     *            The course in question
-     * @param event
-     *            The event that triggered the sending of this mail
-     * @param locale
-     *            The language to fetch messages in
-     * @param messageSource
-     *            The source for our messages.
-     * @param mailComment
-     *            Optional comment from the admin initiating the sending of this
-     *            mail
-     * @return A complete mail body ready to be inserted into an e-mail object
-     */
-    public static StringBuffer createChangedBody(Course course, int event, Locale locale, MessageSource messageSource,
-            String mailComment, List<String> changedList) {
-        return createChangedBody(course, event, locale, messageSource, mailComment, changedList, false);
+	/**
+	 * Creates a course deleted mail body
+	 * 
+	 * @param course
+	 *            The course in question
+	 * @param locale
+	 *            The language to fetch messages in
+	 * @param messageSource
+	 *            The source for our messages.
+	 * @param mailComment
+	 *            Optional comment from the admin initiating the sending of this
+	 *            mail
+	 * @return A complete mail body ready to be inserted into an e-mail object
+	 */
+    public static StringBuffer create_EMAIL_EVENT_COURSEDELETED_body(Course course, Locale locale, MessageSource messageSource, String mailComment) {
+        StringBuffer msg = new StringBuffer();
+
+        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.contactinfo", locale, messageSource)));
+        msg.append("\n");
+        
+        addMailComment(mailComment, msg);
+
+        msg.append(StringEscapeUtils.unescapeHtml(getText("courseDeleted.mail.body", " " + course.getName(), locale, messageSource)) + "\n");
+
+        msg.append("\n");
+
+        // coursedetails are appended in separate method
+        appendCourseDetails(course, locale, messageSource, msg);
+
+        msg.append("\n\n");
+
+        msg.append(StringEscapeUtils.unescapeHtml(getText("courseDeleted.mail.body", " " + course.getName() + "\n", locale, messageSource)));
+
+        msg.append("\n");
+        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.donotreply", getText("mail.default.from", locale, messageSource), locale, messageSource)) + "\n");
+        return msg;
     }
 
-    /**
-     * Creates a standard mail body containing all the details of a course and
-     * some information on the event that triggered the mail to be sent.
-     * 
-     * @param course
-     *            The course in question
-     * @param event
-     *            The event that triggered the sending of this mail
-     * @param locale
-     *            The language to fetch messages in
-     * @param messageSource
-     *            The source for our messages.
-     * @param reservationConfirmed
-     *            Set to true if the reservation is confirmed, and to false if
-     *            the attendee is on the waiting list
-     * @return A complete mail body ready to be inserted into an e-mail object
-     */
-    public static StringBuffer createStandardBody(Course course, int event, Locale locale, MessageSource messageSource,
-            boolean reservationConfirmed) {
-        return createStandardBody(course, event, locale, messageSource, null, reservationConfirmed);
-    }
-
-    /**
-     * Creates a standard mail body containing all the details of a course and
-     * some information on the event that triggered the mail to be sent.
-     * 
-     * @param course
-     *            The course in question
-     * @param event
-     *            The event that triggered the sending of this mail
-     * @param locale
-     *            The language to fetch messages in
-     * @param messageSource
-     *            The source for our messages.
-     * @param mailComment
-     *            Optional comment from the admin initiating the sending of this
-     *            mail
-     * @param reservationConfirmed
-     *            Set to true if the reservation is confirmed, and to false if
-     *            the attendee is on the waiting list
-     * @return A complete mail body ready to be inserted into an e-mail object
-     */
-    public static StringBuffer createStandardBody(Course course, int event, Locale locale, MessageSource messageSource,
+	/**
+	 * Creates a notification mail body containing info if your registration is
+	 * confirmed or still on waitlist, link to detailed course information and
+	 * direct cancellation
+	 * 
+	 * @param course
+	 *            The course in question
+	 * @param locale
+	 *            The language to fetch messages in
+	 * @param messageSource
+	 *            The source for our messages.
+	 * @param mailComment
+	 *            Optional comment from the admin initiating the sending of this
+	 *            mail
+	 * @param reservationConfirmed
+	 *            Set to true if the reservation is confirmed, and to false if
+	 *            the attendee is on the waiting list
+	 * @return A complete mail body ready to be inserted into an e-mail object
+	 */
+    public static StringBuffer create_EMAIL_EVENT_NOTIFICATION_body(Course course, Locale locale, MessageSource messageSource,
             String mailComment, boolean reservationConfirmed) {
         StringBuffer msg = new StringBuffer();
 
         msg.append(StringEscapeUtils.unescapeHtml(getText("mail.contactinfo", locale, messageSource)));
         msg.append("\n");
         
+        addMailComment(mailComment, msg);
+
+        if(reservationConfirmed)
+            msg.append(StringEscapeUtils.unescapeHtml(getText("courseNotification.mail.body.reserved", locale, messageSource)));
+        else
+            msg.append(StringEscapeUtils.unescapeHtml(getText("courseNotification.mail.body.waitinglist", locale, messageSource)));
+
+        msg.append("\n");
+
+        // coursedetails are appended in separate method
+        appendCourseDetails(course, locale, messageSource, msg);
+
+        msg.append("\n\n"); // empty lines
+
+        addDetailsLink(course, locale, messageSource, msg);
+        
+        msg.append("\n\n");
+
+        if(reservationConfirmed)
+            msg.append(StringEscapeUtils.unescapeHtml(getText("courseNotification.mail.footer.registered", locale, messageSource)));
+        else
+            msg.append(StringEscapeUtils.unescapeHtml(getText("courseNotification.mail.footer.waitinglist", locale, messageSource)));
+
+        msg.append("\n\n");
+        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.donotreply", getText("mail.default.from", locale, messageSource), locale, messageSource))	+ "\n");
+        return msg;
+    }
+
+    
+	/**
+	 * Creates a waitinglist mail body containing all the details of a
+	 * course, link to detailed course information and direct cancellation
+	 * 
+	 * @param course
+	 *            The course in question
+	 * @param registration
+	 *            The registration that triggered the sending of this mail
+	 * @param locale
+	 *            The language to fetch messages in
+	 * @param messageSource
+	 *            The source for our messages.
+	 * @param mailComment
+	 *            Optional comment from the admin initiating the sending of this
+	 *            mail
+	 * @param reservationConfirmed
+	 *            Set to true if the reservation is confirmed, and to false if
+	 *            the attendee is on the waiting list
+	 * @return A complete mail body ready to be inserted into an e-mail object
+	 */
+    public static StringBuffer create_EMAIL_EVENT_WAITINGLIST_NOTIFICATION_body(Course course, Registration registration, Locale locale, MessageSource messageSource,
+            String mailComment, boolean reservationConfirmed) {
+        StringBuffer msg = new StringBuffer();
+
+        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.contactinfo", locale, messageSource)) + "\n");
+        msg.append("\n");
+        
+        addMailComment(mailComment, msg);
+        if (reservationConfirmed)
+        	msg.append(StringEscapeUtils.unescapeHtml(getText("registrationConfirmed.mail.body", course.getName(), locale, messageSource)) + "\n");
+        else
+        	msg.append(StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.body", course.getName(), locale, messageSource)) + "\n");
+        	
+        
+        msg.append("\n");
+
+        // coursedetails are appended in separate method
+        appendCourseDetails(course, locale, messageSource, msg);
+
+        msg.append("\n\n"); // emptyt lines
+
+        addDetailsLink(course, locale, messageSource, msg);
+
+        msg.append("\n"); // empty line
+
+        addCancelLink(course, registration, locale, messageSource, msg);
+
+        msg.append("\n\n");
+
+        // TODO: Test if right. Previously:
+        // "registrationComplete.mail.footer", null,locale)
+        if (reservationConfirmed)
+            msg.append(StringEscapeUtils.unescapeHtml(getText("registrationComplete.mail.footer", locale, messageSource)) + "\n");
+        else
+            msg.append(StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.footer", " " + course.getName() + "\n", locale, messageSource)));
+
+        msg.append("\n\n");
+        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.donotreply", getText("mail.default.from", locale, messageSource), locale, messageSource))	+ "\n");
+        return msg;
+    }
+
+    
+	/**
+	 * Creates a confirm cancellation mail body containing all the details of a
+	 * course
+	 * 
+	 * @param course
+	 *            The course in question
+	 * @param locale
+	 *            The language to fetch messages in
+	 * @param messageSource
+	 *            The source for our messages.
+	 * @param chargeOverdue
+	 *            If true unit has to pay for cancelled course
+	 * @return A complete mail body ready to be inserted into an e-mail object
+	 */
+    public static StringBuffer create_EMAIL_EVENT_REGISTRATION_DELETED_body(Course course, Locale locale, MessageSource messageSource, boolean chargeOverdue) {
+        StringBuffer msg = new StringBuffer();
+
+        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.contactinfo", locale, messageSource)) + "\n");
+        msg.append("\n");
+        
+        if(chargeOverdue)
+        	msg.append(StringEscapeUtils.unescapeHtml(getText("registrationDeleted.mail.body.chargeoverdue", course.getName(), locale, messageSource)) + "\n");
+        else 
+        	msg.append(StringEscapeUtils.unescapeHtml(getText("registrationDeleted.mail.body", course.getName(), locale, messageSource)) + "\n");
+        	
+        msg.append("\n");
+
+        // coursedetails are appended in separate method
+        appendCourseDetails(course, locale, messageSource, msg);
+
+        msg.append("\n\n");
+
+        addDetailsLink(course, locale, messageSource, msg);
+        
+        msg.append("\n");
+        
+        msg.append(StringEscapeUtils.unescapeHtml(getText("registrationDeleted.mail.footer", locale, messageSource)) + "\n");
+
+        msg.append("\n");
+        
+        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.donotreply", getText("mail.default.from", locale, messageSource), locale, messageSource))	+ "\n");
+        
+        return msg;
+    }
+    
+
+	/**
+	 * Creates a moved-to-waitinglist mail body containing all the details of a
+	 * course, link to detailed course information and direct cancellation
+	 * 
+	 * @param course
+	 *            The course in question
+	 * @param locale
+	 *            The language to fetch messages in
+	 * @param messageSource
+	 *            The source for our messages.
+	 * @param mailComment
+	 *            Optional comment from the admin initiating the sending of this
+	 *            mail
+	 * @return A complete mail body ready to be inserted into an e-mail object
+	 */
+    public static StringBuffer create_EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST_body(Course course, Locale locale, MessageSource messageSource,
+            String mailComment) {
+        StringBuffer msg = new StringBuffer();
+
+        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.contactinfo", locale, messageSource)));
+        msg.append("\n");
+        
+        addMailComment(mailComment, msg);
+
+        msg.append(StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.body", course.getName(), locale, messageSource)) + "\n");
+
+        msg.append("\n");
+
+        // coursedetails are appended in separate method
+        appendCourseDetails(course, locale, messageSource, msg);
+
+        msg.append("\n\n");
+
+        addDetailsLink(course, locale, messageSource, msg);
+        
+        msg.append("\n\n");
+
+        msg.append("\n"	+ StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.footer", locale, messageSource)) + "\n");
+
+        msg.append("\n");
+        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.donotreply", getText("mail.default.from", locale, messageSource), locale, messageSource))	+ "\n");
+        return msg;
+    }
+    
+    
+	/**
+	 * Creates a confirm registration mail body containing all the details of a
+	 * course, link to detailed course information and direct cancellation
+	 * 
+	 * @param course
+	 *            The course in question
+	 * @param registration
+	 *            The registration that triggered the sending of this mail
+	 * @param event
+	 *            The event that triggered the sending of this mail
+	 * @param locale
+	 *            The language to fetch messages in
+	 * @param messageSource
+	 *            The source for our messages.
+	 * @param mailComment
+	 *            Optional comment from the admin initiating the sending of this
+	 *            mail
+	 * @param reservationConfirmed
+	 *            Set to true if the reservation is confirmed, and to false if
+	 *            the attendee is on the waiting list
+	 * @return A complete mail body ready to be inserted into an e-mail object
+	 */
+    public static StringBuffer create_EMAIL_EVENT_REGISTRATION_CONFIRMED_body(Course course, Registration registration, 
+    		Locale locale, MessageSource messageSource, String mailComment) {
+        StringBuffer msg = new StringBuffer();
+        
+        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.contactinfo", locale, messageSource)));
+        msg.append("\n");
+        
         // Include user defined comment if specified
+        if (mailComment != null && StringUtils.isNotBlank(mailComment)) {
+            msg.append("\n"); // empty line
+            msg.append(mailComment + "\n");
+        }
+        
+        msg.append("\n"); // empty line
+
+        appendCourseDetails(course, locale, messageSource, msg);
+
+        msg.append("\n\n"); // empty lines
+        
+        addDetailsLink(course, locale, messageSource, msg);
+
+        msg.append("\n"); // empty line
+
+        addCancelLink(course, registration, locale, messageSource, msg);
+
+        msg.append("\n"); // empty lines
+
+        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.donotreply", getText("mail.default.from", locale, messageSource), locale, messageSource))	+ "\n");
+        return msg;
+    }
+
+    
+	/**
+	 * Creates a new course mail body containing all the details of a
+	 * course, link to detailed course information and direct cancellation
+	 * 
+	 * @param course
+	 *            The course in question
+	 * @param locale
+	 *            The language to fetch messages in
+	 * @param messageSource
+	 *            The source for our messages.
+	 * @param mailComment
+	 *            Optional comment from the admin initiating the sending of this
+	 *            mail
+	 * @return A complete mail body ready to be inserted into an e-mail object
+	 */
+    public static StringBuffer create_EMAIL_EVENT_NEW_COURSE_NOTIFICATION_body(Course course, Locale locale, MessageSource messageSource,
+            String mailComment) {
+        StringBuffer msg = new StringBuffer();
+
+        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.contactinfo", locale, messageSource)));
+        msg.append("\n");
+        
+        addMailComment(mailComment, msg);
+
+        msg.append(StringEscapeUtils.unescapeHtml(getText("registrationNewCourse.mail.body", locale, messageSource)) + "\n");
+
+        msg.append("\n");
+
+        // coursedetails are appended in separate method
+        appendCourseDetails(course, locale, messageSource, msg);
+
+        msg.append("\n\n");
+
+        addDetailsLink(course, locale, messageSource, msg);
+
+        msg.append("\n\n");
+
+        msg.append("\n" + StringEscapeUtils.unescapeHtml(getText("registrationNewCourse.mail.footer", locale, messageSource)) + "\n");
+
+        msg.append("\n");
+        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.donotreply", getText("mail.default.from", locale, messageSource), locale, messageSource))	+ "\n");
+        return msg;
+    }
+    
+    /**
+     * Adds mailComment to current msg
+     * @param mailComment
+     * @param msg
+     */
+	private static void addMailComment(String mailComment, StringBuffer msg) {
+		// Include user defined comment if specified
         if (mailComment != null && StringUtils.isNotBlank(mailComment)) {
             msg.append("\n");
             msg.append(mailComment);
             msg.append("\n\n");
         }
+	}
 
-        // Build mail
-        switch (event) {
-        case Constants.EMAIL_EVENT_COURSECHANGED:
-            msg.append(StringEscapeUtils.unescapeHtml(getText("courseChanged.mail.body", " " + course.getName(),
-                    locale, messageSource)));
-            break;
-        case Constants.EMAIL_EVENT_COURSECANCELLED:
-            msg.append(StringEscapeUtils.unescapeHtml(getText("courseCancelled.mail.body", " " + course.getName(),
-                    locale, messageSource)));
-            break;
-        case Constants.EMAIL_EVENT_COURSEDELETED:
-            msg.append(StringEscapeUtils.unescapeHtml(getText("courseDeleted.mail.body", " " + course.getName(),
-                    locale, messageSource)));
-            break;
-        case Constants.EMAIL_EVENT_NOTIFICATION:
-            if(reservationConfirmed){
-                msg.append(StringEscapeUtils.unescapeHtml(getText("courseNotification.mail.body.reserved", locale, messageSource)));
-            }
-            else{
-                msg.append(StringEscapeUtils.unescapeHtml(getText("courseNotification.mail.body.waitinglist", locale, messageSource)));
-            }
-            break;
-        case Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION:
-            msg.append(StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.body", locale, messageSource)));
-            break;
-        case Constants.EMAIL_EVENT_REGISTRATION_DELETED:
-            msg.append(StringEscapeUtils.unescapeHtml(getText("registrationDeleted.mail.body", course.getName(),
-                    locale, messageSource))	+ "\n\n");
+	/**
+	 * Adds link to details of current course
+	 * @param course
+	 * @param locale
+	 * @param messageSource
+	 * @param msg
+	 */
+    private static void addDetailsLink(Course course, Locale locale,
+    		MessageSource messageSource, StringBuffer msg) {
+    	// link til detaljer om registrering
+    	String baseurl = StringEscapeUtils.unescapeHtml(getText("javaapp.baseurl", locale, messageSource));
+    	
+    	msg.append(StringEscapeUtils.unescapeHtml(getText("javaapp.findurlhere", locale, messageSource)) + "\n");
+    	String coursedetailurl = StringEscapeUtils.unescapeHtml(getText("javaapp.coursedetailurl", ""+course.getId(), locale, messageSource));
+    	msg.append(baseurl + coursedetailurl + "\n");
+    }
 
-            break;
-        case Constants.EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST:
-            msg.append(StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.body", course.getName(),
-                    locale, messageSource))	+ "\n\n");
-            break;
-        case Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED:
-            msg.append(StringEscapeUtils.unescapeHtml(getText("registrationConfirmed.mail.body", course.getName(),
-                    locale, messageSource))	+ "\n\n");
-            break;
-        case Constants.EMAIL_EVENT_NEW_COURSE_NOTIFICATION:
-            msg.append(StringEscapeUtils.unescapeHtml(getText("registrationNewCourse.mail.body", locale, messageSource))
-                    + "\n\n");
-            break;
-        }
+    /**
+     * Adds link to direct cancellation of registration, including info about chargeoverdue if present
+     * @param course
+     * @param registration
+     * @param locale
+     * @param messageSource
+     * @param msg
+     */
+    private static void addCancelLink(Course course, Registration registration,
+			Locale locale, MessageSource messageSource, StringBuffer msg) {
+		// link for direkte avmelding
+    	String baseurl = StringEscapeUtils.unescapeHtml(getText("javaapp.baseurl", locale, messageSource));
 
-        msg.append("\n\n");
+        msg.append(StringEscapeUtils.unescapeHtml(getText("javaapp.cancelcourse", locale, messageSource)) + "\n");
+        String coursecancelurl = StringEscapeUtils.unescapeHtml(getText("javaapp.coursecancelurl", ""+registration.getId(), locale, messageSource));
+        msg.append(baseurl + coursecancelurl + "\n");
+        
+        if(course.getChargeoverdue()) msg.append(StringEscapeUtils.unescapeHtml(getText("registrationConfirmed.mail.footer.overdue", locale, messageSource)) + "\n");
+	}
 
-        // Include all the course details
+    
+    /**
+     * Adds course details to msg
+     * @param course
+     * @param locale
+     * @param messageSource
+     * @param msg
+     */
+	private static void appendCourseDetails(Course course, Locale locale, MessageSource messageSource, 
+			StringBuffer msg) {
+		// Include all the course details
         msg.append(StringEscapeUtils.unescapeHtml(getText("course.name", locale, messageSource)) + ": "
                 + course.getName() + "\n");
         msg.append(StringEscapeUtils.unescapeHtml(getText("course.type", locale, messageSource)) + ": "
@@ -255,72 +529,7 @@ public class MailUtil {
                 + course.getInstructor().getName() + ", mailto:" + course.getInstructor().getEmail() + "\n");
         msg.append(StringEscapeUtils.unescapeHtml(getText("course.description", locale, messageSource)) + ": "
                 + course.getDescription() + "\n");
-
-        // We cannot link to a deleted course, so the link is only displayed if
-        // the course still exists
-        if (event != Constants.EMAIL_EVENT_COURSEDELETED) {
-            String baseurl = StringEscapeUtils.unescapeHtml(getText("javaapp.baseurl", locale, messageSource));
-            String coursedetailurl = StringEscapeUtils.unescapeHtml(getText("javaapp.coursedetailurl", String
-                    .valueOf(course.getId()), locale, messageSource));
-            msg.append("\n\n");
-            msg.append(StringEscapeUtils.unescapeHtml(getText("javaapp.findurlhere", locale, messageSource)) + " "
-                    + baseurl + coursedetailurl);
-        }
-
-        msg.append("\n\n");
-
-        switch (event) {
-        case Constants.EMAIL_EVENT_COURSECHANGED:
-            msg.append(StringEscapeUtils.unescapeHtml(getText("courseChanged.mail.footer", locale, messageSource)));
-
-            break;
-        case Constants.EMAIL_EVENT_COURSECANCELLED:
-            msg.append(StringEscapeUtils.unescapeHtml(getText("courseCancelled.mail.body", " " + course.getName()
-                    + "\n\n", locale, messageSource)));
-            break;
-        case Constants.EMAIL_EVENT_COURSEDELETED:
-            msg.append(StringEscapeUtils.unescapeHtml(getText("courseDeleted.mail.body", " " + course.getName()
-                    + "\n\n", locale, messageSource)));
-            break;
-        case Constants.EMAIL_EVENT_NOTIFICATION:
-            if(reservationConfirmed){
-                msg.append(StringEscapeUtils.unescapeHtml(getText("courseNotification.mail.footer.registered", locale,
-                        messageSource)));
-            } else {
-                msg.append(StringEscapeUtils.unescapeHtml(getText("courseNotification.mail.footer.waitinglist", locale,
-                        messageSource)));
-            }
-            break;
-        case Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION:
-            // TODO: Test if right. Previously:
-            // "registrationComplete.mail.footer", null,locale)
-            if (reservationConfirmed) {
-                msg.append(StringEscapeUtils.unescapeHtml(getText("registrationComplete.mail.footer", locale,
-                        messageSource)));
-            } else {
-                msg.append(StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.footer", " "
-                        + course.getName() + "\n\n", locale, messageSource)));
-            }
-            break;
-        case Constants.EMAIL_EVENT_REGISTRATION_DELETED:
-            msg.append("\n"	+ StringEscapeUtils.unescapeHtml(getText("registrationDeleted.mail.footer", locale,
-                    messageSource)));
-            break;
-        case Constants.EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST:
-            msg.append("\n"	+ StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.footer", locale, messageSource)) + "\n\n");
-            break;
-        case Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED:
-            msg.append("\n"	+ StringEscapeUtils.unescapeHtml(getText("registrationConfirmed.mail.footer", locale, messageSource)) + "\n\n");
-            break;
-        case Constants.EMAIL_EVENT_NEW_COURSE_NOTIFICATION:
-            msg.append("\n" + StringEscapeUtils.unescapeHtml(getText("registrationNewCourse.mail.footer", locale, messageSource)) + "\n\n");
-            break;
-        }
-
-        msg.append("\n\n");
-        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.donotreply", getText("mail.default.from", locale, messageSource), locale, messageSource))	+ "\n");
-        return msg;
-    }
+	}
 
     /**
      * Creates a changed mail body containing all the details of a course and
@@ -342,16 +551,11 @@ public class MailUtil {
      *            the attendee is on the waiting list
      * @return A complete mail body ready to be inserted into an e-mail object
      */
-    public static StringBuffer createChangedBody(Course course, int event, Locale locale, MessageSource messageSource,
-            String mailComment, List<String> changedList, boolean reservationConfirmed) {
+    public static StringBuffer createChangedBody(Course course, Locale locale, MessageSource messageSource,
+            String mailComment, List<String> changedList) {
         StringBuffer msg = new StringBuffer();
 
-        // Include user defined comment if specified
-        if (mailComment != null && StringUtils.isNotBlank(mailComment)) {
-            msg.append("\n");
-            msg.append(mailComment);
-            msg.append("\n\n");
-        }
+        addMailComment(mailComment, msg);
 
         // Build mail
         msg.append(StringEscapeUtils.unescapeHtml(getText("courseChanged.mail.body", " " + course.getName(), locale,
@@ -410,7 +614,15 @@ public class MailUtil {
             msg.append(StringEscapeUtils.unescapeHtml(getText("course.description", locale, messageSource)) + ": "
                     + course.getDescription() + "\n");
         }
+        if (changedList.contains("chargeoverdue")) {
+            msg.append(StringEscapeUtils.unescapeHtml(getText("course.chargeoverdue", locale, messageSource)) + ": "
+                    + (course.getChargeoverdue()?"Ja":"Nei") + "\n");
+        }
 
+
+/*
+		// why change a deleted course -- case should never occur
+	
         // We cannot link to a deleted course, so the link is only displayed if
         // the course still exists
         if (event != Constants.EMAIL_EVENT_COURSEDELETED) {
@@ -420,9 +632,10 @@ public class MailUtil {
             msg.append("\n\n");
             msg.append(StringEscapeUtils.unescapeHtml(getText("javaapp.findurlhere", locale, messageSource)) + " "
                     + baseurl + coursedetailurl);
+            msg.append("\n");
         }
-
-        msg.append("\n\n");
+*/
+        msg.append("\n");
 
         msg.append(StringEscapeUtils.unescapeHtml(getText("courseChanged.mail.footer", locale, messageSource)));
 
@@ -496,10 +709,9 @@ public class MailUtil {
                 helper.setSubject(getSubject(registration, event, registered, waiting, messageSource, locale, course));
                 helper.setText(getBody(registration, msg, registered, waiting, messageSource, locale));
                 addCalendar(helper,event,course, registration);                
-                List recipients = getRecipients(registration, course.getResponsible());
-                log.debug("The mail is to: " + recipients);
-                helper.setTo(StringUtil.list2Array(recipients));
-
+                helper.setTo(registration.getEmail());
+                helper.setCc(course.getResponsible().getEmail());
+                
                 if (from != null && !from.equals(""))
                     helper.setFrom(from);
                 else

@@ -66,6 +66,7 @@ public class Course extends BaseObject implements Serializable {
     private Integer availableAttendants;
     private Integer status = 0;
     private Boolean restricted = false;
+    private Boolean chargeoverdue = false;
 
     /**
      * @return
@@ -667,6 +668,8 @@ public class Course extends BaseObject implements Serializable {
     	this.setMaxAttendants(original.getMaxAttendants());
     	this.setReservedInternal(original.getReservedInternal());
     	this.setRole(original.getRole());
+    	this.setRestricted(original.getRestricted());
+        this.setChargeoverdue(original.getChargeoverdue());
     }
 
     /**
@@ -694,5 +697,18 @@ public class Course extends BaseObject implements Serializable {
 
     public void setRestricted(Boolean restricted) {
         this.restricted = restricted;
+    }
+    
+    /**
+     * Charge course fee if user cancel registration after duedate
+     * @return
+     * @hibernate.property column="chargeoverdue" not-null="false"
+     */
+    public Boolean getChargeoverdue() {
+        return chargeoverdue;
+    }
+
+    public void setChargeoverdue(Boolean chargeoverdue) {
+        this.chargeoverdue = chargeoverdue;
     }
 }

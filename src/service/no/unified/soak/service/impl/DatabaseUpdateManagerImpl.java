@@ -304,7 +304,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                 }
                 // service areas
                 if(!course.getServiceArea().getOrganizationid().equals(course.getOrganizationid())){
-                    // mÃ¥ hente servicearea som passer
+                    // må hente servicearea som passer
                     ServiceArea search = new ServiceArea();
                     search.setOrganizationid(course.getOrganizationid());
                     List<ServiceArea> serviceAreas = serviceAreaManager.searchServiceAreas(search);
@@ -323,6 +323,12 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                     Category category = categoryManager.getCategory(new Long(1));
                     course.setCategory(category);
                     course.setCategoryid(category.getId());
+                    save = true;
+                }
+
+                // chargeoverdue
+                if(course.getChargeoverdue() == null){
+                    course.setChargeoverdue(false);
                     save = true;
                 }
                 if(save){

@@ -99,39 +99,41 @@ public class WaitingListManagerImpl extends BaseManager implements WaitingListMa
             Date now = new Date();
             Course course = courseManager.getCourse(String.valueOf(courseId));
 
-            // Are we allowed to make changes at all now
-            if (!course.getFreezeAttendance().before(now)) {
-                // Are we in the periode before freeze but after the date that
-                // stops manual registrations?
-                // In that case "first come, first serve" is the rule
-                if (course.getRegisterBy().before(now)) {
-                    processSingleWaitingList(courseId, new Boolean(false));
-                } else // In this case we need to prioritize the local attendants on a
-                       // waitinglist
-                 {
-                    // First check if there IS a waiting list
-                    Integer noAttendants = registrationManager.getNumberOfAttendants(new Boolean(
-                                false), course);
-
-                    if (course.getMaxAttendants().longValue() < noAttendants.longValue()) {
-                        // So there's a waiting list - let's see if all the
-                        // local seats are taken
-                        Integer localAttendants = registrationManager.getNumberOfAttendants(true,
-                                course);
-
-                        if (localAttendants.longValue() >= course.getReservedInternal()
-                                                                     .longValue()) {
-                            processSingleWaitingList(courseId, false);
-                        } else {
-                            // We need to prioritize locals
-                            processSingleWaitingList(courseId, true);
-                        }
-                    }
-                }
+            if (course.getRegisterBy().before(now)) {
+            	// due date of registration is passed
+            	// processing waitlist, all registrations treated equal
+                processSingleWaitingList(courseId, new Boolean(false));
+            }
+            else {
+            	// course is open for registration
+            	boolean localsFirst = getLocalsFirst(course);
+            	processSingleWaitingList(course.getId(), localsFirst);
             }
         }
     }
 
+    /**
+     * Checks if local registrations have 1st priority, or if all registrations should be treated equal 
+     * @return priority
+     */
+    private boolean getLocalsFirst(Course course) {
+    	
+        Integer noAttendants = registrationManager.getNumberOfAttendants(false, course);
+        if (course.getMaxAttendants().longValue() < noAttendants.longValue()) {
+            // So there's a waiting list - let's see if all the local seats are taken
+            Integer localAttendants = registrationManager.getNumberOfAttendants(true, course);
+            if (localAttendants.longValue() >= course.getReservedInternal().longValue()) {
+                // reserved quota is full -- all registration on waitlist are treated equal
+            	return false;
+            }
+            else {
+                // reserved quota is NOT full -- local registrations have 1st priority
+            	return true;
+            }
+        }
+        else return false; // no waitlist -- all treated equal
+    }
+    
     /**
      * @see no.unified.soak.service.WaitingListManager#processSingleWaitingList(java.lang.Long,
      *      boolean)
@@ -181,9 +183,7 @@ public class WaitingListManagerImpl extends BaseManager implements WaitingListMa
 
                     // Is it a a change of course - if it is we have a lot of
                     // variables to update?
-                    if (courseId.longValue() != registrations.get(i)
-                                                                 .getCourseid()
-                                                                 .longValue()) {
+                    if (courseId.longValue() != registrations.get(i).getCourseid().longValue()) {
                         currentCourse = registrations.get(i).getCourse();
                         courseId = currentCourse.getId();
                         availableLocalSeats = currentCourse.getReservedInternal() -
@@ -292,7 +292,8 @@ public class WaitingListManagerImpl extends BaseManager implements WaitingListMa
     	Course course = currentRegistration.getCourse();
     	
     	// Create the body of the e-mail
-    	StringBuffer msg = MailUtil.createStandardBody(course, Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION, locale, messageSource, null, confirmed);
+//    	StringBuffer msg = MailUtil.createStandardBody(course, Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION, locale, messageSource, null, confirmed);
+    	StringBuffer msg = MailUtil.create_EMAIL_EVENT_WAITINGLIST_NOTIFICATION_body(course, currentRegistration, locale, messageSource, null, confirmed);
 
     	// Create the email
     	ArrayList<MimeMessage> theEmails = MailUtil.getMailMessages(currentRegistration, Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION, course, msg, messageSource, locale, mailSender);
@@ -335,8 +336,8 @@ public class WaitingListManagerImpl extends BaseManager implements WaitingListMa
                 // course, if it isn't - we call it the quits
                 if (registrations.get(j).getCourseid().longValue() == courseId.longValue()) {
                     // So far - so good. Let's see if the attendant is a "local"
-                    if (registrations.get(j).getOrganizationid() != null && registrations.get(j).getOrganizationid().longValue() == currentCourse.getOrganizationid()
-                                                                                                 .longValue()) {
+                    if (registrations.get(j).getOrganizationid() != null 
+                    		&& registrations.get(j).getOrganizationid().longValue() == currentCourse.getOrganizationid().longValue()) {
                         // We got ourselves a local attendant. Now let's see if
                         // we've used this one earlier
                         if (!used.containsKey(new Long(j))) {

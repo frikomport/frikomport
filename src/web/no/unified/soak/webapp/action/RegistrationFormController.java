@@ -10,18 +10,18 @@
  */
 package no.unified.soak.webapp.action;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.ArrayList;
 
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.mail.internet.MimeMessage;
 
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
@@ -30,6 +30,7 @@ import no.unified.soak.model.Organization;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.ServiceArea;
 import no.unified.soak.model.User;
+import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.NotificationManager;
@@ -37,7 +38,6 @@ import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.UserManager;
-import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.DateUtil;
 import no.unified.soak.util.MailUtil;
@@ -404,9 +404,25 @@ public class RegistrationFormController extends BaseFormController {
      * @param event
      */
     private void sendMail(Locale locale, Course course, Registration registration, int event) {
-        StringBuffer msg = MailUtil.createStandardBody(course, event, locale, messageSource, null, true);
-        ArrayList<MimeMessage> theEmails = MailUtil.getMailMessages(registration, event, course, msg, messageSource,
-                locale, mailSender);
+    	StringBuffer msg = null;
+    	switch(event) {
+	    	case Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED:
+	    		msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_CONFIRMED_body(course, registration, locale, messageSource, null); // bør endre navn
+	    		break;
+	    	case Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION:
+	    		msg = MailUtil.create_EMAIL_EVENT_WAITINGLIST_NOTIFICATION_body(course, registration, locale, messageSource, null, false);
+	    		break;
+			case Constants.EMAIL_EVENT_REGISTRATION_DELETED:
+				boolean chargeOverdue = false;
+	        	if(new Date().after(course.getRegisterBy())) {
+	        		if(course.getChargeoverdue()) {
+	        			chargeOverdue = true;
+	        		}
+	        	}
+				msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_DELETED_body(course, locale, messageSource, chargeOverdue);
+				break;
+    	}
+        ArrayList<MimeMessage> theEmails = MailUtil.getMailMessages(registration, event, course, msg, messageSource, locale, mailSender);
         MailUtil.sendMimeMails(theEmails, mailEngine);
     }
 

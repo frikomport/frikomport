@@ -153,15 +153,10 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 						// cleanup manager
 						String localeLanguage = notification.getRegistration().getLocale();
 						Locale locale = new Locale(localeLanguage);
-						StringBuffer msg = MailUtil.createStandardBody(course,
-								Constants.EMAIL_EVENT_NOTIFICATION, locale,
-								messageSource, null, notification.getRegistration().getReserved());
+						StringBuffer msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_body(course, locale, messageSource, null, notification.getRegistration().getReserved());
 						ArrayList<Registration> registrations = new ArrayList<Registration>();
 						registrations.add(notification.getRegistration());
-						ArrayList<MimeMessage> newEmails = MailUtil
-								.getMailMessages(registrations,
-										Constants.EMAIL_EVENT_NOTIFICATION,
-										course, msg, messageSource, locale, null,mailSender);
+						ArrayList<MimeMessage> newEmails = MailUtil.getMailMessages(registrations, Constants.EMAIL_EVENT_NOTIFICATION, course, msg, messageSource, locale, null,mailSender);
 						emails.addAll(newEmails);
 						notification.setReminderSent(true);
 						dao.saveNotification(notification);

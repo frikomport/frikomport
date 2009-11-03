@@ -548,6 +548,16 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 			</td>
 		</tr>
 
+        <tr>
+            <th>
+                <soak:label key="course.chargeoverdue" />
+            </th>
+            <td>
+                <form:checkbox path="chargeoverdue" />
+                <form:errors cssClass="fieldError" htmlEscape="false" path="chargeoverdue" />
+            </td>
+        </tr>
+
 		<tr>
 			<th>
 				<soak:label key="course.detailURL" />

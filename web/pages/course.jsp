@@ -215,7 +215,19 @@
 			pattern="${dateformat} ${timeformat}" />
 	</td>
 </tr>
+</c:if>
 
+<tr>
+    <th>
+        <fmt:message key="course.chargeoverdue" />
+    </th>
+    <td>
+		<c:if test="${course.chargeoverdue}">Ja</c:if>
+        <c:if test="${!course.chargeoverdue}">Nei</c:if>
+    </td>
+</tr>
+
+<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
 <tr>
 	<th>
 		<fmt:message key="course.url" />

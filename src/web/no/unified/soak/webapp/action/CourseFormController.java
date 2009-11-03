@@ -619,17 +619,21 @@ public class CourseFormController extends BaseFormController {
      * @param course
      *            The course the applicant has registered for
      */
-    private void sendMail(Locale locale, Course course, int event,
-            String mailComment) {
+    private void sendMail(Locale locale, Course course, int event, String mailComment) {
         log.debug("Sending mail from CourseFormController");
         // Get all registrations
-        List<Registration> registrations = registrationManager
-        .getSpecificRegistrations(course.getId(), null, null, null,
-                null, null, null);
+        List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, null, null, null, null);
 
         // Build standard e-mail body
-        StringBuffer msg = MailUtil.createStandardBody(course, event, locale, messageSource, mailComment);
-
+		StringBuffer msg = null;
+		switch(event) {
+			case Constants.EMAIL_EVENT_COURSEDELETED:
+				msg = MailUtil.create_EMAIL_EVENT_COURSEDELETED_body(course, locale, messageSource, mailComment);
+				break;
+			default:
+				if(log.isDebugEnabled()) log.debug("sendMail: Handling of event:" + event + " not implemented..!");
+		}
+        
         // Add sender etc.
         ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, messageSource, locale, null, mailSender);
         MailUtil.sendMimeMails(emails, mailEngine);		

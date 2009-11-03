@@ -395,7 +395,26 @@ public class RegistrationAdministrationController extends BaseFormController {
      * @param course
      */
 	private void sendMail(Locale locale, Course course, int event, Registration registration) {
-		StringBuffer msg = MailUtil.createStandardBody(course, event, locale, messageSource);
+		StringBuffer msg = null;
+		switch(event) {
+			case Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED:
+				msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_CONFIRMED_body(course, registration, locale, messageSource, null);
+				break;
+			case Constants.EMAIL_EVENT_REGISTRATION_DELETED:
+				boolean chargeOverdue = false;
+	        	if(new Date().after(course.getRegisterBy())) {
+	        		if(course.getChargeoverdue()) {
+	        			chargeOverdue = true;
+	        		}
+	        	}
+	        	msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_DELETED_body(course, locale, messageSource, chargeOverdue);
+				break;
+			case Constants.EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST:
+				msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST_body(course, locale, messageSource, null);
+				break;
+			default:
+				if(log.isDebugEnabled()) log.debug("sendMail: Handling of event:" + event + " not implemented..!");
+		}
 		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registration, event, course, msg, messageSource, locale, mailSender);
 		MailUtil.sendMimeMails(emails, mailEngine);
 	}
