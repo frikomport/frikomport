@@ -486,24 +486,6 @@ public class CourseFormController extends BaseFormController {
                 "Invalid date or time");
             }
 
-            try {
-                Date time = parseDateAndTime(request, "freezeAttendance",
-                        format);
-
-                if (time != null) {
-                    course.setFreezeAttendance(time);
-                } else {
-                    throw new BindException(course, "freezeAttendance");
-                }
-            } catch (Exception e) {
-                args = new Object[] {
-                        getText("course.freezeAttendance", request.getLocale()),
-                        getText("date.format.localized", request.getLocale()),
-                        getText("time.format.localized", request.getLocale()) };
-                errors.rejectValue("freezeAttendance", "errors.dateformat",
-                        args, "Invalid date or time");
-            }
-
             if (args != null) {
                 return showForm(request, response, errors);
             }

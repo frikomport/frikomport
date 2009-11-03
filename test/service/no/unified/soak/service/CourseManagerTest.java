@@ -145,7 +145,6 @@ public class CourseManagerTest extends BaseManagerTestCase {
         course.setDuration("En times tid");
         course.setFeeExternal(new Double(1.861804799761001E307));
         course.setFeeInternal(new Double(7.100663138877625E307));
-        course.setFreezeAttendance(new Date(2005 - 12 - 15));
         course.setMaxAttendants(new Integer(329979612));
         course.setName("Test av kursnavn");
         course.setRegisterBy(new Date(2005 - 12 - 15));

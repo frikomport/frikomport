@@ -517,37 +517,6 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 			</td>
 		</tr>
 
-		<tr>
-			<th>
-				<soak:label key="course.freezeAttendance" />
-			</th>
-			<td>
-				<fmt:formatDate value="${course.freezeAttendance}" type="date"
-					pattern="${dateformat}" var="freezeAttendanceDate" />
-				<fmt:formatDate value="${course.freezeAttendance}" type="time"
-					pattern="${timeformat}" var="freezeAttendanceTime" />
-				<input type="text" size="12" name="freezeAttendanceDate"
-					id="freezeAttendanceDate"
-					value="<c:out value="${freezeAttendanceDate}"/>"
-					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
-				<a href="#" name="a1" id="Anch_freezeAttendanceDate"
-					onClick="cal1.select(document.forms[0].freezeAttendanceDate,'Anch_freezeAttendanceDate','<fmt:message key="date.format"/>'); return false;"
-					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
-				<soak:label key="course.time" />
-				<input type="text" size="6" name="freezeAttendanceTime"
-					id="freezeAttendanceTime"
-					value="<c:out value="${freezeAttendanceTime}"/>"
-					title="<fmt:message key="time.format.title"/>: <fmt:message key="time.format.localized"/>" />
-				<spring:bind path="course.freezeAttendance">
-					<input type="hidden" name="<c:out value="${status.expression}"/>"
-						id="<c:out value="${status.expression}"/>"
-						value="<fmt:formatDate value="${time[0]}" type="date" pattern="${dateformat}"/>" />
-					<span class="fieldError"><c:out
-							value="${status.errorMessage}" escapeXml="false" /> </span>
-				</spring:bind>
-			</td>
-		</tr>
-
         <tr>
             <th>
                 <soak:label key="course.chargeoverdue" />

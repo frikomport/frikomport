@@ -253,7 +253,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the freezeAttendance.
-     * @hibernate.property column="freezeAttendance" not-null="true"
+     * @hibernate.property column="freezeAttendance" not-null="false"
      */
     public Date getFreezeAttendance() {
         return freezeAttendance;
@@ -262,7 +262,6 @@ public class Course extends BaseObject implements Serializable {
     /**
      * @param freezeAttendance
      *            The freezeAttendance to set.
-     * @spring.validator type="required"
      */
     public void setFreezeAttendance(Date freezeAttendance) {
         this.freezeAttendance = freezeAttendance;

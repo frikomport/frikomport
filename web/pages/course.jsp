@@ -205,18 +205,6 @@
 	</td>
 </tr>
 
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
-<tr>
-	<th>
-		<fmt:message key="course.freezeAttendance" />
-	</th>
-	<td>
-		<fmt:formatDate value="${course.freezeAttendance}" type="both"
-			pattern="${dateformat} ${timeformat}" />
-	</td>
-</tr>
-</c:if>
-
 <tr>
     <th>
         <fmt:message key="course.chargeoverdue" />

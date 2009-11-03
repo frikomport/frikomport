@@ -62,9 +62,6 @@ public class CourseDAOTest extends BaseDAOTestCase {
         Double feeInternal = new Double(1000.50);
         course.setFeeInternal(feeInternal);
 
-        java.util.Date freezeAttendance = new Date(2005 - 12 - 15);
-        course.setFreezeAttendance(freezeAttendance);
-
         Integer maxAttendants = new Integer(200);
         course.setMaxAttendants(maxAttendants);
 
@@ -115,7 +112,6 @@ public class CourseDAOTest extends BaseDAOTestCase {
         assertEquals(duration, course.getDuration());
         assertEquals(feeExternal, course.getFeeExternal());
         assertEquals(feeInternal, course.getFeeInternal());
-        assertEquals(freezeAttendance, course.getFreezeAttendance());
         assertEquals(maxAttendants, course.getMaxAttendants());
         assertEquals(name, course.getName());
         assertEquals(registerBy, course.getRegisterBy());
@@ -181,9 +177,6 @@ public class CourseDAOTest extends BaseDAOTestCase {
         Double feeInternal = new Double(2.319715755428284E306);
         course.setFeeInternal(feeInternal);
 
-        java.util.Date freezeAttendance = new Date(2005 - 12 - 15);
-        course.setFreezeAttendance(freezeAttendance);
-
         Integer maxAttendants = new Integer(299363422);
         course.setMaxAttendants(maxAttendants);
 
@@ -225,7 +218,6 @@ public class CourseDAOTest extends BaseDAOTestCase {
         assertEquals(duration, course.getDuration());
         assertEquals(feeExternal, course.getFeeExternal());
         assertEquals(feeInternal, course.getFeeInternal());
-        assertEquals(freezeAttendance, course.getFreezeAttendance());
         assertEquals(maxAttendants, course.getMaxAttendants());
         assertEquals(name, course.getName());
         assertEquals(registerBy, course.getRegisterBy());

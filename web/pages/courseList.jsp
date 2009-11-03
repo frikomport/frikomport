@@ -209,10 +209,6 @@ function fillSelect(obj){
          <fmt:formatDate value="${courseList.reminder}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
 
-    <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.freezeAttendance.export" sortProperty="freezeAttendance">
-         <fmt:formatDate value="${courseList.freezeAttendance}" type="both" pattern="${dateformat} ${timeformat}"/>
-    </display:column>
-
     <display:column media="excel" property="description" sortable="true" headerClass="sortable" titleKey="course.description.export"/>
 
     <display:column media="excel" property="detailURL" sortable="true" headerClass="sortable" titleKey="course.detailURL.export"/>
