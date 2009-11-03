@@ -711,4 +711,14 @@ public class Course extends BaseObject implements Serializable {
     public void setChargeoverdue(Boolean chargeoverdue) {
         this.chargeoverdue = chargeoverdue;
     }
+    
+    /**
+     * The course is expired if registerBy is past
+     * @return expired
+     */
+    public boolean isExpired() {
+    	if(new Date().after(registerBy)) return true;
+    	else return false;
+    }
+    
 }

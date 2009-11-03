@@ -19,16 +19,16 @@ function fillSelect(obj){
     }
 
     var j = 0;
-<c:forEach var="servicearea" items="${serviceareas}">
-    if ("<c:out value="${servicearea.id}"/>" == ""){
-        serviceArea.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>", true);
-        j++;
-    }
-else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
-        serviceArea.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>");
-        j++ ;
-    }
-</c:forEach>
+	<c:forEach var="servicearea" items="${serviceareas}">
+	    if ("<c:out value="${servicearea.id}"/>" == ""){
+	        serviceArea.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>", true);
+	        j++;
+	    }
+	    else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
+	        serviceArea.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>");
+	        j++ ;
+	    }
+	</c:forEach>
 }
 </script>
 
@@ -155,6 +155,17 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
     </display:column>
     
     <display:column property="availableAttendants" sortable="true" headerClass="sortable" titleKey="course.availableAttendants"/>
+
+    <display:column sortable="true" headerClass="sortable" titleKey="course.registerBy" sortProperty="registerBy">
+		<c:choose>
+			<c:when test="${courseList.expired}">
+				<i><fmt:formatDate value="${courseList.registerBy}" type="both" pattern="${dateformat} ${timeformat}" /></i>
+			</c:when>
+			<c:otherwise>
+				<fmt:formatDate value="${courseList.registerBy}" type="both" pattern="${dateformat} ${timeformat}" />
+			</c:otherwise>
+		</c:choose>
+	</display:column>
 
     <display:column property="duration" sortable="true" headerClass="sortable"
          titleKey="course.duration"/>

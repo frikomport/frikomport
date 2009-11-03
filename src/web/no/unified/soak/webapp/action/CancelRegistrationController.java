@@ -123,7 +123,7 @@ public class CancelRegistrationController implements Controller {
     		model.put("lastname", user.getLastName());
     		model.put("email", user.getEmail());
     		
-			// notify/upgrade no.1 on waitinglist -- ser ikke ut til å gjøre jobben den skulle
+			// notify/upgrade no.1 on waitinglist
 			waitingListManager.processIfNeeded(course.getId(), locale);
         }
         return new ModelAndView("registrationCancelled", "cancellation", model);
