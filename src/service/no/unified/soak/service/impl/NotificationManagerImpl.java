@@ -1,50 +1,52 @@
 package no.unified.soak.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
+import java.util.Vector;
 
-import org.springframework.context.MessageSource;
-import org.springframework.mail.MailSender;
+import javax.mail.internet.MimeMessage;
 
 import no.unified.soak.Constants;
+import no.unified.soak.dao.NotificationDao;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Notification;
 import no.unified.soak.model.Registration;
-import no.unified.soak.dao.NotificationDao;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.NotificationManager;
 import no.unified.soak.service.RegistrationManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.MailUtil;
 
-import javax.mail.internet.MimeMessage;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.springframework.context.MessageSource;
+import org.springframework.mail.MailSender;
 
 public class NotificationManagerImpl extends BaseManager implements NotificationManager {
 	private NotificationDao dao;
 
 	protected MailEngine mailEngine = null;
 
-	private MessageSource messageSource = null;
-
 	private RegistrationManager registrationManager = null;
 
     private MailSender mailSender = null;
-
-    private Locale locale = null;
 
     public void executeTask() {
         log.info("running NotificationManager");
         sendReminders();
     }
 
+	public void setLocale(Locale locale) {}
+	public void setMessageSource(MessageSource messageSource) {}
+
     public void setMailSender(MailSender mailSender) {
         this.mailSender = mailSender;
-    }
-
-    public void setLocale(Locale locale) {
-        this.locale = locale;
     }
 
     /**
@@ -60,14 +62,6 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 	 */
 	public void setRegistrationManager(RegistrationManager registrationManager) {
 		this.registrationManager = registrationManager;
-	}
-
-	/**
-	 * @param messageSource
-	 *            the messageSource to set
-	 */
-	public void setMessageSource(MessageSource messageSource) {
-		this.messageSource = messageSource;
 	}
 
 	/**
@@ -124,10 +118,18 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 	 * @see no.unified.soak.service.NotificationManager#sendReminders()
 	 */
 	public void sendReminders() {
+		NotificationSummary notificationSummary = new NotificationSummary();
+
 		// Fetch all the Notifications that does not have the sent-flag set.
 		List<Notification> notifications = this.getUnsentNotifications();
+
 		ArrayList<MimeMessage> emails = new ArrayList<MimeMessage>();
+
 		if (notifications != null && notifications.size() > 0) {
+			// order notifications by lastname, firstname
+			NotificationComparator nc = new NotificationComparator();
+			Collections.sort(notifications, nc);
+			
 			for (int i = 0; i < notifications.size(); i++) {
 				Date today = new Date();
 				Notification notification = notifications.get(i);
@@ -140,32 +142,28 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 					if (course.getStatus().equals(CourseStatus.COURSE_PUBLISHED) 
 					        && course.getReminder() != null 
 					        && course.getReminder().before(today)) {
-						// Yupp, we are: Send notification email
-//						log
-//								.debug("We've got one: "
-//										+ notification.getRegistration()
-//												.getCourseid()
-//										+ " for "
-//										+ notification.getRegistration()
-//												.getFirstName() + " " + notification.getRegistration().getLastName());
-
 						// Store that it has been successfully sent - cleanup by
 						// cleanup manager
-						String localeLanguage = notification.getRegistration().getLocale();
-						Locale locale = new Locale(localeLanguage);
-						StringBuffer msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_body(course, locale, messageSource, null, notification.getRegistration().getReserved());
+						StringBuffer msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_body(course, null, notification.getRegistration().getReserved());
 						ArrayList<Registration> registrations = new ArrayList<Registration>();
 						registrations.add(notification.getRegistration());
-						ArrayList<MimeMessage> newEmails = MailUtil.getMailMessages(registrations, Constants.EMAIL_EVENT_NOTIFICATION, course, msg, messageSource, locale, null,mailSender);
+						ArrayList<MimeMessage> newEmails = MailUtil.getMailMessages(registrations, Constants.EMAIL_EVENT_NOTIFICATION, course, msg, null, mailSender);
 						emails.addAll(newEmails);
+						
 						notification.setReminderSent(true);
+						
 						dao.saveNotification(notification);
+						
+						notificationSummary.add(notification);
 					}
 				}
 			}
 		}
 		if (emails != null && emails.size() > 0) {
 			MailUtil.sendMimeMails(emails, mailEngine);
+
+			// notifies instructor/responsible
+			notificationSummary.send();
 		}
 	}
 	
@@ -182,11 +180,82 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 		}	
 	}
 	
-//	private String getText(String key, String attribute, Locale locale) {
-//		return MailUtil.getText(key, attribute, locale, messageSource);
-//	}
-//
-//	private String getText(String key, Locale locale) {
-//		return MailUtil.getText(key, locale, messageSource);
-//	}
+	
+	
+	/**
+	 * Creates a summary of notifications and sends it to instructor /responsible
+	 * @author sa
+	 */
+	private class NotificationSummary {
+		
+		Hashtable<Course, Vector<String>> summary = new Hashtable<Course, Vector<String>>();
+		
+		public NotificationSummary() {}
+		
+		/**
+		 * Creates a notification summary to instructor/responsible
+		 */
+		private void add(Notification notification) {
+			Registration r = notification.getRegistration();
+			Course course = r.getCourse();
+			
+			String waitlist = "";
+			if(!r.getReserved()) waitlist = "(" + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.waitlist")) + ")";
+			String name = r.getFirstName() + " " + r.getLastName() + "  <" + r.getEmail() + "> " + waitlist + "\n";
+			addToSummary(course, name);
+		}
+
+		/**
+		 * Sends summary mail(s) to the responsible(s) and the instructor(s) to
+		 * be notified with a list of the persons that received notifications
+		 */
+		public void send() {
+			Enumeration<Course> courses = summary.keys();
+			while(courses.hasMoreElements()) {
+				Course course = courses.nextElement();
+				StringBuffer listOfNames = new StringBuffer();
+				Vector<String> names = summary.get(course);
+				for(int v=0; v<names.size();v++) {
+					listOfNames.append(names.get(v));
+				}
+				
+				if(log.isDebugEnabled()) log.debug(listOfNames.toString());
+				
+				StringBuffer msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_SUMMARY_body(course, listOfNames.toString());
+				String subject = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.summarysubject", course.getName()));
+				MimeMessage mail = MailUtil.getMailMessage(new String[]{course.getInstructor().getEmail()}, new String[]{course.getResponsible().getEmail()}, null, null, subject, msg, null, null, mailSender);
+				mailEngine.send(mail);
+			}
+		}
+		
+		private void addToSummary(Course course, String name) {
+			Vector<String> notified = summary.get(course);
+			if(notified == null) {
+				notified = new Vector<String>();
+				summary.put(course, notified);
+			}
+			notified.add(name);
+			if(log.isDebugEnabled()) log.debug(name + " added to courseid=" + course.getId() + " in summary");
+		}
+	}
+
+	
+	/**
+	 * Comparator for ordering notifications by lastname, firstname
+	 * @author sa
+	 */
+	private class NotificationComparator implements Comparator<Notification> {
+
+		public NotificationComparator() {
+			super();
+		}
+
+		// order by lastname, firstname
+		public int compare(Notification not1, Notification not2) {
+			String n1 = not1.getRegistration().getLastName() + not1.getRegistration().getFirstName();
+			String n2 = not2.getRegistration().getLastName() + not2.getRegistration().getFirstName();
+			return n1.compareTo(n2);
+		}
+	}
+	
 }

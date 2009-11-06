@@ -172,6 +172,46 @@ public class MailUtil {
 
     
 	/**
+	 * Creates a notification summary for instructor / responsible
+	 * 
+	 * @param course
+	 *            The course in question
+	 * @param mailComment
+	 *            Optional comment from the admin initiating the sending of this
+	 *            mail
+	 * @param reservationConfirmed
+	 *            Set to true if the reservation is confirmed, and to false if
+	 *            the attendee is on the waiting list
+	 * @return A complete mail body ready to be inserted into an e-mail object
+	 */
+    public static StringBuffer create_EMAIL_EVENT_NOTIFICATION_SUMMARY_body(Course course, String summary) {
+        StringBuffer msg = new StringBuffer();
+
+        String instructor = " " + course.getInstructor().getName() + " ";
+        String responsible = " " + course.getResponsible().getFullName();
+        
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("misc.hello")) + instructor + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("misc.and")) + responsible + "\n");
+        msg.append("\n");
+        
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.summaryheader")) + ":\n");
+        
+        addMailComment(summary, msg);
+
+        msg.append("\n");
+
+        // coursedetails are appended in separate method
+        appendCourseDetails(course, msg);
+
+        msg.append("\n\n"); // empty lines
+
+        addDetailsLink(course, msg);
+        
+        msg.append("\n\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from"))) + "\n");
+        return msg;
+    }
+    
+	/**
 	 * Creates a waitinglist mail body containing all the details of a
 	 * course, link to detailed course information and direct cancellation
 	 * 
