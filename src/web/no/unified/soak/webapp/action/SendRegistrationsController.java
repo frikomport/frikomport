@@ -122,8 +122,8 @@ public class SendRegistrationsController implements Controller {
         DateFormat f = new SimpleDateFormat("dd-MM-yyyy");
         String filenameInMail = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.id")) + "-" + course.getId() + "_" + f.format(course.getStartTime()) + ".pdf";
         
-    	StringBuffer msg = MailUtil.create_EMAIL_EVENT_REGISTRATIONLIST_body(course, locale, messageSource);
-		MimeMessage email = MailUtil.getMailMessage(to, null, null, null, (course.getName() + ", " + date), msg, filenameInMail, new File(attachementFilename), messageSource, locale, mailSender);
+    	StringBuffer msg = MailUtil.create_EMAIL_EVENT_REGISTRATIONLIST_body(course);
+		MimeMessage email = MailUtil.getMailMessage(to, null, null, null, (course.getName() + ", " + date), msg, filenameInMail, new File(attachementFilename), mailSender);
 
 		if(email != null && attachementFilename != null) {
 			mailEngine.send(email);

@@ -398,7 +398,7 @@ public class RegistrationAdministrationController extends BaseFormController {
 		StringBuffer msg = null;
 		switch(event) {
 			case Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED:
-				msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_CONFIRMED_body(course, registration, locale, messageSource, null);
+				msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_CONFIRMED_body(course, registration, null);
 				break;
 			case Constants.EMAIL_EVENT_REGISTRATION_DELETED:
 				boolean chargeOverdue = false;
@@ -407,15 +407,15 @@ public class RegistrationAdministrationController extends BaseFormController {
 	        			chargeOverdue = true;
 	        		}
 	        	}
-	        	msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_DELETED_body(course, locale, messageSource, chargeOverdue);
+	        	msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_DELETED_body(course, chargeOverdue);
 				break;
 			case Constants.EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST:
-				msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST_body(course, locale, messageSource, null);
+				msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST_body(course, null);
 				break;
 			default:
 				if(log.isDebugEnabled()) log.debug("sendMail: Handling of event:" + event + " not implemented..!");
 		}
-		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registration, event, course, msg, messageSource, locale, mailSender);
+		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registration, event, course, msg, mailSender);
 		MailUtil.sendMimeMails(emails, mailEngine);
 	}
 }

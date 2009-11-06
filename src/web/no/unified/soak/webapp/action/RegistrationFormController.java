@@ -407,10 +407,10 @@ public class RegistrationFormController extends BaseFormController {
     	StringBuffer msg = null;
     	switch(event) {
 	    	case Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED:
-	    		msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_CONFIRMED_body(course, registration, locale, messageSource, null); // bør endre navn
+	    		msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_CONFIRMED_body(course, registration, null); // bør endre navn
 	    		break;
 	    	case Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION:
-	    		msg = MailUtil.create_EMAIL_EVENT_WAITINGLIST_NOTIFICATION_body(course, registration, locale, messageSource, null, false);
+	    		msg = MailUtil.create_EMAIL_EVENT_WAITINGLIST_NOTIFICATION_body(course, registration, null, false);
 	    		break;
 			case Constants.EMAIL_EVENT_REGISTRATION_DELETED:
 				boolean chargeOverdue = false;
@@ -419,10 +419,10 @@ public class RegistrationFormController extends BaseFormController {
 	        			chargeOverdue = true;
 	        		}
 	        	}
-				msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_DELETED_body(course, locale, messageSource, chargeOverdue);
+				msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_DELETED_body(course, chargeOverdue);
 				break;
     	}
-        ArrayList<MimeMessage> theEmails = MailUtil.getMailMessages(registration, event, course, msg, messageSource, locale, mailSender);
+        ArrayList<MimeMessage> theEmails = MailUtil.getMailMessages(registration, event, course, msg, mailSender);
         MailUtil.sendMimeMails(theEmails, mailEngine);
     }
 

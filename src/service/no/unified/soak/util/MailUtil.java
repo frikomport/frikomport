@@ -54,15 +54,11 @@ public class MailUtil {
 	 * 
 	 * @param course
 	 *            The course in question
-	 * @param locale
-	 *            The language to fetch messages in
-	 * @param messageSource
-	 *            The source for our messages.
 	 * @param mailComment
 	 *            Optional comment from the admin initiating the sending of this mail
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_COURSECANCELLED_body(Course course, Locale locale, MessageSource messageSource, String mailComment) {
+    public static StringBuffer create_EMAIL_EVENT_COURSECANCELLED_body(Course course, String mailComment) {
         StringBuffer msg = new StringBuffer();
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
@@ -76,11 +72,11 @@ public class MailUtil {
         msg.append("\n");
 
         // coursedetails are appended in separate method
-        appendCourseDetails(course, locale, messageSource, msg);
+        appendCourseDetails(course, msg);
 
         msg.append("\n\n"); // empty lines
         
-        addDetailsLink(course, locale, messageSource, msg);
+        addDetailsLink(course, msg);
 
         msg.append("\n\n"); // empty lines
 
@@ -96,16 +92,12 @@ public class MailUtil {
 	 * 
 	 * @param course
 	 *            The course in question
-	 * @param locale
-	 *            The language to fetch messages in
-	 * @param messageSource
-	 *            The source for our messages.
 	 * @param mailComment
 	 *            Optional comment from the admin initiating the sending of this
 	 *            mail
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_COURSEDELETED_body(Course course, Locale locale, MessageSource messageSource, String mailComment) {
+    public static StringBuffer create_EMAIL_EVENT_COURSEDELETED_body(Course course, String mailComment) {
         StringBuffer msg = new StringBuffer();
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
@@ -118,7 +110,7 @@ public class MailUtil {
         msg.append("\n");
 
         // coursedetails are appended in separate method
-        appendCourseDetails(course, locale, messageSource, msg);
+        appendCourseDetails(course, msg);
 
         msg.append("\n\n");
 
@@ -136,10 +128,6 @@ public class MailUtil {
 	 * 
 	 * @param course
 	 *            The course in question
-	 * @param locale
-	 *            The language to fetch messages in
-	 * @param messageSource
-	 *            The source for our messages.
 	 * @param mailComment
 	 *            Optional comment from the admin initiating the sending of this
 	 *            mail
@@ -148,8 +136,7 @@ public class MailUtil {
 	 *            the attendee is on the waiting list
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_NOTIFICATION_body(Course course, Locale locale, MessageSource messageSource,
-            String mailComment, boolean reservationConfirmed) {
+    public static StringBuffer create_EMAIL_EVENT_NOTIFICATION_body(Course course, String mailComment, boolean reservationConfirmed) {
         StringBuffer msg = new StringBuffer();
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
@@ -165,11 +152,11 @@ public class MailUtil {
         msg.append("\n");
 
         // coursedetails are appended in separate method
-        appendCourseDetails(course, locale, messageSource, msg);
+        appendCourseDetails(course, msg);
 
         msg.append("\n\n"); // empty lines
 
-        addDetailsLink(course, locale, messageSource, msg);
+        addDetailsLink(course, msg);
         
         msg.append("\n\n");
 
@@ -192,10 +179,6 @@ public class MailUtil {
 	 *            The course in question
 	 * @param registration
 	 *            The registration that triggered the sending of this mail
-	 * @param locale
-	 *            The language to fetch messages in
-	 * @param messageSource
-	 *            The source for our messages.
 	 * @param mailComment
 	 *            Optional comment from the admin initiating the sending of this
 	 *            mail
@@ -204,8 +187,7 @@ public class MailUtil {
 	 *            the attendee is on the waiting list
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_WAITINGLIST_NOTIFICATION_body(Course course, Registration registration, Locale locale, MessageSource messageSource,
-            String mailComment, boolean reservationConfirmed) {
+    public static StringBuffer create_EMAIL_EVENT_WAITINGLIST_NOTIFICATION_body(Course course, Registration registration, String mailComment, boolean reservationConfirmed) {
         StringBuffer msg = new StringBuffer();
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
@@ -221,15 +203,15 @@ public class MailUtil {
         msg.append("\n");
 
         // coursedetails are appended in separate method
-        appendCourseDetails(course, locale, messageSource, msg);
+        appendCourseDetails(course, msg);
 
         msg.append("\n\n"); // emptyt lines
 
-        addDetailsLink(course, locale, messageSource, msg);
+        addDetailsLink(course, msg);
 
         msg.append("\n"); // empty line
 
-        addCancelLink(course, registration, locale, messageSource, msg);
+        addCancelLink(course, registration, msg);
 
         msg.append("\n\n");
 
@@ -252,15 +234,11 @@ public class MailUtil {
 	 * 
 	 * @param course
 	 *            The course in question
-	 * @param locale
-	 *            The language to fetch messages in
-	 * @param messageSource
-	 *            The source for our messages.
 	 * @param chargeOverdue
 	 *            If true unit has to pay for cancelled course
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_REGISTRATION_DELETED_body(Course course, Locale locale, MessageSource messageSource, boolean chargeOverdue) {
+    public static StringBuffer create_EMAIL_EVENT_REGISTRATION_DELETED_body(Course course, boolean chargeOverdue) {
         StringBuffer msg = new StringBuffer();
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
@@ -274,11 +252,11 @@ public class MailUtil {
         msg.append("\n");
 
         // coursedetails are appended in separate method
-        appendCourseDetails(course, locale, messageSource, msg);
+        appendCourseDetails(course, msg);
 
         msg.append("\n\n");
 
-        addDetailsLink(course, locale, messageSource, msg);
+        addDetailsLink(course, msg);
         
         msg.append("\n");
         
@@ -296,20 +274,16 @@ public class MailUtil {
 	 * 
 	 * @param course
 	 *            The course in question
-	 * @param locale
-	 *            The language to fetch messages in
-	 * @param messageSource
-	 *            The source for our messages.
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_REGISTRATIONLIST_body(Course course, Locale locale, MessageSource messageSource) {
+    public static StringBuffer create_EMAIL_EVENT_REGISTRATIONLIST_body(Course course) {
         StringBuffer msg = new StringBuffer();
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
         msg.append("\n");
         
         // coursedetails are appended in separate method
-        appendCourseDetails(course, locale, messageSource, msg);
+        appendCourseDetails(course, msg);
 
         msg.append("\n\n");
 
@@ -329,17 +303,12 @@ public class MailUtil {
 	 * 
 	 * @param course
 	 *            The course in question
-	 * @param locale
-	 *            The language to fetch messages in
-	 * @param messageSource
-	 *            The source for our messages.
 	 * @param mailComment
 	 *            Optional comment from the admin initiating the sending of this
 	 *            mail
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST_body(Course course, Locale locale, MessageSource messageSource,
-            String mailComment) {
+    public static StringBuffer create_EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST_body(Course course, String mailComment) {
         StringBuffer msg = new StringBuffer();
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
@@ -352,11 +321,11 @@ public class MailUtil {
         msg.append("\n");
 
         // coursedetails are appended in separate method
-        appendCourseDetails(course, locale, messageSource, msg);
+        appendCourseDetails(course, msg);
 
         msg.append("\n\n");
 
-        addDetailsLink(course, locale, messageSource, msg);
+        addDetailsLink(course, msg);
         
         msg.append("\n\n");
 
@@ -376,12 +345,6 @@ public class MailUtil {
 	 *            The course in question
 	 * @param registration
 	 *            The registration that triggered the sending of this mail
-	 * @param event
-	 *            The event that triggered the sending of this mail
-	 * @param locale
-	 *            The language to fetch messages in
-	 * @param messageSource
-	 *            The source for our messages.
 	 * @param mailComment
 	 *            Optional comment from the admin initiating the sending of this
 	 *            mail
@@ -390,8 +353,7 @@ public class MailUtil {
 	 *            the attendee is on the waiting list
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_REGISTRATION_CONFIRMED_body(Course course, Registration registration, 
-    		Locale locale, MessageSource messageSource, String mailComment) {
+    public static StringBuffer create_EMAIL_EVENT_REGISTRATION_CONFIRMED_body(Course course, Registration registration, String mailComment) {
         StringBuffer msg = new StringBuffer();
         
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
@@ -405,15 +367,15 @@ public class MailUtil {
         
         msg.append("\n"); // empty line
 
-        appendCourseDetails(course, locale, messageSource, msg);
+        appendCourseDetails(course, msg);
 
         msg.append("\n\n"); // empty lines
         
-        addDetailsLink(course, locale, messageSource, msg);
+        addDetailsLink(course, msg);
 
         msg.append("\n"); // empty line
 
-        addCancelLink(course, registration, locale, messageSource, msg);
+        addCancelLink(course, registration, msg);
 
         msg.append("\n"); // empty lines
 
@@ -428,17 +390,12 @@ public class MailUtil {
 	 * 
 	 * @param course
 	 *            The course in question
-	 * @param locale
-	 *            The language to fetch messages in
-	 * @param messageSource
-	 *            The source for our messages.
 	 * @param mailComment
 	 *            Optional comment from the admin initiating the sending of this
 	 *            mail
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_NEW_COURSE_NOTIFICATION_body(Course course, Locale locale, MessageSource messageSource,
-            String mailComment) {
+    public static StringBuffer create_EMAIL_EVENT_NEW_COURSE_NOTIFICATION_body(Course course, String mailComment) {
         StringBuffer msg = new StringBuffer();
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
@@ -451,11 +408,11 @@ public class MailUtil {
         msg.append("\n");
 
         // coursedetails are appended in separate method
-        appendCourseDetails(course, locale, messageSource, msg);
+        appendCourseDetails(course, msg);
 
         msg.append("\n\n");
 
-        addDetailsLink(course, locale, messageSource, msg);
+        addDetailsLink(course, msg);
 
         msg.append("\n\n");
 
@@ -487,8 +444,7 @@ public class MailUtil {
 	 * @param messageSource
 	 * @param msg
 	 */
-    private static void addDetailsLink(Course course, Locale locale,
-    		MessageSource messageSource, StringBuffer msg) {
+    private static void addDetailsLink(Course course, StringBuffer msg) {
     	// link til detaljer om registrering
     	String baseurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.baseurl"));
     	
@@ -505,8 +461,7 @@ public class MailUtil {
      * @param messageSource
      * @param msg
      */
-    private static void addCancelLink(Course course, Registration registration,
-			Locale locale, MessageSource messageSource, StringBuffer msg) {
+    private static void addCancelLink(Course course, Registration registration, StringBuffer msg) {
 		// link for direkte avmelding
     	String baseurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.baseurl"));
 
@@ -525,8 +480,7 @@ public class MailUtil {
      * @param messageSource
      * @param msg
      */
-	private static void appendCourseDetails(Course course, Locale locale, MessageSource messageSource, 
-			StringBuffer msg) {
+	private static void appendCourseDetails(Course course, StringBuffer msg) {
 		// Include all the course details
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.name")) + ": "
                 + course.getName() + "\n");
@@ -691,11 +645,10 @@ public class MailUtil {
      * @return A list of MimeMessage object
      * @throws MessagingException
      */
-    public static ArrayList<MimeMessage> getMailMessages(Registration registration, int event, Course course,
-            StringBuffer msg, MessageSource messageSource, Locale locale, MailSender sender) {
+    public static ArrayList<MimeMessage> getMailMessages(Registration registration, int event, Course course, StringBuffer msg, MailSender sender) {
         List<Registration> theRegistration = new ArrayList<Registration>();
         theRegistration.add(registration);
-        return getMailMessages(theRegistration, event, course, msg, messageSource, locale, null, sender);
+        return getMailMessages(theRegistration, event, course, msg, null, sender);
     }
 
     /**
@@ -709,8 +662,6 @@ public class MailUtil {
      *            The course in question
      * @param msg
      *            Content of the message
-     * @param messageSource
-     * @param locale
      * @param from
      *            The sender of the mail
      * @param sender
@@ -718,7 +669,7 @@ public class MailUtil {
      * @throws MessagingException
      */
     public static ArrayList<MimeMessage> getMailMessages(List<Registration> registrations, int event, Course course,
-            StringBuffer msg, MessageSource messageSource, Locale locale, String from, MailSender sender) {
+            StringBuffer msg, String from, MailSender sender) {
         Log log = LogFactory.getLog(MailUtil.class.toString());
         ArrayList<MimeMessage> allEMails = new ArrayList<MimeMessage>();
 
@@ -730,8 +681,8 @@ public class MailUtil {
             MimeMessageHelper helper = null;
             try {
                 helper = new MimeMessageHelper(message, true, (ApplicationResourcesUtil.getText("mail.encoding")));
-                helper.setSubject(getSubject(registration, event, registered, waiting, messageSource, locale, course));
-                helper.setText(getBody(registration, msg, registered, waiting, messageSource, locale));
+                helper.setSubject(getSubject(registration, event, registered, waiting, course));
+                helper.setText(getBody(registration, msg, registered, waiting));
                 addCalendar(helper,event,course, registration);                
                 helper.setTo(registration.getEmail());
                 helper.setCc(course.getResponsible().getEmail());
@@ -748,7 +699,7 @@ public class MailUtil {
         return allEMails;
     }
 
-    public static MimeMessage getMailMessage(String[] to, String[] cc, String[] bcc, String from, String subject, StringBuffer msg, String attachmentName, File attachementFileOnDisk, MessageSource messageSource, Locale locale, MailSender sender) {
+    public static MimeMessage getMailMessage(String[] to, String[] cc, String[] bcc, String from, String subject, StringBuffer msg, String attachmentName, File attachementFileOnDisk, MailSender sender) {
         Log log = LogFactory.getLog(MailUtil.class.toString());
 
         MimeMessage message = null;
@@ -938,8 +889,7 @@ public class MailUtil {
         return emails;
     }
 
-    public static String getSubject(Registration registration, int event, String registered, String waiting,
-            MessageSource messageSource, Locale locale, Course course) {
+    public static String getSubject(Registration registration, int event, String registered, String waiting, Course course) {
         String subject = null;
         String coursename = course.getName();
         switch (event) {
@@ -1009,8 +959,7 @@ public class MailUtil {
         return subject;
     }
 
-    public static String getBody(Registration registration, StringBuffer msg, String registeredMsg, String waitingMsg,
-            MessageSource messageSource, Locale locale) {
+    public static String getBody(Registration registration, StringBuffer msg, String registeredMsg, String waitingMsg) {
         String custom = msg.toString();
         if (registration.getReserved()) {
             custom = custom.replaceAll("<registeredfor/>", registeredMsg);
@@ -1024,7 +973,7 @@ public class MailUtil {
         msgIndivid.insert(0, "\n\n");
 
         // Employeenumber
-        String employeeNoText = messageSource.getMessage("registration.employeeNumber", null, locale);
+        String employeeNoText = ApplicationResourcesUtil.getText("registration.employeeNumber");
         if (!StringUtils.isEmpty(employeeNoText))
             employeeNoText = employeeNoText.toLowerCase();
 

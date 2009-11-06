@@ -226,12 +226,12 @@ public class CourseNotificationController extends BaseFormController {
 				msg = MailUtil.createChangedBody(course, locale, messageSource, mailComment, changedList); 
 				break;
 			case Constants.EMAIL_EVENT_COURSECANCELLED:
-				msg = MailUtil.create_EMAIL_EVENT_COURSECANCELLED_body(course, locale, messageSource, mailComment);
+				msg = MailUtil.create_EMAIL_EVENT_COURSECANCELLED_body(course, mailComment);
 				break;
 			default:
 				if(log.isDebugEnabled()) log.debug("sendMail: Handling of event:" + event + " not implemented..!");
 		}
-		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, messageSource, locale, from, mailSender);
+		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, from, mailSender);
 		MailUtil.sendMimeMails(emails, mailEngine);
 		
 	}
@@ -254,13 +254,13 @@ public class CourseNotificationController extends BaseFormController {
 		StringBuffer msg = null;
 		switch(event) {
 			case Constants.EMAIL_EVENT_NEW_COURSE_NOTIFICATION:
-				msg = MailUtil.create_EMAIL_EVENT_NEW_COURSE_NOTIFICATION_body(course, locale, messageSource, mailComment);
+				msg = MailUtil.create_EMAIL_EVENT_NEW_COURSE_NOTIFICATION_body(course, mailComment);
 				break;
 			default:
 				if(log.isDebugEnabled()) log.debug("sendMailToWaitingList: Handling of event:" + event + " not implemented..!");
 		}
 		
-		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, messageSource, locale, from, mailSender);
+		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, from, mailSender);
 		MailUtil.sendMimeMails(emails, mailEngine);
 		
 	}

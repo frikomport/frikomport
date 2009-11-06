@@ -608,14 +608,14 @@ public class CourseFormController extends BaseFormController {
 		StringBuffer msg = null;
 		switch(event) {
 			case Constants.EMAIL_EVENT_COURSEDELETED:
-				msg = MailUtil.create_EMAIL_EVENT_COURSEDELETED_body(course, locale, messageSource, mailComment);
+				msg = MailUtil.create_EMAIL_EVENT_COURSEDELETED_body(course, mailComment);
 				break;
 			default:
 				if(log.isDebugEnabled()) log.debug("sendMail: Handling of event:" + event + " not implemented..!");
 		}
         
         // Add sender etc.
-        ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, messageSource, locale, null, mailSender);
+        ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, null, mailSender);
         MailUtil.sendMimeMails(emails, mailEngine);		
     }
 

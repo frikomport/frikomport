@@ -293,10 +293,10 @@ public class WaitingListManagerImpl extends BaseManager implements WaitingListMa
     	
     	// Create the body of the e-mail
 //    	StringBuffer msg = MailUtil.createStandardBody(course, Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION, locale, messageSource, null, confirmed);
-    	StringBuffer msg = MailUtil.create_EMAIL_EVENT_WAITINGLIST_NOTIFICATION_body(course, currentRegistration, locale, messageSource, null, confirmed);
+    	StringBuffer msg = MailUtil.create_EMAIL_EVENT_WAITINGLIST_NOTIFICATION_body(course, currentRegistration, null, confirmed);
 
     	// Create the email
-    	ArrayList<MimeMessage> theEmails = MailUtil.getMailMessages(currentRegistration, Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION, course, msg, messageSource, locale, mailSender);
+    	ArrayList<MimeMessage> theEmails = MailUtil.getMailMessages(currentRegistration, Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION, course, msg, mailSender);
     	
     	// Send the email
     	MailUtil.sendMimeMails(theEmails, mailEngine);

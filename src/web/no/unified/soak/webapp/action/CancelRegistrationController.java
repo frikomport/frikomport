@@ -109,8 +109,8 @@ public class CancelRegistrationController implements Controller {
         	}
         	
         	// confirm cancellation
-        	StringBuffer msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_DELETED_body(course, locale, messageSource, chargeOverdue);
-    		ArrayList<MimeMessage> email = MailUtil.getMailMessages(registration, Constants.EMAIL_EVENT_REGISTRATION_DELETED, course, msg, messageSource, locale, mailSender);
+        	StringBuffer msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_DELETED_body(course, chargeOverdue);
+    		ArrayList<MimeMessage> email = MailUtil.getMailMessages(registration, Constants.EMAIL_EVENT_REGISTRATION_DELETED, course, msg, mailSender);
     		MailUtil.sendMimeMails(email, mailEngine);
 
     		DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");

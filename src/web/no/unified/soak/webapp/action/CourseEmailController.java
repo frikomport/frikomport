@@ -108,13 +108,13 @@ public class CourseEmailController extends CourseNotificationController
 		StringBuffer msg = null;
 		switch(event) {
 			case Constants.EMAIL_EVENT_NOTIFICATION:
-				msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_body(course, locale, messageSource, mailComment, true);
+				msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_body(course, mailComment, true);
 				break;
 			default:
 				if(log.isDebugEnabled()) log.debug("sendMail: Handling of event:" + event + " not implemented..!");
 		}
 		
-		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, messageSource, locale, from, mailSender);
+		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, from, mailSender);
 		MailUtil.sendMimeMails(emails, mailEngine);
 
 	}
