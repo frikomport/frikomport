@@ -20,8 +20,10 @@ import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.UserManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 
 import org.apache.commons.validator.EmailValidator;
+import org.springframework.context.MessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
@@ -41,6 +43,16 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     private OrganizationManager organizationManager = null;
     private CategoryManager categoryManager = null;
 
+
+    // hack for setting messagesource and locale to ApplicationResourcesUtil once
+    public void setLocale(Locale locale) {
+        ApplicationResourcesUtil.setLocale(locale);
+    }
+    public void setMessageSource(MessageSource messageSource) {
+        ApplicationResourcesUtil.setMessageSource(messageSource);
+    }
+    // --- end hack
+    
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
         jt.setDataSource(dataSource);
@@ -372,9 +384,5 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     public void executeTask() {
         log.info("running databaseUpdateManager");
         updateDatabase();
-    }
-
-    public void setLocale(Locale locale) {
-        // Do nothing
     }
 }
