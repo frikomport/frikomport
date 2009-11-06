@@ -158,7 +158,7 @@ public class SendRegistrationsController implements Controller {
 				String date = start.equals(stop)? start : start + " - " + stop;
 				String duration = course.getDuration()!=null ? (" (" + course.getDuration() + ")") : "";
 				
-				pdf.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.name")) + ": " + course.getName() + " - " + date + duration, 12, PdfUtil.ALIGN_LEFT);
+				pdf.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.name")) + ": " + course.getName() + " - " + date + duration, 13, PdfUtil.ALIGN_LEFT);
 				pdf.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.responsible")) + ": " + course.getResponsible().getFullName() + "  /  " + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.instructor")) +  ": " + course.getInstructor().getName(), 9, PdfUtil.ALIGN_LEFT);
 				pdf.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.location")) + ": " + course.getLocation().getName() + ", " + course.getLocation().getAddress(), 9, PdfUtil.ALIGN_LEFT);
 				
@@ -221,12 +221,12 @@ public class SendRegistrationsController implements Controller {
 					pdf.emptyLine(10);
 				}
 				if(rCount > 0) {
-					pdf.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.attendants")), 10, PdfUtil.ALIGN_LEFT);
+					pdf.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.attendants")), 11, PdfUtil.ALIGN_LEFT);
 					pdf.addTableToDocument(reserved);
 				}
 				if(rCount > 0 && wCount > 0) pdf.emptyLine(10);
 				if(wCount > 0) {
-					pdf.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.waitlist")), 10, PdfUtil.ALIGN_LEFT);
+					pdf.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.waitlist")), 11, PdfUtil.ALIGN_LEFT);
 					pdf.addTableToDocument(waiting);
 				}
 				pdf.close();
