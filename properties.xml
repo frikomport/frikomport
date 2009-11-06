@@ -16,7 +16,7 @@
     <property name="secure.login" value="false"/> <!-- SSL for login -->
     <property name="secure.application" value="false"/> <!-- SSL for all -->
     <property name="rememberMe.enabled" value="true"/>
-    <property name="http.port" value="8080"/>
+    <property name="http.port" value="8088"/>
     <property name="https.port" value="8443"/>
     <property name="dao.type" value="hibernate"/>
     <property name="jsp.2" value="false"/>
@@ -129,6 +129,7 @@
         <fileset dir="${ical4j.dir}" includes="*.jar"/>
         <fileset dir="${spring.dir}" includes="*.jar"/>
         <fileset dir="${velocity.dir}" includes="*.jar"/>
+        <fileset dir="${displaytag.dir}" includes="*.jar"/>
     </path>
     <path id="service.test.classpath">
         <path refid="service.compile.classpath"/>
@@ -148,7 +149,6 @@
         <pathelement location="${dist.dir}/${webapp.name}-service.jar"/>
         <pathelement location="${struts.jar}"/>
         <pathelement location="${strutsmenu.jar}"/>
-        <pathelement location="${displaytag.jar}"/>
         <pathelement location="${jakarta-oro.jar}"/>
         <pathelement location="${commons-digester.jar}"/>
         <pathelement location="${commons-logging.jar}"/>
@@ -164,6 +164,7 @@
         <fileset dir="${ical4j.dir}" includes="*.jar"/>
         <fileset dir="${spring.dir}" includes="*.jar"/>
         <fileset dir="${jstl.dir}/lib" includes="jstl.jar"/>
+        <fileset dir="${displaytag.dir}" includes="*.jar"/>
     </path>
     <path id="web.test.classpath">
         <pathelement location="${hibernate.jar}"/> 

@@ -34,7 +34,7 @@ import org.springframework.web.servlet.mvc.Controller;
 
 
 /**
- * bla bla
+ * Controller for handling cancellations from mail-links
  * @author sa
  */
 public class CancelRegistrationController implements Controller {

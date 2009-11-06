@@ -292,6 +292,38 @@ public class MailUtil {
     }
     
 	/**
+	 * Creates a registrationlist mail body containing 
+	 * 
+	 * @param course
+	 *            The course in question
+	 * @param locale
+	 *            The language to fetch messages in
+	 * @param messageSource
+	 *            The source for our messages.
+	 * @return A complete mail body ready to be inserted into an e-mail object
+	 */
+    public static StringBuffer create_EMAIL_EVENT_REGISTRATIONLIST_body(Course course, Locale locale, MessageSource messageSource) {
+        StringBuffer msg = new StringBuffer();
+
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
+        msg.append("\n");
+        
+        // coursedetails are appended in separate method
+        appendCourseDetails(course, locale, messageSource, msg);
+
+        msg.append("\n\n");
+
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationsSent.mail.footer", course.getName())) + "\n");
+
+        msg.append("\n");
+        
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from")))	+ "\n");
+        
+        return msg;
+    }
+
+    
+	/**
 	 * Creates a moved-to-waitinglist mail body containing all the details of a
 	 * course, link to detailed course information and direct cancellation
 	 * 

@@ -103,8 +103,13 @@
 </c:if>
 <c:if test="${admin == true}">
 		    <button type="button" onclick="location.href='<c:url value="/emailCourse.html"><c:param name="id" value="${course.id}"/><c:param name="enablemail" value="true"/></c:url>'">
-	    	    <fmt:message key="button.mail"/>
+	    	    <fmt:message key="button.mails"/>
 		    </button>
+</c:if>
+<c:if test="${admin == true}">
+            <button type="button" onclick="location.href='<c:url value="/sendRegistrations.html"><c:param name="cid" value="${course.id}"/></c:url>'">
+                <fmt:message key="button.sendregistrations"/>
+            </button>
 </c:if>
         </td>
     </tr>
