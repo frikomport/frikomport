@@ -165,7 +165,7 @@ public class SendRegistrationsController implements Controller {
 				Vector<String> tableHeader = new Vector<String>();
 				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.firstName")));
 				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.lastName")));
-				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.mail")));
+				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.email")));
 				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.municipality")));
 				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.jobTitle")));
 				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.servicearea")));
@@ -177,8 +177,11 @@ public class SendRegistrationsController implements Controller {
 //				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registration.reserved")));
 				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registration.attended")));
 				
-				Integer reserved = pdf.addTableHeader(tableHeader);
-				Integer waiting = pdf.addTableHeader(tableHeader);
+				// absolute values for column widths (veeery testdriven)
+				float[] widths = {15,15,26,11,13,13,12,10,10,20,8,8};
+				
+				Integer reserved = pdf.addTableHeader(tableHeader, widths);
+				Integer waiting = pdf.addTableHeader(tableHeader, widths);
 				int rCount = 0;
 				int wCount = 0;
 					

@@ -144,14 +144,15 @@ public class PdfUtil {
 	
 	/**
 	 * Creates a table header form coloumns in vector
-	 * @param tableheaders
+	 * @param tableheader
+	 * @param widths absolute values for column widths, can be null
 	 * @return identifier needed for {@link #addTableRow(Vector, Integer)} and {@link #addTableToDocument(Integer)}
 	 * @throws BadElementException
 	 */
-	public Integer addTableHeader(Vector<String> tableheaders) throws BadElementException {
+	public Integer addTableHeader(Vector<String> tableheader, float[] widths) throws BadElementException {
 		tableIdentifier++;
 		
-		PdfUtilTable pdfut = new PdfUtilTable(tableheaders.size());
+		PdfUtilTable pdfut = new PdfUtilTable(tableheader.size());
 		Table table = pdfut.getTable();
 		table.setCellsFitPage(true);
 		table.setWidth(100);
@@ -159,10 +160,14 @@ public class PdfUtil {
 		table.setSpacing(0);
 		table.setAlignment(Table.ALIGN_LEFT);
 
+		if(widths != null && widths.length == tableheader.size()) {
+			table.setWidths(widths);
+		}
+		
 		Font font = new Font();
 		font.setSize(8); // bør kunne angis utenfra
 		
-		Iterator it = tableheaders.iterator();
+		Iterator it = tableheader.iterator();
 		while(it.hasNext()) {
 			String t = (String)it.next();
 			Element e = new Paragraph(StringUtils.capitalize(t), font);
@@ -249,7 +254,7 @@ public class PdfUtil {
 			header.add("Epost");
 			header.add("Sted");
 			header.add("Mobil");
-			Integer identifier = pu.addTableHeader(header);
+			Integer identifier = pu.addTableHeader(header, null);
 
 			Vector<String> row = new Vector<String>();
 			row.add("Sindre");
@@ -277,7 +282,7 @@ public class PdfUtil {
 			header2.add("Etternavn");
 			header2.add("Epost");
 			header2.add("Sted");
-			Integer identifier2 = pu.addTableHeader(header2);
+			Integer identifier2 = pu.addTableHeader(header2, null);
 
 			Vector<String> row3 = new Vector<String>();
 			row3.add("Gunnar");
