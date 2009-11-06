@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.io.File;
 import java.net.URI;
 import java.net.SocketException;
 import java.net.URISyntaxException;
@@ -61,18 +62,16 @@ public class MailUtil {
 	 *            Optional comment from the admin initiating the sending of this mail
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_COURSECANCELLED_body(Course course, Locale locale, MessageSource messageSource,
-            String mailComment) {
+    public static StringBuffer create_EMAIL_EVENT_COURSECANCELLED_body(Course course, Locale locale, MessageSource messageSource, String mailComment) {
         StringBuffer msg = new StringBuffer();
 
-        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.contactinfo", locale, messageSource)) + "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
 
         msg.append("\n"); // empty line
 
         addMailComment(mailComment, msg);
 
-        msg.append(StringEscapeUtils.unescapeHtml(getText("courseCancelled.mail.body", " " + course.getName(),
-                locale, messageSource)));
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseCancelled.mail.body", " " + course.getName())));
 
         msg.append("\n");
 
@@ -85,11 +84,10 @@ public class MailUtil {
 
         msg.append("\n\n"); // empty lines
 
-        msg.append(StringEscapeUtils.unescapeHtml(getText("courseCancelled.mail.body", " " + course.getName()
-                + "\n", locale, messageSource)));
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseCancelled.mail.body", " " + course.getName() + "\n")));
 
         msg.append("\n\n");
-        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.donotreply", getText("mail.default.from", locale, messageSource), locale, messageSource))	+ "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from")))	+ "\n");
         return msg;
     }
 
@@ -110,12 +108,12 @@ public class MailUtil {
     public static StringBuffer create_EMAIL_EVENT_COURSEDELETED_body(Course course, Locale locale, MessageSource messageSource, String mailComment) {
         StringBuffer msg = new StringBuffer();
 
-        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.contactinfo", locale, messageSource)));
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
         msg.append("\n");
         
         addMailComment(mailComment, msg);
 
-        msg.append(StringEscapeUtils.unescapeHtml(getText("courseDeleted.mail.body", " " + course.getName(), locale, messageSource)) + "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseDeleted.mail.body", " " + course.getName())) + "\n");
 
         msg.append("\n");
 
@@ -124,10 +122,10 @@ public class MailUtil {
 
         msg.append("\n\n");
 
-        msg.append(StringEscapeUtils.unescapeHtml(getText("courseDeleted.mail.body", " " + course.getName() + "\n", locale, messageSource)));
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseDeleted.mail.body", " " + course.getName() + "\n")));
 
         msg.append("\n");
-        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.donotreply", getText("mail.default.from", locale, messageSource), locale, messageSource)) + "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from"))) + "\n");
         return msg;
     }
 
@@ -154,15 +152,15 @@ public class MailUtil {
             String mailComment, boolean reservationConfirmed) {
         StringBuffer msg = new StringBuffer();
 
-        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.contactinfo", locale, messageSource)));
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
         msg.append("\n");
         
         addMailComment(mailComment, msg);
 
         if(reservationConfirmed)
-            msg.append(StringEscapeUtils.unescapeHtml(getText("courseNotification.mail.body.reserved", locale, messageSource)));
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.mail.body.reserved")));
         else
-            msg.append(StringEscapeUtils.unescapeHtml(getText("courseNotification.mail.body.waitinglist", locale, messageSource)));
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.mail.body.waitinglist")));
 
         msg.append("\n");
 
@@ -176,12 +174,12 @@ public class MailUtil {
         msg.append("\n\n");
 
         if(reservationConfirmed)
-            msg.append(StringEscapeUtils.unescapeHtml(getText("courseNotification.mail.footer.registered", locale, messageSource)));
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.mail.footer.registered")));
         else
-            msg.append(StringEscapeUtils.unescapeHtml(getText("courseNotification.mail.footer.waitinglist", locale, messageSource)));
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.mail.footer.waitinglist")));
 
         msg.append("\n\n");
-        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.donotreply", getText("mail.default.from", locale, messageSource), locale, messageSource))	+ "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from"))) + "\n");
         return msg;
     }
 
@@ -210,14 +208,14 @@ public class MailUtil {
             String mailComment, boolean reservationConfirmed) {
         StringBuffer msg = new StringBuffer();
 
-        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.contactinfo", locale, messageSource)) + "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
         msg.append("\n");
         
         addMailComment(mailComment, msg);
         if (reservationConfirmed)
-        	msg.append(StringEscapeUtils.unescapeHtml(getText("registrationConfirmed.mail.body", course.getName(), locale, messageSource)) + "\n");
+        	msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationConfirmed.mail.body", course.getName())) + "\n");
         else
-        	msg.append(StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.body", course.getName(), locale, messageSource)) + "\n");
+        	msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationToWaitinglist.mail.body", course.getName())) + "\n");
         	
         
         msg.append("\n");
@@ -238,12 +236,12 @@ public class MailUtil {
         // TODO: Test if right. Previously:
         // "registrationComplete.mail.footer", null,locale)
         if (reservationConfirmed)
-            msg.append(StringEscapeUtils.unescapeHtml(getText("registrationComplete.mail.footer", locale, messageSource)) + "\n");
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationComplete.mail.footer")) + "\n");
         else
-            msg.append(StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.footer", " " + course.getName() + "\n", locale, messageSource)));
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationToWaitinglist.mail.footer", " " + course.getName() + "\n")));
 
         msg.append("\n\n");
-        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.donotreply", getText("mail.default.from", locale, messageSource), locale, messageSource))	+ "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from")))	+ "\n");
         return msg;
     }
 
@@ -265,13 +263,13 @@ public class MailUtil {
     public static StringBuffer create_EMAIL_EVENT_REGISTRATION_DELETED_body(Course course, Locale locale, MessageSource messageSource, boolean chargeOverdue) {
         StringBuffer msg = new StringBuffer();
 
-        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.contactinfo", locale, messageSource)) + "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
         msg.append("\n");
         
         if(chargeOverdue)
-        	msg.append(StringEscapeUtils.unescapeHtml(getText("registrationDeleted.mail.body.chargeoverdue", course.getName(), locale, messageSource)) + "\n");
+        	msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationDeleted.mail.body.chargeoverdue", course.getName())) + "\n");
         else 
-        	msg.append(StringEscapeUtils.unescapeHtml(getText("registrationDeleted.mail.body", course.getName(), locale, messageSource)) + "\n");
+        	msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationDeleted.mail.body", course.getName())) + "\n");
         	
         msg.append("\n");
 
@@ -284,16 +282,15 @@ public class MailUtil {
         
         msg.append("\n");
         
-        msg.append(StringEscapeUtils.unescapeHtml(getText("registrationDeleted.mail.footer", locale, messageSource)) + "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationDeleted.mail.footer")) + "\n");
 
         msg.append("\n");
         
-        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.donotreply", getText("mail.default.from", locale, messageSource), locale, messageSource))	+ "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from")))	+ "\n");
         
         return msg;
     }
     
-
 	/**
 	 * Creates a moved-to-waitinglist mail body containing all the details of a
 	 * course, link to detailed course information and direct cancellation
@@ -313,12 +310,12 @@ public class MailUtil {
             String mailComment) {
         StringBuffer msg = new StringBuffer();
 
-        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.contactinfo", locale, messageSource)));
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
         msg.append("\n");
         
         addMailComment(mailComment, msg);
 
-        msg.append(StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.body", course.getName(), locale, messageSource)) + "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationToWaitinglist.mail.body", course.getName())) + "\n");
 
         msg.append("\n");
 
@@ -331,10 +328,10 @@ public class MailUtil {
         
         msg.append("\n\n");
 
-        msg.append("\n"	+ StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.footer", locale, messageSource)) + "\n");
+        msg.append("\n"	+ StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationToWaitinglist.mail.footer")) + "\n");
 
         msg.append("\n");
-        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.donotreply", getText("mail.default.from", locale, messageSource), locale, messageSource))	+ "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from")))	+ "\n");
         return msg;
     }
     
@@ -365,7 +362,7 @@ public class MailUtil {
     		Locale locale, MessageSource messageSource, String mailComment) {
         StringBuffer msg = new StringBuffer();
         
-        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.contactinfo", locale, messageSource)));
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
         msg.append("\n");
         
         // Include user defined comment if specified
@@ -388,7 +385,7 @@ public class MailUtil {
 
         msg.append("\n"); // empty lines
 
-        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.donotreply", getText("mail.default.from", locale, messageSource), locale, messageSource))	+ "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from")))	+ "\n");
         return msg;
     }
 
@@ -412,12 +409,12 @@ public class MailUtil {
             String mailComment) {
         StringBuffer msg = new StringBuffer();
 
-        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.contactinfo", locale, messageSource)));
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
         msg.append("\n");
         
         addMailComment(mailComment, msg);
 
-        msg.append(StringEscapeUtils.unescapeHtml(getText("registrationNewCourse.mail.body", locale, messageSource)) + "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationNewCourse.mail.body")) + "\n");
 
         msg.append("\n");
 
@@ -430,10 +427,10 @@ public class MailUtil {
 
         msg.append("\n\n");
 
-        msg.append("\n" + StringEscapeUtils.unescapeHtml(getText("registrationNewCourse.mail.footer", locale, messageSource)) + "\n");
+        msg.append("\n" + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationNewCourse.mail.footer")) + "\n");
 
         msg.append("\n");
-        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.donotreply", getText("mail.default.from", locale, messageSource), locale, messageSource))	+ "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from")))	+ "\n");
         return msg;
     }
     
@@ -461,10 +458,10 @@ public class MailUtil {
     private static void addDetailsLink(Course course, Locale locale,
     		MessageSource messageSource, StringBuffer msg) {
     	// link til detaljer om registrering
-    	String baseurl = StringEscapeUtils.unescapeHtml(getText("javaapp.baseurl", locale, messageSource));
+    	String baseurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.baseurl"));
     	
-    	msg.append(StringEscapeUtils.unescapeHtml(getText("javaapp.findurlhere", locale, messageSource)) + "\n");
-    	String coursedetailurl = StringEscapeUtils.unescapeHtml(getText("javaapp.coursedetailurl", ""+course.getId(), locale, messageSource));
+    	msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.findurlhere")) + "\n");
+    	String coursedetailurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.coursedetailurl", ""+course.getId()));
     	msg.append(baseurl + coursedetailurl + "\n");
     }
 
@@ -479,13 +476,13 @@ public class MailUtil {
     private static void addCancelLink(Course course, Registration registration,
 			Locale locale, MessageSource messageSource, StringBuffer msg) {
 		// link for direkte avmelding
-    	String baseurl = StringEscapeUtils.unescapeHtml(getText("javaapp.baseurl", locale, messageSource));
+    	String baseurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.baseurl"));
 
-        msg.append(StringEscapeUtils.unescapeHtml(getText("javaapp.cancelcourse", locale, messageSource)) + "\n");
-        String coursecancelurl = StringEscapeUtils.unescapeHtml(getText("javaapp.coursecancelurl", ""+registration.getId(), locale, messageSource));
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.cancelcourse")) + "\n");
+        String coursecancelurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.coursecancelurl", ""+registration.getId()));
         msg.append(baseurl + coursecancelurl + "\n");
         
-        if(course.getChargeoverdue()) msg.append(StringEscapeUtils.unescapeHtml(getText("registrationConfirmed.mail.footer.overdue", locale, messageSource)) + "\n");
+        if(course.getChargeoverdue()) msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationConfirmed.mail.footer.overdue")) + "\n");
 	}
 
     
@@ -499,35 +496,35 @@ public class MailUtil {
 	private static void appendCourseDetails(Course course, Locale locale, MessageSource messageSource, 
 			StringBuffer msg) {
 		// Include all the course details
-        msg.append(StringEscapeUtils.unescapeHtml(getText("course.name", locale, messageSource)) + ": "
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.name")) + ": "
                 + course.getName() + "\n");
-        msg.append(StringEscapeUtils.unescapeHtml(getText("course.type", locale, messageSource)) + ": "
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.type")) + ": "
                 + course.getType() + "\n");
-        msg.append(StringEscapeUtils.unescapeHtml(getText("course.startTime", locale, messageSource))
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.startTime"))
                 + ": "
-                + DateUtil.getDateTime(getText("date.format", locale, messageSource) + " "
-                        + getText("time.format", locale, messageSource), course.getStartTime()) + "\n");
-        msg.append(StringEscapeUtils.unescapeHtml(getText("course.stopTime", locale, messageSource))
+                + DateUtil.getDateTime(ApplicationResourcesUtil.getText("date.format") + " "
+                        + ApplicationResourcesUtil.getText("time.format"), course.getStartTime()) + "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.stopTime"))
                 + ": "
-                + DateUtil.getDateTime(getText("date.format", locale, messageSource) + " "
-                        + getText("time.format", locale, messageSource), course.getStopTime()) + "\n");
-        msg.append(StringEscapeUtils.unescapeHtml(getText("course.duration", locale, messageSource)) + ": "
+                + DateUtil.getDateTime(ApplicationResourcesUtil.getText("date.format") + " "
+                        + ApplicationResourcesUtil.getText("time.format"), course.getStopTime()) + "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.duration")) + ": "
                 + course.getDuration() + "\n");
-        msg.append(StringEscapeUtils.unescapeHtml(getText("course.organization", locale, messageSource)) + ": "
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.organization")) + ": "
                 + course.getOrganization().getName() + "\n");
-        msg.append(StringEscapeUtils.unescapeHtml(getText("course.serviceArea", locale, messageSource)) + ": "
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.serviceArea")) + ": "
                 + course.getServiceArea().getName() + "\n");
-        msg.append(StringEscapeUtils.unescapeHtml(getText("course.location", locale, messageSource)) + ": "
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.location")) + ": "
                 + course.getLocation().getName() + "\n");
 
         if (course.getResponsible() != null) {
-            msg.append(StringEscapeUtils.unescapeHtml(getText("course.responsible", locale, messageSource)) + ": "
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.responsible")) + ": "
                     + course.getResponsible().getFullName() + ", mailto:" + course.getResponsible().getEmail() + "\n");
         }
 
-        msg.append(StringEscapeUtils.unescapeHtml(getText("course.instructor", locale, messageSource)) + ": "
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.instructor")) + ": "
                 + course.getInstructor().getName() + ", mailto:" + course.getInstructor().getEmail() + "\n");
-        msg.append(StringEscapeUtils.unescapeHtml(getText("course.description", locale, messageSource)) + ": "
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.description")) + ": "
                 + course.getDescription() + "\n");
 	}
 
@@ -558,64 +555,63 @@ public class MailUtil {
         addMailComment(mailComment, msg);
 
         // Build mail
-        msg.append(StringEscapeUtils.unescapeHtml(getText("courseChanged.mail.body", " " + course.getName(), locale,
-                messageSource)));
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseChanged.mail.body", " " + course.getName())));
         msg.append("\n\n");
 
         // Include all the course details
         if (changedList.contains("name")) {
-            msg.append(StringEscapeUtils.unescapeHtml(getText("course.name", locale, messageSource)) + ": "
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.name")) + ": "
                     + course.getName() + "\n");
         }
         if (changedList.contains("type")) {
-            msg.append(StringEscapeUtils.unescapeHtml(getText("course.type", locale, messageSource)) + ": "
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.type")) + ": "
                     + course.getType() + "\n");
         }
         if (changedList.contains("startTime")) {
-            msg.append(StringEscapeUtils.unescapeHtml(getText("course.startTime", locale, messageSource))
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.startTime"))
                     + ": "
-                    + DateUtil.getDateTime(getText("date.format", locale, messageSource) + " "
-                            + getText("time.format", locale, messageSource), course.getStartTime()) + "\n");
+                    + DateUtil.getDateTime(ApplicationResourcesUtil.getText("date.format") + " "
+                            + ApplicationResourcesUtil.getText("time.format"), course.getStartTime()) + "\n");
         }
         if (changedList.contains("stopTime")) {
-            msg.append(StringEscapeUtils.unescapeHtml(getText("course.stopTime", locale, messageSource))
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.stopTime"))
                     + ": "
-                    + DateUtil.getDateTime(getText("date.format", locale, messageSource) + " "
-                            + getText("time.format", locale, messageSource), course.getStopTime()) + "\n");
+                    + DateUtil.getDateTime(ApplicationResourcesUtil.getText("date.format") + " "
+                            + ApplicationResourcesUtil.getText("time.format"), course.getStopTime()) + "\n");
         }
         if (changedList.contains("duration")) {
-            msg.append(StringEscapeUtils.unescapeHtml(getText("course.duration", locale, messageSource)) + ": "
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.duration")) + ": "
                     + course.getDuration() + "\n");
         }
         if (changedList.contains("organization")) {
-            msg.append(StringEscapeUtils.unescapeHtml(getText("course.organization", locale, messageSource)) + ": "
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.organization")) + ": "
                     + course.getOrganization().getName() + "\n");
         }
         if (changedList.contains("serviceArea")) {
-            msg.append(StringEscapeUtils.unescapeHtml(getText("course.serviceArea", locale, messageSource)) + ": "
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.serviceArea")) + ": "
                     + course.getServiceArea().getName() + "\n");
         }
         if (changedList.contains("location")) {
-            msg.append(StringEscapeUtils.unescapeHtml(getText("course.location", locale, messageSource)) + ": "
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.location")) + ": "
                     + course.getLocation().getName() + "\n");
         }
         if (changedList.contains("responsible")) {
             if (course.getResponsible() != null) {
-                msg.append(StringEscapeUtils.unescapeHtml(getText("course.responsible", locale, messageSource)) + ": "
+                msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.responsible")) + ": "
                         + course.getResponsible().getFullName() + ", mailto:" + course.getResponsible().getEmail()
                         + "\n");
             }
         }
         if (changedList.contains("instructor")) {
-            msg.append(StringEscapeUtils.unescapeHtml(getText("course.instructor", locale, messageSource)) + ": "
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.instructor")) + ": "
                     + course.getInstructor().getName() + ", mailto:" + course.getInstructor().getEmail() + "\n");
         }
         if (changedList.contains("description")) {
-            msg.append(StringEscapeUtils.unescapeHtml(getText("course.description", locale, messageSource)) + ": "
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.description")) + ": "
                     + course.getDescription() + "\n");
         }
         if (changedList.contains("chargeoverdue")) {
-            msg.append(StringEscapeUtils.unescapeHtml(getText("course.chargeoverdue", locale, messageSource)) + ": "
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.chargeoverdue")) + ": "
                     + (course.getChargeoverdue()?"Ja":"Nei") + "\n");
         }
 
@@ -637,13 +633,11 @@ public class MailUtil {
 */
         msg.append("\n");
 
-        msg.append(StringEscapeUtils.unescapeHtml(getText("courseChanged.mail.footer", locale, messageSource)));
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseChanged.mail.footer")));
 
         msg.append("\n\n");
-        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.contactinfo", locale, messageSource)) + "\n");
-        msg.append(StringEscapeUtils.unescapeHtml(getText("mail.donotreply", getText("mail.default.from", locale,
-                messageSource), locale, messageSource))
-                + "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from"))) + "\n");
 
         return msg;
     }
@@ -696,16 +690,14 @@ public class MailUtil {
         Log log = LogFactory.getLog(MailUtil.class.toString());
         ArrayList<MimeMessage> allEMails = new ArrayList<MimeMessage>();
 
-        String registered = StringEscapeUtils.unescapeHtml(getText("courseNotification.phrase.registered", locale,
-                messageSource));
-        String waiting = StringEscapeUtils.unescapeHtml(getText("courseNotification.phrase.waitinglist", locale,
-                messageSource));
+        String registered = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.phrase.registered"));
+        String waiting = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.phrase.waitinglist"));
 
         for (Registration registration : registrations) {
             MimeMessage message = ((JavaMailSenderImpl) sender).createMimeMessage();
             MimeMessageHelper helper = null;
             try {
-                helper = new MimeMessageHelper(message, true, (getText("mail.encoding", locale,messageSource)));
+                helper = new MimeMessageHelper(message, true, (ApplicationResourcesUtil.getText("mail.encoding")));
                 helper.setSubject(getSubject(registration, event, registered, waiting, messageSource, locale, course));
                 helper.setText(getBody(registration, msg, registered, waiting, messageSource, locale));
                 addCalendar(helper,event,course, registration);                
@@ -715,7 +707,7 @@ public class MailUtil {
                 if (from != null && !from.equals(""))
                     helper.setFrom(from);
                 else
-                    helper.setFrom(StringEscapeUtils.unescapeHtml(getText("mail.default.from", locale, messageSource)));
+                    helper.setFrom(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.default.from")));
             } catch (MessagingException e) {
                 log.error("Could not create MimeMessage", e);
             }
@@ -724,6 +716,38 @@ public class MailUtil {
         return allEMails;
     }
 
+    public static MimeMessage getMailMessage(String[] to, String[] cc, String[] bcc, String from, String subject, StringBuffer msg, String attachmentName, File attachementFileOnDisk, MessageSource messageSource, Locale locale, MailSender sender) {
+        Log log = LogFactory.getLog(MailUtil.class.toString());
+
+        MimeMessage message = null;
+        
+        if(subject == null) subject = "(No Subject)";
+        try {
+
+	        message = ((JavaMailSenderImpl) sender).createMimeMessage();
+	        MimeMessageHelper helper = null;
+	        helper = new MimeMessageHelper(message, true, (ApplicationResourcesUtil.getText("mail.encoding")));
+	
+	        helper.setSubject(subject);
+	        helper.setText(msg.toString());
+	        helper.setTo(to);
+	        
+	        if(cc != null) helper.setCc(cc);
+	        if(bcc != null) helper.setBcc(bcc);
+	        
+	        if (from != null && !from.equals(""))
+	            helper.setFrom(from);
+	        else
+	            helper.setFrom(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.default.from")));
+	
+	        if(attachmentName != null && attachementFileOnDisk != null) helper.addAttachment(attachmentName, attachementFileOnDisk);
+        }
+        catch(MessagingException e) {
+        	log.error("Error creating mimemessage", e);
+        }
+        return message;
+    }
+    
     /**
      * Adds ics file if registration OK, course changed or course cancelled.
      * @param helper
@@ -890,71 +914,65 @@ public class MailUtil {
         case Constants.EMAIL_EVENT_COURSECHANGED:
             if (registration.getReserved()) {
                 subject = StringEscapeUtils.unescapeHtml(
-                        getText("courseChanged.mail.subject", coursename, locale, messageSource)).replaceAll(
+                		ApplicationResourcesUtil.getText("courseChanged.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", registered).replaceAll("<coursename/>", coursename);
             } else {
                 subject = StringEscapeUtils.unescapeHtml(
-                        getText("courseChanged.mail.subject", coursename, locale, messageSource)).replaceAll(
+                		ApplicationResourcesUtil.getText("courseChanged.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", waiting).replaceAll("<coursename/>", coursename);
             }
             break;
         case Constants.EMAIL_EVENT_COURSECANCELLED:
             if (registration.getReserved()) {
                 subject = StringEscapeUtils.unescapeHtml(
-                        getText("courseCancelled.mail.subject", coursename, locale, messageSource)).replaceAll(
+                		ApplicationResourcesUtil.getText("courseCancelled.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", registered).replaceAll("<coursename/>", coursename);
             } else {
                 subject = StringEscapeUtils.unescapeHtml(
-                        getText("courseCancelled.mail.subject", coursename, locale, messageSource)).replaceAll(
+                		ApplicationResourcesUtil.getText("courseCancelled.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", waiting).replaceAll("<coursename/>", coursename);
             }
             break;
         case Constants.EMAIL_EVENT_COURSEDELETED:
             if (registration.getReserved()) {
                 subject = StringEscapeUtils.unescapeHtml(
-                        getText("courseDeleted.mail.subject", coursename, locale, messageSource)).replaceAll(
+                		ApplicationResourcesUtil.getText("courseDeleted.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", registered).replaceAll("<coursename/>", coursename);
             } else {
                 subject = StringEscapeUtils.unescapeHtml(
-                        getText("courseDeleted.mail.subject", coursename, locale, messageSource)).replaceAll(
+                		ApplicationResourcesUtil.getText("courseDeleted.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", waiting).replaceAll("<coursename/>", coursename);
             }
             break;
         case Constants.EMAIL_EVENT_NOTIFICATION:
             if (registration.getReserved()) {
                 subject = StringEscapeUtils.unescapeHtml(
-                        getText("courseNotification.mail.subject", coursename, locale, messageSource)).replaceAll(
+                		ApplicationResourcesUtil.getText("courseNotification.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", registered).replaceAll("<coursename/>", coursename);
             } else {
                 subject = StringEscapeUtils.unescapeHtml(
-                        getText("courseNotification.mail.subject", coursename, locale, messageSource)).replaceAll(
+                		ApplicationResourcesUtil.getText("courseNotification.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", waiting).replaceAll("<coursename/>", coursename);
             }
             break;
         case Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION:
             if (registration.getReserved()) {
-                subject = StringEscapeUtils.unescapeHtml(getText("registrationComplete.mail.subject", coursename,
-                        locale, messageSource));
+                subject = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationComplete.mail.subject", coursename));
             } else {
-                subject = StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.subject", coursename,
-                        locale, messageSource));
+                subject = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationToWaitinglist.mail.subject", coursename));
             }
             break;
         case Constants.EMAIL_EVENT_REGISTRATION_DELETED:
-            subject = StringEscapeUtils.unescapeHtml(getText("registrationDeleted.mail.subject", coursename, locale,
-                    messageSource));
+            subject = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationDeleted.mail.subject", coursename));
             break;
         case Constants.EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST:
-            subject = StringEscapeUtils.unescapeHtml(getText("registrationToWaitinglist.mail.subject", coursename,
-                    locale, messageSource));
+            subject = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationToWaitinglist.mail.subject", coursename));
             break;
         case Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED:
-            subject = StringEscapeUtils.unescapeHtml(getText("registrationConfirmed.mail.subject", coursename, locale,
-                    messageSource));
+            subject = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationConfirmed.mail.subject", coursename));
             break;
         case Constants.EMAIL_EVENT_NEW_COURSE_NOTIFICATION:
-            subject = StringEscapeUtils.unescapeHtml(getText("registrationNewCourse.mail.subject", coursename, locale,
-                    messageSource));
+            subject = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationNewCourse.mail.subject", coursename));
         }
         return subject;
     }
@@ -985,80 +1003,10 @@ public class MailUtil {
             msgIndivid.insert(0, StringUtil.ifEmpty(registration.getEmployeeNumber(), ansattParentes));
         }
 
-        msgIndivid.insert(0, getText("misc.hello", locale, messageSource) + " " + registration.getFirstName() + " "
+        msgIndivid.insert(0, ApplicationResourcesUtil.getText("misc.hello") + " " + registration.getFirstName() + " "
                 + registration.getLastName());
         return msgIndivid.toString();
     }
 
-    /**
-     * Method for getting a key's value (with i18n support). Calling
-     * getMessageSourceAccessor() is used because the RequestContext variable is
-     * not set in unit tests b/c there's no DispatchServlet Request.
-     * 
-     * @param msgKey
-     *            The key to the message
-     * @param locale
-     *            the current locale
-     * @param messageSource
-     *            The source of our messages
-     */
-    public static String getText(String msgKey, Locale locale, MessageSource messageSource) {
-        String result = "";
-        try {
-            result = messageSource.getMessage(msgKey, new String[] {}, locale);
-        } catch (Exception e) {
-            // TODO Handle exception
-        }
-        return result;
-    }
-
-    /**
-     * Method for getting a key's value (with i18n support). Calling
-     * getMessageSourceAccessor() is used because the RequestContext variable is
-     * not set in unit tests b/c there's no DispatchServlet Request.
-     * 
-     * @param msgKey
-     *            The key to the message
-     * @param arg0
-     *            Text to insert into the message
-     * @param locale
-     *            the current locale
-     * @param messageSource
-     *            The source of our messages
-     */
-    public static String getText(String msgKey, String arg0, Locale locale, MessageSource messageSource) {
-        String result = "";
-        try {
-            result = messageSource.getMessage(msgKey, new String[] { arg0 }, locale);
-        } catch (Exception e) {
-            // TODO Handle exception
-        }
-        return result;
-    }
-
-    /**
-     * Method for getting a key's value (with i18n support). Calling
-     * getMessageSourceAccessor() is used because the RequestContext variable is
-     * not set in unit tests b/c there's no DispatchServlet Request.
-     * 
-     * @param msgKey
-     *            The key to the message
-     * @param args
-     *            An arbitrary number of arguments to be inserted into the
-     *            retrieved message
-     * @param locale
-     *            the current locale
-     * @param messageSource
-     *            The source of our messages
-     */
-    public static String getText(String msgKey, Object[] args, Locale locale, MessageSource messageSource) {
-        String result = "";
-        try {
-            result = messageSource.getMessage(msgKey, args, locale);
-        } catch (Exception e) {
-            // TODO Handle exception
-        }
-        return result;
-    }
 
 }
