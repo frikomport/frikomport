@@ -163,7 +163,7 @@ public class RegistrationManagerTest extends BaseManagerTestCase {
         registrationDAO.expects(once()).method("getSpecificRegistrations")
                        .will(returnValue(new ArrayList()));
         registrationManager.getSpecificRegistrations(courseId, organizationId,
-            serviceareaId, reserved, invoiced, attended, limitToCourses);
+            serviceareaId, reserved, invoiced, attended, limitToCourses, null);
         registrationDAO.verify();
     }
 

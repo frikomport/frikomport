@@ -183,7 +183,7 @@ public class RegistrationAdministrationController extends BaseFormController {
 		}
 
 		List registrations = registrationManager.getSpecificRegistrations(new Long(courseId), null, null, null, null,
-				null, null);
+				null, null, null);
 		registrationsBackingObject.setRegistrations(registrations);
 
 		return registrationsBackingObject;

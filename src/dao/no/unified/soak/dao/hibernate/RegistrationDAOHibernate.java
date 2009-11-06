@@ -155,7 +155,7 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
 
     public List getSpecificRegistrations(Long courseId, Long organizationId,
 			Long serviceAreaId, Boolean reserved, Boolean invoiced, 
-			Boolean attended, Collection limitToCourses) {
+			Boolean attended, Collection limitToCourses, String[] orderBy) {
 		// The default setup - returns everything
 		DetachedCriteria criteria = DetachedCriteria
 				.forClass(Registration.class);
@@ -200,6 +200,12 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
         	}
         }
 
+        if(orderBy != null) {
+        	for(int i=0; i<orderBy.length; i++) {
+    			criteria.addOrder(Order.asc(orderBy[i]));
+        	}
+        }
+        
         List result = getHibernateTemplate().findByCriteria(criteria);
 
 		return result;

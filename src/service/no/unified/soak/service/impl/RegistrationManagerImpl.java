@@ -102,9 +102,9 @@ public class RegistrationManagerImpl extends BaseManager implements
 	 */
 	public List getSpecificRegistrations(Long courseId, Long organizationId,
 			Long serviceareaId, Boolean reserved, Boolean invoiced, 
-			Boolean attended, Collection limitToCourses) {
+			Boolean attended, Collection limitToCourses, String[] orderBy) {
 		return dao.getSpecificRegistrations(courseId, organizationId,
-				serviceareaId, reserved, invoiced, attended, limitToCourses);
+				serviceareaId, reserved, invoiced, attended, limitToCourses, orderBy);
 	}
 
 	/**

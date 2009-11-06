@@ -101,7 +101,7 @@ public interface RegistrationManager extends Manager {
      */
     public List getSpecificRegistrations(Long courseId, Long organizationId,
         Long serviceareaId, Boolean reserved, Boolean invoiced, 
-        Boolean attended, Collection limitToCourses);
+        Boolean attended, Collection limitToCourses, String[] orderBy);
 
     /**
      * Returns all registrations that are not confirmed (and thus are on the waiting list)

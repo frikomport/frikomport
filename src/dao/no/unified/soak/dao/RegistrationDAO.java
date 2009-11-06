@@ -106,11 +106,12 @@ public interface RegistrationDAO extends DAO {
 	 *            invoiced (true) or not (false)
      * @param attended Restrict list to registrations where the course has been
      *            attended (true) or not (false)
+     * @param orderBy String[] of order by criterias, can be null
 	 * @return List of Courses
 	 */
 	public List getSpecificRegistrations(Long courseId, Long organizationId,
 			Long serviceAreaId, Boolean reserved, Boolean invoiced, 
-			Boolean attended, Collection limitToCourses);
+			Boolean attended, Collection limitToCourses, String[] orderBy);
 
 	/**
 	 * Returns all registrations that are not confirmed (and thus are on the
