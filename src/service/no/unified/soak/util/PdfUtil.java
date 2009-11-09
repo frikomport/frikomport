@@ -9,10 +9,18 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
+import no.unified.soak.model.Course;
+import no.unified.soak.model.Registration;
+
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -58,9 +66,23 @@ public class PdfUtil {
 	 * @throws FileNotFoundException 
 	 */
 	public PdfUtil(String filename, int format, int mode, String title, String author) throws DocumentException, FileNotFoundException {
-
 		out = new FileOutputStream(filename);
+		openDocument(out, format, mode, title, author);
+	} 
 
+	/**
+	 * Instance for creation of pdf-document 
+	 * @param out 
+	 * @param pageformat A3, A4, A5
+	 * @param mode PORTRAIT, LANDSCAPE
+	 * @throws DocumentException 
+	 * @throws FileNotFoundException 
+	 */
+	public PdfUtil(OutputStream out, int format, int mode, String title, String author) throws DocumentException {
+		openDocument(out, format, mode, title, author);
+	} 
+
+	private void openDocument(OutputStream out, int format, int mode, String title, String author) throws DocumentException {
 		switch(format) {
 		case 3:
 			if(mode == LANDSCAPE) doc = new Document(PageSize.A3.rotate());
@@ -83,28 +105,11 @@ public class PdfUtil {
 		PdfWriter.getInstance(doc, out);
 		doc.addCreationDate();
 		
-		if(title != null) doc.addTitle(title);
-		if(author != null) doc.addAuthor(author);
-		
+		if(title != null) doc.addTitle(title); // must be set before doc.open() for itext-2.0.4
+		if(author != null) doc.addAuthor(author); // must be set before doc.open() for itext-2.0.4
 
 		doc.open();
-	} 
-	
-//	/**
-//	 * Adds title to file properties
-//	 * @param title
-//	 */
-//	public void addTitle(String title) {
-//		doc.addTitle(title);
-//	}
-//
-//	/**
-//	 * Adds author to file properties
-//	 * @param author
-//	 */
-//	public void addAuthor(String author) {
-//		doc.addAuthor(author);
-//	}
+	}
 	
 	public void emptyLine(int fontsize) throws DocumentException {
 		Font font = new Font();
@@ -209,11 +214,10 @@ public class PdfUtil {
 	}
 
 	
-//	public void adjustTableColumnsWidths(Integer identifier) {
-//		PdfUtilTable pdfut = tables.get(identifier);
-//		Table table = pdfut.getTable();
-//		table.setWidth(float[]);
-//	}
+	public void adjustTableColumnsWidths(Integer identifier) {
+		// TODO: generic calculation of columns widths should be implemented
+		//		table.setWidth(float[]);
+	}
 	
 	/**
 	 * Adds created table to pdf document
@@ -230,9 +234,104 @@ public class PdfUtil {
 	 */
 	public void close() {
 		doc.close();
-		try { out.close(); }
+		try { if(out != null) out.close(); }
 		catch (IOException e) { log.error("Error closing outputstream", e); }
 	}
+	
+	
+	/**
+	 * Formats an export of registrations
+	 * Should be moved to another class if PdfUtil is to be used for several purposes
+	 * @param course
+	 * @param registrations
+	 */
+	public void createRegistrationListExport(Course course, List<Registration> registrations) {
+		try {
+			// legg til kurs info
+			DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+			String start = formatter.format(course.getStartTime());
+			String stop = formatter.format(course.getStopTime());
+			String date = start.equals(stop)? start : start + " - " + stop;
+			String duration = course.getDuration()!=null ? (" (" + course.getDuration() + ")") : "";
+			
+			this.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.name")) + ": " + course.getName() + " - " + date + duration, 13, PdfUtil.ALIGN_LEFT);
+			this.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.responsible")) + ": " + course.getResponsible().getFullName() + "  /  " + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.instructor")) +  ": " + course.getInstructor().getName(), 9, PdfUtil.ALIGN_LEFT);
+			this.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.location")) + ": " + course.getLocation().getName() + ", " + course.getLocation().getAddress(), 9, PdfUtil.ALIGN_LEFT);
+			
+			Vector<String> tableHeader = new Vector<String>();
+			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.firstName")));
+			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.lastName")));
+			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.email")));
+			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.municipality")));
+			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.jobTitle")));
+			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.servicearea")));
+			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.workplace")));
+			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.phoneNumber.short")));
+			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.mobilePhone.short")));
+			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registration.comment")));
+			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registration.invoiced")));
+//				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registration.reserved")));
+			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registration.attended")));
+			
+			// absolute values for column widths (veeery testdriven)
+			float[] widths = {15,15,26,11,13,13,12,10,10,20,8,8};
+			
+			Integer reserved = this.addTableHeader(tableHeader, widths);
+			Integer waiting = this.addTableHeader(tableHeader, widths);
+			int rCount = 0;
+			int wCount = 0;
+				
+			// legg til deltakere
+			Iterator<Registration> it = registrations.iterator();
+			while(it.hasNext()) {
+				Registration r = it.next();
+				Vector<String> row = new Vector<String>();
+				row.add(r.getFirstName());
+				row.add(r.getLastName());
+				row.add(r.getEmail());
+				try { row.add(r.getOrganization().getName()); }catch(Exception e) { row.add(""); } // if organization not set
+				row.add(r.getJobTitle());
+				try { row.add(r.getServiceArea().getName()); }catch(Exception e) { row.add(""); } // if servicearea not set
+				row.add(r.getWorkplace());
+				row.add(r.getPhone());
+				row.add(r.getMobilePhone());
+				row.add(r.getComment());
+				row.add(r.getInvoiced()?StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("checkbox.checked")):StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("checkbox.unchecked")));
+//						row.add(r.getReserved()?StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("checkbox.checked")):StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("checkbox.unchecked")));
+				row.add(r.getAttended()?StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("checkbox.checked")):StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("checkbox.unchecked")));
+
+				if(r.getReserved()) {
+					this.addTableRow(row, reserved);
+					rCount++;
+				}
+				else {
+					this.addTableRow(row, waiting);
+					wCount++;
+				}
+			}
+
+			if(rCount > 0 || wCount > 0) {
+				this.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.attendants")) + ": " + rCount + "  /  " 
+						+ StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.waitlist")) + ": " + wCount 
+						+ "  (" + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationsSent.updated")) + " " + formatter.format(new Date()) + ")", 9, PdfUtil.ALIGN_LEFT);
+				this.emptyLine(10);
+			}
+			if(rCount > 0) {
+				this.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.attendants")), 11, PdfUtil.ALIGN_LEFT);
+				this.addTableToDocument(reserved);
+			}
+			if(rCount > 0 && wCount > 0) this.emptyLine(10);
+			if(wCount > 0) {
+				this.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.waitlist")), 11, PdfUtil.ALIGN_LEFT);
+				this.addTableToDocument(waiting);
+			}
+			this.close();
+			
+		} catch (Exception e) {
+			log.error("Error creating pdf document", e);
+		}
+	}
+	
 	
 	/**
 	 * For testing...

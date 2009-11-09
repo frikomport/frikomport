@@ -64,7 +64,7 @@
 		titleKey="registration.lastName"/>
 
     <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
-    <display:column media="csv excel xml pdf" property="email" sortable="true" headerClass="sortable" 
+    <display:column media="csv excel xml cpdf" property="email" sortable="true" headerClass="sortable" 
         titleKey="registration.email"/>
     </c:if>
 
@@ -103,7 +103,7 @@
 		<c:if test="${registrationList.invoiced == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 	</c:if>
 	</display:column>
-	<display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="registration.invoiced">
+	<display:column media="csv excel xml cpdf" sortable="true" headerClass="sortable" titleKey="registration.invoiced">
 		<c:if test="${registrationList.invoiced == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${registrationList.invoiced == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 	</display:column>
@@ -121,7 +121,7 @@
 		<c:if test="${registrationList.reserved == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 	</c:if>
 	</display:column>
-	<display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="registration.reserved">
+	<display:column media="csv excel xml cpdf" sortable="true" headerClass="sortable" titleKey="registration.reserved">
 		<c:if test="${registrationList.reserved == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${registrationList.reserved == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 	</display:column>
@@ -139,7 +139,7 @@
 		<c:if test="${registrationList.attended == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 	</c:if>
 	</display:column>
-	<display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="registration.attended.export">
+	<display:column media="csv excel xml cpdf" sortable="true" headerClass="sortable" titleKey="registration.attended.export">
 		<c:if test="${registrationList.attended == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${registrationList.attended == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 	</display:column>
@@ -162,6 +162,8 @@
 	</c:if>
 	<display:setProperty name="paging.banner.item_name" value="${item}"/>
 	<display:setProperty name="paging.banner.items_name" value="${items}"/>
+    <display:setProperty name="export.pdf" value="false"/>
+    <display:setProperty name="export.cpdf" value="true"/>
 </display:table>
 
 <input type="hidden" id="regid" name="regid" value="0"/>
