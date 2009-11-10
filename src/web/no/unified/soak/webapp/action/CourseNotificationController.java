@@ -174,6 +174,7 @@ public class CourseNotificationController extends BaseFormController {
 			if (originalCourse != null){
 				changedList = courseManager.getChangedList(originalCourse, course, format);
 			}
+			else log.error("NB!! changedList==null - Course not in session - caused by eZ Publish/forward/redirect...!!");
 		}
 
 		Locale locale = request.getLocale();
