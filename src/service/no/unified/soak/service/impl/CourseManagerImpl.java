@@ -141,13 +141,15 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
 		if (!originalCourse.getInstructorid().equals(changedCourse.getInstructorid())){
 			changedList.add("instructor");
 		}
+		if (originalCourse.getMaxAttendants() != changedCourse.getMaxAttendants()){
+			changedList.add("maxAttendants");
+		}
 		if (!originalCourse.getDescription().equals(changedCourse.getDescription())){
 			changedList.add("description");
 		}
-		if (!originalCourse.getChargeoverdue()!= changedCourse.getChargeoverdue()){
+		if (originalCourse.getChargeoverdue() != changedCourse.getChargeoverdue()){
 			changedList.add("chargeoverdue");
 		}
-
 		return changedList;
     }
 }

@@ -584,63 +584,72 @@ public class MailUtil {
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseChanged.mail.body", " " + course.getName())));
         msg.append("\n\n");
 
-        // Include all the course details
-        if (changedList.contains("name")) {
-            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.name")) + ": "
-                    + course.getName() + "\n");
-        }
-        if (changedList.contains("type")) {
-            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.type")) + ": "
-                    + course.getType() + "\n");
-        }
-        if (changedList.contains("startTime")) {
-            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.startTime"))
-                    + ": "
-                    + DateUtil.getDateTime(ApplicationResourcesUtil.getText("date.format") + " "
-                            + ApplicationResourcesUtil.getText("time.format"), course.getStartTime()) + "\n");
-        }
-        if (changedList.contains("stopTime")) {
-            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.stopTime"))
-                    + ": "
-                    + DateUtil.getDateTime(ApplicationResourcesUtil.getText("date.format") + " "
-                            + ApplicationResourcesUtil.getText("time.format"), course.getStopTime()) + "\n");
-        }
-        if (changedList.contains("duration")) {
-            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.duration")) + ": "
-                    + course.getDuration() + "\n");
-        }
-        if (changedList.contains("organization")) {
-            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.organization")) + ": "
-                    + course.getOrganization().getName() + "\n");
-        }
-        if (changedList.contains("serviceArea")) {
-            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.serviceArea")) + ": "
-                    + course.getServiceArea().getName() + "\n");
-        }
-        if (changedList.contains("location")) {
-            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.location")) + ": "
-                    + course.getLocation().getName() + "\n");
-        }
-        if (changedList.contains("responsible")) {
-            if (course.getResponsible() != null) {
-                msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.responsible")) + ": "
-                        + course.getResponsible().getFullName() + ", mailto:" + course.getResponsible().getEmail()
-                        + "\n");
-            }
-        }
-        if (changedList.contains("instructor")) {
-            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.instructor")) + ": "
-                    + course.getInstructor().getName() + ", mailto:" + course.getInstructor().getEmail() + "\n");
-        }
-        if (changedList.contains("description")) {
-            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.description")) + ": "
-                    + course.getDescription() + "\n");
-        }
-        if (changedList.contains("chargeoverdue")) {
-            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.chargeoverdue")) + ": "
-                    + (course.getChargeoverdue()?"Ja":"Nei") + "\n");
-        }
+        if(changedList != null) {
+	        // Include all the course details
+	        if (changedList.contains("name")) {
+	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.name")) + ": "
+	                    + course.getName() + "\n");
+	        }
+	        if (changedList.contains("type")) {
+	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.type")) + ": "
+	                    + course.getType() + "\n");
+	        }
+	        if (changedList.contains("startTime")) {
+	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.startTime"))
+	                    + ": "
+	                    + DateUtil.getDateTime(ApplicationResourcesUtil.getText("date.format") + " "
+	                            + ApplicationResourcesUtil.getText("time.format"), course.getStartTime()) + "\n");
+	        }
+	        if (changedList.contains("stopTime")) {
+	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.stopTime"))
+	                    + ": "
+	                    + DateUtil.getDateTime(ApplicationResourcesUtil.getText("date.format") + " "
+	                            + ApplicationResourcesUtil.getText("time.format"), course.getStopTime()) + "\n");
+	        }
+	        if (changedList.contains("duration")) {
+	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.duration")) + ": "
+	                    + course.getDuration() + "\n");
+	        }
+	        if (changedList.contains("organization")) {
+	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.organization")) + ": "
+	                    + course.getOrganization().getName() + "\n");
+	        }
+	        if (changedList.contains("serviceArea")) {
+	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.serviceArea")) + ": "
+	                    + course.getServiceArea().getName() + "\n");
+	        }
+	        if (changedList.contains("location")) {
+	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.location")) + ": "
+	                    + course.getLocation().getName() + "\n");
+	        }
+	        if (changedList.contains("responsible")) {
+	            if (course.getResponsible() != null) {
+	                msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.responsible")) + ": "
+	                        + course.getResponsible().getFullName() + ", mailto:" + course.getResponsible().getEmail()
+	                        + "\n");
+	            }
+	        }
+	        if (changedList.contains("instructor")) {
+	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.instructor")) + ": "
+	                    + course.getInstructor().getName() + ", mailto:" + course.getInstructor().getEmail() + "\n");
+	        }
 
+	        if (changedList.contains("maxAttendants")) {
+	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.maxAttendants")) + ": "
+	                    + course.getMaxAttendants() + "\n");
+	        }
+	        /*
+	         * Internal /external fee are (most likely) not to be broadcasted to all attendants
+			*/
+	        if (changedList.contains("description")) {
+	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.description")) + ": "
+	                    + course.getDescription() + "\n");
+	        }
+	        if (changedList.contains("chargeoverdue")) {
+	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.chargeoverdue")) + ": "
+	                    + (course.getChargeoverdue()?"Ja":"Nei") + "\n");
+	        }
+	    }
 
 /*
 		// why change a deleted course -- case should never occur
