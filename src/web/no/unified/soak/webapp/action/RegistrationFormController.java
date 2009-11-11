@@ -367,9 +367,7 @@ public class RegistrationFormController extends BaseFormController {
                 sendMail(locale, course, registration, Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED);
 
             } else {
-                // The course is fully booked, put the applicant on the
-                // waiting
-                // list
+                // The course is fully booked, put the applicant on the waiting list
                 courseFull = new Boolean(true);
                 registration.setReserved(new Boolean(false));
                 registrationManager.saveRegistration(registration);

@@ -117,40 +117,39 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
 	 *      Course)
 	 */
 	public Integer getAvailability(Boolean localAttendant, Course course) {
-		Integer result = null;
+		Integer availableSeats = null;
 
 		// Find number of registrations totally on the course
-		Integer allAttendants = getNumberOfAttendants(new Boolean(false),
-				course, true);
-
-		// If this is a local attendant, we simply calculate the result
+		int allAttendants = getNumberOfAttendants(new Boolean(false), course, true).intValue();
+		int maxAttendants = course.getMaxAttendants().intValue();
+		
+		// if local attendant
 		if (localAttendant.booleanValue()) {
-			if ((course.getMaxAttendants().intValue() - allAttendants
-					.intValue()) > 0) {
-				result = new Integer(course.getMaxAttendants().intValue()
-						- allAttendants.intValue());
+			if ((maxAttendants - allAttendants) > 0) {
+				availableSeats = maxAttendants - allAttendants;
 			} else {
-				result = new Integer(0);
-			}
-		} else {
-			// If it is not a local attendant, we need to see about their quota
-			Integer localAttendants = getNumberOfAttendants(new Boolean(true),
-					course, true);
-
-			// Find number of seats left reserved for the locals
-			int seatsLocalAvailable = course.getReservedInternal().intValue()
-					- localAttendants.intValue();
-
-			if ((course.getMaxAttendants().intValue()
-					- allAttendants.intValue() - seatsLocalAvailable) > 0) {
-				result = new Integer(course.getMaxAttendants().intValue()
-						- seatsLocalAvailable);
-			} else {
-				result = new Integer(0);
+				availableSeats = 0;
 			}
 		}
+		else { // if non-local attendant
+			int localAttendants = getNumberOfAttendants(new Boolean(true), course, true).intValue();
+			int otherAttendants = allAttendants - localAttendants; // non-locals with a reserved seat
 
-		return result;
+			// Find number of seats reserved for the locals
+			int reservedInternal = course.getReservedInternal().intValue();
+			int seatsOtherAvailable = 0;
+			if(reservedInternal > 0 && reservedInternal >= localAttendants) {
+				// reserved seats are not taken, but still not available for non-locals
+				seatsOtherAvailable = maxAttendants - reservedInternal - otherAttendants;
+			}
+			else {
+				// no reserved seats or all reserved seats taken
+				seatsOtherAvailable = maxAttendants - allAttendants;
+			}
+			availableSeats = seatsOtherAvailable;
+		}
+
+		return new Integer(availableSeats);
 	}
 
     public List getSpecificRegistrations(Long courseId, Long organizationId,
