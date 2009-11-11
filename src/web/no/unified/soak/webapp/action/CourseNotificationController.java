@@ -29,6 +29,7 @@ import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.RegistrationManager;
+import no.unified.soak.service.WaitingListManager;
 import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.MailUtil;
 
@@ -55,7 +56,8 @@ public class CourseNotificationController extends BaseFormController {
     private MailSender mailSender = null;
     protected MailEngine mailEngine = null;
 	protected SimpleMailMessage message = null;
-
+	private WaitingListManager waitingListManager = null;
+	
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource = messageSource;
 	}
@@ -80,18 +82,26 @@ public class CourseNotificationController extends BaseFormController {
         this.configurationManager = configurationManager;
     }
 
+	public void setWaitingListManager(WaitingListManager waitingListManager) {
+		this.waitingListManager = waitingListManager;
+	}
+
+    
     /**
 	 * @see org.springframework.web.servlet.mvc.SimpleFormController#referenceData(javax.servlet.http.HttpServletRequest)
 	 */
 	public Map referenceData(HttpServletRequest request, Object command, Errors errors) throws Exception {
 		Map<String, Object> model = new HashMap<String, Object>();
         Locale locale = request.getLocale();
+        Course course = (Course)command;
         String courseid = request.getParameter("id");
 		model.put("id", courseid);
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(Constants.USER_KEY);
 
-        // Are we to enable mail comment field and buttons?
+        // course is changed - waitingList should be processed
+        waitingListManager.processIfNeeded(course.getId(), locale);
+        
 		Boolean enableMail = new Boolean(false);
 		Boolean newCourse = new Boolean(false);
 		Boolean waitinglist = new Boolean(false);
@@ -111,11 +121,9 @@ public class CourseNotificationController extends BaseFormController {
 		}
 		
 		model.put("waitinglist", waitinglist);
-		
 		model.put("enableMail", enableMail);
 		model.put("newCourse", newCourse);
-
-        model.put("mailsenders",getMailSenders((Course)command, user, locale));
+        model.put("mailsenders",getMailSenders(course, user, locale));
 
         return model;
 	}
@@ -248,7 +256,7 @@ public class CourseNotificationController extends BaseFormController {
      */
 	private void sendMailToWaitingList(Locale locale, Course course, int event, String mailComment, String from, List <String> changedList) {
 		log.debug("Sending mail from CourseNotificationController");
-		List ids = new ArrayList<Long> ();
+		List<Long> ids = new ArrayList<Long> ();
 		ids.add(course.getCopyid());
 		List<Registration> registrations = registrationManager.getWaitingListRegistrations(ids);
 		
@@ -276,7 +284,7 @@ public class CourseNotificationController extends BaseFormController {
 	}
 
     protected List<String> getMailSenders(Course course, User user, Locale locale){
-        List senders = new ArrayList<String>();
+        List<String> senders = new ArrayList<String>();
         String defaultFrom = getText("mail.default.from",locale);
         senders.add(defaultFrom);
 
