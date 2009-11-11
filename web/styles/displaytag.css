@@ -38,6 +38,11 @@ span.xml {
 span.ics {
     background-image: url(../images/calendar.png);
 }
+
+span.rss {
+    background-image: url(../images/feed.png);
+}
+
 span.export {
     cursor: pointer;
     display: inline;

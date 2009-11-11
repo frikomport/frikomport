@@ -226,6 +226,7 @@ function fillSelect(obj){
     <display:setProperty name="paging.banner.item_name" value="${item}"/>
     <display:setProperty name="paging.banner.items_name" value="${items}"/>
     <display:setProperty name="export.ics" value="true"/>
+    <display:setProperty name="export.rss" value="true"/>
 </display:table>
 
 <c:out value="${buttons}" escapeXml="false"/>
