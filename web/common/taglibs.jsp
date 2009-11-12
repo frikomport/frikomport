@@ -1,4 +1,4 @@
-<%@ page language="java" errorPage="/error.jsp" pageEncoding="UTF-8" contentType="text/html; charset=utf-8" %>
+<%@ page language="java" errorPage="/error.jsp" pageEncoding="ISO-8859-1" contentType="text/html; charset=iso-8859-1" %>
 <%@ taglib uri="http://www.springmodules.org/tags/commons-validator" prefix="v" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>

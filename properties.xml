@@ -165,6 +165,7 @@
         <fileset dir="${spring.dir}" includes="*.jar"/>
         <fileset dir="${jstl.dir}/lib" includes="jstl.jar"/>
         <fileset dir="${displaytag.dir}" includes="*.jar"/>
+        <fileset dir="${poi.dir}" includes="*.jar"/>
     </path>
     <path id="web.test.classpath">
         <pathelement location="${hibernate.jar}"/> 
