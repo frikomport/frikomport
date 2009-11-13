@@ -7,15 +7,13 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import java.io.Serializable;
 
 /**
- * Created by IntelliJ IDEA.
- * User: gv
- *
  * @hibernate.class table="configuration" lazy="false"
  */
 public class Configuration extends BaseObject implements Serializable {
 
     private static final long serialVersionUID = 2027089783395343906L;    
     private String key;
+    private Boolean active;
     private String value;
 
     /**
@@ -33,8 +31,24 @@ public class Configuration extends BaseObject implements Serializable {
         this.key = key;
     }
 
+	/**
+	 * @hibernate.property column="active" not-null="true"
+	 * @return Returns active
+	 */
+	public Boolean getActive() {
+		return active;
+	}
+
+	/**
+	 * @param active
+	 * The active to set.
+	 */
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+    
     /**
-     * @hibernate.property column="value" not-null="true" length="100"
+     * @hibernate.property column="value" not-null="false" length="100"
      * @return
      */
     public String getValue() {

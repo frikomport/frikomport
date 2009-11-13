@@ -145,13 +145,13 @@ public class ActionFilter implements Filter {
     private void doConfiguration(HttpServletRequest request, HttpSession session){
         ConfigurationManager configurationManager = (ConfigurationManager)getContext().getBean("configurationManager");
 
-        session.setAttribute("showMenu", configurationManager.getValue("show.menu","false"));
-        session.setAttribute("canDelete", configurationManager.getValue("access.registration.delete","false"));
-        session.setAttribute("userdefaults", configurationManager.getValue("access.registration.userdefaults","false"));
-        session.setAttribute("emailrepeat", configurationManager.getValue("access.registration.emailrepeat","false"));
-        session.setAttribute("hideEmployeeFields", configurationManager.getValue("access.registration.hideEmployeeFields","false"));
-        session.setAttribute("hideServiceArea", configurationManager.getValue("access.registration.hideServiceArea","false"));
-        session.setAttribute("hideComment", configurationManager.getValue("access.registration.hideComment","false"));
+        session.setAttribute("showMenu", configurationManager.isActive("show.menu",false));
+        session.setAttribute("canDelete", configurationManager.isActive("access.registration.delete",false));
+        session.setAttribute("userdefaults", configurationManager.isActive("access.registration.userdefaults",false));
+        session.setAttribute("emailrepeat", configurationManager.isActive("access.registration.emailrepeat",false));
+        session.setAttribute("hideEmployeeFields", configurationManager.isActive("access.registration.hideEmployeeFields",false));
+        session.setAttribute("hideServiceArea", configurationManager.isActive("access.registration.hideServiceArea",false));
+        session.setAttribute("hideComment", configurationManager.isActive("access.registration.hideComment",false));
         session.setAttribute("itemCount", configurationManager.getValue("list.itemCount", "25"));
     }
 

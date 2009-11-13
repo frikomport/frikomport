@@ -199,9 +199,7 @@ public class RegistrationFormController extends BaseFormController {
                 registration.setOrganizationid(user.getOrganization().getId());
             }
             User regUser = null;
-            //            Locale locale = request.getLocale();
-            String userdefaults = configurationManager.getValue("access.registration.userdefaults","false");
-            if (userdefaults != null && userdefaults.equals("true")) {
+            if (configurationManager.isActive("access.registration.userdefaults",false)) {
                 regUser = user;
                 if (user != null && user.getUsername().equals(Constants.ANONYMOUS_ROLE)) {
                     regUser = (User) session.getAttribute(Constants.ALT_USER_KEY);
@@ -295,7 +293,7 @@ public class RegistrationFormController extends BaseFormController {
             // Perform a new registration
 
             // Check email
-            if(configurationManager.getValue("access.registration.emailrepeat","false").equals("true") &&  !registration.getEmail().equals(registration.getEmailRepeat())){
+            if(configurationManager.isActive("access.registration.emailrepeat",false) &&  !registration.getEmail().equals(registration.getEmailRepeat())){
                 //                String error = "errors.email.notSame";
                 errors.rejectValue("email", "errors.email.notSame",  new Object[] { registration.getEmail(), registration.getEmailRepeat() }, "Email addresses not equal.");
 

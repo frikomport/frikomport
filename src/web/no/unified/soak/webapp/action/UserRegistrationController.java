@@ -56,9 +56,9 @@ public class UserRegistrationController extends BaseFormController{
         Map model = new HashMap();
 
         HttpSession session = request.getSession();
-        String userdefaults = configurationManager.getValue("access.registration.userdefaults","false");
+ 
         User user = null;
-        if(userdefaults != null && userdefaults.equals("true")){
+        if(configurationManager.isActive("access.registration.userdefaults",false)){
             user = (User) session.getAttribute(Constants.USER_KEY);
             if(user != null && user.getUsername().equals(Constants.ANONYMOUS_ROLE)){
                 user = (User) session.getAttribute(Constants.ALT_USER_KEY);
@@ -111,10 +111,9 @@ public class UserRegistrationController extends BaseFormController{
     protected Object formBackingObject(HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();
         Locale locale = request.getLocale();
-        String userdefaults = configurationManager.getValue("access.registration.userdefaults","false");
 
         User user = null;
-        if(userdefaults != null && userdefaults.equals("true")){
+        if(configurationManager.isActive("access.registration.userdefaults",false)){
             user = (User) session.getAttribute(Constants.USER_KEY);
             if(user != null && user.getUsername().equals(Constants.ANONYMOUS_ROLE)){
                 user = (User) session.getAttribute(Constants.ALT_USER_KEY);

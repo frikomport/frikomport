@@ -1,13 +1,9 @@
 package no.unified.soak.dao;
 
+import java.util.List;
+
 import no.unified.soak.model.Configuration;
 
-/**
- * Created by IntelliJ IDEA.
- * User: gv
- * Date: 10.nov.2008
- * Time: 11:26:28
- */
 public interface ConfigurationDAO extends DAO {
 
     /**
@@ -15,4 +11,8 @@ public interface ConfigurationDAO extends DAO {
      * @return no.unified.soak.model.Configuration
      */
     public Configuration getConfiguration(String key);
+    
+    public List<Configuration> getConfigurations();
+    
+    public void saveConfiguration(Configuration configuration);
 }

@@ -9,11 +9,13 @@ import javax.sql.DataSource;
 import no.unified.soak.Constants;
 import no.unified.soak.model.Address;
 import no.unified.soak.model.Category;
+import no.unified.soak.model.Configuration;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Organization;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.ServiceArea;
 import no.unified.soak.model.User;
+import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.DatabaseUpdateManager;
 import no.unified.soak.service.OrganizationManager;
@@ -42,6 +44,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     private ServiceAreaManager serviceAreaManager = null;
     private OrganizationManager organizationManager = null;
     private CategoryManager categoryManager = null;
+    private ConfigurationManager configurationManager = null;
 
 
     // hack for setting messagesource and locale to ApplicationResourcesUtil once
@@ -82,6 +85,10 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         this.categoryManager = categoryManager;
     }
 
+    public void setConfigurationManager(ConfigurationManager configurationManager) {
+        this.configurationManager = configurationManager;
+    }
+    
     public void updateDatabase() {
         // Schmema updates preactions
 //        updateDatabaseSchemaBefore();
@@ -97,6 +104,9 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         updateRegistrations();
         // Schema updates postactions
         updateDatabaseSchemaAfter();
+        
+        //update configuration content
+        updateConfigurations();
     }
 
     /**
@@ -381,6 +391,39 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         }
     }
 
+    /**
+     * @since 1.7
+     */
+    private void updateConfigurations() {
+		/**
+		 * DB has changed from key, value to key, active, value. Most values in
+		 * DB are boolean defined as strings i value field, this method moves
+		 * values to correct new field
+		 */
+    	List<Configuration> configurations = configurationManager.getConfigurations();
+    	if(configurations != null) {
+    		Iterator<Configuration> iterator = configurations.iterator();
+    		while(iterator.hasNext()) {
+    			Configuration configuration = iterator.next();
+    			String value = configuration.getValue();
+    			boolean updated = false;
+
+    			if(value != null && value.equals("true")) {
+    				configuration.setActive(new Boolean(true));
+    				configuration.setValue(null);
+    				updated = true;
+    			}
+    			if(value != null && value.equals("false")) {
+    				configuration.setActive(new Boolean(false));
+    				configuration.setValue(null);
+    				updated = true;
+    			}
+    			
+    			if(updated) configurationManager.saveConfiguration(configuration);
+    		}
+    	}
+    }
+    
     public void executeTask() {
         log.info("running databaseUpdateManager");
         updateDatabase();

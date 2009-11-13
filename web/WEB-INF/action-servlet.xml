@@ -271,6 +271,15 @@
         <property name="cancelView" value="redirect:listCategories.html"/>
     </bean>
 
+    <bean id="configurationFormController" class="no.unified.soak.webapp.action.ConfigurationFormController" autowire="byName">
+        <property name="commandName" value="configurationsBackingObject"/>
+        <property name="commandClass" value="no.unified.soak.webapp.action.ConfigurationsBackingObject"/>
+        <property name="formView" value="configurationForm"/>
+        <property name="successView" value="redirect:administerConfiguration.html"/>
+        <property name="cancelView" value="redirect:administerConfiguration.html"/>
+    </bean>
+
+
     <!-- Load WEB-INF/classes/ApplicationResources.properties for i18n messages using JSTL's fmt tag -->
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
         <property name="cacheSeconds" value="10"/>
@@ -331,6 +340,8 @@
                 <prop key="/detailsUser.html">userDetailsController</prop>
 				<prop key="/listUsers.html">userController</prop>
 				<prop key="/profileUser.html">userRegistrationController</prop>
+
+                <prop key="/administerConfiguration.html">configurationFormController</prop>
 
                 <prop key="/listCategories.html">categoryController</prop>
                 <prop key="/detailsCategory.html">categoryDetailsController</prop>
