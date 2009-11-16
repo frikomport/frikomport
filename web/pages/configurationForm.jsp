@@ -26,12 +26,12 @@
 <display:table name="${configurationsBackingObject.configurations}" cellspacing="0" cellpadding="0"
     pagesize="${itemCount}" class="list" export="true" id="configurationList" requestURI="">
 
-    <display:column property="key" sortable="true" headerClass="sortable" 
-        titleKey="configuration.key"/>
+    <display:column property="name" sortable="true" headerClass="sortable" 
+        titleKey="configuration.name"/>
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="configuration.active">
-        <input type="hidden" name="_key<c:out value="${configurationList.key}"/>" value="visible"/>
-        <input type="checkbox" name="key_<c:out value="${configurationList.key}"/>"
+        <input type="hidden" name="_id<c:out value="${configurationList.id}"/>" value="visible"/>
+        <input type="checkbox" name="id_<c:out value="${configurationList.id}"/>"
                     <c:if test="${configurationList.active == true}"> checked="checked" </c:if> />
     </display:column>
     <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="configuration.active">
@@ -41,6 +41,10 @@
 
     <!--  display:column property="value" sortable="true" headerClass="sortable" 
         titleKey="configuration.value"/ -->
+
+    <display:column sortable="true" headerClass="sortable" titleKey="configuartion.description">
+        <fmt:message key="${configurationList.name}" />
+    </display:column>
 
     <display:setProperty name="paging.banner.item_name" value="${item}"/>
     <display:setProperty name="paging.banner.items_name" value="${items}"/>

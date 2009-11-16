@@ -108,8 +108,8 @@ public class ConfigurationFormController extends BaseFormController {
 			// Get current row
 			Configuration thisConfiguration = configurationsBackingObject.getConfigurations().get(i);
 
-			String activeCheckbox = request.getParameter("key_" + thisConfiguration.getKey());
-			String hiddenActiveCheckbox = request.getParameter("_key" + thisConfiguration.getKey()); 
+			String activeCheckbox = request.getParameter("id_" + thisConfiguration.getId());
+			String hiddenActiveCheckbox = request.getParameter("_id" + thisConfiguration.getId()); 
 
 			boolean active = checkboxToBoolean(activeCheckbox);
 			boolean hiddenActivePresent = checkboxToBoolean(hiddenActiveCheckbox);

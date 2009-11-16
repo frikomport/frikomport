@@ -405,6 +405,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     		Iterator<Configuration> iterator = configurations.iterator();
     		while(iterator.hasNext()) {
     			Configuration configuration = iterator.next();
+    			String name = configuration.getName();
     			String value = configuration.getValue();
     			boolean updated = false;
 
@@ -418,6 +419,29 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     				configuration.setValue(null);
     				updated = true;
     			}
+
+    			// invers properties from hide* to show*
+    			if(name.equals("access.registration.hideEmployeeFields")) {
+    				configuration.setName("access.registration.showEmployeeFields");
+    				if(configuration.getActive()) configuration.setActive(new Boolean(false));
+    				else configuration.setActive(new Boolean(true));
+    				updated = true;
+    			}
+
+    			if(name.equals("access.registration.hideServiceArea")) {
+    				configuration.setName("access.registration.showServiceArea");
+    				if(configuration.getActive()) configuration.setActive(new Boolean(false));
+    				else configuration.setActive(new Boolean(true));
+    				updated = true;
+    			}
+
+    			if(name.equals("access.registration.hideComment")) {
+    				configuration.setName("access.registration.showComment");
+    				if(configuration.getActive()) configuration.setActive(new Boolean(false));
+    				else configuration.setActive(new Boolean(true));
+    				updated = true;
+    			}
+    			// -- end invers
     			
     			if(updated) configurationManager.saveConfiguration(configuration);
     		}

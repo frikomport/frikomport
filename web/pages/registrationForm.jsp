@@ -32,7 +32,7 @@
 		<table class="detail">
 			<form:hidden path="id" />
 			<form:hidden path="courseid" />
-			<c:if test="${!hideEmployeeFields}">
+			<c:if test="${showEmployeeFields}">
 			<tr>
 				<th>
 					<soak:label key="registration.employeeNumber" />
@@ -102,7 +102,7 @@
 					<form:errors cssClass="fieldError" path="mobilePhone" />
 				</td>
 			</tr>
-            <c:if test="${!hideEmployeeFields}">
+            <c:if test="${showEmployeeFields}">
 			<tr>
 				<th>
 					<soak:label key="registration.closestLeader" />
@@ -143,7 +143,7 @@
 					<form:errors cssClass="fieldError" path="organizationid" />
 				</td>
 			</tr>
-            <c:if test="${!hideServiceArea}">
+            <c:if test="${showServiceArea}">
 			<tr>
 				<th>
 					<soak:label key="registration.serviceArea" />
@@ -177,7 +177,7 @@
 				</td>
 			</tr>
             </c:if>
-            <c:if test="${!hideComment}">
+            <c:if test="${showComment}">
 			<tr>
 				<th>
 					<soak:label key="registration.comment" />

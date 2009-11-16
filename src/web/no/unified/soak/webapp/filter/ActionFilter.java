@@ -149,9 +149,9 @@ public class ActionFilter implements Filter {
         session.setAttribute("canDelete", configurationManager.isActive("access.registration.delete",false));
         session.setAttribute("userdefaults", configurationManager.isActive("access.registration.userdefaults",false));
         session.setAttribute("emailrepeat", configurationManager.isActive("access.registration.emailrepeat",false));
-        session.setAttribute("hideEmployeeFields", configurationManager.isActive("access.registration.hideEmployeeFields",false));
-        session.setAttribute("hideServiceArea", configurationManager.isActive("access.registration.hideServiceArea",false));
-        session.setAttribute("hideComment", configurationManager.isActive("access.registration.hideComment",false));
+        session.setAttribute("showEmployeeFields", configurationManager.isActive("access.registration.showEmployeeFields",true));
+        session.setAttribute("showServiceArea", configurationManager.isActive("access.registration.showServiceArea",true));
+        session.setAttribute("showComment", configurationManager.isActive("access.registration.showComment",true));
         session.setAttribute("itemCount", configurationManager.getValue("list.itemCount", "25"));
     }
 

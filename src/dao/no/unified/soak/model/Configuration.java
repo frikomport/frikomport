@@ -12,23 +12,39 @@ import java.io.Serializable;
 public class Configuration extends BaseObject implements Serializable {
 
     private static final long serialVersionUID = 2027089783395343906L;    
-    private String key;
+    private Long id;
+    private String name;
     private Boolean active;
     private String value;
 
     /**
-     * @hibernate.id column="cfg_key" not-null="true" length="100" generator-class="assigned"
+     * @hibernate.id column="id" not-null="true" generator-class="assigned"
      * @return The key
      */
-    public String getKey() {
-        return key;
+    public Long getId() {
+        return id;
     }
 
     /**
-     * @param key The konfigurationkey to set
+     * @param id The id to set
      */
-    public void setKey(String key) {
-        this.key = key;
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+    /**
+     * @hibernate.property column="name" not-null="true" length="100"
+     * @return The name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name The configuration name to set
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
 	/**
@@ -61,6 +77,7 @@ public class Configuration extends BaseObject implements Serializable {
     public void setValue(String value) {
         this.value = value;
     }
+    
 
     /**
      * @see java.lang.Object#equals()
@@ -72,7 +89,8 @@ public class Configuration extends BaseObject implements Serializable {
 
         Configuration castOther = (Configuration) other;
 
-        return new EqualsBuilder().append(key, castOther.key)
+        return new EqualsBuilder().append(id, castOther.id)
+        							.append(name, castOther.name)
                                     .append(value, castOther.value)
                                     .isEquals();
     }
@@ -83,7 +101,7 @@ public class Configuration extends BaseObject implements Serializable {
      * @see java.lang.Object#hashCode()
      */
     public int hashCode() {
-        return new HashCodeBuilder().append(key).toHashCode();
+        return new HashCodeBuilder().append(id).toHashCode();
     }
 
 
@@ -91,7 +109,8 @@ public class Configuration extends BaseObject implements Serializable {
      * @see java.lang.Object#toString()
      */
     public String toString() {
-        return new ToStringBuilder(this).append("key",key)
+        return new ToStringBuilder(this).append("id",id)
+        								.append("name",name)
                                         .append("value",value)
                                         .toString();
     }
