@@ -141,6 +141,16 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 <display:table name="${registrationList}" cellspacing="0" cellpadding="0"
     id="registrationList" pagesize="${itemCount}" class="list" 
     export="true" requestURI="">
+    
+    <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+    <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
+<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible || (isCourseResponsible)}">
+        <a href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseId" value="${registrationList.courseid}"/></c:url>'>
+            <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
+        </a>
+</c:if>
+    </display:column>
+</c:if>
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="course.name">
          <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${registrationList.course.id}"/></c:url>" 
@@ -192,18 +202,6 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
     <display:column media="csv excel xml pdf" property="invoiceAddress.city" sortable="true" headerClass="sortable" titleKey="registrationList.invoiceAddress.city"/>
     <display:column media="csv excel xml pdf" property="invoiceAddress.postalCode" sortable="true" headerClass="sortable" titleKey="registrationList.invoiceAddress.postalCode"/>
     
-    
-
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
-    <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible || (isCourseResponsible)}">
-	    <button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseId" value="${registrationList.courseid}"/></c:url>'">
-    	    <fmt:message key="button.edit"/>
-	    </button>
-</c:if>
-    </display:column>
-</c:if>
-
     <display:setProperty name="paging.banner.item_name" value="${item}"/>
     <display:setProperty name="paging.banner.items_name" value="${items}"/>
 </display:table>

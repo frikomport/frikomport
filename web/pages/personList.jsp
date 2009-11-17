@@ -20,7 +20,13 @@
 <display:table name="${personList}" cellspacing="0" cellpadding="0"
     id="personList" pagesize="${itemCount}" class="list" 
     export="true" requestURI="">
-
+<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+    <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
+        <a href='<c:url value="/editPerson.html"><c:param name="id" value="${personList.id}"/><c:param name="from" value="list"/></c:url>'>
+            <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
+        </a>
+    </display:column>
+</c:if>
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="person.name" sortProperty="name">
          <a href="<c:url value="/detailsPerson.html"><c:param name="id" value="${personList.id}"/></c:url>" 
          title="<c:out value="${personList.description}"/>"><c:out value="${personList.name}"/></a>
@@ -44,16 +50,8 @@
 
     <display:column sortable="true" headerClass="sortable"
          titleKey="person.selectable">
-		<c:if test="${personList.selectable == true}"><fmt:message key="checkbox.checked"/></c:if>
-		<c:if test="${personList.selectable == false}"><fmt:message key="checkbox.unchecked"/></c:if>
-	</display:column>
-</c:if>
-
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
-    <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-	    <button type="button" onclick="location.href='<c:url value="/editPerson.html"><c:param name="id" value="${personList.id}"/><c:param name="from" value="list"/></c:url>'">
-    	    <fmt:message key="button.edit"/>
-	    </button>
+        <c:if test="${personList.selectable == true}"><fmt:message key="checkbox.checked"/></c:if>
+        <c:if test="${personList.selectable == false}"><fmt:message key="checkbox.unchecked"/></c:if>
     </display:column>
 </c:if>
 

@@ -52,7 +52,13 @@
 <display:table name="${userList}" cellspacing="0" cellpadding="0"
     requestURI="listUsers.html" defaultsort="1" id="userList" pagesize="${itemCount}"
     class="list userList" export="true">
-
+    <c:if test="${isAdmin || isEducationResponsible}">
+    <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
+        <a href='<c:url value="/editUser.html"><c:param name="username" value="${userList.username}"/><c:param name="from" value="list"/></c:url>'>
+            <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
+        </a>
+    </display:column>
+    </c:if>
     <%-- Table columns --%>
     <display:column property="username" sortable="true"
         headerClass="sortable" url="/detailsUser.html?from=list"
@@ -63,13 +69,6 @@
         headerClass="sortable" titleKey="user.lastName" />
     <display:column property="email" sortable="true" headerClass="sortable"
         autolink="true" titleKey="user.mail" />
-    <c:if test="${isAdmin || isEducationResponsible}">
-    <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-        <button type="button" onclick="location.href='<c:url value="/editUser.html"><c:param name="username" value="${userList.username}"/><c:param name="from" value="list"/></c:url>'">
-            <fmt:message key="button.edit"/>
-        </button>
-    </display:column>
-</c:if>
 
     <fmt:message var="user" key="userList.user" />
     <fmt:message var="users" key="userList.users" />

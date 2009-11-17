@@ -57,6 +57,18 @@
 	pagesize="${itemCount}" class="list"
 	export="true" id="registrationList" requestURI="">
 
+    <c:if test="${(admin == true || canDelete == true) && allowEditRegistration == true}">
+    <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
+        <a href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseId" value="${registrationList.courseid}"/></c:url>'>
+            <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
+        </a>
+        <input src="<c:url value="/images/cross.png"/>" title="<fmt:message key="button.unregister"/>" alt="<fmt:message key="button.unregister"/>" type="image" value="unregister" name="unregister" onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmUnregistration()"/>
+        <c:if test="${admin == true}">
+        <input src="<c:url value="/images/bin.png"/>" title="<fmt:message key="button.delete"/>" alt="<fmt:message key="button.delete"/>" type="image" value="delete" name="delete" onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmDeleteRegistration()"/>
+        </c:if>
+    </display:column>
+    </c:if>
+    
 	<display:column property="firstName" sortable="true" headerClass="sortable" 
 		titleKey="registration.firstName"/>
 
@@ -145,21 +157,6 @@
 	</display:column>
     </c:if>
 
-	<c:if test="${(admin == true || canDelete == true) && allowEditRegistration == true}">
-	<display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-		<button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseId" value="${registrationList.courseid}"/></c:url>'">
-			<fmt:message key="button.edit"/>
-		</button>
-		<button type="submit" name="unregister"	onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmUnregistration()">
-			<fmt:message key="button.unregister"/>
-		</button>
-		<c:if test="${admin == true}">
-		<button type="submit" name="delete" onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmDeleteRegistration()">
-			<fmt:message key="button.delete"/>
-		</button>
-		</c:if>
-	</display:column>
-	</c:if>
 	<display:setProperty name="paging.banner.item_name" value="${item}"/>
 	<display:setProperty name="paging.banner.items_name" value="${items}"/>
     <display:setProperty name="export.pdf" value="false"/>

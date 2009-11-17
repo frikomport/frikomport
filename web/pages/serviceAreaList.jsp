@@ -50,7 +50,14 @@
 <display:table name="${serviceAreaList}" cellspacing="0" cellpadding="0"
 	id="serviceAreaList" pagesize="${itemCount}" class="list" export="true"
 	requestURI="">
-
+    <c:if test="${isAdmin}">
+        <display:column media="html" sortable="false" headerClass="sortable"
+            titleKey="button.heading">
+        <a href='<c:url value="/editServiceArea.html"><c:param name="id" value="${serviceAreaList.id}"/></c:url>'>
+            <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
+        </a>
+        </display:column>
+    </c:if>
 	<display:column property="name" sortable="true" headerClass="sortable"
 		titleKey="serviceArea.name" />
 
@@ -68,16 +75,6 @@
 			<c:if test="${serviceAreaList.selectable == false}">
 				<fmt:message key="checkbox.unchecked" />
 			</c:if>
-		</display:column>
-	</c:if>
-
-	<c:if test="${isAdmin}">
-		<display:column media="html" sortable="false" headerClass="sortable"
-			titleKey="button.heading">
-			<button type="button"
-				onclick="location.href='<c:url value="/editServiceArea.html"><c:param name="id" value="${serviceAreaList.id}"/></c:url>'">
-				<fmt:message key="button.edit" />
-			</button>
 		</display:column>
 	</c:if>
 

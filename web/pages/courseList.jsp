@@ -129,6 +129,16 @@ function fillSelect(obj){
     id="courseList" pagesize="${itemCount}" class="list" 
     export="true" requestURI="listCourses.html">
 
+<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+    <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
+<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible && username == courseList.responsible.username}">
+        <a href='<c:url value="/editCourse.html"><c:param name="id" value="${courseList.id}"/><c:param name="from" value="list"/></c:url>'>
+            <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
+        </a>
+</c:if>
+    </display:column>
+</c:if>
+
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="name">
         <c:if test="${courseList.status == 3}"><img src="<c:url value="/images/cancel.png"/>"
                		alt="<fmt:message key="icon.warning"/>" class="icon" /><fmt:message key="course.cancelled.alert"/><br/></c:if>
@@ -212,16 +222,6 @@ function fillSelect(obj){
     <display:column media="excel" property="description" sortable="true" headerClass="sortable" titleKey="course.description.export"/>
 
     <display:column media="excel" property="detailURL" sortable="true" headerClass="sortable" titleKey="course.detailURL.export"/>
-
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
-    <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible && username == courseList.responsible.username}">
-	    <button type="button" onclick="location.href='<c:url value="/editCourse.html"><c:param name="id" value="${courseList.id}"/><c:param name="from" value="list"/></c:url>'">
-    	    <fmt:message key="button.edit"/>
-	    </button>
-</c:if>
-    </display:column>
-</c:if>
 
     <display:setProperty name="paging.banner.item_name" value="${item}"/>
     <display:setProperty name="paging.banner.items_name" value="${items}"/>
