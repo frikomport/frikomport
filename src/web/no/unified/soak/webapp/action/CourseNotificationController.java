@@ -51,11 +51,11 @@ public class CourseNotificationController extends BaseFormController {
 	
 	private CourseManager courseManager = null;
 	private RegistrationManager registrationManager = null;
-    private ConfigurationManager configurationManager = null;
 	private MessageSource messageSource = null;
     private MailSender mailSender = null;
     protected MailEngine mailEngine = null;
 	protected SimpleMailMessage message = null;
+	protected ConfigurationManager configurationManager = null;
 	private WaitingListManager waitingListManager = null;
 	
 	public void setMessageSource(MessageSource messageSource) {
@@ -240,9 +240,12 @@ public class CourseNotificationController extends BaseFormController {
 			default:
 				if(log.isDebugEnabled()) log.debug("sendMail: Handling of event:" + event + " not implemented..!");
 		}
-		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, from, mailSender);
+		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, from, mailSender, false);
 		MailUtil.sendMimeMails(emails, mailEngine);
 		
+		if(configurationManager.isActive("mail.course.sendSummary", true)) {
+			MailUtil.sendSummaryToResponsibleAndInstructor(course, from, registrations, msg, mailEngine, mailSender);
+		}
 	}
 	
 
@@ -269,11 +272,13 @@ public class CourseNotificationController extends BaseFormController {
 				if(log.isDebugEnabled()) log.debug("sendMailToWaitingList: Handling of event:" + event + " not implemented..!");
 		}
 		
-		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, from, mailSender);
+		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, from, mailSender, false);
 		MailUtil.sendMimeMails(emails, mailEngine);
-		
-	}
 
+		if(configurationManager.isActive("mail.course.sendSummary", true)) {
+			MailUtil.sendSummaryToResponsibleAndInstructor(course, from, registrations, msg, mailEngine, mailSender);
+		}
+	}
 
 	/**
 	 * @param registrationManager

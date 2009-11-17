@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import javax.mail.internet.MimeMessage;
 
 import no.unified.soak.Constants;
+import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.util.MailUtil;
 import no.unified.soak.model.Course;
@@ -39,7 +40,7 @@ public class CourseEmailController extends CourseNotificationController
     public void setMailSender(MailSender mailSender) {
         this.mailSender = mailSender;
     }
-
+    
     public Map referenceData(HttpServletRequest request, Object command, Errors errors) throws Exception {
         if (log.isDebugEnabled()) {
             log.debug("entering 'referenceData' method...");
@@ -114,8 +115,11 @@ public class CourseEmailController extends CourseNotificationController
 				if(log.isDebugEnabled()) log.debug("sendMail: Handling of event:" + event + " not implemented..!");
 		}
 		
-		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, from, mailSender);
+		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, from, mailSender, false);
 		MailUtil.sendMimeMails(emails, mailEngine);
 
+		if(configurationManager.isActive("mail.course.sendSummary", true)) {
+			MailUtil.sendSummaryToResponsibleAndInstructor(course, from, registrations, msg, mailEngine, mailSender);
+		}
 	}
 }

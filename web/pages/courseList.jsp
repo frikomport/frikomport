@@ -166,7 +166,7 @@ function fillSelect(obj){
     
     <display:column property="availableAttendants" sortable="true" headerClass="sortable" titleKey="course.availableAttendants"/>
 
-    <display:column sortable="true" headerClass="sortable" titleKey="course.registerBy" sortProperty="registerBy">
+    <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.registerBy" sortProperty="registerBy">
 		<c:choose>
 			<c:when test="${courseList.expired}">
 				<i><fmt:formatDate value="${courseList.registerBy}" type="both" pattern="${dateformat} ${timeformat}" /></i>
@@ -176,6 +176,9 @@ function fillSelect(obj){
 			</c:otherwise>
 		</c:choose>
 	</display:column>
+    <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="course.registerBy.export">
+        <fmt:formatDate value="${courseList.registerBy}" type="both" pattern="${dateformat} ${timeformat}" />
+    </display:column>
 
     <display:column property="duration" sortable="true" headerClass="sortable"
          titleKey="course.duration"/>
@@ -186,8 +189,6 @@ function fillSelect(obj){
     <display:column property="serviceArea.name" sortable="true" headerClass="sortable"
          titleKey="course.serviceArea"/>
          
-    <display:column media="csv excel xml pdf" property="type" sortable="true" headerClass="sortable" titleKey="course.type.export"/>
-
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.location">
          <a href="<c:url value="/detailsLocation.html"><c:param name="id" value="${courseList.location.id}"/></c:url>" title="<c:out value="${courseList.location.description}"/>"><c:out value="${courseList.location.name}"/></a>
     </display:column>

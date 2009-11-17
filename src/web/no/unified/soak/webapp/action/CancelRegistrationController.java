@@ -3,10 +3,8 @@ package no.unified.soak.webapp.action;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -18,6 +16,7 @@ import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.User;
+import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.RegistrationManager;
@@ -46,7 +45,8 @@ public class CancelRegistrationController implements Controller {
     private MailEngine mailEngine = null;
     private MailSender mailSender = null;    
 	private WaitingListManager waitingListManager = null;
-    
+    private ConfigurationManager configurationManager = null;
+	
     public void setUserManager(UserManager userManager) {
         this.userManager = userManager;
     }
@@ -75,6 +75,10 @@ public class CancelRegistrationController implements Controller {
 		this.waitingListManager = waitingListManager;
 	}
 
+	public void setConfigurationManager(ConfigurationManager configurationManager) {
+		this.configurationManager = configurationManager;
+	}
+	
     /**
      * @see org.springframework.web.servlet.mvc.Controller#handleRequest(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
@@ -109,8 +113,10 @@ public class CancelRegistrationController implements Controller {
         	}
         	
         	// confirm cancellation
+        	boolean ccToResponsible = configurationManager.isActive("mail.registration.notifyResponsible", false);
+        	
         	StringBuffer msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_DELETED_body(course, chargeOverdue);
-    		ArrayList<MimeMessage> email = MailUtil.getMailMessages(registration, Constants.EMAIL_EVENT_REGISTRATION_DELETED, course, msg, mailSender);
+    		ArrayList<MimeMessage> email = MailUtil.getMailMessages(registration, Constants.EMAIL_EVENT_REGISTRATION_DELETED, course, msg, mailSender, ccToResponsible);
     		MailUtil.sendMimeMails(email, mailEngine);
 
     		DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");

@@ -2,6 +2,7 @@ package no.unified.soak.util;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -694,10 +695,10 @@ public class MailUtil {
      * @return A list of MimeMessage object
      * @throws MessagingException
      */
-    public static ArrayList<MimeMessage> getMailMessages(Registration registration, int event, Course course, StringBuffer msg, MailSender sender) {
+    public static ArrayList<MimeMessage> getMailMessages(Registration registration, int event, Course course, StringBuffer msg, MailSender sender, boolean ccToResponsible) {
         List<Registration> theRegistration = new ArrayList<Registration>();
         theRegistration.add(registration);
-        return getMailMessages(theRegistration, event, course, msg, null, sender);
+        return getMailMessages(theRegistration, event, course, msg, null, sender, ccToResponsible);
     }
 
     /**
@@ -718,7 +719,7 @@ public class MailUtil {
      * @throws MessagingException
      */
     public static ArrayList<MimeMessage> getMailMessages(List<Registration> registrations, int event, Course course,
-            StringBuffer msg, String from, MailSender sender) {
+            StringBuffer msg, String from, MailSender sender, boolean ccToResponsible) {
         Log log = LogFactory.getLog(MailUtil.class.toString());
         ArrayList<MimeMessage> allEMails = new ArrayList<MimeMessage>();
 
@@ -733,8 +734,9 @@ public class MailUtil {
                 helper.setSubject(getSubject(registration, event, registered, waiting, course));
                 helper.setText(getBody(registration, msg, registered, waiting));
                 addCalendar(helper,event,course, registration);                
+
                 helper.setTo(registration.getEmail());
-                helper.setCc(course.getResponsible().getEmail());
+                if(ccToResponsible) helper.setCc(course.getResponsible().getEmail());
                 
                 if (from != null && !from.equals(""))
                     helper.setFrom(from);
@@ -1037,6 +1039,48 @@ public class MailUtil {
                 + registration.getLastName());
         return msgIndivid.toString();
     }
+
+    /**
+     * Returns name and email for all registrations
+     * @param registrations
+     * @return attendants 
+     */
+	public static String getAttendantsNameAndEmail(List<Registration> registrations) {
+		String attendants = "";
+		Iterator<Registration> iterator = registrations.iterator();
+		while(iterator.hasNext()) {
+			Registration reg = iterator.next();
+			attendants += reg.getFirstName() + " " + reg.getLastName() + " <" + reg.getEmail() + ">\n";
+		}
+		attendants += "\n";
+		return attendants;
+	}
+
+	/**
+	 * Creates and sends a summarymail (that contains a list of attendees and
+	 * original information) to responsible/instructor
+	 * 
+	 * @param course
+	 * @param from
+	 * @param registrations
+	 * @param orginalMessageBody
+	 * @param mailEngine
+	 * @param mailSender
+	 */
+	public static void sendSummaryToResponsibleAndInstructor(Course course, String from, List<Registration> registrations, StringBuffer orginalMessageBody, MailEngine mailEngine, MailSender mailSender) {
+		String[] to = new String[] {course.getResponsible().getEmail()};
+		String[] cc = new String[] {course.getInstructor().getEmail()};
+		String subject = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.summarysubject", course.getName()));
+		String attendants = MailUtil.getAttendantsNameAndEmail(registrations);
+		StringBuffer summaryMsg = new StringBuffer();
+		summaryMsg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.summaryheader")) + ":\n\n");
+		summaryMsg.append(attendants);
+		summaryMsg.append("-- " + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.summarymiddle")) + " --\n");
+		String replacedorginalMessageBody = orginalMessageBody.toString().replace("&hash=<userhash/>", ""); // removed incomplete link-attribute
+		summaryMsg.append(replacedorginalMessageBody);
+		MimeMessage summary = getMailMessage(to, cc, null, from, subject, summaryMsg, null, null, mailSender);
+		mailEngine.send(summary);
+	}
 
 
 }

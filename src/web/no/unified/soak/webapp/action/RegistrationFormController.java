@@ -418,7 +418,8 @@ public class RegistrationFormController extends BaseFormController {
 				msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_DELETED_body(course, chargeOverdue);
 				break;
     	}
-        ArrayList<MimeMessage> theEmails = MailUtil.getMailMessages(registration, event, course, msg, mailSender);
+    	boolean ccToResponsible = configurationManager.isActive("mail.registration.notifyResponsible", false);
+        ArrayList<MimeMessage> theEmails = MailUtil.getMailMessages(registration, event, course, msg, mailSender, ccToResponsible);
         MailUtil.sendMimeMails(theEmails, mailEngine);
     }
 

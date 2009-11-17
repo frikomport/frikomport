@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
+import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.OrganizationManager;
@@ -63,6 +64,8 @@ public class RegistrationAdministrationController extends BaseFormController {
 
     protected MailSender mailSender = null;
 
+    private ConfigurationManager configurationManager = null;
+
 //    protected SimpleMailMessage message = null;
 
 	public void setMessageSource(MessageSource messageSource) {
@@ -99,6 +102,10 @@ public class RegistrationAdministrationController extends BaseFormController {
 
 	public void setOrganizationManager(OrganizationManager organizationManager) {
 		this.organizationManager = organizationManager;
+	}
+
+	public void setConfigurationManager(ConfigurationManager configurationManager) {
+		this.configurationManager = configurationManager;
 	}
 
 	/**
@@ -396,6 +403,7 @@ public class RegistrationAdministrationController extends BaseFormController {
      */
 	private void sendMail(Locale locale, Course course, int event, Registration registration) {
 		StringBuffer msg = null;
+		
 		switch(event) {
 			case Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED:
 				msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_CONFIRMED_body(course, registration, null);
@@ -415,7 +423,9 @@ public class RegistrationAdministrationController extends BaseFormController {
 			default:
 				if(log.isDebugEnabled()) log.debug("sendMail: Handling of event:" + event + " not implemented..!");
 		}
-		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registration, event, course, msg, mailSender);
+
+		boolean ccToResponsible = configurationManager.isActive("mail.registration.notifyResponsible", false);
+		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registration, event, course, msg, mailSender, ccToResponsible);
 		MailUtil.sendMimeMails(emails, mailEngine);
 	}
 }

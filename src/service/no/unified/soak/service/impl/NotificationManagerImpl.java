@@ -147,7 +147,7 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 						StringBuffer msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_body(course, null, notification.getRegistration().getReserved());
 						ArrayList<Registration> registrations = new ArrayList<Registration>();
 						registrations.add(notification.getRegistration());
-						ArrayList<MimeMessage> newEmails = MailUtil.getMailMessages(registrations, Constants.EMAIL_EVENT_NOTIFICATION, course, msg, null, mailSender);
+						ArrayList<MimeMessage> newEmails = MailUtil.getMailMessages(registrations, Constants.EMAIL_EVENT_NOTIFICATION, course, msg, null, mailSender, false);
 						emails.addAll(newEmails);
 						
 						notification.setReminderSent(true);
