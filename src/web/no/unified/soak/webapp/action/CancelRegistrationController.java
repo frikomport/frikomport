@@ -91,35 +91,50 @@ public class CancelRegistrationController implements Controller {
 
         String registrationid = request.getParameter("rid");
         String username_hash = request.getParameter("hash");
-
+        String confirm = request.getParameter("confirm");
+        
+        model.put("rid", registrationid);
+        model.put("hash", username_hash);
+        
         Locale locale = request.getLocale();
         Registration registration = (Registration)formBackingObject(registrationid);
         User user = userManager.getUserByHash(username_hash);
         
         // verifies that username from stored registration matches hash in request
         if(registration.getUsername().equals(user.getUsername())) {
-        	
-        	registrationManager.removeRegistration(""+registration.getId());
-        	boolean chargeOverdue = false;
         	Course course = registration.getCourse();
-
-        	// update available seats?
         	
-        	// cancellation after duedate ? might cause charge of fee 
-        	if(new Date().after(course.getRegisterBy())) {
-        		if(course.getChargeoverdue()) {
-        			chargeOverdue = true;
-        		}
+        	if(confirm != null && confirm.equals("true")) {
+	        	registrationManager.removeRegistration(""+registration.getId());
+	        	boolean chargeOverdue = false;
+	        	// cancellation after registerBy-date might cause charge of fee 
+	        	if(new Date().after(course.getRegisterBy())) {
+	        		if(course.getChargeoverdue()) {
+	        			chargeOverdue = true;
+	        		}
+	        	}
+	        	
+	        	model.put("completed", new Boolean(true));
+
+	        	// confirm cancellation mail
+	        	boolean ccToResponsible = configurationManager.isActive("mail.registration.notifyResponsible", false);
+	        	
+	        	StringBuffer msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_DELETED_body(course, chargeOverdue);
+	    		ArrayList<MimeMessage> email = MailUtil.getMailMessages(registration, Constants.EMAIL_EVENT_REGISTRATION_DELETED, course, msg, mailSender, ccToResponsible);
+	    		MailUtil.sendMimeMails(email, mailEngine);
+
+	    		// notify/upgrade no.1 on waitinglist
+	    		waitingListManager.processIfNeeded(course.getId(), locale);
         	}
-        	
-        	// confirm cancellation
-        	boolean ccToResponsible = configurationManager.isActive("mail.registration.notifyResponsible", false);
-        	
-        	StringBuffer msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_DELETED_body(course, chargeOverdue);
-    		ArrayList<MimeMessage> email = MailUtil.getMailMessages(registration, Constants.EMAIL_EVENT_REGISTRATION_DELETED, course, msg, mailSender, ccToResponsible);
-    		MailUtil.sendMimeMails(email, mailEngine);
+        	else if(confirm != null && confirm.equals("false")) {
+	        	model.put("abort", new Boolean(true));
+        	}
+        	else {
+        		// show confirm and cancel buttons
+        		model.put("ask_for_confirmation", new Boolean(true));
+        	}
 
-    		DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+        	DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
     		String start = formatter.format(course.getStartTime());
     		String stop = formatter.format(course.getStopTime());
     		String date = start.equals(stop)? start : start + " - " + stop;
@@ -128,11 +143,8 @@ public class CancelRegistrationController implements Controller {
     		model.put("firstname", user.getFirstName());
     		model.put("lastname", user.getLastName());
     		model.put("email", user.getEmail());
-    		
-			// notify/upgrade no.1 on waitinglist
-			waitingListManager.processIfNeeded(course.getId(), locale);
         }
-        return new ModelAndView("registrationCancelled", "cancellation", model);
+        return new ModelAndView("registrationCancel", "cancel", model);
     }
 
     /**
