@@ -89,4 +89,6 @@ public interface CourseManager extends Manager {
      * @return A list of all changes 
      */
     public List<String> getChangedList(Course originalCourse, Course changedCourse, String dateFormat);
+    
+    public List<Course> getCoursesWhereRegisterByExpired(long millis);
 }

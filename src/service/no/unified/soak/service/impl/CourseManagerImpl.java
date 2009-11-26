@@ -152,4 +152,8 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
 		}
 		return changedList;
     }
+    
+    public List<Course> getCoursesWhereRegisterByExpired(long millis){
+        return dao.getCoursesWhereRegisterByExpired(millis);
+    }
 }

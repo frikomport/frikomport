@@ -7,23 +7,6 @@
  */
 package no.unified.soak.webapp.listener;
 
-import no.unified.soak.Constants;
-import no.unified.soak.service.LookupManager;
-import no.unified.soak.service.NotificationManager;
-import no.unified.soak.service.WaitingListManager;
-import no.unified.soak.service.CourseStatusManager;
-import no.unified.soak.service.UserSynchronizeManager;
-import no.unified.soak.service.DatabaseUpdateManager;
-import no.unified.soak.webapp.action.ScheduledTasks;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import org.springframework.context.ApplicationContext;
-
-import org.springframework.web.context.ContextLoaderListener;
-import org.springframework.web.context.support.WebApplicationContextUtils;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -31,6 +14,22 @@ import java.util.Timer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+
+import no.unified.soak.Constants;
+import no.unified.soak.service.CourseStatusManager;
+import no.unified.soak.service.DatabaseUpdateManager;
+import no.unified.soak.service.LookupManager;
+import no.unified.soak.service.NotificationManager;
+import no.unified.soak.service.RegisterByDateManager;
+import no.unified.soak.service.UserSynchronizeManager;
+import no.unified.soak.service.WaitingListManager;
+import no.unified.soak.webapp.action.ScheduledTasks;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.ContextLoaderListener;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * StartupListener class used to initialize and database settings and populate
@@ -97,6 +96,7 @@ public class StartupListener extends ContextLoaderListener implements
         DatabaseUpdateManager databaseUpdateManager = (DatabaseUpdateManager) ctx.getBean("databaseUpdateManager");
 
         // Recurring tasks
+		RegisterByDateManager registerByDateManager = (RegisterByDateManager) ctx.getBean("registerByDateManager");
 		NotificationManager notificationManager = (NotificationManager) ctx.getBean("notificationManager");
 		WaitingListManager waitingListManager = (WaitingListManager) ctx.getBean("waitingListManager");
         CourseStatusManager courseStatusManager = (CourseStatusManager) ctx.getBean("courseStatusManager");
@@ -112,6 +112,7 @@ public class StartupListener extends ContextLoaderListener implements
         ScheduledTasks recurring = new ScheduledTasks();
         recurring.addTask(courseStatusManager);
         recurring.addTask(userSynchronizeManager);
+        recurring.addTask(registerByDateManager);
         recurring.addTask(notificationManager);
         recurring.addTask(waitingListManager);
         // Here we set the intervals for how often

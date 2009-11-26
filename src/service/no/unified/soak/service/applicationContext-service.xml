@@ -181,6 +181,14 @@
     </bean>
     <!-- WaitingList-END-->
 
+    <!-- RegisterByDateManager-START-->    
+    <bean id="registerByDateManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.RegisterByDateManagerImpl" autowire="byName"/>
+        </property>
+    </bean>
+    <!-- RegisterByDateManager-END-->
+
     <!--Notification-START-->    
     <bean id="notificationManager" parent="txProxyTemplate">
         <property name="target">

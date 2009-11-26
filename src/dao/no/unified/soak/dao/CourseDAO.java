@@ -73,4 +73,6 @@ public interface CourseDAO extends DAO {
     public List<Course> getUnpublished(Course course);
 
     public List<Course> findByInstructor(Person person);
+    
+    public List<Course> getCoursesWhereRegisterByExpired(long millis);
 }

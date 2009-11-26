@@ -221,8 +221,6 @@
 
     <bean id="cancelRegistrationController" class="no.unified.soak.webapp.action.CancelRegistrationController" autowire="byName"/>
 
-    <bean id="sendRegistrationsController" class="no.unified.soak.webapp.action.SendRegistrationsController" autowire="byName"/>
-    
     <!--Registration-BEAN-END-->
     <!-- Add additional controller beans here -->
 
@@ -332,7 +330,6 @@
                 <prop key="/registrationComplete.html">registrationCompleteController</prop>
                 <prop key="/cancelRegistration.html">cancelRegistrationController</prop>
                 <prop key="/administerRegistration.html">registrationAdministrationController</prop>
-                <prop key="/sendRegistrations.html">sendRegistrationsController</prop>
                 <!--Registration-URL-END-->
                 
                 <!-- Add additional URL mappings here -->

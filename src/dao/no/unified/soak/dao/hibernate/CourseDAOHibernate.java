@@ -152,5 +152,16 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
     public List<Course> findByInstructor(Person person) {
         DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
         criteria.add(Restrictions.eq("instructorid",person.getId()));
-        return getHibernateTemplate().findByCriteria(criteria);    }
+        return getHibernateTemplate().findByCriteria(criteria);
+    }
+    
+    public List<Course> getCoursesWhereRegisterByExpired(long millis){
+        DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
+        criteria.add(Restrictions.eq("status",new Integer(CourseStatus.COURSE_PUBLISHED)));
+        Date to = new Date();
+        Date from = new Date(to.getTime() - millis); // low is now-millis
+        criteria.add(Restrictions.between("registerBy", from, to));
+        return getHibernateTemplate().findByCriteria(criteria);
+    }
+    
 }
