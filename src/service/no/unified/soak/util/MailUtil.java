@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.SocketException;
 import java.net.URISyntaxException;
@@ -733,15 +734,18 @@ public class MailUtil {
                 helper = new MimeMessageHelper(message, true, (ApplicationResourcesUtil.getText("mail.encoding")));
                 helper.setSubject(getSubject(registration, event, registered, waiting, course));
                 helper.setText(getBody(registration, msg, registered, waiting));
-                addCalendar(helper,event,course, registration);                
+                addCalendar(helper,event,course, registration);
 
                 helper.setTo(registration.getEmail());
                 if(ccToResponsible) helper.setCc(course.getResponsible().getEmail());
                 
                 if (from != null && !from.equals(""))
                     helper.setFrom(from);
-                else
+                else {
                     helper.setFrom(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.default.from")));
+                    try { helper.setReplyTo(course.getResponsible().getEmail(), course.getResponsible().getFullName()); }
+                    catch(UnsupportedEncodingException r) { log.warn("Could not set replyTo-address", r); }
+                }
             } catch (MessagingException e) {
                 log.error("Could not create MimeMessage", e);
             }
