@@ -49,7 +49,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
     // hack for setting messagesource and locale to ApplicationResourcesUtil once
     public void setLocale(Locale locale) {
-        ApplicationResourcesUtil.setLocale(locale);
+//        ApplicationResourcesUtil.setLocale(locale);
     }
     public void setMessageSource(MessageSource messageSource) {
         ApplicationResourcesUtil.setMessageSource(messageSource);

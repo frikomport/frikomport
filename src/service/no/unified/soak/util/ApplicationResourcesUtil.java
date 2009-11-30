@@ -3,6 +3,7 @@ package no.unified.soak.util;
 import java.util.Locale;
 
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 public class ApplicationResourcesUtil {
 
@@ -32,7 +33,7 @@ public class ApplicationResourcesUtil {
     public static String getText(String msgKey) {
         String result = "";
         try {
-            result = messageSource.getMessage(msgKey, new String[] {}, locale);
+            result = messageSource.getMessage(msgKey, new String[] {}, LocaleContextHolder.getLocale());
         } catch (Exception e) {
             // TODO Handle exception
         }
@@ -56,7 +57,7 @@ public class ApplicationResourcesUtil {
     public static String getText(String msgKey, String arg0) {
         String result = "";
         try {
-            result = messageSource.getMessage(msgKey, new String[] { arg0 }, locale);
+            result = messageSource.getMessage(msgKey, new String[] { arg0 }, LocaleContextHolder.getLocale());
         } catch (Exception e) {
             // TODO Handle exception
         }
@@ -81,7 +82,7 @@ public class ApplicationResourcesUtil {
     public static String getText(String msgKey, Object[] args) {
         String result = "";
         try {
-            result = messageSource.getMessage(msgKey, args, locale);
+            result = messageSource.getMessage(msgKey, args, LocaleContextHolder.getLocale());
         } catch (Exception e) {
             // TODO Handle exception
         }
