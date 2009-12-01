@@ -128,7 +128,7 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
         DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
         // Only those after the registration limit
         criteria.add(Restrictions.lt("registerBy", now));
-
+        criteria.add(Restrictions.gt("startTime", now));
         return getHibernateTemplate().findByCriteria(criteria);
     }
 
