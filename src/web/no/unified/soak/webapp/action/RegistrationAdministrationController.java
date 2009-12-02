@@ -223,7 +223,7 @@ public class RegistrationAdministrationController extends BaseFormController {
 
 			return new ModelAndView(getCancelView(), "id", courseId);
 		} // or to delete?
-		else if (request.getParameter("unregister") != null) {
+		else if (request.getParameter("unregister.x") != null) {
 			// We are deleting a registration
 			unregisterRegistration(request, locale);
 
@@ -233,7 +233,7 @@ public class RegistrationAdministrationController extends BaseFormController {
 			String key = "waitinglist.updated";
 			saveMessage(request, getText(key, locale));
 		}
-		else if (request.getParameter("delete") != null) {
+		else if (request.getParameter("delete.x") != null) {
             // We are deleting a registration
             deleteRegistration(request, locale);
 
