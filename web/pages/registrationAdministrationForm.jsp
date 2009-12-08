@@ -62,9 +62,9 @@
         <a href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseId" value="${registrationList.courseid}"/></c:url>'>
             <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
-        <input src="<c:url value="/images/cross.png"/>" title="<fmt:message key="button.unregister"/>" alt="<fmt:message key="button.unregister"/>" type="image" value="unregister" name="unregister" onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmUnregistration();submit()"/>
+        <input src="<c:url value="/images/cross.png"/>" title="<fmt:message key="button.unregister"/>" alt="<fmt:message key="button.unregister"/>" type="image" value="unregister" name="unregister" onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmUnregistration()"/>
         <c:if test="${admin == true}">
-        <input src="<c:url value="/images/bin.png"/>" title="<fmt:message key="button.delete"/>" alt="<fmt:message key="button.delete"/>" type="image" value="delete" name="delete" onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmDeleteRegistration();submit()"/>
+        <input src="<c:url value="/images/bin.png"/>" title="<fmt:message key="button.delete"/>" alt="<fmt:message key="button.delete"/>" type="image" value="delete" name="delete" onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmDeleteRegistration()"/>
         </c:if>
     </display:column>
     </c:if>
@@ -101,6 +101,17 @@
 
 	<display:column property="comment" sortable="true" headerClass="sortable"
 		titleKey="registration.comment"/>
+
+	<c:if test="${admin == true}">
+	<display:column media="ccsv cexcel cxml cpdf" property="invoiceName" sortable="true" headerClass="sortable"
+		titleKey="registration.invoiceAddress.name"/>
+	<display:column media="ccsv cexcel cxml cpdf" property="invoiceAddress.address" sortable="true" headerClass="sortable"
+		titleKey="registration.invoiceAddress.address"/>
+	<display:column media="ccsv cexcel cxml cpdf" property="invoiceAddress.postalCode" sortable="true" headerClass="sortable"
+		titleKey="registration.invoiceAddress.postalCode"/>		
+	<display:column media="ccsv cexcel cxml cpdf" property="invoiceAddress.city" sortable="true" headerClass="sortable"
+		titleKey="registration.invoiceAddress.city"/>
+	</c:if>
 
 	<display:column media="html" sortable="true" headerClass="sortable" titleKey="registration.invoiced">
 	<c:if test="${admin == true}">
