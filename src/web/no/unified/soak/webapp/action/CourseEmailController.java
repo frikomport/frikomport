@@ -1,29 +1,28 @@
 package no.unified.soak.webapp.action;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
 
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.mail.internet.MimeMessage;
 
 import no.unified.soak.Constants;
-import no.unified.soak.service.ConfigurationManager;
+import no.unified.soak.model.Course;
+import no.unified.soak.model.Registration;
+import no.unified.soak.model.User;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.util.MailUtil;
-import no.unified.soak.model.Course;
-import no.unified.soak.model.User;
-import no.unified.soak.model.Registration;
 
+import org.springframework.context.MessageSource;
+import org.springframework.mail.MailSender;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.context.MessageSource;
-import org.springframework.mail.MailSender;
 
 public class CourseEmailController extends CourseNotificationController
 {
@@ -103,7 +102,7 @@ public class CourseEmailController extends CourseNotificationController
      */
 	private void sendMail(Locale locale, Course course, int event, String mailComment, String from) {
 		log.debug("Sending mail from CourseEmailController");
-		List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, true, null, null, null, null);
+		List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, Registration.Status.RESERVED, null, null, null, null);
 
 		// Sender mail til kun reserverte.
 		StringBuffer msg = null;

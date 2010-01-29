@@ -4,18 +4,15 @@
 package no.unified.soak.webapp.action;
 
 import java.util.Locale;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import no.unified.soak.model.Category;
-import no.unified.soak.model.ServiceArea;
 import no.unified.soak.service.impl.CategoryManager;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
-import org.springframework.validation.Errors;
 import org.springframework.web.servlet.ModelAndView;
 
 /**

@@ -10,14 +10,13 @@ package no.unified.soak.dao.hibernate;
 import java.util.List;
 
 import no.unified.soak.dao.UserDAO;
-import no.unified.soak.model.Course;
 import no.unified.soak.model.User;
 import no.unified.soak.model.UserCookie;
 
-import org.springframework.orm.ObjectRetrievalFailureException;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.orm.ObjectRetrievalFailureException;
 
 
 /**

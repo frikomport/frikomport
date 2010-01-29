@@ -141,10 +141,19 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 <display:table name="${registrationList}" cellspacing="0" cellpadding="0"
     id="registrationList" pagesize="${itemCount}" class="list" 
     export="true" requestURI="">
+
+	<c:choose> 
+		<c:when test="${registrationList.canceled}">
+		<c:set var="tdClass" value="canceled" />
+		</c:when>
+		<c:otherwise>
+			<c:set var="tdClass" value="" />
+		</c:otherwise>
+	</c:choose>
     
     <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible || (isCourseResponsible)}">
+<c:if test="${(isAdmin || isEducationResponsible || isCourseResponsible || (isCourseResponsible)) && !registrationList.canceled}">
         <a href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseId" value="${registrationList.courseid}"/></c:url>'>
             <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
@@ -152,38 +161,38 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
     </display:column>
 </c:if>
 
-    <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="course.name">
+    <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="course.name" class="${tdClass}">
          <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${registrationList.course.id}"/></c:url>" 
          title="<c:out value="${registrationList.course.description}"/>"><c:out value="${registrationList.course.name}"/></a>
     </display:column>
-    <display:column media="csv excel xml pdf" property="course.name" sortable="true" headerClass="sortable" titleKey="course.name"/>
+    <display:column media="csv excel xml pdf" property="course.name" sortable="true" headerClass="sortable" titleKey="course.name" class="${tdClass}"/>
     
-    <display:column sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="course.startTime">
+    <display:column sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="course.startTime" class="${tdClass}">
          <fmt:formatDate value="${registrationList.course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
     
     <display:column property="firstName" sortable="true" headerClass="sortable"
-         titleKey="registration.firstName"/>
+         titleKey="registration.firstName" class="${tdClass}"/>
          
     <display:column property="lastName" sortable="true" headerClass="sortable"
-         titleKey="registration.lastName"/>
+         titleKey="registration.lastName" class="${tdClass}"/>
          
-    <display:column media="html" sortable="true" headerClass="sortable" titleKey="registration.email">
+    <display:column media="html" sortable="true" headerClass="sortable" titleKey="registration.email" class="${tdClass}">
          <a href="mailto:<c:out value="${registrationList.email}"/>"><c:out value="${registrationList.email}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="email" sortable="true" headerClass="sortable" titleKey="registration.email"/>
     
     <display:column property="phone" sortable="true" headerClass="sortable"
-         titleKey="registration.phone"/>
+         titleKey="registration.phone" class="${tdClass}"/>
          
     <display:column property="mobilePhone" sortable="true" headerClass="sortable"
-         titleKey="registration.mobilePhone"/>
+         titleKey="registration.mobilePhone" class="${tdClass}"/>
          
     <display:column property="organization.name" sortable="true" headerClass="sortable"
-         titleKey="registration.organization"/>
+         titleKey="registration.organization" class="${tdClass}"/>
 	
 	<display:column property="serviceArea.name" sortable="true" headerClass="sortable" 
-		titleKey="registration.serviceArea"/>
+		titleKey="registration.serviceArea" class="${tdClass}"/>
          
     <display:column sortable="true" headerClass="sortable"
          titleKey="registration.invoiced">

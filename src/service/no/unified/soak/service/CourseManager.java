@@ -10,13 +10,12 @@
  */
 package no.unified.soak.service;
 
-import no.unified.soak.dao.CourseDAO;
-import no.unified.soak.model.Course;
-import no.unified.soak.model.User;
-import no.unified.soak.model.Person;
-
 import java.util.Date;
 import java.util.List;
+
+import no.unified.soak.dao.CourseDAO;
+import no.unified.soak.model.Course;
+import no.unified.soak.model.Person;
 
 
 /**

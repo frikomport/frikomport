@@ -11,12 +11,15 @@
 package no.unified.soak.webapp.action;
 
 import no.unified.soak.Constants;
+import no.unified.soak.dao.hibernate.RegistrationStatusCriteria;
 import no.unified.soak.model.*;
+import no.unified.soak.model.Registration.Status;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 
 import org.springframework.validation.BindException;
@@ -70,14 +73,13 @@ public class RegistrationController extends BaseFormController {
      * @see org.springframework.web.servlet.mvc.SimpleFormController#referenceData(javax.servlet.http.HttpServletRequest)
      */
     protected Map referenceData(HttpServletRequest request, Object command,
-        Errors errors) throws Exception {
+ Errors errors) throws Exception {
         if (log.isDebugEnabled()) {
             log.debug("entering 'referenceData' method...");
         }
         HttpSession session = request.getSession();
         Object comm = session.getAttribute("registration");
 
-        Boolean reserved = null;
         Boolean invoiced = null;
         Boolean attended = null;
         Locale locale = request.getLocale();
@@ -93,17 +95,17 @@ public class RegistrationController extends BaseFormController {
         // Don't modify organization if in postback
         String postback = request.getParameter("ispostbackregistrationlist");
         if ((postback == null) || (postback.compareTo("1") != 0)) {
-	        // Check if a default organization should be applied
-            User user = (User)session.getAttribute(Constants.USER_KEY);
-            if(user != null && user.getOrganizationid() != null){
+            // Check if a default organization should be applied
+            User user = (User) session.getAttribute(Constants.USER_KEY);
+            if (user != null && user.getOrganizationid() != null) {
                 registration.setOrganizationid(user.getOrganizationid());
             }
-	
-	        // Check if a specific organization has been requested
-	        String mid = request.getParameter("mid");
-	        if ((mid != null) && StringUtils.isNumeric(mid)) {
-	            registration.setOrganizationid(new Long(mid));
-	        }
+
+            // Check if a specific organization has been requested
+            String mid = request.getParameter("mid");
+            if ((mid != null) && StringUtils.isNumeric(mid)) {
+                registration.setOrganizationid(new Long(mid));
+            }
         }
 
         String courseid = request.getParameter("courseId");
@@ -115,9 +117,6 @@ public class RegistrationController extends BaseFormController {
         if ((serviceareaid != null) && StringUtils.isNumeric(serviceareaid)) {
             registration.setServiceAreaid(new Long(serviceareaid));
         }
-
-        // String reserved = request.getParameter("reserved");
-        // if (reserved != null)
 
         // Check whether we should display historic data as well
         String hist = request.getParameter("historic");
@@ -135,14 +134,14 @@ public class RegistrationController extends BaseFormController {
         model = addReserved(model, locale);
         model = addInvoiced(model, locale);
         model = addAttended(model, locale);
-        
+
         List courses = getCourses(locale, historic);
         List courseIds = null;
         if (courses != null) {
-        	model.put("courses", courses);
-        	if (historic.booleanValue() == false) {
-        		courseIds = getCourseIdList(courses);
-        	}
+            model.put("courses", courses);
+            if (historic.booleanValue() == false) {
+                courseIds = getCourseIdList(courses);
+            }
         }
 
         // Set the historic-flag
@@ -153,13 +152,19 @@ public class RegistrationController extends BaseFormController {
 
         // These are set to false to trick the jsp
         registration.setInvoiced(new Boolean(false));
-        registration.setReserved(new Boolean(false));
         registration.setAttended(new Boolean(false));
 
+        RegistrationStatusCriteria statusCriteria;
+        if ((Boolean) request.getAttribute("isAdmin") || (Boolean) request.getAttribute("isEducationResponsible")
+                || (Boolean) request.getAttribute("isCourseResponsible")) {
+            statusCriteria = null;
+        } else {
+            statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();
+        }
+
         // Fetch all registrations that match the parameters
-        List registrations = registrationManager.getSpecificRegistrations(registration.getCourseid(),
-                registration.getOrganizationid(),
-                registration.getServiceAreaid(), reserved, invoiced, attended, courseIds, null);
+        List registrations = registrationManager.getSpecificRegistrations(registration.getCourseid(), registration
+                .getOrganizationid(), registration.getServiceAreaid(), statusCriteria, invoiced, attended, courseIds, null);
 
         if (registrations != null) {
             model.put("registrationList", registrations);
@@ -206,14 +211,22 @@ public class RegistrationController extends BaseFormController {
         String attendedRequest = request.getParameter("attendedField");
 
         // Check the "boolean" values for invoiced, reserved and attended
+        RegistrationStatusCriteria statusCriteria = null;
         if ((reservedRequest != null) && (reservedRequest.compareTo("0") == 0)) {
-            registration.setReserved(new Boolean(false));
+            registration.setStatus(Registration.Status.WAITING);
+            statusCriteria = new RegistrationStatusCriteria(Registration.Status.WAITING);
         } else if ((reservedRequest != null) &&
                 (reservedRequest.compareTo("1") == 0)) {
-            registration.setReserved(new Boolean(true));
+            registration.setStatus(Registration.Status.RESERVED);
+            statusCriteria = new RegistrationStatusCriteria(Registration.Status.RESERVED);
         } else if ((reservedRequest != null) &&
                 (reservedRequest.compareTo("2") == 0)) {
-            registration.setReserved(null);
+
+            if (!(Boolean) request.getAttribute("isAdmin") && !(Boolean) request.getAttribute("isEducationResponsible")
+                    && !(Boolean) request.getAttribute("isCourseResponsible")) {
+                statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();
+            }
+            registration.setStatus((Registration.Status) null);
         }
 
         if ((invoicedRequest != null) && (invoicedRequest.compareTo("0") == 0)) {
@@ -280,7 +293,7 @@ public class RegistrationController extends BaseFormController {
         model.put("registrationList",
             registrationManager.getSpecificRegistrations(
                 registration.getCourseid(), registration.getOrganizationid(),
-                registration.getServiceAreaid(), registration.getReserved(),
+                registration.getServiceAreaid(), statusCriteria,
                 registration.getInvoiced(), registration.getAttended(), courseIds, null));
 
         return new ModelAndView(getSuccessView(), model);

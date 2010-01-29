@@ -56,50 +56,65 @@
 <display:table name="${registrationsBackingObject.registrations}" cellspacing="0" cellpadding="0"
 	pagesize="${itemCount}" class="list"
 	export="true" id="registrationList" requestURI="">
+	<c:choose> 
+		<c:when test="${registrationList.canceled}">
+		<c:set var="tdClass" value="canceled" />
+		</c:when>
+		<c:otherwise>
+			<c:set var="tdClass" value="" />
+		</c:otherwise>
+	</c:choose>
 
     <c:if test="${(admin == true || canDelete == true) && allowEditRegistration == true}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-        <a href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseId" value="${registrationList.courseid}"/></c:url>'>
-            <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
-        </a>
-        <input src="<c:url value="/images/cross.png"/>" title="<fmt:message key="button.unregister"/>" alt="<fmt:message key="button.unregister"/>" type="image" value="unregister" name="unregister" onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmUnregistration()"/>
+        <c:choose>
+        <c:when test="${!registrationList.canceled}">
+	        <a href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseId" value="${registrationList.courseid}"/></c:url>'>
+	            <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
+	        </a>
+	        <input src="<c:url value="/images/cross.png"/>" title="<fmt:message key="button.unregister"/>" 
+		       alt="<fmt:message key="button.unregister"/>" type="image" value="unregister" name="unregister" 
+		       onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmUnregistration()"/>
+        </c:when>
+        <c:otherwise>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;</c:otherwise>
+        </c:choose>
+
         <c:if test="${admin == true}">
         <input src="<c:url value="/images/bin.png"/>" title="<fmt:message key="button.delete"/>" alt="<fmt:message key="button.delete"/>" type="image" value="delete" name="delete" onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmDeleteRegistration()"/>
         </c:if>
     </display:column>
     </c:if>
-    
-	<display:column property="firstName" sortable="true" headerClass="sortable" 
+	<display:column property="firstName" sortable="true" headerClass="sortable" class="${tdClass}" 
 		titleKey="registration.firstName"/>
 
-	<display:column property="lastName" sortable="true" headerClass="sortable" 
+	<display:column property="lastName" sortable="true" headerClass="sortable" class="${tdClass}" 
 		titleKey="registration.lastName"/>
 
     <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
-    <display:column media="ccsv cexcel cxml cpdf" property="email" sortable="true" headerClass="sortable" 
+    <display:column media="ccsv cexcel cxml cpdf" property="email" sortable="true" headerClass="sortable" class="${tdClass}"
         titleKey="registration.email"/>
     </c:if>
 
-	<display:column property="organization.name" sortable="true" headerClass="sortable" 
+	<display:column property="organization.name" sortable="true" headerClass="sortable" class="${tdClass}"
 		titleKey="registration.organization"/>
 
-	<display:column property="jobTitle" sortable="true" headerClass="sortable" 
+	<display:column property="jobTitle" sortable="true" headerClass="sortable" class="${tdClass}"
 		titleKey="registration.jobTitle"/>
 		
-	<display:column property="serviceArea.name" sortable="true" headerClass="sortable" 
+	<display:column property="serviceArea.name" sortable="true" headerClass="sortable" class="${tdClass}"
 		titleKey="registration.serviceArea"/>
 
-	<display:column property="workplace" sortable="true" headerClass="sortable" 
+	<display:column property="workplace" sortable="true" headerClass="sortable" class="${tdClass}"
 		titleKey="registration.workplace"/>
 
     <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
-	<display:column property="phone" sortable="true" headerClass="sortable" 
+	<display:column property="phone" sortable="true" headerClass="sortable" class="${tdClass}"
 		titleKey="registration.phone"/>
 
-	<display:column property="mobilePhone" sortable="true" headerClass="sortable" 
+	<display:column property="mobilePhone" sortable="true" headerClass="sortable" class="${tdClass}"
 		titleKey="registration.mobilePhone"/>
 
-	<display:column property="comment" sortable="true" headerClass="sortable"
+	<display:column property="comment" sortable="true" headerClass="sortable" class="${tdClass}"
 		titleKey="registration.comment"/>
 
 	<c:if test="${admin == true}">

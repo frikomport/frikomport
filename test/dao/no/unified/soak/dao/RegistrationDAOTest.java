@@ -15,6 +15,7 @@ import java.util.List;
 
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.Registration.Status;
 
 import org.springframework.orm.ObjectRetrievalFailureException;
 
@@ -56,8 +57,8 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		Date registered = new Date();
 		registration.setRegistered(registered);
 
-		Boolean reserved = new Boolean("false");
-		registration.setReserved(reserved);
+		Status status = Registration.Status.WAITING;
+		registration.setStatus(status);
 
 		Long serviceareaid = new Long(1);
 		registration.setServiceAreaid(serviceareaid);
@@ -93,7 +94,7 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		assertEquals(invoiced, registration.getInvoiced());
 		assertEquals(organizationid, registration.getOrganizationid());
 		assertEquals(registered, registration.getRegistered());
-		assertEquals(reserved, registration.getReserved());
+		assertEquals(status, registration.getStatusAsEnum());
 		assertEquals(serviceareaid, registration.getServiceAreaid());
 		assertEquals(locale, registration.getLocale());
 		assertEquals(comment, registration.getComment());
@@ -128,7 +129,7 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 	/**
 	 * Test the getSpecificRegistrations function. Prerequisite: A registration
 	 * in the database with - id=1 - serviceareaid=1 - organizationid=1 -
-	 * reserved=true - invoiced=true
+	 * status=RESERVED - invoiced=true
 	 * 
 	 * 1. Readies all needed parameteres 2. Executes the function 3. Asserts
 	 * that the result is as expected
@@ -139,14 +140,14 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		Long courseId = new Long(1);
 		Long organizationId = new Long(1);
 		Long serviceAreaId = new Long(1);
-		Boolean reserved = new Boolean(true);
+		Registration.Status status = Registration.Status.RESERVED;
 		Boolean invoiced = new Boolean(true);
 		Boolean attended = new Boolean(false);
 		List limitToCourses = null;
 		String[] orderBy = null;
 		
 		List courses = dao.getSpecificRegistrations(courseId, organizationId,
-				serviceAreaId, reserved, invoiced, attended, limitToCourses, orderBy);
+				serviceAreaId, status, invoiced, attended, limitToCourses, orderBy);
 		assertTrue(courses.size() == 1);
 	}
 
@@ -172,8 +173,8 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		Date registered = new Date();
 		registration.setRegistered(registered);
 
-		Boolean reserved = new Boolean("false");
-		registration.setReserved(reserved);
+		Status status = Registration.Status.WAITING;
+		registration.setStatus(status);
 
 		Long serviceAreaid = new Long(2);
 		registration.setServiceAreaid(serviceAreaid);
@@ -187,7 +188,7 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		assertEquals(invoiced, registration.getInvoiced());
 		assertEquals(organizationid, registration.getOrganizationid());
 		assertEquals(registered, registration.getRegistered());
-		assertEquals(reserved, registration.getReserved());
+		assertEquals(status, registration.getStatusAsEnum());
 		assertEquals(serviceAreaid, registration.getServiceAreaid());
 		assertEquals(attended, registration.getAttended());
 	}

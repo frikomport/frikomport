@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Iterator;
 
 import no.unified.soak.dao.RegistrationDAO;
+import no.unified.soak.dao.hibernate.RegistrationStatusCriteria;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.User;
@@ -71,6 +72,16 @@ public class RegistrationManagerImpl extends BaseManager implements
 	}
 
 	/**
+	 * @see no.unified.soak.service.RegistrationManager#cancelRegistration(String
+	 *      id)
+	 */
+	public void cancelRegistration(String id) {
+		Registration registration = dao.getRegistration(new Long(id));
+		registration.setStatus(Registration.Status.CANCELED);
+		dao.saveRegistration(registration);
+	}
+
+	/**
 	 * @see no.unified.soak.service.RegistrationManager#getAvailability(java.lang.Boolean,
 	 *      Course)
 	 */
@@ -94,17 +105,30 @@ public class RegistrationManagerImpl extends BaseManager implements
 			Boolean reserved) {
 		return dao.getNumberOfAttendants(localOnly, course, reserved);
 	}
-
-    /**
+	
+	/**
 	 * @see no.unified.soak.service.RegistrationManager#getSpecificRegistrations(java.lang.Long,
 	 *      java.lang.Long, java.lang.Long, java.lang.Boolean,
 	 *      java.lang.Boolean)
 	 */
 	public List getSpecificRegistrations(Long courseId, Long organizationId,
-			Long serviceareaId, Boolean reserved, Boolean invoiced, 
+			Long serviceareaId, Registration.Status status, Boolean invoiced,
 			Boolean attended, Collection limitToCourses, String[] orderBy) {
 		return dao.getSpecificRegistrations(courseId, organizationId,
-				serviceareaId, reserved, invoiced, attended, limitToCourses, orderBy);
+				serviceareaId, status, invoiced, attended, limitToCourses,
+				orderBy);
+	}
+
+	/**
+	 * @see no.unified.soak.service.RegistrationManager#getSpecificRegistrations(Long,
+	 *      Long, Long, RegistrationStatusCriteria, Boolean, Boolean,
+	 *      Collection, String[])
+	 */
+	public List getSpecificRegistrations(Long courseId, Long organizationId, Long serviceareaId,
+			RegistrationStatusCriteria statusCriteria, Boolean invoiced, Boolean attended, Collection limitToCourses,
+			String[] orderBy) {
+		return dao.getSpecificRegistrations(courseId, organizationId, serviceareaId, statusCriteria, invoiced, attended,
+				limitToCourses, orderBy);
 	}
 
 	/**
@@ -130,22 +154,30 @@ public class RegistrationManagerImpl extends BaseManager implements
 		return dao.getCourseRegistrations(courseId);
 	}
 
-    public List<Registration> getUserRegistrations(String username) {
-        return dao.getUserRegistrations(username);
-    }
-
-	public List <Registration> getUserRegistrationsForCourse(String email, String firstname, String lastname, Long courseId) {
-		return dao.getUserRegistationsForCourse(email, firstname, lastname, courseId);
+	public List<Registration> getUserRegistrations(String username) {
+		return dao.getUserRegistrations(username);
 	}
 
-    public void moveRegistrations(User olduser, User newuser){
-        List<Registration> registrations = getUserRegistrations(olduser.getUsername());
-        Iterator<Registration> it = registrations.iterator();
-        while(it.hasNext()){
-            Registration registration = it.next();
-            registration.setUser(newuser);
-            registration.setUsername(newuser.getUsername());
-            saveRegistration(registration);
-        }
-    }
+	public List<Registration> getUserRegistrationsForCourse(String email,
+			String firstname, String lastname, Long courseId) {
+		return dao.getUserRegistationsForCourse(email, firstname, lastname,
+				courseId);
+	}
+
+	public List<Registration> getUserRegistrationsForCourse(String username, Long courseId) {
+		return dao.getUserRegistationsForCourse(username, courseId);
+	}
+	
+	public void moveRegistrations(User olduser, User newuser) {
+		List<Registration> registrations = getUserRegistrations(olduser
+				.getUsername());
+		Iterator<Registration> it = registrations.iterator();
+		while (it.hasNext()) {
+			Registration registration = it.next();
+			registration.setUser(newuser);
+			registration.setUsername(newuser.getUsername());
+			saveRegistration(registration);
+		}
+	}
+
 }

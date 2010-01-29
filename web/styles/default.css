@@ -491,3 +491,6 @@ thead th.sortable {
 	background-color: #e2eaef;
 }
 
+td.canceled, tr.canceled {
+	text-decoration:line-through;
+}

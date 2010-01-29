@@ -672,7 +672,7 @@
                 <setinputfield stepid="set invoiced" name="invoiced" value="true"/>
                 <setinputfield stepid="set organizationid" name="organizationid" value="150"/>
                 <setinputfield stepid="set registered" name="registered" value="true"/>
-                <setinputfield stepid="set reserved" name="reserved" value="true"/>
+                <setinputfield stepid="set status" name="status" value="2"/>
                 <setinputfield stepid="set serviceareaid" name="serviceareaid" value="150"/>
                 <clickbutton label="${button.save}" stepid="Click button 'Save'"/>
                 <verifytitle stepid="Registration List appears if save successful"

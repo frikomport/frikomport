@@ -21,6 +21,7 @@ import javax.mail.internet.MimeMessage;
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.Registration.Status;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.RegisterByDateManager;
@@ -103,7 +104,7 @@ public class RegisterByDateManagerImpl extends BaseManager implements RegisterBy
 	        
 	        String[] orderBy = new String[] {"lastName", "firstName"};
 	        
-	        List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, null, null, null, null, orderBy);
+	        List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, (Status)null, null, null, null, orderBy);
 	        
 	        String attachementFilename = createPdf(course, registrations);
 	        log.debug("attachementFilename: " + attachementFilename);

@@ -7,11 +7,9 @@ import org.springframework.context.i18n.LocaleContextHolder;
 
 public class ApplicationResourcesUtil {
 
-	private static Locale locale = null;
-    private static MessageSource messageSource = null;
+	private static MessageSource messageSource = null;
 
     public static void setLocale(Locale l) {
-		locale = l;
     }
 
     public static void setMessageSource(MessageSource m) {

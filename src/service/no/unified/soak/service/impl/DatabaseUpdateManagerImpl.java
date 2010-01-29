@@ -28,6 +28,7 @@ import org.apache.commons.validator.EmailValidator;
 import org.springframework.context.MessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.jdbc.support.rowset.SqlRowSetMetaData;
 
 /**
  * User: gv
@@ -37,7 +38,6 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUpdateManager {
 
     private JdbcTemplate jt = new JdbcTemplate();
-    private DataSource dataSource = null;
     private CourseManager courseManager = null;
     private RegistrationManager registrationManager = null;
     private UserManager userManager = null;
@@ -57,7 +57,6 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     // --- end hack
     
     public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
         jt.setDataSource(dataSource);
     }
 
@@ -92,6 +91,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     public void updateDatabase() {
         // Schmema updates preactions
 //        updateDatabaseSchemaBefore();
+    	updateBySQLStatements();
         // ServiceArea updates
         updateServiceAreas();
         // User updates
@@ -109,6 +109,10 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         updateConfigurations();
     }
 
+    private void updateBySQLStatements() {
+    	updateRegistrationbySQLStatement();
+	}
+
     /**
      * Updates databaseschema
      * @since 1.6
@@ -118,6 +122,35 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         updateCourseSchema();
     }
 
+	private void updateRegistrationbySQLStatement() {
+		if (!reservedFieldExist()) {
+			log
+					.debug("No column 'reserved' to convert data from. This is probably ok. No initial writing to 'status' column is done in database.");
+			return;
+		}
+
+		String sql = "update registration set status = reserved + 1 where status is null";
+		int nRowsAffected = jt.update(sql);
+		if (nRowsAffected > 0) {
+			log.info(nRowsAffected + " rows affected by convertion from reserved to status field in database.");
+		} else {
+			log.debug(nRowsAffected + " rows affected by convertion from reserved to status field in database.");
+		}
+	}
+	
+	private boolean reservedFieldExist() {
+		SqlRowSet rowSet = jt.queryForRowSet("select * from registration limit 1");
+		SqlRowSetMetaData metaData = rowSet.getMetaData();
+		boolean reservedFieldExists = false;
+		for (String columnName : metaData.getColumnNames()) {
+			if (columnName.equals("reserved")) {
+				reservedFieldExists = true;
+				continue;
+			}
+		}
+		return reservedFieldExists;
+	}
+    
     private void updateCategorySchema() {
         String sql = "";
         try{
@@ -130,7 +163,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         catch(Exception e){
             log.debug("Create table category");
             sql = "create table category (id integer not null default 0, name varchar(100) not null, selectable tinyint(1) default 1)";
-            jt.execute(sql);
+            jt.execute(sql);	
             sql = "insert into category values (1,'Kurs',true)";
             jt.execute(sql);
         }
@@ -141,9 +174,8 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         sql = "select * from course";
         SqlRowSet rowSet =  jt.queryForRowSet(sql);
         if(rowSet.next()){
-            int categoryid = 0;
             try{
-                categoryid = rowSet.getInt("categoryid");
+                rowSet.getInt("categoryid");
             }
             catch(Exception e){
                 sql = "ALTER TABLE course ADD COLUMN categoryid BIGINT(20)";

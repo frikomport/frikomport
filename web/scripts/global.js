@@ -318,7 +318,12 @@ function confirmUnregistration(obj) {
     var msg = "Vil du melde av denne registreringen?";
     ans = confirm(msg);
     if (ans) {
-        return true;
+    	if (!obj) {
+    		return true;
+    	}
+    	else {
+    		location.href=obj;
+    	}
     } else {
         return false;
     }

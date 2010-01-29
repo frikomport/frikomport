@@ -280,8 +280,8 @@ public class RegistrationFormController extends BaseFormController {
             return new ModelAndView(getCancelView(), "courseid", registration.getCourseid());
         } // or to delete?
         else if (request.getParameter("unregister") != null) {
-            registrationManager.removeRegistration(registration.getId().toString());
-            saveMessage(request, getText("registration.unregistered", locale));
+            registrationManager.cancelRegistration(registration.getId().toString());
+            saveMessage(request, getText("registration.canceled", locale));
             sendMail(locale, course, registration, Constants.EMAIL_EVENT_REGISTRATION_DELETED);
             return new ModelAndView(getCancelView(), "courseid", registration.getCourseid());
         } else if (request.getParameter("delete") != null) {
@@ -354,7 +354,7 @@ public class RegistrationFormController extends BaseFormController {
             if (availability.intValue() > 0) {
                 // There's room - save the registration
                 courseFull = new Boolean(false);
-                registration.setReserved(new Boolean(true));
+                registration.setStatus(Registration.Status.RESERVED);
                 registrationManager.saveRegistration(registration);
                 Notification notification = new Notification();
                 notification.setRegistrationid(registration.getId());
@@ -367,7 +367,7 @@ public class RegistrationFormController extends BaseFormController {
             } else {
                 // The course is fully booked, put the applicant on the waiting list
                 courseFull = new Boolean(true);
-                registration.setReserved(new Boolean(false));
+                registration.setStatus(Registration.Status.WAITING);
                 registrationManager.saveRegistration(registration);
                 Notification notification = new Notification();
                 notification.setRegistrationid(registration.getId());

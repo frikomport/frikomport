@@ -22,8 +22,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import no.unified.soak.Constants;
+import no.unified.soak.dao.hibernate.RegistrationStatusCriteria;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.Registration.Status;
 import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
@@ -34,6 +36,7 @@ import no.unified.soak.service.WaitingListManager;
 import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.MailUtil;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.MailSender;
@@ -58,19 +61,18 @@ public class RegistrationAdministrationController extends BaseFormController {
 
 	private WaitingListManager waitingListManager = null;
 
-	private MessageSource messageSource = null;
-
 	protected MailEngine mailEngine = null;
 
     protected MailSender mailSender = null;
 
     private ConfigurationManager configurationManager = null;
 
-//    protected SimpleMailMessage message = null;
+	/**
+	 * Brukes av jsp-kode.
+	 */
+	@SuppressWarnings("unused")
+	private MessageSource messageSource;
 
-	public void setMessageSource(MessageSource messageSource) {
-		this.messageSource = messageSource;
-	}
 
     public void setMailSender(MailSender mailSender) {
         this.mailSender = mailSender;
@@ -80,10 +82,9 @@ public class RegistrationAdministrationController extends BaseFormController {
 		this.mailEngine = mailEngine;
 	}
 
-//	public void setMessage(SimpleMailMessage message) {
-//		this.message = message;
-//	}
-
+    public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
+	}
 	public void setWaitingListManager(WaitingListManager waitingListManager) {
 		this.waitingListManager = waitingListManager;
 	}
@@ -182,14 +183,22 @@ public class RegistrationAdministrationController extends BaseFormController {
 
 		RegistrationsBackingObject registrationsBackingObject = new RegistrationsBackingObject();
 
-		// Get the courseId to administrer registrations for
+		// Get the courseId to administer registrations for
 		String courseId = request.getParameter("courseId");
 
 		if ((courseId == null) || !StringUtils.isNumeric(courseId)) {
 			// TODO:Redirect to error page - should never happen
 		}
 
-		List registrations = registrationManager.getSpecificRegistrations(new Long(courseId), null, null, null, null,
+		RegistrationStatusCriteria statusCriteria;
+        if ((Boolean) request.getAttribute("isAdmin") || (Boolean) request.getAttribute("isEducationResponsible")
+                || (Boolean) request.getAttribute("isCourseResponsible")) {
+            statusCriteria = null;
+        } else {
+            statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();
+        }
+		
+		List registrations = registrationManager.getSpecificRegistrations(new Long(courseId), null, null, statusCriteria, null,
 				null, null, null);
 		registrationsBackingObject.setRegistrations(registrations);
 
@@ -225,7 +234,7 @@ public class RegistrationAdministrationController extends BaseFormController {
 		} // or to delete?
 		else if (request.getParameter("unregister.x") != null) {
 			// We are deleting a registration
-			unregisterRegistration(request, locale);
+			cancelRegistration(request, locale);
 
 			// Ready the WaitingListManagerImpl
 			waitingListManager.processIfNeeded(new Long(courseId), locale);
@@ -300,9 +309,9 @@ public class RegistrationAdministrationController extends BaseFormController {
 			boolean hiddenAttendedPresent = checkboxToBoolean(hiddenAttendedCheckbox);
 
 			// Check if reserved is changed
-			if (thisRegistration.getReserved().booleanValue() != reserved && hiddenReservedPresent) {
+			if ((thisRegistration.getStatusAsEnum() == Registration.Status.RESERVED) != reserved && hiddenReservedPresent) {
 				changed = true;
-				thisRegistration.setReserved(new Boolean(reserved));
+				thisRegistration.setStatus(reserved ? Registration.Status.RESERVED : Registration.Status.WAITING);
 
 				// Send mail about the status change of the reservation
 				if (reserved) {
@@ -343,16 +352,16 @@ public class RegistrationAdministrationController extends BaseFormController {
 	 * @param locale
 	 *            The current locale
 	 */
-	private void unregisterRegistration(HttpServletRequest request, Locale locale) {
+	private void cancelRegistration(HttpServletRequest request, Locale locale) {
 		String regid = request.getParameter("regid");
 
 		// Send mail to the person in question
 		Registration registration = registrationManager.getRegistration(regid);
 		Course course = registration.getCourse();
 		sendMail(locale, course, Constants.EMAIL_EVENT_REGISTRATION_DELETED, registration);
-		registrationManager.removeRegistration(regid);
+		registrationManager.cancelRegistration(regid);
 
-		String key = "registration.unregistered";
+		String key = "registration.canceled";
 		saveMessage(request, getText(key, locale));
 	}
 	

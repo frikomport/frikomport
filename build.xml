@@ -997,7 +997,7 @@
     <!-- =================================================================== -->
     <target name="setup-tomcat" depends="init" if="tomcat.home"
         description="copies jdbc driver and context.xml to tomcat">
-        <if>
+        <!--if>
             <and>
                 <isset property="tomcat5"/>
                 <not><isset property="tomcat5.5"/></not>
@@ -1012,14 +1012,14 @@
             </then>
             <elseif>
                 <isset property="tomcat5.5"/>
-                <then>
+                <then-->
                     <echo message="Detected Tomcat 5.5..."/>
                     <echo level="info">Copying ${webapp.name}.xml...</echo>
                     <copy tofile="${tomcat.home}/conf/Catalina/localhost/${webapp.name}.xml"
                         file="metadata/conf/tomcat-context-5.5.xml" overwrite="true">
                         <filterset refid="db.variables"/>
                     </copy>
-                </then>
+                <!--/then>
             </elseif>
             <else>
                 <echo message="Detected Tomcat 4..."/>
@@ -1029,7 +1029,7 @@
                     <filterset refid="db.variables"/>
                 </copy>
             </else>
-        </if>
+        </if-->
 
         <echo level="info">Copying ${database.type} JDBC Driver...</echo>
         <copy todir="${tomcat.home}/common/lib" file="${database.jar}" overwrite="true"/>

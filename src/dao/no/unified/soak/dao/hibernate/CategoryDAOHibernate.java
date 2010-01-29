@@ -1,15 +1,14 @@
 package no.unified.soak.dao.hibernate;
 
-import no.unified.soak.dao.CategoryDAO;
-import no.unified.soak.model.Category;
-import no.unified.soak.model.Location;
-
 import java.util.List;
 
-import org.springframework.orm.ObjectRetrievalFailureException;
+import no.unified.soak.dao.CategoryDAO;
+import no.unified.soak.model.Category;
+
 import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.orm.ObjectRetrievalFailureException;
 
 /**
  * Created by IntelliJ IDEA.

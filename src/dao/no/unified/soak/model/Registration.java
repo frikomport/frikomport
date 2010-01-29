@@ -27,6 +27,31 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @hibernate.class table="registration" lazy="false"
  */
 public class Registration extends BaseObject implements Serializable {
+	
+
+
+	public enum Status {
+		INVITED(0), WAITING (1), RESERVED(2), CANCELED(3);
+		private Integer statusDBValue;
+		
+		Status(int status) {
+			this.statusDBValue = status; 
+		}
+
+		public static Status getStatusFromDBValue(Integer dbValue) {
+			for (Registration.Status status : values()) {
+				if (status.getDBValue().equals(dbValue)) {
+					return status;
+				}
+			}
+			return null;
+		}
+		
+		public Integer getDBValue() {
+			return statusDBValue;
+		}
+	}
+
 	/**
 	 * Eclipse generated UID
 	 */
@@ -36,9 +61,9 @@ public class Registration extends BaseObject implements Serializable {
 
 	private Course course;
 
-    private User user;
+	private User user;
 
-    private Organization organization;
+	private Organization organization;
 
 	private ServiceArea serviceArea;
 
@@ -52,15 +77,13 @@ public class Registration extends BaseObject implements Serializable {
 
 	private String email;
 
-    private String emailRepeat;
+	private String emailRepeat;
 
 	private String phone;
 
 	private String mobilePhone;
 
 	private String useMailAddress;
-
-	private Boolean reserved;
 
 	private Date registered;
 
@@ -72,30 +95,32 @@ public class Registration extends BaseObject implements Serializable {
 
 	private Long serviceAreaid;
 
-    private String username;
+	private String username;
 
-    private String locale;
-	
+	private String locale;
+
 	private String comment;
-	
+
 	private Boolean attended;
-	
+
 	private String workplace;
-	
+
 	private String invoiceName;
-	
+
 	private String closestLeader;
 
 	private Address invoiceAddress = new Address();
+
+	private Status status;
+	
 	/**
 	 * Default constructor
 	 */
 	public Registration() {
 		// Set default values to the required attributes
-		reserved = new Boolean(false);
 		registered = new Date();
-		invoiced = new Boolean(false);
-		attended = new Boolean(false);
+		invoiced = Boolean.FALSE;
+		attended = Boolean.FALSE;
 	}
 
 	/**
@@ -115,23 +140,24 @@ public class Registration extends BaseObject implements Serializable {
 		this.course = course;
 	}
 
-    /**
+	/**
 	 * @return Returns the user.
-	 * @hibernate.many-to-one not-null="false" column="username" insert="false" update="false" cascade="none"
+	 * @hibernate.many-to-one not-null="false" column="username" insert="false"
+	 *                        update="false" cascade="none"
 	 */
-    public User getUser() {
-        return user;
-    }
+	public User getUser() {
+		return user;
+	}
 
-    /**
+	/**
 	 * @param user
 	 *            The user to set.
 	 */
-    public void setUser(User user) {
-        this.user = user;
-    }
+	public void setUser(User user) {
+		this.user = user;
+	}
 
-    /**
+	/**
 	 * @return Returns the courseid.
 	 * @hibernate.property column="courseid" not-null="true"
 	 */
@@ -160,31 +186,32 @@ public class Registration extends BaseObject implements Serializable {
 	 * @param email
 	 *            The email to set.
 	 * @spring.validator type="required"
-     * @spring.validator type="email"
+	 * @spring.validator type="email"
 	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
-    /**
-     *
-     * @return the email repeated
-     */
-    public String getEmailRepeat() {
-        return emailRepeat;
-    }
+	/**
+	 * 
+	 * @return the email repeated
+	 */
+	public String getEmailRepeat() {
+		return emailRepeat;
+	}
 
-    /**
-     *
-     * @param emailRepeat The email repeated
-     *
-     * @spring.validator type="email"
-     */
-    public void setEmailRepeat(String emailRepeat) {
-        this.emailRepeat = emailRepeat;
-    }
+	/**
+	 * 
+	 * @param emailRepeat
+	 *            The email repeated
+	 * 
+	 * @spring.validator type="email"
+	 */
+	public void setEmailRepeat(String emailRepeat) {
+		this.emailRepeat = emailRepeat;
+	}
 
-    /**
+	/**
 	 * @return Returns the employeeNumber.
 	 * @hibernate.property column="employeenumber"
 	 */
@@ -317,8 +344,9 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the organization.
-	 * @hibernate.many-to-one not-null="false" column="organizationid" not-found="ignore"
-	 *                        insert="false" update="false" cascade="none"
+	 * @hibernate.many-to-one not-null="false" column="organizationid"
+	 *                        not-found="ignore" insert="false" update="false"
+	 *                        cascade="none"
 	 */
 	public Organization getOrganization() {
 		return organization;
@@ -381,25 +409,22 @@ public class Registration extends BaseObject implements Serializable {
 	}
 
 	/**
-	 * @return Returns the reserved.
-	 * @hibernate.property column="reserved" not-null="true"
+	 * Gets info of whether the registration is reserved. Used by jsp-files.
+	 * 
+	 * @return <code>true</code> if the registration is reserved
+	 *         <code>false</code> otherwise.
+	 * 
+	 * @return
 	 */
-	public Boolean getReserved() {
-		return reserved;
-	}
-
-	/**
-	 * @param reserved
-	 *            The reserved to set.
-	 */
-	public void setReserved(Boolean reserved) {
-		this.reserved = reserved;
+	public boolean getReserved() {
+		return getStatusAsEnum() == Status.RESERVED;
 	}
 
 	/**
 	 * @return Returns the serviceArea.
-	 * @hibernate.many-to-one not-null="false" column="serviceareaid" not-found="ignore"
-	 *                        insert="false" update="false" cascade="none"
+	 * @hibernate.many-to-one not-null="false" column="serviceareaid"
+	 *                        not-found="ignore" insert="false" update="false"
+	 *                        cascade="none"
 	 */
 	public ServiceArea getServiceArea() {
 		return serviceArea;
@@ -429,23 +454,23 @@ public class Registration extends BaseObject implements Serializable {
 		this.serviceAreaid = serviceAreaid;
 	}
 
-    /**
+	/**
 	 * @return Returns the username.
 	 * @hibernate.property column="username" not-null="false" length="50"
 	 */
-    public String getUsername() {
-        return username;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    /**
+	/**
 	 * @param username
 	 *            The usename to set.
 	 */
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    /**
+	/**
 	 * @return Returns the useMailAddress.
 	 * @hibernate.property column="usemailaddress" length="100"
 	 */
@@ -489,106 +514,148 @@ public class Registration extends BaseObject implements Serializable {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return new ToStringBuilder(this).append("id", id).append("jobTitle", jobTitle).append("employeeNumber",
-				employeeNumber).append("firstName", firstName).append("lastName", lastName)
-				.append("reserved", reserved).append("invoiced", invoiced).append("organizationid", organizationid)
-				.append("courseid", courseid).append("serviceareaid", serviceAreaid).toString();
+		return new ToStringBuilder(this).append("id", id).append("jobTitle",
+				jobTitle).append("employeeNumber", employeeNumber).append(
+				"firstName", firstName).append("lastName", lastName).append(
+				"status", status).append("invoiced", invoiced).append(
+				"organizationid", organizationid).append("courseid", courseid)
+				.append("serviceareaid", serviceAreaid).toString();
 	}
 
-    /**
+	/**
 	 * @return the comment
 	 * @hibernate.property column="comment" length="255"
 	 */
-    public String getComment() {
-        return comment;
-    }
+	public String getComment() {
+		return comment;
+	}
 
-    /**
-     * @param comment the comment to set
+	/**
+	 * @param comment
+	 *            the comment to set
+	 */
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
 
-     */
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
+	/**
+	 * @return the attended
+	 * @hibernate.property column="attended" not-null="true"
+	 */
+	public Boolean getAttended() {
+		return attended;
+	}
 
-    /**
-     * @return the attended
-     * @hibernate.property column="attended" not-null="true"
-     */
-    public Boolean getAttended() {
-        return attended;
-    }
+	/**
+	 * @param attended
+	 *            the attended to set
+	 */
+	public void setAttended(Boolean attended) {
+		this.attended = attended;
+	}
 
-    /**
-     * @param attended the attended to set
-     */
-    public void setAttended(Boolean attended) {
-        this.attended = attended;
-    }
+	/**
+	 * @return the workplace
+	 * @hibernate.property column="workplace" length="100"
+	 */
+	public String getWorkplace() {
+		return workplace;
+	}
 
-    /**
-     * @return the workplace
-     * @hibernate.property column="workplace" length="100"
-     */
-    public String getWorkplace() {
-        return workplace;
-    }
+	/**
+	 * @param workplace
+	 *            the workplace to set
+	 */
+	public void setWorkplace(String workplace) {
+		this.workplace = workplace;
+	}
 
-    /**
-     * @param workplace the workplace to set
-     */
-    public void setWorkplace(String workplace) {
-        this.workplace = workplace;
-    }
-    
-    /**
-     *
-     * @return the invoice address
-     *
-     * @hibernate.component not-null="false" prefix="invoice_"
-     */
+	/**
+	 * 
+	 * @return the invoice address
+	 * 
+	 * @hibernate.component not-null="false" prefix="invoice_"
+	 */
 	public Address getInvoiceAddress() {
 		return invoiceAddress;
 	}
 
-	  /**
-     * Sets the invoice address.
-     * @param invoiceAddress The invoice address to set
-     *
-     */
+	/**
+	 * Sets the invoice address.
+	 * 
+	 * @param invoiceAddress
+	 *            The invoice address to set
+	 * 
+	 */
 	public void setInvoiceAddress(Address invoiceAddress) {
 		this.invoiceAddress = invoiceAddress;
 	}
 
-	 /**
-     * @return the invoice name.
-     * @hibernate.property column="invoice_name" not-null="false"
-     */
+	/**
+	 * @return the invoice name.
+	 * @hibernate.property column="invoice_name" not-null="false"
+	 */
 	public String getInvoiceName() {
 		return invoiceName;
 	}
 
 	/**
-     * @param invoiceName
-     *            The invoice name to set.
-     */
+	 * @param invoiceName
+	 *            The invoice name to set.
+	 */
 	public void setInvoiceName(String invoiceName) {
 		this.invoiceName = invoiceName;
 	}
 
-	 /**
-     * @return the closest leader name.
-     * @hibernate.property column="closest_leader" not-null="false"
-     */
+	/**
+	 * @return the closest leader name.
+	 * @hibernate.property column="closest_leader" not-null="false"
+	 */
 	public String getClosestLeader() {
 		return closestLeader;
 	}
 
 	/**
-     * @param closestLeader
-     *            The closestLeader to set.
-     */
+	 * @param closestLeader
+	 *            The closestLeader to set.
+	 */
 	public void setClosestLeader(String closestLeader) {
 		this.closestLeader = closestLeader;
 	}
+
+	/**
+	 * Gets info of whether the registration is canceled. Used by jsp-files.
+	 * 
+	 * @return <code>true</code> if the registration is canceled.
+	 *         <code>false</code> otherwise.
+	 */
+	public Boolean getCanceled() {
+		return getStatusAsEnum() == Status.CANCELED;
+	}
+	
+	/**
+	 * Gets the status of the registration.
+	 * 
+	 * @return The registration status
+	 * @hibernate.property column="status" not-null="true" type="integer"
+	 */
+	public Integer getStatus() {
+		return (status == null ? null : status.getDBValue());
+	}
+
+	public Status getStatusAsEnum() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		if (this.status != null && this.status == Status.CANCELED && this.status != status) {
+			throw new RuntimeException("Illegal status assignment away from current status CANCELED, for registration " + this);
+		}
+		this.status = status;
+	}
+
+	public void setStatus(Integer status) {
+		setStatus(Status.getStatusFromDBValue(status));
+	}
+
 }

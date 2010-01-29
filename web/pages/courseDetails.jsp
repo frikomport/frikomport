@@ -62,8 +62,14 @@
 		    	    <fmt:message key="button.signup"/>
 			    </button>
 			</c:if>
-            <c:if test="${altusername ne null}">
-                <button type="button" onclick="location.href='<c:url value="/profileUser.html"></c:url>'">
+            <c:if test="${altusername ne null && isRegistered}">
+                <button type="button" 
+                onclick="bCancel=true; return confirmUnregistration('<c:url value="/cancelRegistration.html?rid=${registrationid}&hash=${hash}&confirm=true"></c:url>');"> 
+
+
+                <!-- &returnUrl=%2fdetailsCourse%3fid%3d${course.id}%26registrationCanceled%3dyes -->
+                
+                
                     <fmt:message key="button.signoff"/>
                 </button>
             </c:if>

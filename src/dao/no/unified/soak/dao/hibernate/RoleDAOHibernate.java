@@ -7,6 +7,8 @@
 */
 package no.unified.soak.dao.hibernate;
 
+import java.util.List;
+
 import no.unified.soak.dao.RoleDAO;
 import no.unified.soak.model.Role;
 
@@ -14,9 +16,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
-
-import java.util.List;
-import java.util.ArrayList;
 
 
 /**

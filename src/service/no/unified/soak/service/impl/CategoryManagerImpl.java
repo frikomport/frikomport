@@ -1,11 +1,10 @@
 package no.unified.soak.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import no.unified.soak.dao.CategoryDAO;
 import no.unified.soak.model.Category;
-import no.unified.soak.model.Organization;
-
-import java.util.List;
-import java.util.ArrayList;
 
 /**
  * Created by IntelliJ IDEA.

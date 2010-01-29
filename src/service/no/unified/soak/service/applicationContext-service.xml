@@ -159,6 +159,7 @@
             <props>
                 <prop key="save*">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
                 <prop key="move*">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
+                <prop key="cancel*">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
                 <prop key="remove*">PROPAGATION_REQUIRED</prop>
             </props>
         </property>

@@ -16,7 +16,7 @@ public interface EzUserDAO {
     /**
      * Henter brukere med gitte roller.
      * Brukes for å hente brukere med rett til å registrer kurs
-     * @param roles TODO
+     * @param roles
      * @return
      */
     public abstract List<EzUser> findUsers(List<String> roles);

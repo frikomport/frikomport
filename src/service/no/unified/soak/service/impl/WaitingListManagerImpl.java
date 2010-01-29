@@ -266,19 +266,19 @@ public class WaitingListManagerImpl extends BaseManager implements WaitingListMa
      * @param currentRegistration
      *            The registration we (might) want to persist changes to
      */
-    private int saveReservation(int availableSeats, Registration currentRegistration) {
-        // If there are more seats avaiable, we reserve a seat for
-        // this one
-        if (availableSeats > 0) {
-            currentRegistration.setReserved(true);
-            registrationManager.saveRegistration(currentRegistration);
-            availableSeats--;
+	private int saveReservation(int availableSeats, Registration currentRegistration) {
+		// If there are more seats available, we reserve a seat for
+		// this one
+		if (availableSeats > 0) {
+			currentRegistration.setStatus(Registration.Status.RESERVED);
+			registrationManager.saveRegistration(currentRegistration);
+			availableSeats--;
 
-            notifyAttendant(true, currentRegistration);
-        }
+			notifyAttendant(true, currentRegistration);
+		}
 
-        return availableSeats;
-    }
+		return availableSeats;
+	}
 
     /**
      * Sends an e-mail to the attendant informing about the status of the application to a course.

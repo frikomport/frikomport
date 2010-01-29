@@ -7,8 +7,10 @@
 */
 package no.unified.soak.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import no.unified.soak.Constants;
-import no.unified.soak.util.StringUtil;
 import no.unified.soak.dao.RoleDAO;
 import no.unified.soak.dao.UserDAO;
 import no.unified.soak.model.Role;
@@ -18,11 +20,7 @@ import no.unified.soak.service.impl.RoleManagerImpl;
 import no.unified.soak.service.impl.UserManagerImpl;
 
 import org.jmock.Mock;
-
 import org.springframework.dao.DataIntegrityViolationException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class UserManagerTest extends BaseManagerTestCase {

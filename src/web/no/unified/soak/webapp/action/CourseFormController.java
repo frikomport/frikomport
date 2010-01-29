@@ -33,6 +33,7 @@ import no.unified.soak.model.Course;
 import no.unified.soak.model.Location;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.User;
+import no.unified.soak.model.Registration.Status;
 import no.unified.soak.service.AttachmentManager;
 import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
@@ -49,6 +50,7 @@ import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.MailUtil;
 import no.unified.soak.webapp.util.FileUtil;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.MailSender;
@@ -232,7 +234,7 @@ public class CourseFormController extends BaseFormController {
 
                 if(course.getStatus().equals(CourseStatus.COURSE_CANCELLED)){
                     allowRegistration = new Boolean(false);
-                    saveMessage(request,getText("course.status.cancelled", locale));                    
+                    saveMessage(request, getText("course.status.cancelled", locale));                    
                 }
 
                 model.put("allowRegistration", allowRegistration);
@@ -266,8 +268,34 @@ public class CourseFormController extends BaseFormController {
                 model.put("isPublished", Boolean.valueOf(course.getStatus().intValue() > CourseStatus.COURSE_CREATED.intValue()));
                 model.put("isCancelled", Boolean.valueOf(course.getStatus().equals(CourseStatus.COURSE_CANCELLED)));
             }
+            
+            String altUsername = (String) request.getAttribute("altusername");
+            if (!StringUtils.isEmpty(altUsername)) {
+				model.put("hash", (String) request.getParameter("hash"));
+            	List<Registration> registrations = registrationManager.getUserRegistrationsForCourse(altUsername, new Long(courseid));
+				if (registrations.size() > 0 && registrations.get(0).getId() != null) {
+					model.put("isRegistered", Boolean.TRUE);
+					model.put("registrationid", registrations.get(0).getId().toString());
+				} else {
+					model.put("isRegistered", Boolean.FALSE);
+				}
+            }
+            
+//			if (BooleanUtils.toBoolean((String) request.getAttribute("unregister"))) {
+//				String registrationId = (String) request.getAttribute("registrationId");
+//				registrationManager.cancelRegistration(registrationId);
+//				List<String> messages = new LinkedList<String>();
+//				ApplicationResourcesUtil.getText("registrationCancel.completed");
+//				messages.add("Påmeldingen er nå slettet");
+//				model.put("messages", messages);
+//			}
+			
+			String registrationCanceled = (String) request.getAttribute("registrationCanceled");
+			if (BooleanUtils.toBoolean(registrationCanceled)) {
+				model.put("isRegistrationCanceled", Boolean.TRUE);
+			}
+			
         }
-
 
         return model;
     }
@@ -536,7 +564,7 @@ public class CourseFormController extends BaseFormController {
                 model.put("newCourse", "true");
                 courseId = course.getId();
             } else {
-                List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, null, null, null, null, null);
+                List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, (Status)null, null, null, null, null);
                 if (registrations.isEmpty()) {
                     //check if this course is a copy and is being published
                     if ((course.getCopyid() != null) && (request.getParameter("publish") != null)){
@@ -607,7 +635,7 @@ public class CourseFormController extends BaseFormController {
     private void sendMail(Locale locale, Course course, int event, String mailComment) {
         log.debug("Sending mail from CourseFormController");
         // Get all registrations
-        List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, null, null, null, null, null);
+        List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, (Status) null, null, null, null, null);
 
         // Build standard e-mail body
 		StringBuffer msg = null;

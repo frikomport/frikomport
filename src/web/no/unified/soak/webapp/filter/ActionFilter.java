@@ -28,7 +28,6 @@ import no.unified.soak.dao.EzUserDAO;
 import no.unified.soak.ez.EzUser;
 import no.unified.soak.model.User;
 import no.unified.soak.service.ConfigurationManager;
-import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.service.UserSynchronizeManager;
 import no.unified.soak.util.UserUtil;
@@ -41,7 +40,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
@@ -152,7 +150,7 @@ public class ActionFilter implements Filter {
         session.setAttribute("showEmployeeFields", configurationManager.isActive("access.registration.showEmployeeFields",true));
         session.setAttribute("showServiceArea", configurationManager.isActive("access.registration.showServiceArea",true));
         session.setAttribute("showComment", configurationManager.isActive("access.registration.showComment",true));
-        session.setAttribute("itemCount", configurationManager.getValue("list.itemCount", "25"));
+        session.setAttribute("itemCount", configurationManager.getValue("list.itemCount", "2"));
     }
 
 	private void doEZAccessing(HttpServletRequest request, HttpSession session) {

@@ -39,7 +39,6 @@ import org.springframework.web.servlet.mvc.Controller;
 public class CancelRegistrationController implements Controller {
     private final Log log = LogFactory.getLog(CancelRegistrationController.class);
     private RegistrationManager registrationManager = null;
-    private CourseManager courseManager = null;
     private UserManager userManager = null;
     private MessageSource messageSource = null;
     private MailEngine mailEngine = null;
@@ -53,10 +52,6 @@ public class CancelRegistrationController implements Controller {
 
     public void setRegistrationManager(RegistrationManager registrationManager) {
         this.registrationManager = registrationManager;
-    }
-
-    public void setCourseManager(CourseManager courseManager){
-        this.courseManager = courseManager;
     }
 
     public void setMessageSource(MessageSource messageSource) {
@@ -105,7 +100,7 @@ public class CancelRegistrationController implements Controller {
         	Course course = registration.getCourse();
         	
         	if(confirm != null && confirm.equals("true")) {
-	        	registrationManager.removeRegistration(""+registration.getId());
+	        	registrationManager.cancelRegistration(""+registration.getId());
 	        	boolean chargeOverdue = false;
 	        	// cancellation after registerBy-date might cause charge of fee 
 	        	if(new Date().after(course.getRegisterBy())) {
@@ -125,6 +120,14 @@ public class CancelRegistrationController implements Controller {
 
 	    		// notify/upgrade no.1 on waitinglist
 	    		waitingListManager.processIfNeeded(course.getId(), locale);
+	    		
+	            String returnUrl = (String) request.getAttribute("returnUrl");
+	    		if (returnUrl != null) {
+	    			response.sendRedirect(returnUrl);
+
+	    			return null;
+
+	    		}
         	}
         	else if(confirm != null && confirm.equals("false")) {
 	        	model.put("abort", new Boolean(true));
@@ -144,6 +147,7 @@ public class CancelRegistrationController implements Controller {
     		model.put("lastname", user.getLastName());
     		model.put("email", user.getEmail());
         }
+
         return new ModelAndView("registrationCancel", "cancel", model);
     }
 

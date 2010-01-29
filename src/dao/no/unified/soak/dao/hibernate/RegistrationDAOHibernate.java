@@ -18,6 +18,7 @@ import no.unified.soak.dao.RegistrationDAO;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Notification;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.Registration.Status;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -30,16 +31,17 @@ import org.springframework.orm.ObjectRetrievalFailureException;
  * 
  * @author hrj
  */
-public class RegistrationDAOHibernate extends BaseDAOHibernate implements RegistrationDAO {
-    
-    /**
+public class RegistrationDAOHibernate extends BaseDAOHibernate implements
+		RegistrationDAO {
+
+	/**
 	 * @see no.unified.soak.dao.RegistrationDAO#getRegistrations(no.unified.soak.model.Registration)
 	 */
 	public List getRegistrations(final Registration registration) {
 		return getHibernateTemplate().find("from Registration");
 	}
 
-    /**
+	/**
 	 * @see no.unified.soak.dao.RegistrationDAO#getRegistration(Long id)
 	 */
 	public Registration getRegistration(final Long id) {
@@ -59,22 +61,23 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
 	 *      registration)
 	 */
 	public void saveRegistration(final Registration registration) {
-        getHibernateTemplate().saveOrUpdate(registration);
-        getHibernateTemplate().flush();
-    }
+		getHibernateTemplate().saveOrUpdate(registration);
+		getHibernateTemplate().flush();
+	}
 
 	/**
 	 * @see no.unified.soak.dao.RegistrationDAO#removeRegistration(Long id)
 	 */
 	public void removeRegistration(final Long id) {
-		
-		// First we need to make sure there are no Notifications to this registration
+
+		// First we need to make sure there are no Notifications to this
+		// registration
 		DetachedCriteria criteria = DetachedCriteria
-		.forClass(Notification.class);
+				.forClass(Notification.class);
 		criteria.add(Restrictions.eq("registrationid", id));
 		List result = getHibernateTemplate().findByCriteria(criteria);
 		if (result != null && result.size() > 0) {
-			for (int i=0; i < result.size(); i++) {
+			for (int i = 0; i < result.size(); i++) {
 				Notification notification = (Notification) result.get(i);
 				getHibernateTemplate().delete(notification);
 			}
@@ -89,19 +92,18 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
 	 *      no.unified.soak.model.Course, Boolean)
 	 */
 	public Integer getNumberOfAttendants(Boolean localOnly, Course course,
-			Boolean reservedOnly) {
-		DetachedCriteria criteria = DetachedCriteria
-				.forClass(Registration.class);
+ Boolean reservedOnly) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(Registration.class);
 
 		// Find number of registrations totally on the course
 		criteria.add(Restrictions.eq("courseid", course.getId()));
 
 		if (reservedOnly != null) {
-			criteria.add(Restrictions.eq("reserved", reservedOnly));
+			criteria.add(Restrictions.eq("status", (reservedOnly ? Registration.Status.RESERVED.getDBValue()
+					: Registration.Status.WAITING.getDBValue())));
 		}
 		if (localOnly.booleanValue()) {
-			criteria.add(Restrictions.eq("organizationid", course
-					.getOrganizationid()));
+			criteria.add(Restrictions.eq("organizationid", course.getOrganizationid()));
 		}
 
 		criteria.setProjection(Projections.rowCount());
@@ -120,9 +122,10 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
 		Integer availableSeats = null;
 
 		// Find number of registrations totally on the course
-		int allAttendants = getNumberOfAttendants(new Boolean(false), course, true).intValue();
+		int allAttendants = getNumberOfAttendants(new Boolean(false), course,
+				true).intValue();
 		int maxAttendants = course.getMaxAttendants().intValue();
-		
+
 		// if local attendant
 		if (localAttendant.booleanValue()) {
 			if ((maxAttendants - allAttendants) > 0) {
@@ -130,19 +133,23 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
 			} else {
 				availableSeats = 0;
 			}
-		}
-		else { // if non-local attendant
-			int localAttendants = getNumberOfAttendants(new Boolean(true), course, true).intValue();
-			int otherAttendants = allAttendants - localAttendants; // non-locals with a reserved seat
+		} else { // if non-local attendant
+			int localAttendants = getNumberOfAttendants(new Boolean(true),
+					course, true).intValue();
+			int otherAttendants = allAttendants - localAttendants; // non-locals
+			// with a
+			// reserved
+			// seat
 
 			// Find number of seats reserved for the locals
 			int reservedInternal = course.getReservedInternal().intValue();
 			int seatsOtherAvailable = 0;
-			if(reservedInternal > 0 && reservedInternal >= localAttendants) {
-				// reserved seats are not taken, but still not available for non-locals
-				seatsOtherAvailable = maxAttendants - reservedInternal - otherAttendants;
-			}
-			else {
+			if (reservedInternal > 0 && reservedInternal >= localAttendants) {
+				// reserved seats are not taken, but still not available for
+				// non-locals
+				seatsOtherAvailable = maxAttendants - reservedInternal
+						- otherAttendants;
+			} else {
 				// no reserved seats or all reserved seats taken
 				seatsOtherAvailable = maxAttendants - allAttendants;
 			}
@@ -152,8 +159,14 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
 		return new Integer(availableSeats);
 	}
 
-    public List getSpecificRegistrations(Long courseId, Long organizationId,
-			Long serviceAreaId, Boolean reserved, Boolean invoiced, 
+	public List getSpecificRegistrations(Long courseId, Long organizationId, Long serviceAreaId, Status status, Boolean invoiced,
+			Boolean attended, Collection limitToCourses, String[] orderBy) {
+		return getSpecificRegistrations(courseId, organizationId, serviceAreaId, new RegistrationStatusCriteria(status), invoiced,
+				attended, limitToCourses, orderBy);
+	}
+	
+	public List getSpecificRegistrations(Long courseId, Long organizationId,
+			Long serviceAreaId, RegistrationStatusCriteria statusCriteria, Boolean invoiced,
 			Boolean attended, Collection limitToCourses, String[] orderBy) {
 		// The default setup - returns everything
 		DetachedCriteria criteria = DetachedCriteria
@@ -176,36 +189,36 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
 			criteria.add(Restrictions.eq("serviceAreaid", serviceAreaId));
 		}
 
-		// Applicant has reservation or is on waiting list
-		if (reserved != null) {
-			criteria.add(Restrictions.eq("reserved", reserved));
+		// Applicant has the correct registration status.
+		if (statusCriteria != null && statusCriteria.getStatusValueList().size() > 0) {
+			criteria.add(Restrictions.in("status", statusCriteria.getStatusValueList()));
 		}
 
 		// Is an invoice sent
 		if (invoiced != null) {
 			criteria.add(Restrictions.eq("invoiced", invoiced));
 		}
-		
+
 		// If the course is attended
-	    if (attended != null) {
-	        criteria.add(Restrictions.eq("attended", attended));
-	    }
+		if (attended != null) {
+			criteria.add(Restrictions.eq("attended", attended));
+		}
 
-        if (limitToCourses != null) {
-        	if (limitToCourses.isEmpty() == false) {
-        		criteria.add(Restrictions.in("courseid", limitToCourses));
-        	} else {
-        		criteria.add(Restrictions.eq("courseid", new Long(0)));
-        	}
-        }
+		if (limitToCourses != null) {
+			if (limitToCourses.isEmpty() == false) {
+				criteria.add(Restrictions.in("courseid", limitToCourses));
+			} else {
+				criteria.add(Restrictions.eq("courseid", new Long(0)));
+			}
+		}
 
-        if(orderBy != null) {
-        	for(int i=0; i<orderBy.length; i++) {
-    			criteria.addOrder(Order.asc(orderBy[i]));
-        	}
-        }
-        
-        List result = getHibernateTemplate().findByCriteria(criteria);
+		if (orderBy != null) {
+			for (int i = 0; i < orderBy.length; i++) {
+				criteria.addOrder(Order.asc(orderBy[i]));
+			}
+		}
+
+		List result = getHibernateTemplate().findByCriteria(criteria);
 
 		return result;
 	}
@@ -218,7 +231,7 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
 			DetachedCriteria criteria = DetachedCriteria
 					.forClass(Registration.class);
 			criteria.add(Restrictions.in("courseid", courseIds));
-			criteria.add(Restrictions.eq("reserved", new Boolean(false)));
+			criteria.add(Restrictions.eq("status", Registration.Status.WAITING.getDBValue()));
 			criteria.addOrder(Order.asc("courseid"));
 			criteria.addOrder(Order.asc("registered"));
 
@@ -239,7 +252,7 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
 			DetachedCriteria criteria = DetachedCriteria
 					.forClass(Registration.class);
 			criteria.add(Restrictions.eq("courseid", course.getId()));
-			criteria.add(Restrictions.eq("reserved", new Boolean(true)));
+			criteria.add(Restrictions.eq("status", Registration.Status.RESERVED.getDBValue()));
 
 			// Are we only to include "locals" in the search
 			if (localOnly.booleanValue()) {
@@ -260,35 +273,56 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements Regist
 		List<Registration> result = new ArrayList<Registration>();
 		if (courseId != null) {
 			DetachedCriteria criteria = DetachedCriteria
-			.forClass(Registration.class);
+					.forClass(Registration.class);
 			criteria.add(Restrictions.eq("courseid", courseId));
+			criteria.add(Restrictions.ne("status", Registration.Status.CANCELED.getDBValue()));
 			result = getHibernateTemplate().findByCriteria(criteria);
 		}
 		return result;
 	}
 
-    public List<Registration> getUserRegistrations(String username) {
-        List<Registration> result = new ArrayList<Registration>();
-        if(username != null){
-            DetachedCriteria criteria = DetachedCriteria.forClass(Registration.class);
-            criteria.add(Restrictions.eq("username",username));
-            result = getHibernateTemplate().findByCriteria(criteria);
-        }
-        return result;
-    }
-
-	public List <Registration> getUserRegistationsForCourse(String email, String firstname, String lastname, Long courseId) {
+	public List<Registration> getUserRegistrations(String username) {
 		List<Registration> result = new ArrayList<Registration>();
-        
-		DetachedCriteria criteria = DetachedCriteria.forClass(Registration.class);
-        criteria.add(Restrictions.eq("email",email));
-        criteria.add(Restrictions.eq("firstName",firstname));
-        criteria.add(Restrictions.eq("lastName",lastname));
-        criteria.add(Restrictions.eq("courseid",courseId));
-        
-        result = getHibernateTemplate().findByCriteria(criteria);
-		
- 		return result;
+		if (username != null) {
+			DetachedCriteria criteria = DetachedCriteria
+					.forClass(Registration.class);
+			criteria.add(Restrictions.eq("username", username));
+			criteria.add(Restrictions.ne("status", Registration.Status.CANCELED.getDBValue()));
+			result = getHibernateTemplate().findByCriteria(criteria);
+		}
+		return result;
 	}
 
+	public List<Registration> getUserRegistationsForCourse(String email,
+			String firstname, String lastname, Long courseId) {
+		List<Registration> result = new ArrayList<Registration>();
+
+		DetachedCriteria criteria = DetachedCriteria
+				.forClass(Registration.class);
+		criteria.add(Restrictions.eq("email", email));
+		criteria.add(Restrictions.eq("firstName", firstname));
+		criteria.add(Restrictions.eq("lastName", lastname));
+		criteria.add(Restrictions.eq("courseid", courseId));
+		criteria.add(Restrictions.ne("status", Registration.Status.CANCELED.getDBValue()));
+
+		result = getHibernateTemplate().findByCriteria(criteria);
+
+		return result;
+	}
+
+	public List<Registration> getUserRegistationsForCourse(String username,
+			Long courseId) {
+		List<Registration> result = new ArrayList<Registration>();
+
+		DetachedCriteria criteria = DetachedCriteria
+				.forClass(Registration.class);
+		criteria.add(Restrictions.eq("username", username));
+		criteria.add(Restrictions.eq("courseid", courseId));
+		criteria.add(Restrictions.ne("status", Registration.Status.CANCELED.getDBValue()));
+
+		result = getHibernateTemplate().findByCriteria(criteria);
+
+		return result;
+	}
+	
 }

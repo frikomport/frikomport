@@ -805,7 +805,7 @@
 		<column>organizationid</column>
 		<column>phone</column>
 		<column>registered</column>
-		<column>reserved</column>
+		<column>status</column>
 		<column>serviceareaid</column>
 		<column>usemailaddress</column>
 		<column>locale</column>
@@ -831,7 +831,7 @@
 			<value>1</value>
 			<value>55544332</value>
 			<value>@NOW-5@</value>
-			<value>1</value>
+			<value>2</value>
 			<value>1</value>
 			<value>Harald Haraldsensvei 11, 9999 Haraldsen</value>
 			<value>no</value>
@@ -843,7 +843,6 @@
 			<value></value>
 			<value></value>
 			<value></value>
-		
 		</row>
 		<row>
 			<value>2</value>
@@ -859,7 +858,7 @@
 			<value>2</value>
 			<value>55332211</value>
 			<value>@NOW-5@</value>
-			<value>1</value>
+			<value>2</value>
 			<value>2</value>
 			<value>Heidi Heidisensvei 99, 9998 Heidistad</value>
 			<value>no</value>
@@ -886,7 +885,7 @@
 			<value>2</value>
 			<value>55221144</value>
 			<value>@NOW-5@</value>
-			<value>0</value>
+			<value>1</value>
 			<value>1</value>
 			<value>Jarle Jarlsesensvei 27, 9997 Jarlestølen</value>
 			<value>no</value>
@@ -913,7 +912,7 @@
 			<value>2</value>
 			<value>55123456</value>
 			<value>@NOW-5@</value>
-			<value>0</value>
+			<value>1</value>
 			<value>2</value>
 			<value>Kari Karisdatterveg 2A, 9996 Karimoen</value>
 			<value>no</value>
@@ -940,7 +939,7 @@
 			<value>2</value>
 			<value>55123456</value>
 			<value>@NOW-5@</value>
-			<value>0</value>
+			<value>1</value>
 			<value>2</value>
 			<value>Kari Karisdatterveg 2A, 9996 Karimoen</value>
 			<value>no</value>
@@ -967,7 +966,7 @@
 			<value>2</value>
 			<value>55123456</value>
 			<value>@NOW-5@</value>
-			<value>0</value>
+			<value>1</value>
 			<value>2</value>
 			<value>Kari Karisdatterveg 2A, 9996 Karimoen</value>
 			<value>no</value>
@@ -994,7 +993,7 @@
 			<value>1</value>
 			<value>55123456</value>
 			<value>@NOW-5@</value>
-			<value>0</value>
+			<value>1</value>
 			<value>2</value>
 			<value>Kari Karisdatterveg 2A, 9996 Karimoen</value>
 			<value>no</value>
@@ -1021,7 +1020,7 @@
 			<value>1</value>
 			<value>55123456</value>
 			<value>@NOW-5@</value>
-			<value>0</value>
+			<value>1</value>
 			<value>2</value>
 			<value>Kari Karisdatterveg 2A, 9996 Karimoen</value>
 			<value>no</value>
@@ -1048,7 +1047,7 @@
 			<value>2</value>
 			<value>55123456</value>
 			<value>@NOW-5@</value>
-			<value>0</value>
+			<value>1</value>
 			<value>2</value>
 			<value>Kari Karisdatterveg 2A, 9996 Karimoen</value>
 			<value>no</value>
@@ -1075,7 +1074,7 @@
 			<value>2</value>
 			<value>55123456</value>
 			<value>@NOW-5@</value>
-			<value>0</value>
+			<value>1</value>
 			<value>2</value>
 			<value>Kari Karisdatterveg 2A, 9996 Karimoen</value>
 			<value>no</value>

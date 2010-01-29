@@ -10,29 +10,24 @@
  */
 package no.unified.soak.webapp.action;
 
-import no.unified.soak.Constants;
-import no.unified.soak.model.ServiceArea;
-import no.unified.soak.model.Location;
-import no.unified.soak.service.ServiceAreaManager;
-import no.unified.soak.service.OrganizationManager;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.lang.StringUtils;
-
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
-import org.springframework.validation.BindException;
-
-import java.util.List;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import no.unified.soak.model.ServiceArea;
+import no.unified.soak.service.OrganizationManager;
+import no.unified.soak.service.ServiceAreaManager;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.validation.BindException;
+import org.springframework.web.servlet.ModelAndView;
 
 
 /**

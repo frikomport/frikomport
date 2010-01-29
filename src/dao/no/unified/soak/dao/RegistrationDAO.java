@@ -13,6 +13,7 @@ package no.unified.soak.dao;
 import java.util.Collection;
 import java.util.List;
 
+import no.unified.soak.dao.hibernate.RegistrationStatusCriteria;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
 
@@ -78,39 +79,72 @@ public interface RegistrationDAO extends DAO {
 	 * @param reserved
 	 *            null if it does not matter.<br>
 	 *            new Boolean(true) to count only reserved.<br>
-	 *            new Boolean(false) to count only non-reserved.<br>
-	 * @return the number of attendants that fulfil the critera
+	 *            new Boolean(false) to count only those in status waiting.<br>
+	 * @return the number of attendants that fulfill the criteria. 
 	 */
 	public Integer getNumberOfAttendants(Boolean localOnly, Course course,
 			Boolean reserved);
-
-    /**
-	 * Returns a list of registration based on serveral given vital attributes.
+	
+	/**
+	 * Returns a list of registration (also the canceled ones) based on several given vital attributes.
 	 * If a parameter is set to null, it is ignored, hence a call to this
 	 * function with all the parameters set to null would return all
 	 * registrations.
 	 * 
 	 * @param courseId
 	 *            Restrict list to registrations to this specific course
-     * @param organizationId
+	 * @param organizationId
 	 *            Restrict list to registrations where the registered user
 	 *            belongs to this specific organization
-     * @param serviceareaId
+	 * @param serviceareaId
 	 *            Restrict list to registrations where the registered user
 	 *            belongs to this service area
-     * @param reserved
+	 * @param reserved
 	 *            Restrict list to registrations where the registration is
 	 *            confirmed (true) or on waiting list (false)
-     * @param invoiced
+	 * @param invoiced
 	 *            Restrict list to registrations where the registration has been
 	 *            invoiced (true) or not (false)
-     * @param attended Restrict list to registrations where the course has been
-     *            attended (true) or not (false)
-     * @param orderBy String[] of order by criterias, can be null
+	 * @param attended
+	 *            Restrict list to registrations where the course has been
+	 *            attended (true) or not (false)
+	 * @param orderBy
+	 *            String[] of order by criterias, can be null
 	 * @return List of Courses
 	 */
 	public List getSpecificRegistrations(Long courseId, Long organizationId,
-			Long serviceAreaId, Boolean reserved, Boolean invoiced, 
+			Long serviceAreaId, Registration.Status status, Boolean invoiced,
+			Boolean attended, Collection limitToCourses, String[] orderBy);
+
+	/**
+	 * Returns a list of registration (also the canceled ones) based on several given vital attributes.
+	 * If a parameter is set to null, it is ignored, hence a call to this
+	 * function with all the parameters set to null would return all
+	 * registrations.
+	 * 
+	 * @param courseId
+	 *            Restrict list to registrations to this specific course
+	 * @param organizationId
+	 *            Restrict list to registrations where the registered user
+	 *            belongs to this specific organization
+	 * @param serviceareaId
+	 *            Restrict list to registrations where the registered user
+	 *            belongs to this service area
+	 * @param statusCriteria
+	 *            Restrict list to registrations where the status is
+	 *            among the ones listed in statusCriteria.
+	 * @param invoiced
+	 *            Restrict list to registrations where the registration has been
+	 *            invoiced (true) or not (false)
+	 * @param attended
+	 *            Restrict list to registrations where the course has been
+	 *            attended (true) or not (false)
+	 * @param orderBy
+	 *            String[] of order by criterias, can be null
+	 * @return List of Courses
+	 */
+	public List getSpecificRegistrations(Long courseId, Long organizationId,
+			Long serviceAreaId, RegistrationStatusCriteria statusCriteria, Boolean invoiced,
 			Boolean attended, Collection limitToCourses, String[] orderBy);
 
 	/**
@@ -134,29 +168,43 @@ public interface RegistrationDAO extends DAO {
 	 * @return The number of occupied seats at the course
 	 */
 	public Integer getNumberOfOccupiedSeats(Course course, Boolean localOnly);
-	
+
 	/**
 	 * Retrieves all registrations for a given course
 	 * 
-	 * @param courseId the ID of the course to find registrations for
+	 * @param courseId
+	 *            the ID of the course to find registrations for
 	 * @return a list of all registrations for the given course
 	 */
 	public List<Registration> getCourseRegistrations(Long courseId);
 
-    /**
-     * Retrieves all registrations for a given user
-     * @param username
-     * @return List of registrations
-     */
-    public List<Registration> getUserRegistrations(String username);
-    
-    /**
-     * Get all registration on specified course for specified user
-     * @param email
-     * @param firstname
-     * @param lastname
-     * @param courseId
-     * @return List of registrations
-     */
-    public List <Registration> getUserRegistationsForCourse(String email, String firstname, String lastname, Long courseId);
+	/**
+	 * Retrieves all registrations for a given user
+	 * 
+	 * @param username
+	 * @return List of registrations
+	 */
+	public List<Registration> getUserRegistrations(String username);
+
+	/**
+	 * Get all registration on specified course for specified user
+	 * 
+	 * @param email
+	 * @param firstname
+	 * @param lastname
+	 * @param courseId
+	 * @return List of registrations
+	 */
+	public List<Registration> getUserRegistationsForCourse(String email,
+			String firstname, String lastname, Long courseId);
+
+	/**
+	 * Get registration(s) on specified course for specified user
+	 * 
+	 * @param username
+	 * @param courseId
+	 * @return List of registrations
+	 */
+	public List<Registration> getUserRegistationsForCourse(String username, Long courseId);
+	
 }

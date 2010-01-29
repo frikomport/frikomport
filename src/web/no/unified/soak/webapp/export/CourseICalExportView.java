@@ -2,7 +2,6 @@ package no.unified.soak.webapp.export;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.Writer;
 
 import javax.servlet.jsp.JspException;
 
