@@ -27,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class CourseEmailController extends CourseNotificationController
 {
     private RegistrationManager registrationManager;
+    @SuppressWarnings("unused")
     private MessageSource messageSource;
     private MailSender mailSender;
 

@@ -155,7 +155,6 @@ public class ActionFilter implements Filter {
 
 	private void doEZAccessing(HttpServletRequest request, HttpSession session) {
 		EzUser ezUser = new EzUser();
-        boolean anonymous = true;
 
 		/*
 		 * eZ publish reuses the session id when logging out and in as a
@@ -171,7 +170,6 @@ public class ActionFilter implements Filter {
             if(ezUser != null && ezUser.getUsername() != null ){
                 User user = copyToLocal(ezUser);
                 session.setAttribute(Constants.USER_KEY, user);
-                anonymous = false;
             }
 		} else {
 			ezUser.setName("No cookie found.");

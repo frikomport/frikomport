@@ -18,7 +18,7 @@ public class Configuration extends BaseObject implements Serializable {
     private String value;
 
     /**
-     * @hibernate.id column="id" not-null="true" generator-class="sequence"
+     * @hibernate.id column="id" not-null="true" generator-class="native"
      * @return The key
      */
     public Long getId() {

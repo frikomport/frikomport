@@ -62,6 +62,7 @@ public class RegistrationFormController extends BaseFormController {
     private NotificationManager notificationManager = null;
     private ConfigurationManager configurationManager = null;
     private UserManager userManager = null;
+    @SuppressWarnings("unused")
     private MessageSource messageSource = null;
     protected MailEngine mailEngine = null;
     protected MailSender mailSender = null;

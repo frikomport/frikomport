@@ -376,7 +376,7 @@ public class RegistrationAdministrationController extends BaseFormController {
 
         // Send mail to the person in question
         Registration registration = registrationManager.getRegistration(regid);
-        Course course = registration.getCourse();
+        registration.getCourse();
         registrationManager.removeRegistration(regid);
 
         String key = "registration.deleted";

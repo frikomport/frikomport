@@ -113,6 +113,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         int count = 0;
         // Insert necessary rows.
         String[][] sqlSelectAndInsertArray = {
+                // Role insert
                 { "select count(*) from soakdb.role where name='anonymous';",
                         "INSERT INTO soakdb.role (name, description, version) VALUES('anonymous', 'Anonymous', 1);" },
                 { "select count(*) from soakdb.role where name='admin';",
@@ -123,11 +124,31 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                         "INSERT INTO soakdb.role (name, description, version) VALUES('instructor', 'Kursansvarlig', 1);" },
                 { "select count(*) from soakdb.role where name='editor';",
                         "INSERT INTO soakdb.role (name, description, version) VALUES('editor', 'Opplaringsansvarlig', 1);" },
+
+                // Category insert
                 { "select count(*) from soakdb.category;",
                         "INSERT INTO soakdb.category (name, selectable) VALUES ('Hendelse', true);" },
-                        
-                { "select count(*) from soakdb.configuration;",
-                        "INSERT INTO soakdb.configuration (name, selectable) VALUES ('', true);" } };
+
+                // Configuration insert
+                { "select count(*) from soakdb.configuration where name = 'access.registration.delete';",
+                        "insert INTO soakdb.configuration (name, active) VALUES ('access.registration.delete', false);" },
+                { "select count(*) from soakdb.configuration where name = 'access.registration.userdefaults';",
+                        "insert INTO soakdb.configuration (name, active) VALUES ('access.registration.userdefaults', false);" },
+                { "select count(*) from soakdb.configuration where name = 'access.registration.emailrepeat';",
+                        "insert INTO soakdb.configuration (name, active) VALUES ('access.registration.emailrepeat', false);" },
+                { "select count(*) from soakdb.configuration where name = 'access.registration.showEmployeeFields';",
+                        "insert INTO soakdb.configuration (name, active) VALUES ('access.registration.showEmployeeFields', true);" },
+                { "select count(*) from soakdb.configuration where name = 'access.registration.showServiceArea';",
+                        "insert INTO soakdb.configuration (name, active) VALUES ('access.registration.showServiceArea', true);" },
+                { "select count(*) from soakdb.configuration where name = 'access.registration.showComment';",
+                        "insert INTO soakdb.configuration (name, active) VALUES ('access.registration.showComment', true);" },
+                { "select count(*) from soakdb.configuration where name = 'mail.course.sendSummary';",
+                        "insert INTO soakdb.configuration (name, active) VALUES ('mail.course.sendSummary', true);" },
+                { "select count(*) from soakdb.configuration where name = 'mail.registration.notifyResponsible';",
+                        "insert INTO soakdb.configuration (name, active) VALUES ('mail.registration.notifyResponsible', false);" },
+                { "select count(*) from soakdb.configuration where name = 'show.menu';",
+                        "insert INTO soakdb.configuration (name, active) VALUES ('show.menu', false);" },
+                 };
 
         for (int i = 0; i < sqlSelectAndInsertArray.length; i++) {
             String[] aSelectAndInsert = sqlSelectAndInsertArray[i];
@@ -141,7 +162,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
             }
         }
         if (count > 0 && log.isInfoEnabled()) {
-            log.info("Number of roles and/or categories inserted in database: " + count);
+            log.info("Number of roles and/or categories and/or configurations inserted in database: " + count);
         }
     }
 
