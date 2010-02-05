@@ -10,12 +10,17 @@
  */
 package no.unified.soak.webapp.action;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import no.unified.soak.model.Organization;
+import no.unified.soak.model.Organization.Type;
 import no.unified.soak.service.OrganizationManager;
 
 import org.apache.commons.lang.StringUtils;
@@ -39,6 +44,19 @@ public class OrganizationFormController extends BaseFormController {
         this.mgr = mgr;
     }
 
+    @Override
+    protected Map referenceData(HttpServletRequest request) throws Exception {
+        Map<String, Object> model = new HashMap<String, Object>();
+        List<Type> types = new LinkedList<Type>();
+
+        for (Type type : Organization.Type.values()) {
+            types.add(type);
+        }
+        model.put("types", types);
+
+        return model;
+    }
+    
     /*
      * (non-Javadoc)
      *

@@ -163,15 +163,17 @@ public class ActionFilter implements Filter {
 		 */
 		Cookie cookie = RequestUtil.getCookie(request, "eZSESSID");
 		String eZSessionId = null;
-		if (cookie != null && cookie.getValue() != null && cookie.getValue().trim().length() > 0) {
-			eZSessionId = cookie.getValue();
-			EzUserDAO ezUserDAO = (EzUserDAO)getContext().getBean("ezUserDAO");
-			ezUser = ezUserDAO.findUserBySessionID(cookie.getValue());
-            if(ezUser != null && ezUser.getUsername() != null ){
+        if (cookie != null && cookie.getValue() != null && cookie.getValue().trim().length() > 0) {
+            eZSessionId = cookie.getValue();
+            EzUserDAO ezUserDAO = (EzUserDAO) getContext().getBean("ezUserDAO");
+            ezUser = ezUserDAO.findUserBySessionID(cookie.getValue());
+            if (ezUser != null && ezUser.getUsername() != null) {
                 User user = copyToLocal(ezUser);
                 session.setAttribute(Constants.USER_KEY, user);
+            } else {
+                log.info("No CMS (eZ publish) user found for eZSESSID=" + eZSessionId);
             }
-		} else {
+        } else {
 			ezUser.setName("No cookie found.");
 		}
 

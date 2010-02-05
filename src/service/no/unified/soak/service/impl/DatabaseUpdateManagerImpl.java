@@ -147,8 +147,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                 { "select count(*) from soakdb.configuration where name = 'mail.registration.notifyResponsible';",
                         "insert INTO soakdb.configuration (name, active) VALUES ('mail.registration.notifyResponsible', false);" },
                 { "select count(*) from soakdb.configuration where name = 'show.menu';",
-                        "insert INTO soakdb.configuration (name, active) VALUES ('show.menu', false);" },
-                 };
+                        "insert INTO soakdb.configuration (name, active) VALUES ('show.menu', false);" }, };
 
         for (int i = 0; i < sqlSelectAndInsertArray.length; i++) {
             String[] aSelectAndInsert = sqlSelectAndInsertArray[i];

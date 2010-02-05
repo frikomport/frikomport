@@ -35,6 +35,10 @@
          <fmt:formatNumber value="${organizationList.number}" minFractionDigits="0"/>
     </display:column>
     
+    <display:column property="typeAsEnum.displayName" sortable="true" headerClass="sortable"
+         titleKey="organization.type">
+    </display:column>
+    
 <c:if test="${isAdmin}">
     <display:column property="invoiceName" sortable="true" headerClass="sortable"
          titleKey="organizationList.invoiceAddress.name"/>

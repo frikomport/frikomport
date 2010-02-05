@@ -50,7 +50,7 @@
 				<soak:label key="organization.type" />
 			</th>
 			<td>
-				<form:select path="type" items="${types}" itemValue="type"/>
+				<form:select path="type" items="${types}" itemLabel="displayName" itemValue="typeDBValue"/>
 				<form:errors cssClass="fieldError" path="type" />
 			</td>
 		</tr>

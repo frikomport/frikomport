@@ -12,6 +12,8 @@ package no.unified.soak.model;
 
 import java.io.Serializable;
 
+import no.unified.soak.util.ApplicationResourcesUtil;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -43,6 +45,7 @@ public class Organization extends BaseObject implements Serializable {
         MUNICIPALITY(1, 1), COUNTY(2, 1), DISTRICT(3, 1), REGION(4, 2);
         private Integer typeDBValue;
         private Integer level;
+        private String displayName;
 
         Type(int type, Integer level) {
             this.typeDBValue = type;
@@ -51,19 +54,35 @@ public class Organization extends BaseObject implements Serializable {
 
         public static Type getTypeFromDBValue(Integer dbValue) {
             for (Type type : values()) {
-                if (type.getDBValue().equals(dbValue)) {
+                if (type.getTypeDBValue().equals(dbValue)) {
                     return type;
                 }
             }
             return null;
         }
 
-        public Integer getDBValue() {
+        public Integer getTypeDBValue() {
             return typeDBValue;
         }
 
         public Integer getLevel() {
             return level;
+        }
+
+        public void setDisplayName(String name) {
+            this.displayName = name;
+        }
+
+        public String getDisplayName() {
+            if (displayName == null) {
+                displayName = ApplicationResourcesUtil.getText("organization.type.displayname." + getTypeDBValue());
+            }
+            return displayName;
+        }
+        
+        @Override
+        public String toString() {
+            return new ToStringBuilder(this).append(getDisplayName()).toString();
         }
 
     }
@@ -224,7 +243,7 @@ public class Organization extends BaseObject implements Serializable {
         if (type == null) {
             return null;
         }
-        return type.getDBValue();
+        return type.getTypeDBValue();
     }
 
     public Type getTypeAsEnum() {
@@ -233,6 +252,10 @@ public class Organization extends BaseObject implements Serializable {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public void setType(Integer type) {
+        this.type = Type.getTypeFromDBValue(type);
     }
 
 }
