@@ -164,7 +164,7 @@ public class RegistrationController extends BaseFormController {
         List registrations = registrationManager.getSpecificRegistrations(registration.getCourseid(), registration
                 .getOrganizationid(), registration.getServiceAreaid(), statusCriteria, invoiced, attended, courseIds, null);
 
-        if (registrations != null) {
+        if (registrations != null && registrations.size() > 0) {
             model.put("registrationList", registrations);
         }
 

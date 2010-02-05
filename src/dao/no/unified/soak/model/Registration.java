@@ -55,7 +55,7 @@ public class Registration extends BaseObject implements Serializable {
 	/**
 	 * Eclipse generated UID
 	 */
-	private static final long serialVersionUID = 2175157764439098070L;
+	private static final long serialVersionUID = 2175157764429098074L;
 
 	private Long id;
 

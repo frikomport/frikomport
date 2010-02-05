@@ -144,7 +144,8 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 					        && course.getReminder().before(today)) {
 						// Store that it has been successfully sent - cleanup by
 						// cleanup manager
-						StringBuffer msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_body(course, null, notification.getRegistration().getReserved());
+						boolean isReserved = notification.getRegistration().getReserved();
+                        StringBuffer msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_body(course, null, isReserved);
 						ArrayList<Registration> registrations = new ArrayList<Registration>();
 						registrations.add(notification.getRegistration());
 						ArrayList<MimeMessage> newEmails = MailUtil.getMailMessages(registrations, Constants.EMAIL_EVENT_NOTIFICATION, course, msg, null, mailSender, false);
