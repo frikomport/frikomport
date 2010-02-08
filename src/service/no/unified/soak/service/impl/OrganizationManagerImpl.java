@@ -4,27 +4,27 @@
  * of the GPL.
  *
  * @author Unified Consulting AS
-*/
+ */
 /*
  * Created on 13.des.2005
  */
 package no.unified.soak.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import no.unified.soak.dao.OrganizationDAO;
 import no.unified.soak.model.Organization;
+import no.unified.soak.model.Organization.Type;
 import no.unified.soak.service.OrganizationManager;
 
-import java.util.List;
-import java.util.ArrayList;
-
-
 /**
- * Implementation of OrganizationManager interface to talk to the persistence layer.
- *
+ * Implementation of OrganizationManager interface to talk to the persistence
+ * layer.
+ * 
  * @author hrj
  */
-public class OrganizationManagerImpl extends BaseManager
-    implements OrganizationManager {
+public class OrganizationManagerImpl extends BaseManager implements OrganizationManager {
     private OrganizationDAO dao;
 
     /**
@@ -71,11 +71,28 @@ public class OrganizationManagerImpl extends BaseManager
 
     public List getAllIncludingDummy(String dummy) {
         List organizations = new ArrayList();
-        Organization organizationDummy = new Organization();
-        organizationDummy.setId(null);
-        organizationDummy.setName(dummy);
-        organizations.add(organizationDummy);
+        organizations.add(makeDummyOrganization(dummy));
         organizations.addAll(getAll());
         return organizations;
     }
+
+    public List getByTypeIncludingDummy(Type type, String dummy) {
+        List organizations = new ArrayList();
+        organizations.add(makeDummyOrganization(dummy));
+        organizations.addAll(getOrganizationsByType(Organization.Type.COUNTY));
+        return organizations;
+    }
+
+    public List getOrganizationsByType(Type county) {
+        return dao.getByType(county.getTypeDBValue());
+    }
+    
+    private Organization makeDummyOrganization(String dummy) {
+        Organization organizationDummy = new Organization();
+        organizationDummy.setId(null);
+        organizationDummy.setName(dummy);
+        return organizationDummy;
+    }
+
+
 }

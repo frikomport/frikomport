@@ -24,13 +24,14 @@ import javax.servlet.http.HttpSession;
 
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
+import no.unified.soak.model.Organization;
 import no.unified.soak.model.User;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
-import no.unified.soak.service.RoleManager;
 import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.impl.CategoryManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.CourseStatus;
 
 import org.apache.commons.lang.StringUtils;
@@ -51,7 +52,6 @@ public class CourseController extends BaseFormController {
     private ServiceAreaManager serviceAreaManager = null;
     private RegistrationManager registrationManager = null;
     private CategoryManager categoryManager = null;
-    private RoleManager roleManager = null;
     private MessageSource messageSource = null;
 
     public void setCourseManager(CourseManager courseManager) {
@@ -73,10 +73,6 @@ public class CourseController extends BaseFormController {
 
     public void setCategoryManager(CategoryManager categoryManager) {
         this.categoryManager = categoryManager;
-    }
-
-    public void setRoleManager(RoleManager roleManager) {
-        this.roleManager = roleManager;
     }
 
     public void setMessageSource(MessageSource messageSource) {
@@ -415,7 +411,13 @@ public class CourseController extends BaseFormController {
             model = new HashMap();
         }
 
-        model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
+        String typeDBvalue = ApplicationResourcesUtil.getText("show.organization.pulldown.typeDBvalue");
+        if (typeDBvalue != null) {
+            model.put("organizations", organizationManager.getByTypeIncludingDummy(Organization.Type.getTypeFromDBValue(Integer
+                    .getInteger(typeDBvalue)), getText("misc.all", locale)));
+        } else {
+            model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
+        }
 
         return model;
     }

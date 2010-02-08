@@ -30,6 +30,7 @@ import no.unified.soak.model.User;
 import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.service.UserSynchronizeManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.UserUtil;
 import no.unified.soak.webapp.util.RequestUtil;
 import no.unified.soak.webapp.util.SslUtil;
@@ -95,7 +96,7 @@ public class ActionFilter implements Filter {
 		
 		// notify the LocaleContextHolder what locale is being used so
 		// service and data layer classes can get the locale
-		LocaleContextHolder.setLocale(request.getLocale());
+        LocaleContextHolder.setLocale(ApplicationResourcesUtil.getNewLocaleWithDefaultCountryAndVariant(request.getLocale()));
 
 		// do pre filter work here
 		// If using https, switch to http

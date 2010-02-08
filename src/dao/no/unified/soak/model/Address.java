@@ -24,6 +24,7 @@ import java.io.Serializable;
  *
  */
 public class Address extends BaseObject implements Serializable {
+    private static final long serialVersionUID = 2308119741313418756L;
     protected String address;
     protected String city;
     protected String province;

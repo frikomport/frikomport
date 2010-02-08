@@ -2,12 +2,19 @@ package no.unified.soak.util;
 
 import java.util.Locale;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 public class ApplicationResourcesUtil {
 
 	private static MessageSource messageSource = null;
+
+    private static final String localeVariant = System.getenv("FRIKOMPORT_VARIANT");
+
+    public static String getLocaleVariant() {
+        return localeVariant;
+    }
 
     public static void setLocale(Locale l) {
     }
@@ -85,6 +92,20 @@ public class ApplicationResourcesUtil {
             // TODO Handle exception
         }
         return result;
+    }
+
+    public static Locale getNewLocaleWithDefaultCountryAndVariant(Locale preferredLocale) {
+        String localeCountry = preferredLocale.getCountry();
+        Locale returnLocale;
+        if (StringUtils.isEmpty(localeCountry)) {
+            localeCountry = "NO";
+        }
+        if (getLocaleVariant() == null) {
+            returnLocale = new Locale(preferredLocale.getLanguage(), localeCountry);
+        } else {
+            returnLocale = new Locale(preferredLocale.getLanguage(), localeCountry, getLocaleVariant());
+        }
+        return returnLocale;
     }
 
 }

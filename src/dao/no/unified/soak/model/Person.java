@@ -27,6 +27,7 @@ import java.io.Serializable;
  * @hibernate.class table="person" lazy="false" 
  */
 public class Person extends BaseObject implements Serializable {
+    private static final long serialVersionUID = 8470485480268638081L;
     private Long id;
     private String name;
     private String email;

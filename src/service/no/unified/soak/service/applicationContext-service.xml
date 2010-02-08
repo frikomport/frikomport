@@ -239,7 +239,7 @@
         </property>
     </bean>
     <!-- DatabaseUpdate-END-->
-
+    
     <!-- Configuration-START-->
     <bean id="configurationManager" parent="txProxyTemplate">
         <property name="target">

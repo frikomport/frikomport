@@ -75,4 +75,20 @@ public class OrganizationDAOHibernate extends BaseDAOHibernate
 
         return getHibernateTemplate().findByCriteria(criteria);
     }
+
+    public List getByType(Integer typeDBValue) {
+        DetachedCriteria criteria = DetachedCriteria.forClass(Organization.class);
+
+        // If type is provided, filter only that type of organization.
+        if (typeDBValue != null) {
+            criteria.add(Restrictions.eq("type", typeDBValue));
+        }
+        
+        // Find only active organizations
+        criteria.add(Restrictions.eq("selectable", new Boolean("true")));
+
+        criteria.addOrder(Order.asc("name"));
+
+        return getHibernateTemplate().findByCriteria(criteria);
+    }
 }

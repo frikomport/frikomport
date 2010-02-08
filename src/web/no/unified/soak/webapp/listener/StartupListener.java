@@ -44,7 +44,7 @@ public class StartupListener extends ContextLoaderListener implements
 	private static final Log log = LogFactory.getLog(StartupListener.class);
 	private static Timer timer = new Timer();
 
-	public void contextInitialized(ServletContextEvent event) {
+    public void contextInitialized(ServletContextEvent event) {
 		if (log.isDebugEnabled()) {
 			log.debug("initializing context...");
 		}

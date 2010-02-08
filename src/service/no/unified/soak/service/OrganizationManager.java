@@ -67,5 +67,9 @@ public interface OrganizationManager {
      * @param dummy of the dummy organization
      * @return
      */
-    public List<Organization> getAllIncludingDummy(String dummy);
+    public List<Organization> getAllIncludingDummy(String dummyOrganizationName);
+
+    public List<Organization> getByTypeIncludingDummy(Organization.Type type, String dummyOrganizationName);
+    
+    public List<Organization> getOrganizationsByType(Organization.Type type);
 }
