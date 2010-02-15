@@ -88,6 +88,14 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
                 criteria.add(Restrictions.eq("serviceAreaid",
                         course.getServiceAreaid()));
             }
+            
+            if ((course.getLocation() != null) &&
+                    (course.getLocation().getId() != 0)) {
+                criteria.add(Restrictions.eq("locationid",
+                        course.getLocation().getId()));
+            } else if (course.getLocationid() != null) {
+                criteria.add(Restrictions.eq("locationid", course.getLocationid()));
+            }
 
             if((course.getCategoryid() != null) && (course.getCategoryid().longValue() != 0)){
                 criteria.add(Restrictions.eq("categoryid",course.getCategoryid()));

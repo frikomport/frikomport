@@ -1,5 +1,6 @@
 package no.unified.soak.service.impl;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -24,6 +25,7 @@ import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.validator.EmailValidator;
 import org.springframework.context.MessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -110,58 +112,123 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     }
 
     private void insertBySQLStatements() {
-        int count = 0;
-        // Insert necessary rows.
-        String[][] sqlSelectAndInsertArray = {
+
+        String[][] sqlSelectAndInsertRoleArray = {
                 // Role insert
-                { "select count(*) from soakdb.role where name='anonymous';",
-                        "INSERT INTO soakdb.role (name, description, version) VALUES('anonymous', 'Anonymous', 1);" },
-                { "select count(*) from soakdb.role where name='admin';",
-                        "INSERT INTO soakdb.role (name, description, version) VALUES('admin', 'Administrator', 1);" },
-                { "select count(*) from soakdb.role where name='employee';",
-                        "INSERT INTO soakdb.role (name, description, version) VALUES('employee', 'Ansatt', 1);" },
-                { "select count(*) from soakdb.role where name='instructor';",
-                        "INSERT INTO soakdb.role (name, description, version) VALUES('instructor', 'Kursansvarlig', 1);" },
-                { "select count(*) from soakdb.role where name='editor';",
-                        "INSERT INTO soakdb.role (name, description, version) VALUES('editor', 'Opplaringsansvarlig', 1);" },
+                { "select count(*) from role where name='anonymous';",
+                        "INSERT INTO role (name, description, version) VALUES('anonymous', 'Anonymous', 1);" },
+                { "select count(*) from role where name='admin';",
+                        "INSERT INTO role (name, description, version) VALUES('admin', 'Administrator', 1);" },
+                { "select count(*) from role where name='employee';",
+                        "INSERT INTO role (name, description, version) VALUES('employee', 'Ansatt', 1);" },
+                { "select count(*) from role where name='instructor';",
+                        "INSERT INTO role (name, description, version) VALUES('instructor', 'Kursansvarlig', 1);" },
+                { "select count(*) from role where name='editor';",
+                        "INSERT INTO role (name, description, version) VALUES('editor', 'Opplaringsansvarlig', 1);" } };
+        insertIntoTableBySQLStatements("role", sqlSelectAndInsertRoleArray);
 
-                // Category insert
-                { "select count(*) from soakdb.category;",
-                        "INSERT INTO soakdb.category (name, selectable) VALUES ('Hendelse', true);" },
+        String[][] sqlSelectAndInsertCategoryArray = { { "select count(*) from category;",
+                "INSERT INTO category (name, selectable) VALUES ('Hendelse', true);" } };
+        insertIntoTableBySQLStatements("category", sqlSelectAndInsertCategoryArray);
 
+        // Insert necessary rows.
+        String[][] sqlSelectAndInsertConfigurationArray = {
                 // Configuration insert
-                { "select count(*) from soakdb.configuration where name = 'access.registration.delete';",
-                        "insert INTO soakdb.configuration (name, active) VALUES ('access.registration.delete', false);" },
-                { "select count(*) from soakdb.configuration where name = 'access.registration.userdefaults';",
-                        "insert INTO soakdb.configuration (name, active) VALUES ('access.registration.userdefaults', false);" },
-                { "select count(*) from soakdb.configuration where name = 'access.registration.emailrepeat';",
-                        "insert INTO soakdb.configuration (name, active) VALUES ('access.registration.emailrepeat', false);" },
-                { "select count(*) from soakdb.configuration where name = 'access.registration.showEmployeeFields';",
-                        "insert INTO soakdb.configuration (name, active) VALUES ('access.registration.showEmployeeFields', true);" },
-                { "select count(*) from soakdb.configuration where name = 'access.registration.showServiceArea';",
-                        "insert INTO soakdb.configuration (name, active) VALUES ('access.registration.showServiceArea', true);" },
-                { "select count(*) from soakdb.configuration where name = 'access.registration.showComment';",
-                        "insert INTO soakdb.configuration (name, active) VALUES ('access.registration.showComment', true);" },
-                { "select count(*) from soakdb.configuration where name = 'mail.course.sendSummary';",
-                        "insert INTO soakdb.configuration (name, active) VALUES ('mail.course.sendSummary', true);" },
-                { "select count(*) from soakdb.configuration where name = 'mail.registration.notifyResponsible';",
-                        "insert INTO soakdb.configuration (name, active) VALUES ('mail.registration.notifyResponsible', false);" },
-                { "select count(*) from soakdb.configuration where name = 'show.menu';",
-                        "insert INTO soakdb.configuration (name, active) VALUES ('show.menu', false);" }, };
+                { "select count(*) from configuration where name = 'access.registration.delete';",
+                        "insert INTO configuration (name, active) VALUES ('access.registration.delete', false);" },
+                { "select count(*) from configuration where name = 'access.registration.userdefaults';",
+                        "insert INTO configuration (name, active) VALUES ('access.registration.userdefaults', false);" },
+                { "select count(*) from configuration where name = 'access.registration.emailrepeat';",
+                        "insert INTO configuration (name, active) VALUES ('access.registration.emailrepeat', false);" },
+                { "select count(*) from configuration where name = 'access.registration.showEmployeeFields';",
+                        "insert INTO configuration (name, active) VALUES ('access.registration.showEmployeeFields', true);" },
+                { "select count(*) from configuration where name = 'access.registration.showServiceArea';",
+                        "insert INTO configuration (name, active) VALUES ('access.registration.showServiceArea', true);" },
+                { "select count(*) from configuration where name = 'access.registration.showComment';",
+                        "insert INTO configuration (name, active) VALUES ('access.registration.showComment', true);" },
+                { "select count(*) from configuration where name = 'mail.course.sendSummary';",
+                        "insert INTO configuration (name, active) VALUES ('mail.course.sendSummary', true);" },
+                { "select count(*) from configuration where name = 'mail.registration.notifyResponsible';",
+                        "insert INTO configuration (name, active) VALUES ('mail.registration.notifyResponsible', false);" },
+                { "select count(*) from configuration where name = 'show.menu';",
+                        "insert INTO configuration (name, active) VALUES ('show.menu', false);" } };
+        insertIntoTableBySQLStatements("configuration", sqlSelectAndInsertConfigurationArray);
 
-        for (int i = 0; i < sqlSelectAndInsertArray.length; i++) {
-            String[] aSelectAndInsert = sqlSelectAndInsertArray[i];
-            // For every row, run the first statement (column index 0) and see
-            // if it returns a 0 integer. If it does, then run the insert
-            // statement in the next sql statement (column index 1).
-            int existCount = jt.queryForInt(aSelectAndInsert[0]);
-            if (existCount == 0) {
-                jt.execute(aSelectAndInsert[1]);
-                count++;
+        String localeVariant = ApplicationResourcesUtil.getLocaleVariant();
+        if (localeVariant != null & localeVariant.equalsIgnoreCase("FKPSVV")) {
+            String[][] sqlSelectAndInsertOrganizationArray = {
+                    { "select count(*) from organization where name='Østfold'",
+                            "insert into organization (name, number, type, selectable) values ('Østfold', 01, 2, true)" },
+                    { "select count(*) from organization where name='Akershus'",
+                            "insert into organization (name, number, type, selectable) values ('Akershus', 02, 2, true)" },
+                    { "select count(*) from organization where name='Oslo'",
+                            "insert into organization (name, number, type, selectable) values ('Oslo', 03, 2, true)" },
+                    { "select count(*) from organization where name='Hedmark'",
+                            "insert into organization (name, number, type, selectable) values ('Hedmark', 04, 2, true)" },
+                    { "select count(*) from organization where name='Oppland'",
+                            "insert into organization (name, number, type, selectable) values ('Oppland', 05, 2, true)" },
+                    { "select count(*) from organization where name='Buskerud'",
+                            "insert into organization (name, number, type, selectable) values ('Buskerud', 06, 2, true)" },
+                    { "select count(*) from organization where name='Vestfold'",
+                            "insert into organization (name, number, type, selectable) values ('Vestfold', 07, 2, true)" },
+                    { "select count(*) from organization where name='Telemark'",
+                            "insert into organization (name, number, type, selectable) values ('Telemark', 08, 2, true)" },
+                    { "select count(*) from organization where name='Aust-Agder'",
+                            "insert into organization (name, number, type, selectable) values ('Aust-Agder', 09, 2, true)" },
+                    { "select count(*) from organization where name='Vest-Agder'",
+                            "insert into organization (name, number, type, selectable) values ('Vest-Agder', 10, 2, true)" },
+                    { "select count(*) from organization where name='Rogaland'",
+                            "insert into organization (name, number, type, selectable) values ('Rogaland', 11, 2, true)" },
+                    { "select count(*) from organization where name='Hordaland'",
+                            "insert into organization (name, number, type, selectable) values ('Hordaland', 12, 2, true)" },
+                    { "select count(*) from organization where name='Sogn og Fjordane'",
+                            "insert into organization (name, number, type, selectable) values ('Sogn og Fjordane', 14, 2, true)" },
+                    { "select count(*) from organization where name='Møre og Romsdal'",
+                            "insert into organization (name, number, type, selectable) values ('Møre og Romsdal', 15, 2, true)" },
+                    { "select count(*) from organization where name='Sør-Trøndelag'",
+                            "insert into organization (name, number, type, selectable) values ('Sør-Trøndelag', 16, 2, true)" },
+                    { "select count(*) from organization where name='Nord-Trøndelag'",
+                            "insert into organization (name, number, type, selectable) values ('Nord-Trøndelag', 17, 2, true)" },
+                    { "select count(*) from organization where name='Nordland'",
+                            "insert into organization (name, number, type, selectable) values ('Nordland', 18, 2, true)" },
+                    { "select count(*) from organization where name='Troms'",
+                            "insert into organization (name, number, type, selectable) values ('Troms', 19, 2, true)" },
+                    { "select count(*) from organization where name='Finnmark'",
+                            "insert into organization (name, number, type, selectable) values ('Finnmark', 20, 2, true)" } };
+            insertIntoTableBySQLStatements("Organization", sqlSelectAndInsertOrganizationArray);
+
+            String[][] sqlInsertServiceareaArray = { {
+                    null,
+                    "insert into servicearea (name, selectable, organizationid) "
+                            + "(select 'Mengdetrening', true, id from organization O where O.type = 2 and not exists (select null from servicearea S0 where S0.organizationid = O.id))" } };
+            insertIntoTableBySQLStatements("servicearea", sqlInsertServiceareaArray);
+        }
+    }
+
+    /**
+     * For every row, run the first (select) statement (column index 0) and see
+     * if it returns a 0 integer. If it does, then run the insert statement in
+     * the next sql statement (column index 1). If the first element (column
+     * index 0) is null, then run only second statement without any checking.
+     * 
+     * @param table
+     * @param sqlStatements
+     */
+    private void insertIntoTableBySQLStatements(String table, String[][] sqlStatements) {
+        int count = 0;
+        for (int i = 0; i < sqlStatements.length; i++) {
+            String[] aSelectAndInsert = sqlStatements[i];
+
+            int existCount = 0;
+            if (aSelectAndInsert[0] != null) {
+                existCount = jt.queryForInt(aSelectAndInsert[0]);
+            }
+            if (existCount == 0 && aSelectAndInsert[1] != null) {
+                count += jt.update(aSelectAndInsert[1]);
             }
         }
         if (count > 0 && log.isInfoEnabled()) {
-            log.info("Number of roles and/or categories and/or configurations inserted in database: " + count);
+            log.info("Number of " + table + " rows inserted in database: " + count);
         }
     }
 

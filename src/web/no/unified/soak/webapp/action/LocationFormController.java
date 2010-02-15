@@ -10,25 +10,27 @@
  */
 package no.unified.soak.webapp.action;
 
-import no.unified.soak.Constants;
-import no.unified.soak.model.Location;
-import no.unified.soak.model.User;
-import no.unified.soak.service.LocationManager;
-import no.unified.soak.service.OrganizationManager;
-
-import org.apache.commons.lang.StringUtils;
-
-import org.springframework.validation.BindException;
-
-import org.springframework.web.servlet.ModelAndView;
-
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import no.unified.soak.Constants;
+import no.unified.soak.model.Course;
+import no.unified.soak.model.Location;
+import no.unified.soak.model.User;
+import no.unified.soak.service.CourseManager;
+import no.unified.soak.service.LocationManager;
+import no.unified.soak.service.OrganizationManager;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.validation.BindException;
+import org.springframework.web.servlet.ModelAndView;
 
 
 /**
@@ -40,6 +42,12 @@ import javax.servlet.http.HttpServletResponse;
 public class LocationFormController extends BaseFormController {
     private LocationManager locationManager = null;
     private OrganizationManager organizationManager = null;
+    private CourseManager courseManager = null;
+
+    
+    public void setCourseManager(CourseManager courseManager) {
+        this.courseManager = courseManager;
+    }
 
     /**
     * @param roleManager
@@ -118,9 +126,18 @@ public class LocationFormController extends BaseFormController {
             
         } // or to delete?
         else if (request.getParameter("delete") != null) {
-            locationManager.removeLocation(location.getId().toString());
+            Course course = new Course();
+            course.setLocationid(location.getId());
+            List<Course> searchedCourses = courseManager.searchCourses(course, null, null);
+            if (searchedCourses == null || searchedCourses.size() == 0) {
+                locationManager.removeLocation(location.getId().toString());
+                saveMessage(request, getText("location.deleted", locale));
+            } else {
+                //TODO Klaus: Visning av message i jsp'en (locationList.jsp) fungerer ikke.
+                saveMessage(request, getText("location.canNotDeleteDueToCourse", locale));
+            }
+            
 
-            saveMessage(request, getText("location.deleted", locale));
         } else {
             locationManager.saveLocation(location);
 
