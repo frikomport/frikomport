@@ -155,7 +155,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         insertIntoTableBySQLStatements("configuration", sqlSelectAndInsertConfigurationArray);
 
         String localeVariant = ApplicationResourcesUtil.getLocaleVariant();
-        if (localeVariant != null & localeVariant.equalsIgnoreCase("FKPSVV")) {
+        if (localeVariant != null && localeVariant.equalsIgnoreCase("FKPSVV")) {
             String[][] sqlSelectAndInsertOrganizationArray = {
                     { "select count(*) from organization where name='Østfold'",
                             "insert into organization (name, number, type, selectable) values ('Østfold', 01, 2, true)" },
