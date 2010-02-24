@@ -157,6 +157,10 @@ public class CourseFormController extends BaseFormController {
     protected Map referenceData(HttpServletRequest request) throws Exception {
         Map<String, Object> model = new HashMap<String, Object>();
         Locale locale = request.getLocale();
+        if (log.isDebugEnabled()) {
+            log.debug("entering CourseFormController.referenceData() method...");
+        }
+        saveMessage(request, "Dette er en første beskjed fra CourseFormController.referenceData()");  //TODO klaus: staftodebug
 
         List categories = categoryManager.getCategories(new Category(),new Boolean(false));
         if(categories != null){
@@ -295,6 +299,7 @@ public class CourseFormController extends BaseFormController {
 				model.put("isRegistrationCanceled", Boolean.TRUE);
 			}
 			
+	        saveMessage(request, "Dette er en ekstra beskjed fra slutten av CourseFormController.referenceData()"); //TODO klaus: staftodebug
         }
 
         return model;
@@ -362,8 +367,9 @@ public class CourseFormController extends BaseFormController {
             HttpServletResponse response, Object command, BindException errors)
     throws Exception {
         if (log.isDebugEnabled()) {
-            log.debug("entering 'onSubmit' method...");
+            log.debug("entering CourseFormController.onSubmit() method...");
         }
+        saveMessage(request, "Ekstrabeskjed 1 fra CourseFormController.onSubmit()"); //TODO Klaus: debug...
 
         Map<String,Object> model = new HashMap<String,Object>();
         Course course = (Course) command;
@@ -604,6 +610,7 @@ public class CourseFormController extends BaseFormController {
 
         // Let the next page know what course we were editing here
         model.put("id", courseId.toString());
+        saveMessage(request, "Ekstrabeskjed 2 fra CourseFormController.onSubmit()"); //TODO Klaus: debug...
 
         return new ModelAndView(getSuccessView(), model);
     }

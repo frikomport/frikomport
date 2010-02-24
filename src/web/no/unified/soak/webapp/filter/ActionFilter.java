@@ -8,6 +8,9 @@
 package no.unified.soak.webapp.filter;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -35,6 +38,9 @@ import no.unified.soak.util.UserUtil;
 import no.unified.soak.webapp.util.RequestUtil;
 import no.unified.soak.webapp.util.SslUtil;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.ListUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -150,6 +156,8 @@ public class ActionFilter implements Filter {
         session.setAttribute("emailrepeat", configurationManager.isActive("access.registration.emailrepeat",false));
         session.setAttribute("showEmployeeFields", configurationManager.isActive("access.registration.showEmployeeFields",true));
         session.setAttribute("showServiceArea", configurationManager.isActive("access.registration.showServiceArea",true));
+        session.setAttribute("showJobTitle", configurationManager.isActive("access.registration.showJobTitle",true));
+        session.setAttribute("showWorkplace", configurationManager.isActive("access.registration.showWorkplace",true));
         session.setAttribute("showComment", configurationManager.isActive("access.registration.showComment",true));
         session.setAttribute("itemCount", configurationManager.getValue("list.itemCount", "25"));
     }
@@ -213,8 +221,8 @@ public class ActionFilter implements Filter {
 		request.setAttribute(messageSource.getMessage("cms.sessionid", null, locale), eZSessionId);
 		
 		if (eZSessionId != null && !authentificationToken.isAuthenticated()) {
-			request.setAttribute(Constants.MESSAGES_INFO_KEY,
-					"Din innlogging er utg&aring;tt. Vennligst logg inn p&aring;ny.");
+            request.setAttribute(Constants.MESSAGES_INFO_KEY, 
+                    Arrays.asList("Din innlogging er utg&aring;tt. Vennligst logg inn p&aring;ny."));
 		}
 	}
 	

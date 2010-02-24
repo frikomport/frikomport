@@ -72,20 +72,14 @@ public class BaseFormController extends SimpleFormController {
     }
 
     public void saveMessage(HttpServletRequest request, String msg) {
-        List messages = (List) request.getSession().getAttribute("messages");
-        List messagesRequest = (List) request.getAttribute("messages");
+        List<String> messages = (List<String>) request.getSession().getAttribute("listOfMessages");
 
         if (messages == null) {
-            messages = new ArrayList();
-        }
-        if (messagesRequest == null) {
-            messagesRequest = new ArrayList();
+            messages = new ArrayList<String>();
         }
 
         messages.add(msg);
-        messagesRequest.add(msg);
-        request.getSession().setAttribute("messages", messages);
-        request.setAttribute("messages", messagesRequest);
+        request.getSession().setAttribute("listOfMessages", messages);
     }
 
     /**

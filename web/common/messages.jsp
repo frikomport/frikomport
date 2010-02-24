@@ -11,13 +11,17 @@
 </c:if>
 
 <%-- Success Messages --%>
-<c:if test="${not empty messages}">
+<c:if test="${not empty listOfMessages}">
     <div class="message" id="successMessages">
-        <c:forEach var="msg" items="${messages}">
+        <c:forEach var="msg" items="${listOfMessages}">
             <img src="<c:url value="/images/iconInformation.gif"/>"
                 alt="<fmt:message key="icon.information"/>" class="icon" />
             <c:out value="${msg}" escapeXml="false"/><br />
         </c:forEach>
     </div>
-    <c:remove var="messages" scope="session"/>
+<%--
+TODO Klaus: Denne linja må inn igjen når messages-debug er ferdig:
+    <c:remove var="listOfMessages" scope="session"/>
+--%>
 </c:if>
+DEBUG: messages.jsp er slutt

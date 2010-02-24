@@ -131,7 +131,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                 "INSERT INTO category (name, selectable) VALUES ('Hendelse', true);" } };
         insertIntoTableBySQLStatements("category", sqlSelectAndInsertCategoryArray);
 
-        // Insert necessary rows.
+        //Insert configuration that are common for all environments. 
         String[][] sqlSelectAndInsertConfigurationArray = {
                 // Configuration insert
                 { "select count(*) from configuration where name = 'access.registration.delete';",
@@ -140,10 +140,6 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                         "insert INTO configuration (name, active) VALUES ('access.registration.userdefaults', false);" },
                 { "select count(*) from configuration where name = 'access.registration.emailrepeat';",
                         "insert INTO configuration (name, active) VALUES ('access.registration.emailrepeat', false);" },
-                { "select count(*) from configuration where name = 'access.registration.showEmployeeFields';",
-                        "insert INTO configuration (name, active) VALUES ('access.registration.showEmployeeFields', true);" },
-                { "select count(*) from configuration where name = 'access.registration.showServiceArea';",
-                        "insert INTO configuration (name, active) VALUES ('access.registration.showServiceArea', true);" },
                 { "select count(*) from configuration where name = 'access.registration.showComment';",
                         "insert INTO configuration (name, active) VALUES ('access.registration.showComment', true);" },
                 { "select count(*) from configuration where name = 'mail.course.sendSummary';",
@@ -202,14 +198,40 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                     "insert into servicearea (name, selectable, organizationid) "
                             + "(select 'Mengdetrening', true, id from organization O where O.type = 2 and not exists (select null from servicearea S0 where S0.organizationid = O.id))" } };
             insertIntoTableBySQLStatements("servicearea", sqlInsertServiceareaArray);
+            
+            // Some insert settings are different for FKPSVV enviroment.
+            String[][] sqlSelectAndInsertConfigurationSVVArray = {
+                    // Configuration insert
+                    { "select count(*) from configuration where name = 'access.registration.showEmployeeFields';",
+                            "insert INTO configuration (name, active) VALUES ('access.registration.showEmployeeFields', false);" },
+                    { "select count(*) from configuration where name = 'access.registration.showServiceArea';",
+                            "insert INTO configuration (name, active) VALUES ('access.registration.showServiceArea', false);" },
+                    { "select count(*) from configuration where name = 'access.registration.showJobTitle';",
+                            "insert INTO configuration (name, active) VALUES ('access.registration.showJobTitle', false);" },
+                    { "select count(*) from configuration where name = 'access.registration.showWorkplace';",
+                            "insert INTO configuration (name, active) VALUES ('access.registration.showWorkplace', false);" } };
+            insertIntoTableBySQLStatements("configuration", sqlSelectAndInsertConfigurationSVVArray);
+
+        } else {
+            // Some insert settings are different for non-FKPSVV enviroment.
+            String[][] sqlSelectAndInsertConfigurationDefaultArray = {
+                    // Configuration insert
+                    { "select count(*) from configuration where name = 'access.registration.showEmployeeFields';",
+                            "insert INTO configuration (name, active) VALUES ('access.registration.showEmployeeFields', true);" },
+                    { "select count(*) from configuration where name = 'access.registration.showServiceArea';",
+                            "insert INTO configuration (name, active) VALUES ('access.registration.showServiceArea', true);" },
+                    { "select count(*) from configuration where name = 'access.registration.showJobTitle';",
+                            "insert INTO configuration (name, active) VALUES ('access.registration.showJobTitle', true);" },
+                    { "select count(*) from configuration where name = 'access.registration.showWorkplace';",
+                            "insert INTO configuration (name, active) VALUES ('access.registration.showWorkplace', true);" }};
+            insertIntoTableBySQLStatements("configuration", sqlSelectAndInsertConfigurationDefaultArray);
         }
     }
 
     /**
-     * For every row, run the first (select) statement (column index 0) and see
-     * if it returns a 0 integer. If it does, then run the insert statement in
-     * the next sql statement (column index 1). If the first element (column
-     * index 0) is null, then run only second statement without any checking.
+     * For every row, run the first (select) statement (column index 0) and see if it returns a 0 integer. If it does,
+     * then run the insert statement in the next sql statement (column index 1). If the first element (column index 0)
+     * is null, then run only second statement without any checking.
      * 
      * @param table
      * @param sqlStatements
@@ -228,7 +250,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
             }
         }
         if (count > 0 && log.isInfoEnabled()) {
-            log.info("Number of " + table + " rows inserted in database: " + count);
+            log.info("Number of " + table + " rows inserted (or updated) in database: " + count);
         }
     }
 
@@ -238,7 +260,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
     private void updateRegistrationbySQLStatement() {
         if (!reservedFieldExist()) {
-            log.debug("No column 'reserved' to convert data from. No initial writing to 'status' column is done in the database.");
+            // No column 'reserved' to convert data from. No initial writing to 'status' column is done in the database.
             return;
         }
 
@@ -247,7 +269,9 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         if (nRowsAffected > 0) {
             log.info(nRowsAffected + " rows affected by convertion from reserved to status field in database.");
         } else {
-            log.debug(nRowsAffected + " rows affected by convertion from reserved to status field in database.");
+            log
+                    .info(nRowsAffected
+                            + " rows affected by convertion from reserved to status field in database. The field \"reserved\" in table \"registration\" can be dropped.");
         }
     }
 
@@ -513,9 +537,8 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
      */
     private void updateConfigurations() {
         /**
-         * DB has changed from key, value to key, active, value. Most values in
-         * DB are boolean defined as strings i value field, this method moves
-         * values to correct new field
+         * DB has changed from key, value to key, active, value. Most values in DB are boolean defined as strings i
+         * value field, this method moves values to correct new field
          */
         List<Configuration> configurations = configurationManager.getConfigurations();
         if (configurations != null) {

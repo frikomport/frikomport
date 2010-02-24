@@ -113,6 +113,7 @@
 				</td>
 			</tr>
             </c:if>
+            <c:if test="${showJobTitle}">
 			<tr>
 				<th>
 					<soak:label key="registration.jobTitle" />
@@ -122,7 +123,9 @@
 					<form:errors cssClass="fieldError" path="jobTitle" />
 				</td>
 			</tr>
+            </c:if>
 
+            <c:if test="${showWorkplace}">
 			<tr>
 				<th>
 					<soak:label key="registration.workplace" />
@@ -132,6 +135,7 @@
 					<form:errors cssClass="fieldError" path="workplace" />
 				</td>
 			</tr>
+            </c:if>
 
 			<tr>
 				<th>
