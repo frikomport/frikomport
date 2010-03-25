@@ -38,7 +38,7 @@
         <property name="target">
             <bean class="no.unified.soak.service.impl.UserManagerImpl" >
                 <property name="userDAO" ref="userDAO"/>
-                <property name="ezUserDAO" ref="ezUserDAO"/>
+                <property name="extUserDAO" ref="extUserDAO"/>
                 <property name="roleManager" ref="roleManager"/>
                 <property name="messageSource" ref="messageSource"/>
                 <property name="organizationManager" ref="organizationManager"/>

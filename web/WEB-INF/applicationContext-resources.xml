@@ -14,7 +14,10 @@
     
     <!-- EzUserDAOJdbc: Ez-publish interface -->
     <!--
-    <bean id="ezUserDAO" class="no.unified.soak.dao.ws.EzUserDAOWS">
+    <bean id="extUserDAO" class="no.unified.soak.dao.ws.EzUserDAOWS">
+        <property name="endpoint" value="http://localhost/nusoap.php/fkpuser"/>
+    </bean>
+    <bean id="extUserDAO" class="no.unified.soak.dao.ws.SVVUserDAOWS">
         <property name="endpoint" value="http://localhost/nusoap.php/fkpuser"/>
     </bean>
     -->

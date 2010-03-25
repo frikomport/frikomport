@@ -42,7 +42,7 @@ public class Organization extends BaseObject implements Serializable {
     private Type type;
 
     public enum Type {
-        MUNICIPALITY(1, 1), COUNTY(2, 1), DISTRICT(3, 1), REGION(4, 2);
+        MUNICIPALITY(1, 1), COUNTY(2, 1), AREA(3, 1), REGION(4, 2);
         private Integer typeDBValue;
         private Integer level;
         private String displayName;

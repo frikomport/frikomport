@@ -2,16 +2,16 @@ package no.unified.soak.dao;
 
 import java.util.List;
 
-import no.unified.soak.ez.EzUser;
+import no.unified.soak.ez.ExtUser;
 
-public interface EzUserDAO {
+public interface ExtUserDAO {
 
     /**
      * Henter innlogga bruker basert på sessionid
      * @param sessionId Henta fra eZSESSID cookie
      * @return
      */
-    public abstract EzUser findUserBySessionID(String sessionId);
+    public abstract ExtUser findUserBySessionID(String sessionId);
 
     /**
      * Henter brukere med gitte roller.
@@ -19,13 +19,13 @@ public interface EzUserDAO {
      * @param roles
      * @return
      */
-    public abstract List<EzUser> findUsers(List<String> roles);
+    public abstract List<ExtUser> findUsers(List<String> roles);
 
     /**
      * Henter alle brukere fra ez
      * @return
      */
-    public abstract List<EzUser> findAll();
+    public abstract List<ExtUser> findAll();
 
     /**
      * Henter alle roller definert i ez

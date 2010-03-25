@@ -86,7 +86,6 @@ public class CourseController extends BaseFormController {
         if (log.isDebugEnabled()) {
             log.debug("entering CourseController.referenceData() method...");
         }
-        saveMessage(request, "Dette er en ekstra beskjed fra CourseController.referenceData()");  //TODO klaus: staftodebug
 
         Locale locale = request.getLocale();
         Map model = new HashMap();
@@ -239,7 +238,6 @@ public class CourseController extends BaseFormController {
         if (log.isDebugEnabled()) {
             log.debug("entering CourseController.onSubmit() method...");
         }
-        saveMessage(request, "Dette er en første beskjed fra CourseController.onSubmit()");  //TODO klaus: staftodebug
 
         Map model = new HashMap();
         HttpSession session = request.getSession();
@@ -335,7 +333,6 @@ public class CourseController extends BaseFormController {
         model.put("historic", historic);
         model.put("past", past);
         model.put("courseList", filtered);
-        saveMessage(request, "Dette er en ekstra beskjed fra CourseController.");  //TODO klaus: staftodebug
 
         return new ModelAndView(getSuccessView(), model);
     }

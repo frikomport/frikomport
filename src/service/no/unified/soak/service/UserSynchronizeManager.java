@@ -1,6 +1,6 @@
 package no.unified.soak.service;
 
-import no.unified.soak.ez.EzUser;
+import no.unified.soak.ez.ExtUser;
 import no.unified.soak.model.User;
 
 /**
@@ -24,5 +24,5 @@ public interface UserSynchronizeManager extends Task{
     /**
      * Processes one singe user
      */
-    public User processUser(EzUser user);
+    public User processUser(ExtUser user);
 }

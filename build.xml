@@ -362,6 +362,7 @@
         </if>
         <echo>Preparing tomcat-context.xml for inclusion in war</echo>
         <!-- Copy tomcat-context.xml file to context.xml -->
+    	<!--
         <if>
             <and>
                 <isset property="tomcat5"/>
@@ -376,13 +377,16 @@
             <elseif>
                 <isset property="tomcat5.5"/>
                 <then>
+                -->
                     <copy tofile="${webapp.dist}/context.xml"
                         file="metadata/conf/tomcat-context-5.5.xml" overwrite="true">
                         <filterset refid="db.variables"/>
                     </copy>
+    	<!--
                 </then>
             </elseif>
         </if>
+        -->
         <!-- Copy .properties files in src tree to build/web/classes -->
         <copy todir="${build.dir}/web/classes">
             <fileset dir="src/web">

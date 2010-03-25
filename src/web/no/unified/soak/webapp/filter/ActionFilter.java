@@ -27,8 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import no.unified.soak.Constants;
-import no.unified.soak.dao.EzUserDAO;
-import no.unified.soak.ez.EzUser;
+import no.unified.soak.dao.ExtUserDAO;
+import no.unified.soak.ez.ExtUser;
 import no.unified.soak.model.User;
 import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.UserManager;
@@ -163,7 +163,7 @@ public class ActionFilter implements Filter {
     }
 
 	private void doEZAccessing(HttpServletRequest request, HttpSession session) {
-		EzUser ezUser = new EzUser();
+		ExtUser extUser = new ExtUser();
 
 		/*
 		 * eZ publish reuses the session id when logging out and in as a
@@ -174,19 +174,19 @@ public class ActionFilter implements Filter {
 		String eZSessionId = null;
         if (cookie != null && cookie.getValue() != null && cookie.getValue().trim().length() > 0) {
             eZSessionId = cookie.getValue();
-            EzUserDAO ezUserDAO = (EzUserDAO) getContext().getBean("ezUserDAO");
-            ezUser = ezUserDAO.findUserBySessionID(cookie.getValue());
-            if (ezUser != null && ezUser.getUsername() != null) {
-                User user = copyToLocal(ezUser);
+            ExtUserDAO extUserDAO = (ExtUserDAO) getContext().getBean("extUserDAO");
+            extUser = extUserDAO.findUserBySessionID(cookie.getValue());
+            if (extUser != null && extUser.getUsername() != null) {
+                User user = copyToLocal(extUser);
                 session.setAttribute(Constants.USER_KEY, user);
             } else {
                 log.info("No CMS (eZ publish) user found for eZSESSID=" + eZSessionId);
             }
         } else {
-			ezUser.setName("No cookie found.");
+			extUser.setName("No cookie found.");
 		}
 
-		EZAuthentificationToken authentificationToken = new EZAuthentificationToken(ezUser, eZSessionId);
+		EZAuthentificationToken authentificationToken = new EZAuthentificationToken(extUser, eZSessionId);
 
 		session.setAttribute("authenticationToken", authentificationToken);
 
@@ -226,7 +226,7 @@ public class ActionFilter implements Filter {
 		}
 	}
 	
-	private User copyToLocal(EzUser user) {
+	private User copyToLocal(ExtUser user) {
 	    ApplicationContext ctx = getContext();
         UserSynchronizeManager userSynchronizeManager = (UserSynchronizeManager)ctx.getBean("userSynchronizeManager");
         return userSynchronizeManager.processUser(user);

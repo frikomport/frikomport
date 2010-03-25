@@ -1,0 +1,205 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="no" xml:lang="no">
+   <head><base href="http://www.vegvesen.no/"/>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <title>KjÃ¸retÃ¸yopplysninger - vegvesen.no </title>
+      <link rel="stylesheet" type="text/css"
+            href="http://www.vegvesen.no/resources/styles/styles.css"
+            media="all" />
+      			<!--[if IE 6]>
+      			<link rel="stylesheet" type="text/css" href="http://www.vegvesen.no/resources/styles/ie6_override.css" media="all" />
+      			<![endif]-->
+      		
+      <link rel="stylesheet" type="text/css"
+            href="http://www.vegvesen.no/resources/styles/print.css"
+            media="print" />
+      <link id="contrast" rel="stylesheet" type="text/css"
+            href="http://www.vegvesen.no/resources/styles/empty.css"
+            media="screen" /><script type="text/javascript"
+              src="http://www.vegvesen.no/resources/scripts/jquery-1.2.6.js">// avoid self-enclosing tag</script><script type="text/javascript" src="http://www.google-analytics.com/ga.js">// avoid self-enclosing tag</script><script type="text/javascript"
+              src="http://www.vegvesen.no/resources/scripts/global.js">// avoid self-enclosing tag</script><link href="http://www.vegvesen.no/s/favicon.ico" rel="shortcut icon"
+            type="image/x-icon" />
+      <meta content="no" http-equiv="content-language" />
+      <meta content="text/javascript" http-equiv="content-script-type" />
+      <meta content="text/css" http-equiv="content-style-type" />
+      <meta content="index,follow" name="robots" />
+      <meta content="false" http-equiv="imagetoolbar" />
+      <meta content="true" name="MSSmartTagsPreventParsing" />
+      <meta content="yes" http-equiv="MSThemeCompatible" />
+      <meta content="document" name="resource-type" />
+      <meta content="http://www.vegvesen.no/Kjoretoy/Fakta+og+statistikk/Kjoretoyopplysninger/SMS+tjeneste/56050.cms"
+            name="contenturl" /><meta content="Statens vegvesen tilbyr nå kjøretøyopplysninger via SMS."
+      name="description"></meta>
+	  <!--${head}-->
+   </head>
+   <body>
+      <div id="PageContainer" class="standardSidemal"><div class="narrow" id="HeaderContainer">
+         <div id="HeaderInnerContainer">
+         <div id="Header">
+         <div class="noindex">
+         <div class="logo">
+         <a href="/">
+         <img alt="Til forsiden" id="logo"
+         src="http://www.vegvesen.no/images/logo.gif"
+         title="Til forsiden"></img>
+         </a>
+         </div>
+         </div>
+         <div class="noindex">
+         <a href="http://www.vegvesen.no/Kjoretoy/Fakta+og+statistikk/Kjoretoyopplysninger/SMS+tjeneste/56050.cms#ContentFrameMiddle"
+         style="position: absolute"
+         title="Til innholdet">
+         <img alt="Til innholdet"
+         src="http://www.vegvesen.no/images/transparent.gif"></img>
+         </a>
+         </div>
+         <div class="noindex" id="printLogo">
+         <img alt="Til forsiden" src="http://www.vegvesen.no/images/printLogo.gif"
+         title="Til forsiden"></img>
+         </div>
+         <div class="noindex">
+         <div class="narrowHeaderPictureContainer"><img
+         src="http://www.vegvesen.no/binary?id=34934"
+         alt="Kjøretøy"
+         id="sublevelHeaderPicture" /></div>
+         </div>
+         <div class="headerContentContainer">
+         <div id="globalOptions" class="noindex">
+         <ul>
+         <li><a id="changeContrast"
+         href="http://www.vegvesen.no/Kjoretoy/Fakta+og+statistikk/Kjoretoyopplysninger/SMS+tjeneste/56050.cms">Høykontrast</a></li>
+         <li><span class="skillelinje">|</span></li>
+         <li><a id="changeFontSize"
+         href="http://www.vegvesen.no/Kjoretoy/Fakta+og+statistikk/Kjoretoyopplysninger/SMS+tjeneste/56050.cms">Skriftstørrelse</a>
+         <a id="setNormalFontSize" title="Liten skrift"
+         href="http://www.vegvesen.no/Kjoretoy/Fakta+og+statistikk/Kjoretoyopplysninger/SMS+tjeneste/56050.cms">A</a> <a id="setLargeFontSize"
+         title="Mellomstor skrift"
+         href="http://www.vegvesen.no/Kjoretoy/Fakta+og+statistikk/Kjoretoyopplysninger/SMS+tjeneste/56050.cms">A</a> <a id="setLargestFontSize"
+         title="Stor skrift"
+         href="http://www.vegvesen.no/Kjoretoy/Fakta+og+statistikk/Kjoretoyopplysninger/SMS+tjeneste/56050.cms">A</a></li>
+         <li><span class="skillelinje">|</span></li>
+         <li><a href="http://www.vegvesen.no/en/Home">English</a></li>
+         <li><span class="skillelinje">|</span></li>
+         <li class="selected last"><span>Norsk</span></li>
+         </ul>
+         </div>
+         <div id="headerTitle"><img
+         src="http://www.vegvesen.no/binary?id=26965"
+         alt="" /></div>
+         </div>
+         </div>
+         </div>
+         </div>
+         <div id="MainmenuContainer" class="noindex">
+            <div id="Mainmenu"><ul>
+               <li class="first ">
+               <a href="http://www.vegvesen.no/Hovedside">
+               <span>Hovedside</span>
+               </a>
+               </li>
+               <li>
+               <a href="http://www.vegvesen.no/Trafikkinformasjon">
+               <span>Trafikkinformasjon</span>
+               </a>
+               </li>
+               <li class="selected">
+               <span>Kjøretøy</span>
+               </li>
+               <li>
+               <a href="http://www.vegvesen.no/Forerkort">
+               <span>Førerkort</span>
+               </a>
+               </li>
+               <li>
+               <a href="http://www.vegvesen.no/Vegprosjekter">
+               <span>Vegprosjekter</span>
+               </a>
+               </li>
+               <li>
+               <a href="http://www.vegvesen.no/Fag">
+               <span>Fag</span>
+               </a>
+               </li>
+               <li>
+               <a href="http://www.vegvesen.no/Jobb">
+               <span>Jobb</span>
+               </a>
+               </li>
+               <li class="last ">
+               <a href="http://www.vegvesen.no/Om+Statens+vegvesen">
+               <span>Om Statens vegvesen</span>
+               </a>
+               </li>
+               </ul>
+               <form action="http://www.vegvesen.no/Sok" method="get" id="searchboxform">
+               <div id="searchbox">
+               <input type="text" name="query" id="searchquery" class="query"></input>
+               <input type="submit" class="searchboxbutton" value="" alt="Søk"></input>
+               </div>
+               </form>
+            </div>
+         </div>
+         <div id="ContentContainer">
+            <div id="Content" class="clearfix"><div id="brodsmulemeny" class="noindex"><a href="http://www.vegvesen.no/Hovedside">Hovedside</a><span class="brodsmulemenySeparator">/</span><a
+               href="http://www.vegvesen.no/Kjoretoy">Kjøretøy</a><span class="brodsmulemenySeparator">/</span><a href="http://www.vegvesen.no/Kjoretoy/Fakta+og+statistikk/Kjoretoyopplysninger">Kjøretøyopplysninger</a><span
+               class="brodsmulemenySeparator">/</span><span id="brodsmulemenySelected">SMS-tjeneste</span></div><div class="noindex">
+               <div class="topbar">
+               <span>
+               <a class="contentprint" href="#" title="Skriv ut">
+               <img alt="Skriverikon" src="http://www.vegvesen.no/images/printerikon.gif"></img>Skriv ut
+               </a>
+               </span>
+               </div>
+               </div>
+               <div id="ContentFrameMiddle">
+                  <div id="UnderMeny"> <div class="noindex">
+                     <ul>
+                     <li class="first selected">
+                     <a href="http://www.vegvesen.no/Kjoretoy/Fakta+og+statistikk/Kjoretoyopplysninger/SMS+tjeneste">SMS-tjeneste</a>
+                     <ul class="subniva">
+                     <li>
+                     <a href="http://www.vegvesen.no/Kjoretoy/Fakta+og+statistikk/Kjoretoyopplysninger/SMS+tjeneste/Svarmelding">Svarmelding</a>
+                     </li>
+                     <li>
+                     <a href="http://www.vegvesen.no/Kjoretoy/Fakta+og+statistikk/Kjoretoyopplysninger/SMS+tjeneste/Avvik+fra+svarmelding">Avvik
+                     fra svarmelding</a>
+                     </li>
+                     <li>
+                     <a href="http://www.vegvesen.no/Kjoretoy/Fakta+og+statistikk/Kjoretoyopplysninger/SMS+tjeneste/Feilmeldinger">Feilmeldinger</a>
+                     </li>
+                     <li>
+                     <a href="http://www.vegvesen.no/Kjoretoy/Fakta+og+statistikk/Kjoretoyopplysninger/SMS+tjeneste/Forbehold">Forbehold</a>
+                     </li>
+                     <li>
+                     <a href="http://www.vegvesen.no/Kjoretoy/Fakta+og+statistikk/Kjoretoyopplysninger/SMS+tjeneste/Kontakt+oss">Kontakt
+                     oss</a>
+                     </li>
+                     </ul>
+                     </li>
+                     <li class="last ">
+                     <a href="http://www.vegvesen.no/Kjoretoy/Fakta+og+statistikk/Kjoretoyopplysninger/Understellsregistret">Understellsregistret</a>
+                     </li>
+                     </ul>
+                     </div>
+                  </div>
+                  <div id="MainContentContainer">
+				  <!--${body}-->				  
+                  </div>
+                  </div>
+               </div>
+            </div>
+            <!--Metadata : start--><input type="hidden" name="fast_title" value="Kjøretøyopplysninger"
+                   class="fast_metadata" />
+            <!--Metadata : end--></div>
+      </div>
+      <div id="FooterContainer" class="noindex">
+         <div id="Footer"><span id="footerText">
+            <span id="footerLink">
+            <a href="http://www.vegvesen.no/Om+Statens+vegvesen/Kontakt/Kontakt+oss">Kontakt Statens vegvesen</a>
+            </span>
+            </span>
+         </div>
+      </div>
+   </body>
+</html>

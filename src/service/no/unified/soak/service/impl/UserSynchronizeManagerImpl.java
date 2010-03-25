@@ -4,8 +4,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import no.unified.soak.dao.EzUserDAO;
-import no.unified.soak.ez.EzUser;
+import no.unified.soak.dao.ExtUserDAO;
+import no.unified.soak.ez.ExtUser;
 import no.unified.soak.model.User;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.UserManager;
@@ -21,12 +21,12 @@ import org.springframework.orm.ObjectRetrievalFailureException;
  */
 
 public class UserSynchronizeManagerImpl extends BaseManager implements UserSynchronizeManager {
-    private EzUserDAO ezUserDAO = null;
+    private ExtUserDAO extUserDAO = null;
     private UserManager userManager = null;
     private RegistrationManager registrationManager = null;
 
-    public void setEzUserDAO(EzUserDAO ezUserDAO) {
-        this.ezUserDAO = ezUserDAO;
+    public void setExtUserDAO(ExtUserDAO extUserDAO) {
+        this.extUserDAO = extUserDAO;
     }
 
     public void setUserManager(UserManager userManager) {
@@ -38,19 +38,19 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
     }
 
     public void synchronizeUsers() {
-        List<EzUser> ezUsers = ezUserDAO.findAll();
+        List<ExtUser> ezUsers = extUserDAO.findAll();
         if(ezUsers != null)
         {
-            Iterator<EzUser> it = ezUsers.iterator();
+            Iterator<ExtUser> it = ezUsers.iterator();
             while (it.hasNext()){
-                EzUser current = it.next();
+                ExtUser current = it.next();
                 processUser(current);
             }
         }
         log.debug("Synchronized users");
     }
 
-    public User processUser(EzUser current) {
+    public User processUser(ExtUser current) {
         
         User emailuser = null;
         User ezUser = null;

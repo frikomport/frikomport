@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Locale;
 
 import no.unified.soak.Constants;
-import no.unified.soak.dao.EzUserDAO;
+import no.unified.soak.dao.ExtUserDAO;
 import no.unified.soak.dao.UserDAO;
-import no.unified.soak.ez.EzUser;
+import no.unified.soak.ez.ExtUser;
 import no.unified.soak.model.Address;
 import no.unified.soak.model.Organization;
 import no.unified.soak.model.User;
@@ -47,7 +47,7 @@ import org.springframework.orm.ObjectRetrievalFailureException;
 public class UserManagerImpl extends BaseManager implements UserManager {
 	private UserDAO dao;
 
-	private EzUserDAO ezUserDAO;
+	private ExtUserDAO extUserDAO;
 
 	private RoleManager roleManager;
 
@@ -64,8 +64,8 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		this.dao = dao;
 	}
 
-	public void setEzUserDAO(EzUserDAO ezUserDAO) {
-		this.ezUserDAO = ezUserDAO;
+	public void setExtUserDAO(ExtUserDAO extUserDAO) {
+		this.extUserDAO = extUserDAO;
 	}
 
 	public void setMessageSource(MessageSource messageSource) {
@@ -207,7 +207,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		List ezUsers = getEZResponsibles(null);
 		List users = new ArrayList();
 		for (Iterator iter = ezUsers.iterator(); iter.hasNext();) {
-			EzUser ezUser = (EzUser) iter.next();
+			ExtUser ezUser = (ExtUser) iter.next();
 			try {
 				users.add(dao.getUser(ezUser.getUsername()));
 			} catch (ObjectRetrievalFailureException objectRetrievalFailureException) {
@@ -453,12 +453,12 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		return roles;
 	}
 
-	private List getEZResponsibles(EzUser user) {
+	private List getEZResponsibles(ExtUser user) {
 	    Locale locale = LocaleContextHolder.getLocale();
         List<String> roles = new ArrayList();
         roles.add(messageSource.getMessage("role.instructor", null, locale));
         roles.add(messageSource.getMessage("role.editor", null, locale));
-		List users = ezUserDAO.findUsers(roles);
+		List users = extUserDAO.findUsers(roles);
 		return users;
 	}
 

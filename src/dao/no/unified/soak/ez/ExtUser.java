@@ -21,7 +21,7 @@ import no.unified.soak.model.BaseObject;
  * @author kst
  *
  */
-public class EzUser extends BaseObject implements Serializable {
+public class ExtUser extends BaseObject implements Serializable {
     private Integer id;
     private String name;
     private String first_name;
@@ -40,11 +40,11 @@ public class EzUser extends BaseObject implements Serializable {
     }
 
     public boolean equals(Object o) {
-        if (!(o instanceof EzUser) || (o == null)) {
+        if (!(o instanceof ExtUser) || (o == null)) {
             return false;
         }
 
-        EzUser user = (EzUser) o;
+        ExtUser user = (ExtUser) o;
 
         if (user.getId() == getId()) {
             return true;

@@ -21,8 +21,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import no.unified.soak.dao.EzUserDAO;
-import no.unified.soak.ez.EzUser;
+import no.unified.soak.dao.ExtUserDAO;
+import no.unified.soak.ez.ExtUser;
 import no.unified.soak.util.NumConvert;
 
 import org.springframework.dao.DataAccessException;
@@ -34,7 +34,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
  * @author kst
  * 
  */
-public class EzUserDAOJdbc implements EzUserDAO {
+public class EzUserDAOJdbc implements ExtUserDAO {
 	DataSource dataSource = null;
 	
 	public void setDataSource(DataSource dataSource) {
@@ -56,13 +56,13 @@ public class EzUserDAOJdbc implements EzUserDAO {
 	}
 
 	/* (non-Javadoc)
-     * @see no.unified.soak.dao.jdbc.EzUserDAO#findUserBySessionID(java.lang.String)
+     * @see no.unified.soak.dao.ExtUserDAO#findUserBySessionID(java.lang.String)
      */
-	public EzUser findUserBySessionID(String sessionId) {
+	public ExtUser findUserBySessionID(String sessionId) {
 		String sql = "select user_id, expiration_time from ezsession where session_key = \'"
 				+ sessionId + "\'";
 		SqlRowSet rowSet = jt.queryForRowSet(sql);
-		EzUser eZuser = null;
+		ExtUser eZuser = null;
 		if (rowSet.next()) {
 			Integer uid = rowSet.getInt("user_id");
 			Long expTime = rowSet.getLong("expiration_time");
@@ -76,7 +76,7 @@ public class EzUserDAOJdbc implements EzUserDAO {
 				 * User is not logged in any more, so don't return the user
 				 * object.
 				 */
-				eZuser = new EzUser();
+				eZuser = new ExtUser();
 //				System.out
 //						.println("UserEzDaoJdbc.findUserBySessionID(): eZ user has timedout. Java module is therefore not accepting the user.");
 			}
@@ -94,7 +94,7 @@ public class EzUserDAOJdbc implements EzUserDAO {
 	 *            <code>String role = "'courseresponsible','educationalresponsible','admin'";</code>
 	 * @return user fetched from eZ publish database.
 	 */
-	private EzUser findUser(Integer userid, String roleCriteria, boolean findRelated) {
+	private ExtUser findUser(Integer userid, String roleCriteria, boolean findRelated) {
 		if (userid == null) {
 			return null;
 		}
@@ -102,7 +102,7 @@ public class EzUserDAOJdbc implements EzUserDAO {
 		if (roleCriteria != null && roleCriteria.trim().length() > 0) {
 			roleCriteriaSQL = " and R.name in (" + roleCriteria + ")";
 		}
-		EzUser user = new EzUser();
+		ExtUser user = new ExtUser();
 		try {
 			String sql = "select O.id, O.name, CA.identifier, A.data_int, A.data_text, U.email, U.login from ezcontentobject O \r\n"
 					+ "inner join ezcontentclass C on O.contentclass_id = C.id\r\n"
@@ -166,7 +166,7 @@ public class EzUserDAOJdbc implements EzUserDAO {
 	}
 
 	/* (non-Javadoc)
-     * @see no.unified.soak.dao.jdbc.EzUserDAO#findKursansvarligeUser()
+     * @see no.unified.soak.dao.ExtUserDAO#findKursansvarligeUser()
      */
 	public List findUsers(List<String> roles) {
 		
@@ -192,10 +192,10 @@ public class EzUserDAOJdbc implements EzUserDAO {
 			SqlRowSet rowSet = jt.queryForRowSet(sql);
 			int curId = 0;
 
-			EzUser user = null;
+			ExtUser user = null;
 			while (rowSet.next()) {
 				if (rowSet.getInt("id") != curId) {
-					user = new EzUser();
+					user = new ExtUser();
 					eZUsers.add(user);
 					curId = rowSet.getInt("id");
 					user.setId(curId);
@@ -222,7 +222,7 @@ public class EzUserDAOJdbc implements EzUserDAO {
 	}
 
     	/* (non-Javadoc)
-         * @see no.unified.soak.dao.jdbc.EzUserDAO#findAll()
+         * @see no.unified.soak.dao.ExtUserDAO#findAll()
          */
     	public List findAll() {
 		List eZUsers = new ArrayList();
@@ -241,10 +241,10 @@ public class EzUserDAOJdbc implements EzUserDAO {
 			SqlRowSet rowSet = jt.queryForRowSet(sql);
 			int curId = 0;
 
-			EzUser user = null;
+			ExtUser user = null;
 			while (rowSet.next()) {
 				if (rowSet.getInt("id") != curId) {
-					user = new EzUser();
+					user = new ExtUser();
 					eZUsers.add(user);
 					curId = rowSet.getInt("id");
 					user.setId(curId);
@@ -271,7 +271,7 @@ public class EzUserDAOJdbc implements EzUserDAO {
 	}
 
     /* (non-Javadoc)
-     * @see no.unified.soak.dao.jdbc.EzUserDAO#findRoles()
+     * @see no.unified.soak.dao.ExtUserDAO#findRoles()
      */
     public List<String> findRoles(){
 	        String sql = "select distinct R.name from ezcontentobject_tree OT, ezuser_role UR, ezrole R, ezcontentobject_tree OT2"
@@ -291,7 +291,7 @@ public class EzUserDAOJdbc implements EzUserDAO {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-	    EzUserDAO userEzDaoJdbc = new EzUserDAOJdbc();
+	    ExtUserDAO userEzDaoJdbc = new EzUserDAOJdbc();
 		List users = userEzDaoJdbc.findUsers(null);
 		for (Iterator iter = users.iterator(); iter.hasNext();) {
 //		    EzUser user = (EzUser) iter.next();
