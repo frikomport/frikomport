@@ -30,7 +30,6 @@ public class SVVUserDAOWS implements ExtUserDAO {
      * 
      * @see no.unified.soak.dao.ExtUserDAO#findAll()
      */
-    @Override
     public List<ExtUser> findAll() {
         // TODO Auto-generated method stub
         return null;
@@ -41,7 +40,6 @@ public class SVVUserDAOWS implements ExtUserDAO {
      * 
      * @see no.unified.soak.dao.ExtUserDAO#findRoles()
      */
-    @Override
     public List<String> findRoles() {
         // TODO Auto-generated method stub
         return null;
@@ -52,7 +50,6 @@ public class SVVUserDAOWS implements ExtUserDAO {
      * 
      * @see no.unified.soak.dao.ExtUserDAO#findUserBySessionID(java.lang.String)
      */
-    @Override
     public ExtUser findUserBySessionID(String sessionId) throws UnsupportedOperationException {
         throw new UnsupportedOperationException("findUserBySessionID(sessionId) is unsupported in SVV environment. Use findUserByUsername(username) instead.");
     }
@@ -62,7 +59,6 @@ public class SVVUserDAOWS implements ExtUserDAO {
      * 
      * @see no.unified.soak.dao.ExtUserDAO#findUsers(java.util.List)
      */
-    @Override
     public List<ExtUser> findUsers(List<String> roles) {
         // TODO Auto-generated method stub
         return null;
