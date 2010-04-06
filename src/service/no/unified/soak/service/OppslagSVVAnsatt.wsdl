@@ -12,7 +12,7 @@
 		Tjenesten er gjort tilgjengelig i tjeneste katalog og er beregnet for
 		bruk til oppslag mot ansatte i SVV. Tjenesten vil returnere funn som
 		samsvarer med UID. UID kan inneholde wildcard: *. Eks: Bri*. Ikke
-		benytt * alene, da dette l�ser store ressurser i oppslag. Tjenesten
+		benytt * alene, da dette løser store ressurser i oppslag. Tjenesten
 		skal kun benyttes innenfra JCaps mot SOA3. Ta kontakt med IT for
 		utfyllende informasjon. All oppkobling mot tjenester i
 		tjenestekatalogen krever oppkoblingsavtale med IT Drift.
