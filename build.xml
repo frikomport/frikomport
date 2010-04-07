@@ -325,7 +325,7 @@
             </deploymentdescriptor>
             <jsptaglib validateXML="true"
                 description="Custom tag library for this application"
-                shortName="${webapp.name}" filename="${webapp.name}.tld"/>
+                shortName="soak" filename="soak.tld"/>
             <springvalidationxml/>
         </webdoclet>
     </target>
