@@ -17,10 +17,12 @@
     <bean id="extUserDAO" class="no.unified.soak.dao.ws.EzUserDAOWS">
         <property name="endpoint" value="http://localhost/nusoap.php/fkpuser"/>
     </bean>
-    <bean id="extUserDAO" class="no.unified.soak.dao.ws.SVVUserDAOWS">
-        <property name="endpoint" value="http://localhost/nusoap.php/fkpuser"/>
-    </bean>
     -->
+    <bean id="extUserDAO" class="no.unified.soak.dao.ws.SVVUserDAOWS" autowire="default">
+        <property name="endpoint" value="http://localhost/nusoap.php/fkpuser"/>
+        <property name="roleDAO" ref="roleDAO"/>
+        <property name="userDAO" ref="userDAO"/>
+    </bean>
 
     <!-- JNDI DataSource for J2EE environments -->
     <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">

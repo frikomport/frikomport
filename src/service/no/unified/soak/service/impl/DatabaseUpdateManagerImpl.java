@@ -1,6 +1,5 @@
 package no.unified.soak.service.impl;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -25,7 +24,6 @@ import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.validator.EmailValidator;
 import org.springframework.context.MessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -150,8 +148,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                         "insert INTO configuration (name, active) VALUES ('show.menu', false);" } };
         insertIntoTableBySQLStatements("configuration", sqlSelectAndInsertConfigurationArray);
 
-        String localeVariant = ApplicationResourcesUtil.getLocaleVariant();
-        if (localeVariant != null && localeVariant.equalsIgnoreCase("FKPSVV")) {
+        if (ApplicationResourcesUtil.isSVV()) {
             String[][] sqlSelectAndInsertOrganizationArray = {
                     { "select count(*) from organization where name='Østfold'",
                             "insert into organization (name, number, type, selectable) values ('Østfold', 01, 2, true)" },

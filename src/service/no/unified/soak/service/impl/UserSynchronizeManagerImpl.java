@@ -10,14 +10,13 @@ import no.unified.soak.model.User;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.service.UserSynchronizeManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.UserUtil;
 
 import org.springframework.orm.ObjectRetrievalFailureException;
 
 /**
- * User: gv
- * Date: 04.jun.2008
- * Time: 11:35:18
+ * User: gv Date: 04.jun.2008 Time: 11:35:18
  */
 
 public class UserSynchronizeManagerImpl extends BaseManager implements UserSynchronizeManager {
@@ -38,52 +37,58 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
     }
 
     public void synchronizeUsers() {
-        List<ExtUser> ezUsers = extUserDAO.findAll();
-        if(ezUsers != null)
-        {
-            Iterator<ExtUser> it = ezUsers.iterator();
-            while (it.hasNext()){
-                ExtUser current = it.next();
-                processUser(current);
-            }
+        if (ApplicationResourcesUtil.isSVV()) {
+            //TODO SVV-synking mot LDAP av alle påloggingsbrukere trengs i fall en brukerrolle fjernes i LDAP.
         }
-        log.debug("Synchronized users");
+        else {
+            List<ExtUser> ezUsers = extUserDAO.findAll();
+            if (ezUsers != null) {
+                Iterator<ExtUser> it = ezUsers.iterator();
+                while (it.hasNext()) {
+                    ExtUser current = it.next();
+                    processUser(current);
+                }
+            }
+            log.debug("Synchronized users");
+        }
     }
 
     public User processUser(ExtUser current) {
-        
+
         User emailuser = null;
-        User ezUser = null;
-        // sjekker om epostaddressa er brukt som usernane
+        User user = null;
+        // sjekker om epostaddressa er brukt som username
         try {
             emailuser = userManager.getUser(current.getEmail().toLowerCase());
         } catch (ObjectRetrievalFailureException e) {
-            User user = userManager.findUser(current.getEmail().toLowerCase());
-            if((user != null) && !user.getUsername().equals(current.getUsername())) {
-                emailuser = user;
+            User tmpUser = userManager.findUser(current.getEmail().toLowerCase());
+            if ((tmpUser != null) && !tmpUser.getUsername().equals(current.getUsername())) {
+                emailuser = tmpUser;
             }
         }
 
-        if(emailuser != null) {
+        if (emailuser != null) {
             byttNavnOgDisable(emailuser);
         }
-        
+
         try {
-            ezUser = userManager.getUser(current.getUsername());
-            userManager.updateUser(ezUser,current.getFirst_name(),current.getLast_name(),current.getEmail().toLowerCase(),current.getId(),current.getRolenames(),current.getKommune());
+            user = userManager.getUser(current.getUsername());
+            userManager.updateUser(user, current.getFirst_name(), current.getLast_name(), current.getEmail().toLowerCase(),
+                    current.getId(), current.getRolenames(), current.getKommune());
         } catch (Exception e) {
             // ezUser finnes ikkje og må opprettes
-            ezUser = userManager.addUser(current.getUsername(), current.getFirst_name(), current.getLast_name(), current.getEmail().toLowerCase(), current.getId(), current.getRolenames(), current.getKommune());
+            user = userManager.addUser(current.getUsername(), current.getFirst_name(), current.getLast_name(), current.getEmail()
+                    .toLowerCase(), current.getId(), current.getRolenames(), current.getKommune());
         }
-        
+
         // Flytt registreringer
         if (emailuser != null) {
-            ezUser.setHash(emailuser.getHash());
-            userManager.updateUser(ezUser);
-            registrationManager.moveRegistrations(emailuser, ezUser);
+            user.setHash(emailuser.getHash());
+            userManager.updateUser(user);
+            registrationManager.moveRegistrations(emailuser, user);
         }
-        
-        return ezUser;
+
+        return user;
     }
 
     private void byttNavnOgDisable(User user) {
@@ -98,6 +103,6 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
     }
 
     public void setLocale(Locale locale) {
-        //Do nothing
+        // Do nothing
     }
 }

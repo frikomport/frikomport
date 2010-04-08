@@ -133,7 +133,6 @@ public class LocationFormController extends BaseFormController {
                 locationManager.removeLocation(location.getId().toString());
                 saveMessage(request, getText("location.deleted", locale));
             } else {
-                //TODO Klaus: Visning av message i jsp'en (locationList.jsp) fungerer ikke (på 64-bits Windows).
                 String text = getText("location.canNotDeleteDueToCourse", locale);
                 saveMessage(request, text);
             }

@@ -112,4 +112,5 @@
     <!--Category-START-->
     <bean id="categoryDao" class="no.unified.soak.dao.hibernate.CategoryDAOHibernate" autowire="byName"/>
     <!--Category-END-->
+    
 </beans>

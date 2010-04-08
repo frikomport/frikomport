@@ -28,6 +28,8 @@ import no.unified.soak.service.UserManager;
 import no.unified.soak.util.RandomGUID;
 import no.unified.soak.util.StringUtil;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -378,19 +380,29 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		user.removeAllRoles();
 		Locale locale = LocaleContextHolder.getLocale();
 
+		String[] adminRolenames = messageSource.getMessage("role.admin", null, locale).split("\\,");
+		String[] editorRolenames = messageSource.getMessage("role.editor", null, locale).split("\\,");
+		String[] eventresponsibleRolenames = messageSource.getMessage("role.eventresponsible", null, locale).split("\\,");
+		String[] readerRolenames = messageSource.getMessage("role.reader", null, locale).split("\\,");
+		String[] emplyeeRolenames = messageSource.getMessage("role.employee", null, locale).split("\\,");
+		String[] anonymousRolenames = messageSource.getMessage("role.anonymous", null, locale).split("\\,");
+
 		for (Iterator iter = rolenames.iterator(); iter.hasNext();) {
 			String rolename = (String) iter.next();
-			if (rolename.equals(messageSource.getMessage("role.employee", null, locale))) {
-				user.addRole(roleManager.getRole(Constants.EMPLOYEE_ROLE));
-			} else if (rolename.equals(messageSource.getMessage("role.anonymous", null, locale))) {
-				user.addRole(roleManager.getRole(Constants.ANONYMOUS_ROLE));
-			} else if (rolename.equals(messageSource.getMessage("role.editor", null, locale))) {
+			
+			if (ArrayUtils.contains(adminRolenames, rolename)) {
+                user.addRole(roleManager.getRole(Constants.ADMIN_ROLE));
+            } else if (ArrayUtils.contains(editorRolenames, rolename)) {
 				user.addRole(roleManager.getRole(Constants.EDITOR_ROLE));
-			} else if (rolename.equals(messageSource.getMessage("role.admin", null, locale))) {
-				user.addRole(roleManager.getRole(Constants.ADMIN_ROLE));
-			} else if (rolename.equals(messageSource.getMessage("role.instructor", null, locale))) {
+			} else if (ArrayUtils.contains(eventresponsibleRolenames, rolename)) {
 				user.addRole(roleManager.getRole(Constants.INSTRUCTOR_ROLE));
-			} else if (roleManager.findRole(rolename) != null) {
+			} else if (ArrayUtils.contains(readerRolenames, rolename)) {
+			    user.addRole(roleManager.getRole(Constants.READER_ROLE));
+			} else if (ArrayUtils.contains(emplyeeRolenames, rolename)) {
+                user.addRole(roleManager.getRole(Constants.EMPLOYEE_ROLE));
+            } else if (ArrayUtils.contains(anonymousRolenames, rolename)) {
+                user.addRole(roleManager.getRole(Constants.ANONYMOUS_ROLE));
+            } else if (roleManager.findRole(rolename) != null) {
 				user.addRole(roleManager.findRole(rolename));
 			} else {
 				no.unified.soak.model.Role role = new no.unified.soak.model.Role("role_" + rolename);
@@ -456,7 +468,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	private List getEZResponsibles(ExtUser user) {
 	    Locale locale = LocaleContextHolder.getLocale();
         List<String> roles = new ArrayList();
-        roles.add(messageSource.getMessage("role.instructor", null, locale));
+        roles.add(messageSource.getMessage("role.eventresponsible", null, locale));
         roles.add(messageSource.getMessage("role.editor", null, locale));
 		List users = extUserDAO.findUsers(roles);
 		return users;

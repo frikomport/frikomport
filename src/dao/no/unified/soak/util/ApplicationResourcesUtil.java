@@ -8,7 +8,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 
 public class ApplicationResourcesUtil {
 
-	private static MessageSource messageSource = null;
+    private static MessageSource messageSource = null;
 
     private static final String localeVariant = System.getenv("FRIKOMPORT_VARIANT");
 
@@ -22,11 +22,10 @@ public class ApplicationResourcesUtil {
     public static void setMessageSource(MessageSource m) {
         messageSource = m;
     }
-    
+
     /**
-     * Method for getting a key's value (with i18n support). Calling
-     * getMessageSourceAccessor() is used because the RequestContext variable is
-     * not set in unit tests b/c there's no DispatchServlet Request.
+     * Method for getting a key's value (with i18n support). Calling getMessageSourceAccessor() is used because the
+     * RequestContext variable is not set in unit tests b/c there's no DispatchServlet Request.
      * 
      * @param msgKey
      *            The key to the message
@@ -46,9 +45,8 @@ public class ApplicationResourcesUtil {
     }
 
     /**
-     * Method for getting a key's value (with i18n support). Calling
-     * getMessageSourceAccessor() is used because the RequestContext variable is
-     * not set in unit tests b/c there's no DispatchServlet Request.
+     * Method for getting a key's value (with i18n support). Calling getMessageSourceAccessor() is used because the
+     * RequestContext variable is not set in unit tests b/c there's no DispatchServlet Request.
      * 
      * @param msgKey
      *            The key to the message
@@ -70,15 +68,13 @@ public class ApplicationResourcesUtil {
     }
 
     /**
-     * Method for getting a key's value (with i18n support). Calling
-     * getMessageSourceAccessor() is used because the RequestContext variable is
-     * not set in unit tests b/c there's no DispatchServlet Request.
+     * Method for getting a key's value (with i18n support). Calling getMessageSourceAccessor() is used because the
+     * RequestContext variable is not set in unit tests b/c there's no DispatchServlet Request.
      * 
      * @param msgKey
      *            The key to the message
      * @param args
-     *            An arbitrary number of arguments to be inserted into the
-     *            retrieved message
+     *            An arbitrary number of arguments to be inserted into the retrieved message
      * @param locale
      *            the current locale
      * @param messageSource
@@ -106,6 +102,14 @@ public class ApplicationResourcesUtil {
             returnLocale = new Locale(preferredLocale.getLanguage(), localeCountry, getLocaleVariant());
         }
         return returnLocale;
+    }
+
+    public static boolean isSVV() {
+        String localeVariant = getLocaleVariant();
+        if (localeVariant != null && localeVariant.equalsIgnoreCase("FKPSVV")) {
+            return true;
+        }
+        return false;
     }
 
 }

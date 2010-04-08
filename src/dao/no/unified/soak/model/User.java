@@ -9,6 +9,7 @@ package no.unified.soak.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -207,6 +208,17 @@ public class User extends BaseObject implements Serializable {
     }
 
     /**
+     * Adds a role for the user
+     *
+     * @param roles
+     */
+    public void addRoles(Collection<String> roles) {
+        for (String rolleNavn : roles) {
+            getRoles().add(new Role(rolleNavn));
+        }
+    }
+    
+    /**
      * Removes a role for the user
      *
      * @param role
@@ -384,7 +396,13 @@ public class User extends BaseObject implements Serializable {
 
         return rolenames;
     }
-    
+
+    public void setRoleNameList(List<String> roles) {
+        for (String roleName : roles) {
+            addRole(new Role(roleName));
+        }
+    }
+
     /**
 	 * Returns the organization.
 	 * 
@@ -674,4 +692,5 @@ public class User extends BaseObject implements Serializable {
     	
 		return copy;
 	}
+
 }

@@ -14,6 +14,13 @@ public interface ExtUserDAO {
     public abstract ExtUser findUserBySessionID(String sessionId);
 
     /**
+     * Henter innlogga bruker basert på username (i http header).
+     * @param username Kan være henta fra konfigurerbar http header.
+     * @return
+     */
+    public abstract ExtUser findUserByUsername(String username);
+
+    /**
      * Henter brukere med gitte roller.
      * Brukes for å hente brukere med rett til å registrer kurs
      * @param roles

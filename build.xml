@@ -107,6 +107,7 @@
         <filter token="EZDB-URL" value="${ez.database.url}"/>
         <filter token="EZDB-USERNAME" value="${ez.database.username}"/>
         <filter token="EZDB-PASSWORD" value="${ez.database.password}"/>
+        <filter token="WEBAPP-NAME" value="${webapp.name}"/>
     </filterset>
     
     <!-- Copy any resource or configuration files -->

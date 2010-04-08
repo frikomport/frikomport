@@ -89,15 +89,18 @@ public class Constants {
     /**
      * The name of the User role, as specified in web.xml
      */
+    public static final String EDITOR_ROLE = "editor";
+    
+    public static final String READER_ROLE = "reader";
+    
+    public static final String EMPLOYEE_ROLE = "employee";
+
     public static final String DEFAULT_ROLE = "anonymous";
 
     public static final String ANONYMOUS_ROLE = "anonymous";
 
-    public static final String EMPLOYEE_ROLE = "employee";
-
     public static final String INSTRUCTOR_ROLE = "instructor";
 
-    public static final String EDITOR_ROLE = "editor";
 
     /**
      * The name of the user's role list, a request-scoped attribute when adding/editing a user.
@@ -286,4 +289,9 @@ public class Constants {
     public static final long TASK_IMMEDIATE = 2000; // 2 second
     public static final long TASK_INITIAL_DELAY = 10000; // 10 sekunder
     public static final long TASK_RUN_INTERVAL = 1800000; // 30 minutter
+
+    /**
+     * The http header used to read user id (username) if it should be present. 
+     */
+    public static final String USERID_HTTPHEADERNAME = "USER-ID";
 }

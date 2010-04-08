@@ -13,6 +13,7 @@ import no.unified.soak.dao.fkpuser.FkpUser_ServiceLocator;
 import no.unified.soak.dao.fkpuser.FkpUser_Type;
 import no.unified.soak.ez.ExtUser;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -59,6 +60,14 @@ public class EzUserDAOWS implements ExtUserDAO {
         return user;
     }
 
+    /* (non-Javadoc)
+     * @see no.unified.soak.dao.ExtUserDAO#findUserByUsername(java.lang.String)
+     */
+    public ExtUser findUserByUsername(String username) {
+        throw new UnsupportedOperationException(
+        "findUserByUsername(String username) is unsupported. Use findUserBySessionID(sessionId) instead.");
+    }
+
     private ExtUser getEzUser(FkpUser_Type fkpUser) {
         ExtUser user = null;
         if(fkpUser != null){
@@ -86,13 +95,7 @@ public class EzUserDAOWS implements ExtUserDAO {
 
     public List<ExtUser> findUsers(List<String> roles) {
         List<ExtUser> users = new ArrayList<ExtUser>();
-        String roleNames = "";
-        for (int i = 0; i < roles.size(); i++) {
-            roleNames += roles.get(i);
-            if(i != roles.size()){
-                roleNames += ",";
-            }
-        }
+        String roleNames = StringUtils.join(roles.iterator(), ",");
         try {
             FkpUser_Type userArray[] = getPort().getUsers(roleNames);
             for (int i = 0; i < userArray.length; i++) {

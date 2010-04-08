@@ -35,6 +35,7 @@ import no.unified.soak.service.WaitingListManager;
 import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.MailUtil;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.MailSender;
@@ -189,8 +190,9 @@ public class RegistrationAdministrationController extends BaseFormController {
 		}
 
 		RegistrationStatusCriteria statusCriteria;
-        if ((Boolean) request.getAttribute("isAdmin") || (Boolean) request.getAttribute("isEducationResponsible")
-                || (Boolean) request.getAttribute("isCourseResponsible")) {
+        if (BooleanUtils.toBoolean((Boolean) request.getAttribute("isAdmin"))
+                || BooleanUtils.toBoolean((Boolean) request.getAttribute("isEducationResponsible"))
+                || BooleanUtils.toBoolean((Boolean) request.getAttribute("isCourseResponsible"))) {
             statusCriteria = null;
         } else {
             statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();

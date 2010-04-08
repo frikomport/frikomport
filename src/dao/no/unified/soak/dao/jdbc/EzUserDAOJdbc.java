@@ -84,6 +84,14 @@ public class EzUserDAOJdbc implements ExtUserDAO {
 		return eZuser;
 	}
 
+    /* (non-Javadoc)
+     * @see no.unified.soak.dao.ExtUserDAO#findUserByUsername(java.lang.String)
+     */
+    public ExtUser findUserByUsername(String username) {
+        throw new UnsupportedOperationException(
+        "findUserByUsername(String username) is unsupported. Use findUserBySessionID(sessionId) instead.");
+    }
+
 	/**
 	 * @param userid
 	 * @param roleCriteria
@@ -299,4 +307,5 @@ public class EzUserDAOJdbc implements ExtUserDAO {
 //				+ user.getKommune());
 		}
 	}
+
 }

@@ -38,7 +38,11 @@
 	<classpathentry kind="lib" path="lib/jakarta-commons/commons-digester.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-commons/commons-fileupload.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-commons/commons-io.jar"/>
-	<classpathentry kind="lib" path="lib/jakarta-commons/commons-lang.jar"/>
+	<classpathentry kind="lib" path="lib/jakarta-commons/commons-lang.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://commons.apache.org/lang/api-2.1/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/jakarta-commons/commons-logging-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-commons/commons-pool.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-commons/commons-validator.jar"/>

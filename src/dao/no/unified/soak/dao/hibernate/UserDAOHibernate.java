@@ -13,6 +13,7 @@ import no.unified.soak.dao.UserDAO;
 import no.unified.soak.model.User;
 import no.unified.soak.model.UserCookie;
 
+import org.hibernate.FetchMode;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -73,6 +74,10 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
             }
             if(user.getEmail() != null && !"".equals(user.getEmail())) {
                 criteria.add(Restrictions.like("email", "%" + user.getEmail() + "%").ignoreCase());
+            }
+            if(user.getRoleNameList()!= null && user.getRoleNameList().size()>0) {
+                //TODO Klaus: join-operasjon fra User til Role mangler.
+                criteria.setFetchMode("Role", FetchMode.JOIN);
             }
         }
         
