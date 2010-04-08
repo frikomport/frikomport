@@ -26,14 +26,12 @@ import javax.servlet.http.HttpSession;
 
 import no.unified.soak.Constants;
 import no.unified.soak.dao.ExtUserDAO;
-import no.unified.soak.dao.UserDAO;
 import no.unified.soak.ez.ExtUser;
 import no.unified.soak.model.User;
 import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.service.UserSynchronizeManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
-import no.unified.soak.util.UserUtil;
 import no.unified.soak.webapp.util.RequestUtil;
 import no.unified.soak.webapp.util.SslUtil;
 
@@ -69,21 +67,9 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 public class ActionFilter implements Filter {
     private static Boolean secure = Boolean.FALSE;
 
-    private final transient Log log = LogFactory.getLog(ActionFilter.class);
+    protected final Log log = LogFactory.getLog(getClass());
 
     private FilterConfig config = null;
-
-    private ExtUserDAO extUserDAO;
-
-    private UserManager userManager;
-
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
-    }
-
-    public void setExtUserDAO(ExtUserDAO extUserDAO) {
-        this.extUserDAO = extUserDAO;
-    }
 
     public void init(FilterConfig config) throws ServletException {
         this.config = config;
@@ -126,12 +112,6 @@ public class ActionFilter implements Filter {
         }
 
         if (ApplicationResourcesUtil.isSVV()) {
-
-            // TODO *** Faking av innkommen http-header USER-ID må bort før deploy hos SVV! ***
-            String userId = (String) request.getAttribute(Constants.USERID_HTTPHEADERNAME);
-            log.debug(Constants.USERID_HTTPHEADERNAME + "=[" + userId + "] (Før faking)");
-            request.setAttribute(Constants.USERID_HTTPHEADERNAME, "admin");
-
             doHttpheaderAccessing(request, session);
         } else {
             doEZAccessing(request, session);
@@ -144,9 +124,7 @@ public class ActionFilter implements Filter {
 
         // user authenticated, empty user object
         if ((username != null) && (user == null)) {
-            ApplicationContext ctx = getContext();
-
-            UserManager mgr = (UserManager) ctx.getBean("userManager");
+            UserManager mgr = (UserManager) getBean("userManager");
             user = mgr.getUser(username);
             session.setAttribute(Constants.USER_KEY, user);
 
@@ -163,7 +141,7 @@ public class ActionFilter implements Filter {
     }
 
     private void doConfiguration(HttpServletRequest request, HttpSession session) {
-        ConfigurationManager configurationManager = (ConfigurationManager) getContext().getBean("configurationManager");
+        ConfigurationManager configurationManager = (ConfigurationManager) getBean("configurationManager");
 
         session.setAttribute("showMenu", configurationManager.isActive("show.menu", false));
         session.setAttribute("canDelete", configurationManager.isActive("access.registration.delete", false));
@@ -178,28 +156,42 @@ public class ActionFilter implements Filter {
     }
 
     private void doHttpheaderAccessing(HttpServletRequest request, HttpSession session) {
+
         String usernameFromHTTPHeader = request.getHeader(Constants.USERID_HTTPHEADERNAME);
         String usernameFromSession = (String) session.getAttribute(Constants.USERID_HTTPHEADERNAME);
         ExtUser extUser = null;
         User user = null;
 
-        if (usernameFromSession == null && usernameFromHTTPHeader != null) {
-            ExtUserDAO extUserDAO = (ExtUserDAO) getContext().getBean("extUserDAO");
-            extUser = extUserDAO.findUserByUsername(usernameFromHTTPHeader);
-            if (extUser != null && extUser.getUsername() != null) {
-                user = copyToLocal(extUser);
-                session.setAttribute(Constants.USER_KEY, user);
-            } else {
-                log.info("No LDAP user found for username=[" + usernameFromHTTPHeader
-                        + "] Taken from http header due to no username found in session object.");
-            }
-
-        } else if (usernameFromSession != null) {
-            user = userManager.getUser(usernameFromSession);
+        if (StringUtils.isEmpty(usernameFromHTTPHeader)) {
+            log.debug("header " + Constants.USERID_HTTPHEADERNAME + "=" + usernameFromHTTPHeader + " (ikke innlogget)");
+        } else {
+            log.debug("header " + Constants.USERID_HTTPHEADERNAME + "=" + usernameFromHTTPHeader + " (innlogget)");
         }
 
-        setAcegiAutenticationToken(session, extUser, usernameFromHTTPHeader);  // Vi antar at acegi trenger dette
-        
+        if (StringUtils.isNotBlank(usernameFromHTTPHeader)) {
+            if (StringUtils.isEmpty(usernameFromSession)) {
+                ExtUserDAO extUserDAO = (ExtUserDAO) getBean("extUserDAO");
+                extUser = extUserDAO.findUserByUsername(usernameFromHTTPHeader);
+                if (extUser == null || StringUtils.isEmpty(extUser.getUsername())) {
+                    log.warn("No LDAP user found for username=[" + usernameFromHTTPHeader
+                            + "] Cannot grant any roles to the presumed logged in user.");
+                } else {
+                    user = copyUserToLocaDBAndSession(extUser, session);
+                    session.setAttribute(Constants.USERID_HTTPHEADERNAME, user.getUsername());
+                }
+            } else {
+                // Brukeren kan (kanskje ha vært avlogget en kort stund og så kommet tilbake med USER-ID i header, uten
+                // at Tomcat-sesjonen har timet ut. Da må user atter settes for å få tilbake rollesettingene i request
+                // attribute'ene.
+                user = (User) session.getAttribute(Constants.USER_KEY);
+            }
+        } else if (StringUtils.isNotBlank(usernameFromSession)) {
+            request.setAttribute(Constants.MESSAGES_INFO_KEY, Arrays
+                    .asList("Din innlogging er utg&aring;tt. Vennligst logg inn p&aring;ny."));
+        }
+
+        setAcegiAutenticationToken(session, extUser, usernameFromHTTPHeader); // Vi antar at acegi trenger dette
+
         authenticateFromHash(request, session);
 
         setRoleRequestAttributes(request, user);
@@ -216,11 +208,10 @@ public class ActionFilter implements Filter {
         String eZSessionId = null;
         if (cookie != null && cookie.getValue() != null && cookie.getValue().trim().length() > 0) {
             eZSessionId = cookie.getValue();
-            ExtUserDAO extUserDAO = (ExtUserDAO) getContext().getBean("extUserDAO");
+            ExtUserDAO extUserDAO = (ExtUserDAO) getBean("extUserDAO");
             extUser = extUserDAO.findUserBySessionID(eZSessionId);
             if (extUser != null && extUser.getUsername() != null) {
-                User user = copyToLocal(extUser);
-                session.setAttribute(Constants.USER_KEY, user);
+                copyUserToLocaDBAndSession(extUser, session);
             } else {
                 log.info("No CMS (eZ publish) user found for eZSESSID=" + eZSessionId);
             }
@@ -228,11 +219,11 @@ public class ActionFilter implements Filter {
             extUser.setName("No cookie found.");
         }
 
-		EZAuthentificationToken authentificationToken = setAcegiAutenticationToken(session, extUser, eZSessionId);
+        EZAuthentificationToken authentificationToken = setAcegiAutenticationToken(session, extUser, eZSessionId);
 
         authenticateFromHash(request, session);
-        
-        MessageSource messageSource = (MessageSource) getContext().getBean("messageSource");
+
+        MessageSource messageSource = (MessageSource) getBean("messageSource");
         Locale locale = request.getLocale();
 
         User user = (User) request.getSession().getAttribute(Constants.USER_KEY);
@@ -247,18 +238,17 @@ public class ActionFilter implements Filter {
         }
     }
 
-	private EZAuthentificationToken setAcegiAutenticationToken(
-			HttpSession session, ExtUser extUser, String eZSessionId) {
-		EZAuthentificationToken authentificationToken = new EZAuthentificationToken(extUser, eZSessionId);
+    private EZAuthentificationToken setAcegiAutenticationToken(HttpSession session, ExtUser extUser, String eZSessionId) {
+        EZAuthentificationToken authentificationToken = new EZAuthentificationToken(extUser, eZSessionId);
 
         session.setAttribute("authenticationToken", authentificationToken);
-		return authentificationToken;
-	}
+        return authentificationToken;
+    }
 
-	private void authenticateFromHash(HttpServletRequest request, HttpSession session) {
-		String hash = request.getParameter("hash");
+    private void authenticateFromHash(HttpServletRequest request, HttpSession session) {
+        String hash = request.getParameter("hash");
         if (hash != null & !StringUtils.isBlank(hash)) {
-            UserManager mgr = (UserManager) getContext().getBean("userManager");
+            UserManager mgr = (UserManager) getBean("userManager");
             User hashuser = mgr.getUserByHash(hash);
             session.setAttribute(Constants.ALT_USER_KEY, hashuser);
         }
@@ -267,7 +257,7 @@ public class ActionFilter implements Filter {
         if (userhash != null) {
             request.setAttribute("altusername", userhash.getUsername());
         }
-	}
+    }
 
     private void setRoleRequestAttributes(HttpServletRequest request, User user) {
         if (user != null) {
@@ -287,21 +277,17 @@ public class ActionFilter implements Filter {
         }
     }
 
-    private User copyToLocal(ExtUser user) {
-        ApplicationContext ctx = getContext();
-        UserSynchronizeManager userSynchronizeManager = (UserSynchronizeManager) ctx.getBean("userSynchronizeManager");
-        return userSynchronizeManager.processUser(user);
+    private User copyUserToLocaDBAndSession(ExtUser extUser, HttpSession session) {
+        UserSynchronizeManager userSynchronizeManager = (UserSynchronizeManager) getBean("userSynchronizeManager");
+        User user = userSynchronizeManager.processUser(extUser);
+        session.setAttribute(Constants.USER_KEY, user);
+        return user;
     }
 
-    protected void byttNavnOgDisable(User user, UserManager userManager) {
-        user = UserUtil.transformEmail(user, "@nonexist.no");
-        user.setEnabled(false);
-        userManager.updateUser(user);
-    }
-
-    private ApplicationContext getContext() {
+    private Object getBean(String beanId) {
         ServletContext context = config.getServletContext();
         ApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(context);
-        return ctx;
+        return ctx.getBean(beanId);
     }
+
 }

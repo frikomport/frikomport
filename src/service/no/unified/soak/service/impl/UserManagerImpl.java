@@ -18,9 +18,9 @@ import no.unified.soak.dao.UserDAO;
 import no.unified.soak.ez.ExtUser;
 import no.unified.soak.model.Address;
 import no.unified.soak.model.Organization;
+import no.unified.soak.model.Registration;
 import no.unified.soak.model.User;
 import no.unified.soak.model.UserCookie;
-import no.unified.soak.model.Registration;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RoleManager;
 import no.unified.soak.service.UserExistsException;
@@ -28,7 +28,6 @@ import no.unified.soak.service.UserManager;
 import no.unified.soak.util.RandomGUID;
 import no.unified.soak.util.StringUtil;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;

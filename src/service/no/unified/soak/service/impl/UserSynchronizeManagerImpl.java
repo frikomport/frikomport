@@ -38,9 +38,8 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 
     public void synchronizeUsers() {
         if (ApplicationResourcesUtil.isSVV()) {
-            //TODO SVV-synking mot LDAP av alle påloggingsbrukere trengs i fall en brukerrolle fjernes i LDAP.
-        }
-        else {
+            // TODO SVV-synking mot LDAP av alle påloggingsbrukere trengs i fall en brukerrolle fjernes i LDAP.
+        } else {
             List<ExtUser> ezUsers = extUserDAO.findAll();
             if (ezUsers != null) {
                 Iterator<ExtUser> it = ezUsers.iterator();
@@ -57,7 +56,7 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 
         User emailuser = null;
         User user = null;
-        // sjekker om epostaddressa er brukt som username
+        // sjekker om epostadressa er brukt som username
         try {
             emailuser = userManager.getUser(current.getEmail().toLowerCase());
         } catch (ObjectRetrievalFailureException e) {
@@ -73,8 +72,8 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 
         try {
             user = userManager.getUser(current.getUsername());
-            userManager.updateUser(user, current.getFirst_name(), current.getLast_name(), current.getEmail().toLowerCase(),
-                    current.getId(), current.getRolenames(), current.getKommune());
+            userManager.updateUser(user, current.getFirst_name(), current.getLast_name(), current.getEmail().toLowerCase(), current
+                    .getId(), current.getRolenames(), current.getKommune());
         } catch (Exception e) {
             // ezUser finnes ikkje og må opprettes
             user = userManager.addUser(current.getUsername(), current.getFirst_name(), current.getLast_name(), current.getEmail()

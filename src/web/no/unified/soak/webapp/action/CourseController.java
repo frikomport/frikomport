@@ -4,8 +4,6 @@
  * of the GPL.
  *
  * @author Unified Consulting AS
-*/
-/*
  * Created 20. dec 2005
  */
 package no.unified.soak.webapp.action;
@@ -40,10 +38,9 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 import org.springframework.web.servlet.ModelAndView;
 
-
 /**
  * Controller class for Course. Creates a view with a list of all Courses.
- *
+ * 
  * @author hrj
  */
 public class CourseController extends BaseFormController {
@@ -58,15 +55,14 @@ public class CourseController extends BaseFormController {
         this.courseManager = courseManager;
     }
 
-    public void setOrganizationManager(
-        OrganizationManager organizationManager) {
+    public void setOrganizationManager(OrganizationManager organizationManager) {
         this.organizationManager = organizationManager;
     }
 
     public void setServiceAreaManager(ServiceAreaManager serviceAreaManager) {
         this.serviceAreaManager = serviceAreaManager;
     }
-    
+
     public void setRegistrationManager(RegistrationManager registrationManager) {
         this.registrationManager = registrationManager;
     }
@@ -76,29 +72,25 @@ public class CourseController extends BaseFormController {
     }
 
     public void setMessageSource(MessageSource messageSource) {
-		this.messageSource = messageSource;
-	}
+        this.messageSource = messageSource;
+    }
 
     /**
      * @see org.springframework.web.servlet.mvc.SimpleFormController#referenceData(javax.servlet.http.HttpServletRequest)
      */
     protected Map referenceData(HttpServletRequest request, Object command, Errors errors) throws Exception {
-        if (log.isDebugEnabled()) {
-            log.debug("entering CourseController.referenceData() method...");
-        }
-
         Locale locale = request.getLocale();
         Map model = new HashMap();
 
-        Course course = (Course)command;
+        Course course = (Course) command;
         Course unpublished = new Course();
 
         // use course from session if set
         HttpSession session = request.getSession();
 
         String alreadyRegistered = request.getParameter("alreadyRegistered");
-        if (alreadyRegistered != null && alreadyRegistered.equals("true")){
-            model.put("alreadyRegistered" , true);
+        if (alreadyRegistered != null && alreadyRegistered.equals("true")) {
+            model.put("alreadyRegistered", true);
         }
 
         // default published courses
@@ -113,9 +105,9 @@ public class CourseController extends BaseFormController {
         User user = (User) session.getAttribute(Constants.USER_KEY);
         Boolean isAdmin = false;
         List<String> roles = null;
-        if(user != null){
+        if (user != null) {
             roles = user.getRoleNameList();
-            isAdmin = (Boolean)roles.contains(Constants.ADMIN_ROLE);
+            isAdmin = (Boolean) roles.contains(Constants.ADMIN_ROLE);
         }
         if (roles == null) {
             roles = new ArrayList<String>();
@@ -128,7 +120,7 @@ public class CourseController extends BaseFormController {
             // Promote inter organization cooperation by not setting organization here
             // Object omid = request.getAttribute(Constants.EZ_ORGANIZATION);
             // if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
-            //     course.setOrganizationid(new Long(omid.toString()));
+            // course.setOrganizationid(new Long(omid.toString()));
             // }
 
             // Check if a specific organization has been requested
@@ -162,7 +154,7 @@ public class CourseController extends BaseFormController {
                 course.setStatus(CourseStatus.COURSE_FINISHED);
             }
         }
-        
+
         // Check whether a specific search is requested
         String name = request.getParameter("name");
         if (name != null) {
@@ -180,15 +172,14 @@ public class CourseController extends BaseFormController {
         List courses = courseManager.searchCourses(course, starttime, stoptime);
         List<Course> filtered = filterByRole(isAdmin, roles, courses);
 
-
         User responsible = null;
-        if(user != null && roles.contains(Constants.INSTRUCTOR_ROLE)){
+        if (user != null && roles.contains(Constants.INSTRUCTOR_ROLE)) {
             responsible = user;
             unpublished.setResponsible(responsible);
         }
         List unpubCourses = courseManager.getUnpublished(unpublished);// Søke på samme måte som på kurs.
-        if(!past && unpubCourses != null && !unpubCourses.isEmpty() && isAdmin(roles)){
-            filtered.addAll(0,unpubCourses);
+        if (!past && unpubCourses != null && !unpubCourses.isEmpty() && isAdmin(roles)) {
+            filtered.addAll(0, unpubCourses);
         }
 
         if (courses != null) {
@@ -200,8 +191,9 @@ public class CourseController extends BaseFormController {
         return model;
     }
 
-    private boolean isAdmin(List<String> roles){
-        if(roles.contains(Constants.INSTRUCTOR_ROLE) || roles.contains(Constants.EDITOR_ROLE) || roles.contains(Constants.ADMIN_ROLE)){
+    private boolean isAdmin(List<String> roles) {
+        if (roles.contains(Constants.INSTRUCTOR_ROLE) || roles.contains(Constants.EDITOR_ROLE)
+                || roles.contains(Constants.ADMIN_ROLE)) {
             return true;
         }
         return false;
@@ -215,7 +207,7 @@ public class CourseController extends BaseFormController {
                 Course roleCourse = (Course) iterator.next();
                 roleCourse.setAvailableAttendants(0);
                 if (roles.contains(roleCourse.getRole()) || admin.booleanValue()) {
-                    if(roleCourse.getStopTime().after(new Date())){
+                    if (roleCourse.getStopTime().after(new Date())) {
                         roleCourse.setAvailableAttendants(registrationManager.getAvailability(true, roleCourse));
                     }
                     filtered.add(roleCourse);
@@ -229,16 +221,10 @@ public class CourseController extends BaseFormController {
 
     /**
      * @see org.springframework.web.servlet.mvc.SimpleFormController#onSubmit(javax.servlet.http.HttpServletRequest,
-     *      javax.servlet.http.HttpServletResponse, java.lang.Object,
-     *      org.springframework.validation.BindException)
+     *      javax.servlet.http.HttpServletResponse, java.lang.Object, org.springframework.validation.BindException)
      */
-    public ModelAndView onSubmit(HttpServletRequest request,
-        HttpServletResponse response, Object command, BindException errors)
-        throws Exception {
-        if (log.isDebugEnabled()) {
-            log.debug("entering CourseController.onSubmit() method...");
-        }
-
+    public ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object command, BindException errors)
+            throws Exception {
         Map model = new HashMap();
         HttpSession session = request.getSession();
 
@@ -246,38 +232,39 @@ public class CourseController extends BaseFormController {
 
         Course course = (Course) command;
         Course unpublished = new Course();
-        
+
         course.setStatus(CourseStatus.COURSE_PUBLISHED);
 
         // Set up parameters, and return them to the view
         model = addServiceAreas(model, locale);
         model = addOrganization(model, locale);
-        model = addCategories(model,locale);
+        model = addCategories(model, locale);
         model.put("course", course);
 
         Boolean historic = new Boolean(false);
         Boolean past = new Boolean(false);
-        
+
         Date starttime = new Date();
         Date stoptime = null;
 
         User user = (User) session.getAttribute(Constants.USER_KEY);
         Boolean isAdmin = false;
         List<String> roles = null;
-        if(user != null){
+        if (user != null) {
             roles = user.getRoleNameList();
-            isAdmin = (Boolean)roles.contains(Constants.ADMIN_ROLE);
+            isAdmin = (Boolean) roles.contains(Constants.ADMIN_ROLE);
         }
         if (roles == null) {
             roles = new ArrayList<String>();
-            roles.add(messageSource.getMessage("role.anonymous", null, locale)); // Make sure not logged in users sees anonymous courses
+            roles.add(messageSource.getMessage("role.anonymous", null, locale)); // Make sure not logged in users sees
+            // anonymous courses
         }
-        
+
         // Check whether we should display historic data as well
         String hist = request.getParameter("historic");
         if ((hist != null) && StringUtils.isNumeric(hist)) {
             if (hist.compareTo("0") != 0) {
-               	starttime = null;
+                starttime = null;
                 historic = new Boolean(true);
                 // also finished courses
                 course.setStatus(CourseStatus.COURSE_FINISHED);
@@ -288,46 +275,46 @@ public class CourseController extends BaseFormController {
         String pastreq = request.getParameter("past");
         if ((pastreq != null) && StringUtils.isNumeric(pastreq)) {
             if (pastreq.compareTo("0") != 0) {
-            	starttime = null;
+                starttime = null;
                 stoptime = new Date();
                 past = new Boolean(true);
                 // also finished courses
                 course.setStatus(CourseStatus.COURSE_FINISHED);
             }
         }
-        
+
         // Check whether a specific search is requested
         String name = request.getParameter("name");
         if (name != null) {
             course.setName(name);
         }
-        
+
         Date startInterval = course.getStartTime();
         Date stopInterval = course.getStopTime();
-        
+
         if (startInterval != null) {
-        	starttime = startInterval;
+            starttime = startInterval;
         }
         if (stopInterval != null) {
-        	stoptime = stopInterval;
+            stoptime = stopInterval;
         }
 
         // Add all courses to the list
         List courses = courseManager.searchCourses(course, starttime, stoptime);
         List<Course> filtered = filterByRole(isAdmin, roles, courses);
 
-        if(course.getOrganizationid() != null){
+        if (course.getOrganizationid() != null) {
             unpublished.setOrganizationid(course.getOrganizationid());
         }
 
         User responsible = null;
-        if(user != null && roles.contains(Constants.INSTRUCTOR_ROLE)){
+        if (user != null && roles.contains(Constants.INSTRUCTOR_ROLE)) {
             responsible = user;
             unpublished.setResponsible(responsible);
         }
         List unpubCourses = courseManager.getUnpublished(unpublished);
-        if(!past && unpubCourses != null && !unpubCourses.isEmpty() && isAdmin(roles)){
-            filtered.addAll(0,unpubCourses);
+        if (!past && unpubCourses != null && !unpubCourses.isEmpty() && isAdmin(roles)) {
+            filtered.addAll(0, unpubCourses);
         }
 
         model.put("historic", historic);
@@ -336,13 +323,13 @@ public class CourseController extends BaseFormController {
 
         return new ModelAndView(getSuccessView(), model);
     }
-    
+
     /**
      * Bygger opp bakgrunnsobjekt
      */
     protected Object formBackingObject(HttpServletRequest request) throws Exception {
         Course course = new Course();
-       
+
         String mid = request.getParameter("mid");
         if ((mid != null) && StringUtils.isNumeric(mid)) {
             course.setOrganizationid(new Long(mid));
@@ -368,18 +355,17 @@ public class CourseController extends BaseFormController {
 
     private boolean isNumber(String orgid) {
         return (orgid != null) && (!orgid.equals("")) && StringUtils.isNumeric(orgid);
-    } 
+    }
 
     /**
-     * Used to create a list of all service areas with an option 0 that says
-     * "all service areas" and is therefore made with search forms in mind.
-     *
+     * Used to create a list of all service areas with an option 0 that says "all service areas" and is therefore made
+     * with search forms in mind.
+     * 
      * @param model
      *            model to send to view
      * @param locale
      *            currently used locale
-     * @return map with all service areas and one with id=0 that is "all service
-     *         areas"
+     * @return map with all service areas and one with id=0 that is "all service areas"
      */
     private Map addServiceAreas(Map model, Locale locale) {
         if (model == null) {
@@ -397,15 +383,14 @@ public class CourseController extends BaseFormController {
     }
 
     /**
-     * Used to create a list of all organizations with an option 0 that says
-     * "all organizations" and is therefore made with search forms in mind.
-     *
+     * Used to create a list of all organizations with an option 0 that says "all organizations" and is therefore made
+     * with search forms in mind.
+     * 
      * @param model
      *            model to send to view
      * @param locale
      *            currently used locale
-     * @return map with all organizations and one with id=0 that is "all
-     *         organizations"
+     * @return map with all organizations and one with id=0 that is "all organizations"
      */
     private Map addOrganization(Map model, Locale locale) {
         if (model == null) {
