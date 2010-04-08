@@ -106,7 +106,7 @@ public class SVVUserDAOWS implements ExtUserDAO {
     public ExtUser findUserByUsername(String username) {
         // TODO Klaus: SVV-tjeneste for henting av brukerinfo mangler, dummy foreløpig.
         try {
-            FkpUser_Type user = getPort().getUser(username);
+//            FkpUser_Type user = getPort().getUser(username);
         } catch (Exception e) {
             log.error("Feilet ved henting av user fra webservice", e);
         }
@@ -114,10 +114,11 @@ public class SVVUserDAOWS implements ExtUserDAO {
         
         //Dummy, før webservice-kall fungerer:
         ExtUser extUser = new ExtUser();
+        extUser.setId(14);
         extUser.setEmail("test_@stafto.no");
         extUser.setFirst_name("Tes");
         extUser.setLast_name("Testson");
-        extUser.setUsername("testson");
+        extUser.setUsername(username);
         String[] RoleStringList = StringUtils.split("FKPAdministrator,FKPMoteadministrator,FKPMoteansvarlig,FKPLesebruker", ',');
         List<String> rolenamesList = extUser.getRolenames();
         CollectionUtils.addAll(rolenamesList, RoleStringList);

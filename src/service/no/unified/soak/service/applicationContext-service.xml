@@ -225,6 +225,19 @@
     </bean>
     <!-- UserSynchronize-END-->
 
+    <!-- ActionFilter-START-->
+    <bean id="actionFilter" parent="txProxyTemplate">
+         <property name="target">
+            <bean class="no.unified.soak.webapp.filter.ActionFilter" autowire="byName"/>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="save*">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
+            </props>
+        </property>
+    </bean>
+    <!-- ActionFilter-END-->
+
     <!-- DatabaseUpdate-START-->
     <bean id="databaseUpdateManager" parent="txProxyTemplate">
          <property name="target">

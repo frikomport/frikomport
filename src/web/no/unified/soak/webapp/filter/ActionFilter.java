@@ -184,6 +184,7 @@ public class ActionFilter implements Filter {
         User user = null;
 
         if (usernameFromSession == null && usernameFromHTTPHeader != null) {
+            ExtUserDAO extUserDAO = (ExtUserDAO) getContext().getBean("extUserDAO");
             extUser = extUserDAO.findUserByUsername(usernameFromHTTPHeader);
             if (extUser != null && extUser.getUsername() != null) {
                 user = copyToLocal(extUser);
@@ -196,6 +197,10 @@ public class ActionFilter implements Filter {
         } else if (usernameFromSession != null) {
             user = userManager.getUser(usernameFromSession);
         }
+
+        setAcegiAutenticationToken(session, extUser, usernameFromHTTPHeader);  // Vi antar at acegi trenger dette
+        
+        authenticateFromHash(request, session);
 
         setRoleRequestAttributes(request, user);
     }
@@ -223,26 +228,14 @@ public class ActionFilter implements Filter {
             extUser.setName("No cookie found.");
         }
 
-        EZAuthentificationToken authentificationToken = new EZAuthentificationToken(extUser, eZSessionId);
+		EZAuthentificationToken authentificationToken = setAcegiAutenticationToken(session, extUser, eZSessionId);
 
-        session.setAttribute("authenticationToken", authentificationToken);  
-
-        User user = (User) request.getSession().getAttribute(Constants.USER_KEY);
-
-        String hash = request.getParameter("hash");
-        if (hash != null & !StringUtils.isBlank(hash)) {
-            UserManager mgr = (UserManager) getContext().getBean("userManager");
-            User hashuser = mgr.getUserByHash(hash);
-            session.setAttribute(Constants.ALT_USER_KEY, hashuser);
-        }
-
-        User userhash = (User) request.getSession().getAttribute(Constants.ALT_USER_KEY);
-        if (userhash != null) {
-            request.setAttribute("altusername", userhash.getUsername());
-        }
+        authenticateFromHash(request, session);
         
         MessageSource messageSource = (MessageSource) getContext().getBean("messageSource");
         Locale locale = request.getLocale();
+
+        User user = (User) request.getSession().getAttribute(Constants.USER_KEY);
         setRoleRequestAttributes(request, user);
 
         /* ezSessionid becomes null if not found. */
@@ -253,6 +246,28 @@ public class ActionFilter implements Filter {
                     .asList("Din innlogging er utg&aring;tt. Vennligst logg inn p&aring;ny."));
         }
     }
+
+	private EZAuthentificationToken setAcegiAutenticationToken(
+			HttpSession session, ExtUser extUser, String eZSessionId) {
+		EZAuthentificationToken authentificationToken = new EZAuthentificationToken(extUser, eZSessionId);
+
+        session.setAttribute("authenticationToken", authentificationToken);
+		return authentificationToken;
+	}
+
+	private void authenticateFromHash(HttpServletRequest request, HttpSession session) {
+		String hash = request.getParameter("hash");
+        if (hash != null & !StringUtils.isBlank(hash)) {
+            UserManager mgr = (UserManager) getContext().getBean("userManager");
+            User hashuser = mgr.getUserByHash(hash);
+            session.setAttribute(Constants.ALT_USER_KEY, hashuser);
+        }
+
+        User userhash = (User) request.getSession().getAttribute(Constants.ALT_USER_KEY);
+        if (userhash != null) {
+            request.setAttribute("altusername", userhash.getUsername());
+        }
+	}
 
     private void setRoleRequestAttributes(HttpServletRequest request, User user) {
         if (user != null) {
