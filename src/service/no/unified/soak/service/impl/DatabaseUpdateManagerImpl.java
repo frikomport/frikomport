@@ -209,6 +209,12 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                             "insert INTO configuration (name, active) VALUES ('access.registration.showWorkplace', false);" } };
             insertIntoTableBySQLStatements("configuration", sqlSelectAndInsertConfigurationSVVArray);
 
+            String[][] sqlSelectAndInsertRoleSVVArray = {
+                    // Role insert
+                    { "select count(*) from role where name='reader';",
+                            "INSERT INTO role (name, description, version) VALUES('reader', 'Reader', 1);" } };
+            insertIntoTableBySQLStatements("role", sqlSelectAndInsertRoleSVVArray);
+
         } else {
             // Some insert settings are different for non-FKPSVV enviroment.
             String[][] sqlSelectAndInsertConfigurationDefaultArray = {
