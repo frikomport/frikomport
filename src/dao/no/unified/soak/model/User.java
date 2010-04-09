@@ -667,18 +667,12 @@ public class User extends BaseObject implements Serializable {
      */
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("roles",
-            this.roles).append("firstName", this.firstName)
-                                                                        .append("lastName",
-            this.lastName).append("passwordHint", this.passwordHint)
-                                                                        .append("username",
-            this.username).append("fullName", this.getFullName())
-                                                                        .append("email",
-            this.email).append("phoneNumber", this.phoneNumber)
-                                                                        .append("password",
-            this.password).append("address", this.address)
-                                                                        .append("confirmPassword",
-            this.confirmPassword).append("website", this.website)
-                                                                        .append("version",
+            this.roles).append("firstName", this.firstName).append("lastName",
+            this.lastName).append("passwordHint", this.passwordHint).append("username",
+            this.username).append("fullName", this.getFullName()).append("email",
+            this.email).append("phoneNumber", this.phoneNumber).append("password",
+            this.password).append("address", this.address).append("confirmPassword",
+            this.confirmPassword).append("website", this.website).append("version",
             this.getVersion()).append("enabled", this.getEnabled()).toString();
     }
     

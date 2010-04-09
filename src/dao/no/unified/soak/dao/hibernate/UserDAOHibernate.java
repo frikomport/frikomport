@@ -7,13 +7,16 @@
 */
 package no.unified.soak.dao.hibernate;
 
+import java.util.Iterator;
 import java.util.List;
 
 import no.unified.soak.dao.UserDAO;
+import no.unified.soak.model.Role;
 import no.unified.soak.model.User;
 import no.unified.soak.model.UserCookie;
 
 import org.hibernate.FetchMode;
+import org.hibernate.Query;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -75,16 +78,32 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
             if(user.getEmail() != null && !"".equals(user.getEmail())) {
                 criteria.add(Restrictions.like("email", "%" + user.getEmail() + "%").ignoreCase());
             }
-            if(user.getRoleNameList()!= null && user.getRoleNameList().size()>0) {
-                //TODO Klaus: join-operasjon fra User til Role mangler.
-                criteria.setFetchMode("Role", FetchMode.JOIN);
-            }
         }
         
         criteria.addOrder(Order.asc("username"));
         return getHibernateTemplate().findByCriteria(criteria);
     }
 
+    
+    /**
+     * @see no.unified.soak.dao.UserDAO#getUsersByRole(java.lang.String)
+     */
+    public List getUsersByRole(String rolename) {
+    	if (log.isDebugEnabled()) log.debug("getUsersByRole: " + rolename);
+    	String hql = "select distinct a from User a join a.roles t where t.name = '" + rolename + "'";
+    	Query query = getSession().createQuery(hql);
+    	List<User> users = query.list();
+
+    	if(users != null && !users.isEmpty()) {
+			Iterator i = users.iterator();
+			while(i.hasNext()) {
+				User u = (User)i.next();
+				List tmpRoles = u.getRoleNameList();
+				if (log.isDebugEnabled()) log.debug("Found: " + u.getFullName() + ", " + tmpRoles.toString());
+			}
+    	}
+        return users;
+    }
     
     /**
      * @see no.unified.soak.dao.UserDAO#getUsers(no.unified.soak.model.User)

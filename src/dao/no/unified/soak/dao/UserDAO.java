@@ -39,7 +39,6 @@ public interface UserDAO extends DAO {
 
     /**
      * Gets a list of users based on parameters passed in.
-     *
      * @return List populated list of users
      */
     public List getUsers(User user);
@@ -88,4 +87,9 @@ public interface UserDAO extends DAO {
      */
     public void removeUserCookies(String username);
 
+    /**
+     * Gets a list of users based on a rolename
+     * @return List populated list of users
+     */
+    public List getUsersByRole(String rolename);
 }
