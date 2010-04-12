@@ -290,7 +290,7 @@
     <target name="test-service" depends="copy-resources,compile-service,check-debug" description="Test service module">
         <test-module module="service"/>
     </target>
-<target name="compile-web" depends="package-service,stage-web" description="Compile web module">
+	<target name="compile-web" depends="package-service,stage-web" description="Compile web module">
         <compile module="web"/>
     </target>
 

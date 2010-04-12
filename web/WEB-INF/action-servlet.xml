@@ -288,6 +288,10 @@
         </property>
     </bean>
 
+    <bean id="healthCheckController" class="no.unified.soak.webapp.action.HealthCheckController" autowire="byName">
+        <property name="categoryManager" ref="categoryManager"/>
+    </bean>
+
     <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
         <property name="mappings">
             <props>
@@ -343,6 +347,8 @@
                 <prop key="/listCategories.html">categoryController</prop>
                 <prop key="/detailsCategory.html">categoryDetailsController</prop>
                 <prop key="/editCategory.html">categoryFormController</prop>
+
+                <prop key="/lb/test">healthCheckController</prop>
             </props>
         </property>
     </bean>

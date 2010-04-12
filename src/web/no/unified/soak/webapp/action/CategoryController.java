@@ -18,7 +18,7 @@ import org.springframework.web.servlet.mvc.Controller;
  * Date: 17.des.2008
  */
 public class CategoryController implements Controller {
-    private final Log log = LogFactory.getLog(OrganizationController.class);
+    private final Log log = LogFactory.getLog(CategoryController.class);
     private CategoryManager categoryManager;
 
     public void setCategoryManager(CategoryManager categoryManager) {

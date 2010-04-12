@@ -37,7 +37,7 @@ public class SVVUserDAOWS implements ExtUserDAO {
 
     UserDAO userDAO;
     RoleDAO roleDAO;
-    String endpoint = "http://localhost/nusoap.php/fkpuser";
+    String endpoint = "http://klaus-PC:8089/mockportOppslagSVVAnsattBnd";
     private transient final Log log = LogFactory.getLog(SVVUserDAOWS.class);
 
     
@@ -47,7 +47,7 @@ public class SVVUserDAOWS implements ExtUserDAO {
 
     private FkpUserPortType getPort() throws ServiceException {
         FkpUser_ServiceLocator locator = new FkpUser_ServiceLocator();
-        locator.setEndpointAddress("FkpUserPort", endpoint);
+        locator.setEndpointAddress("", endpoint);
         FkpUserPortType port =  locator.getFkpUserPort();
         return port;
     }
