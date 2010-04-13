@@ -3,12 +3,9 @@
  */
 package no.unified.soak.webapp.action;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import no.unified.soak.model.Category;
 import no.unified.soak.service.impl.CategoryManager;
 
 import org.apache.commons.lang.StringUtils;
@@ -33,8 +30,6 @@ public class HealthCheckController implements Controller {
         String errorMsg = "";
         boolean isHealthy = true;
 
-        List<Category> categories = null;
-
         if (categoryManager == null) {
             errorMsg = errorMsg.concat("Bean with id \"categoryManager\" is not working. Either initialization failed or the bean has been removed.\n");
             isHealthy = false;
@@ -47,6 +42,7 @@ public class HealthCheckController implements Controller {
             response.addHeader("Reason-Phrase", "SVV_LB_HEALTH_CHECK_FAILED");
             StringUtils.remove(errorMsg, "RUNNING");
             request.setAttribute("errorMsg", errorMsg);
+            log.error(errorMsg);
             return new ModelAndView("healthCheckERROR");
         }
     }
