@@ -99,7 +99,7 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
 			while(i.hasNext()) {
 				User u = (User)i.next();
 				List tmpRoles = u.getRoleNameList();
-				if (log.isDebugEnabled()) log.debug("Found: " + u.getFullName() + ", " + tmpRoles.toString());
+				if (log.isDebugEnabled()) log.debug("Found: " + u.getFullName() + "("+u.getEmail()+")"+", " + tmpRoles.toString());
 			}
     	}
         return users;

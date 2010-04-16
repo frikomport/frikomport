@@ -31,7 +31,8 @@ public class HealthCheckController implements Controller {
         boolean isHealthy = true;
 
         if (categoryManager == null) {
-            errorMsg = errorMsg.concat("Bean with id \"categoryManager\" is not working. Either initialization failed or the bean has been removed.\n");
+            errorMsg = errorMsg
+                    .concat("Bean with id \"categoryManager\" is not working. Either initialization failed or the bean has been removed.\n");
             isHealthy = false;
         }
 
@@ -40,7 +41,8 @@ public class HealthCheckController implements Controller {
         } else {
             response.setStatus(503);
             response.addHeader("Reason-Phrase", "SVV_LB_HEALTH_CHECK_FAILED");
-            StringUtils.remove(errorMsg, "RUNNING");
+
+            errorMsg = StringUtils.remove(errorMsg, "RUNNING");
             request.setAttribute("errorMsg", errorMsg);
             log.error(errorMsg);
             return new ModelAndView("healthCheckERROR");

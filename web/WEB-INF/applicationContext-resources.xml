@@ -19,7 +19,7 @@
     </bean>
     -->
     <bean id="extUserDAO" class="no.unified.soak.dao.ws.SVVUserDAOWS" autowire="default">
-        <property name="endpoint" value="http://localhost/nusoap.php/fkpuser"/>
+        <property name="endpoint" value="http://klaus-PC:8089/mockportOppslagSVVAnsattBnd"/>
         <property name="roleDAO" ref="roleDAO"/>
         <property name="userDAO" ref="userDAO"/>
     </bean>

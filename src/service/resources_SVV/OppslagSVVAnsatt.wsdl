@@ -75,10 +75,10 @@
 	<service name="OppslagSVVAnsatt_Service">
 		<port name="portOppslagSVVAnsattBndPort" binding="tns:portOppslagSVVAnsattBnd">
 		
+			<!-- soap:address
+				location="http://localhost:8089/mockportOppslagSVVAnsattBnd" /-->
 			<soap:address
-				location="http://localhost:8089/mockportOppslagSVVAnsattBnd" />
-			<!--soap:address
-				location="http://svvjcapsu04.vegvesen.no:18201/ldap_searchemployees/portOppslagSVVAnsattBndPort" /-->
+				location="http://svvjcapsu04.vegvesen.no:18201/ldap_searchemployees/portOppslagSVVAnsattBndPort" />
 		</port>
 	</service>
 </definitions>
