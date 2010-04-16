@@ -18,8 +18,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.transform.stream.StreamSource;
-
 import no.unified.soak.dao.ExtUserDAO;
 import no.unified.soak.dao.RoleDAO;
 import no.unified.soak.dao.UserDAO;
@@ -30,11 +28,6 @@ import no.unified.soak.util.ConvertDAO;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-
-import com.sun.org.apache.xerces.internal.parsers.DOMParser;
-import com.sun.org.apache.xerces.internal.xni.parser.XMLInputSource;
 
 /**
  * Class for fetching user info at SVV with no possibility of fetching 1) users based on role or 2) fetching roles or 3)
@@ -112,10 +105,14 @@ public class SVVUserDAOWS implements ExtUserDAO {
 	public ExtUser findUserByUsername(String username) {
 		ExtUser extUser = null;
 		try {
-			extUser = getExtUserFromWebservice(username);
+			String xmlString = getExtUserFromWebservice(username);
+			extUser = new ExtUser();
+			extUser.setEmail(getTagValue("urn1:mail", xmlString));
+
 		} catch (Exception e) {
 			log.error("Feilet ved henting av user fra webservice", e);
 		}
+		
 
 		if (extUser == null) {
 			extUser = getHardcodedExtUser(username);
@@ -123,8 +120,8 @@ public class SVVUserDAOWS implements ExtUserDAO {
 		return extUser;
 	}
 
-	public ExtUser getExtUserFromWebservice(String username) {
-		ExtUser extuser = null;
+	public String getExtUserFromWebservice(String username) {
+		String responseString = null;
 		PrintWriter output = null;
 		InputStream inputStream = null;
 		try {
@@ -157,29 +154,9 @@ public class SVVUserDAOWS implements ExtUserDAO {
 			output.flush();
 
 			inputStream = connection.getInputStream();
-//			String responseString = convertStreamToString(inputStream);
-//			System.out.println(responseString);
+			responseString = convertStreamToString(inputStream);
+			System.out.println(responseString);
 			
-			DOMParser parser = new DOMParser();
-
-			StreamSource streamSource = new StreamSource(inputStream);
-			XMLInputSource xmlInputSource = new XMLInputSource(streamSource);
-			parser.parse(xmlInputSource);
-			Document document = parser.getDocument();
-
-			extuser = new ExtUser();
-			NodeList mailElement = document.getElementsByTagName("urn1:mail");
-			extuser.setEmail(mailElement.item(0).getNodeValue());
-
-			NodeList lastNameElement = document.getElementsByTagName("urn1:sn");
-			extuser.setLast_name(lastNameElement.item(0).getNodeValue());
-			
-//			NodeList lastNameElement = document.getElementsByTagName("urn1:svvrole");
-//			extuser.setLast_name(lastNameElement.item(0).getNodeValue());
-			
-			
-			
-
 		} catch (IOException e) {
 			log.info("Webservice call failed. " +e);
 		} catch (Exception e2) {
@@ -197,8 +174,15 @@ public class SVVUserDAOWS implements ExtUserDAO {
 			}
 		}
 		
-		
-		return extuser ;
+		return responseString;
+	}
+
+	static String getTagValue(String tagname, String xml) {
+		int startTagFirstpos = xml.indexOf("<"+tagname);
+		int startTagLastpos = xml.indexOf(">", startTagFirstpos);
+		int endTagFirstpos = xml.indexOf("</"+tagname+">",
+				startTagLastpos);
+		return xml.substring(startTagLastpos+1, endTagFirstpos);
 	}
 
 	public static String convertStreamToString(InputStream is) throws IOException {
