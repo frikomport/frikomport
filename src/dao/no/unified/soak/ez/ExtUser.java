@@ -14,6 +14,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+
 import no.unified.soak.model.BaseObject;
 
 
@@ -31,6 +34,22 @@ public class ExtUser extends BaseObject implements Serializable {
     private String email;
     private List<String> rolenames = new ArrayList<String>();
 
+    public ExtUser() {
+        
+    }
+    
+    public ExtUser(int id, String username, String email, String firstName, String lastName, String rolenamesCSV){
+        setId(id);
+        setEmail(email);
+        setFirst_name(firstName);
+        setLast_name(lastName);
+        setUsername(username);
+        String[] RoleStringList = StringUtils.split(rolenamesCSV, ',');
+        List<String> rolenamesList = getRolenames();
+        CollectionUtils.addAll(rolenamesList, RoleStringList);
+        setRolenames(rolenamesList);
+    }
+    
     public String toString() {
         if ((getFirst_name() != null) || (getLast_name() != null)) {
             return getFirst_name() + " " + getLast_name();
