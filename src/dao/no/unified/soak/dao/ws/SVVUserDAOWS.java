@@ -18,21 +18,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.namespace.QName;
-import javax.xml.rpc.ServiceException;
-
 import no.unified.soak.dao.ExtUserDAO;
 import no.unified.soak.dao.RoleDAO;
 import no.unified.soak.dao.UserDAO;
-import no.unified.soak.dao.ldapuser.FkpUserPortType;
-import no.unified.soak.dao.ldapuser.FkpUser_ServiceLocator;
 import no.unified.soak.ez.ExtUser;
 import no.unified.soak.model.Role;
 import no.unified.soak.model.User;
 import no.unified.soak.util.ConvertDAO;
 
-import org.apache.axis.client.Call;
-import org.apache.axis.client.Service;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
