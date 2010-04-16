@@ -1,0 +1,29 @@
+=== REQUEST i SoapUI 3.5 ===
+POST http://svvjcapsu04.vegvesen.no:18201/ldap_searchemployees/portOppslagSVVAnsattBndPort HTTP/1.1
+Accept-Encoding: gzip,deflate
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: "urn:no:vegvesen:ldap.wsdl:OppslagSVVAnsatt:1:0/portOppslagSVVAnsatt/opOppslagSVVAnsatt"
+User-Agent: Jakarta Commons-HttpClient/3.1
+Host: svvjcapsu04.vegvesen.no:18201
+Content-Length: 339
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:no:vegvesen:ldap.wsdl.OppslagSVVAnsattContract:cc:1:0" xmlns:urn1="urn:no:vegvesen:ldap:soa2:SVVUIDType:cct:1:0">
+   <soapenv:Body>
+      <urn:Request>
+         <urn1:UID>extkla</urn1:UID>
+      </urn:Request>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+
+
+=== RESPONS i SoapUI 3.5 ===
+HTTP/1.1 200 OK
+X-Powered-By: Servlet/2.4
+Accept: text/xml, text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+Content-Type: text/xml;charset=utf-8
+Content-Length: 3047
+Date: Fri, 16 Apr 2010 08:17:33 GMT
+Server: Sun-Java-System/Application-Server-PE-8.0
+
+<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/" xmlns:enc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns0="urn:no:vegvesen:landskap:SVVFeilType:cct:1:0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><env:Header><tns:WrapperImp xmlns:tns="urn:no:vegvesen:ldap.wsdl:OppslagSVVAnsatt:1:0"/></env:Header><env:Body><tns:Response xmlns:tns="urn:no:vegvesen:ldap.wsdl.OppslagSVVAnsattContract:cc:1:0"><urn:ObjSVVAnsatt xmlns:urn="urn:no:vegvesen:ldap:soa2:SVVAnsattListeType:cct:1:0"><urn:ObjInfo><urn1:ObjectClass xmlns:urn1="urn:no:vegvesen:ldap:soa2:SVVTopType:cct:1:0">top</urn1:ObjectClass><urn1:CreateTimestamp xmlns:urn1="urn:no:vegvesen:ldap:soa2:SVVTopType:cct:1:0">20100415092420Z</urn1:CreateTimestamp><urn1:CreatorsName xmlns:urn1="urn:no:vegvesen:ldap:soa2:SVVTopType:cct:1:0">cn=directory manager</urn1:CreatorsName><urn1:ModifiersName xmlns:urn1="urn:no:vegvesen:ldap:soa2:SVVTopType:cct:1:0">cn=directory manager</urn1:ModifiersName></urn:ObjInfo><urn:SVVAnsatt><urn1:sn xmlns:urn1="urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0">Stafto</urn1:sn><urn1:cn xmlns:urn1="urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0">Klaus Stafto</urn1:cn><urn1:uid xmlns:urn1="urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0">EXTKLA</urn1:uid><urn1:givenName xmlns:urn1="urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0">Klaus</urn1:givenName><urn1:mail xmlns:urn1="urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0">klaus.stafto@vegvesen.no</urn1:mail><urn1:mobile xmlns:urn1="urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0">98257893</urn1:mobile><urn1:svvcompany xmlns:urn1="urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0"><urn2:Pair xmlns:urn2="urn:no:vegvesen:ldap:felles:KeyPairListType:cct:1:0"><urn2:Key>984761805000000000</urn2:Key><urn2:Value/></urn2:Pair></urn1:svvcompany><urn1:svvdateofhire xmlns:urn1="urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0">20100311</urn1:svvdateofhire><urn1:svvflag xmlns:urn1="urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0">00</urn1:svvflag><urn1:svvlocation xmlns:urn1="urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0">264</urn1:svvlocation><urn1:svvlocationtext xmlns:urn1="urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0">Oslo, Vdt</urn1:svvlocationtext><urn1:svvorgunit xmlns:urn1="urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0">67142</urn1:svvorgunit><urn1:svvorgunittext xmlns:urn1="urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0">Systemene for trafikant og kjøretøy</urn1:svvorgunittext><urn1:svvregion xmlns:urn1="urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0">6</urn1:svvregion><urn1:svvregiontext xmlns:urn1="urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0">Vegdirektoratet</urn1:svvregiontext><urn1:svvrole xmlns:urn1="urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0"><urn2:Pair xmlns:urn2="urn:no:vegvesen:ldap:felles:KeyPairListType:cct:1:0"><urn2:Key>FKPAdministrator</urn2:Key><urn2:Value>user</urn2:Value></urn2:Pair></urn1:svvrole></urn:SVVAnsatt></urn:ObjSVVAnsatt></tns:Response></env:Body></env:Envelope>
