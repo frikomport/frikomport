@@ -909,6 +909,14 @@
         <unwar src="${webapp.dist}/${webapp.war}"
             dest="${tomcat.home}/webapps/${webapp.name}"/>
 
+        <copy todir="${tomcat.home}/lib" includeEmptyDirs="no">
+            <fileset dir="${hibernate.dir}/lib">   
+                <include name="jta.jar"/>
+            </fileset>
+            <filterset refid="variables.to.replace"/>
+        </copy>            
+        <copy todir="${tomcat.home}/lib" includeEmptyDirs="no" file="${mysql.jar}">
+        </copy>            
     </target>
     
     <!-- =================================================================== -->
