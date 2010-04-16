@@ -18,6 +18,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.transform.stream.StreamSource;
+
 import no.unified.soak.dao.ExtUserDAO;
 import no.unified.soak.dao.RoleDAO;
 import no.unified.soak.dao.UserDAO;
@@ -28,6 +30,11 @@ import no.unified.soak.util.ConvertDAO;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
+import com.sun.org.apache.xerces.internal.parsers.DOMParser;
+import com.sun.org.apache.xerces.internal.xni.parser.XMLInputSource;
 
 /**
  * Class for fetching user info at SVV with no possibility of fetching 1) users based on role or 2) fetching roles or 3)
@@ -150,13 +157,33 @@ public class SVVUserDAOWS implements ExtUserDAO {
 			output.flush();
 
 			inputStream = connection.getInputStream();
-			String responseString = convertStreamToString(inputStream);
-			System.out.println(responseString);
+//			String responseString = convertStreamToString(inputStream);
+//			System.out.println(responseString);
 			
+			DOMParser parser = new DOMParser();
+
+			StreamSource streamSource = new StreamSource(inputStream);
+			XMLInputSource xmlInputSource = new XMLInputSource(streamSource);
+			parser.parse(xmlInputSource);
+			Document document = parser.getDocument();
+
 			extuser = new ExtUser();
+			NodeList mailElement = document.getElementsByTagName("urn1:mail");
+			extuser.setEmail(mailElement.item(0).getNodeValue());
+
+			NodeList lastNameElement = document.getElementsByTagName("urn1:sn");
+			extuser.setLast_name(lastNameElement.item(0).getNodeValue());
+			
+//			NodeList lastNameElement = document.getElementsByTagName("urn1:svvrole");
+//			extuser.setLast_name(lastNameElement.item(0).getNodeValue());
+			
+			
+			
 
 		} catch (IOException e) {
-			log.info("Webservice call failed." +e);
+			log.info("Webservice call failed. " +e);
+		} catch (Exception e2) {
+			log.info("Parsing webservice answer failed. " +e2);
 		} finally {
 			if (inputStream != null) {
 				try {
