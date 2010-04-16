@@ -102,54 +102,72 @@ public class SVVUserDAOWS implements ExtUserDAO {
         return extUsers;
     }
 
-    public ExtUser findUserByUsername(String username) {
-        // TODO Klaus: SVV-tjeneste for henting av brukerinfo mangler, dummy foreløpig.
-        try {
-            getExtUserFromWebservice(username);
-        } catch (Exception e) {
-            log.error("Feilet ved henting av user fra webservice", e);
-        }
+	public ExtUser findUserByUsername(String username) {
+		ExtUser extUser = null;
+		try {
+			extUser = getExtUserFromWebservice(username);
+		} catch (Exception e) {
+			log.error("Feilet ved henting av user fra webservice", e);
+		}
 
-        ExtUser extUser = null;
-        
-        // Dummy, før webservice-kall fungerer:
-        extUser = getHardcodedExtUser(username);
-       
-        return extUser;
-    }
+		if (extUser == null) {
+			extUser = getHardcodedExtUser(username);
+		}
+		return extUser;
+	}
 
 	public ExtUser getExtUserFromWebservice(String username) {
 		ExtUser extuser = null;
+		PrintWriter output = null;
+		InputStream inputStream = null;
 		try {
-			URL url = new URL("http://svvjcapsu04.vegvesen.no:18201/ldap_searchemployees/portOppslagSVVAnsattBndPort");
+			URL url = new URL(
+					"http://svvjcapsu04.vegvesen.no:18201/ldap_searchemployees/portOppslagSVVAnsattBndPort");
 			URLConnection connection = url.openConnection();
 			connection.setDoOutput(true);
-			connection.setDoInput(true); //Only if you expect to read a response...
-			connection.setUseCaches(false); //Highly recommended...
-			connection.setRequestProperty("Content-Type", "text/xml;charset=UTF-8");
-			connection.setRequestProperty("SOAPAction", 
-					"\"urn:no:vegvesen:ldap.wsdl:OppslagSVVAnsatt:1:0/portOppslagSVVAnsatt/opOppslagSVVAnsatt\"");
-			connection.setRequestProperty("Host", "svvjcapsu04.vegvesen.no:18201");
+			connection.setDoInput(true); // Only if you expect to read a
+											// response...
+			connection.setUseCaches(false); // Highly recommended...
+			connection.setRequestProperty("Content-Type",
+					"text/xml;charset=UTF-8");
+			connection
+					.setRequestProperty(
+							"SOAPAction",
+							"\"urn:no:vegvesen:ldap.wsdl:OppslagSVVAnsatt:1:0/portOppslagSVVAnsatt/opOppslagSVVAnsatt\"");
+			connection.setRequestProperty("Host",
+					"svvjcapsu04.vegvesen.no:18201");
 
-            String requestXML = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:no:vegvesen:ldap.wsdl.OppslagSVVAnsattContract:cc:1:0\" xmlns:urn1=\"urn:no:vegvesen:ldap:soa2:SVVUIDType:cct:1:0\">"
-                  + "<soapenv:Body><urn:Request><urn1:UID>"
-                  + username
-                  + "</urn1:UID></urn:Request></soapenv:Body></soapenv:Envelope>";
-            
-            connection.setRequestProperty("Content-Length", String.valueOf(requestXML.length()));
-            PrintWriter output = new PrintWriter(new OutputStreamWriter(connection.getOutputStream()));
-            output.print(requestXML);
-            output.flush();
-            output.close();
+			String requestXML = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:no:vegvesen:ldap.wsdl.OppslagSVVAnsattContract:cc:1:0\" xmlns:urn1=\"urn:no:vegvesen:ldap:soa2:SVVUIDType:cct:1:0\">"
+					+ "<soapenv:Body><urn:Request><urn1:UID>"
+					+ username
+					+ "</urn1:UID></urn:Request></soapenv:Body></soapenv:Envelope>";
 
-            InputStream inputStream = connection.getInputStream();
-            String responseString = convertStreamToString(inputStream);
-            System.out.println(responseString);
-            extuser = new ExtUser();
-            
+			connection.setRequestProperty("Content-Length", String
+					.valueOf(requestXML.length()));
+			output = new PrintWriter(new OutputStreamWriter(connection
+					.getOutputStream()));
+			output.print(requestXML);
+			output.flush();
+
+			inputStream = connection.getInputStream();
+			String responseString = convertStreamToString(inputStream);
+			System.out.println(responseString);
+			
+			extuser = new ExtUser();
+
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.info("Webservice call failed." +e);
+		} finally {
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+					log.warn("Could not close InputStream in finally block for webservice call. " + e);
+				} 
+			}
+			if (output != null) {
+				output.close();
+			}
 		}
 		
 		
