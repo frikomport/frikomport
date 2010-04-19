@@ -77,7 +77,7 @@ public class ExtUser extends BaseObject implements Serializable {
     }
 
     public void addRolename(String rolename) {
-        rolenames.add(rolename);
+    	if(rolename != null) rolenames.add(rolename);
     }
 
     public boolean hasRolename(String rolename) {

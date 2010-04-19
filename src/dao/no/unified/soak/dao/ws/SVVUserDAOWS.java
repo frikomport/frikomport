@@ -107,12 +107,21 @@ public class SVVUserDAOWS implements ExtUserDAO {
 		try {
 			String xmlString = getExtUserFromWebservice(username);
 			extUser = new ExtUser();
+			extUser.setUsername(username);
 			extUser.setEmail(getTagValue("urn1:mail", xmlString));
+			extUser.setFirst_name(getTagValue("urn1:givenName", xmlString));
+			extUser.setLast_name(getTagValue("urn1:sn", xmlString));
+			extUser.setName(getTagValue("urn1:cn", xmlString));
 
+	        List roleList = roleDAO.getRoles(null);
+	        Iterator roles = roleList.iterator();
+	        while(roles.hasNext()) {
+	        	String rolename = (String)roles.next();
+	        	extUser.addRolename(containsRolename(rolename, xmlString));
+	        }
 		} catch (Exception e) {
 			log.error("Feilet ved henting av user fra webservice", e);
 		}
-		
 
 		if (extUser == null) {
 			extUser = getHardcodedExtUser(username);
@@ -180,11 +189,17 @@ public class SVVUserDAOWS implements ExtUserDAO {
 	static String getTagValue(String tagname, String xml) {
 		int startTagFirstpos = xml.indexOf("<"+tagname);
 		int startTagLastpos = xml.indexOf(">", startTagFirstpos);
-		int endTagFirstpos = xml.indexOf("</"+tagname+">",
-				startTagLastpos);
+		int endTagFirstpos = xml.indexOf("</"+tagname+">", startTagLastpos);
 		return xml.substring(startTagLastpos+1, endTagFirstpos);
 	}
 
+	static String containsRolename(String rolename, String source) {
+		int pos = 0;
+		if((pos = source.indexOf(rolename)) != -1 && pos > source.indexOf("<urn1:svvrole") && pos < source.indexOf("</urn1:svvrole>"))
+			return rolename;
+		else return null;
+	}
+	
 	public static String convertStreamToString(InputStream is) throws IOException {
 		/*
 		 * To convert the InputStream to String we use the
