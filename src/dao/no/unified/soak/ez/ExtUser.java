@@ -35,15 +35,15 @@ public class ExtUser extends BaseObject implements Serializable {
     private List<String> rolenames = new ArrayList<String>();
 
     public ExtUser() {
-        
     }
     
-    public ExtUser(int id, String username, String email, String firstName, String lastName, String rolenamesCSV){
+    public ExtUser(Integer id, String username, String email, String firstName, String lastName, String rolenamesCSV){
         setId(id);
+        setUsername(username);
         setEmail(email);
         setFirst_name(firstName);
         setLast_name(lastName);
-        setUsername(username);
+        setName(firstName+" "+lastName);
         String[] RoleStringList = StringUtils.split(rolenamesCSV, ',');
         List<String> rolenamesList = getRolenames();
         CollectionUtils.addAll(rolenamesList, RoleStringList);

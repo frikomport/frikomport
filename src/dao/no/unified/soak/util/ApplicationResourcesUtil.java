@@ -3,12 +3,15 @@ package no.unified.soak.util;
 import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 public class ApplicationResourcesUtil {
 
     private static MessageSource messageSource = null;
+    private static final Log log = LogFactory.getLog(ApplicationResourcesUtil.class);
 
     private static final String localeVariant = System.getenv("FRIKOMPORT_VARIANT");
 
@@ -38,8 +41,18 @@ public class ApplicationResourcesUtil {
         String result = "";
         try {
             result = messageSource.getMessage(msgKey, new String[] {}, LocaleContextHolder.getLocale());
-        } catch (Exception e) {
-            // TODO Handle exception
+        } catch (NullPointerException e) {
+            if (log != null) {
+                log.error("messageSource object not found. Initial bean injection probably failed. " + e);
+            } else {
+                System.out.println("messageSource object not found. Initial bean injection probably failed." + e);
+            }
+        } catch (Exception e2) {
+            if (log != null) {
+                log.error("Failed getting a string from messageSource. Something wrong with bean injection?" + e2);
+            } else {
+                System.out.println("Failed getting a string from messageSource. Something wrong with bean injection?" + e2);
+            }
         }
         return result;
     }
