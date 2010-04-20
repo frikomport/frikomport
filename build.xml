@@ -425,7 +425,7 @@
         	<lib dir="${ical4j.dir}" includes="*.jar"/>
         	<lib dir="${axis.dir}" includes="*.jar"/>
             <lib file="${hibernate.jar}"/>
-            <lib dir="${hibernate.dir}/lib" includes="*.jar" excludes="jta.jar"/>
+            <lib dir="${hibernate.dir}/lib" includes="*.jar"/> <!--debug stafto har fjernet:  excludes="jta.jar" -->
             <lib dir="${spring.dir}" includes="*.jar" excludes="*mock.jar"/>
             <lib file="${commons-fileupload.jar}"/>
             <lib file="${requesttag.jar}"/>
@@ -908,15 +908,6 @@
 
         <unwar src="${webapp.dist}/${webapp.war}"
             dest="${tomcat.home}/webapps/${webapp.name}"/>
-
-        <copy todir="${tomcat.home}/lib" includeEmptyDirs="no">
-            <fileset dir="${hibernate.dir}/lib">   
-                <include name="jta.jar"/>
-            </fileset>
-            <filterset refid="variables.to.replace"/>
-        </copy>            
-        <copy todir="${tomcat.home}/lib" includeEmptyDirs="no" file="${mysql.jar}">
-        </copy>            
     </target>
     
     <!-- =================================================================== -->
@@ -1079,6 +1070,7 @@
                 <pathelement path="${java.home}/../lib/tools.jar"/>
                 <fileset dir="${tomcat.home}">
                     <include name="bin/bootstrap.jar"/>
+                    <include name="lib/jta.jar"/> <!-- debugStafto -->
                 </fileset>
             </classpath>
         </java>
