@@ -153,36 +153,6 @@
                </div>
                </div>
                <div id="ContentFrameMiddle">
-                  <div id="UnderMeny"> <div class="noindex">
-                     <ul>
-                     <li class="first selected">
-                     <a href="http://www.vegvesen.no/Kjoretoy/Fakta+og+statistikk/Kjoretoyopplysninger/SMS+tjeneste">SMS-tjeneste</a>
-                     <ul class="subniva">
-                     <li>
-                     <a href="http://www.vegvesen.no/Kjoretoy/Fakta+og+statistikk/Kjoretoyopplysninger/SMS+tjeneste/Svarmelding">Svarmelding</a>
-                     </li>
-                     <li>
-                     <a href="http://www.vegvesen.no/Kjoretoy/Fakta+og+statistikk/Kjoretoyopplysninger/SMS+tjeneste/Avvik+fra+svarmelding">Avvik
-                     fra svarmelding</a>
-                     </li>
-                     <li>
-                     <a href="http://www.vegvesen.no/Kjoretoy/Fakta+og+statistikk/Kjoretoyopplysninger/SMS+tjeneste/Feilmeldinger">Feilmeldinger</a>
-                     </li>
-                     <li>
-                     <a href="http://www.vegvesen.no/Kjoretoy/Fakta+og+statistikk/Kjoretoyopplysninger/SMS+tjeneste/Forbehold">Forbehold</a>
-                     </li>
-                     <li>
-                     <a href="http://www.vegvesen.no/Kjoretoy/Fakta+og+statistikk/Kjoretoyopplysninger/SMS+tjeneste/Kontakt+oss">Kontakt
-                     oss</a>
-                     </li>
-                     </ul>
-                     </li>
-                     <li class="last ">
-                     <a href="http://www.vegvesen.no/Kjoretoy/Fakta+og+statistikk/Kjoretoyopplysninger/Understellsregistret">Understellsregistret</a>
-                     </li>
-                     </ul>
-                     </div>
-                  </div>
                   <div id="MainContentContainer">
 				  <!--${body}-->				  
                   </div>
