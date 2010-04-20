@@ -108,27 +108,33 @@ public class SVVUserDAOWS implements ExtUserDAO {
         ExtUser extUser = null;
         try {
             String xmlString = getUserXMLFromWebservice(username);
-            extUser = new ExtUser();
-            extUser.setEmail(getTagValue("urn1:mail", xmlString));
-            extUser.setFirst_name(SVVUserDAOWS.getTagValue("urn1:givenName", xmlString));
-            extUser.setLast_name(SVVUserDAOWS.getTagValue("urn1:sn", xmlString));
-            extUser.setName(SVVUserDAOWS.getTagValue("urn1:cn", xmlString));
+            if (!StringUtils.isEmpty(xmlString)) {
+                extUser = new ExtUser();
+                extUser.setEmail(getTagValue("urn1:mail", xmlString));
+                extUser.setFirst_name(SVVUserDAOWS.getTagValue("urn1:givenName", xmlString));
+                extUser.setLast_name(SVVUserDAOWS.getTagValue("urn1:sn", xmlString));
+                extUser.setName(SVVUserDAOWS.getTagValue("urn1:cn", xmlString));
 
-            String adminRoles = ApplicationResourcesUtil.getText("role.admin");
-            String eventAdminRoles = ApplicationResourcesUtil.getText("MoteAdminRoles ");
-            String eventResponsible = ApplicationResourcesUtil.getText("role.eventresponsible");
-            String ansattRoles = ApplicationResourcesUtil.getText("role.employee");
-            String readeRoles = ApplicationResourcesUtil.getText("role.reader");
+                String adminRoles = ApplicationResourcesUtil.getText("role.admin");
+                String eventAdminRoles = ApplicationResourcesUtil.getText("MoteAdminRoles ");
+                String eventResponsible = ApplicationResourcesUtil.getText("role.eventresponsible");
+                String ansattRoles = ApplicationResourcesUtil.getText("role.employee");
+                String readeRoles = ApplicationResourcesUtil.getText("role.reader");
 
-            extUser.setRolenames(SVVUserDAOWS.getInnerTagValuesInTag(xmlString, "urn1:svvrole", "Key", new String[] { adminRoles, eventAdminRoles,
-                    eventResponsible, ansattRoles, readeRoles }));
+                extUser.setRolenames(SVVUserDAOWS.getInnerTagValuesInTag(xmlString, "urn1:svvrole", "Key", new String[] {
+                        adminRoles, eventAdminRoles, eventResponsible, ansattRoles, readeRoles }));
 
+            }
         } catch (Exception e) {
-            log.error("Feilet ved henting av user fra webservice", e);
+            log.error("Feilet ved henting av user [" + username + "] fra webservice", e);
         }
 
         if (extUser == null) {
+            log.info("Intet svar fra web service. Prøver å hente brukernavn [" + username + "] fra hardkodede testbrukere.");
             extUser = getHardcodedExtUser(username);
+            if (extUser == null) {
+                log.error("Fant ikke [" + username + "} blant hardkodede testbrukere.");
+            }
         }
         return extUser;
     }
