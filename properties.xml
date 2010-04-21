@@ -28,6 +28,7 @@
     <property name="tomcat.password" value="admin"/>
 
     <!-- Defaults for database.properties -->
+	<!--
     <property name="database.jar" location="${mysql.jar}"/>
     <property name="database.type" value="mysql"/>
     <property name="database.name" value="frikomdb"/>
@@ -35,16 +36,35 @@
     <property name="database.username" value="frikom"/>
     <property name="database.password" value="frikom"/>
     
+-->    
     <!-- database URL for creating other dbs - used in db-create target -->
-    <property name="database.admin.url" value="jdbc:${database.type}://${database.host}/mysql?autoReconnect=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8"/>
+<!--
+	<property name="database.admin.url" value="jdbc:${database.type}://${database.host}/mysql?autoReconnect=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8"/>
     <property name="database.admin.username" value="root"/>
     <property name="database.admin.password" value="sysadm"/>
     <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLInnoDBDialect"/>
     <property name="database.driver_class" value="com.mysql.jdbc.Driver"/>
     <property name="database.url" 
         value="jdbc:${database.type}://${database.host}/${database.name}?autoReconnect=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8"/>
-    <property name="database.show_sql" value="true"/>
+-->    
 	
+    <property name="database.jar" location="${oracle.jar}"/>
+    <property name="database.type" value="oracle"/>
+    <property name="database.name" value="XE"/>
+    <property name="database.port" value="1521"/>
+    <property name="database.host" value="localhost"/>
+    <property name="database.username" value="frikom"/>
+    <property name="database.password" value="frikom"/>
+    <!-- database URL for creating other dbs - used in db-create target -->
+    <property name="database.admin.url" value="jdbc:${database.type}:thin:@${database.host}:${database.port}:${database.name}"/>
+    <property name="database.admin.username" value="SYS"/>
+    <property name="database.admin.password" value="Hurra1705!"/>
+    <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
+    <property name="database.driver_class" value="oracle.jdbc.driver.OracleDriver"/>
+    <property name="database.url" 
+        value="jdbc:${database.type}:thin:@${database.host}:${database.port}:${database.name}"/>
+	<property name="database.show_sql" value="true"/>
+
 	<!-- Defaults for eZ db integration -->
 	<property name="ez.database.type" value="mysql"/>
     <property name="ez.database.name" value="frikom_ezdb"/>

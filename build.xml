@@ -401,7 +401,6 @@
             <metainf dir="${webapp.dist}" includes="context.xml"/>
 
             <classes dir="${build.dir}/web/classes">
-                <exclude name="**/database.properties"/>
             </classes>
 
             <lib file="${dist.dir}/${webapp.name}-dao.jar"/>

@@ -23,7 +23,9 @@ import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
+import no.unified.soak.util.DefaultQuotedNamingStrategy;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.EmailValidator;
 import org.springframework.context.MessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -113,39 +115,39 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
         String[][] sqlSelectAndInsertRoleArray = {
                 // Role insert
-                { "select count(*) from role where name='anonymous';",
-                        "INSERT INTO role (name, description, version) VALUES('anonymous', 'Anonymous', 1);" },
-                { "select count(*) from role where name='admin';",
-                        "INSERT INTO role (name, description, version) VALUES('admin', 'Administrator', 1);" },
-                { "select count(*) from role where name='employee';",
-                        "INSERT INTO role (name, description, version) VALUES('employee', 'Ansatt', 1);" },
-                { "select count(*) from role where name='instructor';",
-                        "INSERT INTO role (name, description, version) VALUES('instructor', 'Kursansvarlig', 1);" },
-                { "select count(*) from role where name='editor';",
-                        "INSERT INTO role (name, description, version) VALUES('editor', 'Opplaringsansvarlig', 1);" } };
+                { "select count(*) from role where name='anonymous'",
+                        "INSERT INTO role (name, description, version) VALUES('anonymous', 'Anonymous', 1)" },
+                { "select count(*) from role where name='admin'",
+                        "INSERT INTO role (name, description, version) VALUES('admin', 'Administrator', 1)" },
+                { "select count(*) from role where name='employee'",
+                        "INSERT INTO role (name, description, version) VALUES('employee', 'Ansatt', 1)" },
+                { "select count(*) from role where name='instructor'",
+                        "INSERT INTO role (name, description, version) VALUES('instructor', 'Kursansvarlig', 1)" },
+                { "select count(*) from role where name='editor'",
+                        "INSERT INTO role (name, description, version) VALUES('editor', 'Opplaringsansvarlig', 1)" } };
         insertIntoTableBySQLStatements("role", sqlSelectAndInsertRoleArray);
 
-        String[][] sqlSelectAndInsertCategoryArray = { { "select count(*) from category;",
-                "INSERT INTO category (name, selectable) VALUES ('Hendelse', true);" } };
+        String[][] sqlSelectAndInsertCategoryArray = { { "select count(*) from category",
+                "INSERT INTO category (name, selectable) VALUES ('Hendelse', true)" } };
         insertIntoTableBySQLStatements("category", sqlSelectAndInsertCategoryArray);
 
-        //Insert configuration that are common for all environments. 
+        // Insert configuration that are common for all environments.
         String[][] sqlSelectAndInsertConfigurationArray = {
                 // Configuration insert
-                { "select count(*) from configuration where name = 'access.registration.delete';",
-                        "insert INTO configuration (name, active) VALUES ('access.registration.delete', false);" },
-                { "select count(*) from configuration where name = 'access.registration.userdefaults';",
-                        "insert INTO configuration (name, active) VALUES ('access.registration.userdefaults', false);" },
-                { "select count(*) from configuration where name = 'access.registration.emailrepeat';",
-                        "insert INTO configuration (name, active) VALUES ('access.registration.emailrepeat', false);" },
-                { "select count(*) from configuration where name = 'access.registration.showComment';",
-                        "insert INTO configuration (name, active) VALUES ('access.registration.showComment', true);" },
-                { "select count(*) from configuration where name = 'mail.course.sendSummary';",
-                        "insert INTO configuration (name, active) VALUES ('mail.course.sendSummary', true);" },
-                { "select count(*) from configuration where name = 'mail.registration.notifyResponsible';",
-                        "insert INTO configuration (name, active) VALUES ('mail.registration.notifyResponsible', false);" },
-                { "select count(*) from configuration where name = 'show.menu';",
-                        "insert INTO configuration (name, active) VALUES ('show.menu', false);" } };
+                { "select count(*) from configuration where name = 'access.registration.delete'",
+                        "insert INTO configuration (name, active) VALUES ('access.registration.delete', false)" },
+                { "select count(*) from configuration where name = 'access.registration.userdefaults'",
+                        "insert INTO configuration (name, active) VALUES ('access.registration.userdefaults', false)" },
+                { "select count(*) from configuration where name = 'access.registration.emailrepeat'",
+                        "insert INTO configuration (name, active) VALUES ('access.registration.emailrepeat', false)" },
+                { "select count(*) from configuration where name = 'access.registration.showComment'",
+                        "insert INTO configuration (name, active) VALUES ('access.registration.showComment', true)" },
+                { "select count(*) from configuration where name = 'mail.course.sendSummary'",
+                        "insert INTO configuration (name, active) VALUES ('mail.course.sendSummary', true)" },
+                { "select count(*) from configuration where name = 'mail.registration.notifyResponsible'",
+                        "insert INTO configuration (name, active) VALUES ('mail.registration.notifyResponsible', false)" },
+                { "select count(*) from configuration where name = 'show.menu'",
+                        "insert INTO configuration (name, active) VALUES ('show.menu', false)" } };
         insertIntoTableBySQLStatements("configuration", sqlSelectAndInsertConfigurationArray);
 
         if (ApplicationResourcesUtil.isSVV()) {
@@ -195,38 +197,38 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                     "insert into servicearea (name, selectable, organizationid) "
                             + "(select 'Mengdetrening', true, id from organization O where O.type = 2 and not exists (select null from servicearea S0 where S0.organizationid = O.id))" } };
             insertIntoTableBySQLStatements("servicearea", sqlInsertServiceareaArray);
-            
+
             // Some insert settings are different for FKPSVV enviroment.
             String[][] sqlSelectAndInsertConfigurationSVVArray = {
                     // Configuration insert
-                    { "select count(*) from configuration where name = 'access.registration.showEmployeeFields';",
-                            "insert INTO configuration (name, active) VALUES ('access.registration.showEmployeeFields', false);" },
-                    { "select count(*) from configuration where name = 'access.registration.showServiceArea';",
-                            "insert INTO configuration (name, active) VALUES ('access.registration.showServiceArea', false);" },
-                    { "select count(*) from configuration where name = 'access.registration.showJobTitle';",
-                            "insert INTO configuration (name, active) VALUES ('access.registration.showJobTitle', false);" },
-                    { "select count(*) from configuration where name = 'access.registration.showWorkplace';",
-                            "insert INTO configuration (name, active) VALUES ('access.registration.showWorkplace', false);" } };
+                    { "select count(*) from configuration where name = 'access.registration.showEmployeeFields'",
+                            "insert INTO configuration (name, active) VALUES ('access.registration.showEmployeeFields', false)" },
+                    { "select count(*) from configuration where name = 'access.registration.showServiceArea'",
+                            "insert INTO configuration (name, active) VALUES ('access.registration.showServiceArea', false)" },
+                    { "select count(*) from configuration where name = 'access.registration.showJobTitle'",
+                            "insert INTO configuration (name, active) VALUES ('access.registration.showJobTitle', false)" },
+                    { "select count(*) from configuration where name = 'access.registration.showWorkplace'",
+                            "insert INTO configuration (name, active) VALUES ('access.registration.showWorkplace', false)" } };
             insertIntoTableBySQLStatements("configuration", sqlSelectAndInsertConfigurationSVVArray);
 
             String[][] sqlSelectAndInsertRoleSVVArray = {
-                    // Role insert
-                    { "select count(*) from role where name='reader';",
-                            "INSERT INTO role (name, description, version) VALUES('reader', 'Reader', 1);" } };
+            // Role insert
+            { "select count(*) from role where name='reader'",
+                    "INSERT INTO role (name, description, version) VALUES('reader', 'Reader', 1)" } };
             insertIntoTableBySQLStatements("role", sqlSelectAndInsertRoleSVVArray);
 
         } else {
             // Some insert settings are different for non-FKPSVV enviroment.
             String[][] sqlSelectAndInsertConfigurationDefaultArray = {
                     // Configuration insert
-                    { "select count(*) from configuration where name = 'access.registration.showEmployeeFields';",
-                            "insert INTO configuration (name, active) VALUES ('access.registration.showEmployeeFields', true);" },
-                    { "select count(*) from configuration where name = 'access.registration.showServiceArea';",
-                            "insert INTO configuration (name, active) VALUES ('access.registration.showServiceArea', true);" },
-                    { "select count(*) from configuration where name = 'access.registration.showJobTitle';",
-                            "insert INTO configuration (name, active) VALUES ('access.registration.showJobTitle', true);" },
-                    { "select count(*) from configuration where name = 'access.registration.showWorkplace';",
-                            "insert INTO configuration (name, active) VALUES ('access.registration.showWorkplace', true);" }};
+                    { "select count(*) from configuration where name = 'access.registration.showEmployeeFields'",
+                            "insert INTO configuration (name, active) VALUES ('access.registration.showEmployeeFields', true)" },
+                    { "select count(*) from configuration where name = 'access.registration.showServiceArea'",
+                            "insert INTO configuration (name, active) VALUES ('access.registration.showServiceArea', true)" },
+                    { "select count(*) from configuration where name = 'access.registration.showJobTitle'",
+                            "insert INTO configuration (name, active) VALUES ('access.registration.showJobTitle', true)" },
+                    { "select count(*) from configuration where name = 'access.registration.showWorkplace'",
+                            "insert INTO configuration (name, active) VALUES ('access.registration.showWorkplace', true)" } };
             insertIntoTableBySQLStatements("configuration", sqlSelectAndInsertConfigurationDefaultArray);
         }
     }
@@ -246,15 +248,77 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
             int existCount = 0;
             if (aSelectAndInsert[0] != null) {
-                existCount = jt.queryForInt(aSelectAndInsert[0]);
+                existCount = jt.queryForInt(adjustToOracle(aSelectAndInsert[0]));
             }
             if (existCount == 0 && aSelectAndInsert[1] != null) {
-                count += jt.update(aSelectAndInsert[1]);
+                count += jt.update(adjustToOracle(aSelectAndInsert[1]));
             }
         }
         if (count > 0 && log.isInfoEnabled()) {
             log.info("Number of " + table + " rows inserted (or updated) in database: " + count);
         }
+    }
+
+    private String adjustToOracle(String sql) {
+        StringBuffer sqlSB = new StringBuffer(sql.toLowerCase());
+        String tablePrefix = DefaultQuotedNamingStrategy.getTablePrefix();
+        if (StringUtils.isNotBlank(tablePrefix)) {
+            // Table name adjustment for Oracle
+            // int fromPos = sqlSB.indexOf(" from ");
+            // int tableStartPos = (fromPos > -1 ? fromPos : sqlSB.indexOf("insert into ")) + 6;
+            // if (tableStartPos == 5) {
+            // return sql;
+            // }
+            // sqlSB.insert(tableStartPos, tablePrefix);
+
+            // Column name adjustment for Oracle
+            int startPos = sqlSB.indexOf(" where ");
+            if (startPos > -1) {
+                sqlSB.insert(startPos + 7, '"');
+                int endPos = sqlSB.indexOf(" ", startPos + 8);
+                if (endPos == -1) {
+                    endPos = sqlSB.indexOf("=", startPos + 8);
+                }
+                sqlSB.insert(endPos, '"');
+            }
+
+            startPos = sqlSB.indexOf(" (") + 2;
+            if (startPos > -1 + 2) {
+                int endPos = sqlSB.indexOf(")");
+                String[] fieldArray = sqlSB.substring(startPos, endPos).replaceAll(" ", "").split(",", 0);
+                String fieldQuoted = "\"" + StringUtils.join(fieldArray, "\",\"") + "\"";
+                sqlSB.delete(startPos, endPos);
+                sqlSB.insert(startPos, fieldQuoted);
+            }
+            
+            //Boolean value adjustment for Oracle. true->1, false->0.
+            startPos = indexOfIgnorecase(sqlSB.toString(), new String[] {" true)", " true,", " true ,", ",true)", ",true )", ",true,", "(true,"});
+            if (startPos > -1) {
+                sqlSB.replace(startPos+1, startPos+5, "1");
+            }
+            startPos = indexOfIgnorecase(sqlSB.toString(), new String[] {" false)", " false,", ",false)", ",false ", ",false,", "(false,", "(false "});
+            if (startPos > -1) {
+                sqlSB.replace(startPos+1, startPos+5, "0");
+            }
+
+            return sqlSB.toString();
+        } else {
+            return sql;
+        }
+    }
+    
+    private static int indexOfIgnorecase(String sbOrig, String[] strings){
+        String sb = sbOrig.toLowerCase();
+        for (int i = 0; i < strings.length; i++) {
+            String string = strings[i];
+            int index = sb.indexOf(string.toLowerCase());
+            if (index > -1) {
+                return index;
+            }
+            
+        }
+        
+        return -1;
     }
 
     private void updateBySQLStatements() {
