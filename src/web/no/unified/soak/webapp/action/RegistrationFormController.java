@@ -43,8 +43,8 @@ import no.unified.soak.util.DateUtil;
 import no.unified.soak.util.MailUtil;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.context.MessageSource;
 import org.springframework.mail.MailSender;
+import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -62,15 +62,11 @@ public class RegistrationFormController extends BaseFormController {
     private NotificationManager notificationManager = null;
     private ConfigurationManager configurationManager = null;
     private UserManager userManager = null;
-    private MessageSource messageSource = null;
     protected MailEngine mailEngine = null;
     protected MailSender mailSender = null;
 
     public void setNotificationManager(NotificationManager notificationManager) {
         this.notificationManager = notificationManager;
-    }
-    public void setMessageSource(MessageSource messageSource) {
-        this.messageSource = messageSource;
     }
     public void setMailEngine(MailEngine mailEngine) {
         this.mailEngine = mailEngine;
@@ -331,7 +327,14 @@ public class RegistrationFormController extends BaseFormController {
             }
 
             // Set user object for registration
-            User user = userManager.findUser(registration.getEmail());
+            User user = null;
+            try {
+                // Check username first.
+                user = userManager.getUser(registration.getEmail());
+            } catch (ObjectRetrievalFailureException orfe) {
+                // Check email second.
+                user = userManager.findUser(registration.getEmail());
+            }
             if(user == null){
                 user = userManager.addUser(registration);
             }
