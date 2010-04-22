@@ -50,7 +50,7 @@ public interface UserManager {
 	 * @param username
 	 * @return User
 	 */
-    public User findUser(String email);
+    public User findUserByEmail(String email);
 
     /**
 	 * Retrieves a list of users, filtering with parameters on a user object
@@ -134,11 +134,13 @@ public interface UserManager {
 	 * @param id id for user
 	 * @param rolenames rolenames for roles to be added to user
 	 * @param kommune kommune for user
+	 * @param mobilePhone 
+	 * @param phoneNumber 
 	 * @return user
 	 * @return null if the user could not be saved.
 	 */
 	public User addUser(String username, String firstName, String lastName, String email, Integer id,
-			List<String> rolenames, Integer kommune);
+			List<String> rolenames, Integer kommune, String mobilePhone, String phoneNumber);
 
 	/**
 	 * Update user 
@@ -149,10 +151,12 @@ public interface UserManager {
 	 * @param id id for user
 	 * @param rolenames rolenames for roles to be added to user
 	 * @param kommune kommune for user
+	 * @param phoneNumber 
+	 * @param mobilePhone 
 	 * @return 
 	 */
 	public void updateUser(User user, String firstName, String lastName, String email, Integer id,
-			List<String> rolenames, Integer kommune);
+			List<String> rolenames, Integer kommune, String mobilePhone, String phoneNumber);
 
     /**
      * Adds new user based on a registration

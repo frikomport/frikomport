@@ -52,7 +52,7 @@ public class EzUserDAOWS implements ExtUserDAO {
     public ExtUser findUserBySessionID(String sessionId) {
         ExtUser user = null;
         try {
-            user = getEzUser(getPort().getUser(sessionId));
+            user = getExtUser(getPort().getUser(sessionId));
             user.setRolenames(getRolenames(getPort().getRoles(user.getId().toString())));
         } catch (Exception e) {
             log.error("Feilet ved henting av user", e);
@@ -68,7 +68,7 @@ public class EzUserDAOWS implements ExtUserDAO {
         "findUserByUsername(String username) is unsupported. Use findUserBySessionID(sessionId) instead.");
     }
 
-    private ExtUser getEzUser(FkpUser_Type fkpUser) {
+    private ExtUser getExtUser(FkpUser_Type fkpUser) {
         ExtUser user = null;
         if(fkpUser != null){
             user = new ExtUser();
@@ -99,7 +99,7 @@ public class EzUserDAOWS implements ExtUserDAO {
         try {
             FkpUser_Type userArray[] = getPort().getUsers(roleNames);
             for (int i = 0; i < userArray.length; i++) {
-                ExtUser user = getEzUser(userArray[i]);
+                ExtUser user = getExtUser(userArray[i]);
                 user.setRolenames(getRolenames(getPort().getRoles(user.getId().toString())));
                 users.add(user);
             }

@@ -110,8 +110,8 @@ public class SVVUserDAOWS implements ExtUserDAO {
 
                 String uid = getTagValue("urn1:uid", xmlString);
                 if(StringUtils.isEmpty(uid)) {
-                	// bruker ikke funnet
-                    log.info("Ingen informasjom om [" + username.toUpperCase() + "] funnet fra webserviceoppslag!");
+                	// Bruker ikke funnet
+                    log.info("Ingen informasjom om brukernavn [" + username.toUpperCase() + "] funnet fra webserviceoppslag!");
                 	return null;
                 }
                 
@@ -121,15 +121,16 @@ public class SVVUserDAOWS implements ExtUserDAO {
                 extUser.setLast_name(SVVUserDAOWS.getTagValue("urn1:sn", xmlString));
                 extUser.setName(SVVUserDAOWS.getTagValue("urn1:cn", xmlString));
                 extUser.setMobilePhone(SVVUserDAOWS.getTagValue("urn1:mobile", xmlString));
+                extUser.setPhoneNumber(SVVUserDAOWS.getTagValue("urn1:telephoneNumber", xmlString));
 
                 String adminRoles = ApplicationResourcesUtil.getText("role.admin");
                 String eventAdminRoles = ApplicationResourcesUtil.getText("MoteAdminRoles ");
                 String eventResponsible = ApplicationResourcesUtil.getText("role.eventresponsible");
                 String ansattRoles = ApplicationResourcesUtil.getText("role.employee");
-                String readeRoles = ApplicationResourcesUtil.getText("role.reader");
+                String readerRoles = ApplicationResourcesUtil.getText("role.reader");
 
                 extUser.setRolenames(SVVUserDAOWS.getInnerTagValuesInTag(xmlString, "urn1:svvrole", "Key", new String[] {
-                        adminRoles, eventAdminRoles, eventResponsible, ansattRoles, readeRoles }));
+                        adminRoles, eventAdminRoles, eventResponsible, ansattRoles, readerRoles }));
 
             }
         } catch (Exception e) {

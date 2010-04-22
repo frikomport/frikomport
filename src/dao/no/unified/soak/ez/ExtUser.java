@@ -14,10 +14,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import no.unified.soak.model.BaseObject;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-
-import no.unified.soak.model.BaseObject;
 
 
 /**
@@ -32,9 +32,9 @@ public class ExtUser extends BaseObject implements Serializable {
     private String username;
     private Integer kommune;
     private String email;
-    private String mobilehone;
     private List<String> rolenames = new ArrayList<String>();
-    private String mobilephone;
+    private String mobilePhone;
+	private String phoneNumber;
 
 	public ExtUser() {
     }
@@ -50,17 +50,9 @@ public class ExtUser extends BaseObject implements Serializable {
         List<String> rolenamesList = getRolenames();
         CollectionUtils.addAll(rolenamesList, RoleStringList);
         setRolenames(rolenamesList);
-        setMobilehone(mobilePhone);
+        setMobilePhone(mobilePhone);
     }
     
-    public String getMobilehone() {
-		return mobilehone;
-	}
-
-	public void setMobilehone(String mobilehone) {
-		this.mobilehone = mobilehone;
-	}
-
     public String toString() {
         if ((getFirst_name() != null) || (getLast_name() != null)) {
             return getFirst_name() + " " + getLast_name();
@@ -181,10 +173,19 @@ public class ExtUser extends BaseObject implements Serializable {
     }
     
     public String getMobilePhone() {
-    	return mobilephone;
+    	return mobilePhone;
     }
     
     public void setMobilePhone(String mobilephone) {
-    	this.mobilephone = mobilephone;
+    	this.mobilePhone = mobilephone;
     }
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	
 }

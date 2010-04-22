@@ -534,10 +534,10 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                 // email addresses
                 if (registration.getUsername() == null || registration.getUsername().trim().length() == 0) {
                     if (EmailValidator.getInstance().isValid(registration.getEmail())) {
-                        User user = userManager.findUser(registration.getEmail());
+                        User user = userManager.findUserByEmail(registration.getEmail());
                         if (user == null) {
                             user = userManager.addUser(registration.getEmail(), registration.getFirstName(), registration
-                                    .getLastName(), registration.getEmail(), new Integer(0), null, new Integer(0));
+                                    .getLastName(), registration.getEmail(), new Integer(0), null, new Integer(0), null, null);
                         }
                         // Connect user with registration
                         registration.setUser(user);

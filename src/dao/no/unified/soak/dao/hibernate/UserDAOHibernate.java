@@ -50,7 +50,7 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
         return user;
     }
 
-    public User findUser(String email) {
+    public User findUserByEmail(String email) {
         DetachedCriteria criteria = DetachedCriteria.forClass(User.class);
         criteria.add(Restrictions.eq("email",email));
         List<User> result = getHibernateTemplate().findByCriteria(criteria);

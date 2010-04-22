@@ -76,9 +76,9 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
             log.info("Synkronisering av brukere starter...");
             while(e.hasMoreElements()) {
             	User local = (User)e.nextElement();
-            	ExtUser ldap = extUserDAO.findUserByUsername(local.getUsername());
-            	if(ldap == null) continue; // TODO: vurdere sletting/deaktivering av brukere som ikke lenger finnes i eksternt system
-            	processUser(ldap);
+            	ExtUser ldapUser = extUserDAO.findUserByUsername(local.getUsername());
+            	if(ldapUser == null) continue; // TODO: vurdere sletting/deaktivering av brukere som ikke lenger finnes i eksternt system
+            	processUser(ldapUser);
             	if (log.isDebugEnabled()) log.debug("LDAP: " + local.getFullName() + " (" + local.getEmail() + ")" + ": " + local.getMobilePhone() + "");
             }
             log.info("Synkronisering av brukere ferdig!");
@@ -100,11 +100,11 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 
         User emailuser = null;
         User user = null;
-        // sjekker om epostadressa er brukt som username
+        // Sjekker om epostadressa er brukt som username i FriKomPort-databasen.
         try {
             emailuser = userManager.getUser(current.getEmail().toLowerCase());
         } catch (ObjectRetrievalFailureException e) {
-            User tmpUser = userManager.findUser(current.getEmail().toLowerCase());
+            User tmpUser = userManager.findUserByEmail(current.getEmail().toLowerCase());
             if ((tmpUser != null) && !tmpUser.getUsername().equals(current.getUsername())) {
                 emailuser = tmpUser;
             }
@@ -117,11 +117,11 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
         try {
             user = userManager.getUser(current.getUsername());
             userManager.updateUser(user, current.getFirst_name(), current.getLast_name(), current.getEmail().toLowerCase(), current
-                    .getId(), current.getRolenames(), current.getKommune());
+                    .getId(), current.getRolenames(), current.getKommune(), current.getMobilePhone(), current.getPhoneNumber());
         } catch (Exception e) {
-            // ezUser finnes ikkje og må opprettes
+            // extUser finnes ikkje og må opprettes
             user = userManager.addUser(current.getUsername(), current.getFirst_name(), current.getLast_name(), current.getEmail()
-                    .toLowerCase(), current.getId(), current.getRolenames(), current.getKommune());
+                    .toLowerCase(), current.getId(), current.getRolenames(), current.getKommune(), current.getMobilePhone(), current.getPhoneNumber());
         }
 
         // Flytt registreringer

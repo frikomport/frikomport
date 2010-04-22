@@ -80,7 +80,7 @@ public class UserRegistrationController extends BaseFormController{
         
         String email = request.getParameter("email");
         if(EmailValidator.getInstance().isValid(email)){
-            User user = userManager.findUser(email);
+            User user = userManager.findUserByEmail(email);
             if(user != null){
                 sendMail(user, locale);
                 saveMessage(request, getText("user.emailsent", user.getEmail() ,locale));

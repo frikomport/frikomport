@@ -102,8 +102,8 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		return dao.getUsers(user);
 	}
 
-	public User findUser(String email) {
-		return dao.findUser(email);
+	public User findUserByEmail(String email) {
+		return dao.findUserByEmail(email);
 	}
 
 	/**
@@ -213,20 +213,24 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 				users.add(dao.getUser(ezUser.getUsername()));
 			} catch (ObjectRetrievalFailureException objectRetrievalFailureException) {
 				User user = addUser(ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser
-						.getEmail(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
+						.getEmail(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune(), null, null);
 				users.add(user);
 			}
 		}
 		return users;
 	}
-
+	
 	public User addUser(String username, String firstName, String lastName, String email, Integer id,
-			List<String> rolenames, Integer kommune) {
+			List<String> rolenames, Integer kommune, String mobilePhone, String phoneNumber) {
 		User user = new User(username);
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
         user.setEmail(email);
-		user.setId(id);
+		if (id == null) {
+			user.setId(0);
+		} else {
+			user.setId(id);
+		}
 		if (kommune != null && kommune != 0) {
 			updateKommune(kommune, user);
 		}
@@ -235,6 +239,8 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		}
 		setRoles(rolenames, user);
 		user.setEnabled(true);
+		user.setMobilePhone(mobilePhone);
+		user.setPhoneNumber(phoneNumber);
 		user.setAddress(new Address());
 		user.setHash(StringUtil.encodeString(username));
 		user.setInvoiceAddress(new Address());
@@ -319,7 +325,8 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	}
 
 	public void updateUser(User user, String firstName, String lastName, String email, Integer id,
-			List<String> rolenames, Integer kommune) {
+ List<String> rolenames, Integer kommune,
+			String mobilePhone, String phoneNumber) {
 		Boolean save = false;
 		if (!firstName.equals(user.getFirstName())) {
 			user.setFirstName(firstName);
@@ -338,17 +345,29 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 			save = true;
 		}
 		if (kommune != null && kommune != 0) {
-			if (updateKommune(kommune, user)){
+			if (updateKommune(kommune, user)) {
 				save = true;
 			}
 		}
+
+		// Since eZ publish does not give these phone numbers but SVVs ldap
+		// does, only update phone numbers when one is presented.
+		if (mobilePhone != null && mobilePhone.equals(user.getMobilePhone())) {
+			user.setMobilePhone(mobilePhone);
+			save = true;
+		}
+		if (phoneNumber != null && phoneNumber.equals(user.getPhoneNumber())) {
+			user.setPhoneNumber(phoneNumber);
+			save = true;
+		}
+
 		setRoles(rolenames, user, save);
 		if (user.getHash() == null || user.getHash().length() == 0) {
 			user.setHash(StringUtil.encodeString(user.getUsername()));
 			save = true;
 		}
 
-		if (updateInvoiceAddressFromOrganization(user)){
+		if (updateInvoiceAddressFromOrganization(user)) {
 			save = true;
 		}
 

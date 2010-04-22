@@ -332,7 +332,7 @@ public class RegistrationFormController extends BaseFormController {
             }
 
             // Set user object for registration
-            User user = userManager.findUser(registration.getEmail());
+            User user = userManager.findUserByEmail(registration.getEmail());
             if(user == null){
                 user = userManager.addUser(registration);
             }
