@@ -116,15 +116,15 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         String[][] sqlSelectAndInsertRoleArray = {
                 // Role insert
                 { "select count(*) from role where name='anonymous'",
-                        "INSERT INTO role (name, description, version) VALUES('anonymous', 'Anonymous', 1)" },
+                        "INSERT INTO role (name, description, version) VALUES('anonymous', 'Anonymous', true)" },
                 { "select count(*) from role where name='admin'",
-                        "INSERT INTO role (name, description, version) VALUES('admin', 'Administrator', 1)" },
+                        "INSERT INTO role (name, description, version) VALUES('admin', 'Administrator', true)" },
                 { "select count(*) from role where name='employee'",
-                        "INSERT INTO role (name, description, version) VALUES('employee', 'Ansatt', 1)" },
+                        "INSERT INTO role (name, description, version) VALUES('employee', 'Ansatt', true)" },
                 { "select count(*) from role where name='instructor'",
-                        "INSERT INTO role (name, description, version) VALUES('instructor', 'Kursansvarlig', 1)" },
+                        "INSERT INTO role (name, description, version) VALUES('instructor', 'Kursansvarlig', true)" },
                 { "select count(*) from role where name='editor'",
-                        "INSERT INTO role (name, description, version) VALUES('editor', 'Opplaringsansvarlig', 1)" } };
+                        "INSERT INTO role (name, description, version) VALUES('editor', 'Opplaringsansvarlig', true)" } };
         insertIntoTableBySQLStatements("role", sqlSelectAndInsertRoleArray);
 
         String[][] sqlSelectAndInsertCategoryArray = { { "select count(*) from category",
