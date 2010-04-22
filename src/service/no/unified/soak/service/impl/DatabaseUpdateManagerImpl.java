@@ -430,7 +430,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     	
     	String sql = null;
     	if(ApplicationResourcesUtil.isSVV()){
-    		sql = "SELECT * FROM(SELECT * FROM registration) WHERE rownum = 1";
+    		sql = "SELECT * FROM registration WHERE rownum = 1";
     	}
     	else{
     		sql = "select * from registration limit 1";
