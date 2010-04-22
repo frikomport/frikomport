@@ -11,8 +11,8 @@ import java.util.List;
 
 import no.unified.soak.dao.ExtUserDAO;
 import no.unified.soak.dao.UserDAO;
-import no.unified.soak.model.User;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.User;
 
 import org.springframework.context.MessageSource;
 

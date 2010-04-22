@@ -347,8 +347,8 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
     private String adjustToOracle(String sql) {
         StringBuffer sqlSB = new StringBuffer(sql.toLowerCase());
-        String tablePrefix = DefaultQuotedNamingStrategy.getTablePrefix();
-        if (StringUtils.isNotBlank(tablePrefix)) {
+        boolean usesOracle = DefaultQuotedNamingStrategy.usesOracle();
+        if (usesOracle) {
             // Table name adjustment for Oracle
             // int fromPos = sqlSB.indexOf(" from ");
             // int tableStartPos = (fromPos > -1 ? fromPos : sqlSB.indexOf("insert into ")) + 6;
@@ -429,8 +429,8 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     private boolean reservedFieldExist() {
     	
     	String sql = null;
-    	if(ApplicationResourcesUtil.isSVV()){
-    		sql = "SELECT * FROM registration WHERE rownum = 1";
+    	if(DefaultQuotedNamingStrategy.usesOracle()){
+    		sql = "SELECT * FROM (SELECT * FROM registration) WHERE rownum = 1";
     	}
     	else{
     		sql = "select * from registration limit 1";

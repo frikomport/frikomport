@@ -9,7 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.cfg.DefaultNamingStrategy;
 
 public class DefaultQuotedNamingStrategy extends DefaultNamingStrategy {
-    static String tablePrefix = "";
+    static boolean usesOracle = false;
 
     public DefaultQuotedNamingStrategy() {
         super();
@@ -20,7 +20,7 @@ public class DefaultQuotedNamingStrategy extends DefaultNamingStrategy {
             if (StringUtils.contains(properties.getProperty("hibernate.connection.url"), "oracle")) {
                 String oracleUsername = properties.getProperty("hibernate.connection.username");
                 if (StringUtils.isNotBlank(oracleUsername)) {
-                    tablePrefix = oracleUsername + ".";
+                    usesOracle = true;
                 }
             }
         } catch (FileNotFoundException e) {
@@ -30,26 +30,6 @@ public class DefaultQuotedNamingStrategy extends DefaultNamingStrategy {
         }
 
     }
-
-//    @Override
-//    public String collectionTableName(String ownerEntity, String ownerEntityTable, String associatedEntity,
-//            String associatedEntityTable, String propertyName) {
-//        StringBuffer newTableName = addPrefix(new StringBuffer(super.collectionTableName(ownerEntity, ownerEntityTable,
-//                associatedEntity, associatedEntityTable, propertyName)));
-//        return newTableName.toString();
-//    }
-//
-//    @Override
-//    public String classToTableName(String className) {
-//        StringBuffer newTableName = addPrefix(new StringBuffer(super.classToTableName(className)));
-//        return newTableName.toString();
-//    }
-//
-//    @Override
-//    public String tableName(String tableName) {
-//        StringBuffer newTableName = addPrefix(new StringBuffer(super.tableName(tableName)));
-//        return newTableName.toString();
-//    }
 
     @Override
     public String columnName(String columnName) {
@@ -74,18 +54,11 @@ public class DefaultQuotedNamingStrategy extends DefaultNamingStrategy {
         return input.insert(0, '`').append('`');
     }
 
-    /**
-     * Adds prefix before the name.
-     * 
-     * @param input
-     *            the input to quote
-     * @return the quoted input
-     */
-    private static StringBuffer addPrefix(StringBuffer input) {
-        return input.insert(0, tablePrefix);
-    }
-
-    public static String getTablePrefix() {
-        return tablePrefix;
+	/**
+	 * Is the application using Oracle database? 
+	 * @return true if Oracle database is used. false is mysql database is used.
+	 */
+    public static boolean usesOracle() {
+        return usesOracle;
     }
 }
