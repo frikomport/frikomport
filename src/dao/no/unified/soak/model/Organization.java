@@ -86,6 +86,15 @@ public class Organization extends BaseObject implements Serializable {
         }
 
     }
+    
+    public Organization(){}
+    
+    public Organization(String name, long number, int type, boolean selectable){
+    	setName(name);
+    	setNumber(number);
+    	setType(type);
+    	setSelectable(selectable);
+    }
 
     /**
      * @return Returns the selectable.

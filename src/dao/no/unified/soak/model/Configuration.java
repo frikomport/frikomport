@@ -17,6 +17,14 @@ public class Configuration extends BaseObject implements Serializable {
     private Boolean active;
     private String value;
 
+    public Configuration(){}
+
+    public Configuration(String name, boolean active, String value){
+    	setName(name);
+    	setActive(active);
+    	setValue(value);
+    }
+    
     /**
      * @hibernate.id column="id" not-null="true" generator-class="native"
      * @return The key

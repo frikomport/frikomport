@@ -3,6 +3,7 @@ package no.unified.soak.service.impl;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Vector;
 
 import javax.sql.DataSource;
 
@@ -13,6 +14,7 @@ import no.unified.soak.model.Configuration;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Organization;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.Role;
 import no.unified.soak.model.ServiceArea;
 import no.unified.soak.model.User;
 import no.unified.soak.service.ConfigurationManager;
@@ -20,6 +22,7 @@ import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.DatabaseUpdateManager;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
+import no.unified.soak.service.RoleManager;
 import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
@@ -31,6 +34,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.jdbc.support.rowset.SqlRowSetMetaData;
+import org.springframework.orm.ObjectRetrievalFailureException;
 
 /**
  * User: gv Date: 05.jun.2008 Time: 10:26:23
@@ -45,7 +49,8 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     private OrganizationManager organizationManager = null;
     private CategoryManager categoryManager = null;
     private ConfigurationManager configurationManager = null;
-
+    private RoleManager roleManager = null;
+    
     // hack for setting messagesource and locale to ApplicationResourcesUtil
     // once
     public void setLocale(Locale locale) {
@@ -90,8 +95,13 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         this.configurationManager = configurationManager;
     }
 
+    public void setRoleManager(RoleManager roleManager) {
+        this.roleManager = roleManager;
+    }
+
     public void updateDatabase() {
-        insertBySQLStatements();
+        insertDefaultValues();
+
         updateBySQLStatements();
 
         // ServiceArea updates
@@ -111,125 +121,201 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         updateConfigurations();
     }
 
-    private void insertBySQLStatements() {
+    private void insertDefaultValues() {
 
-        String[][] sqlSelectAndInsertRoleArray = {
-                // Role insert
-                { "select count(*) from role where name='anonymous'",
-                        "INSERT INTO role (name, description, version) VALUES('anonymous', 'Anonymous', true)" },
-                { "select count(*) from role where name='admin'",
-                        "INSERT INTO role (name, description, version) VALUES('admin', 'Administrator', true)" },
-                { "select count(*) from role where name='employee'",
-                        "INSERT INTO role (name, description, version) VALUES('employee', 'Ansatt', true)" },
-                { "select count(*) from role where name='instructor'",
-                        "INSERT INTO role (name, description, version) VALUES('instructor', 'Kursansvarlig', true)" },
-                { "select count(*) from role where name='editor'",
-                        "INSERT INTO role (name, description, version) VALUES('editor', 'Opplaringsansvarlig', true)" } };
-        insertIntoTableBySQLStatements("role", sqlSelectAndInsertRoleArray);
+        try {
+        	roleManager.getRole("anonymous");
+        }catch(ObjectRetrievalFailureException e){
+        	Role role = new Role();
+        	role.setName("anonymous");
+        	role.setDescription("Anonymous");
+        	role.setVersion(1);
+        	log.info("\"Role\" lagt til i DB: " + role);
+        }
 
-        String[][] sqlSelectAndInsertCategoryArray = { { "select count(*) from category",
-                "INSERT INTO category (name, selectable) VALUES ('Hendelse', true)" } };
-        insertIntoTableBySQLStatements("category", sqlSelectAndInsertCategoryArray);
+        try {
+        	roleManager.getRole("admin");
+        }catch(ObjectRetrievalFailureException e){
+        	Role role = new Role();
+        	role.setName("admin");
+        	role.setDescription("Administrator");
+        	role.setVersion(1);
+        	log.info("\"Role\" lagt til i DB: " + role);
+        }
 
-        // Insert configuration that are common for all environments.
-        String[][] sqlSelectAndInsertConfigurationArray = {
-                // Configuration insert
-                { "select count(*) from configuration where name = 'access.registration.delete'",
-                        "insert INTO configuration (name, active) VALUES ('access.registration.delete', false)" },
-                { "select count(*) from configuration where name = 'access.registration.userdefaults'",
-                        "insert INTO configuration (name, active) VALUES ('access.registration.userdefaults', false)" },
-                { "select count(*) from configuration where name = 'access.registration.emailrepeat'",
-                        "insert INTO configuration (name, active) VALUES ('access.registration.emailrepeat', false)" },
-                { "select count(*) from configuration where name = 'access.registration.showComment'",
-                        "insert INTO configuration (name, active) VALUES ('access.registration.showComment', true)" },
-                { "select count(*) from configuration where name = 'mail.course.sendSummary'",
-                        "insert INTO configuration (name, active) VALUES ('mail.course.sendSummary', true)" },
-                { "select count(*) from configuration where name = 'mail.registration.notifyResponsible'",
-                        "insert INTO configuration (name, active) VALUES ('mail.registration.notifyResponsible', false)" },
-                { "select count(*) from configuration where name = 'show.menu'",
-                        "insert INTO configuration (name, active) VALUES ('show.menu', false)" } };
-        insertIntoTableBySQLStatements("configuration", sqlSelectAndInsertConfigurationArray);
+        try {
+        	roleManager.getRole("employee");
+        }catch(ObjectRetrievalFailureException e){
+        	Role role = new Role();
+        	role.setName("employee");
+        	role.setDescription("Ansatt");
+        	role.setVersion(1);
+        	log.info("\"Role\" lagt til i DB: " + role);
+        }
+
+        try {
+        	roleManager.getRole("instructor");
+        }catch(ObjectRetrievalFailureException e){
+        	Role role = new Role();
+        	role.setName("instructor");
+        	role.setDescription("Kursansvarlig");
+        	role.setVersion(1);
+        	log.info("\"Role\" lagt til i DB: " + role);
+        }
+
+        try {
+        	roleManager.getRole("editor");
+        }catch(ObjectRetrievalFailureException e){
+        	Role role = new Role();
+        	role.setName("editor");
+        	role.setDescription("Opplaringsansvarlig");
+        	role.setVersion(1);
+        	log.info("\"Role\" lagt til i DB: " + role);
+        }
 
         if (ApplicationResourcesUtil.isSVV()) {
-            String[][] sqlSelectAndInsertOrganizationArray = {
-                    { "select count(*) from organization where name='Østfold'",
-                            "insert into organization (name, number, type, selectable) values ('Østfold', 01, 2, true)" },
-                    { "select count(*) from organization where name='Akershus'",
-                            "insert into organization (name, number, type, selectable) values ('Akershus', 02, 2, true)" },
-                    { "select count(*) from organization where name='Oslo'",
-                            "insert into organization (name, number, type, selectable) values ('Oslo', 03, 2, true)" },
-                    { "select count(*) from organization where name='Hedmark'",
-                            "insert into organization (name, number, type, selectable) values ('Hedmark', 04, 2, true)" },
-                    { "select count(*) from organization where name='Oppland'",
-                            "insert into organization (name, number, type, selectable) values ('Oppland', 05, 2, true)" },
-                    { "select count(*) from organization where name='Buskerud'",
-                            "insert into organization (name, number, type, selectable) values ('Buskerud', 06, 2, true)" },
-                    { "select count(*) from organization where name='Vestfold'",
-                            "insert into organization (name, number, type, selectable) values ('Vestfold', 07, 2, true)" },
-                    { "select count(*) from organization where name='Telemark'",
-                            "insert into organization (name, number, type, selectable) values ('Telemark', 08, 2, true)" },
-                    { "select count(*) from organization where name='Aust-Agder'",
-                            "insert into organization (name, number, type, selectable) values ('Aust-Agder', 09, 2, true)" },
-                    { "select count(*) from organization where name='Vest-Agder'",
-                            "insert into organization (name, number, type, selectable) values ('Vest-Agder', 10, 2, true)" },
-                    { "select count(*) from organization where name='Rogaland'",
-                            "insert into organization (name, number, type, selectable) values ('Rogaland', 11, 2, true)" },
-                    { "select count(*) from organization where name='Hordaland'",
-                            "insert into organization (name, number, type, selectable) values ('Hordaland', 12, 2, true)" },
-                    { "select count(*) from organization where name='Sogn og Fjordane'",
-                            "insert into organization (name, number, type, selectable) values ('Sogn og Fjordane', 14, 2, true)" },
-                    { "select count(*) from organization where name='Møre og Romsdal'",
-                            "insert into organization (name, number, type, selectable) values ('Møre og Romsdal', 15, 2, true)" },
-                    { "select count(*) from organization where name='Sør-Trøndelag'",
-                            "insert into organization (name, number, type, selectable) values ('Sør-Trøndelag', 16, 2, true)" },
-                    { "select count(*) from organization where name='Nord-Trøndelag'",
-                            "insert into organization (name, number, type, selectable) values ('Nord-Trøndelag', 17, 2, true)" },
-                    { "select count(*) from organization where name='Nordland'",
-                            "insert into organization (name, number, type, selectable) values ('Nordland', 18, 2, true)" },
-                    { "select count(*) from organization where name='Troms'",
-                            "insert into organization (name, number, type, selectable) values ('Troms', 19, 2, true)" },
-                    { "select count(*) from organization where name='Finnmark'",
-                            "insert into organization (name, number, type, selectable) values ('Finnmark', 20, 2, true)" } };
-            insertIntoTableBySQLStatements("Organization", sqlSelectAndInsertOrganizationArray);
+        	// inserts new role for SVV
+        	try {
+        		roleManager.getRole("reader");
+        	}catch(ObjectRetrievalFailureException e){
+        		Role role = new Role();
+        		role.setName("reader");
+        		role.setDescription("Reader");
+        		role.setVersion(1);
+        		log.info("\"Role\" lagt til i DB: " + role);
+        	}
+        }    	
 
-            String[][] sqlInsertServiceareaArray = { {
-                    null,
-                    "insert into servicearea (name, selectable, organizationid) "
-                            + "(select 'Mengdetrening', true, id from organization O where O.type = 2 and not exists (select null from servicearea S0 where S0.organizationid = O.id))" } };
-            insertIntoTableBySQLStatements("servicearea", sqlInsertServiceareaArray);
+        // inserts category if doesn't
+        try {
+        	categoryManager.getCategory(1L);
+        }catch(ObjectRetrievalFailureException e){
+        	Category cat = new Category();
+        	cat.setName("Hendelse");
+        	cat.setSelectable(true);
+        	categoryManager.saveCategory(cat);
+        	log.info("\"Category\" lagt til i DB: " + cat);
+        }
 
-            // Some insert settings are different for FKPSVV enviroment.
-            String[][] sqlSelectAndInsertConfigurationSVVArray = {
-                    // Configuration insert
-                    { "select count(*) from configuration where name = 'access.registration.showEmployeeFields'",
-                            "insert INTO configuration (name, active) VALUES ('access.registration.showEmployeeFields', false)" },
-                    { "select count(*) from configuration where name = 'access.registration.showServiceArea'",
-                            "insert INTO configuration (name, active) VALUES ('access.registration.showServiceArea', false)" },
-                    { "select count(*) from configuration where name = 'access.registration.showJobTitle'",
-                            "insert INTO configuration (name, active) VALUES ('access.registration.showJobTitle', false)" },
-                    { "select count(*) from configuration where name = 'access.registration.showWorkplace'",
-                            "insert INTO configuration (name, active) VALUES ('access.registration.showWorkplace', false)" } };
-            insertIntoTableBySQLStatements("configuration", sqlSelectAndInsertConfigurationSVVArray);
-
-            String[][] sqlSelectAndInsertRoleSVVArray = {
-            // Role insert
-            { "select count(*) from role where name='reader'",
-                    "INSERT INTO role (name, description, version) VALUES('reader', 'Reader', 1)" } };
-            insertIntoTableBySQLStatements("role", sqlSelectAndInsertRoleSVVArray);
+        
+        Vector<Configuration> configurationsToInsert = new Vector<Configuration>();
+        // common configurations 
+    	configurationsToInsert.add(new Configuration("access.registration.delete", false, null));
+    	configurationsToInsert.add(new Configuration("access.registration.userdefaults", false, null));
+    	configurationsToInsert.add(new Configuration("access.registration.emailrepeat", false, null));
+    	configurationsToInsert.add(new Configuration("access.registration.showComment", true, null));
+    	configurationsToInsert.add(new Configuration("mail.course.sendSummary", true, null));
+    	configurationsToInsert.add(new Configuration("mail.registration.notifyResponsible", false, null));
+    	configurationsToInsert.add(new Configuration("show.menu", false, null));
+        
+        if (ApplicationResourcesUtil.isSVV()) {
+            // configurations specific for FKPSVV enviroment.
+        	configurationsToInsert.add(new Configuration("access.registration.showEmployeeFields", false, null));
+        	configurationsToInsert.add(new Configuration("access.registration.showServiceArea", false, null));
+        	configurationsToInsert.add(new Configuration("access.registration.showJobTitle", false, null));
+        	configurationsToInsert.add(new Configuration("access.registration.showWorkplace", false, null));
 
         } else {
-            // Some insert settings are different for non-FKPSVV enviroment.
-            String[][] sqlSelectAndInsertConfigurationDefaultArray = {
-                    // Configuration insert
-                    { "select count(*) from configuration where name = 'access.registration.showEmployeeFields'",
-                            "insert INTO configuration (name, active) VALUES ('access.registration.showEmployeeFields', true)" },
-                    { "select count(*) from configuration where name = 'access.registration.showServiceArea'",
-                            "insert INTO configuration (name, active) VALUES ('access.registration.showServiceArea', true)" },
-                    { "select count(*) from configuration where name = 'access.registration.showJobTitle'",
-                            "insert INTO configuration (name, active) VALUES ('access.registration.showJobTitle', true)" },
-                    { "select count(*) from configuration where name = 'access.registration.showWorkplace'",
-                            "insert INTO configuration (name, active) VALUES ('access.registration.showWorkplace', true)" } };
-            insertIntoTableBySQLStatements("configuration", sqlSelectAndInsertConfigurationDefaultArray);
+            // configurations specific for non-FKPSVV enviroment.
+        	configurationsToInsert.add(new Configuration("access.registration.showEmployeeFields", true, null));
+        	configurationsToInsert.add(new Configuration("access.registration.showServiceArea", true, null));
+        	configurationsToInsert.add(new Configuration("access.registration.showJobTitle", true, null));
+        	configurationsToInsert.add(new Configuration("access.registration.showWorkplace", true, null));
+        }
+
+        List<Configuration> configurationsInDB = configurationManager.getConfigurations();
+        if(configurationsInDB.isEmpty()){
+        	// insert all configurations for env
+        	for(int i=0; i<configurationsToInsert.size(); i++){
+        		Configuration c = configurationsToInsert.get(i);
+        		configurationManager.saveConfiguration(c);
+	        	log.info("\"Configuration\" lagt til i DB: " + c);
+        	}
+        }
+        else {
+        	// insert missing configurations
+    		for(int i=0; i<configurationsToInsert.size(); i++){
+    			Configuration configuration = configurationsToInsert.get(i);
+    			boolean insert = true;
+    			Iterator confList = configurationsInDB.iterator();
+            	while(confList.hasNext()){
+            		Configuration alreadyInDB = (Configuration)confList.next();
+            		if(alreadyInDB.getName().equalsIgnoreCase(configuration.getName())){
+            			insert = false;
+            		}
+            	}
+            	if(insert) {
+            		configurationManager.saveConfiguration(configuration);
+    	        	log.info("\"Configuration\" lagt til i DB: " + configuration);
+            	}
+    		}
+        }
+        
+        if (ApplicationResourcesUtil.isSVV()) {
+        	
+        	List<Organization> organizationsInDB = organizationManager.getAll();
+        	
+        	Vector<Organization> organizationsToInsert = new Vector<Organization>();
+        	organizationsToInsert.add(new Organization("Østfold", 1, 2, true));
+        	organizationsToInsert.add(new Organization("Akershus", 2, 2, true));
+        	organizationsToInsert.add(new Organization("Oslo", 3, 2, true));
+        	organizationsToInsert.add(new Organization("Hedmark", 4, 2, true));
+        	organizationsToInsert.add(new Organization("Oppland", 5, 2, true));
+        	organizationsToInsert.add(new Organization("Buskerud", 6, 2, true));
+        	organizationsToInsert.add(new Organization("Vestfold", 7, 2, true));
+        	organizationsToInsert.add(new Organization("Telemark", 8, 2, true));
+        	organizationsToInsert.add(new Organization("Aust-Agder", 9, 2, true));
+        	organizationsToInsert.add(new Organization("Vest-Agder", 10, 2, true));
+        	organizationsToInsert.add(new Organization("Rogaland", 11, 2, true));
+        	organizationsToInsert.add(new Organization("Hordaland", 12, 2, true));
+        	organizationsToInsert.add(new Organization("Sogn og Fjordane", 14, 2, true));
+        	organizationsToInsert.add(new Organization("Møre og Romsdal", 15, 2, true));
+        	organizationsToInsert.add(new Organization("Sør-Trøndelag", 16, 2, true));
+        	organizationsToInsert.add(new Organization("Nord-Trøndelag", 17, 2, true));
+        	organizationsToInsert.add(new Organization("Nordland", 18, 2, true));
+        	organizationsToInsert.add(new Organization("Troms", 19, 2, true));
+        	organizationsToInsert.add(new Organization("Finnmark", 20, 2, true));
+
+            if(organizationsInDB.isEmpty()){
+            	// insert organizations for env
+            	for(int i=0; i<organizationsToInsert.size(); i++){
+            		Organization o = organizationsToInsert.get(i);
+            		organizationManager.saveOrganization(o);
+    	        	log.info("\"Organization\" lagt til i DB: " + o);
+            	}
+            }
+            else {
+            	// insert missing organizations
+        		for(int i=0; i<organizationsToInsert.size(); i++){
+            		Organization organization = organizationsToInsert.get(i);
+        			boolean insert = true;
+        			Iterator orgList = organizationsInDB.iterator();
+                	while(orgList.hasNext()){
+                		Organization alreadyInDB = (Organization)orgList.next();
+                		if(alreadyInDB.getName().equalsIgnoreCase(organization.getName())){
+                			insert = false;
+                		}
+                	}
+                	if(insert) {
+                		organizationManager.saveOrganization(organization);
+        	        	log.info("\"Organization\" lagt til i DB: " + organization);
+                	}
+        		}
+            }
+
+            // assign servicearea Mengdetrening to SVV-organizations
+            
+            List<Organization> counties = organizationManager.getOrganizationsByType(Organization.Type.COUNTY);
+            List<ServiceArea> serviceAreas = serviceAreaManager.getAll();
+            
+            if(serviceAreas.isEmpty()){
+            	// insert servicearea pr. county
+            	Iterator c = counties.iterator();
+            	while(c.hasNext()){
+            		Organization organization = (Organization)c.next();
+            		serviceAreaManager.saveServiceArea(new ServiceArea("Mengdetrening", true, organization.getId()));
+            	}
+            }
         }
     }
 
@@ -336,14 +422,21 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         if (nRowsAffected > 0) {
             log.info(nRowsAffected + " rows affected by convertion from reserved to status field in database.");
         } else {
-            log
-                    .info(nRowsAffected
-                            + " rows affected by convertion from reserved to status field in database. The field \"reserved\" in table \"registration\" can be dropped.");
+            log.info(nRowsAffected + " rows affected by convertion from reserved to status field in database. The field \"reserved\" in table \"registration\" can be dropped.");
         }
     }
 
     private boolean reservedFieldExist() {
-        SqlRowSet rowSet = jt.queryForRowSet("select * from registration limit 1");
+    	
+    	String sql = null;
+    	if(ApplicationResourcesUtil.isSVV()){
+    		sql = "SELECT * FROM(SELECT * FROM registration) WHERE rownum = 1";
+    	}
+    	else{
+    		sql = "select * from registration limit 1";
+    	}
+    	
+        SqlRowSet rowSet = jt.queryForRowSet(sql);
         SqlRowSetMetaData metaData = rowSet.getMetaData();
         boolean reservedFieldExists = false;
         for (String columnName : metaData.getColumnNames()) {

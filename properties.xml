@@ -57,10 +57,11 @@
     <property name="database.password" value="frikom"/>
     <!-- database URL for creating other dbs - used in db-create target -->
     <property name="database.admin.url" value="jdbc:${database.type}:thin:@${database.host}:${database.port}:${database.name}"/>
-    <property name="database.admin.username" value="SYS"/>
-    <property name="database.admin.password" value="Hurra1705!"/>
+    <property name="database.admin.username" value="SYSTEM"/>
+    <property name="database.admin.password" value="system"/>
     <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
-    <property name="database.driver_class" value="oracle.jdbc.driver.OracleDriver"/>
+	<property name="hibernate.hbm2ddl.auto" value="update"/>
+    <property name="database.driver_class" value="oracle.jdbc.OracleDriver"/>
     <property name="database.url" 
         value="jdbc:${database.type}:thin:@${database.host}:${database.port}:${database.name}"/>
 	<property name="database.show_sql" value="true"/>

@@ -37,6 +37,15 @@ public class ServiceArea extends BaseObject implements Serializable {
     private Organization organization;
     private Long organizationid;
 
+    
+    public ServiceArea(){}
+
+    public ServiceArea(String name, boolean selectable, long organizationid){
+    	setName(name);
+    	setSelectable(selectable);
+    	setOrganizationid(organizationid);
+    }
+    
     /**
      * @return Returns the id.
      * @hibernate.id column="id" generator-class="native" unsaved-value="null"
