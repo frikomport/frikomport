@@ -7,15 +7,16 @@
 */
 package no.unified.soak.dao.hibernate;
 
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
 import no.unified.soak.dao.UserDAO;
-import no.unified.soak.model.Role;
 import no.unified.soak.model.User;
 import no.unified.soak.model.UserCookie;
 
-import org.hibernate.FetchMode;
 import org.hibernate.Query;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -42,7 +43,7 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
         User user = (User) getHibernateTemplate().get(User.class, username);
 
         if (user == null) {
-            log.warn("uh oh, user '" + username + "' not found...");
+//            log.warn("uh oh, user '" + username + "' not found...");
             throw new ObjectRetrievalFailureException(User.class, username);
         }
 
@@ -105,6 +106,34 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
         return users;
     }
     
+
+    /**
+     * @see no.unified.soak.dao.UserDAO#getUsersByRoles(java.util.List<String>)
+     */
+    public List getUsersByRoles(List<String> rolenames) {
+    	Hashtable<String, User> users = new Hashtable<String, User>();
+    	Iterator r = rolenames.iterator();
+    	while(r.hasNext()) {
+    		String rolename = (String)r.next();
+    		List tmp = getUsersByRole(rolename);
+    		Iterator u = tmp.iterator();
+    		while(u.hasNext()) {
+    			User user = (User)u.next();
+    			// prevents duplicates
+    			users.put(user.getUsername(), user);
+    		}
+    	}
+
+        List<User> result = new ArrayList<User>(users.size());
+    	Enumeration all = users.elements();
+    	while(all.hasMoreElements()) {
+    		result.add((User)all.nextElement());
+    	}
+    	
+    	return result;
+    }
+
+    
     /**
      * @see no.unified.soak.dao.UserDAO#getUsers(no.unified.soak.model.User)
      */
@@ -131,7 +160,7 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
      */
     public void saveUser(final User user) {
         if (log.isDebugEnabled()) {
-            log.debug("user's id: " + user.getUsername());
+//            log.debug("user's id: " + user.getUsername());
         }
         getHibernateTemplate().saveOrUpdate(user);
         // necessary to throw a DataIntegrityViolation and catch it in UserManager
@@ -139,8 +168,8 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
     }
 
     public void updateUser(User user) {
-                if (log.isDebugEnabled()) {
-            log.debug("user's id: " + user.getUsername());
+    	if (log.isDebugEnabled()) {
+//            log.debug("user's id: " + user.getUsername());
         }
         getHibernateTemplate().update(user);
         getHibernateTemplate().flush();
@@ -178,8 +207,7 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
         List cookies = getHibernateTemplate().find("from UserCookie c where c.username=?", username);
 
         if ((cookies.size() > 0) && log.isDebugEnabled()) {
-            log.debug("deleting " + cookies.size() + " cookies for user '" +
-                username + "'");
+            log.debug("deleting " + cookies.size() + " cookies for user '" + username + "'");
         }
 
         getHibernateTemplate().deleteAll(cookies);

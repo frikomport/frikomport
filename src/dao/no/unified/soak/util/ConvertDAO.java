@@ -21,6 +21,7 @@ public class ConvertDAO {
         extUser.setKommune(user.getOrganizationid() == null ? null : user.getOrganizationid().intValue());
         extUser.setRolenames(user.getRoleNameList());
         extUser.setId(user.getId());
+        extUser.setMobilePhone(user.getMobilePhone());
         return extUser;
     }
 }

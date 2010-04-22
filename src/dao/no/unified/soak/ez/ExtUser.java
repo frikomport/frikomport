@@ -33,11 +33,12 @@ public class ExtUser extends BaseObject implements Serializable {
     private Integer kommune;
     private String email;
     private List<String> rolenames = new ArrayList<String>();
+    private String mobilephone;
 
     public ExtUser() {
     }
     
-    public ExtUser(Integer id, String username, String email, String firstName, String lastName, String rolenamesCSV){
+    public ExtUser(Integer id, String username, String email, String firstName, String lastName, String rolenamesCSV, String mobilephone){
         setId(id);
         setUsername(username);
         setEmail(email);
@@ -48,6 +49,7 @@ public class ExtUser extends BaseObject implements Serializable {
         List<String> rolenamesList = getRolenames();
         CollectionUtils.addAll(rolenamesList, RoleStringList);
         setRolenames(rolenamesList);
+        setMobilePhone(mobilephone);
     }
     
     public String toString() {
@@ -167,5 +169,13 @@ public class ExtUser extends BaseObject implements Serializable {
 
     public void setRolenames(List<String> rolenames) {
         this.rolenames = rolenames;
+    }
+    
+    public String getMobilePhone() {
+    	return mobilephone;
+    }
+    
+    public void setMobilePhone(String mobilephone) {
+    	this.mobilephone = mobilephone;
     }
 }

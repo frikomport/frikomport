@@ -91,16 +91,13 @@ public class SVVUserDAOWS implements ExtUserDAO {
      * @see no.unified.soak.dao.ExtUserDAO#findUsers(java.util.List)
      */
     public List<ExtUser> findUsers(List<String> roles) {
-        User searchUser = new User();
-        searchUser.addRoles(roles);
-        List users = userDAO.getUsers(searchUser);
+        List users = userDAO.getUsersByRoles(roles); // from local database
+        
         List<ExtUser> extUsers = new ArrayList<ExtUser>(users.size());
-
         for (Iterator iterator = users.iterator(); iterator.hasNext();) {
             User user = (User) iterator.next();
             extUsers.add(ConvertDAO.User2ExtUser(user));
         }
-
         return extUsers;
     }
 
@@ -110,10 +107,20 @@ public class SVVUserDAOWS implements ExtUserDAO {
             String xmlString = getUserXMLFromWebservice(username);
             if (!StringUtils.isEmpty(xmlString)) {
                 extUser = new ExtUser();
+
+                String uid = getTagValue("urn1:uid", xmlString);
+                if(StringUtils.isEmpty(uid)) {
+                	// bruker ikke funnet
+                    log.info("Ingen informasjom om [" + username.toUpperCase() + "] funnet fra webserviceoppslag!");
+                	return null;
+                }
+                
+                extUser.setUsername(uid);
                 extUser.setEmail(getTagValue("urn1:mail", xmlString));
                 extUser.setFirst_name(SVVUserDAOWS.getTagValue("urn1:givenName", xmlString));
                 extUser.setLast_name(SVVUserDAOWS.getTagValue("urn1:sn", xmlString));
                 extUser.setName(SVVUserDAOWS.getTagValue("urn1:cn", xmlString));
+                extUser.setMobilePhone(SVVUserDAOWS.getTagValue("urn1:mobile", xmlString));
 
                 String adminRoles = ApplicationResourcesUtil.getText("role.admin");
                 String eventAdminRoles = ApplicationResourcesUtil.getText("MoteAdminRoles ");
@@ -126,14 +133,15 @@ public class SVVUserDAOWS implements ExtUserDAO {
 
             }
         } catch (Exception e) {
-            log.error("Feilet ved henting av user [" + username + "] fra webservice", e);
+            log.error("Feilet ved tolkning av data funnet ved oppslag på [" + username.toUpperCase() + "] fra webservice!", e);
+            return null;
         }
 
         if (extUser == null) {
-            log.info("Intet svar fra web service. Prøver å hente brukernavn [" + username + "] fra hardkodede testbrukere.");
+            log.info("Intet svar fra web service. Prøver å hente brukernavn [" + username.toUpperCase() + "] fra hardkodede testbrukere.");
             extUser = getHardcodedExtUser(username);
             if (extUser == null) {
-                log.error("Fant ikke [" + username + "} blant hardkodede testbrukere.");
+                log.error("Fant ikke [" + username.toUpperCase() + "] blant hardkodede testbrukere.");
             }
         }
         return extUser;
@@ -243,12 +251,12 @@ public class SVVUserDAOWS implements ExtUserDAO {
 
     private ExtUser getHardcodedExtUser(String username) {
         if (hardcodedExtUsers.isEmpty()) {
-            hardcodedExtUsers.put("admin", new ExtUser(14, "admin", "admin_@stafto.no", "Truls", "Testesen", "FKPAdministrator"));
-            hardcodedExtUsers.put("sindre", new ExtUser(15, "sindre", "sa@knowit.no", "Sindre", "Amundsen", "FKPAdministrator"));
-            hardcodedExtUsers.put("klaus", new ExtUser(16, "klaus", "kst@knowit.no", "Klaus", "Stafto", "FKPAdministrator"));
-            hardcodedExtUsers.put("moteadmin", new ExtUser(17, "moteadmin", "moteadmin_@stafto.no", "Møte", "Adminssønn", "FKPMoteansvarlig"));
-            hardcodedExtUsers.put("regionadmin", new ExtUser(18, "regionadmin", "regionadmin_@stafto.no", "Regiona", "Adminsdatter", "FKPMoteadministrator"));
-            hardcodedExtUsers.put("lese", new ExtUser(19, "lese", "lese_@stafto.no", "Lese", "Brukersønn", "FKPLesebruker"));
+            hardcodedExtUsers.put("admin", new ExtUser(14, "admin", "admin_@stafto.no", "Truls", "Testesen", "FKPAdministrator", "90102030"));
+            hardcodedExtUsers.put("sindre", new ExtUser(15, "sindre", "sa@knowit.no", "Sindre", "Amundsen", "FKPAdministrator", "90597725"));
+            hardcodedExtUsers.put("klaus", new ExtUser(16, "klaus", "kst@knowit.no", "Klaus", "Stafto", "FKPAdministrator","98257893"));
+            hardcodedExtUsers.put("moteadmin", new ExtUser(17, "moteadmin", "moteadmin_@stafto.no", "Møte", "Adminssønn", "FKPMoteansvarlig", "40414243"));
+            hardcodedExtUsers.put("regionadmin", new ExtUser(18, "regionadmin", "regionadmin_@stafto.no", "Regiona", "Adminsdatter", "FKPMoteadministrator", null));
+            hardcodedExtUsers.put("lese", new ExtUser(19, "lese", "lese_@stafto.no", "Lese", "Brukersønn", "FKPLesebruker", "80040085"));
         }
 
         return hardcodedExtUsers.get(username);

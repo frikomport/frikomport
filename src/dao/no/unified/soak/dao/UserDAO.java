@@ -92,4 +92,11 @@ public interface UserDAO extends DAO {
      * @return List populated list of users
      */
     public List getUsersByRole(String rolename);
+
+    /**
+     * Gets a list of users based on a list of rolenames
+     * @return List populated list of users
+     */
+    public List getUsersByRoles(List<String> rolenames);
+
 }
