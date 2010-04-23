@@ -62,14 +62,10 @@ public class RegistrationFormController extends BaseFormController {
     private NotificationManager notificationManager = null;
     private ConfigurationManager configurationManager = null;
     private UserManager userManager = null;
-    protected MailEngine mailEngine = null;
     protected MailSender mailSender = null;
 
     public void setNotificationManager(NotificationManager notificationManager) {
         this.notificationManager = notificationManager;
-    }
-    public void setMailEngine(MailEngine mailEngine) {
-        this.mailEngine = mailEngine;
     }
     public void setMailSender(MailSender mailSender) {
         this.mailSender = mailSender;

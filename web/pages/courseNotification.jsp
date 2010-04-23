@@ -25,6 +25,8 @@
     <input type="hidden" name="<c:out value="${status.expression}"/>" value="<c:out value="${status.value}"/>" />
 </spring:bind>
 
+	<input type="hidden" name="waitinglist" value="<c:out value="${waitinglist}"/>" />
+
 <c:if test="${enableMail}">
 
     <c:choose>

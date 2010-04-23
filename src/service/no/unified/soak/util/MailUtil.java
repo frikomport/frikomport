@@ -906,7 +906,8 @@ public class MailUtil {
         event.getProperties().add(streetAddress);
 
         try {
-            Url url = new Url(new URI(null,"http://www.vg.no",null));
+            String link = ApplicationResourcesUtil.getText("javaapp.baseurl") + ApplicationResourcesUtil.getText("javaapp.courseurl") + course.getId();
+            Url url = new Url(new URI(null,link,null));
             event.getProperties().add(url);
         } catch (URISyntaxException e) {
             // Wrong format

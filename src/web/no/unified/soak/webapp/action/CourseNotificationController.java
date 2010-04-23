@@ -199,7 +199,7 @@ public class CourseNotificationController extends BaseFormController {
 			return new ModelAndView(getCancelView(), "id", course.getId().toString());
 		} // or to send out notification email?
 		else if (request.getParameter("send") != null) {
-			if (course.getStatus().equals(CourseStatus.COURSE_PUBLISHED) && course.getCopyid() != null){
+			if (course.getStatus().equals(CourseStatus.COURSE_PUBLISHED) && course.getCopyid() != null && request.getParameter("waitinglist").equals("true")){
 				// FKM-517
 				sendMailToWaitingList(locale, course, Constants.EMAIL_EVENT_NEW_COURSE_NOTIFICATION, mailComment, mailSender, changedList);
 			}
