@@ -124,7 +124,7 @@ public class SVVUserDAOWS implements ExtUserDAO {
                 extUser.setPhoneNumber(SVVUserDAOWS.getTagValue("urn1:telephoneNumber", xmlString));
 
                 String adminRoles = ApplicationResourcesUtil.getText("role.admin");
-                String eventAdminRoles = ApplicationResourcesUtil.getText("MoteAdminRoles");
+                String eventAdminRoles = ApplicationResourcesUtil.getText("role.editor");
                 String eventResponsible = ApplicationResourcesUtil.getText("role.eventresponsible");
                 String ansattRoles = ApplicationResourcesUtil.getText("role.employee");
                 String readerRoles = ApplicationResourcesUtil.getText("role.reader");

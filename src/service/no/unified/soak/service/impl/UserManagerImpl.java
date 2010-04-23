@@ -205,7 +205,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	}
 
 	public List getResponsibles() {
-		List ezUsers = getEZResponsibles(null);
+		List ezUsers = getEZResponsibles();
 		List users = new ArrayList();
 		for (Iterator iter = ezUsers.iterator(); iter.hasNext();) {
 			ExtUser ezUser = (ExtUser) iter.next();
@@ -476,12 +476,13 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		return roles;
 	}
 
-	private List getEZResponsibles(ExtUser user) {
+	private List getEZResponsibles() {
 	    Locale locale = LocaleContextHolder.getLocale();
         List<String> roles = new ArrayList();
-        roles.add(messageSource.getMessage("role.eventresponsible", null, locale));
-        roles.add(messageSource.getMessage("role.editor", null, locale));
-		List users = extUserDAO.findUsers(roles);
+//        roles.add(messageSource.getMessage("role.eventresponsible", null, locale));
+//        roles.add(messageSource.getMessage("role.editor", null, locale));
+        roles.add("editor");
+        List users = extUserDAO.findUsers(roles);
 		return users;
 	}
 

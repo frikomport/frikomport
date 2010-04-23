@@ -13,6 +13,7 @@ import no.unified.soak.model.Category;
 import no.unified.soak.model.Configuration;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Organization;
+import no.unified.soak.model.Person;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.Role;
 import no.unified.soak.model.ServiceArea;
@@ -21,6 +22,7 @@ import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.DatabaseUpdateManager;
 import no.unified.soak.service.OrganizationManager;
+import no.unified.soak.service.PersonManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.RoleManager;
 import no.unified.soak.service.ServiceAreaManager;
@@ -50,6 +52,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     private CategoryManager categoryManager = null;
     private ConfigurationManager configurationManager = null;
     private RoleManager roleManager = null;
+    private PersonManager personManager = null;
     
     // hack for setting messagesource and locale to ApplicationResourcesUtil
     // once
@@ -97,6 +100,10 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
     public void setRoleManager(RoleManager roleManager) {
         this.roleManager = roleManager;
+    }
+    
+    public void setPersonManager(PersonManager personManager){
+    	this.personManager = personManager;
     }
 
     public void updateDatabase() {
@@ -155,19 +162,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     
     private void insertDefaultValues() {
 
-//        String[][] sqlSelectAndInsertRoleArray = {
-//                // Role insert
-//                { "select count(*) from role where name='anonymous'",
-//                        "INSERT INTO role (name, description, version) VALUES('anonymous', 'Anonymous', 1)" },
-//                { "select count(*) from role where name='admin'",
-//                        "INSERT INTO role (name, description, version) VALUES('admin', 'Administrator', 1)" },
-//                { "select count(*) from role where name='employee'",
-//                        "INSERT INTO role (name, description, version) VALUES('employee', 'Ansatt', 1)" },
-//                { "select count(*) from role where name='instructor'",
-//                        "INSERT INTO role (name, description, version) VALUES('instructor', 'Kursansvarlig', 1)" },
-//                { "select count(*) from role where name='editor'",
-//                        "INSERT INTO role (name, description, version) VALUES('editor', 'Opplaringsansvarlig', 1)" } };
-//        insertIntoTableBySQLStatements("role", sqlSelectAndInsertRoleArray);
+    	// ROLES
     	int addedRoles = 0;
         try { 
         	Role anonymous = roleManager.getRole("anonymous");
@@ -234,18 +229,8 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         }
     	if(addedRoles != 0) log.info("Antall nye roller lagt til i database: " + addedRoles);
 
-        // inserts category if doesn't
-//        Category cat;
-//        try { cat = categoryManager.getCategory(1L); }
-//        catch(ObjectRetrievalFailureException e){ cat = null; }
-//        if(cat == null){
-//        	cat = new Category();
-//        	cat.setName("Hendelse");
-//        	cat.setSelectable(true);
-//        	categoryManager.saveCategory(cat);
-//        	log.info("\"Category\" lagt til i DB: " + cat);
-//        }
 
+    	// CATEGORIES
         try { categoryManager.getCategory(1L); }
         catch(ObjectRetrievalFailureException e){
 	        Category cat = new Category();
@@ -255,7 +240,25 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	        log.info("\"Category\" lagt til i DB: " + cat);
     	}
 
+        // PERSONS
+        if(ApplicationResourcesUtil.isSVV()){
+	        try { 
+	        	List persons = personManager.getPersons(null, false);
+	        	if(persons.isEmpty()){
+	        		Person mengdetrening = new Person();
+	        		mengdetrening.setName("Mengdetrening");
+	        		mengdetrening.setEmail("mengdetrening@vegvesen.no");
+	        		mengdetrening.setSelectable(true);
+	        		personManager.savePerson(mengdetrening);
+	        		log.info("Lagt inn dummy-person i DB: " + mengdetrening);
+	        	}
+	        }
+	        catch(Exception e){
+		        log.error("Feil ved innlegging av dummy-person \"Mengdetrening\"", e);
+	    	}
+        }
         
+        // CONFIGURATIONS
         Vector<Configuration> configurationsToInsert = new Vector<Configuration>();
         // common configurations 
     	configurationsToInsert.add(new Configuration("access.registration.delete", false, null));
