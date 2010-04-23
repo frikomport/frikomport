@@ -40,10 +40,10 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
     }
 
     /**
-     * @see no.unified.soak.service.CourseManager#getCourses(no.unified.soak.model.Course)
+     * @see no.unified.soak.service.CourseManager#getAllCourses()
      */
-    public List getCourses(final Course course) {
-        return dao.getCourses(course);
+    public List getAllCourses() {
+        return dao.getAllCourses();
     }
 
     /**

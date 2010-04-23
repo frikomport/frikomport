@@ -107,7 +107,8 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     }
 
     public void updateDatabase() {
-    	updateTables();
+    	alterUserAndRolebySQL();
+//    	updateRolesBySQL();
     	
         insertDefaultValues();
 
@@ -130,7 +131,25 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         updateConfigurations();
     }
 
-    private void updateTables(){
+	private void updateRolesBySQL() {
+		// TODO Klaus gjør ferdig denne.
+		String sql = "update role set name = 'eventresponsible' where name = 'instructor'";
+		if (DefaultQuotedNamingStrategy.usesOracle()) {
+			sql = "update role set \"name\" = 'eventresponsible' where \"name\" = 'instructor'";
+		}
+
+		try {
+			int nRowsAffected = jt.update(sql);
+			if (nRowsAffected > 0) {
+				log.info("Endret rolle 'instructor' til 'eventresponsible' i Role.");
+			}
+		} catch (Exception e) {
+			log.error("Feil ved dataendring i \"Role\". Dersom det finnes en rad i Role med name='instructor' må dette name endres til 'eventresponsible'.",
+							e);
+		}
+	}
+
+	private void alterUserAndRolebySQL(){
 
     	// removes ID from APP_USER -- column has no purpose..
     	if(checkIfColumnExists("id", "app_user")){
@@ -198,9 +217,9 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         }
 
         try { 
-        	Role instructor = roleManager.getRole("instructor");
+        	Role instructor = roleManager.getRole("eventresponsible");
         	if(instructor == null){
-        		roleManager.saveRole(new Role("instructor", "Kursansvarlig"));
+        		roleManager.saveRole(new Role("eventresponsible", "Kursansvarlig"));
         		addedRoles++;
         	}
         }
@@ -227,7 +246,9 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         		addedRoles++;
         	}
         }
-    	if(addedRoles != 0) log.info("Antall nye roller lagt til i database: " + addedRoles);
+		if (addedRoles != 0) {
+			log.info("Antall nye roller lagt til i database: " + addedRoles);
+		}
 
 
     	// CATEGORIES
@@ -665,7 +686,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
      * @since 1.4
      */
     private void updateCourses() {
-        List<Course> courses = courseManager.getCourses(new Course());
+        List<Course> courses = courseManager.getAllCourses();
         if (courses != null && !courses.isEmpty()) {
             Iterator<Course> it = courses.iterator();
             while (it.hasNext()) {
@@ -681,7 +702,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                     course.setRole(Constants.EMPLOYEE_ROLE);
                     save = true;
                 } else if (course.getRole().equals("Kursansvarlig")) {
-                    course.setRole(Constants.INSTRUCTOR_ROLE);
+                    course.setRole(Constants.EVENTRESPONSIBLE_ROLE);
                     save = true;
                 } else if (course.getRole().equals("Opplaringsansvarlig")) {
                     course.setRole(Constants.EDITOR_ROLE);
@@ -752,7 +773,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                 if (serviceArea.getOrganizationid() == -1) {
                     for (int i = 0; i < organizations.size(); i++) {
                         Organization organization = organizations.get(i);
-                        if (i == 0) { // oppdater fÃ¸rste og lag kopier
+                        if (i == 0) { // oppdater første og lag kopier
                             // etterpÃ¥.
                             serviceArea.setOrganization(organization);
                             serviceArea.setOrganizationid(organization.getId());

@@ -32,9 +32,9 @@ import org.springframework.orm.ObjectRetrievalFailureException;
 public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
     
     /**
-     * @see no.unified.soak.dao.CourseDAO#getCourses(no.unified.soak.model.Course)
+     * @see no.unified.soak.dao.CourseDAO#getAllCourses()
      */
-    public List getCourses(final Course course) {
+    public List getAllCourses() {
         DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
         criteria.addOrder(Order.asc("startTime"));
 
@@ -47,7 +47,7 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
     public Course getCourse(final Long id) {
         Course course = (Course) getHibernateTemplate().get(Course.class, id);
         if (course == null) {
-            log.warn("uh oh, course with id '" + id + "' not found...");
+            log.warn("Course with id '" + id + "' not found.");
             throw new ObjectRetrievalFailureException(Course.class, id);
         }
 //        getHibernateTemplate().initialize(course);

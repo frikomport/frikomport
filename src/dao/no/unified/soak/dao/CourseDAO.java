@@ -26,7 +26,7 @@ public interface CourseDAO extends DAO {
     /**
      * Retrieves all of the courses
      */
-    public List<Course> getCourses(Course course);
+    public List<Course> getAllCourses();
 
     /**
      * Gets course's information based on primary key. An

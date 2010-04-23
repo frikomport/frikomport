@@ -173,7 +173,7 @@ public class CourseController extends BaseFormController {
         List<Course> filtered = filterByRole(isAdmin, roles, courses);
 
         User responsible = null;
-        if (user != null && roles.contains(Constants.INSTRUCTOR_ROLE)) {
+        if (user != null && roles.contains(Constants.EVENTRESPONSIBLE_ROLE)) {
             responsible = user;
             unpublished.setResponsible(responsible);
         }
@@ -192,7 +192,7 @@ public class CourseController extends BaseFormController {
     }
 
     private boolean isAdmin(List<String> roles) {
-        if (roles.contains(Constants.INSTRUCTOR_ROLE) || roles.contains(Constants.EDITOR_ROLE)
+        if (roles.contains(Constants.EVENTRESPONSIBLE_ROLE) || roles.contains(Constants.EDITOR_ROLE)
                 || roles.contains(Constants.ADMIN_ROLE)) {
             return true;
         }
@@ -308,7 +308,7 @@ public class CourseController extends BaseFormController {
         }
 
         User responsible = null;
-        if (user != null && roles.contains(Constants.INSTRUCTOR_ROLE)) {
+        if (user != null && roles.contains(Constants.EVENTRESPONSIBLE_ROLE)) {
             responsible = user;
             unpublished.setResponsible(responsible);
         }

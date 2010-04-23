@@ -406,7 +406,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
             } else if (ArrayUtils.contains(editorRolenames, rolename)) {
 				user.addRole(roleManager.getRole(Constants.EDITOR_ROLE));
 			} else if (ArrayUtils.contains(eventresponsibleRolenames, rolename)) {
-				user.addRole(roleManager.getRole(Constants.INSTRUCTOR_ROLE));
+				user.addRole(roleManager.getRole(Constants.EVENTRESPONSIBLE_ROLE));
 			} else if (ArrayUtils.contains(readerRolenames, rolename)) {
 			    user.addRole(roleManager.getRole(Constants.READER_ROLE));
 			} else if (ArrayUtils.contains(emplyeeRolenames, rolename)) {

@@ -33,7 +33,7 @@ public interface CourseManager extends Manager {
     /**
      * Retrieves all of the courses
      */
-    public List getCourses(Course course);
+    public List getAllCourses();
 
     /**
      * Gets course's information based on id.
