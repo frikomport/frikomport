@@ -43,7 +43,7 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
         User user = (User) getHibernateTemplate().get(User.class, username);
 
         if (user == null) {
-//            log.warn("uh oh, user '" + username + "' not found...");
+//            log.warn("User '" + username + "' not found.");
             throw new ObjectRetrievalFailureException(User.class, username);
         }
 
