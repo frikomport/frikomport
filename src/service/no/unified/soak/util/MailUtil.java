@@ -814,34 +814,34 @@ public class MailUtil {
             // Create an event
             VEvent event = getVEvent(course);
 
-            UidGenerator ug = new UidGenerator("1");
-            Uid uid = ug.generateUid();
-            event.getProperties().add(uid);
-            event.getProperties().add(Method.PUBLISH);
-
-            Description description = new Description(course.getDescription());
-            event.getProperties().add(description);
-
-            Location location = new Location(course.getLocation().getName());
-            event.getProperties().add(location);
-            StreetAddress streetAddress = new StreetAddress(course.getLocation().getAddress());
-            event.getProperties().add(streetAddress);
-
-            if (course.getStatus().equals(CourseStatus.COURSE_CANCELLED)) {
-                event.getProperties().add(Status.VEVENT_CANCELLED);
-            } else {
-                event.getProperties().add(Status.VEVENT_CONFIRMED);
-            }
-
-            if (course.getResponsible() != null) {
-                try {
-                    URI mailto = new URI("MAILTO", course.getResponsible().getEmail(), null);
-                    Organizer organizer = new Organizer(mailto);
-                    event.getProperties().add(organizer);
-                } catch (Exception ex) {
-                    log.error("Could not create Organizer object");
-                }
-            }
+//            UidGenerator ug = new UidGenerator(course.getId().toString());
+//            Uid uid = ug.generateUid();
+//            event.getProperties().add(uid);
+//            event.getProperties().add(Method.PUBLISH);
+//
+//            Description description = new Description(course.getDescription());
+//            event.getProperties().add(description);
+//
+//            Location location = new Location(course.getLocation().getName());
+//            event.getProperties().add(location);
+//            StreetAddress streetAddress = new StreetAddress(course.getLocation().getAddress());
+//            event.getProperties().add(streetAddress);
+//
+//            if (course.getStatus().equals(CourseStatus.COURSE_CANCELLED)) {
+//                event.getProperties().add(Status.VEVENT_CANCELLED);
+//            } else {
+//                event.getProperties().add(Status.VEVENT_CONFIRMED);
+//            }
+//
+//            if (course.getResponsible() != null) {
+//                try {
+//                    URI mailto = new URI("MAILTO", course.getResponsible().getEmail(), null);
+//                    Organizer organizer = new Organizer(mailto);
+//                    event.getProperties().add(organizer);
+//                } catch (Exception ex) {
+//                    log.error("Could not create Organizer object");
+//                }
+//            }
 
             try {
                 URI mailto = new URI("MAILTO", registration.getUser().getEmail(), null);
@@ -851,14 +851,14 @@ public class MailUtil {
                 log.error("Could not create Attendee object");
             }
 
-            if (course.getDetailURL() != null && course.getDetailURL().length() > 0) {
-                try {
-                    Url url = new Url(Uris.create(course.getDetailURL()));
-                    event.getProperties().add(url);
-                } catch (Exception ex) {
-                    log.error("Could not create Url object");
-                }
-            }
+//            if (course.getDetailURL() != null && course.getDetailURL().length() > 0) {
+//                try {
+//                    Url url = new Url(Uris.create(course.getDetailURL()));
+//                    event.getProperties().add(url);
+//                } catch (Exception ex) {
+//                    log.error("Could not create Url object");
+//                }
+//            }
 
             // // Set timezone
             // VTimeZone tz = new VTimeZone();
@@ -892,7 +892,7 @@ public class MailUtil {
         VEvent event = new VEvent(new DateTime(course.getStartTime()), new DateTime(course.getStopTime()), course
                 .getName());
 
-        UidGenerator ug = new UidGenerator("1");
+        UidGenerator ug = new UidGenerator(course.getId().toString());
         Uid uid = ug.generateUid();
         event.getProperties().add(uid);
         event.getProperties().add(Method.PUBLISH);
