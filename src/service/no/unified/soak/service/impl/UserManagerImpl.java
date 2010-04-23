@@ -226,11 +226,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
         user.setEmail(email);
-		if (id == null) {
-			user.setId(0);
-		} else {
-			user.setId(id);
-		}
+
 		if (kommune != null && kommune != 0) {
 			updateKommune(kommune, user);
 		}
@@ -340,10 +336,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 			user.setEmail(email);
 			save = true;
 		}
-		if (!id.equals(user.getId())) {
-			user.setId(id);
-			save = true;
-		}
+
 		if (kommune != null && kommune != 0) {
 			if (updateKommune(kommune, user)) {
 				save = true;
@@ -463,7 +456,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 
 		user.setEnabled(true);
 		user.setAddress(new Address());
-		user.setId(new Integer(0));
+//		user.setId(new Integer(0));
 		setRoles(getDefaultRoles(), user);
 		user.setHash(StringUtil.encodeString(user.getUsername()));
 		try {

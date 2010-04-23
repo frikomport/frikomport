@@ -20,7 +20,6 @@ public class ConvertDAO {
         extUser.setLast_name(user.getLastName());
         extUser.setKommune(user.getOrganizationid() == null ? null : user.getOrganizationid().intValue());
         extUser.setRolenames(user.getRoleNameList());
-        extUser.setId(user.getId());
         extUser.setMobilePhone(user.getMobilePhone());
         return extUser;
     }

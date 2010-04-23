@@ -44,7 +44,7 @@ public class SVVUserDAOWS implements ExtUserDAO {
     UserDAO userDAO;
     RoleDAO roleDAO;
     String endpoint = "http://klaus-PC:8089/mockportOppslagSVVAnsatt";
-    private transient final Log log = LogFactory.getLog(SVVUserDAOWS.class);
+    private transient final static Log log = LogFactory.getLog(SVVUserDAOWS.class);
 
     // Only used for testing when real web service is unavailable.
     private static Map<String, ExtUser> hardcodedExtUsers = new HashMap<String, ExtUser>(6);
@@ -115,7 +115,7 @@ public class SVVUserDAOWS implements ExtUserDAO {
                 	return null;
                 }
                 
-                extUser.setUsername(uid);
+                extUser.setUsername(uid.toLowerCase());
                 extUser.setEmail(getTagValue("urn1:mail", xmlString));
                 extUser.setFirst_name(SVVUserDAOWS.getTagValue("urn1:givenName", xmlString));
                 extUser.setLast_name(SVVUserDAOWS.getTagValue("urn1:sn", xmlString));
@@ -124,7 +124,7 @@ public class SVVUserDAOWS implements ExtUserDAO {
                 extUser.setPhoneNumber(SVVUserDAOWS.getTagValue("urn1:telephoneNumber", xmlString));
 
                 String adminRoles = ApplicationResourcesUtil.getText("role.admin");
-                String eventAdminRoles = ApplicationResourcesUtil.getText("MoteAdminRoles ");
+                String eventAdminRoles = ApplicationResourcesUtil.getText("MoteAdminRoles");
                 String eventResponsible = ApplicationResourcesUtil.getText("role.eventresponsible");
                 String ansattRoles = ApplicationResourcesUtil.getText("role.employee");
                 String readerRoles = ApplicationResourcesUtil.getText("role.reader");
@@ -198,32 +198,49 @@ public class SVVUserDAOWS implements ExtUserDAO {
     }
 
     public static String getTagValue(String tagname, String xml) {
-        int startTagFirstpos = xml.indexOf("<" + tagname);
-        int startTagLastpos = xml.indexOf(">", startTagFirstpos);
-        int endTagFirstpos = xml.indexOf("</" + tagname + ">", startTagLastpos);
-        return xml.substring(startTagLastpos + 1, endTagFirstpos);
+    	try {
+	        int startTagFirstpos = xml.indexOf("<" + tagname);
+	        int startTagLastpos = xml.indexOf(">", startTagFirstpos);
+	        int endTagFirstpos = xml.indexOf("</" + tagname + ">", startTagLastpos);
+	        return xml.substring(startTagLastpos + 1, endTagFirstpos);
+    	}catch(Exception e){
+    		log.info("<" + tagname + "> finnes ikke i xml");
+    		return null;
+    	}
     }
 
     public static List<String> getInnerTagValuesInTag(String xml, String outerTagname, String innerTagEndfix, String[] keyCSVToSearch) {
-        int startTagFirstpos = xml.indexOf("<" + outerTagname);
-        int startTagLastpos = xml.indexOf(">", startTagFirstpos);
-        int endTagFirstpos = xml.indexOf("</" + outerTagname + ">", startTagLastpos);
-
-        List<String> keyList = new ArrayList<String>();
-        for (int i = 0; i < keyCSVToSearch.length; i++) {
-            String string = keyCSVToSearch[i];
-            String[] keyValues = StringUtils.split(string, ',');
-            CollectionUtils.addAll(keyList, keyValues);
-        }
-
-        List<String> roleList = new ArrayList<String>();
-        for (String rolename : keyList) {
-            int rolePosition = xml.indexOf(innerTagEndfix+">" + rolename + "</", startTagFirstpos + 2);
-            if (rolePosition < endTagFirstpos && rolePosition > -1) {
-                roleList.add(rolename);
-            }
-        }
-        return roleList;
+    	try {
+	    	int startTagFirstpos = xml.indexOf("<" + outerTagname);
+	        int startTagLastpos = xml.indexOf(">", startTagFirstpos);
+	        int endTagFirstpos = xml.indexOf("</" + outerTagname + ">", startTagLastpos);
+	
+	        List<String> keyList = new ArrayList<String>();
+	        for (int i = 0; i < keyCSVToSearch.length; i++) {
+	            String string = keyCSVToSearch[i];
+	            String[] keyValues = StringUtils.split(string, ',');
+	            CollectionUtils.addAll(keyList, keyValues);
+	        }
+	
+	        List<String> roleList = new ArrayList<String>();
+	        for (String rolename : keyList) {
+	            int rolePosition = xml.indexOf(innerTagEndfix+">" + rolename + "</", startTagFirstpos + 2);
+	            if (rolePosition < endTagFirstpos && rolePosition > -1) {
+	                roleList.add(rolename);
+	            }
+	        }
+	        
+	        // TEST TEST TEST -- pga. manglende definasjon av nødvendige roller i SVV's LDAP
+	        // roleList.add("FKPMoteadministrator");
+	        // roleList.add("FKPMoteansvarlig");
+	        // --------------------------
+	        
+	        return roleList;
+    	}catch(Exception e){
+    		log.info("Problem ved uthenting av <" + outerTagname + ">");
+    		return new ArrayList<String>(); // tom liste uten verdier
+    	}
+	        
     }
 
     public static String convertStreamToString(InputStream is) throws IOException {

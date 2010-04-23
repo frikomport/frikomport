@@ -100,6 +100,8 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     }
 
     public void updateDatabase() {
+    	updateTables();
+    	
         insertDefaultValues();
 
         updateBySQLStatements();
@@ -121,76 +123,105 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         updateConfigurations();
     }
 
+    private void updateTables(){
+    	// removes ID from APP_USER -- column has no purpose..
+    	if(checkIfColumnExists("id", "app_user")){
+    		log.info("Column APP_USER.ID exists.");
+    		String sql = "alter table app_user drop column id";
+    		try { 
+    			jt.execute(sql);
+        		log.info("Column APP_USER.ID removed!");
+    		}
+    		catch(Exception e){ log.error("Alter table APP_USER failed", e); }
+    	}
+    }
+    
     private void insertDefaultValues() {
 
-        try {
-        	roleManager.getRole("anonymous");
-        }catch(ObjectRetrievalFailureException e){
-        	Role role = new Role();
-        	role.setName("anonymous");
-        	role.setDescription("Anonymous");
-        	role.setVersion(1);
-        	log.info("\"Role\" lagt til i DB: " + role);
+        String[][] sqlSelectAndInsertRoleArray = {
+                // Role insert
+                { "select count(*) from role where name='anonymous'",
+                        "INSERT INTO role (name, description, version) VALUES('anonymous', 'Anonymous', 1)" },
+                { "select count(*) from role where name='admin'",
+                        "INSERT INTO role (name, description, version) VALUES('admin', 'Administrator', 1)" },
+                { "select count(*) from role where name='employee'",
+                        "INSERT INTO role (name, description, version) VALUES('employee', 'Ansatt', 1)" },
+                { "select count(*) from role where name='instructor'",
+                        "INSERT INTO role (name, description, version) VALUES('instructor', 'Kursansvarlig', 1)" },
+                { "select count(*) from role where name='editor'",
+                        "INSERT INTO role (name, description, version) VALUES('editor', 'Opplaringsansvarlig', 1)" } };
+        insertIntoTableBySQLStatements("role", sqlSelectAndInsertRoleArray);
+
+    	Role role;
+    	/*    	
+        try { role = roleManager.getRole("anonymous"); }catch(ObjectRetrievalFailureException e){ role = null; }
+        if(role == null){
+        	role = new Role();
+	        role.setName("anonymous");
+	        role.setDescription("Anonymous");
+	        role.setVersion(1);
+	        roleManager.saveRole(role);
+	        log.info("\"Role\" lagt til i DB: " + role);
         }
 
-        try {
-        	roleManager.getRole("admin");
-        }catch(ObjectRetrievalFailureException e){
-        	Role role = new Role();
+        try { role = roleManager.getRole("admin"); }catch(ObjectRetrievalFailureException e){ role = null; }
+        if(role == null){
+        	role = new Role();
         	role.setName("admin");
         	role.setDescription("Administrator");
         	role.setVersion(1);
+	        roleManager.saveRole(role);
         	log.info("\"Role\" lagt til i DB: " + role);
         }
-
-        try {
-        	roleManager.getRole("employee");
-        }catch(ObjectRetrievalFailureException e){
-        	Role role = new Role();
+        
+        try { role = roleManager.getRole("employee"); }catch(ObjectRetrievalFailureException e){ role = null; }
+        if(role == null){	
+        	role = new Role();
         	role.setName("employee");
         	role.setDescription("Ansatt");
         	role.setVersion(1);
+	        roleManager.saveRole(role);
         	log.info("\"Role\" lagt til i DB: " + role);
         }
 
-        try {
-        	roleManager.getRole("instructor");
-        }catch(ObjectRetrievalFailureException e){
-        	Role role = new Role();
+        try { role = roleManager.getRole("instructor"); }catch(ObjectRetrievalFailureException e){ role = null; }
+        if(role == null) {
+        	role = new Role();
         	role.setName("instructor");
         	role.setDescription("Kursansvarlig");
         	role.setVersion(1);
+	        roleManager.saveRole(role);
         	log.info("\"Role\" lagt til i DB: " + role);
         }
 
-        try {
-        	roleManager.getRole("editor");
-        }catch(ObjectRetrievalFailureException e){
-        	Role role = new Role();
+        try { role = roleManager.getRole("editor"); }catch(ObjectRetrievalFailureException e){ role = null; }
+    	if(role == null){
+        	role = new Role();
         	role.setName("editor");
         	role.setDescription("Opplaringsansvarlig");
         	role.setVersion(1);
+	        roleManager.saveRole(role);
         	log.info("\"Role\" lagt til i DB: " + role);
         }
-
+*/
         if (ApplicationResourcesUtil.isSVV()) {
         	// inserts new role for SVV
-        	try {
-        		roleManager.getRole("reader");
-        	}catch(ObjectRetrievalFailureException e){
-        		Role role = new Role();
+        	try { role = roleManager.getRole("reader"); }catch(ObjectRetrievalFailureException e){ role = null; }
+        	if(role == null){
+            	role = new Role();
         		role.setName("reader");
         		role.setDescription("Reader");
         		role.setVersion(1);
+    	        roleManager.saveRole(role);
         		log.info("\"Role\" lagt til i DB: " + role);
         	}
         }    	
 
         // inserts category if doesn't
-        try {
-        	categoryManager.getCategory(1L);
-        }catch(ObjectRetrievalFailureException e){
-        	Category cat = new Category();
+        Category cat;
+        try { cat = categoryManager.getCategory(1L); }catch(ObjectRetrievalFailureException e){ cat = null; }
+        if(cat == null){
+        	cat = new Category();
         	cat.setName("Hendelse");
         	cat.setSelectable(true);
         	categoryManager.saveCategory(cat);
@@ -448,6 +479,26 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         return reservedFieldExists;
     }
 
+    private boolean checkIfColumnExists(String column, String table) {
+    	
+    	String sql = null;
+    	if(DefaultQuotedNamingStrategy.usesOracle()){
+    		sql = "SELECT * FROM (SELECT * FROM " + table + ") WHERE rownum = 1";
+    	}
+    	else{
+    		sql = "select * from " + table + " limit 1";
+    	}
+    	
+        SqlRowSet rowSet = jt.queryForRowSet(sql);
+        SqlRowSetMetaData metaData = rowSet.getMetaData();
+        for (String columnName : metaData.getColumnNames()) {
+            if (columnName.equalsIgnoreCase(column)) {
+            	return true; // no need to continue in loop
+            }
+        }
+        return false;
+    }
+    
     private void updateDatabaseSchemaAfter() {
     }
 
