@@ -177,7 +177,7 @@ public class CourseController extends BaseFormController {
             responsible = user;
             unpublished.setResponsible(responsible);
         }
-        List unpubCourses = courseManager.getUnpublished(unpublished);// SÃ¸ke pÃ¥ samme mÃ¥te som pÃ¥ kurs.
+        List unpubCourses = courseManager.getUnpublished(unpublished);// Søke på samme måte som på kurs.
         if (!past && unpubCourses != null && !unpubCourses.isEmpty() && isAdmin(roles)) {
             filtered.addAll(0, unpubCourses);
         }

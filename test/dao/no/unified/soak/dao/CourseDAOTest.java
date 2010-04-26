@@ -145,7 +145,7 @@ public class CourseDAOTest extends BaseDAOTestCase {
     public void testGetCourses() throws Exception {
         course = new Course();
 
-        List results = dao.getCourses(course);
+        List results = dao.getAllCourses();
         assertTrue(results.size() > 0);
     }
 
