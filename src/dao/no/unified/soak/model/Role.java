@@ -31,7 +31,7 @@ public class Role extends BaseObject implements Serializable {
     private String name;
     private String description;
     private Set users;
-
+    
     public Role() {
     }
 

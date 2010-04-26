@@ -12,6 +12,7 @@ import no.unified.soak.dao.fkpuser.FkpUserPortType;
 import no.unified.soak.dao.fkpuser.FkpUser_ServiceLocator;
 import no.unified.soak.dao.fkpuser.FkpUser_Type;
 import no.unified.soak.ez.ExtUser;
+import no.unified.soak.model.RoleEnum;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -111,4 +112,24 @@ public class EzUserDAOWS implements ExtUserDAO {
         return users;
     }
 
+	/* The roles expected from the eZ publish web service.
+	 * @see no.unified.soak.dao.ExtUserDAO#getStringForRole(no.unified.soak.model.RoleEnum)
+	 */
+	public String getStringForRole(RoleEnum role) {
+		switch (role) {
+		case ADMIN_ROLE:
+			return "Administrator";
+		case EDITOR_ROLE:
+			return "Opplaringsansvarlig";
+		case EVENTRESPONSIBLE_ROLE:
+			return "Kursansvarlig";
+		case EMPLOYEE:
+			return "Ansatt";
+		case ANONYMOUS:
+			return "Anonymous";
+		case READER_ROLE:
+			return "FKPLesebruker";
+		}
+		return null;
+	}
 }

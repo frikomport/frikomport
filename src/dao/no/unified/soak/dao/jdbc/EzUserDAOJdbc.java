@@ -22,6 +22,7 @@ import javax.sql.DataSource;
 
 import no.unified.soak.dao.ExtUserDAO;
 import no.unified.soak.ez.ExtUser;
+import no.unified.soak.model.RoleEnum;
 import no.unified.soak.util.NumConvert;
 
 import org.springframework.dao.DataAccessException;
@@ -294,4 +295,24 @@ public class EzUserDAOJdbc implements ExtUserDAO {
 	        return roles;
 	}
     
+	/* The roles expected from the eZ publish database.
+	 * @see no.unified.soak.dao.ExtUserDAO#getStringForRole(no.unified.soak.model.RoleEnum)
+	 */
+	public String getStringForRole(RoleEnum role) {
+		switch (role) {
+		case ADMIN_ROLE:
+			return "Administrator";
+		case EDITOR_ROLE:
+			return "Opplaringsansvarlig";
+		case EVENTRESPONSIBLE_ROLE:
+			return "Kursansvarlig";
+		case EMPLOYEE:
+			return "Ansatt";
+		case ANONYMOUS:
+			return "Anonymous";
+		case READER_ROLE:
+			return "FKPLesebruker";
+		}
+		return null;
+	}
 }

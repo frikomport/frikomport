@@ -19,6 +19,7 @@ import no.unified.soak.ez.ExtUser;
 import no.unified.soak.model.Address;
 import no.unified.soak.model.Organization;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.RoleEnum;
 import no.unified.soak.model.User;
 import no.unified.soak.model.UserCookie;
 import no.unified.soak.service.OrganizationManager;
@@ -389,14 +390,13 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 
 		// remove existing roles before new ones are added.
 		user.removeAllRoles();
-		Locale locale = LocaleContextHolder.getLocale();
 
-		String[] adminRolenames = messageSource.getMessage("role.admin", null, locale).split("\\,");
-		String[] editorRolenames = messageSource.getMessage("role.editor", null, locale).split("\\,");
-		String[] eventresponsibleRolenames = messageSource.getMessage("role.eventresponsible", null, locale).split("\\,");
-		String[] readerRolenames = messageSource.getMessage("role.reader", null, locale).split("\\,");
-		String[] emplyeeRolenames = messageSource.getMessage("role.employee", null, locale).split("\\,");
-		String[] anonymousRolenames = messageSource.getMessage("role.anonymous", null, locale).split("\\,");
+		String[] adminRolenames = extUserDAO.getStringForRole(RoleEnum.ADMIN_ROLE).split("\\,");
+		String[] editorRolenames = extUserDAO.getStringForRole(RoleEnum.EDITOR_ROLE).split("\\,");
+		String[] eventresponsibleRolenames = extUserDAO.getStringForRole(RoleEnum.EVENTRESPONSIBLE_ROLE).split("\\,");
+		String[] readerRolenames = extUserDAO.getStringForRole(RoleEnum.READER_ROLE).split("\\,");
+		String[] emplyeeRolenames = extUserDAO.getStringForRole(RoleEnum.EMPLOYEE).split("\\,");
+		String[] anonymousRolenames = extUserDAO.getStringForRole(RoleEnum.ANONYMOUS).split("\\,");
 
 		for (Iterator iter = rolenames.iterator(); iter.hasNext();) {
 			String rolename = (String) iter.next();
@@ -469,10 +469,9 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	}
 
 	private List<String> getDefaultRoles() {
-        Locale locale = LocaleContextHolder.getLocale();
         List<String> roles = new ArrayList();
-        roles.add(messageSource.getMessage("role.anonymous", null, locale));
-        roles.add(messageSource.getMessage("role.employee", null, locale));
+        roles.add(extUserDAO.getStringForRole(RoleEnum.ANONYMOUS));
+        roles.add(extUserDAO.getStringForRole(RoleEnum.EMPLOYEE));
 		return roles;
 	}
 

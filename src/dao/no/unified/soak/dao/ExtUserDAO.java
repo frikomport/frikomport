@@ -3,6 +3,7 @@ package no.unified.soak.dao;
 import java.util.List;
 
 import no.unified.soak.ez.ExtUser;
+import no.unified.soak.model.RoleEnum;
 
 public interface ExtUserDAO {
 
@@ -39,5 +40,13 @@ public interface ExtUserDAO {
      * @return
      */
     public abstract List<String> findRoles();
+    
+	/**
+	 * Gives rolename in the external system for a specific RoleEnum.
+	 * 
+	 * @param role
+	 * @return
+	 */
+	public abstract String getStringForRole(RoleEnum role);
 
 }

@@ -7,6 +7,8 @@
  */
 package no.unified.soak;
 
+import no.unified.soak.model.RoleEnum;
+
 /**
  * Constant values used throughout the application.
  * 
@@ -84,22 +86,22 @@ public class Constants {
     /**
      * The name of the Administrator role, as specified in web.xml
      */
-    public static final String ADMIN_ROLE = "admin";
+    public static final String ADMIN_ROLE = RoleEnum.ADMIN_ROLE.getJavaDBRolename();
 
     /**
      * The name of the User role, as specified in web.xml
      */
-    public static final String EDITOR_ROLE = "editor";
+    public static final String EDITOR_ROLE = RoleEnum.EDITOR_ROLE.getJavaDBRolename();
     
-    public static final String READER_ROLE = "reader";
+    public static final String READER_ROLE = RoleEnum.READER_ROLE.getJavaDBRolename();
     
-    public static final String EMPLOYEE_ROLE = "employee";
+    public static final String EMPLOYEE_ROLE = RoleEnum.EMPLOYEE.getJavaDBRolename();
 
-    public static final String DEFAULT_ROLE = "anonymous";
+    public static final String DEFAULT_ROLE = RoleEnum.ANONYMOUS.getJavaDBRolename();
 
-    public static final String ANONYMOUS_ROLE = "anonymous";
+    public static final String ANONYMOUS_ROLE = RoleEnum.ANONYMOUS.getJavaDBRolename();
 
-    public static final String EVENTRESPONSIBLE_ROLE = "eventresponsible";
+    public static final String EVENTRESPONSIBLE_ROLE = RoleEnum.EVENTRESPONSIBLE_ROLE.getJavaDBRolename();
 
 
     /**

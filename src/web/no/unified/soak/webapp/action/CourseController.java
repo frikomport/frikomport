@@ -23,6 +23,7 @@ import javax.servlet.http.HttpSession;
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Organization;
+import no.unified.soak.model.RoleEnum;
 import no.unified.soak.model.User;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.OrganizationManager;
@@ -256,7 +257,7 @@ public class CourseController extends BaseFormController {
         }
         if (roles == null) {
             roles = new ArrayList<String>();
-            roles.add(messageSource.getMessage("role.anonymous", null, locale)); // Make sure not logged in users sees
+            roles.add(RoleEnum.ANONYMOUS.getJavaDBRolename()); // Make sure not logged in users sees
             // anonymous courses
         }
 
