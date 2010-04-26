@@ -77,9 +77,16 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
             while(e.hasMoreElements()) {
             	User local = (User)e.nextElement();
             	ExtUser ldapUser = extUserDAO.findUserByUsername(local.getUsername());
-            	if(ldapUser == null) continue; // TODO: vurdere sletting/deaktivering av brukere som ikke lenger finnes i eksternt system
-            	processUser(ldapUser);
-            	if (log.isDebugEnabled()) log.debug("LDAP: " + local.getFullName() + " (" + local.getEmail() + ")" + ": " + local.getMobilePhone() + "");
+            	if(ldapUser == null) {
+            		// brukeren finnes ikke lenger i eksternt system, settes som inaktiv bruker
+            		local.setEnabled(false);
+            		userDAO.updateUser(local);
+            		if (log.isDebugEnabled()) log.debug("Deaktivert: " + local.getFullName() + " (" + local.getEmail() + ")");
+            	}
+            	else {
+            		processUser(ldapUser);
+            		if (log.isDebugEnabled()) log.debug("LDAP: " + local.getFullName() + " (" + local.getEmail() + ")");
+            	}
             }
             log.info("Synkronisering av brukere ferdig!");
             
