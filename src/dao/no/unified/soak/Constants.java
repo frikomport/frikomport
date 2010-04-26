@@ -99,7 +99,7 @@ public class Constants {
 
     public static final String ANONYMOUS_ROLE = "anonymous";
 
-    public static final String EVENTRESPONSIBLE_ROLE = "instructor";
+    public static final String EVENTRESPONSIBLE_ROLE = "eventresponsible";
 
 
     /**
