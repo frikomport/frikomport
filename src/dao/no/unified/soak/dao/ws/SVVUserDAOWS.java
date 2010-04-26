@@ -204,7 +204,7 @@ public class SVVUserDAOWS implements ExtUserDAO {
 	        int endTagFirstpos = xml.indexOf("</" + tagname + ">", startTagLastpos);
 	        return xml.substring(startTagLastpos + 1, endTagFirstpos);
     	}catch(Exception e){
-    		log.info("<" + tagname + "> finnes ikke i xml");
+    		if(log.isDebugEnabled()) log.debug("<" + tagname + "> finnes ikke i xml");
     		return null;
     	}
     }
@@ -237,7 +237,7 @@ public class SVVUserDAOWS implements ExtUserDAO {
 	        
 	        return roleList;
     	}catch(Exception e){
-    		log.info("Problem ved uthenting av <" + outerTagname + ">");
+    		if(log.isDebugEnabled()) log.debug("Problem ved uthenting av <" + outerTagname + ">");
     		return new ArrayList<String>(); // tom liste uten verdier
     	}
 	        
