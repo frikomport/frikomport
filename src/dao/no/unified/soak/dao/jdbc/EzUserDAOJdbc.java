@@ -12,7 +12,6 @@ package no.unified.soak.dao.jdbc;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -295,17 +294,4 @@ public class EzUserDAOJdbc implements ExtUserDAO {
 	        return roles;
 	}
     
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-	    ExtUserDAO userEzDaoJdbc = new EzUserDAOJdbc();
-		List users = userEzDaoJdbc.findUsers(null);
-		for (Iterator iter = users.iterator(); iter.hasNext();) {
-//		    EzUser user = (EzUser) iter.next();
-//			System.out.println("ez User: " + user.getId() + ", " + user + " "
-//				+ user.getKommune());
-		}
-	}
-
 }
