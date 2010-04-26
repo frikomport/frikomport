@@ -108,7 +108,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
     public void updateDatabase() {
     	alterUserAndRolebySQL();
-//    	updateRolesBySQL();
+    	changeRolesBySQL();
     	
         insertDefaultValues();
 
@@ -131,8 +131,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         updateConfigurations();
     }
 
-	private void updateRolesBySQL() {
-		// TODO Klaus gjør ferdig denne.
+	private void changeRolesBySQL() {
 		String sql = "update role set name = 'eventresponsible' where name = 'instructor'";
 		if (DefaultQuotedNamingStrategy.usesOracle()) {
 			sql = "update role set \"name\" = 'eventresponsible' where \"name\" = 'instructor'";
@@ -217,8 +216,8 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         }
 
         try { 
-        	Role instructor = roleManager.getRole("eventresponsible");
-        	if(instructor == null){
+        	Role eventResponsible = roleManager.getRole("eventresponsible");
+        	if(eventResponsible == null){
         		roleManager.saveRole(new Role("eventresponsible", "Kursansvarlig"));
         		addedRoles++;
         	}
