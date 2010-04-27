@@ -44,7 +44,8 @@ public class SVVUserDAOWS implements ExtUserDAO {
 
 	UserDAO userDAO;
 	RoleDAO roleDAO;
-	String endpoint = "http://klaus-PC:8089/mockportOppslagSVVAnsatt";
+//	String endpoint = "http://klaus-PC:8089/mockportOppslagSVVAnsatt";
+	String endpoint = "http://svvjcapsu04.vegvesen.no:18201/ldap_searchemployees/portOppslagSVVAnsattBndPort";
 	private transient final static Log log = LogFactory.getLog(SVVUserDAOWS.class);
 
 	// Only used for testing when real web service is unavailable.

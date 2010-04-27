@@ -19,7 +19,7 @@
     </bean>
     -->
     <bean id="extUserDAO" class="no.unified.soak.dao.ws.SVVUserDAOWS" autowire="default">
-        <property name="endpoint" value="http://klaus-PC:8089/mockportOppslagSVVAnsattBnd"/>
+        <property name="endpoint" value="http://svvjcapsu04.vegvesen.no:18201/ldap_searchemployees/portOppslagSVVAnsattBndPort"/>
         <property name="roleDAO" ref="roleDAO"/>
         <property name="userDAO" ref="userDAO"/>
     </bean>
@@ -29,7 +29,7 @@
         <property name="jndiName"><value>java:comp/env/jdbc/soakdb</value></property>
     </bean>
 
-    <bean id="userEzDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+    <!--bean id="userEzDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
         <property name="jndiName"><value>java:comp/env/jdbc/ezdb</value></property>
-    </bean>
+    </bean-->
 </beans>

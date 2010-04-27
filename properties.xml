@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="properties">
+	
+    <!-- To For at app'en skal kunne deplo skal fungerer i Oracle AS 10.1.3 -->
+	<property name="DeployOnOrion" value="true"/>
+	
     <!-- Library versions and JARs -->
     <property name="lib.dir" location="lib"/>
     <property file="${lib.dir}/lib.properties"/>
@@ -28,6 +32,7 @@
     <property name="tomcat.password" value="admin"/>
 
     <!-- Defaults for database.properties -->
+
 	<!--
     <property name="database.jar" location="${mysql.jar}"/>
     <property name="database.type" value="mysql"/>
@@ -35,10 +40,6 @@
     <property name="database.host" value="localhost"/>
     <property name="database.username" value="frikom"/>
     <property name="database.password" value="frikom"/>
-    
--->    
-    <!-- database URL for creating other dbs - used in db-create target -->
-<!--
 	<property name="database.admin.url" value="jdbc:${database.type}://${database.host}/mysql?autoReconnect=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8"/>
     <property name="database.admin.username" value="root"/>
     <property name="database.admin.password" value="sysadm"/>
@@ -46,24 +47,23 @@
     <property name="database.driver_class" value="com.mysql.jdbc.Driver"/>
     <property name="database.url" 
         value="jdbc:${database.type}://${database.host}/${database.name}?autoReconnect=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8"/>
--->    
-	
+-->
     <property name="database.jar" location="${oracle.jar}"/>
     <property name="database.type" value="oracle"/>
-    <property name="database.name" value="XE"/>
-    <property name="database.port" value="1521"/>
-    <property name="database.host" value="localhost"/>
-    <property name="database.username" value="frikom"/>
-    <property name="database.password" value="frikom"/>
-    <!-- database URL for creating other dbs - used in db-create target -->
+    <property name="database.name" value="mengdetrening"/>
+    <property name="database.port" value="1641"/>
+    <property name="database.host" value="udb1.vegvesen.no"/>
+    <property name="database.username" value="mengdetrening"/>
+    <property name="database.password" value="mengdetrening"/>
     <property name="database.admin.url" value="jdbc:${database.type}:thin:@${database.host}:${database.port}:${database.name}"/>
-    <property name="database.admin.username" value="SYSTEM"/>
-    <property name="database.admin.password" value="system"/>
+    <property name="database.admin.username" value="mengdetrening"/>
+    <property name="database.admin.password" value="mengdetrening"/>
     <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
 	<property name="hibernate.hbm2ddl.auto" value="update"/>
     <property name="database.driver_class" value="oracle.jdbc.OracleDriver"/>
     <property name="database.url" 
         value="jdbc:${database.type}:thin:@${database.host}:${database.port}:${database.name}"/>
+
 	<property name="database.show_sql" value="true"/>
 
 	<!-- Defaults for eZ db integration -->
@@ -111,7 +111,8 @@
     <!-- Hibernate -->
     <path id="hibernate.classpath">
         <pathelement location="${hibernate.jar}"/> 
-        <fileset dir="${hibernate.dir}/lib" includes="*.jar"/>
+        <fileset dir="${hibernate.dir}/lib" includes="*.jar" excludes="${hibernate.excludeJar}">
+        </fileset>
         <pathelement location="${database.jar}"/> 
         <pathelement location="${commons-beanutils.jar}"/>
         <pathelement location="${commons-lang.jar}"/>

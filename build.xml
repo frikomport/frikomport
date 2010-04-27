@@ -126,6 +126,13 @@
             includes="ApplicationResources_zh_CN.properties" encoding="UTF-8"/>
         <generate-database-properties/>
         <copy todir="${build.dir}/web/classes" file="database.properties"/>
+		<copy overwrite="true" tofile="${build.dir}/${webapp.name}/WEB-INF/applicationContext-${dao.type}.xml">
+			<fileset dir="src/dao" includes="**/*-${dao.type}.xml"/>
+			<filterset refid="variables.to.replace"/>
+		</copy>
+		<copy tofile="${build.dir}/${webapp.name}/WEB-INF/applicationContext-service.xml">
+			<fileset dir="src/service" includes="**/*-service.xml"/>
+		</copy>  
     </target>
     
     <!-- =================================================================== -->
@@ -302,7 +309,7 @@
     <!-- The "webdoclet" target generates web deployment descriptors.           -->
     <!-- =================================================================== -->
     <target name="webdoclet" depends="compile-web" unless="webdoclet.unnecessary"
-        description="Generate web deployment descriptors">
+        description="Generate web and Struts descriptors">
         <taskdef name="webdoclet" classname="xdoclet.modules.web.WebDocletTask">
             <classpath>
                 <path refid="xdoclet.classpath"/>
@@ -315,7 +322,7 @@
             excludedtags="@version,@author"
             verbose="true">
             <fileset dir="src/web"/>
-            <fileset dir="src/dao"/>
+            <fileset dir="${build.dir}/dao/classes"/>
             <deploymentdescriptor validateXML="true"
                 servletspec="2.3" sessiontimeout="10"
                 destdir="${webapp.target}/WEB-INF" distributable="false"
@@ -324,6 +331,16 @@
                 <configParam name="httpsPort" value="${https.port}"/>
                 <configParam name="daoType" value="${dao.type}"/>
             </deploymentdescriptor>
+            <strutsconfigxml validateXML="true" version="1.2"/>
+            <strutsvalidationxml/>
+           </webdoclet>
+           <webdoclet destdir="${webapp.target}/WEB-INF"
+              force="${xdoclet.force}"
+              mergedir="metadata/web"
+              excludedtags="@version,@author"
+              verbose="true">
+              <fileset dir="src/web" excludes="**/listener/**"/>
+              <fileset dir="${build.dir}/dao/classes"/>
             <jsptaglib validateXML="true"
                 description="Custom tag library for this application"
                 shortName="soak" filename="soak.tld"/>
@@ -346,10 +363,15 @@
         </propertyfile>
         <!-- If Tomcat 5, uncomment the <dispatcher> elements in filter-mappings -->
         <if>
-            <or>
+            <and>    <!-- Modified Part start -->
+              <not>
+                <isset property="DeployOnOrion"/>
+              </not>
+              <or>
                 <isset property="tomcat5"/>
                 <isset property="tomcat5.5"/>
-            </or>
+              </or>
+            </and>   <!-- Modified Part end-->
             <then>
                 <replaceregexp flags="g"
                     file="${webapp.target}/WEB-INF/web.xml"
@@ -378,9 +400,12 @@
             <elseif>
                 <isset property="tomcat5.5"/>
                 <then>
-                -->
                     <copy tofile="${webapp.dist}/context.xml"
                         file="metadata/conf/tomcat-context-5.5.xml" overwrite="true">
+                -->
+                    <copy tofile="${webapp.dist}/context.xml"
+                        file="metadata/conf/oracle-context.xml" overwrite="true">
+    				
                         <filterset refid="db.variables"/>
                     </copy>
     	<!--

@@ -121,6 +121,19 @@
         <property name="forceHttps" value="false"/>
     </bean>
 
+	<bean id="txProxyTemplate" abstract="true"
+        class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager" ref="transactionManager"/>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="process*">PROPAGATION_REQUIRED</prop>
+                <prop key="save*">PROPAGATION_REQUIRED</prop>
+                <prop key="remove*">PROPAGATION_REQUIRED</prop>
+                <prop key="*">PROPAGATION_REQUIRED</prop>
+            </props>
+        </property>
+    </bean>
+    
     <!-- Override 'userManager' bean definition to add userManagerSecurity interceptor -->
     <bean id="userManager" parent="txProxyTemplate">
         <property name="target">
