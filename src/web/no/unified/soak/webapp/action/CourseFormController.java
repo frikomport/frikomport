@@ -108,6 +108,10 @@ public class CourseFormController extends BaseFormController {
     public void setMailEngine(MailEngine mailEngine) {
         this.mailEngine = mailEngine;
     }
+    
+    public void setMailSender(MailSender mailSender) {
+        this.mailSender = mailSender;
+    }
 
     public void setMessage(SimpleMailMessage message) {
         this.message = message;
