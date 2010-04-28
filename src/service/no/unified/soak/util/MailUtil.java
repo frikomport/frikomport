@@ -736,7 +736,7 @@ public class MailUtil {
                 helper.setText(getBody(registration, msg, registered, waiting));
                 addCalendar(helper,event,course, registration);
 
-                helper.setTo(registration.getEmail());
+                helper.setTo(registration.getUser().getEmail()); // Bruker brukerens epostadresse. FKM-381
                 if(ccToResponsible) helper.setCc(course.getResponsible().getEmail());
                 
                 if (from != null && !from.equals(""))
