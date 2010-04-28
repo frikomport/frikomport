@@ -47,8 +47,7 @@ public class Person extends BaseObject implements Serializable {
 
     /**
      * @spring.validator type="required"
-     * @param selectable
-     *            The selectable to set.
+     * @param selectable The selectable to set.
      */
     public void setSelectable(Boolean selectable) {
         this.selectable = selectable;
@@ -63,8 +62,7 @@ public class Person extends BaseObject implements Serializable {
     }
 
     /**
-     * @param detailURL
-     *            The detailURL to set.
+     * @param detailURL The detailURL to set.
      */
     public void setDetailURL(String detailURL) {
         this.detailURL = detailURL;
@@ -80,8 +78,8 @@ public class Person extends BaseObject implements Serializable {
 
     /**
      * @spring.validator type="required"
-     * @param email
-     *            The email to set.
+     * @spring.validator type="email"
+     * @param email The email to set.
      */
     public void setEmail(String email) {
         this.email = email;
