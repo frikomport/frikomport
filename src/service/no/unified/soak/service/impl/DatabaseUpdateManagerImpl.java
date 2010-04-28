@@ -181,85 +181,112 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     private void insertDefaultValues() {
 
     	// ROLES
-    	int addedRoles = 0;
-        try { 
-        	Role anonymous = roleManager.getRole("anonymous");
-        	if(anonymous == null){
-        		roleManager.saveRole(new Role("anonymous", "Anonymous"));
-        		addedRoles++;
-        	}
-        }
-        catch(Exception e){ 
-        	log.error("Feil i opprettelse av \"Role\"", e); 
-        }
+//    	int addedRoles = 0;
+//        try { 
+//        	Role anonymous = roleManager.getRole("anonymous");
+//        	if(anonymous == null){
+//        		roleManager.saveRole(new Role("anonymous", "Anonymous"));
+//        		addedRoles++;
+//        	}
+//        }
+//        catch(Exception e){ 
+//        	log.error("Feil i opprettelse av \"Role\"", e); 
+//        }
+//
+//        try { 
+//        	Role admin = roleManager.getRole("admin");
+//        	if(admin == null){
+//        		roleManager.saveRole(new Role("admin", "Administrator"));
+//        		addedRoles++;
+//        	}
+//        }
+//        catch(Exception e){ 
+//        	log.error("Feil i opprettelse av \"Role\"", e); 
+//        }
+//
+//        try { 
+//        	Role employee = roleManager.getRole("employee");
+//        	if(employee == null){
+//        		roleManager.saveRole(new Role("employee", "Ansatt"));
+//        		addedRoles++;
+//        	}
+//        }
+//        catch(Exception e){ 
+//        	log.error("Feil i opprettelse av \"Role\"", e); 
+//        }
+//
+//        try { 
+//        	Role eventResponsible = roleManager.getRole("eventresponsible");
+//        	if(eventResponsible == null){
+//        		roleManager.saveRole(new Role("eventresponsible", "Kursansvarlig"));
+//        		addedRoles++;
+//        	}
+//        }
+//        catch(Exception e){ 
+//        	log.error("Feil i opprettelse av \"Role\"", e); 
+//        }
+//
+//        try { 
+//        	Role editor = roleManager.getRole("editor");
+//        	if(editor == null){
+//        		roleManager.saveRole(new Role("editor", "Opplaringsansvarlig"));
+//        		addedRoles++;
+//        	}
+//        }
+//        catch(Exception e){ 
+//        	log.error("Feil i opprettelse av \"Role\"", e); 
+//        }
 
-        try { 
-        	Role admin = roleManager.getRole("admin");
-        	if(admin == null){
-        		roleManager.saveRole(new Role("admin", "Administrator"));
-        		addedRoles++;
-        	}
-        }
-        catch(Exception e){ 
-        	log.error("Feil i opprettelse av \"Role\"", e); 
-        }
+        String[][] sqlSelectAndInsertRoleArray = {
+            // Role insert
+            { "select count(*) from role where name='anonymous'",
+                    "INSERT INTO role (name, description) VALUES('anonymous', 'Anonymous')" },
+            { "select count(*) from role where name='admin'",
+                    "INSERT INTO role (name, description) VALUES('admin', 'Administrator')" },
+            { "select count(*) from role where name='employee'",
+                    "INSERT INTO role (name, description) VALUES('employee', 'Ansatt')" },
+            { "select count(*) from role where name='instructor'",
+                    "INSERT INTO role (name, description) VALUES('eventresponsible', 'Kursansvarlig')" },
+            { "select count(*) from role where name='editor'",
+                "INSERT INTO role (name, description) VALUES('editor', 'Opplaringsansvarlig')" } };
+        insertIntoTableBySQLStatements("role", sqlSelectAndInsertRoleArray);
 
-        try { 
-        	Role employee = roleManager.getRole("employee");
-        	if(employee == null){
-        		roleManager.saveRole(new Role("employee", "Ansatt"));
-        		addedRoles++;
-        	}
-        }
-        catch(Exception e){ 
-        	log.error("Feil i opprettelse av \"Role\"", e); 
-        }
-
-        try { 
-        	Role eventResponsible = roleManager.getRole("eventresponsible");
-        	if(eventResponsible == null){
-        		roleManager.saveRole(new Role("eventresponsible", "Kursansvarlig"));
-        		addedRoles++;
-        	}
-        }
-        catch(Exception e){ 
-        	log.error("Feil i opprettelse av \"Role\"", e); 
-        }
-
-        try { 
-        	Role editor = roleManager.getRole("editor");
-        	if(editor == null){
-        		roleManager.saveRole(new Role("editor", "Opplaringsansvarlig"));
-        		addedRoles++;
-        	}
-        }
-        catch(Exception e){ 
-        	log.error("Feil i opprettelse av \"Role\"", e); 
-        }
-
+    	
     	if (ApplicationResourcesUtil.isSVV()) {
         	// inserts new role for SVV
-        	try { roleManager.getRole("reader"); }
-        	catch(ObjectRetrievalFailureException e){
-        		roleManager.saveRole(new Role("reader", "Reader"));
-        		addedRoles++;
-        	}
-        }
-		if (addedRoles != 0) {
-			log.info("Antall nye roller lagt til i database: " + addedRoles);
-		}
+//        	try { roleManager.getRole("reader"); }
+//        	catch(ObjectRetrievalFailureException e){
+//        		roleManager.saveRole(new Role("reader", "Reader"));
+//        		addedRoles++;
+//        	}
+
+            String[][] sqlSelectAndInsertRoleSVVArray = {
+                    // Role insert
+                    { "select count(*) from role where name='reader'",
+                            "INSERT INTO role (name, description) VALUES('reader', 'Reader')" } };
+            insertIntoTableBySQLStatements("role", sqlSelectAndInsertRoleSVVArray);
+    	
+    	}
+//		if (addedRoles != 0) {
+//			log.info("Antall nye roller lagt til i database: " + addedRoles);
+//		}
 
 
     	// CATEGORIES
-        try { categoryManager.getCategory(1L); }
-        catch(ObjectRetrievalFailureException e){
-	        Category cat = new Category();
-	        cat.setName("Hendelse");
-	        cat.setSelectable(true);
-	        categoryManager.saveCategory(cat);
-	        log.info("\"Category\" lagt til i DB: " + cat);
-    	}
+//        try { categoryManager.getCategory(1L); }
+//        catch(ObjectRetrievalFailureException e){
+//	        Category cat = new Category();
+//	        cat.setName("Hendelse");
+//	        cat.setSelectable(true);
+//	        categoryManager.saveCategory(cat);
+//	        log.info("\"Category\" lagt til i DB: " + cat);
+//    	}
 
+        String[][] sqlSelectAndInsertCategoryArray = { { "select count(*) from category",
+        	"INSERT INTO category (name, selectable) VALUES ('Hendelse', true)" } };
+        insertIntoTableBySQLStatements("category", sqlSelectAndInsertCategoryArray);
+
+    	
         // PERSONS
         if(ApplicationResourcesUtil.isSVV()){
 	        try { 
