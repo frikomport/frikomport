@@ -461,13 +461,8 @@
         </war>
     	
     	<ear appxml="ear/META-INF/application.xml" destfile="${webapp.dist}/${webapp.name}.ear">
-            <include name="${webapp.dist}/${webapp.war}" />
-    		<!--metainf>
-    			<fileset id="ear-meta-inf" file="ear\META-INF\orion-application.xml"/>
-    			<fileset dir="ear\META-INF">
-    			  <include name="orion-application.xml"/>
-    			</fileset>
-			</metainf-->
+          <fileset dir="${webapp.dist}" includes="*.war"/>
+          <fileset dir="ear" includes="META-INF/orion-application.xml"/>
     	</ear>
     </target>
 
