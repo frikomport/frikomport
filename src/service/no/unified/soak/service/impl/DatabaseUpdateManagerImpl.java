@@ -237,20 +237,23 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 //        	log.error("Feil i opprettelse av \"Role\"", e); 
 //        }
 
-        String[][] sqlSelectAndInsertRoleArray = {
-            // Role insert
-            { "select count(*) from role where name='anonymous'",
-                    "INSERT INTO role (name, description) VALUES('anonymous', 'Anonymous')" },
-            { "select count(*) from role where name='admin'",
-                    "INSERT INTO role (name, description) VALUES('admin', 'Administrator')" },
-            { "select count(*) from role where name='employee'",
-                    "INSERT INTO role (name, description) VALUES('employee', 'Ansatt')" },
-            { "select count(*) from role where name='instructor'",
-                    "INSERT INTO role (name, description) VALUES('eventresponsible', 'Kursansvarlig')" },
-            { "select count(*) from role where name='editor'",
-                "INSERT INTO role (name, description) VALUES('editor', 'Opplaringsansvarlig')" } };
-        insertIntoTableBySQLStatements("role", sqlSelectAndInsertRoleArray);
-
+    	try {
+	        String[][] sqlSelectAndInsertRoleArray = {
+	            // Role insert
+	            { "select count(*) from role where name='anonymous'",
+	                    "INSERT INTO role (name, description) VALUES('anonymous', 'Anonymous')" },
+	            { "select count(*) from role where name='admin'",
+	                    "INSERT INTO role (name, description) VALUES('admin', 'Administrator')" },
+	            { "select count(*) from role where name='employee'",
+	                    "INSERT INTO role (name, description) VALUES('employee', 'Ansatt')" },
+	            { "select count(*) from role where name='instructor'",
+	                    "INSERT INTO role (name, description) VALUES('eventresponsible', 'Kursansvarlig')" },
+	            { "select count(*) from role where name='editor'",
+	                "INSERT INTO role (name, description) VALUES('editor', 'Opplaringsansvarlig')" } };
+	        insertIntoTableBySQLStatements("role", sqlSelectAndInsertRoleArray);
+    	}catch(Exception e){
+    		log.warn("Feil ved insert av roller", e);
+    	}
     	
     	if (ApplicationResourcesUtil.isSVV()) {
         	// inserts new role for SVV
@@ -260,11 +263,15 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 //        		addedRoles++;
 //        	}
 
-            String[][] sqlSelectAndInsertRoleSVVArray = {
-                    // Role insert
-                    { "select count(*) from role where name='reader'",
-                            "INSERT INTO role (name, description) VALUES('reader', 'Reader')" } };
-            insertIntoTableBySQLStatements("role", sqlSelectAndInsertRoleSVVArray);
+    		try {
+	            String[][] sqlSelectAndInsertRoleSVVArray = {
+	                // Role insert
+	                { "select count(*) from role where name='reader'",
+	                        "INSERT INTO role (name, description) VALUES('reader', 'Reader')" } };
+	            insertIntoTableBySQLStatements("role", sqlSelectAndInsertRoleSVVArray);
+    		}catch (Exception e) {
+				log.warn("Feil ved insert av rolle", e);
+			}
     	
     	}
 //		if (addedRoles != 0) {
@@ -282,10 +289,13 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 //	        log.info("\"Category\" lagt til i DB: " + cat);
 //    	}
 
-        String[][] sqlSelectAndInsertCategoryArray = { { "select count(*) from category",
-        	"INSERT INTO category (name, selectable) VALUES ('Hendelse', true)" } };
-        insertIntoTableBySQLStatements("category", sqlSelectAndInsertCategoryArray);
-
+    	try {
+	        String[][] sqlSelectAndInsertCategoryArray = { { "select count(*) from category",
+	        	"INSERT INTO category (name, selectable) VALUES ('Hendelse', true)" } };
+	        insertIntoTableBySQLStatements("category", sqlSelectAndInsertCategoryArray);
+    	}catch (Exception e) {
+			log.warn("Feil ved insert av kategori", e);
+		}
     	
         // PERSONS
         if(ApplicationResourcesUtil.isSVV()){
