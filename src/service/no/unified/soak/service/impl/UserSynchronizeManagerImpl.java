@@ -52,56 +52,60 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
         this.roleManager = roleManager;
     }
 
-    public void synchronizeUsers() {
-        if (ApplicationResourcesUtil.isSVV()) {
-            // TODO SVV-synking mot LDAP av alle påloggingsbrukere trengs i fall en brukerrolle fjernes i LDAP.
-        	Hashtable<String, User> users = new Hashtable<String, User>();
-        	
-        	List roles = roleManager.getRoles(null);
-            Iterator r = roles.iterator();
-            while (r.hasNext()) {
-                Role role = (Role)r.next();
-                // Brukere med rolle annonym eller ansatt skal utelates fra synkronisering mot LDAP
-                if(!role.getName().equals(Constants.ANONYMOUS_ROLE) && !role.getName().equals(Constants.EMPLOYEE_ROLE)) {
-                	List tmp = userDAO.getUsersByRole(role.getName());
-                	Iterator u = tmp.iterator();
-                	while(u.hasNext()) {
-                		User user = (User)u.next();
-                		users.put(user.getUsername(), user);
-                	}
-                }
-            }
-            // brukere som skal synkroniseres
-            Enumeration e = users.elements();
-            log.info("Synkronisering av brukere starter...");
-            while(e.hasMoreElements()) {
-            	User local = (User)e.nextElement();
-            	ExtUser ldapUser = extUserDAO.findUserByUsername(local.getUsername());
-            	if(ldapUser == null) {
-            		// brukeren finnes ikke lenger i eksternt system, settes som inaktiv bruker
-            		local.setEnabled(false);
-            		userDAO.updateUser(local);
-            		if (log.isDebugEnabled()) log.debug("Deaktivert: " + local.getFullName() + " (" + local.getEmail() + ")");
-            	}
-            	else {
-            		processUser(ldapUser);
-            		if (log.isDebugEnabled()) log.debug("LDAP: " + local.getFullName() + " (" + local.getEmail() + ")");
-            	}
-            }
-            log.info("Synkronisering av brukere ferdig!");
-            
-        } else {
-            List<ExtUser> ezUsers = extUserDAO.findAll();
-            if (ezUsers != null) {
-                Iterator<ExtUser> it = ezUsers.iterator();
-                while (it.hasNext()) {
-                    ExtUser current = it.next();
-                    processUser(current);
-                }
-            }
-            log.debug("Synchronized users");
-        }
-    }
+	public void synchronizeUsers() {
+		if (ApplicationResourcesUtil.isSVV()) {
+			// TODO SVV-synking mot LDAP av alle påloggingsbrukere trengs i
+			// fall en brukerrolle fjernes i LDAP.
+			Hashtable<String, User> users = new Hashtable<String, User>();
+
+			List roles = roleManager.getRoles(null);
+			Iterator r = roles.iterator();
+			while (r.hasNext()) {
+				Role role = (Role) r.next();
+				// Brukere med rolle annonym eller ansatt skal utelates fra
+				// synkronisering mot LDAP
+				if (!role.getName().equals(Constants.ANONYMOUS_ROLE) && !role.getName().equals(Constants.EMPLOYEE_ROLE)) {
+					List tmp = userDAO.getUsersByRole(role.getName());
+					Iterator u = tmp.iterator();
+					while (u.hasNext()) {
+						User user = (User) u.next();
+						users.put(user.getUsername(), user);
+					}
+				}
+			}
+			// brukere som skal synkroniseres
+			Enumeration e = users.elements();
+			log.info("Synkronisering av brukere starter...");
+			while (e.hasMoreElements()) {
+				User local = (User) e.nextElement();
+				ExtUser ldapUser = extUserDAO.findUserByUsername(local.getUsername());
+				if (ldapUser == null) {
+					// brukeren finnes ikke lenger i eksternt system, settes
+					// som inaktiv bruker
+					local.setEnabled(false);
+					userDAO.updateUser(local);
+					if (log.isDebugEnabled())
+						log.debug("Deaktivert: " + local.getFullName() + " (" + local.getEmail() + ")");
+				} else {
+					processUser(ldapUser);
+					if (log.isDebugEnabled())
+						log.debug("LDAP: " + local.getFullName() + " (" + local.getEmail() + ")");
+				}
+			}
+			log.info("Synkronisering av brukere ferdig!");
+
+		} else {
+			List<ExtUser> ezUsers = extUserDAO.findAll();
+			if (ezUsers != null) {
+				Iterator<ExtUser> it = ezUsers.iterator();
+				while (it.hasNext()) {
+					ExtUser current = it.next();
+					processUser(current);
+				}
+			}
+			log.debug("Synchronized users");
+		}
+	}
 
     public User processUser(ExtUser current) {
 

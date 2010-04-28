@@ -8,6 +8,7 @@ import no.unified.soak.service.Task;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.jdbc.ConnectionWrapper;
 
 public class ScheduledTasks extends TimerTask {
     private Vector<Task> tasks = null;
@@ -24,6 +25,10 @@ public class ScheduledTasks extends TimerTask {
 
 	@Override
 	public void run() {
+		ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+		Thread.currentThread().setContextClassLoader(ConnectionWrapper.class.getClassLoader());
+		try {
+
         Iterator<Task> it = tasks.iterator();
         while (it.hasNext()){
             Task task = it.next();
@@ -35,5 +40,8 @@ public class ScheduledTasks extends TimerTask {
             }
         }
         log.debug("Ran tasks");
+		} finally {
+			Thread.currentThread().setContextClassLoader(contextClassLoader);
+		}
 	}
 }
