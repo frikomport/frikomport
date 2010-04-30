@@ -1,0 +1,37 @@
+       <form name="fileUpload">
+            <field property="name" depends="required">
+                <arg0 key="uploadForm.name"/>
+            </field>
+            <!-- Client-side Javascript won't catch this in IE, but server-side will. -->
+            <field property="file" depends="required">
+                <arg0 key="uploadForm.file"/>
+            </field>
+       </form>       
+       <form name="user">
+            <field property="username" depends="required">
+            </field>
+       </form>
+       <form name="location">
+            <field property="name" depends="required">
+            </field>
+       </form>
+       <form name="person">
+            <field property="name" depends="required">
+            </field>
+       </form>
+       <form name="serviceArea">
+            <field property="name" depends="required">
+            </field>
+       </form>
+       <form name="course">
+            <field property="name" depends="required">
+            </field>
+       </form>
+       <form name="registration">
+            <field property="email" depends="required">
+            </field>
+       </form>
+       <form name="organization">
+            <field property="name" depends="required">
+            </field>
+       </form>
