@@ -168,6 +168,12 @@ public class ActionFilter implements Filter {
             log.debug("header " + Constants.USERID_HTTPHEADERNAME + "=" + usernameFromHTTPHeader + " (innlogget)");
         }
 
+        //A different user-id from the one in the session object might come in the current http request.
+        if (!StringUtils.equals(usernameFromHTTPHeader, usernameFromSession)) {
+        	usernameFromSession = null;
+        	session.setAttribute(Constants.USERID_HTTPHEADERNAME, null);
+        }
+        
         if (StringUtils.isNotBlank(usernameFromHTTPHeader)) {
             if (StringUtils.isEmpty(usernameFromSession)) {
                 ExtUserDAO extUserDAO = (ExtUserDAO) getBean("extUserDAO");
