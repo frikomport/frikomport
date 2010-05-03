@@ -246,7 +246,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	                    "INSERT INTO role (name, description) VALUES('admin', 'Administrator')" },
 	            { "select count(*) from role where name='employee'",
 	                    "INSERT INTO role (name, description) VALUES('employee', 'Ansatt')" },
-	            { "select count(*) from role where name='instructor'",
+	            { "select count(*) from role where name='eventresponsible'",
 	                    "INSERT INTO role (name, description) VALUES('eventresponsible', 'Kursansvarlig')" },
 	            { "select count(*) from role where name='editor'",
 	                "INSERT INTO role (name, description) VALUES('editor', 'Opplaringsansvarlig')" } };
