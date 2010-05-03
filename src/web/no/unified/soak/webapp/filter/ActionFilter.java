@@ -269,10 +269,10 @@ public class ActionFilter implements Filter {
             request.setAttribute("username", user.getUsername());
         } else {
             // User is not logged in, removing all role settings.
-            request.setAttribute("isCourseParticipant", null);
-            request.setAttribute("isCourseResponsible", null);
-            request.setAttribute("isEducationResponsible", null);
-            request.setAttribute("isAdmin", null);
+            request.setAttribute("isCourseParticipant", false);
+            request.setAttribute("isCourseResponsible", false);
+            request.setAttribute("isEducationResponsible", false);
+            request.setAttribute("isAdmin", false);
             request.setAttribute("username", null);
         }
     }
