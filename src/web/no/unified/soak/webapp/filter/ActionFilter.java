@@ -158,6 +158,10 @@ public class ActionFilter implements Filter {
     private void doHttpheaderAccessing(HttpServletRequest request, HttpSession session) {
 
         String usernameFromHTTPHeader = request.getHeader(Constants.USERID_HTTPHEADERNAME);
+        
+        // for IE testing
+        // usernameFromHTTPHeader="extsam";
+        
         String usernameFromSession = (String) session.getAttribute(Constants.USERID_HTTPHEADERNAME);
         ExtUser extUser = null;
         User user = null;

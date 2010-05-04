@@ -385,7 +385,6 @@
                     replace='&lt;/dispatcher&gt;'/>
             </then>
         </if>
-        <echo>Preparing tomcat-context.xml for inclusion in war</echo>
         <!-- Copy tomcat-context.xml file to context.xml -->
     	<!--
         <if>
@@ -394,6 +393,7 @@
                 <not><isset property="tomcat5.5"/></not>
             </and>
             <then>
+		        <echo>Preparing tomcat-context.xml for inclusion in war</echo>
                 <copy tofile="${webapp.dist}/context.xml"
                     file="metadata/conf/tomcat-context.xml" overwrite="true">
                     <filterset refid="db.variables"/>
@@ -402,9 +402,11 @@
             <elseif>
                 <isset property="tomcat5.5"/>
                 <then>
+			        <echo>Preparing tomcat-context.xml for inclusion in war</echo>
                     <copy tofile="${webapp.dist}/context.xml"
                         file="metadata/conf/tomcat-context-5.5.xml" overwrite="true">
                 -->
+			        <echo>Preparing orion-context.xml for inclusion in war</echo>
                     <copy tofile="${webapp.dist}/context.xml"
                         file="metadata/conf/oracle-context.xml" overwrite="true">
     				
