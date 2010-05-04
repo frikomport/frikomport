@@ -29,6 +29,7 @@
             <Item name="ResponsibleMenu" title="responsibleList.heading" page="/listResponsibles.html"/>
             <Item name="ServiceAreaMenu" title="serviceAreaList.heading" page="/listServiceAreas.html"/>
             <Item name="RegistrationMenu" title="registrationList.heading" page="/listRegistrations.html"/>
+            <Item name="ConfigurationMenu" title="configuration.name" page="/administerConfiguration.html"/>
         </Menu>
 
         <!--Registration-END-->
