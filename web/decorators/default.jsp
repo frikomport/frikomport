@@ -15,7 +15,7 @@
 <c:choose>
 <c:when test="${decorURL != null && !empty decorURL}">
 <c:catch var="exception">
-	<c:import url="${decorURL}" var="ctmpl" />
+	<c:import url="${decorURL}" var="ctmpl" charEncoding="utf-8"/>
 </c:catch>
 <c:if test="${exception != null}">
 <%
