@@ -131,6 +131,9 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         updateConfigurations();
     }
 
+	/**
+	 * For upgrade from 1.7.X to SVV
+	 */
 	private void changeRolesBySQL() {
 		String sql = "update role set name = 'eventresponsible' where name = 'instructor'";
 		if (DefaultQuotedNamingStrategy.usesOracle()) {
@@ -148,6 +151,9 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		}
 	}
 
+	/**
+	 * For upgrade from 1.7.X to SVV
+	 */
 	private void alterUserAndRolebySQL(){
 
     	// removes ID from APP_USER -- column has no purpose..
@@ -529,6 +535,9 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         updateRegistrationbySQLStatement();
     }
 
+	/**
+	 * For upgrade from 1.7.X to SVV
+	 */
     private void updateRegistrationbySQLStatement() {
         if (!reservedFieldExist()) {
             // No column 'reserved' to convert data from. No initial writing to 'status' column is done in the database.
@@ -665,7 +674,6 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
             while (it.hasNext()) {
                 boolean save = false;
                 Registration registration = it.next();
-                User admin = userManager.getUser("admin");
                 // Checks the registrations table and creates users based on
                 // email addresses
                 if (registration.getUsername() == null || registration.getUsername().trim().length() == 0) {
@@ -680,10 +688,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                         registration.setUsername(user.getUsername());
                         save = true;
                     } else {
-                        // Connect with admin user
-                        registration.setUser(admin);
-                        registration.setUsername(admin.getUsername());
-                        save = true;
+                    	log.warn("Følgende påmelding har ugyldig epostadresse: "+registration.toString());
                     }
                 }
                 // updates the invoice address
