@@ -76,9 +76,11 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 			// brukere som skal synkroniseres
 			Enumeration e = users.elements();
 			log.info("Synkronisering av brukere starter...");
+			int antall = 0;
 			while (e.hasMoreElements()) {
 				User local = (User) e.nextElement();
 				ExtUser ldapUser = extUserDAO.findUserByUsername(local.getUsername());
+				antall++;
 				if (ldapUser == null) {
 					// brukeren finnes ikke lenger i eksternt system, settes
 					// som inaktiv bruker
@@ -92,7 +94,7 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 						log.debug("LDAP: " + local.getFullName() + " (" + local.getEmail() + ")");
 				}
 			}
-			log.info("Synkronisering av brukere ferdig!");
+			log.info("Synkronisering av " + antall + " brukere ferdig!");
 
 		} else {
 			List<ExtUser> ezUsers = extUserDAO.findAll();
