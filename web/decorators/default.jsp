@@ -20,11 +20,26 @@
 <c:if test="${exception != null}">
 <%
     Exception exception = (Exception) pageContext.getAttribute("exception");
-	Exception causeException = (Exception) exception.getCause();
-	if (causeException instanceof java.io.IOException) {
-        useCmsUrl = false;
-	} else {
-	    throw exception;
+	if (exception != null) {
+		Exception causeException = (Exception) exception.getCause();
+		if (causeException instanceof java.io.IOException) {
+	        useCmsUrl = false;
+		} else {
+		    throw exception;
+		}
+	}
+	else {
+		System.out.println("default.jsp: En uventet situasjon har oppstått.<br/>");			
+		System.out.println("default.jsp: getPathInfo=["+request.getPathInfo()+"]<br/>");			
+		System.out.println("default.jsp: getQueryString=["+request.getQueryString()+"]<br/>");			
+		System.out.println("default.jsp: getServletPath=["+request.getServletPath()+"]<br/>");			
+		System.out.println("default.jsp: getRequestURI=["+request.getRequestURI()+"]<br/>");			
+
+		Exception exceptionHttp = (Exception) request.getAttribute("exception");
+		System.out.println("default.jsp: exceptionHttp=["+exceptionHttp+"]<br/>");			
+ 	     pageContext.getAttribute("decorURL");
+ 	    System.out.println("default.jsp: decorURL=["+pageContext.getAttribute("decorURL")+"]");
+ 	    System.out.println("default.jsp: ctmpl / sidedekor=["+pageContext.getAttribute("ctmpl")+"]");
 	}
 %>
 </c:if>

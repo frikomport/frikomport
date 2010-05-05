@@ -516,7 +516,7 @@ public class Registration extends BaseObject implements Serializable {
 	public String toString() {
 		return new ToStringBuilder(this).append("id", id).append("jobTitle",
 				jobTitle).append("employeeNumber", employeeNumber).append(
-				"firstName", firstName).append("lastName", lastName).append(
+				"firstName", firstName).append("lastName", lastName).append("email", email).append(
 				"status", status).append("invoiced", invoiced).append(
 				"organizationid", organizationid).append("courseid", courseid)
 				.append("serviceareaid", serviceAreaid).toString();
