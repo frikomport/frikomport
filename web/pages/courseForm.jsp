@@ -204,7 +204,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 					value="<c:out value="${startTimeDate}"/>" 
 					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
 				<a href="#" name="a1" id="Anch_startTimeDate"
-					onClick="cal1.select(document.forms[0].startTimeDate,'Anch_startTimeDate','<fmt:message key="date.format"/>'); return false;"
+					onClick="cal1.select(document.course.startTimeDate,'Anch_startTimeDate','<fmt:message key="date.format"/>'); return false;"
 					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="startTimeTime" id="startTimeTime"
@@ -233,7 +233,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 					value="<c:out value="${stopTimeDate}"/>"
 					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
 				<a href="#" name="a1" id="Anch_stopTimeDate"
-					onClick="cal1.select(document.forms[0].stopTimeDate,'Anch_stopTimeDate','<fmt:message key="date.format"/>'); return false;"
+					onClick="cal1.select(document.course.stopTimeDate,'Anch_stopTimeDate','<fmt:message key="date.format"/>'); return false;"
 					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="stopTimeTime" id="stopTimeTime"
@@ -442,7 +442,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 					value="<c:out value="${registerStartDate}"/>"
 					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
 				<a href="#" name="a1" id="Anch_registerStartDate"
-					onClick="cal1.select(document.forms[0].registerStartDate,'Anch_registerStartDate','<fmt:message key="date.format"/>'); return false;"
+					onClick="cal1.select(document.course.registerStartDate,'Anch_registerStartDate','<fmt:message key="date.format"/>'); return false;"
 					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="registerStartTime"
@@ -472,7 +472,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 					value="<c:out value="${reminderDate}"/>"
 					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
 				<a href="#" name="a1" id="Anch_reminderDate"
-					onClick="cal1.select(document.forms[0].reminderDate,'Anch_reminderDate','<fmt:message key="date.format"/>'); return false;"
+					onClick="cal1.select(document.course.reminderDate,'Anch_reminderDate','<fmt:message key="date.format"/>'); return false;"
 					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="reminderTime" id="reminderTime"
@@ -501,7 +501,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 					id="registerByDate" value="<c:out value="${registerByDate}"/>"
 					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
 				<a href="#" name="a1" id="Anch_registerByDate"
-					onClick="cal1.select(document.forms[0].registerByDate,'Anch_registerByDate','<fmt:message key="date.format"/>'); return false;"
+					onClick="cal1.select(document.course.registerByDate,'Anch_registerByDate','<fmt:message key="date.format"/>'); return false;"
 					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="registerByTime"

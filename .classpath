@@ -99,5 +99,6 @@
 	<classpathentry kind="lib" path="lib/poi-3.0.1-FINAL/poi-3.0.1-FINAL-20070705.jar"/>
 	<classpathentry kind="lib" path="lib/axis-1.4/jaxrpc.jar"/>
 	<classpathentry kind="lib" path="lib/axis-1.4/axis.jar"/>
+	<classpathentry kind="lib" path="C:/FriKomPort_SVV/SVV/lib/jakarta-commons/commons-discovery-0.2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
