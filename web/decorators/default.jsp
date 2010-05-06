@@ -21,6 +21,10 @@
 <%
     Exception exception = (Exception) pageContext.getAttribute("exception");
 	if (exception != null) {
+ 	    System.out.println("En håndterbar feil har oppstått");
+ 	    System.out.println("default.jsp: decorURL=["+pageContext.getAttribute("decorURL")+"]");
+ 	    System.out.println("default.jsp: ctmpl / sidedekor=["+pageContext.getAttribute("ctmpl")+"]");
+
 		Exception causeException = (Exception) exception.getCause();
 		if (causeException instanceof java.io.IOException) {
 	        useCmsUrl = false;
