@@ -13,6 +13,8 @@ package no.unified.soak.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import no.unified.soak.validation.Required;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -113,6 +115,7 @@ public class Course extends BaseObject implements Serializable {
      *            The role to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setRole(String role) {
         this.role = role;
     }
@@ -130,6 +133,7 @@ public class Course extends BaseObject implements Serializable {
      *            The instructorid to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setInstructorid(Long instructorid) {
         this.instructorid = instructorid;
     }
@@ -147,6 +151,7 @@ public class Course extends BaseObject implements Serializable {
      *            The responsibleUsername to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setResponsibleUsername(String responsibleusername) {
         this.responsibleUsername = responsibleusername;
     }
@@ -180,6 +185,7 @@ public class Course extends BaseObject implements Serializable {
      *            The serviceAreaid to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setServiceAreaid(Long serviceAreaid) {
         this.serviceAreaid = serviceAreaid;
     }
@@ -213,6 +219,7 @@ public class Course extends BaseObject implements Serializable {
      *            The duration to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setDuration(String duration) {
         this.duration = duration;
     }
@@ -230,6 +237,7 @@ public class Course extends BaseObject implements Serializable {
      *            The feeExternal to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setFeeExternal(Double feeExternal) {
         this.feeExternal = feeExternal;
     }
@@ -247,6 +255,7 @@ public class Course extends BaseObject implements Serializable {
      *            The feeInternal to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setFeeInternal(Double feeInternal) {
         this.feeInternal = feeInternal;
     }
@@ -315,6 +324,7 @@ public class Course extends BaseObject implements Serializable {
      *            The maxAttendants to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setMaxAttendants(Integer maxAttendants) {
         this.maxAttendants = maxAttendants;
     }
@@ -332,6 +342,7 @@ public class Course extends BaseObject implements Serializable {
      *            The name to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setName(String name) {
         this.name = name;
     }
@@ -349,6 +360,7 @@ public class Course extends BaseObject implements Serializable {
      *            The registerBy to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setRegisterBy(Date registerBy) {
         this.registerBy = registerBy;
     }
@@ -398,6 +410,7 @@ public class Course extends BaseObject implements Serializable {
      *            The reservedInternal to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setReservedInternal(Integer reservedInternal) {
         this.reservedInternal = reservedInternal;
     }
@@ -415,6 +428,7 @@ public class Course extends BaseObject implements Serializable {
      *            The startTime to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
@@ -432,14 +446,17 @@ public class Course extends BaseObject implements Serializable {
      *            The stopTime to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setStopTime(Date stopTime) {
         this.stopTime = stopTime;
     }
 
-    /**
-     * @return Returns the type.
-     * @hibernate.property column="type" length="100"
-     */
+	/**
+	 * Gets "maalgruppe".
+	 * 
+	 * @return Returns the type.
+	 * @hibernate.property column="type" length="100"
+	 */
     public String getType() {
         return type;
     }
@@ -515,6 +532,7 @@ public class Course extends BaseObject implements Serializable {
      *            The locationid to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setLocationid(Long locationid) {
         this.locationid = locationid;
     }
@@ -549,6 +567,7 @@ public class Course extends BaseObject implements Serializable {
      *            The organizationid to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setOrganizationid(Long organizationid) {
         this.organizationid = organizationid;
     }

@@ -152,6 +152,7 @@ public class ActionFilter implements Filter {
         session.setAttribute("showJobTitle", configurationManager.isActive("access.registration.showJobTitle", true));
         session.setAttribute("showWorkplace", configurationManager.isActive("access.registration.showWorkplace", true));
         session.setAttribute("showComment", configurationManager.isActive("access.registration.showComment", true));
+        session.setAttribute("usePayment", configurationManager.isActive("access.course.usePayment", true));
         session.setAttribute("itemCount", configurationManager.getValue("list.itemCount", "25"));
     }
 
@@ -186,7 +187,7 @@ public class ActionFilter implements Filter {
                     log.warn("No LDAP user found for username=[" + usernameFromHTTPHeader
                             + "] Cannot grant any roles to the presumed logged in user.");
                 } else {
-                    user = copyUserToLocaDBAndSession(extUser, session);
+                    user = copyUserToLocalDBAndSession(extUser, session);
                     session.setAttribute(Constants.USERID_HTTPHEADERNAME, user.getUsername());
                 }
             } else {
@@ -221,7 +222,7 @@ public class ActionFilter implements Filter {
             ExtUserDAO extUserDAO = (ExtUserDAO) getBean("extUserDAO");
             extUser = extUserDAO.findUserBySessionID(eZSessionId);
             if (extUser != null && extUser.getUsername() != null) {
-                copyUserToLocaDBAndSession(extUser, session);
+                copyUserToLocalDBAndSession(extUser, session);
             } else {
                 log.info("No CMS (eZ publish) user found for eZSESSID=" + eZSessionId);
             }
@@ -287,7 +288,7 @@ public class ActionFilter implements Filter {
         }
     }
 
-    private User copyUserToLocaDBAndSession(ExtUser extUser, HttpSession session) {
+    private User copyUserToLocalDBAndSession(ExtUser extUser, HttpSession session) {
         UserSynchronizeManager userSynchronizeManager = (UserSynchronizeManager) getBean("userSynchronizeManager");
         User user = userSynchronizeManager.processUser(extUser);
         session.setAttribute(Constants.USER_KEY, user);

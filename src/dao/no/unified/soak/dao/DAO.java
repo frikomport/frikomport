@@ -53,4 +53,12 @@ public interface DAO {
      * @param id the identifier (primary key) of the class
      */
     public void removeObject(Class clazz, Serializable id);
+    
+	/**
+	 * Evict entity for hibernate sessions. This avoids automatic saving
+	 * (flush) of the entity.
+	 * 
+	 * @param entity
+	 */
+	public void evict(Object entity);
 }

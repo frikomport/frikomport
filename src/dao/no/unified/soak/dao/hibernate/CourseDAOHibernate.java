@@ -37,7 +37,6 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
     public List getAllCourses() {
         DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
         criteria.addOrder(Order.asc("startTime"));
-
         return getHibernateTemplate().findByCriteria(criteria);
     }
 

@@ -114,7 +114,7 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
 		if (!originalCourse.getName().equals(changedCourse.getName())){
 			changedList.add("name");
 		}
-		if (!originalCourse.getType().equals(changedCourse.getType())){
+		if (!StringUtils.equals(originalCourse.getType(), changedCourse.getType())){
 			changedList.add("type");
 		}
 		if (!sdf.format(originalCourse.getStartTime()).equals(sdf.format(changedCourse.getStartTime()))){
@@ -123,7 +123,7 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
 		if (!sdf.format(originalCourse.getStopTime()).equals(sdf.format(changedCourse.getStopTime()))){
 			changedList.add("stopTime");
 		}
-		if (!originalCourse.getDuration().equals(changedCourse.getDuration())){
+		if (!StringUtils.equals(originalCourse.getDuration(), changedCourse.getDuration())) {
 			changedList.add("duration");
 		}
 		if (!originalCourse.getOrganizationid().equals(changedCourse.getOrganizationid())){
@@ -144,7 +144,7 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
 		if (originalCourse.getMaxAttendants() != changedCourse.getMaxAttendants()){
 			changedList.add("maxAttendants");
 		}
-		if (!originalCourse.getDescription().equals(changedCourse.getDescription())){
+		if (!StringUtils.equals(originalCourse.getDescription(), changedCourse.getDescription())){
 			changedList.add("description");
 		}
 		if (originalCourse.getChargeoverdue() != changedCourse.getChargeoverdue()){
@@ -156,4 +156,14 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
     public List<Course> getCoursesWhereRegisterByExpired(long millis){
         return dao.getCoursesWhereRegisterByExpired(millis);
     }
+
+	/**
+	 * Evict entity for hibernate sessions. This avoids automatic saving
+	 * (flush) of the entity.
+	 * 
+	 * @param entity
+	 */
+	public void evict(Object entity) {
+		dao.evict(entity);
+	}
 }

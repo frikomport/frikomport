@@ -7,29 +7,9 @@
 */
 package no.unified.soak.webapp.action;
 
-import no.unified.soak.Constants;
-import no.unified.soak.model.User;
-import no.unified.soak.service.MailEngine;
-import no.unified.soak.service.UserManager;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.beans.propertyeditors.CustomNumberEditor;
-
-import org.springframework.mail.SimpleMailMessage;
-
-import org.springframework.validation.BindException;
-
-import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.SimpleFormController;
-
+import java.lang.reflect.Method;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -41,6 +21,28 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import no.unified.soak.Constants;
+import no.unified.soak.model.User;
+import no.unified.soak.service.MailEngine;
+import no.unified.soak.service.UserManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
+import no.unified.soak.validation.Email;
+import no.unified.soak.validation.Required;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.validator.EmailValidator;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.beans.propertyeditors.CustomNumberEditor;
+import org.springframework.context.NoSuchMessageException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.SimpleFormController;
 
 
 /**
@@ -91,9 +93,16 @@ public class BaseFormController extends SimpleFormController {
      * @param locale
      *            the current locale
      */
-    public String getText(String msgKey, Locale locale) {
-        return getMessageSourceAccessor().getMessage(msgKey, locale);
-    }
+	public String getText(String msgKey, Locale locale) {
+		String theMessage;
+		try {
+			theMessage = getMessageSourceAccessor().getMessage(msgKey, locale);
+		} catch (NoSuchMessageException e) {
+			log.warn("Error getting message for key [" + msgKey + "], using locale [" + locale + "]: " + e);
+			theMessage = msgKey;
+		}
+		return theMessage;
+	}
 
     /**
      * Convenient method for getting a i18n key's value with a single string
@@ -284,4 +293,84 @@ public class BaseFormController extends SimpleFormController {
 
         return this.cancelView;
     }
+    
+	protected int validateAnnotations(Object obj, BindException errors) {
+		int i = 0;
+		for (Method method : obj.getClass().getMethods()) {
+			if (!method.getName().substring(0, 3).equals("set")) {
+				continue;
+			}
+
+			i += validateRequired(obj, errors, method);
+			i += validateEmail(obj, errors, method);
+		}
+		return i;
+	}
+
+	private int validateEmail(Object obj, BindException errors, Method method) {
+		int nErrors = 0;
+		if (method.getAnnotation(Email.class) != null) {
+			String fieldNameCamelCase = method.getName().substring(3);
+			String fieldName = lowercaseFirstLetter(fieldNameCamelCase);
+			try {
+				Method getMethod = obj.getClass().getMethod("get" + fieldNameCamelCase);
+				Object methodResult = getMethod.invoke(obj);
+
+				if (methodResult != null && methodResult instanceof String && !StringUtils.isEmpty((String) methodResult)
+						&& !EmailValidator.getInstance().isValid((String) methodResult)) {
+
+					String fieldText = ApplicationResourcesUtil.getText(obj.getClass().getSimpleName().toLowerCase() + "."
+							+ fieldName);
+					if (StringUtils.isEmpty(fieldText)) {
+						fieldText = ApplicationResourcesUtil.getText(fieldName);
+					}
+					if (StringUtils.isEmpty(fieldText)) {
+						fieldText = fieldName;
+					}
+					Object[] args = new Object[] { fieldText };
+					nErrors = 1;
+					errors.rejectValue(fieldName, "errors.email", args, methodResult
+							+ " er ikke en gyldig epostadresse i feltet " + fieldName + ".");
+				}
+			} catch (Exception e) {
+				log.warn("Feil under validering av " + fieldName + ": " + e);
+			}
+		}
+		return nErrors;
+	}
+
+	private int validateRequired(Object obj, BindException errors, Method method) {
+		int nErrors=0;
+		if (method.getAnnotation(Required.class) != null) {
+			String fieldNameCamelCase = method.getName().substring(3);
+			String fieldName = lowercaseFirstLetter(fieldNameCamelCase);
+			try {
+				Method getMethod = obj.getClass().getMethod("get" + fieldNameCamelCase);
+				Object methodResult = getMethod.invoke(obj);
+				
+				if (methodResult == null || (methodResult instanceof String && StringUtils.isEmpty((String) methodResult))) {
+					String fieldText = ApplicationResourcesUtil.getText(obj.getClass().getSimpleName().toLowerCase() + "."
+							+ fieldName);
+					if (StringUtils.isEmpty(fieldText)) {
+						fieldText = ApplicationResourcesUtil.getText(fieldName);
+					}
+					if (StringUtils.isEmpty(fieldText)) {
+						fieldText = fieldName;
+					}
+					Object[] args = new Object[] { fieldText };
+					nErrors=1;
+					errors.rejectValue(fieldName, "errors.required", args, fieldName + " is required.");
+				}
+			} catch (Exception e) {
+				log.warn("Feil under validering av " + fieldName + ": " + e);
+			}
+		}
+		return nErrors;
+	}
+
+	private String lowercaseFirstLetter(String fieldNameCamelCase) {
+		String firstLetterLowercase = fieldNameCamelCase.substring(0, 1).toLowerCase();
+		String fieldName = firstLetterLowercase+fieldNameCamelCase.substring(1);
+		return fieldName;
+	}
 }

@@ -65,4 +65,14 @@ public class BaseDAOHibernate extends HibernateDaoSupport implements DAO {
     public void removeObject(Class clazz, Serializable id) {
         getHibernateTemplate().delete(getObject(clazz, id));
     }
+    
+	/**
+	 * Evict entity for hibernate sessions. This avoids automatic saving
+	 * (flush) of the entity.
+	 * 
+	 * @param entity
+	 */
+	public void evict(Object entity) {
+		getHibernateTemplate().evict(entity);
+	}
 }

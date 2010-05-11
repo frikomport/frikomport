@@ -24,8 +24,19 @@
             </field>
        </form>
        <form name="course">
-            <field property="name" depends="required">
-            </field>
+            <field property="name" depends="required"/>
+            <field property="instructorid" depends="required"/>
+            <field property="categoryid" depends="required"/>
+            <field property="responsibleUsername" depends="required"/>
+            <field property="organizationid" depends="required"/>
+            <field property="organization" depends="required"/>
+            <field property="serviceArea" depends="required"/>
+            <field property="serviceAreaid" depends="required"/>
+            <field property="locationid" depends="required"/>
+            <field property="maxAttendants" depends="required"/>
+            <field property="registerBy" depends="required"/>
+            <field property="startTime" depends="required"/>
+            <field property="stopTime" depends="required"/>
        </form>
        <form name="registration">
             <field property="email" depends="required">

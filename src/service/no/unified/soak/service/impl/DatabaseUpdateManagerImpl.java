@@ -338,6 +338,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	configurationsToInsert.add(new Configuration("access.registration.showServiceArea", false, null));
         	configurationsToInsert.add(new Configuration("access.registration.showJobTitle", false, null));
         	configurationsToInsert.add(new Configuration("access.registration.showWorkplace", false, null));
+        	configurationsToInsert.add(new Configuration("access.course.usePayment", false, null));
 
         } else {
             // configurations specific for non-FKPSVV enviroment.
@@ -345,6 +346,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	configurationsToInsert.add(new Configuration("access.registration.showServiceArea", true, null));
         	configurationsToInsert.add(new Configuration("access.registration.showJobTitle", true, null));
         	configurationsToInsert.add(new Configuration("access.registration.showWorkplace", true, null));
+        	configurationsToInsert.add(new Configuration("access.course.usePayment", true, null));
         }
 
         List<Configuration> configurationsInDB = configurationManager.getConfigurations();

@@ -90,4 +90,12 @@ public interface CourseManager extends Manager {
     public List<String> getChangedList(Course originalCourse, Course changedCourse, String dateFormat);
     
     public List<Course> getCoursesWhereRegisterByExpired(long millis);
+
+	/**
+	 * Evict entity for hibernate sessions. This avoids automatic saving
+	 * (flush) of the entity.
+	 * 
+	 * @param entity
+	 */
+	public void evict(Object entity);
 }

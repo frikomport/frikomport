@@ -21,7 +21,7 @@
 <%
     Exception exception = (Exception) pageContext.getAttribute("exception");
 	if (exception != null) {
- 	    System.out.println("En håndterbar feil har oppstått");
+ 	    System.out.println("En mulig håndterbar feil har oppstått");
  	    System.out.println("default.jsp: decorURL=["+pageContext.getAttribute("decorURL")+"]");
  	    System.out.println("default.jsp: ctmpl / sidedekor=["+pageContext.getAttribute("ctmpl")+"]");
 
@@ -40,10 +40,9 @@
 		System.out.println("default.jsp: getRequestURI=["+request.getRequestURI()+"]<br/>");			
 
 		Exception exceptionHttp = (Exception) request.getAttribute("exception");
-		System.out.println("default.jsp: exceptionHttp=["+exceptionHttp+"]<br/>");			
- 	     pageContext.getAttribute("decorURL");
- 	    System.out.println("default.jsp: decorURL=["+pageContext.getAttribute("decorURL")+"]");
- 	    System.out.println("default.jsp: ctmpl / sidedekor=["+pageContext.getAttribute("ctmpl")+"]");
+		System.out.println("default.jsp: request.'exception'=["+exceptionHttp+"]<br/>");			
+ 	    //System.out.println("default.jsp: decorURL=["+pageContext.getAttribute("decorURL")+"]");
+ 	    //System.out.println("default.jsp: ctmpl / sidedekor=["+pageContext.getAttribute("ctmpl")+"]");
 	}
 %>
 </c:if>
