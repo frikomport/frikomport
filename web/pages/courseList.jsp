@@ -180,9 +180,10 @@ function fillSelect(obj){
         <fmt:formatDate value="${courseList.registerBy}" type="both" pattern="${dateformat} ${timeformat}" />
     </display:column>
 
+<c:if test="${showDuration}">
     <display:column property="duration" sortable="true" headerClass="sortable"
          titleKey="course.duration"/>
-
+</c:if>
     <display:column property="organization.name" sortable="true" headerClass="sortable"
          titleKey="course.organization"/>
 
@@ -193,9 +194,11 @@ function fillSelect(obj){
          <a href="<c:url value="/detailsLocation.html"><c:param name="id" value="${courseList.location.id}"/></c:url>" title="<c:out value="${courseList.location.description}"/>"><c:out value="${courseList.location.name}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="location.name" sortable="true" headerClass="sortable" titleKey="course.location"/>
+	
 	<display:column media="html" sortable="true" headerClass="sortable" titleKey="course.responsible">
          <a href="<c:url value="/detailsUser.html"><c:param name="username" value="${courseList.responsible.username}"/></c:url>"><c:out value="${courseList.responsible.fullName}"/></a>
     </display:column>
+    
     <display:column media="csv excel xml pdf" property="responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible"/>
 
     <display:column media="excel" property="instructor.name" sortable="true" headerClass="sortable" titleKey="course.instructor.export"/>

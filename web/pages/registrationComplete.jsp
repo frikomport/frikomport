@@ -38,6 +38,8 @@
 </h4>
 
 <table class="detail">
+
+<c:if test="${showEmployeeFields}">
 	<tr>
 		<th>
 			<fmt:message key="registration.employeeNumber" />
@@ -47,6 +49,8 @@
 				minFractionDigits="0" />
 		</td>
 	</tr>
+</c:if>
+
 	<tr>
 		<th>
 			<fmt:message key="registration.firstName" />
@@ -57,6 +61,7 @@
 			</spring:bind>
 		</td>
 	</tr>
+
 	<tr>
 		<th>
 			<fmt:message key="registration.lastName" />
@@ -67,6 +72,7 @@
 			</spring:bind>
 		</td>
 	</tr>
+
 	<tr>
 		<th>
 			<fmt:message key="registration.email" />
@@ -77,6 +83,7 @@
 			</spring:bind>
 		</td>
 	</tr>
+
 	<tr>
 		<th>
 			<fmt:message key="registration.phone" />
@@ -87,6 +94,7 @@
 			</spring:bind>
 		</td>
 	</tr>
+
 	<tr>
 		<th>
 			<fmt:message key="registration.mobilePhone" />
@@ -97,6 +105,8 @@
 			</spring:bind>
 		</td>
 	</tr>
+
+<c:if test="${showEmployeeFields}">
 	<tr>
 		<th>
 			<fmt:message key="registration.closestLeader" />
@@ -107,6 +117,9 @@
 			</spring:bind>
 		</td>
 	</tr>
+</c:if>
+
+<c:if test="${showJobTitle}">
 	<tr>
 		<th>
 			<fmt:message key="registration.jobTitle" />
@@ -117,6 +130,9 @@
 			</spring:bind>
 		</td>
 	</tr>
+</c:if>
+
+<c:if test="${showWorkplace}">
 	<tr>
 		<th>
 			<fmt:message key="registration.workplace" />
@@ -127,6 +143,8 @@
 			</spring:bind>
 		</td>
 	</tr>
+</c:if>
+
 	<tr>
 		<th>
 			<fmt:message key="registration.organization" />
@@ -139,6 +157,8 @@
 			</c:if>
 		</td>
 	</tr>
+
+<c:if test="${showServiceArea}">
 	<tr>
 		<th>
 			<fmt:message key="registration.serviceArea" />
@@ -151,6 +171,9 @@
 			</c:if>
 		</td>
 	</tr>
+</c:if>
+
+<c:if test="${showComment}">
 	<tr>
 		<th>
 			<fmt:message key="registration.comment" />
@@ -161,54 +184,56 @@
 			</spring:bind>
 		</td>
 	</tr>
+</c:if>
 
-	<c:if test="${!freeCourse}">
-		<tr>
-			<th>
-				<soak:label key="registration.invoiceAddress" />
-			</th>
-		</tr>
-		<tr>
-			<th>
-				<fmt:message key="registration.invoiceAddress.name" />
-			</th>
-			<td>
-				<spring:bind path="registration.invoiceName">
-					<c:out value="${status.value}" />
-				</spring:bind>
-			</td>
-		</tr>
-		<tr>
-			<th>
-				<fmt:message key="registration.invoiceAddress.address" />
-			</th>
-			<td>
-				<spring:bind path="registration.invoiceAddress.address">
-					<c:out value="${status.value}" />
-				</spring:bind>
-			</td>
-		</tr>
-		<tr>
-			<th>
-				<fmt:message key="registration.invoiceAddress.city" />
-			</th>
-			<td>
-				<spring:bind path="registration.invoiceAddress.city">
-					<c:out value="${status.value}" />
-				</spring:bind>
-			</td>
-		</tr>
-		<tr>
-			<th>
-				<fmt:message key="registration.invoiceAddress.postalCode" />
-			</th>
-			<td>
-				<spring:bind path="registration.invoiceAddress.postalCode">
-					<c:out value="${status.value}" />
-				</spring:bind>
-			</td>
-		</tr>
-	</c:if>
+<c:if test="${!freeCourse}">
+	<tr>
+		<th>
+			<soak:label key="registration.invoiceAddress" />
+		</th>
+	</tr>
+	<tr>
+		<th>
+			<fmt:message key="registration.invoiceAddress.name" />
+		</th>
+		<td>
+			<spring:bind path="registration.invoiceName">
+				<c:out value="${status.value}" />
+			</spring:bind>
+		</td>
+	</tr>
+	<tr>
+		<th>
+			<fmt:message key="registration.invoiceAddress.address" />
+		</th>
+		<td>
+			<spring:bind path="registration.invoiceAddress.address">
+				<c:out value="${status.value}" />
+			</spring:bind>
+		</td>
+	</tr>
+	<tr>
+		<th>
+			<fmt:message key="registration.invoiceAddress.city" />
+		</th>
+		<td>
+			<spring:bind path="registration.invoiceAddress.city">
+				<c:out value="${status.value}" />
+			</spring:bind>
+		</td>
+	</tr>
+	<tr>
+		<th>
+			<fmt:message key="registration.invoiceAddress.postalCode" />
+		</th>
+		<td>
+			<spring:bind path="registration.invoiceAddress.postalCode">
+				<c:out value="${status.value}" />
+			</spring:bind>
+		</td>
+	</tr>
+</c:if>
+
 	<tr>
 		<td class="buttonBar">
 		<form method="post" action="<c:url value="/listCourses.html"/>"

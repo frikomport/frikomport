@@ -334,19 +334,29 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         
         if (ApplicationResourcesUtil.isSVV()) {
             // configurations specific for FKPSVV enviroment.
+
+        	// registrationForm
         	configurationsToInsert.add(new Configuration("access.registration.showEmployeeFields", false, null));
         	configurationsToInsert.add(new Configuration("access.registration.showServiceArea", false, null));
         	configurationsToInsert.add(new Configuration("access.registration.showJobTitle", false, null));
         	configurationsToInsert.add(new Configuration("access.registration.showWorkplace", false, null));
+        	
+        	//courseForm
         	configurationsToInsert.add(new Configuration("access.course.usePayment", false, null));
-
+        	configurationsToInsert.add(new Configuration("access.course.showDuration", false, null));
+        	
         } else {
             // configurations specific for non-FKPSVV enviroment.
+        	
+        	// registrationForm
         	configurationsToInsert.add(new Configuration("access.registration.showEmployeeFields", true, null));
         	configurationsToInsert.add(new Configuration("access.registration.showServiceArea", true, null));
         	configurationsToInsert.add(new Configuration("access.registration.showJobTitle", true, null));
         	configurationsToInsert.add(new Configuration("access.registration.showWorkplace", true, null));
+
+        	//courseForm
         	configurationsToInsert.add(new Configuration("access.course.usePayment", true, null));
+        	configurationsToInsert.add(new Configuration("access.course.showDuration", true, null));
         }
 
         List<Configuration> configurationsInDB = configurationManager.getConfigurations();

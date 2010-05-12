@@ -4,7 +4,6 @@
 <fmt:message key="time.format" var="timeformat" />
 <fmt:message key="date.format.localized" var="datelocalized" />
 <fmt:message key="time.format.localized" var="timelocalized" />
-<fmt:message key="access.course.singleprice" var="singleprice" />
 <fmt:message key="access.course.filterlocation" var="filterlocation" />
 
 <SCRIPT LANGUAGE="JavaScript" ID="js1">
@@ -249,16 +248,23 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 			</td>
 		</tr>
 
-		<tr>
-			<th>
-				<soak:label key="course.duration" />
-			</th>
-			<td>
-				<form:input path="duration" size="50" maxlength="100"/>
-				<form:errors cssClass="fieldError" htmlEscape="false"
-					path="duration" />
-			</td>
-		</tr>
+		<c:choose>
+			<c:when test="${showDuration}">
+				<tr>
+					<th>
+						<soak:label key="course.duration" />
+					</th>
+					<td>
+						<form:input path="duration" size="50" maxlength="100"/>
+						<form:errors cssClass="fieldError" htmlEscape="false"
+							path="duration" />
+					</td>
+				</tr>
+			</c:when>
+			<c:otherwise>
+				<form:hidden path="duration" />
+			</c:otherwise>
+		</c:choose>
 
 		<tr>
 			<th>
@@ -388,7 +394,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 		</tr>
 
 		<c:choose>
-			<c:when test="${!singleprice}">
+			<c:when test="${!singleprice && usePayment}">
 				<tr>
 					<th>
 						<soak:label key="course.reservedInternal" />
@@ -417,16 +423,23 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 			</c:otherwise>
 		</c:choose>
 
-		<tr>
-			<th>
-				<soak:label key="course.feeExternal" />
-			</th>
-			<td>
-				<form:input path="feeExternal" />
-				<form:errors cssClass="fieldError" htmlEscape="false"
-					path="feeExternal" />
-			</td>
-		</tr>
+		<c:choose>
+			<c:when test="${usePayment}">
+				<tr>
+					<th>
+						<soak:label key="course.feeExternal" />
+					</th>
+					<td>
+						<form:input path="feeExternal" />
+						<form:errors cssClass="fieldError" htmlEscape="false"
+							path="feeExternal" />
+					</td>
+				</tr>
+			</c:when>
+			<c:otherwise>
+				<form:hidden path="feeExternal" />
+			</c:otherwise>
+		</c:choose>
 
 		<tr>
 			<th>
@@ -517,16 +530,23 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 			</td>
 		</tr>
 
-        <tr>
-            <th>
-                <soak:label key="course.chargeoverdue" />
-            </th>
-            <td>
-                <form:checkbox path="chargeoverdue" />
-                <form:errors cssClass="fieldError" htmlEscape="false" path="chargeoverdue" />
-            </td>
-        </tr>
-
+		<c:choose>
+			<c:when test="${usePayment}">
+		        <tr>
+		            <th>
+		                <soak:label key="course.chargeoverdue" />
+		            </th>
+		            <td>
+		                <form:checkbox path="chargeoverdue" />
+		                <form:errors cssClass="fieldError" htmlEscape="false" path="chargeoverdue" />
+		            </td>
+		        </tr>
+			</c:when>
+			<c:otherwise>
+				<form:hidden path="chargeoverdue" />
+			</c:otherwise>
+		</c:choose>
+		
 		<tr>
 			<th>
 				<soak:label key="course.detailURL" />

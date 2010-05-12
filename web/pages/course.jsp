@@ -3,7 +3,6 @@
 <fmt:message key="time.format" var="timeformat" />
 <fmt:message key="attachmentList.item" var="item" />
 <fmt:message key="attachmentList.items" var="items" />
-<fmt:message key="access.course.singleprice" var="singleprice" />
 
 <tr>
 	<th>
@@ -65,16 +64,19 @@
 	</td>
 </tr>
 
-<tr>
-	<th>
-		<fmt:message key="course.duration" />
-	</th>
-	<td>
-		<spring:bind path="course.duration">
-			<c:out value="${status.value}" />
-		</spring:bind>
-	</td>
-</tr>
+
+<c:if test="${showDuration}">
+	<tr>
+		<th>
+			<fmt:message key="course.duration" />
+		</th>
+		<td>
+			<spring:bind path="course.duration">
+				<c:out value="${status.value}" />
+			</spring:bind>
+		</td>
+	</tr>
+</c:if>
 
 <tr>
 	<th>
@@ -143,7 +145,7 @@
 	</td>
 </tr>
 
-<c:if test="${!singleprice}">
+<c:if test="${usePayment && !singleprice}">
 	<tr>
 		<th>
 			<fmt:message key="course.reservedInternal" />
@@ -164,14 +166,17 @@
 	</tr>
 </c:if>
 
-<tr>
-	<th>
-		<fmt:message key="course.feeExternal" />
-	</th>
-	<td>
-		<fmt:formatNumber value="${course.feeExternal}" minFractionDigits="2" />
-	</td>
-</tr>
+
+<c:if test="${usePayment}">
+	<tr>
+		<th>
+			<fmt:message key="course.feeExternal" />
+		</th>
+		<td>
+			<fmt:formatNumber value="${course.feeExternal}" minFractionDigits="2" />
+		</td>
+	</tr>
+</c:if>
 
 <tr>
 	<th>
@@ -205,15 +210,17 @@
 	</td>
 </tr>
 
-<tr>
-    <th>
-        <fmt:message key="course.chargeoverdue" />
-    </th>
-    <td>
-		<c:if test="${course.chargeoverdue}">Ja</c:if>
-        <c:if test="${!course.chargeoverdue}">Nei</c:if>
-    </td>
-</tr>
+<c:if test="${usePayment}">
+	<tr>
+	    <th>
+	        <fmt:message key="course.chargeoverdue" />
+	    </th>
+	    <td>
+			<c:if test="${course.chargeoverdue}"><fmt:message key="button.yes"/></c:if>
+	        <c:if test="${!course.chargeoverdue}"><fmt:message key="button.no"/></c:if>
+	    </td>
+	</tr>
+</c:if>
 
 <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
 <tr>

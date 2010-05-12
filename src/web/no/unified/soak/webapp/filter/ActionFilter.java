@@ -144,6 +144,7 @@ public class ActionFilter implements Filter {
         ConfigurationManager configurationManager = (ConfigurationManager) getBean("configurationManager");
 
         session.setAttribute("showMenu", configurationManager.isActive("show.menu", false));
+        session.setAttribute("singleprice", configurationManager.isActive("access.course.singleprice", false));
         session.setAttribute("canDelete", configurationManager.isActive("access.registration.delete", false));
         session.setAttribute("userdefaults", configurationManager.isActive("access.registration.userdefaults", false));
         session.setAttribute("emailrepeat", configurationManager.isActive("access.registration.emailrepeat", false));
@@ -153,6 +154,7 @@ public class ActionFilter implements Filter {
         session.setAttribute("showWorkplace", configurationManager.isActive("access.registration.showWorkplace", true));
         session.setAttribute("showComment", configurationManager.isActive("access.registration.showComment", true));
         session.setAttribute("usePayment", configurationManager.isActive("access.course.usePayment", true));
+        session.setAttribute("showDuration", configurationManager.isActive("access.course.showDuration", true));
         session.setAttribute("itemCount", configurationManager.getValue("list.itemCount", "25"));
     }
 
