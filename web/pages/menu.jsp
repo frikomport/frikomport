@@ -20,7 +20,7 @@
 
     initializeMenus();
     <c:if test="${alternativeUserForm != null}">
-    personalizeMenu('<c:out value="${alternativeUserForm.fullName}"/>','<c:url value='/profileUser.html'/>');
+    personalizeMenu('<c:out value="${alternativeUserForm.fullName}" />','<c:url value='/profileUser.html'/>');
     </c:if>
    
 </script>

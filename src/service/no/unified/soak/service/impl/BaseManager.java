@@ -65,13 +65,4 @@ public class BaseManager implements Manager {
         dao.saveObject(o);
     }
 
-	/**
-	 * Evict entity for hiibernate sessions. this avoids automatic saving
-	 * (flush) of the entity.
-	 * 
-	 * @param entity
-	 */
-	public void evict(Object entity) {
-		dao.evict(entity);
-	}
 }

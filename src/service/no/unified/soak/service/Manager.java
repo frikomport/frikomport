@@ -51,12 +51,4 @@ public interface Manager {
      */
     public void removeObject(Class clazz, Serializable id);
 
-	/**
-	 * Evict entity for hiibernate sessions. this avoids automatic saving
-	 * (flush) of the entity.
-	 * 
-	 * @param entity
-	 */
-	public void evict(Object entity);
-
 }
