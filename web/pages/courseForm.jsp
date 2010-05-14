@@ -148,6 +148,10 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
         <form:hidden path="categoryid"/>
     </c:otherwise>
 </c:choose>
+
+
+<c:choose>
+<c:when test="${showDescription}">
 		<tr>
 			<th>
 				<soak:label key="course.description" />
@@ -158,18 +162,32 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 					path="description" />
 			</td>
 		</tr>
+</c:when>
+<c:otherwise>
+				<form:hidden path="description" />
+</c:otherwise>
+</c:choose>
 
+<c:choose>
+<c:when test="${showRole}">
 		<tr>
 			<th>
 				<soak:label key="course.role" />
 			</th>
 			<td>
 				<form:select path="role" items="${roles}" itemValue="name"
-					itemLabel="description" />
+					itemLabel="role" />
 				<form:errors cssClass="fieldError" htmlEscape="false" path="role" />
 			</td>
 		</tr>
+</c:when>
+<c:otherwise>
+				<form:hidden path="role" />
+</c:otherwise>
+</c:choose>
 
+<c:choose>
+<c:when test="${showType}">
 		<tr>
 			<th>
 				<soak:label key="course.type" />
@@ -179,7 +197,14 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 				<form:errors cssClass="fieldError" htmlEscape="false" path="type" />
 			</td>
 		</tr>
+</c:when>
+<c:otherwise>
+				<form:hidden path="type" />
+</c:otherwise>
+</c:choose>
 
+<c:choose>
+<c:when test="${showRestricted}">
         <tr>
 			<th>
 				<soak:label key="course.restricted" />
@@ -189,6 +214,11 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 				<form:errors cssClass="fieldError" htmlEscape="false" path="restricted" />
 			</td>
 		</tr>
+</c:when>
+<c:otherwise>
+				<form:hidden path="restricted" />
+</c:otherwise>
+</c:choose>
 
         <tr>
 			<th>

@@ -22,6 +22,7 @@
 	</td>
 </tr>
 
+<c:if test="${showDescription}">
 <tr>
 	<th>
 		<fmt:message key="course.description" />
@@ -32,7 +33,9 @@
 		</spring:bind>
 	</td>
 </tr>
+</c:if>
 
+<c:if test="${showType}">
 <tr>
 	<th>
 		<fmt:message key="course.type" />
@@ -43,6 +46,7 @@
 		</spring:bind>
 	</td>
 </tr>
+</c:if>
 
 <tr>
 	<th>

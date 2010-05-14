@@ -143,8 +143,18 @@ public class ActionFilter implements Filter {
     private void doConfiguration(HttpServletRequest request, HttpSession session) {
         ConfigurationManager configurationManager = (ConfigurationManager) getBean("configurationManager");
 
+        // course
         session.setAttribute("showMenu", configurationManager.isActive("show.menu", false));
         session.setAttribute("singleprice", configurationManager.isActive("access.course.singleprice", false));
+        session.setAttribute("usePayment", configurationManager.isActive("access.course.usePayment", true));
+        session.setAttribute("showDuration", configurationManager.isActive("access.course.showDuration", true));
+        session.setAttribute("showDescription", configurationManager.isActive("access.course.showDescription", true));
+        session.setAttribute("showRole", configurationManager.isActive("access.course.showRole", true));
+        session.setAttribute("showType", configurationManager.isActive("access.course.showType", true));
+        session.setAttribute("showRestricted", configurationManager.isActive("access.course.showRestricted", true));
+
+        
+        // registration
         session.setAttribute("canDelete", configurationManager.isActive("access.registration.delete", false));
         session.setAttribute("userdefaults", configurationManager.isActive("access.registration.userdefaults", false));
         session.setAttribute("emailrepeat", configurationManager.isActive("access.registration.emailrepeat", false));
@@ -153,8 +163,8 @@ public class ActionFilter implements Filter {
         session.setAttribute("showJobTitle", configurationManager.isActive("access.registration.showJobTitle", true));
         session.setAttribute("showWorkplace", configurationManager.isActive("access.registration.showWorkplace", true));
         session.setAttribute("showComment", configurationManager.isActive("access.registration.showComment", true));
-        session.setAttribute("usePayment", configurationManager.isActive("access.course.usePayment", true));
-        session.setAttribute("showDuration", configurationManager.isActive("access.course.showDuration", true));
+        
+        // lists
         session.setAttribute("itemCount", configurationManager.getValue("list.itemCount", "25"));
     }
 

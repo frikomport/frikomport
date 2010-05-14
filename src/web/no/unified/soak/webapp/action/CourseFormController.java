@@ -630,6 +630,9 @@ public class CourseFormController extends BaseFormController {
 		if (StringUtils.isEmpty(course.getDuration())) {
 			course.setDuration("");
 		}
+		if(StringUtils.isEmpty(course.getRole())){
+			course.setRole(Constants.ANONYMOUS_ROLE);
+		}
 	}
 
 	protected Date parseDateAndTime(HttpServletRequest request, String fieldName, String format) throws ParseException {

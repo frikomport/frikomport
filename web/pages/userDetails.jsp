@@ -36,6 +36,7 @@
         </td>
     </tr>
 
+<c:if test="${showJobTitle}">
     <tr>
         <th>
             <fmt:message key="user.jobTitle"/>
@@ -44,7 +45,9 @@
 	    	<c:out value="${user.jobTitle}"/>
         </td>
     </tr>
+</c:if>
 
+<c:if test="${showWorkplace}">
     <tr>
         <th>
             <fmt:message key="user.workplace"/>
@@ -53,7 +56,9 @@
 	    	<c:out value="${user.workplace}"/>
         </td>
     </tr>
+</c:if>
 
+<c:if test="${showServiceArea}">
     <tr>
         <th>
             <fmt:message key="user.servicearea"/>
@@ -62,6 +67,7 @@
 	    	<c:out value="${user.serviceArea.name}"/>
         </td>
     </tr>
+</c:if>
 
     <tr>
         <th>

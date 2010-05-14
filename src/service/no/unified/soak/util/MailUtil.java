@@ -535,22 +535,33 @@ public class MailUtil {
 		// Include all the course details
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.name")) + ": "
                 + course.getName() + "\n");
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.type")) + ": "
-                + course.getType() + "\n");
+
+        if(!StringUtils.isEmpty(course.getType())){
+	        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.type")) + ": "
+	                + course.getType() + "\n");
+        }
+        
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.startTime"))
                 + ": "
                 + DateUtil.getDateTime(ApplicationResourcesUtil.getText("date.format") + " "
                         + ApplicationResourcesUtil.getText("time.format"), course.getStartTime()) + "\n");
+        
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.stopTime"))
                 + ": "
                 + DateUtil.getDateTime(ApplicationResourcesUtil.getText("date.format") + " "
                         + ApplicationResourcesUtil.getText("time.format"), course.getStopTime()) + "\n");
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.duration")) + ": "
-                + course.getDuration() + "\n");
+        
+        if(!StringUtils.isEmpty(course.getDuration())){
+	        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.duration")) + ": "
+	                + course.getDuration() + "\n");
+        }
+        
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.organization")) + ": "
                 + course.getOrganization().getName() + "\n");
+        
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.serviceArea")) + ": "
                 + course.getServiceArea().getName() + "\n");
+        
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.location")) + ": "
                 + course.getLocation().getName() + "\n");
 
@@ -561,8 +572,11 @@ public class MailUtil {
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.instructor")) + ": "
                 + course.getInstructor().getName() + ", mailto:" + course.getInstructor().getEmail() + "\n");
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.description")) + ": "
-                + course.getDescription() + "\n");
+        
+        if(!StringUtils.isEmpty(course.getDescription())){
+	        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.description")) + ": "
+	                + course.getDescription() + "\n");
+        }
 	}
 
     /**

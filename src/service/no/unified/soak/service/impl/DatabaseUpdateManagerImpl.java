@@ -328,7 +328,10 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     	configurationsToInsert.add(new Configuration("access.registration.userdefaults", false, null));
     	configurationsToInsert.add(new Configuration("access.registration.emailrepeat", false, null));
     	configurationsToInsert.add(new Configuration("access.registration.showComment", true, null));
+    	
     	configurationsToInsert.add(new Configuration("mail.course.sendSummary", true, null));
+    	configurationsToInsert.add(new Configuration("access.course.showDescription", true, null));
+
     	configurationsToInsert.add(new Configuration("mail.registration.notifyResponsible", false, null));
     	configurationsToInsert.add(new Configuration("show.menu", false, null));
         
@@ -344,7 +347,10 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	//courseForm
         	configurationsToInsert.add(new Configuration("access.course.usePayment", false, null));
         	configurationsToInsert.add(new Configuration("access.course.showDuration", false, null));
-        	
+        	configurationsToInsert.add(new Configuration("access.course.showRole", false, null));
+        	configurationsToInsert.add(new Configuration("access.course.showType", false, null));
+        	configurationsToInsert.add(new Configuration("access.course.showRestricted", false, null));
+
         } else {
             // configurations specific for non-FKPSVV enviroment.
         	
@@ -357,6 +363,9 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	//courseForm
         	configurationsToInsert.add(new Configuration("access.course.usePayment", true, null));
         	configurationsToInsert.add(new Configuration("access.course.showDuration", true, null));
+        	configurationsToInsert.add(new Configuration("access.course.showRole", true, null));
+        	configurationsToInsert.add(new Configuration("access.course.showType", true, null));
+        	configurationsToInsert.add(new Configuration("access.course.showRestricted", true, null));
         }
 
         List<Configuration> configurationsInDB = configurationManager.getConfigurations();
