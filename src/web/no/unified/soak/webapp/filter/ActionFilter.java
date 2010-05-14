@@ -164,6 +164,10 @@ public class ActionFilter implements Filter {
         session.setAttribute("showWorkplace", configurationManager.isActive("access.registration.showWorkplace", true));
         session.setAttribute("showComment", configurationManager.isActive("access.registration.showComment", true));
         
+        // profile
+        session.setAttribute("showAddress", configurationManager.isActive("access.profile.showAddress", true));
+        session.setAttribute("showInvoiceaddress", configurationManager.isActive("access.profile.showInvoiceaddress", true));
+        
         // lists
         session.setAttribute("itemCount", configurationManager.getValue("list.itemCount", "25"));
     }

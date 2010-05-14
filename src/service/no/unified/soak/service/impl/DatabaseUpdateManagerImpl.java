@@ -159,7 +159,15 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     	// removes ID from APP_USER -- column has no purpose..
     	if(checkIfColumnExists("id", "app_user")){
     		log.info("Column APP_USER.ID exists.");
-    		String sql = "alter table app_user drop column id";
+    		String sql = "update table app_user set hashuser = true where id=0";
+    		if(DefaultQuotedNamingStrategy.usesOracle()){ sql = "update table app_user set \"hashuser\" = 1 where \"id\"=0"; }
+    		try { 
+    			jt.execute(sql);
+        		log.info("Column APP_USER.HASHUSER updated from ID=0!");
+    		}
+    		catch(Exception e){ log.error("Alter table APP_USER.HASHUSER failed", e); }
+
+    		sql = "alter table app_user drop column id";
     		if(DefaultQuotedNamingStrategy.usesOracle()){ sql = "alter table app_user drop column \"id\""; }
     		try { 
     			jt.execute(sql);
@@ -335,6 +343,10 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     	configurationsToInsert.add(new Configuration("mail.registration.notifyResponsible", false, null));
     	configurationsToInsert.add(new Configuration("show.menu", false, null));
         
+    	// profile
+    	configurationsToInsert.add(new Configuration("access.profile.showAddress", true, null));
+
+    	
         if (ApplicationResourcesUtil.isSVV()) {
             // configurations specific for FKPSVV enviroment.
 
@@ -351,6 +363,9 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	configurationsToInsert.add(new Configuration("access.course.showType", false, null));
         	configurationsToInsert.add(new Configuration("access.course.showRestricted", false, null));
 
+        	// profile
+        	configurationsToInsert.add(new Configuration("access.profile.showInvoiceaddress", false, null));
+
         } else {
             // configurations specific for non-FKPSVV enviroment.
         	
@@ -366,6 +381,9 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	configurationsToInsert.add(new Configuration("access.course.showRole", true, null));
         	configurationsToInsert.add(new Configuration("access.course.showType", true, null));
         	configurationsToInsert.add(new Configuration("access.course.showRestricted", true, null));
+
+        	// profile
+        	configurationsToInsert.add(new Configuration("access.profile.showInvoiceaddress", true, null));
         }
 
         List<Configuration> configurationsInDB = configurationManager.getConfigurations();

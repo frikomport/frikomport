@@ -60,6 +60,8 @@
 				</c:choose>
 			</td>
 		</tr>
+
+<c:if test="${showEmployeeFields}">
 		<tr>
 			<th>
 				<soak:label key="user.employeeNumber" />
@@ -69,13 +71,15 @@
 				<form:errors cssClass="fieldError" path="employeeNumber" />
 			</td>
 		</tr>
+</c:if>
+
 		<tr>
 			<th>
 				<soak:label key="user.firstName" />
 			</th>
 			<td>
 				<c:choose>
-					<c:when test="${user.id == '0'}">
+					<c:when test="${user.hashuser}">
 						<form:input path="firstName" />
 						<form:errors cssClass="fieldError" path="firstName" />
 					</c:when>
@@ -91,7 +95,7 @@
 			</th>
 			<td>
 				<c:choose>
-					<c:when test="${user.id == '0'}">
+					<c:when test="${user.hashuser}">
 						<form:input path="lastName" />
 						<form:errors cssClass="fieldError" path="lastName" />
 					</c:when>
@@ -101,6 +105,8 @@
 				</c:choose>
 			</td>
 		</tr>
+		
+<c:if test="${showAddress}">
 		<tr>
 			<th>
 				<soak:label key="user.address.address" />
@@ -108,6 +114,15 @@
 			<td>
 				<form:input path="address.address" />
 				<form:errors cssClass="fieldError" path="address.address" />
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<soak:label key="user.address.postalCode" />
+			</th>
+			<td>
+				<form:input path="address.postalCode" />
+				<form:errors cssClass="fieldError" path="address.postalCode" />
 			</td>
 		</tr>
 		<tr>
@@ -128,22 +143,15 @@
 				<form:errors cssClass="fieldError" path="address.country" />
 			</td>
 		</tr>
-		<tr>
-			<th>
-				<soak:label key="user.address.postalCode" />
-			</th>
-			<td>
-				<form:input path="address.postalCode" />
-				<form:errors cssClass="fieldError" path="address.postalCode" />
-			</td>
-		</tr>
+</c:if>
+		
 		<tr>
 			<th>
 				<soak:label key="user.email" />
 			</th>
 			<td>
                 <c:choose>
-					<c:when test="${user.id == '0'}">
+					<c:when test="${user.hashuser}">
 						<form:input path="email" />
 						<form:errors cssClass="fieldError" path="email" />
 					</c:when>
@@ -173,6 +181,7 @@
 			</td>
 		</tr>
 
+<c:if test="${showEmployeeFields}">
 		<tr>
 			<th>
 				<soak:label key="user.closestLeader" />
@@ -182,7 +191,9 @@
 				<form:errors cssClass="fieldError" path="closestLeader" />
 			</td>
 		</tr>
+</c:if>
 
+<c:if test="${showJobTitle}">
 		<tr>
 			<th>
 				<soak:label key="user.jobTitle" />
@@ -192,7 +203,9 @@
 				<form:errors cssClass="fieldError" path="jobTitle" />
 			</td>
 		</tr>
+</c:if>
 
+<c:if test="${showWorkplace}">
 		<tr>
 			<th>
 				<soak:label key="user.workplace" />
@@ -202,6 +215,8 @@
 				<form:errors cssClass="fieldError" path="workplace" />
 			</td>
 		</tr>
+</c:if>
+
 		<tr>
 			<th>
 				<soak:label key="user.website" />
@@ -228,6 +243,8 @@
 					path="organizationid" />
 			</td>
 		</tr>
+
+<c:if test="${showServiceArea}">
 		<tr>
 			<th>
 				<soak:label key="user.servicearea" />
@@ -260,7 +277,9 @@
 				</spring:bind>
 			</td>
 		</tr>
+</c:if>
 
+<c:if test="${showInvoiceaddress}">
 		<tr>
 			<th>
 				<soak:label key="user.invoiceAddress" />
@@ -288,15 +307,6 @@
 		</tr>
 		<tr>
 			<th>
-				<soak:label key="user.invoiceAddress.city" />
-			</th>
-			<td>
-				<form:input path="invoiceAddress.city" />
-				<form:errors cssClass="fieldError" path="invoiceAddress.city" />
-			</td>
-		</tr>
-		<tr>
-			<th>
 				<soak:label key="user.invoiceAddress.postalCode" />
 			</th>
 			<td>
@@ -304,6 +314,17 @@
 				<form:errors cssClass="fieldError" path="invoiceAddress.postalCode" />
 			</td>
 		</tr>
+		<tr>
+			<th>
+				<soak:label key="user.invoiceAddress.city" />
+			</th>
+			<td>
+				<form:input path="invoiceAddress.city" />
+				<form:errors cssClass="fieldError" path="invoiceAddress.city" />
+			</td>
+		</tr>
+</c:if>
+		
 		<c:if test="${param.from == 'list' or param.method == 'Add'}">
 			<tr>
 				<th>

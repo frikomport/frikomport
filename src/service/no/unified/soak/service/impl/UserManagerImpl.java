@@ -476,9 +476,10 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 
 		user.setEnabled(true);
 		user.setAddress(new Address());
-//		user.setId(new Integer(0));
 		setRoles(getDefaultRoles(), user);
 		user.setHash(StringUtil.encodeString(user.getUsername()));
+		user.setHashuser(true);
+		
 		try {
 			saveUser(user);
 			return user;

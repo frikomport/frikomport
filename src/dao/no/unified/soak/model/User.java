@@ -59,6 +59,7 @@ public class User extends BaseObject implements Serializable {
     protected String invoiceName;
     protected Address invoiceAddress = new Address();
     protected String closestLeader;
+    protected Boolean hashuser;
   
     public User() {
     }
@@ -283,6 +284,9 @@ public class User extends BaseObject implements Serializable {
      *
      */
     public void setAddress(Address address) {
+    	if(address == null) {
+    		address = new Address();
+    	}
         this.address = address;
     }
 
@@ -584,8 +588,7 @@ public class User extends BaseObject implements Serializable {
 		return hash;
 	}
 
-    
-    /**
+	/**
 	 * Sets the hash.
 	 * 
 	 * @param hash
@@ -594,6 +597,24 @@ public class User extends BaseObject implements Serializable {
 	 */
 	public void setHash(String hash) {
 		this.hash = hash;
+	}
+
+	/**
+     * @return true if user has an emailaddress as username
+	 * @hibernate.property column="hashuser" not-null="true"
+	 */
+	public Boolean getHashuser() {
+		return hashuser;
+	}
+
+	/**
+     * @param hashuser
+     */
+	public void setHashuser(Boolean hashuser) {
+		if(hashuser == null) {
+			hashuser = false;
+		}
+		this.hashuser = hashuser;
 	}
 
 	public boolean equals(Object o) {
