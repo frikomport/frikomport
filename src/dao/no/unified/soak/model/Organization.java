@@ -42,14 +42,14 @@ public class Organization extends BaseObject implements Serializable {
     private Type type;
 
     public enum Type {
-        MUNICIPALITY(1, 1), COUNTY(2, 1), AREA(3, 1), REGION(4, 2);
+        MUNICIPALITY(1, null), COUNTY(2, MUNICIPALITY), AREA(3, null), REGION(4, MUNICIPALITY, AREA);
         private Integer typeDBValue;
-        private Integer level;
+        private Type[] possibleChildren;
         private String displayName;
 
-        Type(int type, Integer level) {
+        Type(int type, Type... possibleChildren) {
             this.typeDBValue = type;
-            this.level = level;
+            this.possibleChildren = possibleChildren;
         }
 
         public static Type getTypeFromDBValue(Integer dbValue) {
@@ -65,8 +65,8 @@ public class Organization extends BaseObject implements Serializable {
             return typeDBValue;
         }
 
-        public Integer getLevel() {
-            return level;
+        public Type[] getLevel() {
+            return possibleChildren;
         }
 
         public void setDisplayName(String name) {
