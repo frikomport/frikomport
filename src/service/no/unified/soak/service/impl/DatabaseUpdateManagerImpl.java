@@ -18,6 +18,7 @@ import no.unified.soak.model.Registration;
 import no.unified.soak.model.Role;
 import no.unified.soak.model.ServiceArea;
 import no.unified.soak.model.User;
+import no.unified.soak.model.Organization.Type;
 import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.DatabaseUpdateManager;
@@ -419,26 +420,70 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	List<Organization> organizationsInDB = organizationManager.getAll();
         	
         	Vector<Organization> organizationsToInsert = new Vector<Organization>();
-        	organizationsToInsert.add(new Organization("Østfold", 1, 2, true));
-        	organizationsToInsert.add(new Organization("Akershus", 2, 2, true));
-        	organizationsToInsert.add(new Organization("Oslo", 3, 2, true));
-        	organizationsToInsert.add(new Organization("Hedmark", 4, 2, true));
-        	organizationsToInsert.add(new Organization("Oppland", 5, 2, true));
-        	organizationsToInsert.add(new Organization("Buskerud", 6, 2, true));
-        	organizationsToInsert.add(new Organization("Vestfold", 7, 2, true));
-        	organizationsToInsert.add(new Organization("Telemark", 8, 2, true));
-        	organizationsToInsert.add(new Organization("Aust-Agder", 9, 2, true));
-        	organizationsToInsert.add(new Organization("Vest-Agder", 10, 2, true));
-        	organizationsToInsert.add(new Organization("Rogaland", 11, 2, true));
-        	organizationsToInsert.add(new Organization("Hordaland", 12, 2, true));
-        	organizationsToInsert.add(new Organization("Sogn og Fjordane", 14, 2, true));
-        	organizationsToInsert.add(new Organization("Møre og Romsdal", 15, 2, true));
-        	organizationsToInsert.add(new Organization("Sør-Trøndelag", 16, 2, true));
-        	organizationsToInsert.add(new Organization("Nord-Trøndelag", 17, 2, true));
-        	organizationsToInsert.add(new Organization("Nordland", 18, 2, true));
-        	organizationsToInsert.add(new Organization("Troms", 19, 2, true));
-        	organizationsToInsert.add(new Organization("Finnmark", 20, 2, true));
+        	
+        	List regioner = organizationManager.getOrganizationsByType(Type.REGION);
+        	if(regioner.isEmpty()){
+        		// regioner
+        		Organization north = new Organization("Region Nord", 1, 4, true, null);
+        		Organization mid = new Organization("Region Midt", 2, 4, true, null);
+        		Organization west = new Organization("Region Vest", 3, 4, true, null);
+        		Organization south = new Organization("Region Sør", 4, 4, true, null);
+        		Organization east = new Organization("Region Øst", 5, 4, true, null);
+        		organizationManager.saveOrganization(north);
+        		organizationManager.saveOrganization(mid);
+        		organizationManager.saveOrganization(west);
+        		organizationManager.saveOrganization(south);
+        		organizationManager.saveOrganization(east);
+        		
+            	// områder
+            	organizationsToInsert.add(new Organization("Område Helgeland", 0, 3, true, north));
+            	organizationsToInsert.add(new Organization("Område Salten", 0, 3, true, north));
+            	organizationsToInsert.add(new Organization("Område Midtre Hålogaland", 0, 3, true, north));
+            	organizationsToInsert.add(new Organization("Område Midtre Troms", 0, 3, true, north));
+            	organizationsToInsert.add(new Organization("Område Nord-Troms og Vest-Finnmark", 0, 3, true, north));
+            	organizationsToInsert.add(new Organization("Område Øst-Finnmark", 0, 3, true, north));
+            	
+            	organizationsToInsert.add(new Organization("Område Møre og Romsdal", 0, 3, true, mid));
+            	organizationsToInsert.add(new Organization("Område Sør-Trøndelag", 0, 3, true, mid));
+            	organizationsToInsert.add(new Organization("Område Nord-Trøndelag", 0, 3, true, mid));
+            	
+            	organizationsToInsert.add(new Organization("Område Sør-Rogaland", 0, 3, true, west));
+            	organizationsToInsert.add(new Organization("Område Haugaland og Sunnhordaland", 0, 3, true, west));
+            	organizationsToInsert.add(new Organization("Område Bergen og Nordhordaland", 0, 3, true, west));
+            	organizationsToInsert.add(new Organization("Område Indre Hordaland og Sogn og Fjordane", 0, 3, true, west));
+            	
+            	organizationsToInsert.add(new Organization("Område Agder", 0, 3, true, south));
+            	organizationsToInsert.add(new Organization("Område Nedre-Telemark og Vestfold", 0, 3, true, south));
+            	organizationsToInsert.add(new Organization("Område Øvre-Telemark og Buskerud", 0, 3, true, south));
 
+            	organizationsToInsert.add(new Organization("Område Follo og Østfold", 0, 3, true, east));
+            	organizationsToInsert.add(new Organization("Område Asker, Bærum og Oslo", 0, 3, true, east));
+            	organizationsToInsert.add(new Organization("Område Glåmdal og Romerike", 0, 3, true, east));
+            	organizationsToInsert.add(new Organization("Område Hedemarken-Østerdalen", 0, 3, true, east));
+            	organizationsToInsert.add(new Organization("Område Oppland", 0, 3, true, east));
+
+            	// fylker
+            	organizationsToInsert.add(new Organization("Østfold", 1, 2, true, east));
+            	organizationsToInsert.add(new Organization("Akershus", 2, 2, true, east));
+            	organizationsToInsert.add(new Organization("Oslo", 3, 2, true, east));
+            	organizationsToInsert.add(new Organization("Hedmark", 4, 2, true, east));
+            	organizationsToInsert.add(new Organization("Oppland", 5, 2, true, east));
+            	organizationsToInsert.add(new Organization("Buskerud", 6, 2, true, south));
+            	organizationsToInsert.add(new Organization("Vestfold", 7, 2, true, south));
+            	organizationsToInsert.add(new Organization("Telemark", 8, 2, true, south));
+            	organizationsToInsert.add(new Organization("Aust-Agder", 9, 2, true, south));
+            	organizationsToInsert.add(new Organization("Vest-Agder", 10, 2, true, south));
+            	organizationsToInsert.add(new Organization("Rogaland", 11, 2, true, west));
+            	organizationsToInsert.add(new Organization("Hordaland", 12, 2, true, west));
+            	organizationsToInsert.add(new Organization("Sogn og Fjordane", 14, 2, true, west));
+            	organizationsToInsert.add(new Organization("Møre og Romsdal", 15, 2, true, mid));
+            	organizationsToInsert.add(new Organization("Sør-Trøndelag", 16, 2, true, mid));
+            	organizationsToInsert.add(new Organization("Nord-Trøndelag", 17, 2, true, mid));
+            	organizationsToInsert.add(new Organization("Nordland", 18, 2, true, north));
+            	organizationsToInsert.add(new Organization("Troms", 19, 2, true, north));
+            	organizationsToInsert.add(new Organization("Finnmark", 20, 2, true, north));
+        	}
+        	
             if(organizationsInDB.isEmpty()){
             	// insert organizations for env
             	for(int i=0; i<organizationsToInsert.size(); i++){
@@ -455,9 +500,20 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         			Iterator orgList = organizationsInDB.iterator();
                 	while(orgList.hasNext()){
                 		Organization alreadyInDB = (Organization)orgList.next();
+                		
+                		Organization parentInDB = alreadyInDB.getParent();
+                		Organization parent = organization.getParent();
+                		                		
                 		if(alreadyInDB.getName().equalsIgnoreCase(organization.getName())){
                 			insert = false;
+
+                			if(parent != null && parentInDB == null){ // update parent for fylker
+                				alreadyInDB.setParent(parent);
+                        		organizationManager.saveOrganization(alreadyInDB);
+                	        	log.info("\"Organization\" oppdatert i DB: " + organization);
+                			}
                 		}
+                		
                 	}
                 	if(insert) {
                 		organizationManager.saveOrganization(organization);

@@ -96,6 +96,14 @@ public class Organization extends BaseObject implements Serializable {
     	setSelectable(selectable);
     }
 
+    public Organization(String name, long number, int type, boolean selectable, Organization parent){
+    	setName(name);
+    	setNumber(number);
+    	setType(type);
+    	setSelectable(selectable);
+    	setParent(parent);
+    }
+
     /**
      * @return Returns the selectable.
      * @hibernate.property column="selectable" not-null="true"
@@ -230,9 +238,9 @@ public class Organization extends BaseObject implements Serializable {
     }
 
     /**
-     * @return Returns the course.
-     * @hibernate.many-to-one not-null="false" column="parentid" insert="false"
-     *                        update="false" cascade="none"
+     * @return Returns the parent organization.
+     * @hibernate.many-to-one not-null="false" column="parentid" insert="true"
+     *                        update="true" cascade="none"
      */
     public Organization getParent() {
         return parent;
