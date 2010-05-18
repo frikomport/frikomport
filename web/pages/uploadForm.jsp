@@ -50,7 +50,7 @@
     <tr>
         <td></td>
         <td class="buttonBar">
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
             <input type="submit" name="upload" class="button" onclick="bCancel=false"
                 value="<fmt:message key="button.upload"/>" />
 </c:if>

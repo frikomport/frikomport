@@ -593,7 +593,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 			<td class="buttonBar">
 
 				<c:if
-					test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+					test="${isAdmin || isEducationResponsible || isEventResponsible}">
 					<input type="submit" class="button" name="save"
 						onclick="bCancel=false"
 						value="<fmt:message key="button.course.save"/>" />
@@ -625,7 +625,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 				<c:if test="${!empty course.id && !empty course.name}">
 					<c:choose>
 						<c:when
-							test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+							test="${isAdmin || isEducationResponsible || isEventResponsible}">
 							<button type="button"
 								onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 								<fmt:message key="button.administerRegistrations" />
@@ -642,7 +642,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 					</c:choose>
 
 					<c:if
-						test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+						test="${isAdmin || isEducationResponsible || isEventResponsible}">
 						<button type="button"
 							onclick="location.href='<c:url value="/editFileCourse.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 							<fmt:message key="button.administerFiles" />

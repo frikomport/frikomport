@@ -604,6 +604,9 @@ public class User extends BaseObject implements Serializable {
 	 * @hibernate.property column="hashuser" not-null="true"
 	 */
 	public Boolean getHashuser() {
+		if(hashuser == null) {
+			hashuser = false;
+		}
 		return hashuser;
 	}
 

@@ -290,14 +290,16 @@ public class ActionFilter implements Filter {
         if (user != null) {
             List<String> roleNameList = user.getRoleNameList();
             request.setAttribute("isCourseParticipant", roleNameList.contains(Constants.EMPLOYEE_ROLE));
-            request.setAttribute("isCourseResponsible", roleNameList.contains(Constants.EVENTRESPONSIBLE_ROLE));
+            request.setAttribute("isReader", roleNameList.contains(Constants.READER_ROLE));
+            request.setAttribute("isEventResponsible", roleNameList.contains(Constants.EVENTRESPONSIBLE_ROLE));
             request.setAttribute("isEducationResponsible", roleNameList.contains(Constants.EDITOR_ROLE));
             request.setAttribute("isAdmin", roleNameList.contains(Constants.ADMIN_ROLE));
             request.setAttribute("username", user.getUsername());
         } else {
             // User is not logged in, removing all role settings.
             request.setAttribute("isCourseParticipant", false);
-            request.setAttribute("isCourseResponsible", false);
+            request.setAttribute("isReader", false);
+            request.setAttribute("isEventResponsible", false);
             request.setAttribute("isEducationResponsible", false);
             request.setAttribute("isAdmin", false);
             request.setAttribute("username", null);

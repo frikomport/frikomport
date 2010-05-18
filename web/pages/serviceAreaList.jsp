@@ -66,7 +66,7 @@
 
 
 	<c:if
-		test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+		test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 		<display:column sortable="true" headerClass="sortable"
 			titleKey="serviceArea.selectable">
 			<c:if test="${serviceAreaList.selectable == true}">

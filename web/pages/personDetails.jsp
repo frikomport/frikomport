@@ -53,7 +53,7 @@
         </td>
     </tr>
 
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <tr>
         <th>
             <fmt:message key="person.phone"/>
@@ -99,7 +99,7 @@
         </td>
     </tr>
 
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <tr>
         <th>
             <fmt:message key="person.selectable"/>
@@ -117,7 +117,7 @@
         <td class="buttonBar">            
             <input type="submit" class="button" name="return" onclick="bCancel=true"
                 value="<fmt:message key="button.person.list"/>" />
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
 		    <button type="button" onclick="location.href='<c:url value="/editPerson.html"><c:param name="id" value="${person.id}"/></c:url>'">
 	    	    <fmt:message key="button.edit"/>
 		    </button>

@@ -192,7 +192,7 @@
 	</td>
 </tr>
 
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
 <tr>
 	<th>
 		<fmt:message key="course.reminder" />
@@ -226,7 +226,7 @@
 	</tr>
 </c:if>
 
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 <tr>
 	<th>
 		<fmt:message key="course.url" />

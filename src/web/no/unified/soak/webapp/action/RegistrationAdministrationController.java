@@ -192,7 +192,7 @@ public class RegistrationAdministrationController extends BaseFormController {
 		RegistrationStatusCriteria statusCriteria;
         if (BooleanUtils.toBoolean((Boolean) request.getAttribute("isAdmin"))
                 || BooleanUtils.toBoolean((Boolean) request.getAttribute("isEducationResponsible"))
-                || BooleanUtils.toBoolean((Boolean) request.getAttribute("isCourseResponsible"))) {
+                || BooleanUtils.toBoolean((Boolean) request.getAttribute("isEventResponsible"))) {
             statusCriteria = null;
         } else {
             statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();

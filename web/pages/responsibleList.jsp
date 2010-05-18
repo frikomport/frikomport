@@ -21,7 +21,7 @@
     </display:column>
     <display:column media="csv excel xml pdf" property="email" sortable="true" headerClass="sortable" titleKey="user.email"/>
 
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <display:column property="phoneNumber" sortable="true" headerClass="sortable"
          titleKey="user.phoneNumber"/>
 

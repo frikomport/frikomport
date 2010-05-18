@@ -39,7 +39,7 @@
          titleKey="organization.type">
     </display:column>
     
-<c:if test="${isAdmin}">
+<c:if test="${(isAdmin || isEducationResponsible || isEventResponsible || isReader) && usePayment}">
     <display:column property="invoiceName" sortable="true" headerClass="sortable"
          titleKey="organizationList.invoiceAddress.name"/>
     <display:column property="invoiceAddress.address" sortable="true" headerClass="sortable"
@@ -50,7 +50,7 @@
          titleKey="organizationList.invoiceAddress.postalCode"/>
 </c:if>    
     
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <display:column sortable="true" headerClass="sortable"
          titleKey="organization.selectable">
 		<c:if test="${organizationList.selectable == true}"><fmt:message key="checkbox.checked"/></c:if>

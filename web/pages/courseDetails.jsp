@@ -1,6 +1,6 @@
 <%@ include file="/common/taglibs.jsp"%>
 <c:set var="admin" value="${false}"/>
-<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && course.responsible.username == username)}">
+<c:if test="${isAdmin || isEducationResponsible || (isEventResponsible && course.responsible.username == username)}">
 	<c:set var="admin" value="${true}"/>
 </c:if>
 
@@ -81,7 +81,7 @@
 		    </button>
 </c:if>
 
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
 			<button type="button" onclick="location.href='<c:url value="/editCourse.html"><c:param name="copyid" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.copy"/>
 		    </button>

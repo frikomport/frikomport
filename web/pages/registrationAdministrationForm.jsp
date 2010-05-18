@@ -1,7 +1,7 @@
 <%@ include file="/common/taglibs.jsp"%>
 
 <c:set var="admin" value="${false}"/>
-<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && course.responsible.username == username)}">
+<c:if test="${isAdmin || isEducationResponsible || (isEventResponsible && course.responsible.username == username)}">
 	<c:set var="admin" value="${true}"/>
 </c:if>
 
@@ -90,7 +90,7 @@
 	<display:column property="lastName" sortable="true" headerClass="sortable" class="${tdClass}" 
 		titleKey="registration.lastName"/>
 
-    <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+    <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <display:column media="ccsv cexcel cxml cpdf" property="email" sortable="true" headerClass="sortable" class="${tdClass}"
         titleKey="registration.email"/>
     </c:if>
@@ -107,7 +107,7 @@
 	<display:column property="workplace" sortable="true" headerClass="sortable" class="${tdClass}"
 		titleKey="registration.workplace"/>
 
-    <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+    <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 	<display:column property="phone" sortable="true" headerClass="sortable" class="${tdClass}"
 		titleKey="registration.phone"/>
 
@@ -117,7 +117,7 @@
 	<display:column property="comment" sortable="true" headerClass="sortable" class="${tdClass}"
 		titleKey="registration.comment"/>
 
-	<c:if test="${admin == true}">
+	<c:if test="${admin == true || isReader}">
 	<display:column media="ccsv cexcel cxml cpdf" property="invoiceName" sortable="true" headerClass="sortable"
 		titleKey="registration.invoiceAddress.name"/>
 	<display:column media="ccsv cexcel cxml cpdf" property="invoiceAddress.address" sortable="true" headerClass="sortable"

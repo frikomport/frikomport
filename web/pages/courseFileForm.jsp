@@ -50,7 +50,7 @@
     <tr>
         <td></td>
         <td class="buttonBar">
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
             <input type="submit" name="upload" class="button" onclick="bCancel=false"
                 value="<fmt:message key="button.upload"/>" />
 </c:if>
@@ -83,7 +83,7 @@
 	            <input type="submit" class="button" name="download"
                 onclick="document.courseFileListForm.attachmentid.value=<c:out value="${attachmentsList.id}"/>;bCancel=true;" 
                 value="<fmt:message key="button.download"/>" />
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
 	            <input type="submit" class="button" name="delete"
                 onclick="document.courseFileListForm.attachmentid.value=<c:out value="${attachmentsList.id}"/>;bCancel=true;" 
                 value="<fmt:message key="button.delete"/>" />

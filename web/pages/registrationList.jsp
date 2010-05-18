@@ -137,7 +137,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 
 <c:out value="${buttons}" escapeXml="false"/>
 
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 <display:table name="${registrationList}" cellspacing="0" cellpadding="0"
     id="registrationList" pagesize="${itemCount}" class="list" 
     export="true" requestURI="">
@@ -151,13 +151,13 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 		</c:otherwise>
 	</c:choose>
     
-    <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+    <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-<c:if test="${(isAdmin || isEducationResponsible || isCourseResponsible || (isCourseResponsible)) && !registrationList.canceled}">
+		<c:if test="${(isAdmin || isEducationResponsible || isEventResponsible) && !registrationList.canceled}">
         <a href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseId" value="${registrationList.courseid}"/></c:url>'>
             <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
-</c:if>
+		</c:if>
     </display:column>
 </c:if>
 

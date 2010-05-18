@@ -162,7 +162,7 @@
     <tr>
         <td></td>
         <td class="buttonBar">            
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
             <input type="submit" class="button" name="save" 
                 onclick="bCancel=false" value="<fmt:message key="button.save"/>" />
 			<c:if test="${!empty location.id}">
