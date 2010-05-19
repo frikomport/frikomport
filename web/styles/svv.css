@@ -1,0 +1,27 @@
+@CHARSET "ISO-8859-1";
+
+/* SVV */
+div#PageContainer div#ContentContainer div.content form input[class~="button"][class~="large"]
+{
+	background-image:url("../../images/buttonLarge.gif");
+}
+
+/*
+SVV  
+PageContainer har class=spesialSidemal
+
+div#PageContainer div#ContentContainer div.content 
+*/
+form button {
+background-color:#FFFFFF;
+background-image:url("../images/SVV/buttonLarge.gif");
+background-position:left top;
+background-repeat:no-repeat;
+border:medium none;
+font-size:12px;
+height:27px;
+padding-bottom:0;
+vertical-align:middle;
+width:79px;	
+}
+
