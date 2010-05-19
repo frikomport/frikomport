@@ -113,8 +113,10 @@ public class ActionFilter implements Filter {
 
         if (ApplicationResourcesUtil.isSVV()) {
             doHttpheaderAccessing(request, session);
+            request.setAttribute("isSVV", Boolean.TRUE);
         } else {
             doEZAccessing(request, session);
+            request.setAttribute("isSVV", Boolean.FALSE);
         }
 
         doConfiguration(request, session);
