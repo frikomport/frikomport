@@ -17,13 +17,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import no.unified.soak.Constants;
+import no.unified.soak.model.Organization;
 import no.unified.soak.model.Role;
 import no.unified.soak.model.User;
+import no.unified.soak.model.Organization.Type;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RoleManager;
 import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.UserExistsException;
 import no.unified.soak.service.UserManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.StringUtil;
 import no.unified.soak.webapp.util.RequestUtil;
 
@@ -70,6 +73,7 @@ public class UserFormController extends BaseFormController {
         Locale locale = request.getLocale();
 
         addOrganization(model,locale);
+        addOrganization2(model,locale);
         
 //      Retrieve all serviceareas into an array
     	List serviceAreas = serviceAreaManager.getAllIncludingDummy(getText("misc.none", locale));
@@ -278,8 +282,32 @@ public class UserFormController extends BaseFormController {
             model = new HashMap();
         }
 
-        model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.none", locale)));
-
+        String typeDBvalue = ApplicationResourcesUtil.getText("show.organization.pulldown.typeDBvalue");
+        if (typeDBvalue != null) {
+        	Integer value = Integer.valueOf(typeDBvalue);
+        	Type type = Organization.Type.getTypeFromDBValue(value);
+            model.put("organizations", organizationManager.getByTypeIncludingDummy(type, getText("misc.all", locale)));
+        } else {
+            model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
+        }
         return model;
     }
+    
+    private Map addOrganization2(Map model, Locale locale) {
+        if (model == null) {
+            model = new HashMap();
+        }
+
+//        String typeDBvalue = ApplicationResourcesUtil.getText("show.organization.pulldown.typeDBvalue");
+//        if (typeDBvalue != null) {
+//            model.put("organizations", organizationManager.getByTypeIncludingDummy(Organization.Type.getTypeFromDBValue(Integer
+//                    .getInteger(typeDBvalue)), getText("misc.all", locale)));
+//        } else {
+//            model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
+//        }
+        
+        model.put("organizations2", organizationManager.getByTypeIncludingParentAndDummy(Organization.Type.AREA, Organization.Type.REGION, getText("misc.all", locale)));
+        return model;
+    }
+
 }

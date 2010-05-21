@@ -31,8 +31,10 @@ import no.unified.soak.model.Attachment;
 import no.unified.soak.model.Category;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Location;
+import no.unified.soak.model.Organization;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.User;
+import no.unified.soak.model.Organization.Type;
 import no.unified.soak.model.Registration.Status;
 import no.unified.soak.service.AttachmentManager;
 import no.unified.soak.service.CourseManager;
@@ -45,6 +47,7 @@ import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.service.impl.CategoryManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.MailUtil;
 import no.unified.soak.webapp.util.FileUtil;
@@ -192,13 +195,18 @@ public class CourseFormController extends BaseFormController {
         if (locations != null) {
             model.put("locations", locations);
         }
-
+        
         // Retrieve all organization into an array
-        List organizations = organizationManager.getAllIncludingDummy(getText("misc.none", locale));
-        if (organizations != null) {
-            model.put("organizations", organizations);
+        String typeDBvalue = ApplicationResourcesUtil.getText("show.organization.pulldown.typeDBvalue");
+        if (typeDBvalue != null) {
+        	Integer value = Integer.valueOf(typeDBvalue);
+        	Type type = Organization.Type.getTypeFromDBValue(value);
+        	model.put("organizations", organizationManager.getByTypeIncludingDummy(type, getText("misc.all", locale)));
+        } else {
+        	model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
         }
-
+        model.put("organizations2", organizationManager.getByTypeIncludingParentAndDummy(Organization.Type.AREA, Organization.Type.REGION, getText("misc.all", locale)));
+        
         // Current time
         List<Date> time = new ArrayList<Date>();
         time.add(new Date());
@@ -339,10 +347,18 @@ public class CourseFormController extends BaseFormController {
             course.setCategory(categoryManager.getCategory(Category.Name.HENDELSE.getDBValue()));
             // Check if a default organization should be applied
             User user = (User) request.getSession().getAttribute(Constants.USER_KEY);
-            Object omid = user.getOrganizationid();
-            if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
-                course.setOrganizationid(new Long(omid.toString()));
-            }
+
+            // default organizations
+            Object orgId = user.getOrganizationid();
+	        if ((orgId != null) && StringUtils.isNumeric(orgId.toString())) {
+	        	course.setOrganizationid(new Long(orgId.toString()));
+	        }
+
+	        Object org2id = user.getOrganization2id();
+	        if ((org2id != null) && StringUtils.isNumeric(org2id.toString())) {
+	        	course.setOrganization2id(new Long(org2id.toString()));
+	        }
+            
             // Default responsible
             course.setResponsibleUsername(user.getUsername());
 
@@ -622,7 +638,7 @@ public class CourseFormController extends BaseFormController {
 			course.setFeeExternal(0d);
 		}
 		if (StringUtils.isEmpty(course.getDuration())) {
-			course.setDuration("");
+			course.setDuration("N/A");
 		}
 		if(StringUtils.isEmpty(course.getRole())){
 			course.setRole(Constants.ANONYMOUS_ROLE);

@@ -11,6 +11,7 @@
 package no.unified.soak.service.impl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import no.unified.soak.dao.OrganizationDAO;
@@ -79,12 +80,37 @@ public class OrganizationManagerImpl extends BaseManager implements Organization
     public List getByTypeIncludingDummy(Type type, String dummy) {
         List organizations = new ArrayList();
         organizations.add(makeDummyOrganization(dummy));
-        organizations.addAll(getOrganizationsByType(Organization.Type.COUNTY));
+        organizations.addAll(getOrganizationsByType(type));
         return organizations;
     }
 
-    public List getOrganizationsByType(Type county) {
-        return dao.getByType(county.getTypeDBValue());
+    public List getOrganizationsByType(Type orgType) {
+        return dao.getByType(orgType.getTypeDBValue());
+    }
+
+    public List getByTypeIncludingParentAndDummy(Type type, Type parentType, String dummy) {
+        List organizations = new ArrayList();
+        organizations.add(makeDummyOrganization(dummy));
+        organizations.addAll(getOrganizationsByTypeIncludingParent(type, parentType));
+        return organizations;
+    }
+
+    public List getOrganizationsByTypeIncludingParent(Type type, Type parentType) {
+        List organizations = new ArrayList();
+    	List parents = getOrganizationsByType(parentType);
+    	if(!parents.isEmpty()){
+    		Iterator p = parents.iterator();
+    		while(p.hasNext()){
+    			Organization parent = (Organization)p.next();
+    			organizations.add(parent);
+    			organizations.addAll(getOrganizationsByParent(parent, type));
+    		}
+    	}
+        return organizations;
+    }
+    
+    public List getOrganizationsByParent(Organization parent, Type type){
+    	return dao.getByParent(parent.getId(), type);
     }
     
     private Organization makeDummyOrganization(String dummy) {

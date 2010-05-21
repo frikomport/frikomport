@@ -39,7 +39,9 @@ public class Course extends BaseObject implements Serializable {
     private Category category;
     private Long categoryid;
     private Organization organization;
+    private Organization organization2;
     private Long organizationid;
+    private Long organization2id;
     private User responsible;
     private Long responsibleid;
     private String responsibleUsername;
@@ -173,7 +175,7 @@ public class Course extends BaseObject implements Serializable {
     }
 
     /**
-     * @hibernate.property column="serviceareaid" not-null="true"
+     * @hibernate.property column="serviceareaid" not-null="false"
      * @return Returns the serviceAreaid.
      */
     public Long getServiceAreaid() {
@@ -539,8 +541,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the organization.
-     * @hibernate.many-to-one not-null="true" column="organizationid"
-     *                        update="false" cascade="none" insert="false"
+     * @hibernate.many-to-one not-null="true" column="organizationid" update="false" cascade="none" insert="false"
      */
     public Organization getOrganization() {
         return organization;
@@ -572,6 +573,41 @@ public class Course extends BaseObject implements Serializable {
         this.organizationid = organizationid;
     }
 
+    /**
+     * @return Returns the organization2id.
+     * @hibernate.property column="organization2id" not-null="false"
+     */
+    public Long getOrganization2id() {
+        return organization2id;
+    }
+
+    /**
+     * @param organizationid
+     *            The organization2id to set.
+     * @spring.validator type="required"
+     */
+    public void setOrganization2id(Long organization2id) {
+        this.organization2id = organization2id;
+    }
+
+    /**
+     * @return Returns the organization2.
+     * @hibernate.many-to-one not-null="false" column="organization2id" update="false" cascade="none" insert="false"
+     */
+    public Organization getOrganization2() {
+    	if(organization2 == null){
+    		this.organization2 = new Organization();
+    	}
+        return organization2;
+    }
+
+    public void setOrganization2(Organization organization2) {
+    	if(organization2 == null){
+    		organization2 = new Organization();
+    	}
+        this.organization2 = organization2;
+    }
+
      /**
      * @return Returns the responsible.
      * @hibernate.many-to-one not-null="true" column="responsibleusername" insert="false" update="false" cascade="none"
@@ -590,8 +626,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the serviceArea.
-     * @hibernate.many-to-one not-null="true" column="serviceareaid"
-     *                        cascade="none" insert="false" update="false"
+     * @hibernate.many-to-one not-null="false" column="serviceareaid" cascade="none" insert="false" update="false"
      */
     public ServiceArea getServiceArea() {
         return serviceArea;

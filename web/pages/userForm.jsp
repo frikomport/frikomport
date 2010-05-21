@@ -244,6 +244,21 @@
 			</td>
 		</tr>
 
+		<tr>
+			<th>
+				<soak:label key="course.organization2" />
+			</th>
+			<td>
+				<form:select path="organization2id" onchange="fillSelect(this);">
+					<form:options items="${organizations2}" itemValue="id"
+						itemLabel="name" />
+				</form:select>
+				<form:errors cssClass="fieldError" htmlEscape="false"
+					path="organization2id" />
+			</td>
+		</tr>
+
+
 <c:if test="${showServiceArea}">
 		<tr>
 			<th>

@@ -20,8 +20,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import no.unified.soak.model.Location;
+import no.unified.soak.model.Organization;
+import no.unified.soak.model.Organization.Type;
 import no.unified.soak.service.LocationManager;
 import no.unified.soak.service.OrganizationManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
@@ -78,6 +81,7 @@ public class LocationController extends BaseFormController {
         // Set up parameters, and return them to the view
         Map model = new HashMap();
         model = addOrganizations(model, locale);
+        model = addOrganizations2(model, locale);
         model.put("location", location);
 
         // Add all locations to the list
@@ -112,6 +116,8 @@ public class LocationController extends BaseFormController {
 
         // Set up parameters, and return them to the view
         model = addOrganizations(model, locale);
+        model = addOrganizations2(model, locale);
+        
         model.put("location", location);
         session.setAttribute("location", location);
 
@@ -138,8 +144,35 @@ public class LocationController extends BaseFormController {
             model = new HashMap();
         }
 
-        model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
-
+        String typeDBvalue = ApplicationResourcesUtil.getText("show.organization.pulldown.typeDBvalue");
+        if (typeDBvalue != null) {
+        	Integer value = Integer.valueOf(typeDBvalue);
+        	Type type = Organization.Type.getTypeFromDBValue(value);
+            model.put("organizations", organizationManager.getByTypeIncludingDummy(type, getText("misc.all", locale)));
+        } else {
+            model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
+        }
         return model;
     }
+
+    /**
+     * Used to create a list of all organization with an option 0 that says
+     * "all organization" and is therefore made with search forms in mind.
+     *
+     * @param model
+     *            model to send to view
+     * @param locale
+     *            currently used locale
+     * @return map with all organization and one with id=0 that is "all
+     *         organization"
+     */
+    private Map addOrganizations2(Map model, Locale locale) {
+        if (model == null) {
+            model = new HashMap();
+        }
+
+        model.put("organizations2", organizationManager.getByTypeIncludingParentAndDummy(Organization.Type.AREA, Organization.Type.REGION, getText("misc.all", locale)));
+        return model;
+    }
+
 }

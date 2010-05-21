@@ -48,7 +48,9 @@ public class User extends BaseObject implements Serializable {
     protected Set roles = new HashSet();
     protected Boolean enabled;
     protected Organization organization;
+    private Organization organization2;
     protected Long organizationid;
+    protected Long organization2id;
     protected String mobilePhone;
     protected Integer employeeNumber;
     protected String jobTitle;
@@ -391,13 +393,8 @@ public class User extends BaseObject implements Serializable {
 
     /**
 	 * Returns the organization.
-	 * 
 	 * @return Organization
-	 * 
-	 * @hibernate.many-to-one column="organizationid" insert="false"
-	 *                        update="false" not-found="ignore" not-null="false" 
-	 *                        
-	 * 
+	 * @hibernate.many-to-one column="organizationid" insert="false" update="false" not-found="ignore" not-null="false" 
 	 */
 	public Organization getOrganization() {
 		return organization;
@@ -414,6 +411,18 @@ public class User extends BaseObject implements Serializable {
 		this.organization = organization;
 	}
 
+    /**
+     * @return Returns the organization2.
+     * @hibernate.many-to-one not-null="false" column="organization2id" update="false" cascade="none" insert="false"
+     */
+    public Organization getOrganization2() {
+        return organization2;
+    }
+
+    public void setOrganization2(Organization organization2) {
+        this.organization2 = organization2;
+    }
+
      /**
      * @return Returns the organizationid.
      * @hibernate.property column="organizationid" not-null="false"
@@ -429,7 +438,23 @@ public class User extends BaseObject implements Serializable {
     public void setOrganizationid(Long organizationid) {
         this.organizationid = organizationid;
     }
-    
+
+    /**
+     * @return Returns the organization2id.
+     * @hibernate.property column="organization2id" not-null="false"
+     */
+    public Long getOrganization2id() {
+        return organization2id;
+    }
+
+    /**
+     * @param organizationid
+     *            The organizationid to set.
+     */
+    public void setOrganization2id(Long organization2id) {
+        this.organization2id = organization2id;
+    }
+
     /**
 	 * @return Returns the serviceArea.
 	 * @hibernate.many-to-one column="serviceareaid" insert="false" update="false" not-found="ignore" not-null="false"

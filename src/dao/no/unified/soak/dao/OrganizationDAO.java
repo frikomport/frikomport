@@ -11,6 +11,7 @@
 package no.unified.soak.dao;
 
 import no.unified.soak.model.Organization;
+import no.unified.soak.model.Organization.Type;
 
 import java.util.List;
 
@@ -52,4 +53,6 @@ public interface OrganizationDAO extends DAO {
     public List getAll(Boolean includeDisabled);
 
     public List getByType(Integer typeDBValue);
+    
+    public List getByParent(Long parentid, Type type);
 }

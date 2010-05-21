@@ -347,9 +347,12 @@ public class BaseFormController extends SimpleFormController {
 			String fieldNameCamelCase = method.getName().substring(3);
 			String fieldName = lowercaseFirstLetter(fieldNameCamelCase);
 			Class<? extends Object> objClass = obj.getClass();
-			boolean isInUse = configurationManager.isActive("access." + objClass.getName().toLowerCase() + ".use" + fieldNameCamelCase, true);
+			boolean isInUse = configurationManager.isActive("access." + objClass.getSimpleName().toLowerCase() + ".use" + fieldNameCamelCase, true);
 			if (isInUse) {
-				isInUse = configurationManager.isActive("access." + objClass.getName().toLowerCase() + ".use" + fieldName, true);
+				isInUse = configurationManager.isActive("access." + objClass.getSimpleName().toLowerCase() + ".use" + fieldName, true);
+			}
+			if (isInUse && fieldNameCamelCase.endsWith("id")){
+				isInUse = configurationManager.isActive("access." + objClass.getSimpleName().toLowerCase() + ".use" + fieldNameCamelCase.substring(0,fieldNameCamelCase.length()-"id".length()), true);
 			}
 			if (!isInUse) {
 				return nErrors;

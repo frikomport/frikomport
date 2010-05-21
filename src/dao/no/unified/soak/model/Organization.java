@@ -39,10 +39,12 @@ public class Organization extends BaseObject implements Serializable {
     private String invoiceName;
     private Address invoiceAddress = new Address();
     private Organization parent;
+    private Long parentid;
     private Type type;
 
     public enum Type {
         MUNICIPALITY(1, null), COUNTY(2, MUNICIPALITY), AREA(3, null), REGION(4, MUNICIPALITY, AREA);
+        
         private Integer typeDBValue;
         private Type[] possibleChildren;
         private String displayName;
@@ -102,6 +104,15 @@ public class Organization extends BaseObject implements Serializable {
     	setType(type);
     	setSelectable(selectable);
     	setParent(parent);
+    }
+
+    public Organization(String name, long number, int type, boolean selectable, Organization parent, Long parentid){
+    	setName(name);
+    	setNumber(number);
+    	setType(type);
+    	setSelectable(selectable);
+    	setParent(parent);
+    	setParentid(parentid);
     }
 
     /**
@@ -239,8 +250,7 @@ public class Organization extends BaseObject implements Serializable {
 
     /**
      * @return Returns the parent organization.
-     * @hibernate.many-to-one not-null="false" column="parentid" insert="true"
-     *                        update="true" cascade="none"
+     * @hibernate.many-to-one not-null="false" column="parentid" insert="false" update="false" cascade="none"
      */
     public Organization getParent() {
         return parent;
@@ -248,6 +258,22 @@ public class Organization extends BaseObject implements Serializable {
 
     public void setParent(Organization parent) {
         this.parent = parent;
+    }
+
+    /**
+     * @return Returns the parentid.
+     * @hibernate.property column="parentid" not-null="false"
+     */
+    public Long getParentid() {
+        return parentid;
+    }
+
+    /**
+     * @param parentid
+     *            The parentid to set.
+     */
+    public void setParentid(Long parentid) {
+        this.parentid = parentid;
     }
 
     /**

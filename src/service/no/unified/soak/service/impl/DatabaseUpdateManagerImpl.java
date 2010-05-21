@@ -108,7 +108,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     }
 
     public void updateDatabase() {
-    	alterUserAndRolebySQL();
+    	alterUserAndRoleAndCoursebySQL();
     	changeRolesBySQL();
     	
         insertDefaultValues();
@@ -155,7 +155,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	/**
 	 * For upgrade from 1.7.X to SVV
 	 */
-	private void alterUserAndRolebySQL(){
+	private void alterUserAndRoleAndCoursebySQL(){
 
     	// removes ID from APP_USER -- column has no purpose..
     	if(checkIfColumnExists("id", "app_user")){
@@ -189,7 +189,15 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     		catch(Exception e){ log.error("Alter table ROLE failed", e); }
     	}
 
-    
+		String sql = "ALTER TABLE course MODIFY serviceareaid number(19,0) null";
+		if(DefaultQuotedNamingStrategy.usesOracle()){ sql = "ALTER TABLE course MODIFY \"serviceareaid\" number(19,0) null"; }
+		try { 
+			jt.execute(sql);
+    		log.info("Column COURSE.SERVICEAREAID changed to nullable!");
+		}
+		catch(Exception e){ log.error("Alter table COURSE failed", e); }
+
+    	
     
     }
     
@@ -342,15 +350,16 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     	configurationsToInsert.add(new Configuration("access.course.showDescription", true, null));
 
     	configurationsToInsert.add(new Configuration("mail.registration.notifyResponsible", false, null));
+
     	configurationsToInsert.add(new Configuration("show.menu", false, null));
-        
+
     	// profile
     	configurationsToInsert.add(new Configuration("access.profile.showAddress", true, null));
 
     	
         if (ApplicationResourcesUtil.isSVV()) {
-            // configurations specific for FKPSVV enviroment.
-
+        	// configurations specific for FKPSVV enviroment.
+        	
         	// registrationForm
         	configurationsToInsert.add(new Configuration("access.registration.showEmployeeFields", false, null));
         	configurationsToInsert.add(new Configuration("access.registration.showServiceArea", false, null));
@@ -363,6 +372,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	configurationsToInsert.add(new Configuration("access.course.showRole", false, null));
         	configurationsToInsert.add(new Configuration("access.course.showType", false, null));
         	configurationsToInsert.add(new Configuration("access.course.showRestricted", false, null));
+        	configurationsToInsert.add(new Configuration("access.course.useServiceArea", false, null));
 
         	// profile
         	configurationsToInsert.add(new Configuration("access.profile.showInvoiceaddress", false, null));

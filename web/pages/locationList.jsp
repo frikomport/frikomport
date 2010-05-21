@@ -85,6 +85,9 @@
     <display:column property="organization.name" sortable="true" headerClass="sortable"
          titleKey="location.organization"/>
 
+    <display:column property="organization2.name" sortable="true" headerClass="sortable"
+         titleKey="location.organization2"/>
+
     <display:column sortable="true" headerClass="sortable"
          titleKey="location.selectable">
         <c:if test="${locationList.selectable == true}"><fmt:message key="checkbox.checked"/></c:if>

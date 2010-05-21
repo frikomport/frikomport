@@ -48,6 +48,18 @@ function fillSelect(obj){
                 </form:select>
                 <form:errors cssClass="fieldError" htmlEscape="false" path="organizationid" />
             </li>
+
+<c:if test="${!user.hashuser}">
+            <li>
+                <soak:label key="course.organization2" styleClass="required"/>
+                <form:select  path="organization2id" onchange="fillSelect(this);">
+                    <form:options items="${organizations2}" itemValue="id" itemLabel="name" />
+                </form:select>
+                <form:errors cssClass="fieldError" htmlEscape="false" path="organization2id" />
+            </li>
+</c:if>
+
+<c:if test="${useServiceArea}">
             <li>
                 <soak:label key="course.serviceArea" styleClass="required"/>
                 <spring:bind path="course.serviceAreaid">
@@ -76,6 +88,8 @@ function fillSelect(obj){
 							value="${status.errorMessage}" escapeXml="false" /> </span>
 				</spring:bind>
             </li>
+</c:if>
+            
 <c:if test="${categories[2] != null}">
             <li>
                 <soak:label key="course.category" styleClass="required"/>
@@ -187,8 +201,15 @@ function fillSelect(obj){
     <display:column property="organization.name" sortable="true" headerClass="sortable"
          titleKey="course.organization"/>
 
+<c:if test="${!user.hashuser}">
+    <display:column property="organization2.name" sortable="true" headerClass="sortable"
+         titleKey="course.organization2"/>
+</c:if>
+
+<c:if test="${useServiceArea}">
     <display:column property="serviceArea.name" sortable="true" headerClass="sortable"
          titleKey="course.serviceArea"/>
+</c:if>
          
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.location">
          <a href="<c:url value="/detailsLocation.html"><c:param name="id" value="${courseList.location.id}"/></c:url>" title="<c:out value="${courseList.location.description}"/>"><c:out value="${courseList.location.name}"/></a>

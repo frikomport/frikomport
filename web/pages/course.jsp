@@ -95,6 +95,18 @@
 
 <tr>
 	<th>
+		<fmt:message key="course.organization2" />
+	</th>
+	<td>
+		<spring:bind path="course.organization2.name">
+			<c:out value="${status.value}" />
+		</spring:bind>
+	</td>
+</tr>
+
+<c:if test="${useServiceArea}">
+<tr>
+	<th>
 		<fmt:message key="course.serviceArea" />
 	</th>
 	<td>
@@ -103,6 +115,7 @@
 		</spring:bind>
 	</td>
 </tr>
+</c:if>
 
 <tr>
 	<th>

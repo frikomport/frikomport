@@ -23,10 +23,13 @@ import javax.servlet.http.HttpServletResponse;
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Location;
+import no.unified.soak.model.Organization;
 import no.unified.soak.model.User;
+import no.unified.soak.model.Organization.Type;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.LocationManager;
 import no.unified.soak.service.OrganizationManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
@@ -69,14 +72,20 @@ public class LocationFormController extends BaseFormController {
      */
     protected Map referenceData(HttpServletRequest request)
         throws Exception {
-        Map<String, List> parameters = new HashMap<String, List>();
+    	Locale locale = request.getLocale();
 
-        // Retrieve all organization into an array
-        List organization = organizationManager.getAll();
+    	Map<String, List> parameters = new HashMap<String, List>();
 
-        if (organization != null) {
-            parameters.put("organizations", organization);
+        String typeDBvalue = ApplicationResourcesUtil.getText("show.organization.pulldown.typeDBvalue");
+        if (typeDBvalue != null) {
+        	Integer value = Integer.valueOf(typeDBvalue);
+        	Type type = Organization.Type.getTypeFromDBValue(value);
+        	parameters.put("organizations", organizationManager.getByTypeIncludingDummy(type, getText("misc.all", locale)));
+        } else {
+        	parameters.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
         }
+
+        parameters.put("organizations2", organizationManager.getByTypeIncludingParentAndDummy(Organization.Type.AREA, Organization.Type.REGION, getText("misc.all", locale)));
 
         return parameters;
     }
@@ -95,12 +104,17 @@ public class LocationFormController extends BaseFormController {
             location = new Location();
 	        // Check if a default organization should be applied
             User user = (User) request.getSession().getAttribute(Constants.USER_KEY);
-            Object omid = user.getOrganizationid();
-	        if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
-	            location.setOrganizationid(new Long(omid.toString()));
+            
+            Object orgId = user.getOrganizationid();
+	        if ((orgId != null) && StringUtils.isNumeric(orgId.toString())) {
+	            location.setOrganizationid(new Long(orgId.toString()));
+	        }
+
+	        Object org2id = user.getOrganization2id();
+	        if ((org2id != null) && StringUtils.isNumeric(org2id.toString())) {
+	            location.setOrganization2id(new Long(org2id.toString()));
 	        }
         }
-
         return location;
     }
 

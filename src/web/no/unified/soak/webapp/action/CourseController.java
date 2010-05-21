@@ -25,6 +25,7 @@ import no.unified.soak.model.Course;
 import no.unified.soak.model.Organization;
 import no.unified.soak.model.RoleEnum;
 import no.unified.soak.model.User;
+import no.unified.soak.model.Organization.Type;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
@@ -165,6 +166,7 @@ public class CourseController extends BaseFormController {
         // Set up parameters, and return them to the view
         model = addServiceAreas(model, locale);
         model = addOrganization(model, locale);
+        model = addOrganization2(model, locale);
         model = addCategories(model, locale);
         model.put("historic", historic);
         model.put("past", past);
@@ -239,6 +241,7 @@ public class CourseController extends BaseFormController {
         // Set up parameters, and return them to the view
         model = addServiceAreas(model, locale);
         model = addOrganization(model, locale);
+        model = addOrganization2(model, locale);
         model = addCategories(model, locale);
         model.put("course", course);
 
@@ -308,6 +311,10 @@ public class CourseController extends BaseFormController {
             unpublished.setOrganizationid(course.getOrganizationid());
         }
 
+        if (course.getOrganization2id() != null) {
+            unpublished.setOrganization2id(course.getOrganization2id());
+        }
+
         User responsible = null;
         if (user != null && roles.contains(Constants.EVENTRESPONSIBLE_ROLE)) {
             responsible = user;
@@ -338,6 +345,10 @@ public class CourseController extends BaseFormController {
         String orgid = request.getParameter("organizationid");
         if (isNumber(orgid)) {
             course.setOrganizationid(new Long(orgid));
+        }
+        String org2id = request.getParameter("organization2id");
+        if (isNumber(orgid)) {
+            course.setOrganization2id(new Long(org2id));
         }
         String areaid = request.getParameter("serviceAreaid");
         if (isNumber(areaid)) {
@@ -400,15 +411,25 @@ public class CourseController extends BaseFormController {
 
         String typeDBvalue = ApplicationResourcesUtil.getText("show.organization.pulldown.typeDBvalue");
         if (typeDBvalue != null) {
-            model.put("organizations", organizationManager.getByTypeIncludingDummy(Organization.Type.getTypeFromDBValue(Integer
-                    .getInteger(typeDBvalue)), getText("misc.all", locale)));
+        	Integer value = Integer.valueOf(typeDBvalue);
+        	Type type = Organization.Type.getTypeFromDBValue(value);
+            model.put("organizations", organizationManager.getByTypeIncludingDummy(type, getText("misc.all", locale)));
         } else {
             model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
         }
-
         return model;
     }
 
+    
+    private Map addOrganization2(Map model, Locale locale) {
+        if (model == null) {
+            model = new HashMap();
+        }
+        
+        model.put("organizations2", organizationManager.getByTypeIncludingParentAndDummy(Organization.Type.AREA, Organization.Type.REGION, getText("misc.all", locale)));
+        return model;
+    }
+    
     private Map addCategories(Map model, Locale locale) {
         if (model == null) {
             model = new HashMap();

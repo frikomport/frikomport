@@ -312,6 +312,21 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 
 		<tr>
 			<th>
+				<soak:label key="course.organization2" />
+			</th>
+			<td>
+				<form:select path="organization2id">
+					<form:options items="${organizations2}" itemValue="id"
+						itemLabel="name" />
+				</form:select>
+				<form:errors cssClass="fieldError" htmlEscape="false"
+					path="organization2id" />
+			</td>
+		</tr>
+
+<c:if test="${useServiceArea}">
+		<tr>
+			<th>
 				<soak:label key="course.serviceArea" />
 			</th>
 			<td>
@@ -342,6 +357,8 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 				</spring:bind>
 			</td>
 		</tr>
+</c:if>
+		
 		<tr>
 			<th>
 				<soak:label key="course.location" />

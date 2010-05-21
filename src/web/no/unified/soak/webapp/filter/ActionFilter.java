@@ -145,8 +145,9 @@ public class ActionFilter implements Filter {
     private void doConfiguration(HttpServletRequest request, HttpSession session) {
         ConfigurationManager configurationManager = (ConfigurationManager) getBean("configurationManager");
 
-        // course
         session.setAttribute("showMenu", configurationManager.isActive("show.menu", false));
+
+        // course
         session.setAttribute("singleprice", configurationManager.isActive("access.course.singleprice", false));
         session.setAttribute("usePayment", configurationManager.isActive("access.course.usePayment", true));
         session.setAttribute("showDuration", configurationManager.isActive("access.course.showDuration", true));
@@ -154,6 +155,7 @@ public class ActionFilter implements Filter {
         session.setAttribute("showRole", configurationManager.isActive("access.course.showRole", true));
         session.setAttribute("showType", configurationManager.isActive("access.course.showType", true));
         session.setAttribute("showRestricted", configurationManager.isActive("access.course.showRestricted", true));
+        session.setAttribute("useServiceArea", configurationManager.isActive("access.course.useServiceArea", true));
 
         
         // registration

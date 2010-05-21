@@ -45,6 +45,7 @@ public class Location extends BaseObject implements Serializable {
     private Double feePerDay;
     private String description;
     private Long organizationid;
+    private Long organization2id;
     private Organization organization;
     private Organization organization2;
     private Boolean selectable;
@@ -271,8 +272,7 @@ public class Location extends BaseObject implements Serializable {
 
     /**
      * @return Returns the organization.
-     * @hibernate.many-to-one not-null="true" column="organizationid"
-     *                        update="false" cascade="none" insert="false"
+     * @hibernate.many-to-one not-null="true" column="organizationid" update="false" cascade="none" insert="false"
      */
     public Organization getOrganization() {
         return organization;
@@ -287,8 +287,7 @@ public class Location extends BaseObject implements Serializable {
  
     /**
      * @return Returns the organization.
-     * @hibernate.many-to-one not-null="false" column="organization2id"
-     *                        update="true" cascade="none" insert="true"
+     * @hibernate.many-to-one not-null="false" column="organization2id" update="false" cascade="none" insert="false"
      */
     public Organization getOrganization2() {
         return organization2;
@@ -311,8 +310,25 @@ public class Location extends BaseObject implements Serializable {
      * @spring.validator type="required"
      */
     public void setOrganizationid(Long organizationid) {
-        this.organizationid = organizationid;
+    	this.organizationid = organizationid;
     }
+
+    /**
+     * @return Returns the organization2id.
+     * @hibernate.property column="organization2id" not-null="false"
+     */
+    public Long getOrganization2id() {
+        return organization2id;
+    }
+
+    /**
+     * @param organization2id The organization2id to set.
+     */
+    public void setOrganization2id(Long organization2id) {
+    	this.organization2id = organization2id;
+    }
+    
+
 
     /**
      * @see java.lang.Object#toString()

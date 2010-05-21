@@ -151,6 +151,17 @@
 
     <tr>
         <th>
+            <soak:label key="location.organization2"/>
+        </th>
+        <td>
+            <form:select path="organization2id" items="${organizations2}" itemLabel="name" itemValue="id"/>
+            <form:errors cssClass="fieldError" path="organization2id"/>
+        </td>
+    </tr>
+
+
+    <tr>
+        <th>
             <soak:label key="location.selectable"/>
         </th>
         <td>

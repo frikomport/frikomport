@@ -153,6 +153,17 @@
 
     <tr>
         <th>
+            <fmt:message key="location.organization2"/>
+        </th>
+        <td>
+            <spring:bind path="location.organization2.name">
+            	<c:out value="${status.value}"/>
+            </spring:bind>
+        </td>
+    </tr>
+
+    <tr>
+        <th>
             <fmt:message key="location.selectable"/>
         </th>
         <td>
