@@ -615,7 +615,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 						onclick="bCancel=false"
 						value="<fmt:message key="button.course.save"/>" />
 					<c:if test="${!isPublished || isCancelled}">
-						<input type="submit" class="button" name="publish"
+						<input type="submit" class="button large" name="publish"
 							onclick="bCancel=false"
 							value="<fmt:message key="button.course.publish"/>" />
 					</c:if>
@@ -625,12 +625,12 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 							value="<fmt:message key="button.course.cancel"/>" />
 					</c:if>
 					<c:if test="${isPublished && canUnpublish}">
-                        <input type="submit" class="button" name="unpublish"
+                        <input type="submit" class="button large" name="unpublish"
                             onclick="bCancel=false"
                             value="<fmt:message key="button.course.unpublish"/>" />
                     </c:if>
 					<c:if test="${!empty course.id && !empty course.name && canDelete}">
-						<input type="submit" class="button" name="delete"
+						<input type="submit" class="button large" name="delete"
 							onclick="bCancel=true;return confirmDelete('<fmt:message key="courseList.theitem"/>')"
 							value="<fmt:message key="button.course.delete"/>" />
 					</c:if>
@@ -643,14 +643,14 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 					<c:choose>
 						<c:when
 							test="${isAdmin || isEducationResponsible || isEventResponsible}">
-							<button type="button"
+							<button type="button" class="large"
 								onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 								<fmt:message key="button.administerRegistrations" />
 							</button>
 						</c:when>
 						<c:otherwise>
 							<c:if test="${isCourseParticipant}">
-								<button type="button"
+								<button type="button" class="large"
 									onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 									<fmt:message key="button.displayRegistrations" />
 								</button>
@@ -660,7 +660,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 
 					<c:if
 						test="${isAdmin || isEducationResponsible || isEventResponsible}">
-						<button type="button"
+						<button type="button" class="large"
 							onclick="location.href='<c:url value="/editFileCourse.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 							<fmt:message key="button.administerFiles" />
 						</button>

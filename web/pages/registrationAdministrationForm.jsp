@@ -205,9 +205,9 @@
 <input type="submit" class="button" name="docancel"	onclick="bCancel=true" 
 	value="<fmt:message key="button.cancel"/>" />
 	
-	<c:if test="${allowRegistration == true}">
-		<button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
-	    	<fmt:message key="button.signup"/>
-		</button>
-	</c:if>
+<c:if test="${allowRegistration == true}">
+	<button type="button" class="large" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
+    	<fmt:message key="button.signup"/>
+	</button>
+</c:if>
 </form>

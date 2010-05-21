@@ -80,7 +80,7 @@
                     onclick="location.href='<c:url value="/editCourse.html"><c:param name="id" value="${course.id}"/></c:url>'">
                 <fmt:message key="button.reedit" /></button>
                 </c:if> 
-                <input type="submit" class="button" name="confirm" onclick="bCancel = true;" value="<fmt:message key="button.continue"/>" /> 
+                <input type="submit" class="button large" name="confirm" onclick="bCancel = true;" value="<fmt:message key="button.continue"/>" /> 
             </td>
         </tr>
     </table>

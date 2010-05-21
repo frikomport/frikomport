@@ -89,13 +89,13 @@
 
 <c:choose>
 	<c:when test="${admin == true && isPublished}">
-		    <button type="button" onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
+		    <button type="button" class="large" onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.administerRegistrations"/>
 		    </button>
 	</c:when>
 	<c:otherwise>
 		<c:if test="${!course.restricted}">
-		    <button type="button" onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
+		    <button type="button" class="large" onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.displayRegistrations"/>
 		    </button>
 		</c:if>
@@ -103,12 +103,12 @@
 </c:choose>
 
 <c:if test="${admin == true}">
-		    <button type="button" onclick="location.href='<c:url value="/editFileCourse.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
+		    <button type="button" class="large" onclick="location.href='<c:url value="/editFileCourse.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.administerFiles"/>
 		    </button>
 </c:if>
 <c:if test="${admin == true}">
-		    <button type="button" onclick="location.href='<c:url value="/emailCourse.html"><c:param name="id" value="${course.id}"/><c:param name="enablemail" value="true"/></c:url>'">
+		    <button type="button" class="large" onclick="location.href='<c:url value="/emailCourse.html"><c:param name="id" value="${course.id}"/><c:param name="enablemail" value="true"/></c:url>'">
 	    	    <fmt:message key="button.mails"/>
 		    </button>
 </c:if>
