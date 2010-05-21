@@ -35,7 +35,6 @@ import no.unified.soak.model.Registration;
 import no.unified.soak.model.User;
 import no.unified.soak.model.Registration.Status;
 import no.unified.soak.service.AttachmentManager;
-import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.LocationManager;
 import no.unified.soak.service.MailEngine;
@@ -88,8 +87,6 @@ public class CourseFormController extends BaseFormController {
 
     private MessageSource messageSource = null;
 
-    private ConfigurationManager configurationManager = null;
-    
     protected MailEngine mailEngine = null;
 
     protected MailSender mailSender = null;
@@ -152,9 +149,6 @@ public class CourseFormController extends BaseFormController {
         this.categoryManager = categoryManager;
     }
 
-    public void setConfigurationManager(ConfigurationManager configurationManager) {
-    	this.configurationManager = configurationManager;
-    }
     /**
      * @see org.springframework.web.servlet.mvc.SimpleFormController#referenceData(javax.servlet.http.HttpServletRequest)
      */

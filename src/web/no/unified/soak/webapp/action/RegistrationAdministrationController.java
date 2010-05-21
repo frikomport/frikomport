@@ -64,8 +64,6 @@ public class RegistrationAdministrationController extends BaseFormController {
 
     protected MailSender mailSender = null;
 
-    private ConfigurationManager configurationManager = null;
-
 	/**
 	 * Brukes av jsp-kode.
 	 */
@@ -102,10 +100,6 @@ public class RegistrationAdministrationController extends BaseFormController {
 
 	public void setOrganizationManager(OrganizationManager organizationManager) {
 		this.organizationManager = organizationManager;
-	}
-
-	public void setConfigurationManager(ConfigurationManager configurationManager) {
-		this.configurationManager = configurationManager;
 	}
 
 	/**

@@ -56,7 +56,6 @@ public class CourseNotificationController extends BaseFormController {
     private MailSender mailSender = null;
     protected MailEngine mailEngine = null;
 	protected SimpleMailMessage message = null;
-	protected ConfigurationManager configurationManager = null;
 	private WaitingListManager waitingListManager = null;
 	
 	public void setMessageSource(MessageSource messageSource) {
@@ -78,10 +77,6 @@ public class CourseNotificationController extends BaseFormController {
 	public void setCourseManager(CourseManager courseManager) {
 		this.courseManager = courseManager;
 	}
-
-    public void setConfigurationManager(ConfigurationManager configurationManager) {
-        this.configurationManager = configurationManager;
-    }
 
 	public void setWaitingListManager(WaitingListManager waitingListManager) {
 		this.waitingListManager = waitingListManager;

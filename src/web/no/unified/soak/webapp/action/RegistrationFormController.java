@@ -60,7 +60,6 @@ public class RegistrationFormController extends BaseFormController {
     private ServiceAreaManager serviceAreaManager = null;
     private OrganizationManager organizationManager = null;
     private NotificationManager notificationManager = null;
-    private ConfigurationManager configurationManager = null;
     private UserManager userManager = null;
     @SuppressWarnings("unused")
     private MessageSource messageSource = null;
@@ -93,10 +92,6 @@ public class RegistrationFormController extends BaseFormController {
     }
     public void setUserManager(UserManager userManager) {
         this.userManager = userManager;
-    }
-
-    public void setConfigurationManager(ConfigurationManager configurationManager) {
-        this.configurationManager = configurationManager;
     }
 
     /**

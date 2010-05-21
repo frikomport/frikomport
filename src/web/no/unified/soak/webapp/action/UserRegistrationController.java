@@ -32,7 +32,6 @@ public class UserRegistrationController extends BaseFormController{
     private RegistrationManager registrationManager = null;
     private UserManager userManager = null;
     private CourseManager courseManager = null;
-    private ConfigurationManager configurationManager = null;
 
     public void setRegistrationManager(RegistrationManager registrationManager) {
         this.registrationManager = registrationManager;
@@ -44,15 +43,10 @@ public class UserRegistrationController extends BaseFormController{
         this.courseManager = courseManager;
     }
 
-    public void setConfigurationManager(ConfigurationManager configurationManager) {
-        this.configurationManager = configurationManager;
-    }
-
     protected Map referenceData(HttpServletRequest request, Object o, Errors errors) throws Exception {
         if (log.isDebugEnabled()) {
             log.debug("entering 'referenceData' method...");
         }
-        Locale locale = request.getLocale();
         Map model = new HashMap();
 
         HttpSession session = request.getSession();
@@ -110,7 +104,6 @@ public class UserRegistrationController extends BaseFormController{
 
     protected Object formBackingObject(HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();
-        Locale locale = request.getLocale();
 
         User user = null;
         if(configurationManager.isActive("access.registration.userdefaults",false)){

@@ -24,6 +24,7 @@ import javax.servlet.http.HttpSession;
 
 import no.unified.soak.Constants;
 import no.unified.soak.model.User;
+import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
@@ -59,18 +60,19 @@ import org.springframework.web.servlet.mvc.SimpleFormController;
  */
 public class BaseFormController extends SimpleFormController {
     protected final transient Log log = LogFactory.getLog(getClass());
-    private UserManager userManager = null;
     protected MailEngine mailEngine = null;
     protected SimpleMailMessage message = null;
     protected String templateName = null;
     protected String cancelView;
-
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
-    }
+    private UserManager userManager;
+    protected ConfigurationManager configurationManager = null;
 
     public UserManager getUserManager() {
-        return this.userManager;
+    	return userManager;
+    }
+    
+    public void setConfigurationManager(ConfigurationManager configurationManager) {
+    	this.configurationManager = configurationManager;
     }
 
     public void saveMessage(HttpServletRequest request, String msg) {
@@ -344,10 +346,18 @@ public class BaseFormController extends SimpleFormController {
 		if (method.getAnnotation(Required.class) != null) {
 			String fieldNameCamelCase = method.getName().substring(3);
 			String fieldName = lowercaseFirstLetter(fieldNameCamelCase);
+			Class<? extends Object> objClass = obj.getClass();
+			boolean isInUse = configurationManager.isActive("access." + objClass.getName().toLowerCase() + ".use" + fieldNameCamelCase, true);
+			if (isInUse) {
+				isInUse = configurationManager.isActive("access." + objClass.getName().toLowerCase() + ".use" + fieldName, true);
+			}
+			if (!isInUse) {
+				return nErrors;
+			}
 			try {
-				Method getMethod = obj.getClass().getMethod("get" + fieldNameCamelCase);
+				Method getMethod = objClass.getMethod("get" + fieldNameCamelCase);
 				Object methodResult = getMethod.invoke(obj);
-				
+
 				if (methodResult == null || (methodResult instanceof String && StringUtils.isEmpty((String) methodResult))) {
 					String fieldText = ApplicationResourcesUtil.getText(obj.getClass().getSimpleName().toLowerCase() + "."
 							+ fieldName);
@@ -358,7 +368,7 @@ public class BaseFormController extends SimpleFormController {
 						fieldText = fieldName;
 					}
 					Object[] args = new Object[] { fieldText };
-					nErrors=1;
+					nErrors = 1;
 					errors.rejectValue(fieldName, "errors.required", args, fieldName + " is required.");
 				}
 			} catch (Exception e) {

@@ -17,12 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 public class ConfigurationFormController extends BaseFormController {
 
-	private ConfigurationManager configurationManager = null;
-	
-	public void setConfigurationManager(ConfigurationManager configurationManager) {
-		this.configurationManager = configurationManager; 
-	}
-    
 	/**
 	 * @see org.springframework.web.servlet.mvc.AbstractFormController#formBackingObject(javax.servlet.http.HttpServletRequest)
 	 */
@@ -50,8 +44,6 @@ public class ConfigurationFormController extends BaseFormController {
         if (log.isDebugEnabled()) {
             log.debug("entering 'onSubmit' method in ConfigurationFormController...");
         }
-
-        Locale locale = request.getLocale();
 
         ConfigurationsBackingObject configurationsBackingObject = (ConfigurationsBackingObject) command;
 
@@ -85,7 +77,6 @@ public class ConfigurationFormController extends BaseFormController {
         }
 
         Map model = new HashMap();
-        Locale locale = request.getLocale();
         // Needs to detect also after redirect:
         if (BooleanUtils.toBoolean((String) request.getParameter("updated"))) {
             model.put("updated", Boolean.TRUE);
