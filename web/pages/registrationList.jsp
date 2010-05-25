@@ -49,6 +49,8 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
                 <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
             </spring:bind>
         </li>
+
+<c:if test="${useServiceArea}">
         <li>
             <soak:label key="registration.serviceArea" styleClass="required"/>
             <spring:bind path="registration.serviceAreaid">
@@ -77,6 +79,8 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
                         value="${status.errorMessage}" escapeXml="false" /> </span>
 		    </spring:bind>
         </li>
+</c:if>
+
         <li>
             <soak:label key="registration.course" styleClass="required"/>
             <spring:bind path="registration.courseid">
@@ -151,7 +155,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 		</c:otherwise>
 	</c:choose>
     
-    <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
 		<c:if test="${(isAdmin || isEducationResponsible || isEventResponsible) && !registrationList.canceled}">
         <a href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseId" value="${registrationList.courseid}"/></c:url>'>
@@ -191,14 +195,18 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
     <display:column property="organization.name" sortable="true" headerClass="sortable"
          titleKey="registration.organization" class="${tdClass}"/>
 	
+<c:if test="${useServiceArea}">
 	<display:column property="serviceArea.name" sortable="true" headerClass="sortable" 
 		titleKey="registration.serviceArea" class="${tdClass}"/>
+</c:if>
          
+<c:if test="${usePayment}">
     <display:column sortable="true" headerClass="sortable"
          titleKey="registration.invoiced">
 		<c:if test="${registrationList.invoiced == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${registrationList.invoiced == false}"><fmt:message key="checkbox.unchecked"/></c:if>
     </display:column>
+</c:if>
     
     <display:column sortable="true" headerClass="sortable"
          titleKey="registration.attended">
@@ -206,10 +214,13 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 		<c:if test="${registrationList.attended == false}"><fmt:message key="checkbox.unchecked"/></c:if>
     </display:column>
     
+    
+<c:if test="${usePayment}">
     <display:column media="csv excel xml pdf" property="invoiceName" sortable="true" headerClass="sortable" titleKey="registrationList.invoiceAddress.name"/>
     <display:column media="csv excel xml pdf" property="invoiceAddress.address" sortable="true" headerClass="sortable" titleKey="registrationList.invoiceAddress.address"/>
     <display:column media="csv excel xml pdf" property="invoiceAddress.city" sortable="true" headerClass="sortable" titleKey="registrationList.invoiceAddress.city"/>
     <display:column media="csv excel xml pdf" property="invoiceAddress.postalCode" sortable="true" headerClass="sortable" titleKey="registrationList.invoiceAddress.postalCode"/>
+</c:if>
     
     <display:setProperty name="paging.banner.item_name" value="${item}"/>
     <display:setProperty name="paging.banner.items_name" value="${items}"/>

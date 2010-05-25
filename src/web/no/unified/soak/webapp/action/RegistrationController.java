@@ -220,8 +220,10 @@ public class RegistrationController extends BaseFormController {
         } else if ((reservedRequest != null) &&
                 (reservedRequest.compareTo("2") == 0)) {
 
-            if (!(Boolean) request.getAttribute("isAdmin") && !(Boolean) request.getAttribute("isEducationResponsible")
-                    && !(Boolean) request.getAttribute("isEventResponsible")) {
+            if (!(Boolean) request.getAttribute("isAdmin") 
+            		&& !(Boolean) request.getAttribute("isEducationResponsible")
+                    && !(Boolean) request.getAttribute("isEventResponsible")
+                    && !(Boolean) request.getAttribute("isReader")) {
                 statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();
             }
             registration.setStatus((Registration.Status) null);
