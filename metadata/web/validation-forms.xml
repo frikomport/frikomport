@@ -12,8 +12,8 @@
             </field>
        </form>
        <form name="location">
-            <field property="name" depends="required">
-            </field>
+            <field property="name" depends="required"/>
+            <field property="address" depends="required"/>
        </form>
        <form name="person">
             <field property="name" depends="required">
