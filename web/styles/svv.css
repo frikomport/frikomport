@@ -76,23 +76,10 @@ div#content h1 {
 body thead tr th.sortable a,
 body thead tr th.sortable a:visited {
 	color:#FFD199 !important;
-	/*
-	FF8C00
-	FFD199
-	FFE8CC
-	*/
 }
 
-thead tr th.sortable {
-	background-color:#5f686E;
-	/*
-	background-color:#878E92;
-	background-color:#EDEEF0;
-	background-color:#D7D9DB;
-	*/
-}
-
-table.list thead th.sorted {
+table.list thead th.sorted,
+table.list thead tr th {
 	background-color:#5f686E;
 }
 
@@ -108,7 +95,15 @@ div#content table thead tr th {
 	background-color:#EDEEF0;
 	color:inherit;
 }
+table.list thead th.sortable:hover {
+	background-color:#FF8C00; /* #FFD199; */
+}
 
+table.list thead th a:hover {
+	color:#FFFFFF !important;
+	text-decoration:none;
+}
+	
 #content table.list th.sortable a {
 	background-image:url("../images/SVV/arrow_off_SVV.png");
 }
