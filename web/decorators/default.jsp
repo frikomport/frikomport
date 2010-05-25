@@ -24,12 +24,8 @@
  	    System.out.println("En mulig håndterbar feil har oppstått");
  	    System.out.println("default.jsp: decorURL=["+pageContext.getAttribute("decorURL")+"]");
  	    System.out.println("default.jsp: ctmpl / sidedekor=["+pageContext.getAttribute("ctmpl")+"]");
-
-		Exception causeException = (Exception) exception.getCause();
-		if (causeException != null ) {
-	        useCmsUrl = false;
-	 	    System.out.println("Bruker ikke CMS, da den gir exception="+exception);
-		}
+ 	    System.out.println("Bruker ikke CMS, da den gir exception="+exception);
+        useCmsUrl = false;
 	}
 	else {
 		System.out.println("default.jsp: En uventet situasjon har oppstått.<br/>");			
