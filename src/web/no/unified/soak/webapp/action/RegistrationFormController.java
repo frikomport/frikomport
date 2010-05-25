@@ -30,6 +30,7 @@ import no.unified.soak.model.Organization;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.ServiceArea;
 import no.unified.soak.model.User;
+import no.unified.soak.model.Organization.Type;
 import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
@@ -38,6 +39,7 @@ import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.UserManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.DateUtil;
 import no.unified.soak.util.MailUtil;
@@ -132,7 +134,6 @@ public class RegistrationFormController extends BaseFormController {
             if (courses != null) {
                 model.put("courseList", filtered);
             }
-
         }
 
         // Retrieve all serviceareas into an array
@@ -142,10 +143,16 @@ public class RegistrationFormController extends BaseFormController {
         }
 
         // Get all organizations
-        List<Organization> organizations = organizationManager.getAllIncludingDummy(getText("misc.none", locale));
-        if (organizations == null) {
-            organizations = new ArrayList<Organization>();
+        List<Organization> organizations = new ArrayList<Organization>(); 
+        String typeDBvalue = ApplicationResourcesUtil.getText("show.organization.pulldown.typeDBvalue");
+        if (typeDBvalue != null) {
+        	Integer value = Integer.valueOf(typeDBvalue);
+        	Type type = Organization.Type.getTypeFromDBValue(value);
+            organizations = organizationManager.getByTypeIncludingDummy(type, getText("misc.all", locale));
+        } else {
+            organizations = organizationManager.getAllIncludingDummy(getText("misc.all", locale));
         }
+        
         // If user not admin, show only registered org
         if (user != null && user.getOrganization() != null && !isAdmin) {
             organizations.clear();
@@ -170,7 +177,6 @@ public class RegistrationFormController extends BaseFormController {
         if (!legalRegistrationDate(request, request.getLocale(), course)) {
             model.put("illegalRegistration", new Boolean(true));
         }
-
         return model;
     }
 

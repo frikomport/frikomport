@@ -52,7 +52,7 @@ function fillSelect(obj){
 <c:if test="${!user.hashuser}">
             <li>
                 <soak:label key="course.organization2" styleClass="required"/>
-                <form:select  path="organization2id" onchange="fillSelect(this);">
+                <form:select  path="organization2id">
                     <form:options items="${organizations2}" itemValue="id" itemLabel="name" />
                 </form:select>
                 <form:errors cssClass="fieldError" htmlEscape="false" path="organization2id" />

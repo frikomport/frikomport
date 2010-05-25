@@ -82,6 +82,12 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
                         course.getOrganizationid()));
             }
 
+            if ((course.getOrganization2id() != null) &&
+                    (course.getOrganization2id().longValue() != 0)) {
+                criteria.add(Restrictions.eq("organization2id",
+                        course.getOrganization2id()));
+            }
+
             if ((course.getServiceAreaid() != null) &&
                     (course.getServiceAreaid().longValue() != 0)) {
                 criteria.add(Restrictions.eq("serviceAreaid",
@@ -152,6 +158,11 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
         if(course.getOrganizationid() != null){
             criteria.add(Restrictions.eq("organizationid", course.getOrganizationid()));
         }
+
+        if(course.getOrganization2id() != null){
+            criteria.add(Restrictions.eq("organization2id", course.getOrganization2id()));
+        }
+
         criteria.addOrder(Order.asc("startTime"));
         return getHibernateTemplate().findByCriteria(criteria);
     }

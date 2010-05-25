@@ -558,9 +558,16 @@ public class MailUtil {
         
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.organization")) + ": "
                 + course.getOrganization().getName() + "\n");
+
+        if(course.getOrganization2() != null){
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.organization2")) + ": "
+                + course.getOrganization2().getName() + "\n");
+        }
         
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.serviceArea")) + ": "
-                + course.getServiceArea().getName() + "\n");
+        if(course.getServiceArea() != null){
+	        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.serviceArea")) + ": "
+	                + course.getServiceArea().getName() + "\n");
+        }
         
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.location")) + ": "
                 + course.getLocation().getName() + "\n");

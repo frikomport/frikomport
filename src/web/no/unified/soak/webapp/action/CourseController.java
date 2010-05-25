@@ -347,7 +347,7 @@ public class CourseController extends BaseFormController {
             course.setOrganizationid(new Long(orgid));
         }
         String org2id = request.getParameter("organization2id");
-        if (isNumber(orgid)) {
+        if (isNumber(org2id)) {
             course.setOrganization2id(new Long(org2id));
         }
         String areaid = request.getParameter("serviceAreaid");
