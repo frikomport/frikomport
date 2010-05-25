@@ -10,6 +10,8 @@
  */
 package no.unified.soak.model;
 
+import no.unified.soak.validation.Required;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -80,6 +82,7 @@ public class Location extends BaseObject implements Serializable {
      * @param address
      *            The address to set.
      */
+    @Required
     public void setAddress(String address) {
         this.address = address;
     }
@@ -190,6 +193,7 @@ public class Location extends BaseObject implements Serializable {
      * @param name
      *            The name to set.
      */
+    @Required
     public void setName(String name) {
         this.name = name;
     }
@@ -309,6 +313,7 @@ public class Location extends BaseObject implements Serializable {
      * @param organizationid The organizationid to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setOrganizationid(Long organizationid) {
     	this.organizationid = organizationid;
     }
