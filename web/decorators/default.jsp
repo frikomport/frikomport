@@ -26,10 +26,9 @@
  	    System.out.println("default.jsp: ctmpl / sidedekor=["+pageContext.getAttribute("ctmpl")+"]");
 
 		Exception causeException = (Exception) exception.getCause();
-		if (causeException instanceof java.io.IOException) {
+		if (causeException != null ) {
 	        useCmsUrl = false;
-		} else {
-		    throw exception;
+	 	    System.out.println("Bruker ikke CMS, da den gir exception="+exception);
 		}
 	}
 	else {
