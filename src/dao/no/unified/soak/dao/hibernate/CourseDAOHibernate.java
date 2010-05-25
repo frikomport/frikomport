@@ -10,12 +10,16 @@
  */
 package no.unified.soak.dao.hibernate;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import no.unified.soak.dao.CourseDAO;
 import no.unified.soak.model.Course;
+import no.unified.soak.model.Organization;
 import no.unified.soak.model.Person;
+import no.unified.soak.model.Organization.Type;
 import no.unified.soak.util.CourseStatus;
 
 import org.hibernate.criterion.DetachedCriteria;
@@ -84,8 +88,22 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
 
             if ((course.getOrganization2id() != null) &&
                     (course.getOrganization2id().longValue() != 0)) {
-                criteria.add(Restrictions.eq("organization2id",
-                        course.getOrganization2id()));
+
+            	List family = new ArrayList<Long>();
+            	family.add(course.getOrganization2id());
+            	
+                DetachedCriteria subCriteria = DetachedCriteria.forClass(Organization.class);
+            	subCriteria.add(Restrictions.eq("parentid", course.getOrganization2id()));
+            	subCriteria.add(Restrictions.eq("type", Type.AREA.getTypeDBValue()));
+            	List childOrgs = getHibernateTemplate().findByCriteria(subCriteria);
+            	if(!childOrgs.isEmpty()){
+            		Iterator<Organization> it = childOrgs.iterator();
+            		while(it.hasNext()){
+            			Organization o = it.next();
+            			family.add(o.getId());
+            		}
+            	}
+            	criteria.add(Restrictions.in("organization2id", family));
             }
 
             if ((course.getServiceAreaid() != null) &&
