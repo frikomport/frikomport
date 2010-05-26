@@ -105,6 +105,8 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
                 <option value="0" <c:if test="${reservedValue == 0}"> selected </c:if> /> <c:out value='${reserved["false"]}'/></option>
             </select>
         </li>
+
+<c:if test="${usePayment}">
         <li>
             <soak:label key="registration.invoiced" styleClass="required"/>
             <select id="invoicedField" name="invoicedField">
@@ -113,6 +115,8 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
                 <option value="0" <c:if test="${invoicedValue == 0}"> selected </c:if> /> <c:out value='${invoiced["false"]}'/></option>
             </select>
         </li>
+</c:if>
+
         <li>
             <soak:label key="registration.attended" styleClass="required"/>
             <select id="attendedField" name="attendedField">
@@ -192,8 +196,12 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
     <display:column property="mobilePhone" sortable="true" headerClass="sortable"
          titleKey="registration.mobilePhone" class="${tdClass}"/>
          
-    <display:column property="organization.name" sortable="true" headerClass="sortable"
-         titleKey="registration.organization" class="${tdClass}"/>
+    <display:column property="course.organization.name" sortable="true" headerClass="sortable"
+         titleKey="course.organization" class="${tdClass}"/>
+
+    <display:column property="course.organization2.name" sortable="true" headerClass="sortable"
+         titleKey="course.organization2" class="${tdClass}"/>
+
 	
 <c:if test="${useServiceArea}">
 	<display:column property="serviceArea.name" sortable="true" headerClass="sortable" 
