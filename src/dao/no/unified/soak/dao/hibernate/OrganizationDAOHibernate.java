@@ -74,6 +74,7 @@ public class OrganizationDAOHibernate extends BaseDAOHibernate
             criteria.add(Restrictions.eq("selectable", new Boolean("true")));
         }
 
+        criteria.addOrder(Order.desc("type"));
         criteria.addOrder(Order.asc("name"));
 
         return getHibernateTemplate().findByCriteria(criteria);
