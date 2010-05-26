@@ -31,6 +31,9 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 <fmt:message key="time.format" var="timeformat"/>
 <fmt:message key="registrationList.item" var="item"/>
 <fmt:message key="registrationList.items" var="items"/>
+
+<c:choose>
+<c:when test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 <div class="searchForm">
     <form method="post" action="<c:url value="/listRegistrations.html"/>" id="registrationList" name="registrationList">
     <INPUT type="hidden" id="ispostbackregistrationlist" name="ispostbackregistrationlist" value="1"/> 
@@ -139,6 +142,13 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
     </ul>
     </form>
 </div>
+</c:when>
+<c:otherwise>
+    <div class="message" style="font-size: 12px"><fmt:message key="access.denied" /></div>
+</c:otherwise>
+</c:choose>
+
+
 
 <c:set var="buttons">
 </c:set>

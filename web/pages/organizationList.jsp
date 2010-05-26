@@ -6,6 +6,9 @@
 <fmt:message key="organizationList.item" var="item"/>
 <fmt:message key="organizationList.items" var="items"/>
 
+<c:choose>
+<c:when test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+
 <c:set var="buttons">
 <c:if test="${isAdmin}">
     <button type="button" style="margin-right: 5px"
@@ -63,6 +66,12 @@
     <display:setProperty name="paging.banner.item_name" value="${item}"/>
     <display:setProperty name="paging.banner.items_name" value="${items}"/>
 </display:table>
+
+</c:when>
+<c:otherwise>
+    <div class="message" style="font-size: 12px"><fmt:message key="access.denied" /></div>
+</c:otherwise>
+</c:choose>
 
 <c:out value="${buttons}" escapeXml="false"/>
 

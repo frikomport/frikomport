@@ -9,6 +9,9 @@
 <fmt:message key="serviceAreaList.item" var="item" />
 <fmt:message key="serviceAreaList.items" var="items" />
 
+<c:choose>
+<c:when test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+
 <form method="post" action="<c:url value="/listServiceAreas.html"/>" id="serviceAreaList">
    	<input type="hidden" id="ispostbackservicearealist" name="ispostbackservicearealist" value="1"/>
 
@@ -81,6 +84,12 @@
 	<display:setProperty name="paging.banner.item_name" value="${item}" />
 	<display:setProperty name="paging.banner.items_name" value="${items}" />
 </display:table>
+
+</c:when>
+<c:otherwise>
+    <div class="message" style="font-size: 12px"><fmt:message key="access.denied" /></div>
+</c:otherwise>
+</c:choose>
 
 <c:out value="${buttons}" escapeXml="false" />
 
