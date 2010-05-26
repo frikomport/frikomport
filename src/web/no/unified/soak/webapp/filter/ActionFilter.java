@@ -299,6 +299,7 @@ public class ActionFilter implements Filter {
             request.setAttribute("isEducationResponsible", roleNameList.contains(Constants.EDITOR_ROLE));
             request.setAttribute("isAdmin", roleNameList.contains(Constants.ADMIN_ROLE));
             request.setAttribute("username", user.getUsername());
+            request.setAttribute("user", user);
         } else {
             // User is not logged in, removing all role settings.
             request.setAttribute("isCourseParticipant", false);
@@ -307,6 +308,7 @@ public class ActionFilter implements Filter {
             request.setAttribute("isEducationResponsible", false);
             request.setAttribute("isAdmin", false);
             request.setAttribute("username", null);
+            request.setAttribute("user", null);
         }
     }
 

@@ -70,6 +70,10 @@ public class BaseFormController extends SimpleFormController {
     public UserManager getUserManager() {
     	return userManager;
     }
+
+    public void setUserManager(UserManager userManager) {
+    	this.userManager = userManager;
+    }
     
     public void setConfigurationManager(ConfigurationManager configurationManager) {
     	this.configurationManager = configurationManager;

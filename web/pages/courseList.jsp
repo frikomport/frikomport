@@ -145,7 +145,7 @@ function fillSelect(obj){
 
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-<c:if test="${isAdmin || isEducationResponsible || isEventResponsible && username == courseList.responsible.username}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible && username == courseList.responsible.username || (isSVV && courseList.organization2id == user.organization2id)}">
         <a href='<c:url value="/editCourse.html"><c:param name="id" value="${courseList.id}"/><c:param name="from" value="list"/></c:url>'>
             <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
