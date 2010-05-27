@@ -98,26 +98,34 @@
 	<display:column property="organization.name" sortable="true" headerClass="sortable" class="${tdClass}"
 		titleKey="registration.organization"/>
 
+	<c:if test="${showJobTitle}">
 	<display:column property="jobTitle" sortable="true" headerClass="sortable" class="${tdClass}"
 		titleKey="registration.jobTitle"/>
-		
+	</c:if>
+
+	<c:if test="${showServiceArea}">		
 	<display:column property="serviceArea.name" sortable="true" headerClass="sortable" class="${tdClass}"
 		titleKey="registration.serviceArea"/>
+	</c:if>
 
+	<c:if test="${showWorkplace}">
 	<display:column property="workplace" sortable="true" headerClass="sortable" class="${tdClass}"
 		titleKey="registration.workplace"/>
+	</c:if>
 
-    <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 	<display:column property="phone" sortable="true" headerClass="sortable" class="${tdClass}"
 		titleKey="registration.phone"/>
 
 	<display:column property="mobilePhone" sortable="true" headerClass="sortable" class="${tdClass}"
 		titleKey="registration.mobilePhone"/>
 
+	<c:if test="${showWorkplace}">
 	<display:column property="comment" sortable="true" headerClass="sortable" class="${tdClass}"
 		titleKey="registration.comment"/>
+	</c:if>
 
-	<c:if test="${admin == true || isReader}">
+	<c:if test="${(admin == true || isReader) && usePayment}">
 	<display:column media="ccsv cexcel cxml cpdf" property="invoiceName" sortable="true" headerClass="sortable"
 		titleKey="registration.invoiceAddress.name"/>
 	<display:column media="ccsv cexcel cxml cpdf" property="invoiceAddress.address" sortable="true" headerClass="sortable"
@@ -128,12 +136,14 @@
 		titleKey="registration.invoiceAddress.city"/>
 	</c:if>
 
+	<c:if test="${usePayment}">	
 	<display:column media="html" sortable="true" headerClass="sortable" titleKey="registration.invoiced">
 	<c:if test="${admin == true}">
 		<input type="hidden" name="_invoiced<c:out value="${registrationList.id}"/>" value="visible" />
 		<input type="checkbox" name="invoiced_<c:out value="${registrationList.id}"/>"
 					<c:if test="${registrationList.invoiced == true}"> checked="checked" </c:if> />
 	</c:if>
+	
 	<c:if test="${admin == false}">
 		<input type="hidden" name="_invoiced<c:out value="${registrationList.id}"/>" value="visible" />
 		<input type="hidden" name="invoiced_<c:out value="${registrationList.id}"/>" value="${registrationList.invoiced}" />
@@ -141,11 +151,13 @@
 		<c:if test="${registrationList.invoiced == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 	</c:if>
 	</display:column>
+
 	<display:column media="ccsv cexcel cxml cpdf" sortable="true" headerClass="sortable" titleKey="registration.invoiced">
 		<c:if test="${registrationList.invoiced == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${registrationList.invoiced == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 	</display:column>
-
+	</c:if>
+	
 	<display:column media="html" sortable="true" headerClass="sortable" titleKey="registration.reserved">
 	<c:if test="${admin == true}">
 		<input type="hidden" name="_reserved<c:out value="${registrationList.id}"/>" value="visible"/>
