@@ -31,6 +31,7 @@ import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
@@ -95,7 +96,7 @@ public class RegistrationController extends BaseFormController {
         if ((postback == null) || (postback.compareTo("1") != 0)) {
             // Check if a default organization should be applied
             User user = (User) session.getAttribute(Constants.USER_KEY);
-            if (user != null && user.getOrganizationid() != null) {
+            if (!ApplicationResourcesUtil.isSVV() && user != null && user.getOrganizationid() != null) {
                 registration.setOrganizationid(user.getOrganizationid());
             }
 
