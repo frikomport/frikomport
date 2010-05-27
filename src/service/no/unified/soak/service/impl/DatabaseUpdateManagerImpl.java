@@ -15,7 +15,6 @@ import no.unified.soak.model.Course;
 import no.unified.soak.model.Organization;
 import no.unified.soak.model.Person;
 import no.unified.soak.model.Registration;
-import no.unified.soak.model.Role;
 import no.unified.soak.model.ServiceArea;
 import no.unified.soak.model.User;
 import no.unified.soak.model.Organization.Type;
@@ -37,7 +36,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.jdbc.support.rowset.SqlRowSetMetaData;
-import org.springframework.orm.ObjectRetrievalFailureException;
 
 /**
  * User: gv Date: 05.jun.2008 Time: 10:26:23
@@ -532,20 +530,6 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	        	log.info("\"Organization\" lagt til i DB: " + organization);
                 	}
         		}
-            }
-
-            // assign servicearea Mengdetrening to SVV-organizations
-            
-            List<Organization> counties = organizationManager.getOrganizationsByType(Organization.Type.COUNTY);
-            List<ServiceArea> serviceAreas = serviceAreaManager.getAll();
-            
-            if(serviceAreas.isEmpty()){
-            	// insert servicearea pr. county
-            	Iterator c = counties.iterator();
-            	while(c.hasNext()){
-            		Organization organization = (Organization)c.next();
-            		serviceAreaManager.saveServiceArea(new ServiceArea("Mengdetrening", true, organization.getId()));
-            	}
             }
         }
     }

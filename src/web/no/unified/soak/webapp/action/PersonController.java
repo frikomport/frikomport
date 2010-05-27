@@ -10,6 +10,7 @@
  */
 package no.unified.soak.webapp.action;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -58,8 +59,10 @@ public class PersonController implements Controller {
 
     	HttpSession session = request.getSession();
     	User user = (User) session.getAttribute(Constants.USER_KEY);
-    	List roles = user.getRoleNameList();
 
+    	List roles = new ArrayList<String>();
+    	if(user != null){ roles = user.getRoleNameList(); }
+    	else { roles.add(Constants.ANONYMOUS_ROLE); }
     	List<Person> persons = getPersons(roles);
 
         return new ModelAndView("personList", Constants.PERSON_LIST, persons);
