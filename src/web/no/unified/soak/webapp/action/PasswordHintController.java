@@ -109,7 +109,7 @@ public class PasswordHintController implements Controller {
                 text.getMessage("login.passwordHint.sent",
                     new Object[] { username, user.getEmail() }));
         } catch (Exception e) {
-            saveError(request,
+            saveErrorMessage(request,
                 text.getMessage("login.passwordHint.error",
                     new Object[] { username }));
         }
@@ -117,26 +117,26 @@ public class PasswordHintController implements Controller {
         return new ModelAndView(new RedirectView(request.getContextPath()));
     }
 
-    public void saveError(HttpServletRequest request, String error) {
-        List errors = (List) request.getSession().getAttribute("errors");
+    public void saveErrorMessage(HttpServletRequest request, String error) {
+        List errors = (List) request.getSession().getAttribute("listOfErrorMessages");
 
         if (errors == null) {
             errors = new ArrayList();
         }
 
         errors.add(error);
-        request.getSession().setAttribute("errors", errors);
+        request.getSession().setAttribute("listOfErrorMessages", errors);
     }
 
     // this method is also in BaseForm Controller
     public void saveMessage(HttpServletRequest request, String msg) {
-        List messages = (List) request.getSession().getAttribute("messages");
+        List messages = (List) request.getSession().getAttribute("listOfMessages");
 
         if (messages == null) {
             messages = new ArrayList();
         }
 
         messages.add(msg);
-        request.getSession().setAttribute("messages", messages);
+        request.getSession().setAttribute("listOfMessages", messages);
     }
 }

@@ -199,5 +199,12 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
         criteria.add(Restrictions.between("registerBy", from, to));
         return getHibernateTemplate().findByCriteria(criteria);
     }
+
+	public List<Course> findByDates(Date beginPeriod, Date endPeriod) {
+		// TODO Auto-generated method stub
+		DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
+		
+		return null;
+	}
     
 }

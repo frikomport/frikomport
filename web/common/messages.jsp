@@ -1,13 +1,13 @@
 <%-- Error Messages --%>
 <c:if test="${not empty errors}">
     <div class="error" id="errorMessages">
-        <c:forEach var="error" items="${errors}">
+        <c:forEach var="error" items="${listOfErrorMessages}">
             <img src="<c:url value="/images/iconWarning.gif"/>"
                 alt="<fmt:message key="icon.warning"/>" class="icon" />
             <c:out value="${error}" escapeXml="false"/><br />
         </c:forEach>
     </div>
-    <c:remove var="errors"/>
+    <c:remove var="listOfErrorMessages"/>
 </c:if>
 
 <%-- Success Messages --%>

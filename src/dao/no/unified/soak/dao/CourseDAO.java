@@ -75,4 +75,11 @@ public interface CourseDAO extends DAO {
     public List<Course> findByInstructor(Person person);
     
     public List<Course> getCoursesWhereRegisterByExpired(long millis);
+
+	/** Finds courses based on date.
+	 * 
+	 * @param course
+	 * @return
+	 */
+	public List<Course> findByDates(Date beginPeriod, Date endPeriod);
 }

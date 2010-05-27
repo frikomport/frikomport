@@ -769,7 +769,7 @@ public class MailUtil {
                 helper.setTo(registration.getEmail());
                 if(ccToResponsible) helper.setCc(course.getResponsible().getEmail());
                 
-                if (from != null && !from.equals(""))
+                if (!StringUtils.isEmpty(from))
                     helper.setFrom(from);
                 else {
                     helper.setFrom(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.default.from")));

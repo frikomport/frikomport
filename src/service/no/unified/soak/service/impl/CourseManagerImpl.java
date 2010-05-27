@@ -166,4 +166,8 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
 	public void evict(Object entity) {
 		dao.evict(entity);
 	}
+
+	public List<Course> findByDates(Date beginPeriod, Date endPeriod) {
+		return dao.findByDates(beginPeriod, endPeriod);
+	}
 }

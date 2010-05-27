@@ -98,4 +98,6 @@ public interface CourseManager extends Manager {
 	 * @param entity
 	 */
 	public void evict(Object entity);
+
+	public List<Course> findByDates(Date beginPeriod, Date endPeriod);
 }

@@ -90,6 +90,17 @@ public class BaseFormController extends SimpleFormController {
         request.getSession().setAttribute("listOfMessages", messages);
     }
 
+    public void saveErrorMessage(HttpServletRequest request, String error) {
+        List errors = (List) request.getSession().getAttribute("listOfErrorMessages");
+
+        if (errors == null) {
+            errors = new ArrayList();
+        }
+
+        errors.add(error);
+        request.getSession().setAttribute("listOfErrorMessages", errors);
+    }
+
     /**
      * Convenience method for getting a i18n key's value. Calling
      * getMessageSourceAccessor() is used because the RequestContext variable is
