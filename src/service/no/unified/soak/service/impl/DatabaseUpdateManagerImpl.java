@@ -373,7 +373,8 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	configurationsToInsert.add(new Configuration("access.course.showType", false, null));
         	configurationsToInsert.add(new Configuration("access.course.showRestricted", false, null));
         	configurationsToInsert.add(new Configuration("access.course.useServiceArea", false, null));
-
+        	configurationsToInsert.add(new Configuration("access.course.showCourseName", false, null));
+        	
         	// profile
         	configurationsToInsert.add(new Configuration("access.profile.showInvoiceaddress", false, null));
 
@@ -392,6 +393,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	configurationsToInsert.add(new Configuration("access.course.showRole", true, null));
         	configurationsToInsert.add(new Configuration("access.course.showType", true, null));
         	configurationsToInsert.add(new Configuration("access.course.showRestricted", true, null));
+        	configurationsToInsert.add(new Configuration("access.course.showCourseName", false, null));
 
         	// profile
         	configurationsToInsert.add(new Configuration("access.profile.showInvoiceaddress", true, null));

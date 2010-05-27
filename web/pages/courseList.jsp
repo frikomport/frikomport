@@ -153,6 +153,7 @@ function fillSelect(obj){
     </display:column>
 </c:if>
 
+<c:if test="${showCourseName}">
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="name">
         <c:if test="${courseList.status == 3}"><img src="<c:url value="/images/cancel.png"/>"
                		alt="<fmt:message key="icon.warning"/>" class="icon" /><fmt:message key="course.cancelled.alert"/><br/></c:if>
@@ -160,19 +161,34 @@ function fillSelect(obj){
          title="<c:out value="${courseList.description}"/>"><c:out value="${courseList.name}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="course.name"/>
+</c:if>
 
-    <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.status">
         <c:if test="${courseList.status == 0}"><img src="<c:url value="/images/add.png"/>" alt="<fmt:message key="course.status.created"/>" title="<fmt:message key="course.status.created"/>" class="icon"/></c:if>
         <c:if test="${courseList.status == 1}"><img src="<c:url value="/images/stop.png"/>" alt="<fmt:message key="course.status.finished"/>" title="<fmt:message key="course.status.finished"/>" class="icon"/></c:if>
         <c:if test="${courseList.status == 2}"><img src="<c:url value="/images/accept.png"/>" alt="<fmt:message key="course.status.published"/>" title="<fmt:message key="course.status.published"/>" class="icon"/></c:if>
         <c:if test="${courseList.status == 3}"><img src="<c:url value="/images/cancel.png"/>" alt="<fmt:message key="course.status.cancelled"/>" title="<fmt:message key="course.status.cancelled"/>" class="icon"/></c:if>
     </display:column>
-    </c:if>
+</c:if>
 
+<c:choose>
+<c:when test="${showCourseName}">
     <display:column sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
-         <fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
+		<fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
+</c:when>
+<c:otherwise>
+    <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
+         <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>" 
+         title="<c:out value="${courseList.description}"/>"><fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/></a>
+    </display:column>
+    <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
+		<fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
+    </display:column>
+</c:otherwise>    
+</c:choose>
+
 
     <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.stopTime" sortProperty="stopTime">
          <fmt:formatDate value="${courseList.stopTime}" type="both" pattern="${dateformat} ${timeformat}"/>
@@ -201,7 +217,7 @@ function fillSelect(obj){
     <display:column property="organization.name" sortable="true" headerClass="sortable"
          titleKey="course.organization"/>
 
-<c:if test="${!user.hashuser}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <display:column property="organization2.name" sortable="true" headerClass="sortable"
          titleKey="course.organization2"/>
 </c:if>

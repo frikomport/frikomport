@@ -121,6 +121,8 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 
 		<form:hidden path="id" />
 
+<c:choose>
+    <c:when test="${showCourseName}">
 		<tr>
 			<th>
 				<soak:label key="course.name" />
@@ -128,9 +130,16 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 			<td>
 				<form:input size="50" maxlength="100" path="name" />
 				<form:errors cssClass="fieldError" htmlEscape="false"
-					path="description" />
+					path="name" />
 			</td>
 		</tr>
+    </c:when>
+    <c:otherwise>
+        		<form:hidden path="name"/>
+    </c:otherwise>
+</c:choose>
+
+
 <c:choose>
     <c:when test="${categories[1] != null}">
         <tr>
@@ -145,7 +154,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
         </tr>
     </c:when>
     <c:otherwise>
-        <form:hidden path="categoryid"/>
+        		<form:hidden path="categoryid"/>
     </c:otherwise>
 </c:choose>
 

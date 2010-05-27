@@ -640,6 +640,9 @@ public class CourseFormController extends BaseFormController {
 		if (StringUtils.isEmpty(course.getDuration())) {
 			course.setDuration("N/A");
 		}
+		if (StringUtils.isEmpty(course.getName())) {
+			course.setName(ApplicationResourcesUtil.getText("course.defaultname"));
+		}
 		if(StringUtils.isEmpty(course.getRole())){
 			course.setRole(Constants.ANONYMOUS_ROLE);
 		}

@@ -5,6 +5,7 @@
 <fmt:message key="attachmentList.items" var="items" />
 
 <tr>
+<c:if test="${showCourseName}">
 	<th>
 		<fmt:message key="course.name" />
 	</th>
@@ -21,6 +22,7 @@
 		</c:choose>
 	</td>
 </tr>
+</c:if>
 
 <c:if test="${showDescription}">
 <tr>

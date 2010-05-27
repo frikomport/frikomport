@@ -129,7 +129,7 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
 		if (!originalCourse.getOrganizationid().equals(changedCourse.getOrganizationid())){
 			changedList.add("organization");
 		}
-		if (!originalCourse.getServiceAreaid().equals(changedCourse.getServiceAreaid())){
+		if ((originalCourse.getServiceAreaid() == null && changedCourse.getServiceAreaid() != null) || (originalCourse.getServiceAreaid() != null && !originalCourse.getServiceAreaid().equals(changedCourse.getServiceAreaid()))){
 			changedList.add("serviceArea");
 		}
 		if (!originalCourse.getLocationid().equals(changedCourse.getLocationid())){
