@@ -27,6 +27,7 @@
             <Item name="LocationMenu" title="locationList.heading" page="/listLocations.html"/>
             <Item name="PersonMenu" title="personList.heading" page="/listPeople.html"/>
             <Item name="ResponsibleMenu" title="responsibleList.heading" page="/listResponsibles.html"/>
+            <Item name="UsersMenu" title="userList.heading" page="/listUsers.html"/>
             <Item name="ServiceAreaMenu" title="serviceAreaList.heading" page="/listServiceAreas.html"/>
             <Item name="RegistrationMenu" title="registrationList.heading" page="/listRegistrations.html"/>
             <Item name="ConfigurationMenu" title="configuration.name" page="/administerConfiguration.html"/>

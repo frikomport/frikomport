@@ -20,7 +20,8 @@
 
 <c:out value="${buttons}" escapeXml="false" />
 --%>
-
+<<c:choose>
+<c:when test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 <form:form commandName="user" name="user">
 <div class="searchForm">
     <ul>
@@ -68,7 +69,7 @@
     <display:column property="lastName" sortable="true"
         headerClass="sortable" titleKey="user.lastName" />
     <display:column property="email" sortable="true" headerClass="sortable"
-        autolink="true" titleKey="user.mail" />
+        autolink="true" titleKey="user.email" />
 
     <fmt:message var="user" key="userList.user" />
     <fmt:message var="users" key="userList.users" />
@@ -80,6 +81,11 @@
     <display:setProperty name="export.csv.filename" value="User List.csv" />
     <display:setProperty name="export.pdf.filename" value="User List.pdf" />
 </display:table>
+</c:when>
+<c:otherwise>
+    <div class="message" style="font-size: 12px"><fmt:message key="access.denied" /></div>
+</c:otherwise>
+</c:choose>
 
 <%-- 
 <c:out value="${buttons}" escapeXml="false" />
