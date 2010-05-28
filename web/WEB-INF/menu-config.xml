@@ -30,6 +30,7 @@
             <Item name="UsersMenu" title="userList.heading" page="/listUsers.html"/>
             <Item name="ServiceAreaMenu" title="serviceAreaList.heading" page="/listServiceAreas.html"/>
             <Item name="RegistrationMenu" title="registrationList.heading" page="/listRegistrations.html"/>
+            <Item name="StatisticsMenu" title="statistics.name" page="/statistics.html"/>
             <Item name="ConfigurationMenu" title="configuration.name" page="/administerConfiguration.html"/>
         </Menu>
 
