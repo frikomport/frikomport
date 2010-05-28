@@ -1,25 +1,25 @@
 package no.unified.soak.webapp.action;
 
-import no.unified.soak.service.RegistrationManager;
-import no.unified.soak.service.UserManager;
-import no.unified.soak.service.CourseManager;
-import no.unified.soak.service.ConfigurationManager;
-import no.unified.soak.model.User;
-import no.unified.soak.Constants;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Map;
-import java.util.Locale;
-import java.util.HashMap;
-import java.util.List;
 
-import org.springframework.web.servlet.ModelAndView;
+import no.unified.soak.Constants;
+import no.unified.soak.model.User;
+import no.unified.soak.service.CourseManager;
+import no.unified.soak.service.RegistrationManager;
+import no.unified.soak.service.UserManager;
+
+import org.apache.commons.validator.EmailValidator;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
-import org.springframework.mail.SimpleMailMessage;
-import org.apache.commons.validator.EmailValidator;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Created by IntelliJ IDEA.

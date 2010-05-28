@@ -9,7 +9,6 @@ package no.unified.soak.webapp.action;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,7 +49,6 @@ public class UserController extends BaseFormController {
         if (log.isDebugEnabled()) {
             log.debug("entering 'handleRequest' method...");
         }
-        Locale locale = request.getLocale();
         Map model = new HashMap();
         User user = new User();
         
@@ -75,8 +73,6 @@ public class UserController extends BaseFormController {
             throws Exception {
         Map model = new HashMap();
         HttpSession session = request.getSession();
-
-        Locale locale = request.getLocale();
 
         User user = (User) command;
         model.put("user", user);

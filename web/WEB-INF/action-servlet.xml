@@ -292,10 +292,8 @@
         </property>
     </bean>
 
-    <bean id="statisticsFormController" class="no.unified.soak.webapp.action.StatisticsFormController" autowire="byName">
-        <property name="formView" value="statistics"/>
-        <property name="successView" value="redirect:statistics.html"/>
-        <property name="cancelView" value="redirect:statistics.html"/>
+    <bean id="statisticsController" class="no.unified.soak.webapp.action.StatisticsController" autowire="byName">
+        <property name="statisticsManager" ref="statisticsManager"/>
     </bean>
 
     <bean id="healthCheckController" class="no.unified.soak.webapp.action.HealthCheckController" autowire="byName">
@@ -357,7 +355,7 @@
                 <prop key="/listCategories.html">categoryController</prop>
                 <prop key="/detailsCategory.html">categoryDetailsController</prop>
                 <prop key="/editCategory.html">categoryFormController</prop>
-                <prop key="/statistics.html">statisticsFormController</prop>
+                <prop key="/statistics.html">statisticsController</prop>
 
                 <prop key="/lb/test">healthCheckController</prop>
             </props>

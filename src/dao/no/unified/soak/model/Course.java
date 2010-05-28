@@ -12,6 +12,7 @@ package no.unified.soak.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 import no.unified.soak.validation.Required;
 
@@ -71,8 +72,45 @@ public class Course extends BaseObject implements Serializable {
     private Integer status = 0;
     private Boolean restricted = false;
     private Boolean chargeoverdue = false;
-
+    private Integer attendants;
+    private Set<Registration> registrations; 
+    
     /**
+     * @return the registrations
+     * @hibernate.set
+     *  inverse="true"
+     *  cascade="none"
+     * @hibernate.collection-key
+     *  column="courseid"
+     * @hibernate.collection-one-to-many class="no.unified.soak.model.Registration"
+     */
+    public Set<Registration> getRegistrations() {
+		return registrations;
+	}
+
+	/**
+	 * @param registrations the registrations to set
+	 */
+	public void setRegistrations(Set<Registration> registrations) {
+		this.registrations = registrations;
+	}
+
+	/**
+	 * @return the number of attendants
+     * @hibernate.property column="attendants" not-null="false"
+	 */
+	public Integer getAttendants() {
+		return attendants;
+	}
+
+	/**
+	 * @param attendants the number of attendants to set
+	 */
+	public void setAttendants(Integer attendants) {
+		this.attendants = attendants;
+	}
+
+	/**
      * @return
      * @hibernate.many-to-one not-null="false" column="categoryid"
      *                        insert="false" update="false" cascade="none"

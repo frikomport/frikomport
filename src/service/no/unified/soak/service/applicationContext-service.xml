@@ -150,6 +150,15 @@
     </bean>
     <!--Course-END-->
     
+    <!--Statistics-START-->
+    <bean id="statisticsManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.StatisticsManagerImpl" autowire="byName">
+            </bean>
+        </property>
+    </bean>
+    <!--Statistics-END-->
+    
     <!--Registration-START-->
     <bean id="registrationManager" parent="txProxyTemplate">
         <property name="target">

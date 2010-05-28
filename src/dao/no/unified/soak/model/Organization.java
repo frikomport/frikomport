@@ -34,7 +34,7 @@ public class Organization extends BaseObject implements Serializable {
     private static final long serialVersionUID = 6036269168761931708L;
     private Long id;
     private Long number;
-    private String Name;
+    private String name;
     private Boolean selectable;
     private String invoiceName;
     private Address invoiceAddress = new Address();
@@ -42,72 +42,72 @@ public class Organization extends BaseObject implements Serializable {
     private Long parentid;
     private Type type;
 
-    public enum Type {
-        MUNICIPALITY(1, null), COUNTY(2, MUNICIPALITY), AREA(3, null), REGION(4, MUNICIPALITY, AREA);
-        
-        private Integer typeDBValue;
-        private Type[] possibleChildren;
-        private String displayName;
+	public enum Type {
+		MUNICIPALITY(1, (Type[]) null), COUNTY(2, MUNICIPALITY), AREA(3, (Type[]) null), REGION(4, MUNICIPALITY, AREA);
 
-        Type(int type, Type... possibleChildren) {
-            this.typeDBValue = type;
-            this.possibleChildren = possibleChildren;
-        }
+		private Integer typeDBValue;
+		private Type[] possibleChildren;
+		private String displayName;
 
-        public static Type getTypeFromDBValue(Integer dbValue) {
-            for (Type type : values()) {
-                if (type.getTypeDBValue().equals(dbValue)) {
-                    return type;
-                }
-            }
-            return null;
-        }
+		Type(int type, Type... possibleChildren) {
+			this.typeDBValue = type;
+			this.possibleChildren = possibleChildren;
+		}
 
-        public Integer getTypeDBValue() {
-            return typeDBValue;
-        }
+		public static Type getTypeFromDBValue(Integer dbValue) {
+			for (Type type : values()) {
+				if (type.getTypeDBValue().equals(dbValue)) {
+					return type;
+				}
+			}
+			return null;
+		}
 
-        public Type[] getLevel() {
-            return possibleChildren;
-        }
+		public Integer getTypeDBValue() {
+			return typeDBValue;
+		}
 
-        public void setDisplayName(String name) {
-            this.displayName = name;
-        }
+		public Type[] getLevel() {
+			return possibleChildren;
+		}
 
-        public String getDisplayName() {
-            if (displayName == null) {
-                displayName = ApplicationResourcesUtil.getText("organization.type.displayname." + getTypeDBValue());
-            }
-            return displayName;
-        }
-        
-        @Override
-        public String toString() {
-            return new ToStringBuilder(this).append(getDisplayName()).toString();
-        }
+		public void setDisplayName(String name) {
+			this.displayName = name;
+		}
 
-    }
+		public String getDisplayName() {
+			if (displayName == null) {
+				displayName = ApplicationResourcesUtil.getText("organization.type.displayname." + getTypeDBValue());
+			}
+			return displayName;
+		}
+
+		@Override
+		public String toString() {
+			return new ToStringBuilder(this).append(getDisplayName()).toString();
+		}
+
+	}
     
     public Organization(){}
     
-    public Organization(String name, long number, int type, boolean selectable){
-    	setName(name);
+    public Organization(String aName, long number, int type, boolean selectable){
+    	setName(aName);
     	setNumber(number);
     	setType(type);
     	setSelectable(selectable);
     }
 
-    public Organization(String name, long number, int type, boolean selectable, Organization parent){
-    	setName(name);
+    public Organization(String aName, long number, int type, boolean selectable, Organization parent){
+    	setName(aName);
     	setNumber(number);
     	setType(type);
     	setSelectable(selectable);
     	setParent(parent);
     }
 
-    public Organization(String name, long number, int type, boolean selectable, Organization parent, Long parentid){
-    	setName(name);
+    public Organization(String aName, long number, int type, boolean selectable, Organization parent, Long parentid){
+    	setName(aName);
     	setNumber(number);
     	setType(type);
     	setSelectable(selectable);
@@ -153,7 +153,7 @@ public class Organization extends BaseObject implements Serializable {
      * @hibernate.property column="name" length="50" not-null="true"
      */
     public String getName() {
-        return Name;
+        return name;
     }
 
     /**
@@ -162,7 +162,7 @@ public class Organization extends BaseObject implements Serializable {
      *            The name to set.
      */
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     /**

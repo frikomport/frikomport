@@ -113,6 +113,8 @@ public class Registration extends BaseObject implements Serializable {
 
 	private Status status;
 	
+	private Integer participants;
+	
 	/**
 	 * Default constructor
 	 */
@@ -122,6 +124,34 @@ public class Registration extends BaseObject implements Serializable {
 		invoiced = Boolean.FALSE;
 		attended = Boolean.FALSE;
 	}
+
+	
+	/**
+	 * @return the number of participants or 1 if value is <code>null</code>
+	 * @hibernate.property column="participants" not-null="false"
+	 */
+	public Integer getParticipants() {
+		if (participants == null) {
+			return 1;
+		}
+		return participants;
+	}
+
+
+	/**
+	 * Sets number of participants. Sets 1 on this object if input parameter is
+	 * <code>null</code>.
+	 * 
+	 * @param participants
+	 *            the number of participants to set
+	 */
+	public void setParticipants(Integer participants) {
+		if (participants == null) {
+			participants = 1;
+		}
+		this.participants = participants;
+	}
+
 
 	/**
 	 * @return Returns the course.

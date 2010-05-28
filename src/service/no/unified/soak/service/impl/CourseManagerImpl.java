@@ -15,12 +15,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
 import no.unified.soak.dao.CourseDAO;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Person;
 import no.unified.soak.service.CourseManager;
+
+import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -165,9 +165,5 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
 	 */
 	public void evict(Object entity) {
 		dao.evict(entity);
-	}
-
-	public List<Course> findByDates(Date beginPeriod, Date endPeriod) {
-		return dao.findByDates(beginPeriod, endPeriod);
 	}
 }

@@ -97,6 +97,8 @@
     <bean id="courseDAO" class="no.unified.soak.dao.hibernate.CourseDAOHibernate" autowire="byName"/>
     <!--Course-END-->
     
+    <bean id="statisticsDAO" class="no.unified.soak.dao.hibernate.StatisticsDAOHibernate" autowire="byName"/>
+    
     <!--Registration-START-->
     <bean id="registrationDAO" class="no.unified.soak.dao.hibernate.RegistrationDAOHibernate" autowire="byName"/>
     <!--Registration-END-->

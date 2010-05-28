@@ -10,11 +10,11 @@
  */
 package no.unified.soak.dao;
 
-import no.unified.soak.model.Course;
-import no.unified.soak.model.Person;
-
 import java.util.Date;
 import java.util.List;
+
+import no.unified.soak.model.Course;
+import no.unified.soak.model.Person;
 
 
 /**
@@ -75,11 +75,4 @@ public interface CourseDAO extends DAO {
     public List<Course> findByInstructor(Person person);
     
     public List<Course> getCoursesWhereRegisterByExpired(long millis);
-
-	/** Finds courses based on date.
-	 * 
-	 * @param course
-	 * @return
-	 */
-	public List<Course> findByDates(Date beginPeriod, Date endPeriod);
 }

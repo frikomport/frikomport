@@ -10,19 +10,16 @@
  */
 package no.unified.soak.dao.hibernate;
 
+import java.util.List;
+
 import no.unified.soak.dao.OrganizationDAO;
 import no.unified.soak.model.Organization;
 import no.unified.soak.model.Organization.Type;
 
-import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.hql.classic.GroupByParser;
-
 import org.springframework.orm.ObjectRetrievalFailureException;
-
-import java.util.List;
 
 
 /**

@@ -1,6 +1,10 @@
 package no.unified.soak.util;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -125,4 +129,25 @@ public class ApplicationResourcesUtil {
         return false;
     }
 
+    public static void saveErrorMessage(HttpServletRequest request, String error) {
+        List errors = (List) request.getSession().getAttribute("listOfErrorMessages");
+
+        if (errors == null) {
+            errors = new ArrayList();
+        }
+
+        errors.add(error);
+        request.getSession().setAttribute("listOfErrorMessages", errors);
+    }
+
+    public static void saveMessage(HttpServletRequest request, String msg) {
+        List<String> messages = (List<String>) request.getSession().getAttribute("listOfMessages");
+
+        if (messages == null) {
+            messages = new ArrayList<String>();
+        }
+
+        messages.add(msg);
+        request.getSession().setAttribute("listOfMessages", messages);
+    }
 }

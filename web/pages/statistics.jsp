@@ -1,55 +1,76 @@
 <%@ include file="/common/taglibs.jsp"%>
 
-<fmt:message key="configurationList.item" var="item"/>
-<fmt:message key="configurationList.items" var="items"/>
-
-<title><fmt:message key="configurationAdministration.title"/></title>
+<title><fmt:message key="statistics.name"/></title>
 <content tag="heading">
-<fmt:message key="configurationAdministration.heading"/>
+<fmt:message key="statistics.name"/>
 </content>
 
-
-<c:if test="${updated}">
-    <div class="message" style="font-size: 12px"><fmt:message key="configuration.updated" /></div>
-</c:if>
-<c:if test="${cancelled}">
-    <div class="message" style="font-size: 12px"><fmt:message key="configuration.cancelled" /></div>
-</c:if>
-
-<form method="post" action="<c:url value="/administerConfiguration.html"/>" name="configurationForm" id="configurationForm">
-	<c:if test="${isAdmin}">
-		<display:table name="${configurationsBackingObject.configurations}" cellspacing="0" cellpadding="0"
-		    pagesize="${itemCount}" class="list" export="true" id="configurationList" requestURI="">
-		
-		    <display:column property="name" sortable="true" headerClass="sortable" 
-		        titleKey="configuration.name"/>
-		
-		    <display:column media="html" sortable="true" headerClass="sortable" titleKey="configuration.active">
-		        <input type="hidden" name="_id<c:out value="${configurationList.id}"/>" value="visible"/>
-		        <input type="checkbox" name="id_<c:out value="${configurationList.id}"/>"
-		                    <c:if test="${configurationList.active == true}"> checked="checked" </c:if> />
-		    </display:column>
-		    <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="configuration.active">
-		        <c:if test="${configurationList.active == true}"><fmt:message key="checkbox.checked"/></c:if>
-		        <c:if test="${configurationList.active == false}"><fmt:message key="checkbox.unchecked"/></c:if>
-		    </display:column>
-		
-		    <!--  display:column property="value" sortable="true" headerClass="sortable" 
-		        titleKey="configuration.value"/ -->
-		
-		    <display:column sortable="true" headerClass="sortable" titleKey="configuartion.description">
-		        <fmt:message key="${configurationList.name}" />
-		    </display:column>
-		
-		    <display:setProperty name="paging.banner.item_name" value="${item}"/>
-		    <display:setProperty name="paging.banner.items_name" value="${items}"/>
-		</display:table>
-		
-		<input type="submit" class="button" name="save" onclick="bCancel=false" value="<fmt:message key="button.save"/>" />
-		<input type="submit" class="button" name="docancel" onclick="bCancel=true" value="<fmt:message key="button.cancel"/>" />
-	</c:if>
+<form method="post" action="<c:url value="/statistics.html"/>" name="statisticsForm" id="statisticsForm">
+<div class="searchForm"><ul>
+<li>
+<label class="required" for="dateBeginInclusive">Fra dato:</label>
+<input id="dateBeginInclusive" name="dateBeginInclusive" value="<c:out value="${dateBeginInclusive}"/>" type="text"/>
+</li>
+<li>
+<label class="required" for="dateEndInclusive">Til dato:</label>
+<input id="dateEndInclusive" name="dateEndInclusive" value="<c:out value="${dateEndInclusive}"/>" type="text"/>
+</li>
+<li>
+<input type="submit" name="Vis_statistikk" value="Vis statistikk" class="button large"/>
+</li>
+</ul>
+</div>
 </form>
 
+<table class="list" style="width:auto;">
+<thead>
+<tr>
+<th><fmt:message key="statistics.unit"/></th>
+<th><fmt:message key="statistics.numCourses"/></th>
+<th><fmt:message key="statistics.numRegistrations"/></th>
+<th><fmt:message key="statistics.numRegistered"/></th>
+<th><fmt:message key="statistics.numAttended"/></th>
+</tr>
+</thead>
+
+<c:forEach items="${statisticsRows}" var="statRow">
+<tr>
+<td>
+<c:out value="${statRow.unit}"/>
+</td>
+<td align="right">
+<c:out value="${statRow.numCourses}"/>
+</td>
+<td align="right">
+<c:out value="${statRow.numRegistrations}"/>
+</td>
+<td align="right">
+<c:out value="${statRow.numRegistered}"/>
+</td>
+<td align="right">
+<c:out value="${statRow.numAttendants}"/>
+</td>
+</tr>
+</c:forEach>
+
+</table>
+
+<!--
 <c:if test="${!isAdmin}">
     <div class="message" style="font-size: 12px"><fmt:message key="access.denied" /></div>
-</c:if>
+</c:if> 
+-->
+<p/><br/>
+<h2>Forklaring</h2>
+<ul class="bulletlist">
+<li>"<b>Ant. oppmøtte</b>": Tas fra oppmøteregistreringen som er gjort for møtet. Dersom denne ikke er gjort, tas summen av "ant. påmeldte" for møtets påmeldinger. Tallet beregnes for møter innen området/regionen i statistikkperioden.
+</li>
+
+<li>"<b>Ant. påmeldte</b>": Summen av feltet "Antall deltakere" for påmeldingene til møter innen området/regionen i statistikkperioden.
+</li>
+<li>"<b>Ant. representerte førerkortkandidater</b>": Antall påmeldinger til møter innen området/regionen i statistikkperioden.
+</li>
+
+<li>Upubliserte møter teller med på linje med publiserte møter.
+</li>
+</ul>

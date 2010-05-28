@@ -2,14 +2,12 @@ package no.unified.soak.webapp.action;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import no.unified.soak.model.Configuration;
-import no.unified.soak.service.ConfigurationManager;
 
 import org.apache.commons.lang.BooleanUtils;
 import org.springframework.validation.BindException;

@@ -2,7 +2,6 @@ package no.unified.soak;
 
 import no.unified.soak.dao.ws.SVVUserDAOWS;
 import no.unified.soak.ez.ExtUser;
-import no.unified.soak.util.ApplicationResourcesUtil;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;

@@ -11,8 +11,6 @@
 package no.unified.soak.service;
 
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import no.unified.soak.dao.OrganizationDAO;

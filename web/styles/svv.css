@@ -40,6 +40,10 @@ table.detail {
 	width:auto;
 }
 
+div#content table.list {
+	margin-left:1px;
+}
+
 table.detail tr th {
 	padding-left:3px !important;
 }
@@ -55,7 +59,8 @@ width:995px;
 }
 
 /* Overskift Temainnganger */
-div#content h1 {
+div#content h1,
+div#content h2 {
 	color:#37424A;
 }
 
@@ -116,6 +121,9 @@ table.list thead th a:hover {
 background-image:url("../images/SVV/arrow_up_SVV.png") !important;
 }
 
+div#content ul.bulletlist {
+	padding-left: 20px;
+}
 
 /* 
 ----------------------------------------

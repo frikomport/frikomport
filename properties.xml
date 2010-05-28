@@ -125,6 +125,7 @@
         <pathelement location="${commons-lang.jar}"/>
         <pathelement location="${commons-logging.jar}"/>
         <pathelement location="${commons-collections.jar}"/>
+        <pathelement location="${servletapi.jar}"/>
         <fileset dir="${ical4j.dir}" includes="*.jar"/>
         <fileset dir="${axis.dir}" includes="*.jar"/>
         <fileset dir="${spring.dir}" includes="*.jar"/>
@@ -135,6 +136,7 @@
         <pathelement location="${junit.jar}"/>
         <pathelement location="${log4j.jar}"/>
 		<pathelement location="${dom4j.jar}"/>
+        <pathelement location="${servletapi.jar}"/>
     </path>
     
     <!-- Service -->

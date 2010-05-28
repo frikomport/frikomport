@@ -25,7 +25,6 @@ import no.unified.soak.ez.ExtUser;
 import no.unified.soak.model.Role;
 import no.unified.soak.model.RoleEnum;
 import no.unified.soak.model.User;
-import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.ConvertDAO;
 
 import org.apache.commons.collections.CollectionUtils;
