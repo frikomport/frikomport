@@ -20,7 +20,8 @@
 
 <c:out value="${buttons}" escapeXml="false" />
 --%>
-<<c:choose>
+
+<c:choose>
 <c:when test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 <form:form commandName="user" name="user">
 <div class="searchForm">
