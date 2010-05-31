@@ -267,6 +267,13 @@
         <property name="target">
             <bean class="no.unified.soak.service.impl.ConfigurationManagerImpl" autowire="byName"/>
         </property>
+        <!-- Override default transaction attributes b/c of LoginCookie methods -->
+        <property name="transactionAttributes">
+            <props>
+                <prop key="isActive">PROPAGATION_NOT_SUPPORTED,readOnly</prop>
+                <prop key="getValue">PROPAGATION_NOT_SUPPORTED,readOnly</prop>
+            </props>
+        </property>
     </bean>
     <!-- Configuration-END-->
 

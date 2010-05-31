@@ -449,6 +449,19 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 			</td>
 		</tr>
 
+	<c:if test="${useAttendants}">
+		<tr>
+			<th>
+				<soak:label key="course.attendants" />
+			</th>
+			<td>
+				<form:input path="attendants" />
+				<form:errors cssClass="fieldError" htmlEscape="false"
+					path="attendants" />
+			</td>
+		</tr>
+	</c:if>
+
 		<c:choose>
 			<c:when test="${!singleprice && usePayment}">
 				<tr>

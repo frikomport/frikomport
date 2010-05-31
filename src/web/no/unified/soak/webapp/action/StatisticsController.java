@@ -49,6 +49,8 @@ public class StatisticsController implements Controller {
 		if (!StringUtils.isEmpty(beginDateStr)) {
 			beginDate = DateUtil.convertStringToDate(beginDateStr);
 			modelAndView.addObject("dateBeginInclusive", beginDateStr);
+		} else {
+			ApplicationResourcesUtil.saveMessage(request, "statistics.message.dateBeginInclusive");
 		}
 
 		String endDateStr = request.getParameter("dateEndInclusive");
@@ -56,11 +58,13 @@ public class StatisticsController implements Controller {
 		if (!StringUtils.isEmpty(endDateStr)) {
 			endDate = DateUtil.convertStringToDate(endDateStr);
 			modelAndView.addObject("dateEndInclusive", endDateStr);
+		} else {
+			ApplicationResourcesUtil.saveMessage(request, "statistics.message.dateEndInclusive");
 		}
 
 		if (beginDate != null && endDate != null) {
-			List<StatisticsTableRow> statisticsRows = statisticsManager.findByDates(beginDate, endDate);
-			modelAndView.addObject("statisticsRows", statisticsRows);
+				List<StatisticsTableRow> statisticsRows = statisticsManager.findByDates(beginDate, endDate);
+				modelAndView.addObject("statisticsRows", statisticsRows);
 		}
 		return modelAndView;
 	}

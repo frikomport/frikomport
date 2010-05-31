@@ -1,5 +1,8 @@
 package no.unified.soak.service.impl;
 
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -30,6 +33,7 @@ import no.unified.soak.service.UserManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.DefaultQuotedNamingStrategy;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.EmailValidator;
 import org.springframework.context.MessageSource;
@@ -153,51 +157,64 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	/**
 	 * For upgrade from 1.7.X to SVV
 	 */
-	private void alterUserAndRoleAndCoursebySQL(){
+	private void alterUserAndRoleAndCoursebySQL() {
 
-    	// removes ID from APP_USER -- column has no purpose..
-    	if(checkIfColumnExists("id", "app_user")){
-    		log.info("Column APP_USER.ID exists.");
-    		String sql = "update table app_user set hashuser = true where id=0";
-    		if(DefaultQuotedNamingStrategy.usesOracle()){ sql = "update table app_user set \"hashuser\" = 1 where \"id\"=0"; }
-    		try { 
-    			jt.execute(sql);
-        		log.info("Column APP_USER.HASHUSER updated from ID=0!");
-    		}
-    		catch(Exception e){ log.error("Alter table APP_USER.HASHUSER failed", e); }
+		// removes ID from APP_USER -- column has no purpose..
+		if (checkIfColumnExists("id", "app_user")) {
+			log.info("Column APP_USER.ID exists.");
+			String sql = "update table app_user set hashuser = true where id=0";
+			if (DefaultQuotedNamingStrategy.usesOracle()) {
+				sql = "update table app_user set \"hashuser\" = 1 where \"id\"=0";
+			}
+			try {
+				jt.execute(sql);
+				log.info("Column APP_USER.HASHUSER updated from ID=0!");
+			} catch (Exception e) {
+				log.error("Alter table APP_USER.HASHUSER failed", e);
+			}
 
-    		sql = "alter table app_user drop column id";
-    		if(DefaultQuotedNamingStrategy.usesOracle()){ sql = "alter table app_user drop column \"id\""; }
-    		try { 
-    			jt.execute(sql);
-        		log.info("Column APP_USER.ID removed!");
-    		}
-    		catch(Exception e){ log.error("Alter table APP_USER failed", e); }
-    	}
-
-    	// removes VERSION from ROLE -- column has no purpose..
-    	if(checkIfColumnExists("version", "role")){
-    		log.info("Column ROLE.VERSION exists.");
-    		String sql = "alter table role drop column version";
-    		if(DefaultQuotedNamingStrategy.usesOracle()){ sql = "alter table role drop column \"version\""; }
-    		try { 
-    			jt.execute(sql);
-        		log.info("Column ROLE.VERSION removed!");
-    		}
-    		catch(Exception e){ log.error("Alter table ROLE failed", e); }
-    	}
-
-		String sql = "ALTER TABLE course MODIFY serviceareaid number(19,0) null";
-		if(DefaultQuotedNamingStrategy.usesOracle()){ sql = "ALTER TABLE course MODIFY \"serviceareaid\" number(19,0) null"; }
-		try { 
-			jt.execute(sql);
-    		log.info("Column COURSE.SERVICEAREAID changed to nullable!");
+			sql = "alter table app_user drop column id";
+			if (DefaultQuotedNamingStrategy.usesOracle()) {
+				sql = "alter table app_user drop column \"id\"";
+			}
+			try {
+				jt.execute(sql);
+				log.info("Column APP_USER.ID removed!");
+			} catch (Exception e) {
+				log.error("Alter table APP_USER failed", e);
+			}
 		}
-		catch(Exception e){ log.error("Alter table COURSE failed", e); }
 
-    	
-    
-    }
+		// removes VERSION from ROLE -- column has no purpose..
+		if (checkIfColumnExists("version", "role")) {
+			log.info("Column ROLE.VERSION exists.");
+			String sql = "alter table role drop column version";
+			if (DefaultQuotedNamingStrategy.usesOracle()) {
+				sql = "alter table role drop column \"version\"";
+			}
+			try {
+				jt.execute(sql);
+				log.info("Column ROLE.VERSION removed!");
+			} catch (Exception e) {
+				log.error("Alter table ROLE failed", e);
+			}
+		}
+
+		if (BooleanUtils.isFalse(checkIfNullableColumn("serviceareaid", "course"))) {
+			String sql = "ALTER TABLE course MODIFY serviceareaid number(19,0) null";
+			if (DefaultQuotedNamingStrategy.usesOracle()) {
+				sql = "ALTER TABLE course MODIFY \"serviceareaid\" number(19,0) null";
+			}
+			log.debug(sql);
+			try {
+				jt.execute(sql);
+				log.info("Column COURSE.SERVICEAREAID changed to nullable!");
+			} catch (Exception e) {
+				log.error("Alter table COURSE failed", e);
+			}
+		}
+
+	}
     
     private void insertDefaultValues() {
 
@@ -364,7 +381,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	configurationsToInsert.add(new Configuration("access.registration.showJobTitle", false, null));
         	configurationsToInsert.add(new Configuration("access.registration.showWorkplace", false, null));
         	
-        	//courseForm
+        	//course
         	configurationsToInsert.add(new Configuration("access.course.usePayment", false, null));
         	configurationsToInsert.add(new Configuration("access.course.showDuration", false, null));
         	configurationsToInsert.add(new Configuration("access.course.showRole", false, null));
@@ -372,6 +389,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	configurationsToInsert.add(new Configuration("access.course.showRestricted", false, null));
         	configurationsToInsert.add(new Configuration("access.course.useServiceArea", false, null));
         	configurationsToInsert.add(new Configuration("access.course.showCourseName", false, null));
+        	configurationsToInsert.add(new Configuration("access.course.useAttendants", true, null));
         	
         	// profile
         	configurationsToInsert.add(new Configuration("access.profile.showInvoiceaddress", false, null));
@@ -385,13 +403,14 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	configurationsToInsert.add(new Configuration("access.registration.showJobTitle", true, null));
         	configurationsToInsert.add(new Configuration("access.registration.showWorkplace", true, null));
 
-        	//courseForm
+        	//course
         	configurationsToInsert.add(new Configuration("access.course.usePayment", true, null));
         	configurationsToInsert.add(new Configuration("access.course.showDuration", true, null));
         	configurationsToInsert.add(new Configuration("access.course.showRole", true, null));
         	configurationsToInsert.add(new Configuration("access.course.showType", true, null));
         	configurationsToInsert.add(new Configuration("access.course.showRestricted", true, null));
         	configurationsToInsert.add(new Configuration("access.course.showCourseName", false, null));
+        	configurationsToInsert.add(new Configuration("access.course.useAttendants", false, null));
 
         	// profile
         	configurationsToInsert.add(new Configuration("access.profile.showInvoiceaddress", true, null));
@@ -664,17 +683,31 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         return false;
     }
 
+	private Boolean checkIfNullableColumn(String column, String table) {
+		ResultSet rsColumns = null;
+		DatabaseMetaData meta;
+		try {
+			meta = jt.getDataSource().getConnection().getMetaData();
+			rsColumns = meta.getColumns(null, null, table.toUpperCase(), column);
+			while (rsColumns.next()) {
+				String columnName = rsColumns.getString("COLUMN_NAME");
+				if (column.equalsIgnoreCase(columnName)) {
+					int nullable = rsColumns.getInt("NULLABLE");
+					if (nullable == DatabaseMetaData.columnNullable) {
+						return Boolean.TRUE;
+					} else {
+						return Boolean.FALSE;
+					}
+				}
+			}
+		} catch (SQLException e) {
+			log.warn("Error while checking nullabililty of column " + column + " in table " + table + ". ", e);
+		}
+		return null;
+	}
+    
     private boolean checkIfColumnExists(String column, String table) {
-    	
-    	String sql = null;
-    	if(DefaultQuotedNamingStrategy.usesOracle()){
-    		sql = "SELECT * FROM (SELECT * FROM " + table + ") WHERE rownum = 1";
-    	}
-    	else{
-    		sql = "select * from " + table + " limit 1";
-    	}
-    	
-        SqlRowSet rowSet = jt.queryForRowSet(sql);
+    	SqlRowSet rowSet = getRowSetWithOneRow(table);
         SqlRowSetMetaData metaData = rowSet.getMetaData();
         for (String columnName : metaData.getColumnNames()) {
             if (columnName.equalsIgnoreCase(column)) {
@@ -683,6 +716,18 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         }
         return false;
     }
+
+	private SqlRowSet getRowSetWithOneRow(String table) {
+		String sql = null;
+    	if(DefaultQuotedNamingStrategy.usesOracle()){
+    		sql = "SELECT * FROM (SELECT * FROM " + table + ") WHERE rownum = 1";
+    	}
+    	else{
+    		sql = "select * from " + table + " limit 1";
+    	}
+        SqlRowSet rowSet = jt.queryForRowSet(sql);
+		return rowSet;
+	}
     
     private void updateDatabaseSchemaAfter() {
     }
@@ -929,7 +974,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
      */
     private void updateConfigurations() {
         /**
-         * DB has changed from key, value to key, active, value. Most values in DB are boolean defined as strings i
+         * DB has changed from key, value to key, active, value. Most values in DB are boolean defined as strings in
          * value field, this method moves values to correct new field
          */
         List<Configuration> configurations = configurationManager.getConfigurations();

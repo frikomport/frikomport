@@ -1,5 +1,13 @@
 <%@ include file="/common/taglibs.jsp"%>
 
+<SCRIPT LANGUAGE="JavaScript" ID="js1">
+var cal1 = new CalendarPopup();
+cal1.setMonthNames('Januar','Februar','Mars','April','Mai','Juni','Juli','August','September','Oktober','November','Desember'); 
+cal1.setDayHeaders('S','M','T','O','T','F','L'); 
+cal1.setWeekStartDay(1); 
+cal1.setTodayText("Idag");
+</script>
+
 <title><fmt:message key="statistics.name"/></title>
 <content tag="heading">
 <fmt:message key="statistics.name"/>
@@ -10,10 +18,16 @@
 <li>
 <label class="required" for="dateBeginInclusive">Fra dato:</label>
 <input id="dateBeginInclusive" name="dateBeginInclusive" value="<c:out value="${dateBeginInclusive}"/>" type="text"/>
+<a href="#" name="a1" id="Anch_dateBeginInclusive"
+	onClick="cal1.select(document.statisticsForm.dateBeginInclusive,'Anch_dateBeginInclusive','<fmt:message key="date.format"/>'); return false;"
+	title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 </li>
 <li>
 <label class="required" for="dateEndInclusive">Til dato:</label>
 <input id="dateEndInclusive" name="dateEndInclusive" value="<c:out value="${dateEndInclusive}"/>" type="text"/>
+<a href="#" name="a1" id="Anch_dateEndInclusive"
+	onClick="cal1.select(document.statisticsForm.dateEndInclusive,'Anch_dateEndInclusive','<fmt:message key="date.format"/>'); return false;"
+	title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 </li>
 <li>
 <input type="submit" name="Vis_statistikk" value="Vis statistikk" class="button large"/>

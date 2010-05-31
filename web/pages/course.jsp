@@ -164,6 +164,17 @@
 	</td>
 </tr>
 
+<c:if test="${useAttendants}">
+<tr>
+	<th>
+		<fmt:message key="course.attendants" />
+	</th>
+	<td>
+		<fmt:formatNumber value="${course.attendants}" minFractionDigits="0" />
+	</td>
+</tr>
+</c:if>
+
 <c:if test="${usePayment && !singleprice}">
 	<tr>
 		<th>

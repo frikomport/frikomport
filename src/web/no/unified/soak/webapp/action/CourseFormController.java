@@ -49,6 +49,7 @@ import no.unified.soak.service.UserManager;
 import no.unified.soak.service.impl.CategoryManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.CourseStatus;
+import no.unified.soak.util.DateUtil;
 import no.unified.soak.util.MailUtil;
 import no.unified.soak.webapp.util.FileUtil;
 
@@ -524,18 +525,19 @@ public class CourseFormController extends BaseFormController {
 				errors.rejectValue("registerBy", "errors.dateformat", args, "Invalid date or time");
 			}
 
-			/**
-			 * TODO: Klaus: Vi må kunne lese en configuration uten at
-			 * course-objektet lagres av Hibernate. Alternativt må coure tas ut av
-			 * og evt. inn i hibernate-session
-			 */
-			// if (!configurationManager.isActive("access.course.usePayment",
-			// true)) {
-			enrichWithDefaultvaluesToAvoidErrors(course);
-			// }
+			
+			if (!configurationManager.isActive("access.course.usePayment", true)) {
+				enrichWithDefaultvaluesToAvoidErrors(course);
+			}
 
 			if (validateAnnotations(course, errors) > 0) {
 				args = new Object[] {};
+			}
+
+			if (course.getAttendants() != null && new Date().before(course.getStartTime())) {
+				args = new Object[] { DateUtil.convertDateToString(new Date()) };
+				errors.rejectValue("attendants", "errors.toearlytosaveAttendants", args,
+						"Antall oppmøtte kan ikke registreres før arrangementet har startet.");
 			}
 
 			if (args != null) {

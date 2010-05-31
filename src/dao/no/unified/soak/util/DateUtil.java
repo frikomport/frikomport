@@ -7,22 +7,14 @@
 */
 package no.unified.soak.util;
 
-import no.unified.soak.Constants;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import org.springframework.context.i18n.LocaleContextHolder;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -41,25 +33,16 @@ import java.util.ResourceBundle;
  */
 public class DateUtil {
     private static Log log = LogFactory.getLog(DateUtil.class);
-    private static String defaultDatePattern = null;
     private static String timePattern = "HH:mm";
 
-    /**
-     * Return default datePattern (MM/dd/yyyy)
-     * @return a string representing the date pattern on the UI
-     */
-    public static synchronized String getDatePattern() {
-        Locale locale = LocaleContextHolder.getLocale();
-
-        try {
-            defaultDatePattern = ResourceBundle.getBundle(Constants.BUNDLE_KEY,
-                    locale).getString("date.format");
-        } catch (MissingResourceException mse) {
-            defaultDatePattern = "MM/dd/yyyy";
-        }
-
-        return defaultDatePattern;
-    }
+	/**
+	 * Return default datePattern (MM/dd/yyyy)
+	 * 
+	 * @return a string representing the date pattern on the UI
+	 */
+	public static synchronized String getDatePattern() {
+		return ApplicationResourcesUtil.getText("date.format");
+	}
 
     /**
      * This method attempts to convert an Oracle-formatted date
@@ -152,13 +135,12 @@ public class DateUtil {
      * @see java.text.SimpleDateFormat
      */
     public static final String getDateTime(String aMask, Date aDate) {
-        SimpleDateFormat df = null;
         String returnValue = "";
 
         if (aDate == null) {
             log.error("aDate is null!");
         } else {
-            df = new SimpleDateFormat(aMask);
+        	SimpleDateFormat df = new SimpleDateFormat(aMask);
             returnValue = df.format(aDate);
         }
 
@@ -204,4 +186,27 @@ public class DateUtil {
 
         return aDate;
     }
+
+	/**
+	 * @param date
+	 * @param beginEnd
+	 *            True if time should be at beginning of date. False if time
+	 *            should be at end of date. null if time should be unchanged.
+	 * @return
+	 */
+	public static String convertDateTimeToISOString(Date date, Boolean beginEnd) {
+		// 1970-01-01 10:00:01.0
+		if (beginEnd == null) {
+			String isoPattern = ApplicationResourcesUtil.getText("datetime.formatISO");
+			return getDateTime(isoPattern, date);
+		}
+		String isoPattern = ApplicationResourcesUtil.getText("date.formatISO");
+		String dateTimeStr = getDateTime(isoPattern, date);
+		if (beginEnd) {
+			dateTimeStr += " 00:00:00.0";
+		} else {
+			dateTimeStr += " 23:59:59.999";
+		}
+		return dateTimeStr;
+	}
 }

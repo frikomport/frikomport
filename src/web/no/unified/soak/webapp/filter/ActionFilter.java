@@ -157,6 +157,7 @@ public class ActionFilter implements Filter {
         session.setAttribute("showRestricted", configurationManager.isActive("access.course.showRestricted", true));
         session.setAttribute("useServiceArea", configurationManager.isActive("access.course.useServiceArea", true));
         session.setAttribute("showCourseName", configurationManager.isActive("access.course.showCourseName", true));
+        session.setAttribute("useAttendants", configurationManager.isActive("access.course.useAttendants", false));
         
         // registration
         session.setAttribute("canDelete", configurationManager.isActive("access.registration.delete", false));
