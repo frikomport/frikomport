@@ -13,6 +13,8 @@ package no.unified.soak.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import no.unified.soak.validation.Required;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -113,8 +115,10 @@ public class Registration extends BaseObject implements Serializable {
 
 	private Status status;
 	
+    private Date birthdate;
+
 	private Integer participants;
-	
+
 	/**
 	 * Default constructor
 	 */
@@ -688,4 +692,24 @@ public class Registration extends BaseObject implements Serializable {
 		setStatus(Status.getStatusFromDBValue(status));
 	}
 
+	
+
+	/**
+	 * @return Returns the date of birth.
+	 * @hibernate.property column="birthdate" not-null="false"
+	 */
+	public Date getBirthdate() {
+		return birthdate;
+	}
+
+	/**
+	 * @param birthdate
+	 *            The birthdate to set.
+	 */
+    @Required
+	public void setBirthdate(Date birthdate) {
+		this.birthdate = birthdate;
+	}
+
+	
 }

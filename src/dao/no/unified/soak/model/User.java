@@ -10,6 +10,7 @@ package no.unified.soak.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -48,7 +49,7 @@ public class User extends BaseObject implements Serializable {
     protected Set roles = new HashSet();
     protected Boolean enabled;
     protected Organization organization;
-    private Organization organization2;
+    protected Organization organization2;
     protected Long organizationid;
     protected Long organization2id;
     protected String mobilePhone;
@@ -62,6 +63,7 @@ public class User extends BaseObject implements Serializable {
     protected Address invoiceAddress = new Address();
     protected String closestLeader;
     protected Boolean hashuser;
+    protected Date birthdate;
   
     public User() {
     }
@@ -635,6 +637,7 @@ public class User extends BaseObject implements Serializable {
 		return hashuser;
 	}
 
+	
 	/**
      * @param hashuser
      */
@@ -644,7 +647,25 @@ public class User extends BaseObject implements Serializable {
 		}
 		this.hashuser = hashuser;
 	}
+	
+	
+	 /**
+	    * @return date of birth
+	    * @hibernate.property column="birthdate" not-null="false"
+	    */
+		public Date getBirthdate() {
+			return birthdate;
+		}
 
+		/**
+	    * @param birthdate
+	    *            The birthdate to set.
+	    */
+		public void setBirthdate(Date birthdate) {
+			this.birthdate = birthdate;
+		}
+
+	
 	public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -683,6 +704,11 @@ public class User extends BaseObject implements Serializable {
 		
 		if ((organizationid != null) ? (!organizationid.equals(user.getOrganizationid())) : (user
 				.getOrganizationid() != null)) {
+			return false;
+		}
+
+		if ((organization2id != null) ? (!organization2id.equals(user.getOrganization2id())) : (user
+				.getOrganization2id() != null)) {
 			return false;
 		}
 

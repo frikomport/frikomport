@@ -168,6 +168,7 @@ public class ActionFilter implements Filter {
         session.setAttribute("showJobTitle", configurationManager.isActive("access.registration.showJobTitle", true));
         session.setAttribute("showWorkplace", configurationManager.isActive("access.registration.showWorkplace", true));
         session.setAttribute("showComment", configurationManager.isActive("access.registration.showComment", true));
+        session.setAttribute("useBirthdate", configurationManager.isActive("access.registration.useBirthdate", false));
         
         // profile
         session.setAttribute("showAddress", configurationManager.isActive("access.profile.showAddress", true));

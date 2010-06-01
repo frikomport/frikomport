@@ -36,6 +36,17 @@
         </td>
     </tr>
 
+<c:if test="${useBirthdate}">
+    <tr>
+        <th>
+            <fmt:message key="user.birthdate"/>
+        </th>
+        <td>
+			<fmt:formatDate value="${user.birthdate}" type="date" pattern="${dateformat}"/>
+        </td>
+    </tr>
+</c:if>
+
 <c:if test="${showJobTitle}">
     <tr>
         <th>

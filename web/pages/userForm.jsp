@@ -162,6 +162,19 @@
 				</c:choose>
 			</td>
 		</tr>
+
+<c:if test="${useBirthdate}">
+		<tr>
+			<th>
+				<soak:label key="user.birthdate" />
+			</th>
+			<td>
+				<form:input path="birthdate" />
+				<form:errors cssClass="fieldError" path="birthdate" />
+			</td>
+		</tr>
+</c:if>
+
 		<tr>
 			<th>
 				<soak:label key="user.phoneNumber" />

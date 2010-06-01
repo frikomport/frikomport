@@ -380,6 +380,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	configurationsToInsert.add(new Configuration("access.registration.showServiceArea", false, null));
         	configurationsToInsert.add(new Configuration("access.registration.showJobTitle", false, null));
         	configurationsToInsert.add(new Configuration("access.registration.showWorkplace", false, null));
+        	configurationsToInsert.add(new Configuration("access.registration.useBirthdate", true, null));
         	
         	//course
         	configurationsToInsert.add(new Configuration("access.course.usePayment", false, null));
@@ -402,6 +403,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	configurationsToInsert.add(new Configuration("access.registration.showServiceArea", true, null));
         	configurationsToInsert.add(new Configuration("access.registration.showJobTitle", true, null));
         	configurationsToInsert.add(new Configuration("access.registration.showWorkplace", true, null));
+        	configurationsToInsert.add(new Configuration("access.registration.useBirthdate", false, null));
 
         	//course
         	configurationsToInsert.add(new Configuration("access.course.usePayment", true, null));
@@ -902,7 +904,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                     save = true;
                 }
                 // service areas
-                if (!course.getServiceArea().getOrganizationid().equals(course.getOrganizationid())) {
+                if (configurationManager.isActive("access.course.useServiceArea", true) && !course.getServiceArea().getOrganizationid().equals(course.getOrganizationid())) {
                     // må hente servicearea som passer
                     ServiceArea search = new ServiceArea();
                     search.setOrganizationid(course.getOrganizationid());

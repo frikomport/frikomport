@@ -1,5 +1,8 @@
 <%@ include file="/common/taglibs.jsp"%>
 
+<fmt:message key="date.format" var="dateformat" />
+<fmt:message key="date.format.localized" var="datelocalized" />
+
 <title><fmt:message key="registrationDetail.title" />
 </title>
 <content tag="heading">
@@ -83,6 +86,26 @@
                 </td>
             </tr>
             </c:if>
+
+            <c:if test="${useBirthdate}">
+			<tr>
+				<th>
+					<soak:label key="registration.birthdate" />
+				</th>
+				<td>
+					<fmt:formatDate value="${registration.birthdate}" type="date" pattern="${dateformat}" var="birthdate" />
+					<input type="text" size="12" name="birthdate" id="birthdate" value="<c:out value="${birthdate}"/>" 
+						title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
+					<spring:bind path="registration.birthdate">
+						<input type="hidden" name="<c:out value="${status.expression}"/>"
+							id="<c:out value="${status.expression}"/>"
+							value="<fmt:formatDate value="${time[0]}" type="date" pattern="${dateformat}"/>" />
+						<span class="fieldError"><c:out	value="${status.errorMessage}" escapeXml="false" /></span>
+					</spring:bind>
+				</td>
+			</tr>
+			</c:if>
+			
 			<tr>
 				<th>
 					<soak:label key="registration.phone" />

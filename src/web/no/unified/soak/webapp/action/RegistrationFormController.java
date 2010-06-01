@@ -213,6 +213,7 @@ public class RegistrationFormController extends BaseFormController {
                 registration.setFirstName(regUser.getFirstName());
                 registration.setLastName(regUser.getLastName());
                 registration.setEmail(regUser.getEmail());
+                registration.setBirthdate(regUser.getBirthdate());
                 registration.setPhone(regUser.getPhoneNumber());
                 registration.setMobilePhone(regUser.getMobilePhone());
                 registration.setJobTitle(regUser.getJobTitle());

@@ -84,6 +84,19 @@
 		</td>
 	</tr>
 
+<c:if test="${useBirthdate}">
+	<tr>
+		<th>
+			<fmt:message key="registration.birthdate" />
+		</th>
+		<td>
+			<spring:bind path="registration.birthdate">
+				<c:out value="${status.value}" />
+			</spring:bind>
+		</td>
+	</tr>
+</c:if>
+
 	<tr>
 		<th>
 			<fmt:message key="registration.phone" />

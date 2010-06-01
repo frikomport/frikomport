@@ -462,6 +462,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		user.setFirstName(registration.getFirstName());
 		user.setLastName(registration.getLastName());
 		user.setEmail(registration.getEmail());
+		user.setBirthdate(registration.getBirthdate());
 		user.setPhoneNumber(registration.getPhone());
 		user.setMobilePhone(registration.getMobilePhone());
 		user.setJobTitle(registration.getJobTitle());
