@@ -164,7 +164,7 @@
 	</td>
 </tr>
 
-<c:if test="${useAttendants}">
+<c:if test="${useAttendants && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
 <tr>
 	<th>
 		<fmt:message key="course.attendants" />

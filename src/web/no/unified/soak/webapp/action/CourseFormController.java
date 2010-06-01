@@ -630,21 +630,26 @@ public class CourseFormController extends BaseFormController {
     }
 
 	private void enrichWithDefaultvaluesToAvoidErrors(Course course) {
-		if (course.getReservedInternal() == null) {
-			course.setReservedInternal(0);
+		if(!configurationManager.isActive("access.course.usePayment", true)){ // dersom betaling for kurs er deaktivert
+			if (course.getReservedInternal() == null) {
+				course.setReservedInternal(0);
+			}
+			if (course.getFeeInternal() == null) {
+				course.setFeeInternal(0d);
+			}
+			if (course.getFeeExternal() == null) {
+				course.setFeeExternal(0d);
+			}
 		}
-		if (course.getFeeInternal() == null) {
-			course.setFeeInternal(0d);
-		}
-		if (course.getFeeExternal() == null) {
-			course.setFeeExternal(0d);
-		}
-		if (StringUtils.isEmpty(course.getDuration())) {
+
+		if (StringUtils.isEmpty(course.getDuration()) && !configurationManager.isActive("access.course.showDuration", true)){
 			course.setDuration("N/A");
 		}
-		if (StringUtils.isEmpty(course.getName())) {
+		
+		if (StringUtils.isEmpty(course.getName()) && !configurationManager.isActive("access.course.showCourseName", true)){
 			course.setName(ApplicationResourcesUtil.getText("course.defaultname"));
 		}
+		
 		if(StringUtils.isEmpty(course.getRole())){
 			course.setRole(Constants.ANONYMOUS_ROLE);
 		}

@@ -551,7 +551,7 @@ public class MailUtil {
                 + DateUtil.getDateTime(ApplicationResourcesUtil.getText("date.format") + " "
                         + ApplicationResourcesUtil.getText("time.format"), course.getStopTime()) + "\n");
         
-        if(!StringUtils.isEmpty(course.getDuration())){
+        if(!StringUtils.isEmpty(course.getDuration()) && !course.getDuration().equals("N/A")){
 	        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.duration")) + ": "
 	                + course.getDuration() + "\n");
         }

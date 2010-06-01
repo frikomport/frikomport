@@ -51,7 +51,7 @@ function fillSelect(obj){
                 <form:errors cssClass="fieldError" htmlEscape="false" path="organizationid" />
             </li>
 
-<c:if test="${!user.hashuser}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
             <li>
                 <soak:label key="course.organization2" styleClass="required"/>
                 <form:select  path="organization2id">
@@ -101,11 +101,15 @@ function fillSelect(obj){
                 <form:errors cssClass="fieldError" htmlEscape="false" path="categoryid" />
             </li>
 </c:if>
+
+<c:if test="${showCourseName}">
             <li>
                 <soak:label key="courseSearch.name" styleClass="required"/>
                 <form:input path="name"/>
                 <form:errors cssClass="fieldError" htmlEscape="false" path="name" />
             </li>
+</c:if>
+
             <input type="hidden" id="past" name="past" 
             <c:if test="${past == true}"> value="1" </c:if>
             <c:if test="${past == false}"> value="0" </c:if> />
