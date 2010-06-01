@@ -50,7 +50,7 @@ public class StatisticsController implements Controller {
 			beginDate = DateUtil.convertStringToDate(beginDateStr);
 			modelAndView.addObject("dateBeginInclusive", beginDateStr);
 		} else {
-			ApplicationResourcesUtil.saveMessage(request, "statistics.message.dateBeginInclusive");
+			ApplicationResourcesUtil.saveMessage(request, ApplicationResourcesUtil.getText("statistics.message.dateBeginInclusive"));
 		}
 
 		String endDateStr = request.getParameter("dateEndInclusive");
@@ -59,13 +59,16 @@ public class StatisticsController implements Controller {
 			endDate = DateUtil.convertStringToDate(endDateStr);
 			modelAndView.addObject("dateEndInclusive", endDateStr);
 		} else {
-			ApplicationResourcesUtil.saveMessage(request, "statistics.message.dateEndInclusive");
+			ApplicationResourcesUtil.saveMessage(request, ApplicationResourcesUtil.getText("statistics.message.dateEndInclusive"));
 		}
 
 		if (beginDate != null && endDate != null) {
 				List<StatisticsTableRow> statisticsRows = statisticsManager.findByDates(beginDate, endDate);
 				modelAndView.addObject("statisticsRows", statisticsRows);
 		}
+		
+		//TODO Klaus: Sjekk for feiltilfeller av møter som mangler både oppmøteregistrering og oppgitte deltakere til påmeldinger på møtet.
+
 		return modelAndView;
 	}
 

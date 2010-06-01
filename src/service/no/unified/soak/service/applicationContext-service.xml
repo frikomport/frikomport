@@ -270,8 +270,8 @@
         <!-- Override default transaction attributes b/c of LoginCookie methods -->
         <property name="transactionAttributes">
             <props>
-                <prop key="isActive">PROPAGATION_NOT_SUPPORTED,readOnly</prop>
-                <prop key="getValue">PROPAGATION_NOT_SUPPORTED,readOnly</prop>
+                <prop key="isActive">PROPAGATION_NOT_SUPPORTED</prop>
+                <prop key="getValue">PROPAGATION_NOT_SUPPORTED</prop>
             </props>
         </property>
     </bean>

@@ -48,10 +48,8 @@ cal1.setTodayText("Idag");
 </thead>
 
 <c:forEach items="${statisticsRows}" var="statRow">
-<tr>
-<td>
-<c:out value="${statRow.unit}"/>
-</td>
+<tr class="<c:out value="${statRow.cssClass}"/>">
+<td><c:if test="${empty statRow.cssClass}"><div class="indentleft"></c:if><c:out value="${statRow.unit}"/><c:if test="${empty statRow.cssClass}"></div></c:if></td>
 <td align="right">
 <c:out value="${statRow.numCourses}"/>
 </td>

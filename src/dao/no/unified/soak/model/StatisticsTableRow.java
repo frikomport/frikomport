@@ -1,5 +1,7 @@
 package no.unified.soak.model;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 /**
  * Data transfar class used to retrieve and display statistics. The class is not
  * used for data storage.
@@ -13,9 +15,10 @@ public class StatisticsTableRow {
 	private Integer numRegistrations;
 	private Integer numRegistered;
 	private Integer numAttendants;
+	private String cssClass;
 
-	public StatisticsTableRow(String unitParent, String unit, Long numCourses, Long numRegistrations,
-			Long numRegistered, Long numAttendants) {
+	public StatisticsTableRow(String unitParent, String unit, Long numCourses, Long numRegistrations, Long numRegistered,
+			Long numAttendants) {
 		this.unitParent = unitParent;
 		this.unit = unit;
 		this.numCourses = numCourses.intValue();
@@ -23,6 +26,23 @@ public class StatisticsTableRow {
 		this.numRegistered = numRegistered.intValue();
 		this.numAttendants = numAttendants.intValue();
 	}
+
+	
+	/**
+	 * @return the cssClass
+	 */
+	public String getCssClass() {
+		return cssClass;
+	}
+
+
+	/**
+	 * @param cssClass the cssClass to set
+	 */
+	public void setCssClass(String cssClass) {
+		this.cssClass = cssClass;
+	}
+
 
 	/**
 	 * @return the unitParent
@@ -32,7 +52,8 @@ public class StatisticsTableRow {
 	}
 
 	/**
-	 * @param unitParent the unitParent to set
+	 * @param unitParent
+	 *            the unitParent to set
 	 */
 	public void setUnitParent(String unitParent) {
 		this.unitParent = unitParent;
@@ -113,5 +134,11 @@ public class StatisticsTableRow {
 	 */
 	public void setNumRegistered(Integer numRegistered) {
 		this.numRegistered = numRegistered;
+	}
+
+	public String toString() {
+		return new ToStringBuilder(this).append("unitParent", this.getUnitParent()).append("unit", getUnit()).append("numCourses",
+				getNumCourses()).append("numRegistrations", getNumRegistrations()).append("numRegistered", getNumRegistered())
+				.append("numAttendants", getNumAttendants()).toString();
 	}
 }

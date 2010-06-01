@@ -48,7 +48,8 @@ table.detail tr th {
 	padding-left:3px !important;
 }
 
-tr th {
+tr th,
+tr.sumfinal {
 	background-color:#C9CDCF; 	
 }
 
@@ -100,6 +101,15 @@ div#content table thead tr th {
 	background-color:#EDEEF0;
 	color:inherit;
 }
+
+tr.sum1 {
+	background-color:#EDEEF0;
+}
+
+div.indentleft {
+	padding-left:15px;
+}
+	
 table.list thead th.sortable:hover {
 	background-color:#FF8C00; /* #FFD199; */
 }
