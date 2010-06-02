@@ -52,20 +52,11 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 
     public User processUser(EzUser current) {
         
-        User emailuser = null;
         User ezUser = null;
-        // sjekker om epostaddressa er brukt som usernane
-        try {
-            emailuser = userManager.getUser(current.getEmail().toLowerCase());
-        } catch (ObjectRetrievalFailureException e) {
-            User user = userManager.findUser(current.getEmail().toLowerCase());
-            if((user != null) && !user.getUsername().equals(current.getUsername())) {
-                emailuser = user;
-            }
-        }
+        User emailuser = userManager.getUserByEmail(current.getEmail());
 
-        if(emailuser != null) {
-            byttNavnOgDisable(emailuser);
+        if(emailuser != null && !emailuser.getUsername().equals(current.getUsername())) {
+            userManager.changeEmailAndDisable(emailuser);
         }
         
         try {
@@ -84,12 +75,6 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
         }
         
         return ezUser;
-    }
-
-    private void byttNavnOgDisable(User user) {
-        user = UserUtil.transformEmail(user, "@nonexist.no");
-        user.setEnabled(false);
-        userManager.updateUser(user);
     }
 
     public void executeTask() {

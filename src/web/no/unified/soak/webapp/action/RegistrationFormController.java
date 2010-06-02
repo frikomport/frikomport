@@ -323,17 +323,19 @@ public class RegistrationFormController extends BaseFormController {
             }
 
             // Set user object for registration
-            User user = null;
-            try {
-                // Check username first.
-                user = userManager.getUser(registration.getEmail());
-            } catch (ObjectRetrievalFailureException orfe) {
-                // Check email second.
-                user = userManager.findUser(registration.getEmail());
+            // Check email if this a registered user.
+            User user = userManager.findUser(registration.getEmail());
+            if (user == null) {
+                // Already registered by email
+                try {
+                    // Check username.
+                    user = userManager.getUser(registration.getEmail());
+                } catch (ObjectRetrievalFailureException orfe) {
+                    // User does not exist
+                    user = userManager.addUser(registration);
+                }
             }
-            if(user == null){
-                user = userManager.addUser(registration);
-            }
+
             session.setAttribute(Constants.ALT_USER_KEY, user);
 
             registration.setUser(user);

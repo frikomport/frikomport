@@ -18,15 +18,17 @@ import no.unified.soak.dao.UserDAO;
 import no.unified.soak.ez.EzUser;
 import no.unified.soak.model.Address;
 import no.unified.soak.model.Organization;
+import no.unified.soak.model.Registration;
+import no.unified.soak.model.Role;
 import no.unified.soak.model.User;
 import no.unified.soak.model.UserCookie;
-import no.unified.soak.model.Registration;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RoleManager;
 import no.unified.soak.service.UserExistsException;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.util.RandomGUID;
 import no.unified.soak.util.StringUtil;
+import no.unified.soak.util.UserUtil;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
@@ -54,7 +56,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	private MessageSource messageSource;
 
 	private OrganizationManager organizationManager;
-
+	
 	/**
 	 * Set the DAO for communication with the data layer.
 	 * 
@@ -79,7 +81,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	public void setOrganizationManager(OrganizationManager organizationManager) {
 		this.organizationManager = organizationManager;
 	}
-
+	
 	/**
 	 * @see no.unified.soak.service.UserManager#getUser(java.lang.String)
 	 */
@@ -93,11 +95,24 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	public User getUserByHash(String hash) {
 		return dao.getUserByHash(hash);
 	}
+	
+    /**
+     * @see no.unified.soak.service.UserManager#getUserByEmail(java.lang.String)
+     */	
+	public User getUserByEmail(String email) {
+	    User user = null;
+        try {
+            user = getUser(email.toLowerCase());
+        } catch (ObjectRetrievalFailureException e) {
+            user = findUser(email.toLowerCase());
+        }
+        return user;
+	}
 
 	/**
 	 * @see no.unified.soak.service.UserManager#getUsers(no.unified.soak.model.User)
 	 */
-	public List getUsers(User user) {
+	public List<User> getUsers(User user) {
 		return dao.getUsers(user);
 	}
 
@@ -198,21 +213,24 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		dao.removeUserCookies(username);
 	}
 
-	public List getRoles() {
-		List roles = roleManager.getRoles(null);
+	public List<Role> getRoles() {
+		List<Role> roles = roleManager.getRoles(null);
 		return roles;
 	}
 
 	public List getResponsibles() {
-		List ezUsers = getEZResponsibles(null);
-		List users = new ArrayList();
-		for (Iterator iter = ezUsers.iterator(); iter.hasNext();) {
-			EzUser ezUser = (EzUser) iter.next();
+		List<EzUser> ezUsers = getEZResponsibles(null);
+		List<User> users = new ArrayList<User>();
+		for (Iterator<EzUser> iter = ezUsers.iterator(); iter.hasNext();) {
+			EzUser ezUser = iter.next();
 			try {
 				users.add(dao.getUser(ezUser.getUsername()));
 			} catch (ObjectRetrievalFailureException objectRetrievalFailureException) {
-				User user = addUser(ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser
-						.getEmail(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
+			    User user = getUserByEmail(ezUser.getEmail());
+			    if (user == null) {
+	                user = addUser(ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), 
+	                        ezUser.getEmail(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
+                }
 				users.add(user);
 			}
 		}
@@ -289,10 +307,10 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 
 	private boolean updateKommune(Integer kommune, User user) {
 		boolean save = false;
-		List organizations = organizationManager.getAll();
+		List<Organization> organizations = organizationManager.getAll();
 		// first search in ids
-		for (Iterator iter = organizations.iterator(); iter.hasNext();) {
-			Organization organization = (Organization) iter.next();
+		for (Iterator<Organization> iter = organizations.iterator(); iter.hasNext();) {
+			Organization organization = iter.next();
 
 			if (organization.getId().equals(kommune.longValue())) {
 				if (user.getOrganizationid() == null || !user.getOrganizationid().equals(organization.getId())) {
@@ -303,8 +321,8 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 			}
 		}
 		// if no match search in numbers.
-		for (Iterator iter = organizations.iterator(); iter.hasNext();) {
-			Organization organization = (Organization) iter.next();
+		for (Iterator<Organization> iter = organizations.iterator(); iter.hasNext();) {
+			Organization organization = iter.next();
 
 			if (organization.getNumber().equals(kommune.longValue())) {
 				if (user.getOrganizationid() == null || !user.getOrganizationid().equals(organization.getId())) {
@@ -378,8 +396,8 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		user.removeAllRoles();
 		Locale locale = LocaleContextHolder.getLocale();
 
-		for (Iterator iter = rolenames.iterator(); iter.hasNext();) {
-			String rolename = (String) iter.next();
+		for (Iterator<String> iter = rolenames.iterator(); iter.hasNext();) {
+			String rolename = iter.next();
 			if (rolename.equals(messageSource.getMessage("role.employee", null, locale))) {
 				user.addRole(roleManager.getRole(Constants.EMPLOYEE_ROLE));
 			} else if (rolename.equals(messageSource.getMessage("role.anonymous", null, locale))) {
@@ -447,18 +465,18 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 
 	private List<String> getDefaultRoles() {
         Locale locale = LocaleContextHolder.getLocale();
-        List<String> roles = new ArrayList();
+        List<String> roles = new ArrayList<String>();
         roles.add(messageSource.getMessage("role.anonymous", null, locale));
         roles.add(messageSource.getMessage("role.employee", null, locale));
 		return roles;
 	}
 
-	private List getEZResponsibles(EzUser user) {
+	private List<EzUser> getEZResponsibles(EzUser user) {
 	    Locale locale = LocaleContextHolder.getLocale();
-        List<String> roles = new ArrayList();
+        List<String> roles = new ArrayList<String>();
         roles.add(messageSource.getMessage("role.instructor", null, locale));
         roles.add(messageSource.getMessage("role.editor", null, locale));
-		List users = ezUserDAO.findUsers(roles);
+		List<EzUser> users = ezUserDAO.findUsers(roles);
 		return users;
 	}
 
@@ -477,5 +495,11 @@ public class UserManagerImpl extends BaseManager implements UserManager {
         } catch (UserExistsException e) {
             log.error("UserExistsException: " + e);
         }
+    }
+    
+    public void changeEmailAndDisable(User user) {
+        user = UserUtil.transformEmail(user, "@nonexist.no");
+        user.setEnabled(false);
+        updateUser(user);
     }
 }

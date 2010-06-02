@@ -16,7 +16,7 @@
     <property name="secure.login" value="false"/> <!-- SSL for login -->
     <property name="secure.application" value="false"/> <!-- SSL for all -->
     <property name="rememberMe.enabled" value="true"/>
-    <property name="http.port" value="8088"/>
+    <property name="http.port" value="8080"/>
     <property name="https.port" value="8443"/>
     <property name="dao.type" value="hibernate"/>
     <property name="jsp.2" value="false"/>
