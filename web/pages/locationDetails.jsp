@@ -48,7 +48,7 @@
         </td>
     </tr>
 
-<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <tr>
         <th>
             <fmt:message key="location.owner"/>
@@ -97,7 +97,7 @@
         </td>
     </tr>
 
-<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <tr>
         <th>
             <fmt:message key="location.mailAddress"/>
