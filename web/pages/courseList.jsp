@@ -102,6 +102,18 @@ function fillSelect(obj){
             </li>
 </c:if>
 
+            <li>
+                <soak:label key="course.location" styleClass="required"/>
+                <form:select  path="locationid">
+                    <form:options items="${locations}" itemValue="id" itemLabel="name" />
+                </form:select>
+                <form:errors cssClass="fieldError" htmlEscape="false" path="locationid" />
+            </li>
+
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+	<br>
+</c:if>
+
 <c:if test="${showCourseName}">
             <li>
                 <soak:label key="courseSearch.name" styleClass="required"/>
@@ -202,6 +214,7 @@ function fillSelect(obj){
     
     <display:column property="availableAttendants" sortable="true" headerClass="sortable" titleKey="course.availableAttendants"/>
 
+<c:if test="${useRegisterBy}">
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.registerBy" sortProperty="registerBy">
 		<c:choose>
 			<c:when test="${courseList.expired}">
@@ -215,6 +228,7 @@ function fillSelect(obj){
     <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="course.registerBy.export">
         <fmt:formatDate value="${courseList.registerBy}" type="both" pattern="${dateformat} ${timeformat}" />
     </display:column>
+</c:if>
 
 <c:if test="${showDuration}">
     <display:column property="duration" sortable="true" headerClass="sortable"
@@ -223,7 +237,7 @@ function fillSelect(obj){
     <display:column property="organization.name" sortable="true" headerClass="sortable"
          titleKey="course.organization"/>
 
-<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+<c:if test="${useOrganization2 && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
     <display:column property="organization2.name" sortable="true" headerClass="sortable"
          titleKey="course.organization2"/>
 </c:if>
@@ -258,9 +272,11 @@ function fillSelect(obj){
          <fmt:formatDate value="${courseList.registerStart}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
 
+	<c:if test="${useRegisterBy}">
     <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.registerBy.export" sortProperty="registerBy">
          <fmt:formatDate value="${courseList.registerBy}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
+	</c:if>
 
     <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.reminder.export" sortProperty="reminder">
          <fmt:formatDate value="${courseList.reminder}" type="both" pattern="${dateformat} ${timeformat}"/>

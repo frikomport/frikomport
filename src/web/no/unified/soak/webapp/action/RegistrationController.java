@@ -27,6 +27,7 @@ import no.unified.soak.dao.hibernate.RegistrationStatusCriteria;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.User;
+import no.unified.soak.model.Organization.Type;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
@@ -315,9 +316,7 @@ public class RegistrationController extends BaseFormController {
         if (model == null) {
             model = new HashMap();
         }
-        
-        model.put("organizations", serviceAreaManager.getAllIncludingDummy(getText("misc.all", locale)));model.put("serviceareas", serviceAreaManager.getAllIncludingDummy(getText("misc.all", locale)));
-
+        model.put("serviceareas", serviceAreaManager.getAllIncludingDummy(getText("misc.all", locale)));
         return model;
     }
 
@@ -336,9 +335,7 @@ public class RegistrationController extends BaseFormController {
         if (model == null) {
             model = new HashMap();
         }
-
-        model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
-
+        model.put("organizations", organizationManager.getByTypeIncludingDummy(Type.COUNTY, getText("misc.all", locale)));
         return model;
     }
 

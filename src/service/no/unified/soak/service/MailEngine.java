@@ -25,7 +25,9 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import java.util.Map;
 
+import javax.mail.Address;
 import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 
@@ -77,7 +79,7 @@ public class MailEngine {
     public void send(SimpleMailMessage msg) {
         try {
             mailSender.send(msg);
-			log.info("Epost (SimpleMailMessage) er sendt med 'To':" + msg.getFrom() + " CC:"
+			log.info("Epost (SimpleMailMessage) er sendt med 'To':" + msg.getTo() + " CC:"
 					+ msg.getCc() + " BCC:" + msg.getBcc() + "\nSubject:"
 					+ msg.getSubject());
         } catch (MailException ex) {
@@ -94,8 +96,32 @@ public class MailEngine {
 	public void send(MimeMessage message) {
 		try {
 			((JavaMailSenderImpl) mailSender).send(message);
-			log.info("Epost (MimeMessage) er sendt med 'To':" + message.getRecipients(RecipientType.TO) + " CC:"
-					+ message.getRecipients(RecipientType.CC) + " BCC:" + message.getRecipients(RecipientType.BCC) + "\nSubject:"
+			
+			String to = "";
+			Address[] tos = message.getRecipients(RecipientType.TO);
+			for(int i=0; i<tos.length; i++){
+				to += ((InternetAddress)tos[i]).getAddress();
+				if(i < tos.length-1) to += ", ";
+			}
+
+			String cc = "";
+			Address[] ccs = message.getRecipients(RecipientType.CC);
+			if(ccs != null){
+				for(int i=0; i<ccs.length; i++){
+					cc += ((InternetAddress)ccs[i]).getAddress();
+					if(i < ccs.length-1) cc += ", ";
+				}
+			}
+			
+			String bcc = "";
+			Address[] bccs = message.getRecipients(RecipientType.BCC);
+			if(bccs != null){
+				for(int i=0; i<bccs.length; i++){
+					bcc += ((InternetAddress)bccs[i]).getAddress();
+					if(i < bccs.length-1) bcc += ", ";
+				}
+			}			
+			log.info("Epost (MimeMessage) er sendt med 'To':" + to + " CC:" + cc + " BCC:" + bcc + "\nSubject:"
 					+ message.getSubject());
 		} catch (MailException ex) {
 			// log it and go on
@@ -131,9 +157,14 @@ public class MailEngine {
         helper.addAttachment(attachmentName, resource);
 
         ((JavaMailSenderImpl) mailSender).send(message);
-		log.info("sendMessage(String[], ...): Epost (MimeMessage) er sendt med 'To':" + message.getRecipients(RecipientType.TO) + " CC:"
-				+ message.getRecipients(RecipientType.CC) + " BCC:" + message.getRecipients(RecipientType.BCC) + "\nSubject:"
-				+ message.getSubject());
+
+		String to = "";
+		Address[] tos = message.getRecipients(RecipientType.TO);
+		for(int i=0; i<tos.length; i++){
+			to += ((InternetAddress)tos[i]).getAddress();
+			if(i < tos.length-1) to += ", ";
+		}
+        log.info("sendMessage(String[], ...): Epost (MimeMessage) er sendt med 'To':" + to + "\nSubject:" + message.getSubject());
 
     }
 }

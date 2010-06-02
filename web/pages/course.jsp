@@ -95,6 +95,8 @@
 	</td>
 </tr>
 
+
+<c:if test="${useOrganization2}">
 <tr>
 	<th>
 		<fmt:message key="course.organization2" />
@@ -105,6 +107,7 @@
 		</spring:bind>
 	</td>
 </tr>
+</c:if>
 
 <c:if test="${useServiceArea}">
 <tr>
@@ -230,6 +233,7 @@
 </tr>
 </c:if>
 
+<c:if test="${useRegisterBy}">
 <tr>
 	<th>
 		<fmt:message key="course.registerBy" />
@@ -239,6 +243,7 @@
 			pattern="${dateformat} ${timeformat}" />
 	</td>
 </tr>
+</c:if>
 
 <c:if test="${usePayment}">
 	<tr>

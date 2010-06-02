@@ -30,6 +30,8 @@
             <field property="responsibleUsername" depends="required"/>
             <field property="organizationid" depends="required"/>
             <field property="organization" depends="required"/>
+            <field property="organization2id" depends="required"/>
+            <field property="organization2" depends="required"/>
             <field property="serviceArea" depends="required"/>
             <field property="serviceAreaid" depends="required"/>
             <field property="locationid" depends="required"/>

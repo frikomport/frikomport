@@ -319,6 +319,8 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 			</td>
 		</tr>
 
+<c:choose>
+	<c:when test="${useOrganization2}">
 		<tr>
 			<th>
 				<soak:label key="course.organization2" />
@@ -332,6 +334,12 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 					path="organization2id" />
 			</td>
 		</tr>
+	</c:when>
+	<c:otherwise>
+		<form:hidden path="organization2id" />
+	</c:otherwise>
+</c:choose>
+
 
 <c:if test="${useServiceArea}">
 		<tr>
@@ -570,6 +578,8 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 			</td>
 		</tr>
 
+<c:choose>
+	<c:when test="${useRegisterBy}">
 		<tr>
 			<th>
 				<soak:label key="course.registerBy" />
@@ -598,6 +608,11 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 				</spring:bind>
 			</td>
 		</tr>
+	</c:when>
+	<c:otherwise>
+		<form:hidden path="registerBy" />
+	</c:otherwise>
+</c:choose>
 
 		<c:choose>
 			<c:when test="${usePayment}">

@@ -98,6 +98,8 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
                 <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
             </spring:bind>
         </li>
+
+<c:if test="${!isSVV}">
     </ul>
     <ul>
         <li>
@@ -108,6 +110,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
                 <option value="0" <c:if test="${reservedValue == 0}"> selected </c:if> /> <c:out value='${reserved["false"]}'/></option>
             </select>
         </li>
+</c:if>    
 
 <c:if test="${usePayment}">
         <li>
@@ -120,6 +123,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
         </li>
 </c:if>
 
+<c:if test="${!isSVV}">
         <li>
             <soak:label key="registration.attended" styleClass="required"/>
             <select id="attendedField" name="attendedField">
@@ -128,6 +132,8 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 				<option value="0" <c:if test="${attendedValue == 0}"> selected </c:if> /> <c:out value='${attended["false"]}'/></option>
 			</select>
         </li>
+</c:if>
+
         <li>
             <soak:label key="course.includeHistoric" styleClass="required"/>
             <INPUT type="hidden" name="_historic" value="0"/>
@@ -241,12 +247,13 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
     </display:column>
 </c:if>
     
+<c:if test="${!isSVV}">
     <display:column sortable="true" headerClass="sortable"
          titleKey="registration.attended">
 		<c:if test="${registrationList.attended == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${registrationList.attended == false}"><fmt:message key="checkbox.unchecked"/></c:if>
     </display:column>
-    
+</c:if>
     
 <c:if test="${usePayment}">
     <display:column media="csv excel xml pdf" property="invoiceName" sortable="true" headerClass="sortable" titleKey="registrationList.invoiceAddress.name"/>

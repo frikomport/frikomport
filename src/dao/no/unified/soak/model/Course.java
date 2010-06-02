@@ -624,6 +624,7 @@ public class Course extends BaseObject implements Serializable {
      *            The organization2id to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setOrganization2id(Long organization2id) {
         this.organization2id = organization2id;
     }

@@ -27,6 +27,7 @@ import no.unified.soak.model.RoleEnum;
 import no.unified.soak.model.User;
 import no.unified.soak.model.Organization.Type;
 import no.unified.soak.service.CourseManager;
+import no.unified.soak.service.LocationManager;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
@@ -51,6 +52,7 @@ public class CourseController extends BaseFormController {
     private ServiceAreaManager serviceAreaManager = null;
     private RegistrationManager registrationManager = null;
     private CategoryManager categoryManager = null;
+    private LocationManager locationManager = null;
     private MessageSource messageSource = null;
 
     public void setCourseManager(CourseManager courseManager) {
@@ -71,6 +73,10 @@ public class CourseController extends BaseFormController {
 
     public void setCategoryManager(CategoryManager categoryManager) {
         this.categoryManager = categoryManager;
+    }
+
+    public void setLocationManager(LocationManager locationManager) {
+        this.locationManager = locationManager;
     }
 
     public void setMessageSource(MessageSource messageSource) {
@@ -168,6 +174,7 @@ public class CourseController extends BaseFormController {
         model = addOrganization(model, locale);
         model = addOrganization2(model, locale);
         model = addCategories(model, locale);
+        model = addLocations(model, locale);
         model.put("historic", historic);
         model.put("past", past);
 
@@ -242,6 +249,7 @@ public class CourseController extends BaseFormController {
         model = addServiceAreas(model, locale);
         model = addOrganization(model, locale);
         model = addOrganization2(model, locale);
+        model = addLocations(model, locale);
         model = addCategories(model, locale);
         model.put("course", course);
 
@@ -350,6 +358,10 @@ public class CourseController extends BaseFormController {
         if (isNumber(org2id)) {
             course.setOrganization2id(new Long(org2id));
         }
+        String locationid = request.getParameter("locationid");
+        if (isNumber(locationid)) {
+            course.setLocationid(new Long(locationid));
+        }
         String areaid = request.getParameter("serviceAreaid");
         if (isNumber(areaid)) {
             course.setServiceAreaid(new Long(areaid));
@@ -429,7 +441,17 @@ public class CourseController extends BaseFormController {
         model.put("organizations2", organizationManager.getByTypeIncludingParentAndDummy(Organization.Type.AREA, Organization.Type.REGION, getText("misc.all", locale)));
         return model;
     }
+
+    private Map addLocations(Map model, Locale locale) {
+        if (model == null) {
+            model = new HashMap();
+        }
+        
+        model.put("locations", locationManager.getAllIncludingDummy(null, false, getText("misc.all", locale)));
+        return model;
+    }
     
+
     private Map addCategories(Map model, Locale locale) {
         if (model == null) {
             model = new HashMap();

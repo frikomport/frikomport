@@ -30,6 +30,9 @@
          
     <display:column property="organization.name" sortable="true" headerClass="sortable"
          titleKey="user.organization"/>
+
+    <display:column property="organization2.name" sortable="true" headerClass="sortable"
+         titleKey="user.organization2"/>
     
 </c:if>
 

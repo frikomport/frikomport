@@ -206,7 +206,7 @@ public class CourseFormController extends BaseFormController {
         } else {
         	model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
         }
-        model.put("organizations2", organizationManager.getByTypeIncludingParentAndDummy(Organization.Type.AREA, Organization.Type.REGION, getText("misc.all", locale)));
+        model.put("organizations2", organizationManager.getByTypeIncludingDummy(Organization.Type.AREA, getText("misc.all", locale)));
         
         // Current time
         List<Date> time = new ArrayList<Date>();
@@ -512,7 +512,10 @@ public class CourseFormController extends BaseFormController {
 
 			try {
 				Date time = parseDateAndTime(request, "registerBy", format);
-
+				
+				if(time == null && !configurationManager.isActive("access.course.useRegisterBy", true)){
+					time = course.getStartTime();
+				}
 				if (time != null) {
 					course.setRegisterBy(time);
 				} else {
@@ -642,6 +645,11 @@ public class CourseFormController extends BaseFormController {
 			}
 		}
 
+		if(course.getRegisterBy() == null && !configurationManager.isActive("access.course.useRegisterBy", true)){
+			// setter påmeldingsfrist til starttid dersom påmeldingsfrist ikke benyttes
+			course.setRegisterBy(course.getStartTime());
+		}
+		
 		if (StringUtils.isEmpty(course.getDuration()) && !configurationManager.isActive("access.course.showDuration", true)){
 			course.setDuration("N/A");
 		}

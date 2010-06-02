@@ -89,6 +89,19 @@
         </td>
     </tr>
 
+<c:if test="${useOrganization2 && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
+    <tr>
+        <th>
+            <fmt:message key="user.organization2"/>
+        </th>
+        <td>
+        <c:if test="${user.organization2 != null}">
+          	<c:out value="${user.organization2.name}"/>
+        </c:if>
+        </td>
+    </tr>
+</c:if>
+
     <tr>
         <th>
             <fmt:message key="user.phoneNumber"/>

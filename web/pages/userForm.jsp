@@ -257,6 +257,7 @@
 			</td>
 		</tr>
 
+<c:if test="${useOrganization2}">
 		<tr>
 			<th>
 				<soak:label key="course.organization2" />
@@ -270,7 +271,7 @@
 					path="organization2id" />
 			</td>
 		</tr>
-
+</c:if>
 
 <c:if test="${showServiceArea}">
 		<tr>
