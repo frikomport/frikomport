@@ -43,14 +43,6 @@ function fillSelect(obj){
 <form:form commandName="course" name="courseList" action="listCourses.html">
     <div class="searchForm">
         <ul>
-            <li>
-                <soak:label key="course.organization" styleClass="required"/>
-                <form:select  path="organizationid" onchange="fillSelect(this);">
-                    <form:options items="${organizations}" itemValue="id" itemLabel="name" />
-                </form:select>
-                <form:errors cssClass="fieldError" htmlEscape="false" path="organizationid" />
-            </li>
-
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
             <li>
                 <soak:label key="course.organization2" styleClass="required"/>
@@ -60,6 +52,14 @@ function fillSelect(obj){
                 <form:errors cssClass="fieldError" htmlEscape="false" path="organization2id" />
             </li>
 </c:if>
+
+            <li>
+                <soak:label key="course.organization" styleClass="required"/>
+                <form:select  path="organizationid" onchange="fillSelect(this);">
+                    <form:options items="${organizations}" itemValue="id" itemLabel="name" />
+                </form:select>
+                <form:errors cssClass="fieldError" htmlEscape="false" path="organizationid" />
+            </li>
 
 <c:if test="${useServiceArea}">
             <li>
@@ -100,11 +100,6 @@ function fillSelect(obj){
                 </form:select>
                 <form:errors cssClass="fieldError" htmlEscape="false" path="categoryid" />
             </li>
-</c:if>
-
-
-<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
-	<br>
 </c:if>
 
             <li>

@@ -168,7 +168,7 @@ public class CourseController extends BaseFormController {
         if (name != null) {
             course.setName(name);
         }
-
+        
         // Set up parameters, and return them to the view
         model = addServiceAreas(model, locale);
         model = addOrganization(model, locale);
@@ -321,6 +321,10 @@ public class CourseController extends BaseFormController {
 
         if (course.getOrganization2id() != null) {
             unpublished.setOrganization2id(course.getOrganization2id());
+        }
+
+        if (course.getLocationid() != null) {
+            unpublished.setLocationid(course.getLocationid());
         }
 
         User responsible = null;
