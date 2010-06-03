@@ -151,7 +151,16 @@ public class LocationFormController extends BaseFormController {
             
 
         } else {
-            locationManager.saveLocation(location);
+        	String mapURL = location.getmapURL();
+        	if(StringUtils.isNotEmpty(mapURL) && !mapURL.startsWith("http://")){
+        		location.setMapURL("http://" + mapURL);
+        	}
+
+        	String detailURL = location.getDetailURL();
+        	if(StringUtils.isNotEmpty(detailURL) && !detailURL.startsWith("http://")){
+        		location.setDetailURL("http://" + detailURL);
+        	}
+        	locationManager.saveLocation(location);
 
             String key = (isNew) ? "location.added" : "location.updated";
             saveMessage(request, getText(key, locale));

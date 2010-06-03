@@ -177,7 +177,7 @@ public class ActionFilter implements Filter {
         session.setAttribute("showInvoiceaddress", configurationManager.isActive("access.profile.showInvoiceaddress", true));
         
         // lists
-        session.setAttribute("itemCount", configurationManager.getValue("list.itemCount", "25"));
+        session.setAttribute("itemCount", configurationManager.getValue("list.itemCount", "50"));
     }
 
     private void doHttpheaderAccessing(HttpServletRequest request, HttpSession session) {

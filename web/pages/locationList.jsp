@@ -63,7 +63,7 @@
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="location.address">
         <c:choose>
             <c:when test="${not empty locationList.mapURL}">
-                <a href="<c:out value="${locationList.mapURL}"/>"><c:out value="${locationList.address}"/></a>
+                <a href="<c:out value="${locationList.mapURL}"/>" target="_blank"><c:out value="${locationList.address}"/></a>
             </c:when>
             <c:otherwise>
                 <c:out value="${locationList.address}"/>

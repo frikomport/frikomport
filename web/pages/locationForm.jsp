@@ -28,34 +28,13 @@
             <form:errors cssClass="fieldError" path="name"/>
         </td>
     </tr>
-
     <tr>
         <th>
-            <soak:label key="location.maxAttendants"/>
+            <soak:label key="location.detailURL"/>
         </th>
         <td>
-            <form:input path="maxAttendants"/>
-            <form:errors cssClass="fieldError" path="maxAttendants"/>
-        </td>
-    </tr>
-
-    <tr>
-        <th>
-            <soak:label key="location.owner"/>
-        </th>
-        <td>
-            <form:input path="owner" size="50"/>
-            <form:errors cssClass="fieldError" path="owner"/>
-        </td>
-    </tr>
-
-    <tr>
-        <th>
-            <soak:label key="location.feePerDay"/>
-        </th>
-        <td>
-            <form:input path="feePerDay"/>
-            <form:errors cssClass="fieldError" path="feePerDay"/>
+            <form:input path="detailURL" size="50"/>
+            <form:errors cssClass="fieldError" path="detailURL"/>
         </td>
     </tr>
 
@@ -71,6 +50,16 @@
 
     <tr>
         <th>
+            <soak:label key="location.maxAttendants"/>
+        </th>
+        <td>
+            <form:input path="maxAttendants"/>
+            <form:errors cssClass="fieldError" path="maxAttendants"/>
+        </td>
+    </tr>
+
+    <tr>
+        <th>
             <soak:label key="location.address"/>
         </th>
         <td>
@@ -78,6 +67,17 @@
             <form:errors cssClass="fieldError" path="address"/>
         </td>
     </tr>
+
+    <tr>
+        <th>
+            <soak:label key="location.mapURL"/>
+        </th>
+        <td>
+            <form:input path="mapURL" size="50"/>
+            <form:errors cssClass="fieldError" path="mapURL"/>
+        </td>
+    </tr>
+
 
     <tr>
         <th>
@@ -121,21 +121,21 @@
 
     <tr>
         <th>
-            <soak:label key="location.mapURL"/>
+            <soak:label key="location.owner"/>
         </th>
         <td>
-            <form:input path="mapURL" size="50"/>
-            <form:errors cssClass="fieldError" path="mapURL"/>
+            <form:input path="owner" size="50"/>
+            <form:errors cssClass="fieldError" path="owner"/>
         </td>
     </tr>
 
     <tr>
         <th>
-            <soak:label key="location.detailURL"/>
+            <soak:label key="location.feePerDay"/>
         </th>
         <td>
-            <form:input path="detailURL" size="50"/>
-            <form:errors cssClass="fieldError" path="detailURL"/>
+            <form:input path="feePerDay"/>
+            <form:errors cssClass="fieldError" path="feePerDay"/>
         </td>
     </tr>
 
@@ -158,7 +158,6 @@
             <form:errors cssClass="fieldError" path="organization2id"/>
         </td>
     </tr>
-
 
     <tr>
         <th>

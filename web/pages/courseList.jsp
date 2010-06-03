@@ -102,6 +102,11 @@ function fillSelect(obj){
             </li>
 </c:if>
 
+
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+	<br>
+</c:if>
+
             <li>
                 <soak:label key="course.location" styleClass="required"/>
                 <form:select  path="locationid">
@@ -109,10 +114,6 @@ function fillSelect(obj){
                 </form:select>
                 <form:errors cssClass="fieldError" htmlEscape="false" path="locationid" />
             </li>
-
-<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
-	<br>
-</c:if>
 
 <c:if test="${showCourseName}">
             <li>
