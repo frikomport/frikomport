@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 import no.unified.soak.dao.StatisticsDAO;
+import no.unified.soak.model.Course;
 import no.unified.soak.model.StatisticsTableRow;
 
 
@@ -30,4 +31,7 @@ public interface StatisticsManager extends Manager {
     public void setStatisticsDAO(StatisticsDAO statisticsDAO);
 
 	public List<StatisticsTableRow> findByDates(Date beginPeriod, Date endPeriod);
+	
+	public List<Course> findEmptyCoursesByDates(Date beginPeriod, Date endPeriod);
+
 }

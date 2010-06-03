@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import no.unified.soak.model.Course;
 import no.unified.soak.model.StatisticsTableRow;
 import no.unified.soak.service.StatisticsManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
@@ -65,10 +66,10 @@ public class StatisticsController implements Controller {
 		if (beginDate != null && endDate != null) {
 				List<StatisticsTableRow> statisticsRows = statisticsManager.findByDates(beginDate, endDate);
 				modelAndView.addObject("statisticsRows", statisticsRows);
+				
+				List<Course> emptyCourses = statisticsManager.findEmptyCoursesByDates(beginDate, endDate);
+				modelAndView.addObject("courseList", emptyCourses);
 		}
-		
-		//TODO Klaus: Sjekk for feiltilfeller av møter som mangler både oppmøteregistrering og oppgitte deltakere til påmeldinger på møtet.
-
 		return modelAndView;
 	}
 
