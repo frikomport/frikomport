@@ -152,10 +152,6 @@
          <fmt:formatDate value="${userRegistrations.course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
 
-    <display:column sortable="true" headerClass="sortable" titleKey="course.stopTime" sortProperty="course.stopTime">
-         <fmt:formatDate value="${userRegistrations.course.stopTime}" type="both" pattern="${dateformat} ${timeformat}"/>
-    </display:column>
-
     <display:column property="course.organization.name" sortable="true" headerClass="sortable" titleKey="course.organization"/>
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.location">
@@ -169,6 +165,7 @@
 
     <display:column property="course.instructor.name" sortable="true" headerClass="sortable" titleKey="course.instructor.export"/>
 
+	<c:if test="${!isSVV}">
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="registration.reserved">
         <input type="hidden" name="_reserved<c:out value="${userRegistrations.id}"/>" value="visible"/>
         <input type="hidden" name="reserved_<c:out value="${userRegistrations.id}"/>" value="${registrationList.reserved}" />
@@ -179,6 +176,11 @@
         <c:if test="${userRegistrations.reserved == true}"><fmt:message key="checkbox.checked"/></c:if>
         <c:if test="${userRegistrations.reserved == false}"><fmt:message key="checkbox.unchecked"/></c:if>
     </display:column>
+	</c:if>
+
+	<c:if test="${isSVV}">
+	    <display:column property="participants" sortable="true" headerClass="sortable" titleKey="registration.participants.number"/>
+	</c:if>
 
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
         <button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="id" value="${userRegistrations.id}"/><c:param name="courseId" value="${userRegistrations.course.id}"/></c:url>'">

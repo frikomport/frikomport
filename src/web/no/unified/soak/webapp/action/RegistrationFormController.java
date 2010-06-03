@@ -353,7 +353,7 @@ public class RegistrationFormController extends BaseFormController {
 
             Integer availability = registrationManager.getAvailability(localAttendant, course);
 
-            if (availability.intValue() > 0) {
+            if (availability.intValue() >= registration.getParticipants()) {
                 // There's room - save the registration
                 courseFull = new Boolean(false);
                 registration.setStatus(Registration.Status.RESERVED);

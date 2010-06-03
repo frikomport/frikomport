@@ -258,6 +258,10 @@ public class MailUtil {
 
         msg.append("\n\n"); // emptyt lines
 
+        addParticipants(registration, msg);
+
+        msg.append("\n"); // empty line
+
         addDetailsLink(course, msg);
 
         msg.append("\n"); // empty line
@@ -422,6 +426,10 @@ public class MailUtil {
 
         msg.append("\n\n"); // empty lines
         
+        addParticipants(registration, msg);
+
+        msg.append("\n"); // empty line
+
         addDetailsLink(course, msg);
 
         msg.append("\n"); // empty line
@@ -489,10 +497,19 @@ public class MailUtil {
 	}
 
 	/**
+	 * Adds number of participants (if > 1)
+	 * @param course
+	 * @param msg
+	 */
+	private static void addParticipants(Registration registration, StringBuffer msg){
+		if(registration.getParticipants() > 1){
+			msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registration.participants")) + ": " + registration.getParticipants() +  "\n");
+		}
+	}
+	
+	/**
 	 * Adds link to details of current course
 	 * @param course
-	 * @param locale
-	 * @param messageSource
 	 * @param msg
 	 */
     private static void addDetailsLink(Course course, StringBuffer msg) {
@@ -508,8 +525,6 @@ public class MailUtil {
      * Adds link to direct cancellation of registration, including info about chargeoverdue if present
      * @param course
      * @param registration
-     * @param locale
-     * @param messageSource
      * @param msg
      */
     private static void addCancelLink(Course course, Registration registration, StringBuffer msg) {

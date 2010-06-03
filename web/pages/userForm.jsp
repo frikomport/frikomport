@@ -177,7 +177,7 @@
 
 		<tr>
 			<th>
-				<soak:label key="user.phoneNumber" />
+				<soak:label key="user.phoneNumber.short" />
 			</th>
 			<td>
 				<form:input path="phoneNumber" />

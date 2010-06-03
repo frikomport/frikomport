@@ -254,6 +254,11 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 		<c:if test="${registrationList.attended == false}"><fmt:message key="checkbox.unchecked"/></c:if>
     </display:column>
 </c:if>
+
+<c:if test="${isSVV}">
+	<display:column property="participants" sortable="true" headerClass="sortable" 
+		titleKey="registration.participants.number" class="${tdClass}"/>
+</c:if>
     
 <c:if test="${usePayment}">
     <display:column media="csv excel xml pdf" property="invoiceName" sortable="true" headerClass="sortable" titleKey="registrationList.invoiceAddress.name"/>

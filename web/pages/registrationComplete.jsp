@@ -97,6 +97,8 @@
 	</tr>
 </c:if>
 
+
+<c:if test="${!isSVV}">
 	<tr>
 		<th>
 			<fmt:message key="registration.phone" />
@@ -107,6 +109,7 @@
 			</spring:bind>
 		</td>
 	</tr>
+</c:if>	
 
 	<tr>
 		<th>
@@ -158,6 +161,7 @@
 	</tr>
 </c:if>
 
+	<c:if test="${!isSVV}">
 	<tr>
 		<th>
 			<fmt:message key="registration.organization" />
@@ -170,6 +174,7 @@
 			</c:if>
 		</td>
 	</tr>
+	</c:if>
 
 <c:if test="${showServiceArea}">
 	<tr>
@@ -199,7 +204,8 @@
 	</tr>
 </c:if>
 
-<c:if test="${!freeCourse}">
+<c:if test="${!freeCourse || isSVV}">
+	<c:if test="${!isSVV}">
 	<tr>
 		<th>
 			<soak:label key="registration.invoiceAddress" />
@@ -215,22 +221,14 @@
 			</spring:bind>
 		</td>
 	</tr>
+	</c:if>	
+	
 	<tr>
 		<th>
 			<fmt:message key="registration.invoiceAddress.address" />
 		</th>
 		<td>
 			<spring:bind path="registration.invoiceAddress.address">
-				<c:out value="${status.value}" />
-			</spring:bind>
-		</td>
-	</tr>
-	<tr>
-		<th>
-			<fmt:message key="registration.invoiceAddress.city" />
-		</th>
-		<td>
-			<spring:bind path="registration.invoiceAddress.city">
 				<c:out value="${status.value}" />
 			</spring:bind>
 		</td>
@@ -245,7 +243,33 @@
 			</spring:bind>
 		</td>
 	</tr>
+	<tr>
+		<th>
+			<fmt:message key="registration.invoiceAddress.city" />
+		</th>
+		<td>
+			<spring:bind path="registration.invoiceAddress.city">
+				<c:out value="${status.value}" />
+			</spring:bind>
+		</td>
+	</tr>
 </c:if>
+
+	<c:if test="${!isSVV}">
+	<tr>
+		<th>
+			<fmt:message key="registration.organization" />
+		</th>
+		<td>
+			<c:if test="${registration.organization != null}">
+				<spring:bind path="registration.organization.name">
+					<c:out value="${status.value}" />
+				</spring:bind>
+			</c:if>
+		</td>
+	</tr>
+	</c:if>
+
 
 	<tr>
 		<td class="buttonBar">

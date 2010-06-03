@@ -196,13 +196,19 @@
 			<c:if test="${registrationList.attended == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 		</c:if>
 		</display:column>
-	</c:if>
 
 	<display:column media="ccsv cexcel cxml cpdf" sortable="true" headerClass="sortable" titleKey="registration.attended.export">
 		<c:if test="${registrationList.attended == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${registrationList.attended == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 	</display:column>
+	</c:if>
+
+	<c:if test="${isSVV}">
+	<display:column property="participants" sortable="true" headerClass="sortable" 
+		titleKey="registration.participants.number" class="${tdClass}"/>
+	</c:if>
     </c:if>
+
 
 	<display:setProperty name="paging.banner.item_name" value="${item}"/>
 	<display:setProperty name="paging.banner.items_name" value="${items}"/>

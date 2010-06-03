@@ -1,8 +1,5 @@
 <%@ include file="/common/taglibs.jsp"%>
 
-<fmt:message key="date.format" var="dateformat" />
-<fmt:message key="date.format.localized" var="datelocalized" />
-
 <title><fmt:message key="registrationDetail.title" />
 </title>
 <content tag="heading">
@@ -23,12 +20,21 @@
 </spring:bind>
 
 <fmt:message key="date.format" var="dateformat" />
+<fmt:message key="date.format.localized" var="datelocalized" />
 <fmt:message key="time.format" var="timeformat" />
+<fmt:message key="day.format" var="dayformat"/>
 
 
 <c:if test="${!illegalRegistration}">
+	
+	<c:if test="${!isSVV}">
 	<div class="message" style="font-size: 12px">
 		<fmt:message key="registrationDetail.emailexplanation" />
+	</div>
+	</c:if>
+
+	<div class="message" style="font-size: 12px">
+		<c:out value="${course.name}" escapeXml="false" /> - <fmt:formatDate value="${course.startTime}" type="both" pattern="${dayformat} ${dateformat} ${timeformat}"/>
 	</div>
 
 	<form:form commandName="registration" onsubmit="return validateRegistration(this)" name="registration">
@@ -106,6 +112,19 @@
 			</tr>
 			</c:if>
 			
+			<c:if test="${useAttendants}">
+			<tr>
+				<th>
+					<soak:label key="registration.participants" />
+				</th>
+				<td>
+					<form:input path="participants" />
+					<form:errors cssClass="fieldError" htmlEscape="false" path="participants" />
+				</td>
+			</tr>
+			</c:if>
+			
+            <c:if test="${!isSVV}">
 			<tr>
 				<th>
 					<soak:label key="registration.phone" />
@@ -115,6 +134,7 @@
 					<form:errors cssClass="fieldError" path="phone" />
 				</td>
 			</tr>
+			</c:if>
 
 			<tr>
 				<th>
@@ -160,6 +180,7 @@
 			</tr>
             </c:if>
 
+			<c:if test="${!isSVV}">
 			<tr>
 				<th>
 					<soak:label key="registration.organization" />
@@ -170,6 +191,8 @@
 					<form:errors cssClass="fieldError" path="organizationid" />
 				</td>
 			</tr>
+			</c:if>
+			
             <c:if test="${showServiceArea}">
 			<tr>
 				<th>
@@ -215,13 +238,13 @@
 				</td>
 			</tr>
             </c:if>
-			<c:if test="${!freeCourse}">
+			<c:if test="${!freeCourse || isSVV}">
+				<c:if test="${!isSVV}">
 				<tr>
 					<th>
 						<soak:label key="registration.invoiceAddress" />
 					</th>
 				</tr>
-
 				<tr>
 					<th>
 						<soak:label key="registration.invoiceAddress.name" />
@@ -231,6 +254,7 @@
 						<form:errors cssClass="fieldError" path="invoiceName" />
 					</td>
 				</tr>
+				</c:if>
 
 				<tr>
 					<th>
@@ -243,15 +267,6 @@
 				</tr>
 				<tr>
 					<th>
-						<soak:label key="registration.invoiceAddress.city" />
-					</th>
-					<td>
-						<form:input path="invoiceAddress.city" maxlength="50"/>
-						<form:errors cssClass="fieldError" path="invoiceAddress.city" />
-					</td>
-				</tr>
-				<tr>
-					<th>
 						<soak:label key="registration.invoiceAddress.postalCode" />
 					</th>
 					<td>
@@ -260,7 +275,29 @@
 							path="invoiceAddress.postalCode" />
 					</td>
 				</tr>
+				<tr>
+					<th>
+						<soak:label key="registration.invoiceAddress.city" />
+					</th>
+					<td>
+						<form:input path="invoiceAddress.city" maxlength="50"/>
+						<form:errors cssClass="fieldError" path="invoiceAddress.city" />
+					</td>
+				</tr>
 			</c:if>
+			
+			<c:if test="${isSVV}">
+			<tr>
+				<th>
+					<soak:label key="registration.organization" />
+				</th>
+				<td>
+					<form:select path="organizationid" items="${organizations}" itemLabel="name" itemValue="id" />
+					<form:errors cssClass="fieldError" path="organizationid" />
+				</td>
+			</tr>
+			</c:if>
+			
 			<c:if test="${!empty courseList}">
 			<tr>
 				<th>
