@@ -10,6 +10,14 @@
 <fmt:message key="courseList.item" var="item"/>
 <fmt:message key="courseList.items" var="items"/>
 
+<SCRIPT LANGUAGE="JavaScript" ID="js1">
+var cal1 = new CalendarPopup();
+cal1.setMonthNames('Januar','Februar','Mars','April','Mai','Juni','Juli','August','September','Oktober','November','Desember'); 
+cal1.setDayHeaders('S','M','T','O','T','F','L'); 
+cal1.setWeekStartDay(1); 
+cal1.setTodayText("Idag");
+</script>
+
 <script type="text/javascript">
 // Code to change the select list for service aera based on organization id.
 function fillSelect(obj){
@@ -98,7 +106,6 @@ function fillSelect(obj){
                 <form:errors cssClass="fieldError" htmlEscape="false" path="categoryid" />
             </li>
 </c:if>
-
             <li>
                 <form:select  path="locationid">
                     <form:options items="${locations}" itemValue="id" itemLabel="name" />
@@ -114,23 +121,41 @@ function fillSelect(obj){
             </li>
 </c:if>
 
-            <input type="hidden" id="past" name="past" 
-            <c:if test="${past == true}"> value="1" </c:if>
-            <c:if test="${past == false}"> value="0" </c:if> />
-<c:if test="${past == true}">
+			<li>
+				<label class="required">Fra:</label>
+				<input id="startTime" name="startTime" value="<fmt:formatDate value="${startTime}" pattern="${dateformat}"/>" type="text" size="12" />
+				<a href="#" name="a1" id="Anch_startTime"
+					onClick="cal1.select(document.courseList.startTime,'Anch_startTime','<fmt:message key="date.format"/>'); return false;"
+					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
+			</li>
+			<li>
+				<label class="required">Til:</label>
+				<input id="stopTime" name="stopTime" value="<fmt:formatDate value="${stopTime}" pattern="${dateformat}"/>" type="text" size="12"/>
+				<a href="#" name="a1" id="Anch_stopTime"
+					onClick="cal1.select(document.courseList.stopTime,'Anch_stopTime','<fmt:message key="date.format"/>'); return false;"
+					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
+			</li>
+
+<c:if test="${!isSVV}">
+        <input type="hidden" id="past" name="past" 
+        <c:if test="${past == true}"> value="1" </c:if>
+        <c:if test="${past == false}"> value="0" </c:if> />
+		<c:if test="${past == true}">
 	    	<input type="hidden" id="historic" name="historic"
 	    	<c:if test="${historic == true}"> value="1" </c:if>
 	    	<c:if test="${historic == false}"> value="0" </c:if>
 	    	/>
-</c:if>
-<c:if test="${past == false}">
+		</c:if>
+		<c:if test="${past == false}">
             <li>
                 <label class="required"><fmt:message key="course.includeHistoric"/>:</label>
                 <input type="hidden" name="_historic" value="0"/>
 		    	<input type="checkbox" id="historic" name="historic" value="1"
 		    	<c:if test="${historic == true}"> checked </c:if> />
             </li>
+		</c:if>
 </c:if>
+
             <li>
                 <button type="submit" name="search" onclick="bCancel=false" style="margin-right: 5px">
 					<fmt:message key="button.search"/>
@@ -281,7 +306,6 @@ function fillSelect(obj){
     <display:setProperty name="paging.banner.item_name" value="${item}"/>
     <display:setProperty name="paging.banner.items_name" value="${items}"/>
     <display:setProperty name="export.ics" value="true"/>
-    <display:setProperty name="export.rss" value="true"/>
 </display:table>
 
 <c:out value="${buttons}" escapeXml="false"/>

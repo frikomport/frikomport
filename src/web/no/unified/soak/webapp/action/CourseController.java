@@ -9,7 +9,9 @@
 package no.unified.soak.webapp.action;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -303,12 +305,20 @@ public class CourseController extends BaseFormController {
 
         Date startInterval = course.getStartTime();
         Date stopInterval = course.getStopTime();
-
+        
+        
         if (startInterval != null) {
             starttime = startInterval;
+            model.put("startTime", startInterval);
         }
         if (stopInterval != null) {
-            stoptime = stopInterval;
+        	// legger på 24timer for å sikre til-og-med sluttdato
+        	Calendar stop = new GregorianCalendar();
+        	stop.setTime(stopInterval);
+        	stop.add(Calendar.HOUR, 24);
+        	stopInterval = stop.getTime();
+        	stoptime = stopInterval;
+            model.put("stopTime", course.getStopTime());
         }
 
         // Add all courses to the list
