@@ -10,7 +10,7 @@
 <fmt:message key="serviceAreaList.items" var="items" />
 
 <c:choose>
-<c:when test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+<c:when test="${!isSVV && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
 
 <form method="post" action="<c:url value="/listServiceAreas.html"/>" id="serviceAreaList">
    	<input type="hidden" id="ispostbackservicearealist" name="ispostbackservicearealist" value="1"/>
@@ -87,9 +87,16 @@
 
 </c:when>
 <c:otherwise>
-    <div class="message" style="font-size: 12px"><fmt:message key="access.denied" /></div>
+	<c:if test="${!isSVV}">
+	    <div class="message" style="font-size: 12px"><fmt:message key="access.denied" /></div>
+	</c:if>
+	
+	<c:if test="${isSVV}">
+	    <div class="message" style="font-size: 12px"><fmt:message key="access.notinuse" /></div>
+	</c:if>
 </c:otherwise>
 </c:choose>
+
 
 <c:out value="${buttons}" escapeXml="false" />
 

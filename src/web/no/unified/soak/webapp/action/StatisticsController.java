@@ -1,6 +1,8 @@
 package no.unified.soak.webapp.action;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -64,11 +66,18 @@ public class StatisticsController implements Controller {
 		}
 
 		if (beginDate != null && endDate != null) {
-				List<StatisticsTableRow> statisticsRows = statisticsManager.findByDates(beginDate, endDate);
-				modelAndView.addObject("statisticsRows", statisticsRows);
-				
-				List<Course> emptyCourses = statisticsManager.findEmptyCoursesByDates(beginDate, endDate);
-				modelAndView.addObject("courseList", emptyCourses);
+
+			// legger på 24H for at sluttdato skal bli med i søket
+        	Calendar end = new GregorianCalendar();
+        	end.setTime(endDate);
+        	end.add(Calendar.HOUR, 24);
+        	endDate = end.getTime();
+			
+			List<StatisticsTableRow> statisticsRows = statisticsManager.findByDates(beginDate, endDate);
+			modelAndView.addObject("statisticsRows", statisticsRows);
+			
+			List<Course> emptyCourses = statisticsManager.findEmptyCoursesByDates(beginDate, endDate);
+			modelAndView.addObject("courseList", emptyCourses);
 		}
 		return modelAndView;
 	}
