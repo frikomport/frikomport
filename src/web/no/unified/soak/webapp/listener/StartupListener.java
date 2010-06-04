@@ -23,6 +23,7 @@ import no.unified.soak.service.NotificationManager;
 import no.unified.soak.service.RegisterByDateManager;
 import no.unified.soak.service.UserSynchronizeManager;
 import no.unified.soak.service.WaitingListManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.webapp.action.ScheduledTasks;
 
 import org.apache.commons.logging.Log;
@@ -104,7 +105,7 @@ public class StartupListener extends ContextLoaderListener implements
 
         // Tasks to be completed once
         ScheduledTasks once = new ScheduledTasks();
-        once.addTask(userSynchronizeManager);
+//        once.addTask(userSynchronizeManager); // kommentert ut fordi den tilsynelatende uansett kjøres umiddelbart etter oppstart
         once.addTask(databaseUpdateManager);
         timer.schedule(once, Constants.TASK_IMMEDIATE);
 
@@ -114,7 +115,11 @@ public class StartupListener extends ContextLoaderListener implements
         recurring.addTask(userSynchronizeManager);
         recurring.addTask(registerByDateManager);
         recurring.addTask(notificationManager);
-        recurring.addTask(waitingListManager);
+        
+        if(!ApplicationResourcesUtil.isSVV()){
+        	recurring.addTask(waitingListManager);
+        }
+
         // Here we set the intervals for how often
 		timer.schedule(recurring, Constants.TASK_INITIAL_DELAY, Constants.TASK_RUN_INTERVAL);
 
