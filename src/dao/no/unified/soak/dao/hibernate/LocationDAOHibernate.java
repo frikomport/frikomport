@@ -12,6 +12,8 @@ package no.unified.soak.dao.hibernate;
 
 import no.unified.soak.dao.LocationDAO;
 import no.unified.soak.model.Location;
+import no.unified.soak.model.Organization;
+import no.unified.soak.model.Organization.Type;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -19,6 +21,8 @@ import org.hibernate.criterion.Restrictions;
 
 import org.springframework.orm.ObjectRetrievalFailureException;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -84,15 +88,30 @@ public class LocationDAOHibernate extends BaseDAOHibernate
 
         // Check for parameteres (in other words - look for restrictions)
         if (location != null) {
-            if ((location.getOrganizationid() != null) &&
-                    (location.getOrganizationid().longValue() != 0)) {
-                criteria.add(Restrictions.eq("organizationid",
-                        location.getOrganizationid()));
+            if (location.getOrganizationid() != null && location.getOrganizationid().longValue() != 0) {
+                criteria.add(Restrictions.eq("organizationid", location.getOrganizationid()));
+            }
+
+            if (location.getOrganization2id() != null && location.getOrganization2id().longValue() != 0) {
+            	List family = new ArrayList<Long>();
+            	family.add(location.getOrganization2id());
+            	
+                DetachedCriteria subCriteria = DetachedCriteria.forClass(Organization.class);
+            	subCriteria.add(Restrictions.eq("parentid", location.getOrganization2id()));
+            	subCriteria.add(Restrictions.eq("type", Type.AREA.getTypeDBValue()));
+            	List childOrgs = getHibernateTemplate().findByCriteria(subCriteria);
+            	if(!childOrgs.isEmpty()){
+            		Iterator<Organization> it = childOrgs.iterator();
+            		while(it.hasNext()){
+            			Organization o = it.next();
+            			family.add(o.getId());
+            		}
+            	}
+            	criteria.add(Restrictions.in("organization2id", family));
             }
 
             if (location.getSelectable() != null) {
-                criteria.add(Restrictions.eq("selectable",
-                        location.getSelectable()));
+                criteria.add(Restrictions.eq("selectable", location.getSelectable()));
             }
         }
 

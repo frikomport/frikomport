@@ -148,7 +148,7 @@ public class LocationController extends BaseFormController {
         if (typeDBvalue != null) {
         	Integer value = Integer.valueOf(typeDBvalue);
         	Type type = Organization.Type.getTypeFromDBValue(value);
-            model.put("organizations", organizationManager.getByTypeIncludingDummy(type, getText("misc.all", locale)));
+            model.put("organizations", organizationManager.getByTypeIncludingDummy(type, getText("misc.all.organizations", locale)));
         } else {
             model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
         }
@@ -171,7 +171,7 @@ public class LocationController extends BaseFormController {
             model = new HashMap();
         }
 
-        model.put("organizations2", organizationManager.getByTypeIncludingParentAndDummy(Organization.Type.AREA, Organization.Type.REGION, getText("misc.all", locale)));
+        model.put("organizations2", organizationManager.getByTypeIncludingParentAndDummy(Organization.Type.AREA, Organization.Type.REGION, getText("misc.all.organization2s", locale)));
         return model;
     }
 

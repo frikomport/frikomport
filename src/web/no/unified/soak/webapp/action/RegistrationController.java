@@ -316,7 +316,7 @@ public class RegistrationController extends BaseFormController {
         if (model == null) {
             model = new HashMap();
         }
-        model.put("serviceareas", serviceAreaManager.getAllIncludingDummy(getText("misc.all", locale)));
+        model.put("serviceareas", serviceAreaManager.getAllIncludingDummy(getText("misc.all.serviceareas", locale)));
         return model;
     }
 
@@ -335,7 +335,7 @@ public class RegistrationController extends BaseFormController {
         if (model == null) {
             model = new HashMap();
         }
-        model.put("organizations", organizationManager.getByTypeIncludingDummy(Type.COUNTY, getText("misc.all", locale)));
+        model.put("organizations", organizationManager.getByTypeIncludingDummy(Type.COUNTY, getText("misc.all.organizations", locale)));
         return model;
     }
 
@@ -353,7 +353,7 @@ public class RegistrationController extends BaseFormController {
             List courseList = new ArrayList();
             Course courseDummy = new Course();
             courseDummy.setId(new Long("0"));
-            courseDummy.setName(getText("misc.all", locale));
+            courseDummy.setName(getText("misc.all.courses", locale));
             courseList.add(courseDummy);
             courseList.addAll(courses);
 

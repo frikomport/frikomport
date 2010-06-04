@@ -39,7 +39,6 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
     <INPUT type="hidden" id="ispostbackregistrationlist" name="ispostbackregistrationlist" value="1"/> 
     <ul>
         <li>
-            <soak:label key="registration.organization" styleClass="required"/>
             <spring:bind path="registration.organizationid">
                   <select id="<c:out value="${status.expression}"/>" name="<c:out value="${status.expression}"/>" onchange="fillSelect(this);">
                     <c:forEach var="organization" items="${organizations}">
@@ -55,7 +54,6 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 
 <c:if test="${useServiceArea}">
         <li>
-            <soak:label key="registration.serviceArea" styleClass="required"/>
             <spring:bind path="registration.serviceAreaid">
                 <select id="<c:out value="${status.expression}"/>" name="<c:out value="${status.expression}"/>">
                     <c:forEach var="servicearea" items="${serviceareas}">
@@ -85,13 +83,13 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 </c:if>
 
         <li>
-            <soak:label key="registration.course" styleClass="required"/>
             <spring:bind path="registration.courseid">
                   <select id="<c:out value="${status.expression}"/>" name="<c:out value="${status.expression}"/>">
                     <c:forEach var="theCourse" items="${courses}">
                       <option value="<c:out value="${theCourse.id}"/>"
                           <c:if test="${theCourse.id == registration.courseid}"> selected="selected"</c:if>>
                           <fmt:formatDate value="${theCourse.startTime}" type="both" pattern="${dateformat} - "/><c:out value="${theCourse.name}"/>
+                          <c:if test="${theCourse.id != 0}">, <c:out value="${theCourse.organization.name}"/>, <c:out value="${theCourse.location.name}"/></c:if>
                       </option>
                     </c:forEach>
                   </select>

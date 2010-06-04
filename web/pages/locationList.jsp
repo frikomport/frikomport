@@ -8,12 +8,24 @@
 
 <form method="post" action="<c:url value="/listLocations.html"/>" id="locationList">
     <INPUT type="hidden" id="ispostbacklocationlist" name="ispostbacklocationlist" value="1"/> 
-
-    <table>
-        <th>
-            <soak:label key="location.organization"/>
-        </th>
-        <td>
+    <div class="searchForm">
+	<ul>
+<c:if test="${useOrganization2 && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
+		<li>
+            <spring:bind path="location.organization2id">
+                  <select name="<c:out value="${status.expression}"/>">
+                    <c:forEach var="organization" items="${organizations2}">
+                      <option value="<c:out value="${organization.id}"/>"
+                          <c:if test="${organization.id == location.organization2id}"> selected="selected"</c:if>>
+                        <c:out value="${organization.name}"/>
+                      </option>
+                    </c:forEach>
+                  </select>            
+                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
+            </spring:bind>
+		</li>
+</c:if>
+		<li>
             <spring:bind path="location.organizationid">
                   <select name="<c:out value="${status.expression}"/>">
                     <c:forEach var="organization" items="${organizations}">
@@ -25,12 +37,14 @@
                   </select>            
                 <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
             </spring:bind>
-        </td>
-        <td class="buttonBar">            
-        <button type="submit" name="search" onclick="bCancel=false" style="margin-right: 5px">
-            <fmt:message key="button.search"/>
-        </button>
-    </table>
+		</li>
+		<li>        
+	        <button type="submit" name="search" onclick="bCancel=false" style="margin-right: 5px">
+	            <fmt:message key="button.search"/>
+	        </button>
+        </li>
+	</ul>
+	</div>
 </form>
 
 <c:set var="buttons">

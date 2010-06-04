@@ -401,7 +401,7 @@ public class CourseController extends BaseFormController {
         }
 
         // Get all organizations in the database
-        List serviceAreas = serviceAreaManager.getAllIncludingDummy(getText("misc.all", locale));
+        List serviceAreas = serviceAreaManager.getAllIncludingDummy(getText("misc.all.serviceareas", locale));
 
         if (serviceAreas != null) {
             model.put("serviceareas", serviceAreas);
@@ -429,7 +429,7 @@ public class CourseController extends BaseFormController {
         if (typeDBvalue != null) {
         	Integer value = Integer.valueOf(typeDBvalue);
         	Type type = Organization.Type.getTypeFromDBValue(value);
-            model.put("organizations", organizationManager.getByTypeIncludingDummy(type, getText("misc.all", locale)));
+            model.put("organizations", organizationManager.getByTypeIncludingDummy(type, getText("misc.all.organizations", locale)));
         } else {
             model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
         }
@@ -442,7 +442,7 @@ public class CourseController extends BaseFormController {
             model = new HashMap();
         }
         
-        model.put("organizations2", organizationManager.getByTypeIncludingParentAndDummy(Organization.Type.AREA, Organization.Type.REGION, getText("misc.all", locale)));
+        model.put("organizations2", organizationManager.getByTypeIncludingParentAndDummy(Organization.Type.AREA, Organization.Type.REGION, getText("misc.all.organization2s", locale)));
         return model;
     }
 
@@ -451,7 +451,7 @@ public class CourseController extends BaseFormController {
             model = new HashMap();
         }
         
-        model.put("locations", locationManager.getAllIncludingDummy(null, false, getText("misc.all", locale)));
+        model.put("locations", locationManager.getAllIncludingDummy(null, false, getText("misc.all.locations", locale)));
         return model;
     }
     

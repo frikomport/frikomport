@@ -43,9 +43,8 @@ function fillSelect(obj){
 <form:form commandName="course" name="courseList" action="listCourses.html">
     <div class="searchForm">
         <ul>
-<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+<c:if test="${useOrganization2 && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
             <li>
-                <soak:label key="course.organization2" styleClass="required"/>
                 <form:select  path="organization2id">
                     <form:options items="${organizations2}" itemValue="id" itemLabel="name" />
                 </form:select>
@@ -54,7 +53,6 @@ function fillSelect(obj){
 </c:if>
 
             <li>
-                <soak:label key="course.organization" styleClass="required"/>
                 <form:select  path="organizationid" onchange="fillSelect(this);">
                     <form:options items="${organizations}" itemValue="id" itemLabel="name" />
                 </form:select>
@@ -63,7 +61,6 @@ function fillSelect(obj){
 
 <c:if test="${useServiceArea}">
             <li>
-                <soak:label key="course.serviceArea" styleClass="required"/>
                 <spring:bind path="course.serviceAreaid">
 					<select id="<c:out value="${status.expression}"/>" name="<c:out value="${status.expression}"/>">
 						<c:forEach var="servicearea" items="${serviceareas}">
@@ -103,7 +100,6 @@ function fillSelect(obj){
 </c:if>
 
             <li>
-                <soak:label key="course.location" styleClass="required"/>
                 <form:select  path="locationid">
                     <form:options items="${locations}" itemValue="id" itemLabel="name" />
                 </form:select>
