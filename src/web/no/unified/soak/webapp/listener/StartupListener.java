@@ -115,10 +115,7 @@ public class StartupListener extends ContextLoaderListener implements
         recurring.addTask(userSynchronizeManager);
         recurring.addTask(registerByDateManager);
         recurring.addTask(notificationManager);
-        
-        if(!ApplicationResourcesUtil.isSVV()){
-        	recurring.addTask(waitingListManager);
-        }
+    	recurring.addTask(waitingListManager);
 
         // Here we set the intervals for how often
 		timer.schedule(recurring, Constants.TASK_INITIAL_DELAY, Constants.TASK_RUN_INTERVAL);

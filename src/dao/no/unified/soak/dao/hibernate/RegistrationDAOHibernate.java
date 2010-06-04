@@ -91,8 +91,7 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 	 * @see no.unified.soak.dao.RegistrationDAO#getNumberOfAttendants(java.lang.Boolean,
 	 *      no.unified.soak.model.Course, Boolean)
 	 */
-	public Integer getNumberOfAttendants(Boolean localOnly, Course course,
- Boolean reservedOnly) {
+	public Integer getNumberOfAttendants(Boolean localOnly, Course course, Boolean reservedOnly) {
 		DetachedCriteria criteria = DetachedCriteria.forClass(Registration.class);
 
 		// Find number of registrations totally on the course
@@ -106,7 +105,8 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 			criteria.add(Restrictions.eq("organizationid", course.getOrganizationid()));
 		}
 
-		criteria.setProjection(Projections.rowCount());
+//		criteria.setProjection(Projections.rowCount());
+		criteria.setProjection(Projections.sum("participants"));
 
 		List queryResult = getHibernateTemplate().findByCriteria(criteria);
 		Integer result = (Integer) queryResult.get(0);
@@ -256,11 +256,11 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 
 			// Are we only to include "locals" in the search
 			if (localOnly.booleanValue()) {
-				criteria.add(Restrictions.eq("organizationid", course
-						.getOrganizationid()));
+				criteria.add(Restrictions.eq("organizationid", course.getOrganizationid()));
 			}
 
-			criteria.setProjection(Projections.rowCount());
+			//criteria.setProjection(Projections.rowCount());
+			criteria.setProjection(Projections.sum("participants"));
 
 			List queryResult = getHibernateTemplate().findByCriteria(criteria);
 			result = (Integer) queryResult.get(0);
