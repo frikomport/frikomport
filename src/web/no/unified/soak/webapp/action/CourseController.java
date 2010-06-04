@@ -296,7 +296,7 @@ public class CourseController extends BaseFormController {
                 course.setStatus(CourseStatus.COURSE_FINISHED);
             }
         }
-
+        
         // Check whether a specific search is requested
         String name = request.getParameter("name");
         if (name != null) {
@@ -306,10 +306,15 @@ public class CourseController extends BaseFormController {
         Date startInterval = course.getStartTime();
         Date stopInterval = course.getStopTime();
         
-        
         if (startInterval != null) {
-            starttime = startInterval;
+        	// if startInterval is in the past, the search will include historic data
+        	if(startInterval.before(new Date())){
+        		historic = new Boolean(true);
+        		course.setStatus(CourseStatus.COURSE_FINISHED);
+        	}
+        	starttime = startInterval;
             model.put("startTime", startInterval);
+            
         }
         if (stopInterval != null) {
         	// legger på 24timer for å sikre til-og-med sluttdato
