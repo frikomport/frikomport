@@ -111,6 +111,9 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 		List queryResult = getHibernateTemplate().findByCriteria(criteria);
 		Integer result = (Integer) queryResult.get(0);
 
+		if(result == null){
+			result = new Integer(0);
+		}
 		return result;
 	}
 
@@ -264,6 +267,10 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 
 			List queryResult = getHibernateTemplate().findByCriteria(criteria);
 			result = (Integer) queryResult.get(0);
+			
+			if(result == null){
+				result = new Integer(0);
+			}
 		}
 
 		return result;
