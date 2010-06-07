@@ -165,7 +165,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
     export="true" requestURI="">
 
 	<c:choose> 
-		<c:when test="${registrationList.canceled}">
+		<c:when test="${!empty registrationList && registrationList.canceled}">
 		<c:set var="tdClass" value="canceled" />
 		</c:when>
 		<c:otherwise>
