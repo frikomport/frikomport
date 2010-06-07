@@ -22,7 +22,6 @@
 <fmt:message key="date.format" var="dateformat" />
 <fmt:message key="date.format.localized" var="datelocalized" />
 <fmt:message key="time.format" var="timeformat" />
-<fmt:message key="day.format" var="dayformat"/>
 
 
 <c:if test="${!illegalRegistration}">
@@ -34,7 +33,7 @@
 	</c:if>
 
 	<div class="message" style="font-size: 12px">
-		<c:out value="${course.name}" escapeXml="false" /> - <fmt:formatDate value="${course.startTime}" type="both" pattern="${dayformat} ${dateformat} ${timeformat}"/>
+		<c:out value="${course.name}" escapeXml="false" /> - <fmt:formatDate value="${course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
 	</div>
 
 	<form:form commandName="registration" onsubmit="return validateRegistration(this)" name="registration">

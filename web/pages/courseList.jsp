@@ -5,7 +5,6 @@
 
 <fmt:message key="date.format" var="dateformat"/>
 <fmt:message key="time.format" var="timeformat"/>
-<fmt:message key="day.format" var="dayformat"/>
 
 <fmt:message key="courseList.item" var="item"/>
 <fmt:message key="courseList.items" var="items"/>
@@ -210,13 +209,13 @@ function fillSelect(obj){
 <c:choose>
 <c:when test="${showCourseName}">
     <display:column sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
-		<fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat} ${dayformat}"/>
+		<fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
 </c:when>
 <c:otherwise>
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
          <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>" 
-         title="<c:out value="${courseList.description}"/>"><fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat} ${dayformat}"/></a>
+         title="<c:out value="${courseList.description}"/>"><fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
 		<fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
