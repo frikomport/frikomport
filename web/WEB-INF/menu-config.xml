@@ -20,7 +20,7 @@
 
         <!-- ====================   FriKom   =========================== -->
         <Menu name="FriKomMenu" title="menu.main" page="/listCourses.html">
-            <Item name="CourseMenu" title="courseList.heading" page="/listCourses.html"/>
+            <Item name="CourseMenu" title="courseList.heading.short" page="/listCourses.html"/>
             <Item name="PastCourseMenu" title="pastCourseList.heading" page="/listCourses.html?past=1"/>
             <Item name="ProfileMenu" title="userProfile.heading" page="/profileUser.html"/>
             <Item name="OrganizationMenu" title="organizationList.heading" page="/listOrganizations.html"/>
