@@ -19,7 +19,7 @@
     }
 
     initializeMenus();
-    <c:if test="${alternativeUserForm != null}">
+    <c:if test="${alternativeUserForm != null && !(isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
     personalizeMenu('<c:out value="${alternativeUserForm.fullName}" />','<c:url value='/profileUser.html'/>');
     </c:if>
    
