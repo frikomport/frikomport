@@ -386,9 +386,13 @@
 
 			<tr>
 				<td class="buttonBar" colspan="2" align="left">
+					<c:if test="${empty registration.id}">
+	                    <input type="submit" class="button" name="save" id="savebutton"
+    	                    onclick="bCancel=false" value="<fmt:message key="button.register.save"/>" />
+    	            </c:if>
+					<c:if test="${!empty registration.id}">
                     <input type="submit" class="button" name="save" id="savebutton"
                         onclick="bCancel=false" value="<fmt:message key="button.register.update"/>" />
-					<c:if test="${!empty registration.id}">
 						<c:if test="${isAdmin}">
 							<input type="submit" class="button" name="delete"
 								onclick="bCancel=true;return confirmDeleteRegistration()"
