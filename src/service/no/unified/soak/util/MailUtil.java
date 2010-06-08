@@ -779,8 +779,11 @@ public class MailUtil {
                 helper = new MimeMessageHelper(message, true, (ApplicationResourcesUtil.getText("mail.encoding")));
                 helper.setSubject(getSubject(registration, event, registered, waiting, course));
                 helper.setText(getBody(registration, msg, registered, waiting));
-                addCalendar(helper,event,course, registration);
 
+                if(!ApplicationResourcesUtil.isSVV()){
+                	addCalendar(helper,event,course, registration);
+                }
+                
                 helper.setTo(registration.getEmail());
                 if(ccToResponsible) helper.setCc(course.getResponsible().getEmail());
                 
