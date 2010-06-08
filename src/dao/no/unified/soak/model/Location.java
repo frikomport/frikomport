@@ -135,7 +135,7 @@ public class Location extends BaseObject implements Serializable {
 
     /**
       * @return Returns the detailURL.
-      * @hibernate.property column="detailurl" length="200"
+      * @hibernate.property column="detailurl" length="350"
       */
     public String getDetailURL() {
         return detailURL;
@@ -151,7 +151,7 @@ public class Location extends BaseObject implements Serializable {
 
     /**
      * @return Returns the mapURL.
-     * @hibernate.property column="mapurl" length="200"
+     * @hibernate.property column="mapurl" length="350"
      */
     public String getmapURL() {
         return mapURL;

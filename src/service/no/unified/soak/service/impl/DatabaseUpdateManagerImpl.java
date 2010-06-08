@@ -35,6 +35,7 @@ import no.unified.soak.util.DefaultQuotedNamingStrategy;
 
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.validator.EmailValidator;
 import org.springframework.context.MessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -127,6 +128,10 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         updateCourses();
         // Registration updates
         updateRegistrations();
+        
+        // Location updates
+        updateLocations();
+        
         // Schema updates postactions
         updateDatabaseSchemaAfter();
 
@@ -154,13 +159,44 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		}
 	}
 
+	private void updateLocations(){
+		ColumnInfo mapurl = getColumnInfo("location", "mapurl");
+		if(mapurl != null && mapurl.getSize() < 350){
+			String sql = "alter table location modify mapurl varchar2(350)";
+			if (DefaultQuotedNamingStrategy.usesOracle()) {
+				sql = "alter table location modify \"mapurl\" varchar2(350)";
+			}
+			try {
+				int nRowsAffected = jt.update(sql);
+				log.info("Oppdatert " + nRowsAffected + " rader i LOCATION pga endring av mapurl-kolonne.");
+			} catch (Exception e) {
+				log.error("Feil under endring av LOCATION.mapurl fra varchar2(200) til varchar2(350)", e);
+			}
+		}
+
+		ColumnInfo detailurl = getColumnInfo("location", "detailurl");
+		if(detailurl != null && detailurl.getSize() < 350){
+			String sql = "alter table location modify detailurl varchar2(350)";
+			if (DefaultQuotedNamingStrategy.usesOracle()) {
+				sql = "alter table location modify \"detailurl\" varchar2(350)";
+			}
+			try {
+				int nRowsAffected = jt.update(sql);
+				log.info("Oppdatert " + nRowsAffected + " rader i LOCATION pga endring av detailurl-kolonne.");
+			} catch (Exception e) {
+				log.error("Feil under endring av LOCATION.detailurl fra varchar2(200) til varchar2(350)", e);
+			}
+		}
+	}
+	
 	/**
 	 * For upgrade from 1.7.X to SVV
 	 */
 	private void alterUserAndRoleAndCoursebySQL() {
 
 		// removes ID from APP_USER -- column has no purpose..
-		if (checkIfColumnExists("id", "app_user")) {
+		ColumnInfo id = getColumnInfo("app_user", "id");
+		if (id != null) {
 			log.info("Column APP_USER.ID exists.");
 			String sql = "update table app_user set hashuser = true where id=0";
 			if (DefaultQuotedNamingStrategy.usesOracle()) {
@@ -186,7 +222,8 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		}
 
 		// removes VERSION from ROLE -- column has no purpose..
-		if (checkIfColumnExists("version", "role")) {
+		ColumnInfo version = getColumnInfo("role", "version");
+		if (version != null) {
 			log.info("Column ROLE.VERSION exists.");
 			String sql = "alter table role drop column version";
 			if (DefaultQuotedNamingStrategy.usesOracle()) {
@@ -200,7 +237,8 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			}
 		}
 
-		if (BooleanUtils.isFalse(checkIfNullableColumn("serviceareaid", "course"))) {
+		ColumnInfo serviceareaid = getColumnInfo("course", "serviceareaid");
+		if (serviceareaid != null && !serviceareaid.isNullable()) {
 			String sql = "ALTER TABLE course MODIFY serviceareaid number(19,0) null";
 			if (DefaultQuotedNamingStrategy.usesOracle()) {
 				sql = "ALTER TABLE course MODIFY \"serviceareaid\" number(19,0) null";
@@ -654,7 +692,9 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	 * For upgrade from 1.7.X to SVV
 	 */
     private void updateRegistrationbySQLStatement() {
-        if (!reservedFieldExist()) {
+
+    	ColumnInfo reserved = getColumnInfo("registration", "reserved");
+    	if (reserved == null) {
             // No column 'reserved' to convert data from. No initial writing to 'status' column is done in the database.
             return;
         }
@@ -668,27 +708,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         }
     }
 
-    private boolean reservedFieldExist() {
-    	
-    	String sql = null;
-    	if(DefaultQuotedNamingStrategy.usesOracle()){
-    		sql = "SELECT * FROM (SELECT * FROM registration) WHERE rownum = 1";
-    	}
-    	else{
-    		sql = "select * from registration limit 1";
-    	}
-    	
-        SqlRowSet rowSet = jt.queryForRowSet(sql);
-        SqlRowSetMetaData metaData = rowSet.getMetaData();
-        for (String columnName : metaData.getColumnNames()) {
-            if (columnName.equals("reserved")) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-	private Boolean checkIfNullableColumn(String column, String table) {
+    private ColumnInfo getColumnInfo(String table, String column) {
 		ResultSet rsColumns = null;
 		DatabaseMetaData meta;
 		try {
@@ -697,42 +717,18 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			while (rsColumns.next()) {
 				String columnName = rsColumns.getString("COLUMN_NAME");
 				if (column.equalsIgnoreCase(columnName)) {
+					String type = rsColumns.getString("TYPE_NAME");
+					int size = rsColumns.getInt("COLUMN_SIZE");
 					int nullable = rsColumns.getInt("NULLABLE");
-					if (nullable == DatabaseMetaData.columnNullable) {
-						return Boolean.TRUE;
-					} else {
-						return Boolean.FALSE;
-					}
+					return new ColumnInfo(columnName, type, size, (nullable == DatabaseMetaData.columnNullable ? true : false), table);
 				}
 			}
 		} catch (SQLException e) {
-			log.warn("Error while checking nullabililty of column " + column + " in table " + table + ". ", e);
+			log.warn("Error fetching metadata of column " + column + " in table " + table + ". ", e);
 		}
 		return null;
-	}
-    
-    private boolean checkIfColumnExists(String column, String table) {
-    	SqlRowSet rowSet = getRowSetWithOneRow(table);
-        SqlRowSetMetaData metaData = rowSet.getMetaData();
-        for (String columnName : metaData.getColumnNames()) {
-            if (columnName.equalsIgnoreCase(column)) {
-            	return true; // no need to continue in loop
-            }
-        }
-        return false;
     }
-
-	private SqlRowSet getRowSetWithOneRow(String table) {
-		String sql = null;
-    	if(DefaultQuotedNamingStrategy.usesOracle()){
-    		sql = "SELECT * FROM (SELECT * FROM " + table + ") WHERE rownum = 1";
-    	}
-    	else{
-    		sql = "select * from " + table + " limit 1";
-    	}
-        SqlRowSet rowSet = jt.queryForRowSet(sql);
-		return rowSet;
-	}
+    
     
     private void updateDatabaseSchemaAfter() {
     }
@@ -1037,6 +1033,43 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         }
     }
 
+    public class ColumnInfo {
+    	String name;
+    	String type;
+    	int size;
+    	boolean nullable;
+    	String table;
+    	
+    	public ColumnInfo(String name, String type, int size, boolean nullable, String table){
+    		this.name = name;
+    		this.type = type;
+    		this.size = size;
+    		this.nullable = nullable;
+    		this.table = table;
+    	}
+    	
+    	public String getType(){
+    		return type;
+    	}
+
+    	public int getSize(){
+    		return size;
+    	}
+    	
+    	public boolean isNullable(){
+    		return nullable;
+    	}
+
+    	public String toString(){
+            return new ToStringBuilder(this).append("name", name)
+            .append("type", type)
+            .append("size", size)
+            .append("nullable", nullable)
+            .append("table", table)
+            .toString();
+    	}
+    }
+    
     public void executeTask() {
         log.info("running databaseUpdateManager");
         updateDatabase();

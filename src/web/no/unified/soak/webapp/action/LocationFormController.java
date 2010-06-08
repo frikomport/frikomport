@@ -140,7 +140,7 @@ public class LocationFormController extends BaseFormController {
         else if (request.getParameter("delete") != null) {
             Course course = new Course();
             course.setLocationid(location.getId());
-            List<Course> searchedCourses = courseManager.searchCourses(course, null, null);
+            List<Course> searchedCourses = courseManager.searchCourses(course, null, null, null);
             if (searchedCourses == null || searchedCourses.size() == 0) {
                 locationManager.removeLocation(location.getId().toString());
                 saveMessage(request, getText("location.deleted", locale));
