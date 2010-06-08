@@ -303,8 +303,7 @@
 					<soak:label key="registration.changeCourse" />
 				</th>
 					<td>
-				<c:if
-					test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+				<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
 					<display:table name="${courseList}" cellspacing="0" cellpadding="0"
 						id="courseList" pagesize="${itemCount}" class="list" export="false"
 						requestURI="performRegistration.html">
@@ -312,7 +311,8 @@
 						<display:column media="html" sortable="false"
 							headerClass="sortable" titleKey="button.heading">
 							<input type="radio" name="changeCourse" value="${courseList.id}"
-								onclick="chooseCourse(<c:out value="${courseList.id}"/>);" />
+								onclick="chooseCourse(<c:out value="${courseList.id}"/>);"
+								<c:if test="${courseList.id == registration.courseid}">checked</c:if> />
 						</display:column>
 
 						<display:column media="html" sortable="true"
@@ -338,14 +338,22 @@
 						<display:column property="availableAttendants" sortable="true"
 							headerClass="sortable" titleKey="course.availableAttendants" />
 
+<c:if test="${showDuration}">
 						<display:column property="duration" sortable="true"
 							headerClass="sortable" titleKey="course.duration" />
-
+</c:if>
 						<display:column property="organization.name" sortable="true"
 							headerClass="sortable" titleKey="course.organization" />
 
+<c:if test="${useServiceArea}">
 						<display:column property="serviceArea.name" sortable="true"
 							headerClass="sortable" titleKey="course.serviceArea" />
+</c:if>
+
+<c:if test="${useOrganization2}">
+						<display:column property="organization2.name" sortable="true"
+							headerClass="sortable" titleKey="course.organization2" />
+</c:if>
 
 						<display:column media="html" sortable="true"
 							headerClass="sortable" titleKey="course.location">
@@ -361,10 +369,8 @@
 									value="${courseList.responsible.fullName}" /> </a>
 						</display:column>
 
-						<display:setProperty name="paging.banner.item_name"
-							value="${item}" />
-						<display:setProperty name="paging.banner.items_name"
-							value="${items}" />
+						<display:setProperty name="paging.banner.item_name" value="${item}" />
+						<display:setProperty name="paging.banner.items_name" value="${items}" />
 
 					</display:table>
 				</c:if>
@@ -378,8 +384,8 @@
 			<tr>
 				<td></td>
 				<td class="buttonBar">
-                    <input type="submit" class="button" name="save"
-                        onclick="bCancel=false" value="<fmt:message key="button.register.save"/>" />
+                    <input type="submit" class="button" name="save" id="savebutton"
+                        onclick="bCancel=false" value="<fmt:message key="button.register.update"/>" />
 					<c:if test="${!empty registration.id}">
 						<c:if test="${isAdmin}">
 							<input type="submit" class="button" name="delete"
@@ -438,6 +444,13 @@ function fillSelect(obj){
 
 function chooseCourse(courseId){
 	document.getElementById('courseid').value = courseId;
+	if(courseId == "<c:out value="${registration.courseid}"/>"){
+		document.getElementById('savebutton').value = "<fmt:message key="button.register.update"/>";
+	}
+	else {
+		document.getElementById('savebutton').value = "<fmt:message key="button.register.change"/>";
+	}
+
 }
 
 // -->
