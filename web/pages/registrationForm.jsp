@@ -296,13 +296,18 @@
 				</td>
 			</tr>
 			</c:if>
-			
+		</table>
+		&nbsp;<br/>
+				
+		<table>	
 			<c:if test="${!empty courseList}">
 			<tr>
 				<th>
 					<soak:label key="registration.changeCourse" />
 				</th>
-					<td>
+			</tr>
+			<tr>
+			<td>				
 				<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
 					<display:table name="${courseList}" cellspacing="0" cellpadding="0"
 						id="courseList" pagesize="${itemCount}" class="list" export="false"
@@ -376,14 +381,11 @@
 				</c:if>
 				</td>
 
-
 			</tr>
 			</c:if>
 
-
 			<tr>
-				<td></td>
-				<td class="buttonBar">
+				<td class="buttonBar" colspan="2" align="left">
                     <input type="submit" class="button" name="save" id="savebutton"
                         onclick="bCancel=false" value="<fmt:message key="button.register.update"/>" />
 					<c:if test="${!empty registration.id}">
