@@ -180,24 +180,37 @@ public class CourseController extends BaseFormController {
         model.put("historic", historic);
         model.put("past", past);
 
-        // Add all courses to the list
-        List courses = courseManager.searchCourses(course, starttime, stoptime);
-        List<Course> filtered = filterByRole(isAdmin, roles, courses);
+        List<Course> courseList = new ArrayList<Course>();
 
-        User responsible = null;
-        if (user != null && roles.contains(Constants.EVENTRESPONSIBLE_ROLE)) {
-            responsible = user;
-            unpublished.setResponsible(responsible);
+        if(ApplicationResourcesUtil.isSVV()){ // alle LDAP-brukere ser alle møter (kurs), men endringstilgang styres av JSP.
+        	Integer[] status = null; 
+        		
+        	if(roles.contains(Constants.ANONYMOUS_ROLE) && roles.size() == 1){ 
+        		// publikumsbruker
+        		status = new Integer[]{ CourseStatus.COURSE_PUBLISHED };
+        	}
+        	else{ 
+        		// isReader / isEventResponsible / isEducationResponsible / isAdministrator
+        		status = new Integer[]{ CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED, CourseStatus.COURSE_CANCELLED };
+        	}
+        	courseList = courseManager.searchCourses(course, starttime, stoptime, status);
+        	courseList = updateAvailableAttendants(courseList);
         }
-        List unpubCourses = courseManager.getUnpublished(unpublished);// Søke på samme måte som på kurs.
-        if (!past && unpubCourses != null && !unpubCourses.isEmpty() && isAdmin(roles)) {
-            filtered.addAll(0, unpubCourses);
+        else {
+	        List courses = courseManager.searchCourses(course, starttime, stoptime, null);
+	        courseList = filterByRole(isAdmin, roles, courses);
+	        User responsible = null;
+	        if (user != null && roles.contains(Constants.EVENTRESPONSIBLE_ROLE)) {
+	            responsible = user;
+	            unpublished.setResponsible(responsible);
+	        }
+	        List unpubCourses = courseManager.getUnpublished(unpublished);// Søke på samme måte som på kurs.
+	        if (!past && unpubCourses != null && !unpubCourses.isEmpty() && isAdmin(roles)) {
+	        	courseList.addAll(0, unpubCourses);
+	        }
         }
 
-        if (courses != null) {
-            model.put("courseList", filtered);
-        }
-
+        model.put("courseList", courseList);
         model.put("JSESSIONID", session.getId());
 
         return model;
@@ -231,6 +244,19 @@ public class CourseController extends BaseFormController {
         return filtered;
     }
 
+    private List<Course> updateAvailableAttendants(List courses){
+    	List<Course> updated = new ArrayList<Course>();
+    	for (Iterator iterator = courses.iterator(); iterator.hasNext();) {
+    		Course course = (Course) iterator.next();
+    		course.setAvailableAttendants(0);
+    		if (course.getStopTime().after(new Date())) {
+    			course.setAvailableAttendants(registrationManager.getAvailability(true, course));
+    		}
+    		updated.add(course);
+    	}
+    	return updated;
+    }
+    
     /**
      * @see org.springframework.web.servlet.mvc.SimpleFormController#onSubmit(javax.servlet.http.HttpServletRequest,
      *      javax.servlet.http.HttpServletResponse, java.lang.Object, org.springframework.validation.BindException)
@@ -270,7 +296,7 @@ public class CourseController extends BaseFormController {
         }
         if (roles == null) {
             roles = new ArrayList<String>();
-            roles.add(RoleEnum.ANONYMOUS.getJavaDBRolename()); // Make sure not logged in users sees
+            roles.add(Constants.ANONYMOUS_ROLE); // Make sure not logged in users sees
             // anonymous courses
         }
 
@@ -314,8 +340,8 @@ public class CourseController extends BaseFormController {
         	}
         	starttime = startInterval;
             model.put("startTime", startInterval);
-            
         }
+
         if (stopInterval != null) {
         	// legger på 24timer for å sikre til-og-med sluttdato
         	Calendar stop = new GregorianCalendar();
@@ -326,35 +352,52 @@ public class CourseController extends BaseFormController {
             model.put("stopTime", course.getStopTime());
         }
 
-        // Add all courses to the list
-        List courses = courseManager.searchCourses(course, starttime, stoptime);
-        List<Course> filtered = filterByRole(isAdmin, roles, courses);
+        List<Course> courseList = new ArrayList<Course>();
 
-        if (course.getOrganizationid() != null) {
-            unpublished.setOrganizationid(course.getOrganizationid());
+        if(ApplicationResourcesUtil.isSVV()){ // alle LDAP-brukere ser alle møter (kurs), men endringstilgang styres av JSP.
+        	Integer[] status = null; 
+        		
+        	if(roles.contains(Constants.ANONYMOUS_ROLE) && roles.size() == 1){ 
+        		// publikumsbruker
+        		status = new Integer[]{ CourseStatus.COURSE_PUBLISHED };
+        	}
+        	else{ 
+        		// isReader / isEventResponsible / isEducationResponsible / isAdministrator
+        		status = new Integer[]{ CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED, CourseStatus.COURSE_CANCELLED };
+        	}
+        	courseList = courseManager.searchCourses(course, starttime, stoptime, status);
+        	courseList = updateAvailableAttendants(courseList);
         }
+        else {
+        	List courses = courseManager.searchCourses(course, starttime, stoptime, null);
+	        courseList = filterByRole(isAdmin, roles, courses);
 
-        if (course.getOrganization2id() != null) {
-            unpublished.setOrganization2id(course.getOrganization2id());
-        }
+	        if (course.getOrganizationid() != null) {
+	            unpublished.setOrganizationid(course.getOrganizationid());
+	        }
 
-        if (course.getLocationid() != null) {
-            unpublished.setLocationid(course.getLocationid());
-        }
+	        if (course.getOrganization2id() != null) {
+	            unpublished.setOrganization2id(course.getOrganization2id());
+	        }
 
-        User responsible = null;
-        if (user != null && roles.contains(Constants.EVENTRESPONSIBLE_ROLE)) {
-            responsible = user;
-            unpublished.setResponsible(responsible);
-        }
-        List unpubCourses = courseManager.getUnpublished(unpublished);
-        if (!past && unpubCourses != null && !unpubCourses.isEmpty() && isAdmin(roles)) {
-            filtered.addAll(0, unpubCourses);
+	        if (course.getLocationid() != null) {
+	            unpublished.setLocationid(course.getLocationid());
+	        }
+
+	        User responsible = null;
+	        if (user != null && roles.contains(Constants.EVENTRESPONSIBLE_ROLE)) {
+	            responsible = user;
+	            unpublished.setResponsible(responsible);
+	        }
+	        List unpubCourses = courseManager.getUnpublished(unpublished);// Søke på samme måte som på kurs.
+	        if (!past && unpubCourses != null && !unpubCourses.isEmpty() && isAdmin(roles)) {
+	        	courseList.addAll(0, unpubCourses);
+	        }
         }
 
         model.put("historic", historic);
         model.put("past", past);
-        model.put("courseList", filtered);
+        model.put("courseList", courseList);
 
         return new ModelAndView(getSuccessView(), model);
     }

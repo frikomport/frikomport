@@ -61,7 +61,7 @@ public interface CourseManager extends Manager {
      * @param stopTime Course has to have the stop date by this date
      * @return list of all courses that applies to the given criteria
      */
-    public List<Course> searchCourses(Course course, Date startTime, Date stopTime);
+    public List<Course> searchCourses(Course course, Date startTime, Date stopTime, Integer[] status);
 
     /**
      * Gets all unpublished courses

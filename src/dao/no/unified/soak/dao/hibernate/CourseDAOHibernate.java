@@ -72,9 +72,9 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
     }
 
     /**
-     * @see no.unified.soak.dao.CourseDAO#searchCourses(no.unified.soak.model.Course, Date, Date)
+     * @see no.unified.soak.dao.CourseDAO#searchCourses(no.unified.soak.model.Course, Date, Date, Integer[])
      */
-    public List<Course> searchCourses(Course course, Date startDate, Date stopDate) {
+    public List<Course> searchCourses(Course course, Date startDate, Date stopDate, Integer[] status) {
         // Default search is "find all"
         DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
 
@@ -133,7 +133,12 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
                         "%" + course.getType() + "%").ignoreCase());
             }
             
-            criteria.add(Restrictions.ge("status",course.getStatus()));
+            if(status != null && status.length > 0){ // gir mulighet for å hente flere typer samtidig
+                criteria.add(Restrictions.in("status", status));
+            }
+            else {
+            	criteria.add(Restrictions.eq("status", course.getStatus()));
+            }
         }
 
         if (startDate != null) {
@@ -144,6 +149,7 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
             criteria.add(Restrictions.lt("stopTime", stopDate));
         }
 
+        criteria.addOrder(Order.asc("status"));
         criteria.addOrder(Order.asc("startTime"));
 
         return getHibernateTemplate().findByCriteria(criteria);
@@ -178,7 +184,21 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
         }
 
         if(course.getOrganization2id() != null){
-            criteria.add(Restrictions.eq("organization2id", course.getOrganization2id()));
+        	List family = new ArrayList<Long>();
+        	family.add(course.getOrganization2id());
+        	
+            DetachedCriteria subCriteria = DetachedCriteria.forClass(Organization.class);
+        	subCriteria.add(Restrictions.eq("parentid", course.getOrganization2id()));
+        	subCriteria.add(Restrictions.eq("type", Type.AREA.getTypeDBValue()));
+        	List childOrgs = getHibernateTemplate().findByCriteria(subCriteria);
+        	if(!childOrgs.isEmpty()){
+        		Iterator<Organization> it = childOrgs.iterator();
+        		while(it.hasNext()){
+        			Organization o = it.next();
+        			family.add(o.getId());
+        		}
+        	}
+        	criteria.add(Restrictions.in("organization2id", family));
         }
 
         if(course.getLocationid() != null){

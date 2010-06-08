@@ -269,7 +269,7 @@ public class CourseDAOTest extends BaseDAOTestCase {
         course.setOrganizationid(new Long("1"));
         course.setServiceAreaid(new Long("1"));
 
-        List searchResults = dao.searchCourses(course, null, null);
+        List searchResults = dao.searchCourses(course, null, null, null);
         assertNotNull(searchResults);
     }
 

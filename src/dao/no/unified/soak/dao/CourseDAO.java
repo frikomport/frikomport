@@ -57,7 +57,7 @@ public interface CourseDAO extends DAO {
      * @param stopDate Course has to have the stop date by this date
      * @return list of all courses that applies to the given criteria
      */
-    public List<Course> searchCourses(Course course, Date startDate, Date stopDate);
+    public List<Course> searchCourses(Course course, Date startDate, Date stopDate, Integer[] status);
 
     /**
      * Finds all courses in the timespan between registerBy and startTime

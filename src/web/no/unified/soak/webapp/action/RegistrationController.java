@@ -347,7 +347,7 @@ public class RegistrationController extends BaseFormController {
         }
 
         // Add all courses to the list
-        List courses = courseManager.searchCourses(null, startDate, null);
+        List courses = courseManager.searchCourses(null, startDate, null, null);
 
         if (courses != null) {
             List courseList = new ArrayList();

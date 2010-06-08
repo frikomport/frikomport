@@ -127,7 +127,7 @@ public class RegistrationFormController extends BaseFormController {
             // and add them to the list
             Course courseForSearch = new Course();
             courseForSearch.setStatus(CourseStatus.COURSE_PUBLISHED);
-            List<Course> courses = courseManager.searchCourses(courseForSearch, null, null);
+            List<Course> courses = courseManager.searchCourses(courseForSearch, null, null, null);
             List<Course> filtered = filterByRole(isAdmin, roles, courses);
 
             if (courses != null) {

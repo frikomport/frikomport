@@ -29,7 +29,7 @@ public class CourseStatusManagerImpl extends BaseManager implements CourseStatus
         Course search = new Course();
         // Get only published courses
         search.setStatus(CourseStatus.COURSE_PUBLISHED);
-        List<Course> courses = courseManager.searchCourses(search,null,new Date());
+        List<Course> courses = courseManager.searchCourses(search, null, new Date(), null);
         Iterator<Course> it = courses.iterator();
         while (it.hasNext()){
             Course course = it.next();

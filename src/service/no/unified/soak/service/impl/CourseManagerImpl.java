@@ -79,8 +79,8 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
     /**
      * @see no.unified.soak.service.CourseManager#searchCourses(no.unified.soak.model.Course, Date, Date)
      */
-    public List<Course> searchCourses(Course course, Date startDate, Date stopDate) {
-        return dao.searchCourses(course, startDate, stopDate);
+    public List<Course> searchCourses(Course course, Date startDate, Date stopDate, Integer[] status) {
+        return dao.searchCourses(course, startDate, stopDate, status);
     }
 
     /**
@@ -100,7 +100,7 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
     public List<Course> getUnpublished(Course course) {
         return dao.getUnpublished(course);
     }
-    
+
     /**
      * @see no.unified.soak.service.CourseManager#getUnpublished()
      */
