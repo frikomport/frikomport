@@ -35,26 +35,28 @@ function setMaxAttendants(obj) {
 // Code to change the select list for service aera based on organization id.
 function fillSelect(obj){
  var orgid=obj.options[obj.selectedIndex].value;
- var serviceArea= document.course.serviceAreaid;
+ var serviceArea = document.course.serviceAreaid;
 
-    while(serviceArea.firstChild){
+ if(serviceArea != null){
+	 while(serviceArea.firstChild){
         serviceArea.removeChild(serviceArea.firstChild);
     }
 
     var j = 0;
-<c:forEach var="servicearea" items="${serviceareas}">
-    if ("<c:out value="${servicearea.id}"/>" == ""){
-        serviceArea.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>", true);
-        j++;
-    }
-else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
-        serviceArea.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>");
-        j++ ;
-    }
-</c:forEach>
-
-<c:if test="${filterlocation}">
-    var location= document.course.locationid;
+	<c:forEach var="servicearea" items="${serviceareas}">
+	    if ("<c:out value="${servicearea.id}"/>" == ""){
+	        serviceArea.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>", true);
+	        j++;
+	    }
+		else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
+	        serviceArea.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>");
+	        j++ ;
+	    }
+	</c:forEach>
+ }
+ 
+<c:if test="${filterlocation || isSVV}">
+    var location = document.course.locationid;
     while(location.firstChild){
         location.removeChild(location.firstChild);
     }
