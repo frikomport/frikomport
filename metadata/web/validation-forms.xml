@@ -14,6 +14,10 @@
        <form name="location">
             <field property="name" depends="required"/>
             <field property="address" depends="required"/>
+            <field property="organizationid" depends="required"/>
+            <field property="organization" depends="required"/>
+            <field property="organization2id" depends="required"/>
+            <field property="organization2" depends="required"/>
        </form>
        <form name="person">
             <field property="name" depends="required">

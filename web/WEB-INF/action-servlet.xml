@@ -75,7 +75,7 @@
     <bean id="locationFormController" class="no.unified.soak.webapp.action.LocationFormController" autowire="byName">
         <property name="commandName" value="location"/>
         <property name="commandClass" value="no.unified.soak.model.Location"/>
-        <property name="validator" ref="beanValidator"/>
+        <!-- property name="validator" ref="beanValidator"/ -->
         <property name="formView" value="locationForm"/>
         <property name="successView" value="redirect:listLocations.html"/> 
     </bean>

@@ -160,6 +160,18 @@ public class LocationFormController extends BaseFormController {
         	if(StringUtils.isNotEmpty(detailURL) && !detailURL.startsWith("http://")){
         		location.setDetailURL("http://" + detailURL);
         	}
+        	
+        	// validering flyttet fra klient til kontroller
+			Object[] args = null;
+			if (validateAnnotations(location, errors) > 0) {
+				args = new Object[] {};
+			}
+
+			if (args != null) {
+				return showForm(request, response, errors);
+			}
+        	// ---
+        	
         	locationManager.saveLocation(location);
 
             String key = (isNew) ? "location.added" : "location.updated";

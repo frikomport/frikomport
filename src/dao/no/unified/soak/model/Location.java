@@ -328,7 +328,9 @@ public class Location extends BaseObject implements Serializable {
 
     /**
      * @param organization2id The organization2id to set.
+     * @spring.validator type="required"
      */
+    @Required
     public void setOrganization2id(Long organization2id) {
     	this.organization2id = organization2id;
     }
