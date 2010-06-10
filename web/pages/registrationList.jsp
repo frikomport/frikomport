@@ -225,11 +225,11 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
     <display:column property="mobilePhone" sortable="true" headerClass="sortable"
          titleKey="registration.mobilePhone" class="${tdClass}"/>
          
-    <display:column property="course.organization.name" sortable="true" headerClass="sortable"
-         titleKey="course.organization" class="${tdClass}"/>
+    <display:column property="organization.name" sortable="true" headerClass="sortable"
+         titleKey="registration.organization" class="${tdClass}"/>
 
-    <display:column property="course.organization2.name" sortable="true" headerClass="sortable"
-         titleKey="course.organization2" class="${tdClass}"/>
+    <!-- display:column property="course.organization2.name" sortable="true" headerClass="sortable"
+         titleKey="course.organization2" class="${tdClass}"/ -->
 
 	
 <c:if test="${useServiceArea}">

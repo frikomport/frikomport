@@ -1,5 +1,6 @@
 <%@ include file="/common/taglibs.jsp"%>
 
+<fmt:message key="date.format" var="dateformat" />
 
 <spring:bind path="user.*">
 	<c:if test="${not empty status.errorMessages}">
@@ -169,8 +170,13 @@
 				<soak:label key="user.birthdate" />
 			</th>
 			<td>
-				<form:input path="birthdate" />
-				<form:errors cssClass="fieldError" path="birthdate" />
+				<fmt:formatDate value="${user.birthdate}" type="date" pattern="${dateformat}" var="birthdate" />
+				<input type="text" readonly="readonly" size="12" name="birthdate" id="birthdate" value="<c:out value="${birthdate}"/>" 
+					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
+				<a href="#" name="a1" id="Anch_birthdate"
+					onClick="cal1.select(document.user.birthdate,'Anch_birthdate','<fmt:message key="date.format"/>',(document.user.birthdate.value=='')?null:document.user.birthdate.value,''); return false;"
+					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
+                    <form:errors cssClass="fieldError" path="birthdate" />
 			</td>
 		</tr>
 </c:if>
@@ -263,12 +269,20 @@
 				<soak:label key="course.organization2" />
 			</th>
 			<td>
-				<form:select path="organization2id" onchange="fillSelect(this);">
-					<form:options items="${organizations2}" itemValue="id"
-						itemLabel="name" />
+				<c:choose>
+				<c:when test="${(isAdmin || isEducationResponsible)}">
+				<form:select path="organization2id">
+					<form:options items="${organizations2}" itemValue="id" itemLabel="name" />
 				</form:select>
-				<form:errors cssClass="fieldError" htmlEscape="false"
-					path="organization2id" />
+				</c:when>
+				<c:otherwise>
+					<c:if test="${user.organization2 != null}">
+						<c:out value="${user.organization2.name}"/>
+					</c:if>
+					<form:hidden path="organization2id" />
+				</c:otherwise>
+				</c:choose>
+				<form:errors cssClass="fieldError" htmlEscape="false" path="organization2id" />
 			</td>
 		</tr>
 </c:if>
@@ -394,6 +408,13 @@ highlightFormElements();
 // if (focusControl.type != "hidden" && !focusControl.disabled) {
 //    focusControl.focus();
 // }
+
+	var cal1 = new CalendarPopup();
+	cal1.setMonthNames('Januar','Februar','Mars','April','Mai','Juni','Juli','August','September','Oktober','November','Desember'); 
+	cal1.setDayHeaders('S','M','T','O','T','F','L'); 
+	cal1.setWeekStartDay(1); 
+	cal1.setTodayText("Idag");
+	cal1.showYearNavigation();
 
 function passwordChanged(passwordField) {
     var origPassword = "<c:out value="${user.password}"/>";

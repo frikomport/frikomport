@@ -222,6 +222,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @spring.validator type="required"
 	 * @spring.validator type="email"
 	 */
+	@Required
 	public void setEmail(String email) {
 		this.email = email;
 	}
@@ -274,6 +275,7 @@ public class Registration extends BaseObject implements Serializable {
 	 *            The firstName to set.
 	 * @spring.validator type="required"
 	 */
+	@Required
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
@@ -339,6 +341,7 @@ public class Registration extends BaseObject implements Serializable {
 	 *            The lastName to set.
 	 * @spring.validator type="required"
 	 */
+	@Required
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
@@ -405,7 +408,9 @@ public class Registration extends BaseObject implements Serializable {
 	/**
 	 * @param organizationid
 	 *            The organizationid to set.
+	 * @spring.validator type="required"
 	 */
+	@Required
 	public void setOrganizationid(Long organizationid) {
 		this.organizationid = organizationid;
 	}
@@ -705,6 +710,7 @@ public class Registration extends BaseObject implements Serializable {
 	/**
 	 * @param birthdate
 	 *            The birthdate to set.
+	 * @spring.validator type="required"
 	 */
     @Required
 	public void setBirthdate(Date birthdate) {

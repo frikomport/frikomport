@@ -743,6 +743,8 @@ public class Course extends BaseObject implements Serializable {
     	this.setInstructorid(original.getInstructorid());
     	this.setOrganization(original.getOrganization());
     	this.setOrganizationid(original.getOrganizationid());
+    	this.setOrganization2(original.getOrganization2());
+    	this.setOrganization2id(original.getOrganization2id());
     	this.setResponsible(original.getResponsible());
         this.setResponsibleUsername(original.getResponsibleUsername());
     	this.setResponsibleid(original.getResponsibleid());
@@ -762,6 +764,8 @@ public class Course extends BaseObject implements Serializable {
     	this.setRole(original.getRole());
     	this.setRestricted(original.getRestricted());
         this.setChargeoverdue(original.getChargeoverdue());
+    	this.setStatus(original.getStatus());
+    	this.setAttendants(original.getAttendants());
     }
 
     /**

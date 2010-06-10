@@ -34,6 +34,7 @@
             <field property="organization2" depends="required"/>
             <field property="serviceArea" depends="required"/>
             <field property="serviceAreaid" depends="required"/>
+            <field property="location" depends="required"/>
             <field property="locationid" depends="required"/>
             <field property="maxAttendants" depends="required"/>
             <field property="registerBy" depends="required"/>
@@ -47,8 +48,10 @@
             <field property="birthdate" depends="required"/>
             <field property="invoiceAddress.postalCode" depends="required"/>
             <field property="invoiceAddress.city" depends="required"/>
+            <field property="organization" depends="required"/>
             <field property="organizationid" depends="required"/>
        </form>
+
        <form name="organization">
             <field property="name" depends="required">
             </field>

@@ -10,8 +10,12 @@
  */
 package no.unified.soak.webapp.action;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -157,6 +161,7 @@ public class RegistrationFormController extends BaseFormController {
             organizations.clear();
             organizations.add(user.getOrganization());
         }
+        
         // If cached user, show only users org
         if (altUser != null &&  altUser.getOrganization() != null && !isAdmin) {
             organizations.clear();
@@ -176,6 +181,13 @@ public class RegistrationFormController extends BaseFormController {
         if (!legalRegistrationDate(request, request.getLocale(), course)) {
             model.put("illegalRegistration", new Boolean(true));
         }
+        
+        // sett startYear 16år tilbake fra i dag - benyttes til CalendarPopup
+        Calendar start = new GregorianCalendar();
+        start.setTime(new Date());
+        start.add(Calendar.YEAR, -16);
+        model.put("startYear", start.getTime());
+        
         return model;
     }
 
@@ -186,6 +198,7 @@ public class RegistrationFormController extends BaseFormController {
         HttpSession session = request.getSession(true);
         String id = request.getParameter("id");
         String courseId = request.getParameter("courseId");
+
         Registration registration = null;
 
         if (!StringUtils.isEmpty(id)) {
@@ -301,7 +314,58 @@ public class RegistrationFormController extends BaseFormController {
 
                 return showForm(request,response, errors);
             }
+            
+            
+            // -- validering på server pga problemer på klient
 
+            
+            // TODO: legge til konfigurasjonsstyring av felter / validering
+            
+			String format = getText("date.format", request.getLocale());
+			Object[] args = null;
+
+			try {
+				String birthdate_str = request.getParameter("birthdate");
+				if(StringUtils.isNotEmpty(birthdate_str)){ 
+					// utfylt, men ukjent format
+					Date birthdate = parseDate(birthdate_str, format);
+					if (birthdate != null) {
+						// utfylt riktig format
+						registration.setBirthdate(birthdate);
+					} else {
+						// utfylt feil format
+						throw new BindException(registration, "birthdate");
+					}
+				}
+			} catch (Exception e) {
+				args = new Object[] { getText("registration.birthdate", request.getLocale()),
+						getText("date.format.localized", request.getLocale()), ""};
+				errors.rejectValue("birthdate", "errors.dateformat", args, "Invalid date");
+			}
+			
+			String sted = request.getParameter("invoiceAddress.city");
+			if(!StringUtils.isNotEmpty(sted)){
+				args = new Object[] { getText("registration.invoiceAddress.city", request.getLocale()), "", ""};
+				errors.rejectValue("invoiceAddress.city", "errors.required", args, "");
+			}
+
+			String postnr = request.getParameter("invoiceAddress.postalCode");
+			if(!StringUtils.isNotEmpty(postnr)){
+				args = new Object[] { getText("registration.invoiceAddress.postalCode", request.getLocale()), "", ""};
+				errors.rejectValue("invoiceAddress.postalCode", "errors.required", args, "");
+			}
+			
+			if (validateAnnotations(registration, errors) > 0) {
+				args = new Object[] {};
+			}
+
+			if (args != null) {
+				return showForm(request, response, errors);
+			}
+			
+			// ---------- 
+
+			
             // We need the course as reference data
             // Course course =
             // courseManager.getCourse(registration.getCourseid().toString());
@@ -313,8 +377,7 @@ public class RegistrationFormController extends BaseFormController {
                     registration.getEmail(), registration.getFirstName(), registration.getLastName(), registration
                     .getCourseid());
 
-            // Is this a valid date to register? Or has this user already been
-            // registered to this course?
+            // Is this a valid date to register? Or has this user already been registered to this course?
             // (It is always allowed to edit the data)
             if ((registration.getId() == null) || (registration.getId().longValue() == 0)) {
                 if (!legalRegistrationDate(request, locale, course)) {
@@ -476,4 +539,15 @@ public class RegistrationFormController extends BaseFormController {
         }
         return filtered;
     }
+    
+    private Date parseDate(String date, String format) throws ParseException {
+	    SimpleDateFormat formatter = new SimpleDateFormat(format);
+	    formatter.setLenient(false);
+	    if (StringUtils.isEmpty(date)) {
+	        return null;
+	    } else {
+	        return (Date) formatter.parse(date);
+	    }
+    }
+    
 }

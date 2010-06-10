@@ -200,7 +200,7 @@
         <property name="mailEngine" ref="mailEngine"/>
         <property name="commandName" value="registration"/>
         <property name="commandClass" value="no.unified.soak.model.Registration"/>
-        <property name="validator" ref="beanValidator"/>
+        <!--  property name="validator" ref="beanValidator"/ -->
         <property name="formView" value="registrationForm"/>
         <property name="successView" value="redirect:registrationComplete.html"/>
         <property name="cancelView" value="redirect:listCourses.html"/>

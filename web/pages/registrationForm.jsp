@@ -19,9 +19,54 @@
 	</c:if>
 </spring:bind>
 
+
 <fmt:message key="date.format" var="dateformat" />
 <fmt:message key="date.format.localized" var="datelocalized" />
 <fmt:message key="time.format" var="timeformat" />
+
+<SCRIPT LANGUAGE="JavaScript" ID="js1">
+	var cal1 = new CalendarPopup();
+	cal1.setMonthNames('Januar','Februar','Mars','April','Mai','Juni','Juli','August','September','Oktober','November','Desember'); 
+	cal1.setDayHeaders('S','M','T','O','T','F','L'); 
+	cal1.setWeekStartDay(1); 
+	cal1.setTodayText("Idag");
+	cal1.showYearNavigation();
+
+
+	// Code to change the select list for service aera based on organization id.
+	function fillSelect(obj){
+	 var orgid=obj.options[obj.selectedIndex].value;
+	 var temp= document.registration.serviceAreaid;
+	  
+	 while(temp.firstChild){
+	 	temp.removeChild(temp.firstChild);
+	 }
+	 
+	 var j = 0;
+		<c:forEach var="servicearea" items="${serviceareas}">
+			if ("<c:out value="${servicearea.id}"/>" == ""){
+				temp.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>", true);
+				j++
+			}
+			else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
+				temp.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>");
+				j++ 
+			}
+		</c:forEach>
+	}
+
+	function chooseCourse(courseId){
+		document.getElementById('courseid').value = courseId;
+		if(courseId == "<c:out value="${registration.courseid}"/>"){
+			document.getElementById('savebutton').value = "<fmt:message key="button.register.update"/>";
+		}
+		else {
+			document.getElementById('savebutton').value = "<fmt:message key="button.register.change"/>";
+		}
+	}
+</SCRIPT>	
+		
+
 
 
 <c:if test="${!illegalRegistration}">
@@ -33,7 +78,7 @@
 	</c:if>
 
 	<div class="message" style="font-size: 12px">
-		<c:out value="${course.name}" escapeXml="false" /> - <fmt:formatDate value="${course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
+		<c:out value="${course.name}" escapeXml="false" />, <c:out value="${course.location.name}"/> - <fmt:formatDate value="${course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
 	</div>
 
 	<form:form commandName="registration" onsubmit="return validateRegistration(this)" name="registration">
@@ -57,7 +102,7 @@
 				</th>
 				<td>
 					<form:input path="firstName" maxlength="100"/>
-					<form:errors cssClass="fieldError" path="firstName" />
+					<form:errors cssClass="fieldError" htmlEscape="false" path="firstName" />
 				</td>
 			</tr>
 
@@ -67,7 +112,7 @@
 				</th>
 				<td>
 					<form:input path="lastName" maxlength="100"/>
-					<form:errors cssClass="fieldError" path="lastName" />
+					<form:errors cssClass="fieldError" htmlEscape="false" path="lastName" />
 				</td>
 			</tr>
 
@@ -77,7 +122,7 @@
 				</th>
 				<td>
 					<form:input path="email" maxlength="50"/>
-					<form:errors cssClass="fieldError" path="email" />
+					<form:errors cssClass="fieldError" htmlEscape="false" path="email" />
 				</td>
 			</tr>
             <c:if test="${emailrepeat}">
@@ -98,15 +143,14 @@
 					<soak:label key="registration.birthdate" />
 				</th>
 				<td>
+					<fmt:formatDate value="${startYear}" type="date" pattern="${dateformat}" var="init" />
 					<fmt:formatDate value="${registration.birthdate}" type="date" pattern="${dateformat}" var="birthdate" />
-					<input type="text" size="12" name="birthdate" id="birthdate" value="<c:out value="${birthdate}"/>" 
+					<input type="text" readonly="readonly" size="12" name="birthdate" id="birthdate" value="<c:out value="${birthdate}"/>" 
 						title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
-					<spring:bind path="registration.birthdate">
-						<input type="hidden" name="<c:out value="${status.expression}"/>"
-							id="<c:out value="${status.expression}"/>"
-							value="<fmt:formatDate value="${time[0]}" type="date" pattern="${dateformat}"/>" />
-						<span class="fieldError"><c:out	value="${status.errorMessage}" escapeXml="false" /></span>
-					</spring:bind>
+					<a href="#" name="a1" id="Anch_birthdate"
+						onClick="cal1.select(document.registration.birthdate,'Anch_birthdate','<fmt:message key="date.format"/>',(document.registration.birthdate.value=='')?'<c:out value="${init}"/>':document.registration.birthdate.value,''); return false;"
+						title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
+	                    <form:errors cssClass="fieldError" path="birthdate" />
 				</td>
 			</tr>
 			</c:if>
@@ -141,7 +185,7 @@
 				</th>
 				<td>
 					<form:input path="mobilePhone" maxlength="30"/>
-					<form:errors cssClass="fieldError" path="mobilePhone" />
+					<form:errors cssClass="fieldError" htmlEscape="false" path="mobilePhone" />
 				</td>
 			</tr>
             <c:if test="${showEmployeeFields}">
@@ -308,7 +352,7 @@
 			</tr>
 			<tr>
 			<td>				
-				<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+				<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
 					<display:table name="${courseList}" cellspacing="0" cellpadding="0"
 						id="courseList" pagesize="${itemCount}" class="list" export="false"
 						requestURI="performRegistration.html">
@@ -387,19 +431,15 @@
 			<tr>
 				<td class="buttonBar" colspan="2" align="left">
 					<c:if test="${empty registration.id}">
-	                    <input type="submit" class="button" name="save" id="savebutton"
-    	                    onclick="bCancel=false" value="<fmt:message key="button.register.save"/>" />
+	                    <input type="submit" class="button" name="save" onclick="bCancel=false" value="<fmt:message key="button.register.save"/>" />
     	            </c:if>
 					<c:if test="${!empty registration.id}">
-                    <input type="submit" class="button" name="save" id="savebutton"
-                        onclick="bCancel=false" value="<fmt:message key="button.register.update"/>" />
+                    <input type="submit" class="button" name="save" id="savebutton" onclick="bCancel=false" value="<fmt:message key="button.register.update"/>" />
 						<c:if test="${isAdmin}">
-							<input type="submit" class="button" name="delete"
-								onclick="bCancel=true;return confirmDeleteRegistration()"
+							<input type="submit" class="button" name="delete" onclick="bCancel=true;return confirmDeleteRegistration()"
 								value="<fmt:message key="button.delete"/>" />
 						</c:if>
-						<input type="submit" class="button" name="unregister"
-							onclick="bCancel=true;return confirmUnregistration()"
+						<input type="submit" class="button" name="unregister" onclick="bCancel=true;return confirmUnregistration()"
 							value="<fmt:message key="button.unregister"/>" />
 					</c:if>
 					<input type="submit" class="button" name="cancel"
@@ -421,46 +461,6 @@
 	</jsp:include>
 </table>
 --%>
-
-
-<script type="text/javascript">
-<!--
-
-// Code to change the select list for service aera based on organization id.
-function fillSelect(obj){
- var orgid=obj.options[obj.selectedIndex].value;
- var temp= document.registration.serviceAreaid;
-  
- while(temp.firstChild){
- 	temp.removeChild(temp.firstChild);
- }
- 
- var j = 0;
-	<c:forEach var="servicearea" items="${serviceareas}">
-		if ("<c:out value="${servicearea.id}"/>" == ""){
-			temp.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>", true);
-			j++
-		}
-		else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
-			temp.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>");
-			j++ 
-		}
-	</c:forEach>
-}
-
-function chooseCourse(courseId){
-	document.getElementById('courseid').value = courseId;
-	if(courseId == "<c:out value="${registration.courseid}"/>"){
-		document.getElementById('savebutton').value = "<fmt:message key="button.register.update"/>";
-	}
-	else {
-		document.getElementById('savebutton').value = "<fmt:message key="button.register.change"/>";
-	}
-
-}
-
-// -->
-</script>
 
 <v:javascript formName="registration" cdata="false"
 	dynamicJavascript="true" staticJavascript="false" />

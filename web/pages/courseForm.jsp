@@ -236,23 +236,18 @@ function fillSelect(obj){
 				<soak:label key="course.startTime" />
 			</th>
 			<td>
-				<fmt:formatDate value="${course.startTime}" type="date"
-					pattern="${dateformat}" var="startTimeDate" />
-				<fmt:formatDate value="${course.startTime}" type="time"
-					pattern="${timeformat}" var="startTimeTime" />
-				<input type="text" size="12" name="startTimeDate" id="startTimeDate"
-					value="<c:out value="${startTimeDate}"/>" 
+				<fmt:formatDate value="${course.startTime}" type="date" pattern="${dateformat}" var="startTimeDate" />
+				<fmt:formatDate value="${course.startTime}" type="time" pattern="${timeformat}" var="startTimeTime" />
+				<input type="text" size="12" name="startTimeDate" id="startTimeDate" value="<c:out value="${startTimeDate}"/>" 
 					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
 				<a href="#" name="a1" id="Anch_startTimeDate"
 					onClick="cal1.select(document.course.startTimeDate,'Anch_startTimeDate','<fmt:message key="date.format"/>'); return false;"
 					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 				<soak:label key="course.time" />
-				<input type="text" size="6" name="startTimeTime" id="startTimeTime"
-					value="<c:out value="${startTimeTime}"/>"
+				<input type="text" size="6" name="startTimeTime" id="startTimeTime" value="<c:out value="${startTimeTime}"/>"
 					title="<fmt:message key="time.format.title"/>: <fmt:message key="time.format.localized"/>" />
 				<spring:bind path="course.startTime">
-					<input type="hidden" name="<c:out value="${status.expression}"/>"
-						id="<c:out value="${status.expression}"/>"
+					<input type="hidden" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>"
 						value="<fmt:formatDate value="${time[0]}" type="date" pattern="${dateformat}"/>" />
 					<span class="fieldError"><c:out
 							value="${status.errorMessage}" escapeXml="false" /> </span>
@@ -265,26 +260,20 @@ function fillSelect(obj){
 				<soak:label key="course.stopTime" />
 			</th>
 			<td>
-				<fmt:formatDate value="${course.stopTime}" type="date"
-					pattern="${dateformat}" var="stopTimeDate" />
-				<fmt:formatDate value="${course.stopTime}" type="time"
-					pattern="${timeformat}" var="stopTimeTime" />
-				<input type="text" size="12" name="stopTimeDate" id="stopTimeDate"
-					value="<c:out value="${stopTimeDate}"/>"
+				<fmt:formatDate value="${course.stopTime}" type="date" pattern="${dateformat}" var="stopTimeDate" />
+				<fmt:formatDate value="${course.stopTime}" type="time" pattern="${timeformat}" var="stopTimeTime" />
+				<input type="text" size="12" name="stopTimeDate" id="stopTimeDate" value="<c:out value="${stopTimeDate}"/>"
 					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
 				<a href="#" name="a1" id="Anch_stopTimeDate"
 					onClick="cal1.select(document.course.stopTimeDate,'Anch_stopTimeDate','<fmt:message key="date.format"/>'); return false;"
 					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 				<soak:label key="course.time" />
-				<input type="text" size="6" name="stopTimeTime" id="stopTimeTime"
-					value="<c:out value="${stopTimeTime}"/>"
+				<input type="text" size="6" name="stopTimeTime" id="stopTimeTime" value="<c:out value="${stopTimeTime}"/>"
 					title="<fmt:message key="time.format.title"/>: <fmt:message key="time.format.localized"/>" />
 				<spring:bind path="course.stopTime">
-					<input type="hidden" name="<c:out value="${status.expression}"/>"
-						id="<c:out value="${status.expression}"/>"
+					<input type="hidden" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>"
 						value="<fmt:formatDate value="${time[0]}" type="date" pattern="${dateformat}"/>" />
-					<span class="fieldError"><c:out
-							value="${status.errorMessage}" escapeXml="false" /> </span>
+					<span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false" /> </span>
 				</spring:bind>
 			</td>
 		</tr>
@@ -297,8 +286,7 @@ function fillSelect(obj){
 					</th>
 					<td>
 						<form:input path="duration" size="50" maxlength="100"/>
-						<form:errors cssClass="fieldError" htmlEscape="false"
-							path="duration" />
+						<form:errors cssClass="fieldError" htmlEscape="false" path="duration" />
 					</td>
 				</tr>
 			</c:when>
@@ -313,11 +301,9 @@ function fillSelect(obj){
 			</th>
 			<td>
 				<form:select path="organizationid" onchange="fillSelect(this);">
-					<form:options items="${organizations}" itemValue="id"
-						itemLabel="name" />
+					<form:options items="${organizations}" itemValue="id" itemLabel="name" />
 				</form:select>
-				<form:errors cssClass="fieldError" htmlEscape="false"
-					path="organizationid" />
+				<form:errors cssClass="fieldError" htmlEscape="false" path="organizationid" />
 			</td>
 		</tr>
 
@@ -329,11 +315,9 @@ function fillSelect(obj){
 			</th>
 			<td>
 				<form:select path="organization2id">
-					<form:options items="${organizations2}" itemValue="id"
-						itemLabel="name" />
+					<form:options items="${organizations2}" itemValue="id" itemLabel="name" />
 				</form:select>
-				<form:errors cssClass="fieldError" htmlEscape="false"
-					path="organization2id" />
+				<form:errors cssClass="fieldError" htmlEscape="false" path="organization2id" />
 			</td>
 		</tr>
 	</c:when>
