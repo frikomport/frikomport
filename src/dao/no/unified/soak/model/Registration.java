@@ -13,6 +13,7 @@ package no.unified.soak.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import no.unified.soak.validation.Email;
 import no.unified.soak.validation.Required;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -223,6 +224,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @spring.validator type="email"
 	 */
 	@Required
+	@Email
 	public void setEmail(String email) {
 		this.email = email;
 	}

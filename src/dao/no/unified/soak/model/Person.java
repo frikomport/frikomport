@@ -10,6 +10,9 @@
  */
 package no.unified.soak.model;
 
+import no.unified.soak.validation.Email;
+import no.unified.soak.validation.Required;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -80,10 +83,13 @@ public class Person extends BaseObject implements Serializable {
     }
 
     /**
-     * @spring.validator type="required"
      * @param email
      *            The email to set.
+     * @spring.validator type="required"
+     * @spring.validator type="email"
      */
+    @Required
+    @Email
     public void setEmail(String email) {
         this.email = email;
     }
@@ -129,9 +135,10 @@ public class Person extends BaseObject implements Serializable {
     }
 
     /**
-     * @spring.validator type="required"
      * @param name The name to set.
+     * @spring.validator type="required"
      */
+    @Required
     public void setName(String name) {
         this.name = name;
     }

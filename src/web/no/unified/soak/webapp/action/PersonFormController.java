@@ -103,6 +103,15 @@ public class PersonFormController extends BaseFormController {
 
             saveMessage(request, getText("person.deleted", locale));
         } else {
+        	// person is new or updated
+        	
+        	// validering flyttet fra klient til kontroller
+			if (validateAnnotations(person, errors) > 0) {
+				personManager.evict(person);
+				return showForm(request, response, errors);
+			}
+        	// ---
+
             personManager.savePerson(person);
 
             String key = (isNew) ? "person.added" : "person.updated";

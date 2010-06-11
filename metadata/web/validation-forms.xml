@@ -20,8 +20,8 @@
             <field property="organization2" depends="required"/>
        </form>
        <form name="person">
-            <field property="name" depends="required">
-            </field>
+            <field property="name" depends="required"/>
+            <field property="email" depends="required"/>
        </form>
        <form name="serviceArea">
             <field property="name" depends="required">

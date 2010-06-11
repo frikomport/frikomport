@@ -20,8 +20,7 @@
     </c:if>
 </spring:bind>
 
-<form method="post" action="<c:url value="/editPerson.html"/>" id="personForm"
-    onsubmit="return validatePerson(this)">
+<form method="post" action="<c:url value="/editPerson.html"/>" id="personForm" onsubmit="return validatePerson(this)">
 <table class="detail">
 
     <spring:bind path="person.id">
@@ -53,7 +52,7 @@
         </td>
     </tr>
 
-<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <tr>
         <th>
             <fmt:message key="person.phone"/>
@@ -99,7 +98,7 @@
         </td>
     </tr>
 
-<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <tr>
         <th>
             <fmt:message key="person.selectable"/>
@@ -115,7 +114,7 @@
 
     <tr>
         <td class="buttonBar">            
-            <input type="submit" class="button" name="return" onclick="bCancel=true"
+            <input type="submit" class="button large" name="return" onclick="bCancel=true"
                 value="<fmt:message key="button.person.list"/>" />
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
 		    <button type="button" onclick="location.href='<c:url value="/editPerson.html"><c:param name="id" value="${person.id}"/></c:url>'">
@@ -145,17 +144,30 @@
          <fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
 
+
+	<c:if test="${!isSVV}">
     <display:column sortable="true" headerClass="sortable" titleKey="course.stopTime" sortProperty="stopTime">
          <fmt:formatDate value="${courseList.stopTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
+	</c:if>
 
+	<c:if test="${showDuration}">
     <display:column property="duration" sortable="true" headerClass="sortable" titleKey="course.duration"/>
-
+	</c:if>
+	
     <display:column property="organization.name" sortable="true" headerClass="sortable" titleKey="course.organization"/>
 
-    <display:column property="serviceArea.name" sortable="true" headerClass="sortable" titleKey="course.serviceArea"/>
+	<c:if test="${useOrganization2}">
+    <display:column property="organization2.name" sortable="true" headerClass="sortable" titleKey="course.organization2"/>
+	</c:if>
 
+	<c:if test="${useServiceArea}">
+    <display:column property="serviceArea.name" sortable="true" headerClass="sortable" titleKey="course.serviceArea"/>
+	</c:if>
+	
+	<c:if test="${!isSVV}">
     <display:column media="csv excel xml pdf" property="type" sortable="true" headerClass="sortable" titleKey="course.type.export"/>
+	</c:if>
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.location">
          <a href="<c:url value="/detailsLocation.html"><c:param name="id" value="${courseList.location.id}"/></c:url>" title="<c:out value="${courseList.location.description}"/>"><c:out value="${courseList.location.name}"/></a>

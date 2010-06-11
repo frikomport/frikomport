@@ -311,16 +311,13 @@ public class RegistrationFormController extends BaseFormController {
             if(configurationManager.isActive("access.registration.emailrepeat",false) &&  !registration.getEmail().equals(registration.getEmailRepeat())){
                 //                String error = "errors.email.notSame";
                 errors.rejectValue("email", "errors.email.notSame",  new Object[] { registration.getEmail(), registration.getEmailRepeat() }, "Email addresses not equal.");
-
+				registrationManager.evict(registration);
                 return showForm(request,response, errors);
             }
             
             
             // -- validering på server pga problemer på klient
-
-            
             // TODO: legge til konfigurasjonsstyring av felter / validering
-            
 			String format = getText("date.format", request.getLocale());
 			Object[] args = null;
 
@@ -360,15 +357,11 @@ public class RegistrationFormController extends BaseFormController {
 			}
 
 			if (args != null) {
+				registrationManager.evict(registration);
 				return showForm(request, response, errors);
 			}
-			
 			// ---------- 
-
 			
-            // We need the course as reference data
-            // Course course =
-            // courseManager.getCourse(registration.getCourseid().toString());
             model.put("course", course);
             registration.setCourse(course);
 

@@ -222,5 +222,14 @@ public interface RegistrationManager extends Manager {
 	 * @param newuser
 	 */
 	void moveRegistrations(User olduser, User newuser);
+	
+	/**
+	 * Evict entity for hibernate sessions. This avoids automatic saving
+	 * (flush) of the entity.
+	 * 
+	 * @param entity
+	 */
+	public void evict(Object entity);
+
 
 }

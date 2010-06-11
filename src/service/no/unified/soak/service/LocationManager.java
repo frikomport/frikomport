@@ -65,4 +65,13 @@ public interface LocationManager extends Manager {
      * @return
      */
     public List getAllIncludingDummy(Location location, Boolean includeDisabled, String dummy);
+    
+	/**
+	 * Evict entity for hibernate sessions. This avoids automatic saving
+	 * (flush) of the entity.
+	 * 
+	 * @param entity
+	 */
+	public void evict(Object entity);
+
 }

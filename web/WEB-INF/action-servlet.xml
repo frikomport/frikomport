@@ -93,7 +93,7 @@
     <bean id="personFormController" class="no.unified.soak.webapp.action.PersonFormController" autowire="byName">
         <property name="commandName" value="person"/>
         <property name="commandClass" value="no.unified.soak.model.Person"/>
-        <property name="validator" ref="beanValidator"/>
+        <!-- property name="validator" ref="beanValidator"/ -->
         <property name="formView" value="personForm"/>
         <property name="successView" value="redirect:listPeople.html"/>
     </bean>

@@ -58,4 +58,13 @@ public interface PersonManager extends Manager {
      *            the person's id
      */
     public void removePerson(final String id);
+    
+	/**
+	 * Evict entity for hibernate sessions. This avoids automatic saving
+	 * (flush) of the entity.
+	 * 
+	 * @param entity
+	 */
+	public void evict(Object entity);
+
 }
