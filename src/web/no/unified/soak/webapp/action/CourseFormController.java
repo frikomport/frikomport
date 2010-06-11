@@ -548,6 +548,11 @@ public class CourseFormController extends BaseFormController {
 				return showForm(request, response, errors);
 			}
 
+			// håndtering av eventer som blir opprettet med dato tilbake i tid
+			if(course.getStartTime().before(new Date()) && course.getStopTime().before(new Date())){
+				course.setStatus(CourseStatus.COURSE_FINISHED);
+			}
+			
 			courseManager.saveCourse(course);
 
 			String key = null;

@@ -156,8 +156,13 @@ public class RegistrationController extends BaseFormController {
 
         RegistrationStatusCriteria statusCriteria;
         if ((Boolean) request.getAttribute("isAdmin") || (Boolean) request.getAttribute("isEducationResponsible")
-                || (Boolean) request.getAttribute("isEventResponsible")) {
-            statusCriteria = null;
+                || (Boolean) request.getAttribute("isEventResponsible")  || (Boolean) request.getAttribute("isReader")) {
+            if(configurationManager.isActive("access.registration.showCancelled", false)){
+            	statusCriteria = null; // viser alle
+            }
+            else{
+            	statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();
+            }
         } else {
             statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();
         }
@@ -212,60 +217,72 @@ public class RegistrationController extends BaseFormController {
 
         // Check the "boolean" values for invoiced, reserved and attended
         RegistrationStatusCriteria statusCriteria = null;
-        if ((reservedRequest != null) && (reservedRequest.compareTo("0") == 0)) {
-            registration.setStatus(Registration.Status.WAITING);
-            statusCriteria = new RegistrationStatusCriteria(Registration.Status.WAITING);
-        } else if ((reservedRequest != null) &&
-                (reservedRequest.compareTo("1") == 0)) {
-            registration.setStatus(Registration.Status.RESERVED);
-            statusCriteria = new RegistrationStatusCriteria(Registration.Status.RESERVED);
-        } else if ((reservedRequest != null) &&
-                (reservedRequest.compareTo("2") == 0)) {
-
-            if (!(Boolean) request.getAttribute("isAdmin") 
-            		&& !(Boolean) request.getAttribute("isEducationResponsible")
-                    && !(Boolean) request.getAttribute("isEventResponsible")
-                    && !(Boolean) request.getAttribute("isReader")) {
-                statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();
-            }
-            registration.setStatus((Registration.Status) null);
+        if(!ApplicationResourcesUtil.isSVV()){
+	        if ((reservedRequest != null) && (reservedRequest.compareTo("0") == 0)) {
+	            registration.setStatus(Registration.Status.WAITING);
+	            statusCriteria = new RegistrationStatusCriteria(Registration.Status.WAITING);
+	        }
+	        else if ((reservedRequest != null) && (reservedRequest.compareTo("1") == 0)) {
+	            registration.setStatus(Registration.Status.RESERVED);
+	            statusCriteria = new RegistrationStatusCriteria(Registration.Status.RESERVED);
+	        }
+	        else if ((reservedRequest != null) && (reservedRequest.compareTo("2") == 0)) {
+	            if (!(Boolean) request.getAttribute("isAdmin") 
+	            		&& !(Boolean) request.getAttribute("isEducationResponsible")
+	                    && !(Boolean) request.getAttribute("isEventResponsible")
+	                    && !(Boolean) request.getAttribute("isReader")) {
+	                statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();
+	            }
+	            registration.setStatus((Registration.Status) null);
+	        }
+	
+	        if ((invoicedRequest != null) && (invoicedRequest.compareTo("0") == 0)) {
+	            registration.setInvoiced(new Boolean(false));
+	        }
+	        else if ((invoicedRequest != null) && (invoicedRequest.compareTo("1") == 0)) {
+	            registration.setInvoiced(new Boolean(true));
+	        }
+	        else if ((invoicedRequest != null) && (invoicedRequest.compareTo("2") == 0)) {
+	            registration.setInvoiced(null);
+	        }
+	        
+	        if ((attendedRequest != null) && (attendedRequest.compareTo("0") == 0)) {
+	            registration.setAttended(new Boolean(false));
+	        }
+	        else if ((attendedRequest != null) && (attendedRequest.compareTo("1") == 0)) {
+	            registration.setAttended(new Boolean(true));
+	        }
+	        else if ((attendedRequest != null) && (attendedRequest.compareTo("2") == 0)) {
+	            registration.setAttended(null);
+	        }
+	
+	        if ((invoicedRequest != null) && StringUtils.isNumeric(invoicedRequest)) {
+	            invoicedParameter = new Integer(invoicedRequest);
+	        }
+	
+	        if ((reservedRequest != null) && StringUtils.isNumeric(reservedRequest)) {
+	            reservedParameter = new Integer(reservedRequest);
+	        }
+	        
+	        if ((attendedRequest != null) && StringUtils.isNumeric(attendedRequest)) {
+	            attendedParameter = new Integer(attendedRequest);
+	        }
         }
-
-        if ((invoicedRequest != null) && (invoicedRequest.compareTo("0") == 0)) {
-            registration.setInvoiced(new Boolean(false));
-        } else if ((invoicedRequest != null) &&
-                (invoicedRequest.compareTo("1") == 0)) {
-            registration.setInvoiced(new Boolean(true));
-        } else if ((invoicedRequest != null) &&
-                (invoicedRequest.compareTo("2") == 0)) {
-            registration.setInvoiced(null);
+        else {
+            if ((Boolean) request.getAttribute("isAdmin") && (Boolean) request.getAttribute("isEducationResponsible")
+                    && (Boolean) request.getAttribute("isEventResponsible") && (Boolean) request.getAttribute("isReader")) {
+                if(configurationManager.isActive("access.registration.showCancelled", false)){
+                	statusCriteria = null; // viser alle
+                }
+                else{
+                	statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();
+                }
+        	}
+        	else {
+        		statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();
+        	}
         }
         
-        if ((attendedRequest != null) && (attendedRequest.compareTo("0") == 0)) {
-            registration.setAttended(new Boolean(false));
-        } else if ((attendedRequest != null) &&
-                (attendedRequest.compareTo("1") == 0)) {
-            registration.setAttended(new Boolean(true));
-        } else if ((attendedRequest != null) &&
-                (attendedRequest.compareTo("2") == 0)) {
-            registration.setAttended(null);
-        }
-
-        if ((invoicedRequest != null) &&
-                StringUtils.isNumeric(invoicedRequest)) {
-            invoicedParameter = new Integer(invoicedRequest);
-        }
-
-        if ((reservedRequest != null) &&
-                StringUtils.isNumeric(reservedRequest)) {
-            reservedParameter = new Integer(reservedRequest);
-        }
-        
-        if ((attendedRequest != null) &&
-                StringUtils.isNumeric(attendedRequest)) {
-            attendedParameter = new Integer(attendedRequest);
-        }
-
         // Set up parameters, and return them to the view
         Map model = new HashMap();
         model = addServiceAreas(model, locale);
