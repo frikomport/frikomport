@@ -10,11 +10,13 @@
     id="responsibleList" pagesize="${itemCount}" class="list" 
     export="true" requestURI="">
 
-	<c:if test="${isAdmin || isEducationResponsible}">
+	<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
+		<c:if test="${isAdmin || isEducationResponsible || (isEventResponsible && user.organization2id == responsibleList.organization2id)}">
         <a href='<c:url value="/editUser.html"><c:param name="username" value="${responsibleList.username}"/><c:param name="from" value="list"/></c:url>'>
             <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
+		</c:if>
     </display:column>
 	</c:if>
 
