@@ -666,6 +666,11 @@ public class CourseFormController extends BaseFormController {
 		if(StringUtils.isEmpty(course.getRole())){
 			course.setRole(Constants.ANONYMOUS_ROLE);
 		}
+		
+		if(ApplicationResourcesUtil.isSVV()){
+			// påmeldinger er ikke offentlig tilgjengelig via courseDetails.jsp
+			course.setRestricted(true);
+		}
 	}
 
 	protected Date parseDateAndTime(HttpServletRequest request, String fieldName, String format) throws ParseException {

@@ -344,7 +344,7 @@
 		&nbsp;<br/>
 				
 		<table>	
-			<c:if test="${!empty courseList}">
+			<c:if test="${!empty courseList && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
 			<tr>
 				<th>
 					<soak:label key="registration.changeCourse" />
