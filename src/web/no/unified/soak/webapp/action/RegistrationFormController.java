@@ -156,16 +156,21 @@ public class RegistrationFormController extends BaseFormController {
             organizations = organizationManager.getAllIncludingDummy(getText("misc.all", locale));
         }
         
-        // If user not admin, show only registered org
-        if (user != null && user.getOrganization() != null && !isAdmin) {
-            organizations.clear();
-            organizations.add(user.getOrganization());
-        }
-        
-        // If cached user, show only users org
-        if (altUser != null &&  altUser.getOrganization() != null && !isAdmin) {
-            organizations.clear();
-            organizations.add(altUser.getOrganization());
+        if(!ApplicationResourcesUtil.isSVV()){
+	        // If user not admin, show only registered org
+	        if (user != null && user.getOrganization() != null && !isAdmin) {
+	            organizations.clear();
+	            organizations.add(user.getOrganization());
+	        }
+	        
+	        // If cached user, show only users org
+	        if (altUser != null &&  altUser.getOrganization() != null && !isAdmin) {
+	            organizations.clear();
+	            organizations.add(altUser.getOrganization());
+	        }
+	        else {
+	        	// Vi ønsker ikke begrensninger for hvem en innlogget bruker kan utføre påmeldinger for
+	        }
         }
         model.put("organizations", organizations);
 
