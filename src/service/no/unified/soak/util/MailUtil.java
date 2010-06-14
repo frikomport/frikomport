@@ -266,7 +266,12 @@ public class MailUtil {
 
         msg.append("\n"); // empty line
 
-        addCancelLink(course, registration, msg);
+        if(ApplicationResourcesUtil.isSVV()){
+        	addEditRegistrationLink(course, registration, msg);
+        }
+        else {
+        	addCancelLink(course, registration, msg);
+        }
 
         msg.append("\n\n");
 
@@ -434,7 +439,12 @@ public class MailUtil {
 
         msg.append("\n"); // empty line
 
-        addCancelLink(course, registration, msg);
+        if(ApplicationResourcesUtil.isSVV()){
+        	addEditRegistrationLink(course, registration, msg);
+        }
+        else {
+        	addCancelLink(course, registration, msg);
+        }
 
         msg.append("\n"); // empty lines
 
@@ -534,6 +544,22 @@ public class MailUtil {
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.cancelcourse")) + "\n");
         String coursecancelurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.coursecancelurl", ""+registration.getId()));
         msg.append(baseurl + coursecancelurl + "\n");
+        
+        if(course.getChargeoverdue()) msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationConfirmed.mail.footer.overdue")) + "\n");
+	}
+
+    /**
+     * Adds link to actual registration, including info about chargeoverdue if present
+     * @param course
+     * @param registration
+     * @param msg
+     */
+    private static void addEditRegistrationLink(Course course, Registration registration, StringBuffer msg) {
+    	String baseurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.baseurl"));
+
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.editregistration")) + "\n");
+        String editregistrationurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.editregistrationurl", new String[]{""+registration.getId(), ""+course.getId()}));
+        msg.append(baseurl + editregistrationurl + "\n");
         
         if(course.getChargeoverdue()) msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationConfirmed.mail.footer.overdue")) + "\n");
 	}
