@@ -192,8 +192,6 @@
     </bean>
 
     <bean id="registrationFormController" class="no.unified.soak.webapp.action.RegistrationFormController" autowire="byName">
-        <property name="messageSource" ref="messageSource"/>
-        <property name="mailEngine" ref="mailEngine"/>
         <property name="commandName" value="registration"/>
         <property name="commandClass" value="no.unified.soak.model.Registration"/>
         <property name="validator" ref="beanValidator"/>

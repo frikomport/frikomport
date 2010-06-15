@@ -33,7 +33,7 @@ public interface UserManager {
 	public void setRoleManager(RoleManager roleManager);
 
 	public void setMessageSource(MessageSource messageSource);
-
+	
 	/**
 	 * Retrieves a user by username.  An exception is thrown if no user
 	 * is found.
@@ -44,8 +44,7 @@ public interface UserManager {
 	public User getUser(String username);
 
     /**
-	 * Retrieves a user by email.  An exception is thrown if no user
-	 * is found.
+	 * Retrieves a user by email.  Returns null if no user is found
 	 *
 	 * @param username
 	 * @return User
@@ -67,6 +66,13 @@ public interface UserManager {
 	 * @return User
 	 */
 	public User getUserByHash(String hash);
+	
+	/**
+	 * Retrieves a user by email. First username and then email is checked.
+	 * @param email
+	 * @return
+	 */
+	public User getUserByEmail(String email);
 	
 	/**
 	 * Saves a user's information
@@ -173,4 +179,10 @@ public interface UserManager {
      * @return
      */
     public void enableUser(User user);
+    
+    /**
+     * Changes the users email and disables user.
+     * @param user The user to disable
+     */
+    public void changeEmailAndDisable(User user);
 }

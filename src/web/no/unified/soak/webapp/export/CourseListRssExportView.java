@@ -69,17 +69,17 @@ public class CourseListRssExportView extends XmlView {
         DateFormat f = new SimpleDateFormat("dd.MM.yyyy HH:mm");
     	String start = " - " + ApplicationResourcesUtil.getText("export.startup") + " " + f.format(course.getStartTime());
     	feed.append("<item>");
-    	feed.append("<title>" + course.getName() + "</title>");
-    	feed.append("<link>" + baseURL + ApplicationResourcesUtil.getText("javaapp.courseurl") + course.getId() +"</link>");
-    	feed.append("<description>" + course.getDescription() + start + "</description>");
+    	feed.append("<title><![CDATA[" + course.getName() + "]]></title>");
+    	feed.append("<link><![CDATA[" + baseURL + ApplicationResourcesUtil.getText("javaapp.courseurl") + course.getId() +"]]></link>");
+    	feed.append("<description><![CDATA[" + course.getDescription() + start + "]]></description>");
     	feed.append("</item>");
     }
     
     private void finalizeFeed() {
     	String header = "<?xml version=\"1.0\"?><rss version=\"2.0\"><channel>";
-    	header += "<title>" + ApplicationResourcesUtil.getText("webapp.prefix") + ApplicationResourcesUtil.getText("courseList.title") + "</title>";
-    	header += "<description>" + ApplicationResourcesUtil.getText("courseList.descriprion") + "</description>";
-    	header += "<link>" + baseURL + "listCourses.html" + "</link>";
+    	header += "<title><![CDATA[" + ApplicationResourcesUtil.getText("webapp.prefix") + ApplicationResourcesUtil.getText("courseList.title") + "]]></title>";
+    	header += "<description><![CDATA[" + ApplicationResourcesUtil.getText("courseList.descriprion") + "]]></description>";
+    	header += "<link><![CDATA[" + baseURL + "listCourses.html" + "]]></link>";
     	
     	String footer = "</channel></rss>";
 

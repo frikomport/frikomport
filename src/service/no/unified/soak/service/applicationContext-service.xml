@@ -42,6 +42,7 @@
                 <property name="roleManager" ref="roleManager"/>
                 <property name="messageSource" ref="messageSource"/>
                 <property name="organizationManager" ref="organizationManager"/>
+                <property name="userSynchronizeManager" ref="userSynchronizeManager"/>
             </bean>
         </property>
         <!-- Override default transaction attributes b/c of LoginCookie methods -->
