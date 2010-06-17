@@ -176,7 +176,7 @@
 </c:if>
 
     <tr>
-        <td class="buttonBar">            
+        <td class="buttonBar" colspan="2">
             <input type="submit" class="button large" name="return" onclick="bCancel=true"
                 value="<fmt:message key="button.location.list"/>" />
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
