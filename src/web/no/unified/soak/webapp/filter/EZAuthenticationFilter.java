@@ -43,17 +43,14 @@ public class EZAuthenticationFilter implements Filter {
         this.ezUserDAO = ezUserDAO;
     }
 
-    @Override
     public void init(FilterConfig config) throws ServletException {
         this.config = config;
     }
 
-    @Override
     public void destroy() {
         this.config = null;
     }
 
-    @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
         // cast to the types I want to use
         HttpServletRequest request = (HttpServletRequest) req;

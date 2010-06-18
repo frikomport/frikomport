@@ -8,8 +8,6 @@
 package no.unified.soak.webapp.filter;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
