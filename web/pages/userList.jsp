@@ -52,13 +52,13 @@
 <display:table name="${userList}" cellspacing="0" cellpadding="0"
     requestURI="listUsers.html" defaultsort="1" id="userList" pagesize="${itemCount}"
     class="list userList" export="true">
-    <c:if test="${isAdmin || isEducationResponsible}">
+    <authz:authorize ifAnyGranted="admin,editor">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
         <a href='<c:url value="/editUser.html"><c:param name="username" value="${userList.username}"/><c:param name="from" value="list"/></c:url>'>
             <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
     </display:column>
-    </c:if>
+    </authz:authorize>
     <%-- Table columns --%>
     <display:column property="username" sortable="true"
         headerClass="sortable" url="/detailsUser.html?from=list"

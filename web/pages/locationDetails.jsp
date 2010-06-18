@@ -48,7 +48,7 @@
         </td>
     </tr>
 
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+    <authz:authorize ifAnyGranted="admin,instructor,editor">
     <tr>
         <th>
             <fmt:message key="location.owner"/>
@@ -68,7 +68,7 @@
         	<fmt:formatNumber value="${location.feePerDay}" minFractionDigits="2"/>
         </td>
     </tr>
-</c:if>
+    </authz:authorize>
 
     <tr>
         <th>
@@ -97,7 +97,7 @@
         </td>
     </tr>
 
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+    <authz:authorize ifAnyGranted="admin,instructor,editor">
     <tr>
         <th>
             <fmt:message key="location.mailAddress"/>
@@ -162,17 +162,18 @@
             </spring:bind>
         </td>
     </tr>
-</c:if>
+</authz:authorize>
 
     <tr>
-        <td class="buttonBar">            
-            <input type="submit" class="button" name="return" onclick="bCancel=true"
-                value="<fmt:message key="button.location.list"/>" />
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+        <td class="buttonBar">
+            <button type="button" onclick="location.href='<c:url value="/listLocations.html"></c:url>'">
+                <fmt:message key="button.location.list"/>
+            </button>
+            <authz:authorize ifAnyGranted="admin,instructor,editor">
 		    <button type="button" onclick="location.href='<c:url value="/editLocation.html"><c:param name="id" value="${location.id}"/></c:url>'">
 	    	    <fmt:message key="button.edit"/>
 		    </button>
-</c:if>
+            </authz:authorize>
         </td>
     </tr>
 </table>

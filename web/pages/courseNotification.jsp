@@ -1,4 +1,13 @@
 <%@ include file="/common/taglibs.jsp"%>
+<c:set var="admin" value="false"/>
+<authz:authorize ifAnyGranted="admin,instructor,editor">
+    <c:set var="admin" value="true"/>
+    <authz:authorize ifAnyGranted="instructor">
+        <c:if test="${course.responsible.username != username}">
+            <c:set var="admin" value="false"/>
+        </c:if>
+    </authz:authorize>
+</authz:authorize>
 
 <title><fmt:message key="courseDetail.title" /></title>
 <content tag="heading">
@@ -57,11 +66,13 @@
         </tr>
         <tr>
             <td colspan="2" class="buttonBar">
-                <c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && username == course.responsibleUsername)}">
+                <authz:authorize ifAnyGranted="admin,instructor,editor">
+                <c:if test="${admin}">
                 <button type="button"
                     onclick="location.href='<c:url value="/editCourse.html"><c:param name="id" value="${course.id}"/></c:url>'">
                 <fmt:message key="button.reedit" /></button>
-                </c:if> 
+                </c:if>
+                </authz:authorize>
                 <input type="submit" class="button" name="skip" onclick="bCancel = true;" value="<fmt:message key="button.skipmail"/>" /> 
                 <input type="submit" class="button" name="send" onclick="bCancel = false;" value="<fmt:message key="button.sendmail"/>" />
             </td>
@@ -77,11 +88,11 @@
     <table class="detail">
         <tr>
             <td colspan="2" class="buttonBar">
-                <c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible)}">
+                <authz:authorize ifAnyGranted="admin,instructor,editor">
                 <button type="button"
                     onclick="location.href='<c:url value="/editCourse.html"><c:param name="id" value="${course.id}"/></c:url>'">
                 <fmt:message key="button.reedit" /></button>
-                </c:if> 
+                </authz:authorize>
                 <input type="submit" class="button" name="confirm" onclick="bCancel = true;" value="<fmt:message key="button.continue"/>" /> 
             </td>
         </tr>

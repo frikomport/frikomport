@@ -25,6 +25,7 @@ import no.unified.soak.Constants;
 import no.unified.soak.dao.hibernate.RegistrationStatusCriteria;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.User;
 import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
@@ -35,6 +36,7 @@ import no.unified.soak.service.WaitingListManager;
 import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.MailUtil;
 
+import org.acegisecurity.context.SecurityContextHolder;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.MailSender;
@@ -189,8 +191,10 @@ public class RegistrationAdministrationController extends BaseFormController {
 		}
 
 		RegistrationStatusCriteria statusCriteria;
-        if ((Boolean) request.getAttribute("isAdmin") || (Boolean) request.getAttribute("isEducationResponsible")
-                || (Boolean) request.getAttribute("isCourseResponsible")) {
+		User user = (User)SecurityContextHolder.getContext().getAuthentication().getDetails();
+		if (user.getRoleNameList().contains("admin") 
+                || user.getRoleNameList().contains("editor") 
+                || user.getRoleNameList().contains("instructor")) {
             statusCriteria = null;
         } else {
             statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();

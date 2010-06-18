@@ -13,7 +13,7 @@ package no.unified.soak.webapp.filter;
 import java.util.ArrayList;
 import java.util.List;
 
-import no.unified.soak.ez.EzUser;
+import no.unified.soak.model.User;
 
 import org.acegisecurity.Authentication;
 import org.acegisecurity.GrantedAuthority;
@@ -27,7 +27,7 @@ import org.acegisecurity.GrantedAuthorityImpl;
 public class EZAuthentificationToken implements Authentication {
     private boolean authenticated;
     private String eZSessionId;
-    private EzUser ezUser;
+    private User ezUser;
     List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
 
     /**
@@ -39,7 +39,7 @@ public class EZAuthentificationToken implements Authentication {
      * @param eZSessionId
      *            The session id of the http-session where user logged in.
      */
-    EZAuthentificationToken(EzUser ezUser, String eZSessionId) {
+    EZAuthentificationToken(User ezUser, String eZSessionId) {
         this.ezUser = ezUser;
         this.eZSessionId = eZSessionId;
 
@@ -47,7 +47,7 @@ public class EZAuthentificationToken implements Authentication {
                 (ezUser != null) && (ezUser.getId() != null) && (ezUser.getId() > 0)) {
             authenticated = true;
 
-            for (String rolename : ezUser.getRolenames()) {
+            for (String rolename : ezUser.getRoleNameList()) {
                 addAuthority(rolename);
             }
         }
@@ -62,7 +62,7 @@ public class EZAuthentificationToken implements Authentication {
     }
 
     public GrantedAuthority[] getAuthorities() {
-        return (GrantedAuthority[]) grantedAuthorities.toArray();
+        return grantedAuthorities.toArray(new GrantedAuthority[grantedAuthorities.size()]);
     }
 
     private void addAuthority(String rolename) {
@@ -79,15 +79,23 @@ public class EZAuthentificationToken implements Authentication {
         return eZSessionId;
     }
 
+    /**
+     * Additional details about user. Here the user object.
+     *
+     * @see net.sf.acegisecurity.Authentication#getDetails()
+     */
     public Object getDetails() {
         return ezUser;
     }
 
+    /**
+     * Either username or UserDetails object. Here username
+     */
     public Object getPrincipal() {
-        return ezUser.getId();
+        return ezUser.getUsername();
     }
 
     public String getName() {
-        return ezUser.getName();
+        return ezUser.getUsername();
     }
 }

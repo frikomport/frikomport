@@ -542,8 +542,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 			<td></td>
 			<td class="buttonBar">
 
-				<c:if
-					test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+				<authz:authorize ifAnyGranted="admin,instructor,editor">
 					<input type="submit" class="button" name="save"
 						onclick="bCancel=false"
 						value="<fmt:message key="button.course.save"/>" />
@@ -567,37 +566,31 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 							onclick="bCancel=true;return confirmDelete('<fmt:message key="courseList.theitem"/>')"
 							value="<fmt:message key="button.course.delete"/>" />
 					</c:if>
-				</c:if>
+				</authz:authorize>
 
 				<input type="submit" class="button" name="cancel"
 					onclick="bCancel=true" value="<fmt:message key="button.cancel"/>" />
 
 				<c:if test="${!empty course.id && !empty course.name}">
-					<c:choose>
-						<c:when
-							test="${isAdmin || isEducationResponsible || isCourseResponsible}">
-							<button type="button"
-								onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
-								<fmt:message key="button.administerRegistrations" />
-							</button>
-						</c:when>
-						<c:otherwise>
-							<c:if test="${isCourseParticipant}">
-								<button type="button"
-									onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
-									<fmt:message key="button.displayRegistrations" />
-								</button>
-							</c:if>
-						</c:otherwise>
-					</c:choose>
+					<authz:authorize ifAnyGranted="admin,instructor,editor">
+						<button type="button"
+							onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
+							<fmt:message key="button.administerRegistrations" />
+						</button>
+					</authz:authorize>
+					<authz:authorize ifNotGranted="admin,instructor,editor">
+						<button type="button"
+							onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
+							<fmt:message key="button.displayRegistrations" />
+						</button>
+					</authz:authorize>
 
-					<c:if
-						test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+					<authz:authorize ifAnyGranted="admin,instructor,editor">
 						<button type="button"
 							onclick="location.href='<c:url value="/editFileCourse.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 							<fmt:message key="button.administerFiles" />
 						</button>
-					</c:if>
+					</authz:authorize>
 				</c:if>
 			</td>
 		</tr>

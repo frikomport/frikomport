@@ -251,6 +251,7 @@ public class EzUserDAOJdbc implements EzUserDAO {
 					user.setName(rowSet.getString("name"));
 					user.setEmail(rowSet.getString("email"));
                     user.setUsername(rowSet.getString("login"));
+                    user.setRolenames(findRoles(curId));
                 }
 				String identifier = rowSet.getString("identifier");
 				if ("first_name".equals(identifier)) {

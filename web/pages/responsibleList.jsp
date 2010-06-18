@@ -21,7 +21,7 @@
     </display:column>
     <display:column media="csv excel xml pdf" property="email" sortable="true" headerClass="sortable" titleKey="user.email"/>
 
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<authz:authorize ifAnyGranted="admin,instructor,editor">
     <display:column property="phoneNumber" sortable="true" headerClass="sortable"
          titleKey="user.phoneNumber"/>
 
@@ -31,15 +31,15 @@
     <display:column property="organization.name" sortable="true" headerClass="sortable"
          titleKey="user.organization"/>
     
-</c:if>
+</authz:authorize>
 
-<c:if test="${isAdmin || isEducationResponsible}">
+<authz:authorize ifAnyGranted="admin,editor">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
 	    <button type="button" onclick="location.href='<c:url value="/editUser.html"><c:param name="username" value="${responsibleList.username}"/><c:param name="from" value="list"/></c:url>'">
     	    <fmt:message key="button.edit"/>
 	    </button>
     </display:column>
-</c:if>
+</authz:authorize>
 
     <display:setProperty name="paging.banner.item_name" value="${item}"/>
     <display:setProperty name="paging.banner.items_name" value="${items}"/>

@@ -1,5 +1,10 @@
 <%@ include file="/common/taglibs.jsp"%>
 
+<c:set var="admin" value="false"/>
+<authz:authorize ifAnyGranted="admin">
+    <c:set var="admin" value="true"/>
+</authz:authorize>
+
 <title><fmt:message key="userDetail.title"/></title>
 <content tag="heading"><c:out value="${user.fullName}"/></content>
 
@@ -92,7 +97,7 @@
 
     <tr>
         <td class="buttonBar">            
-            <c:if test="${isAdmin || user.username == username || user.username == altusername}">
+            <c:if test="${admin || user.username == username || user.username == altusername}">
             	<button type="button" onclick="location.href='<c:url value="/editUser.html"><c:param name="username" value="${user.username}"/></c:url>'">
     	            <fmt:message key="button.edit"/>
 	            </button>
@@ -101,7 +106,7 @@
     </tr>
 </table>
 
-<c:if test="${isAdmin || user.username == username || user.username == altusername}">
+<c:if test="${admin || user.username == username || user.username == altusername}">
 <display:table name="${userRegistrations}" pagesize="${itemCount}" id="userRegistrations" class="list" requestURI="detailsUser.html">
 
     <display:column property="firstName" sortable="true" headerClass="sortable"

@@ -1,9 +1,9 @@
 <%@ include file="/common/taglibs.jsp"%>
 
 <c:set var="admin" value="${false}"/>
-<c:if test="${isAdmin}">
+<authz:authorize ifAnyGranted="admin">
     <c:set var="admin" value="${true}"/>
-</c:if>
+</authz:authorize>
 
 <fmt:message key="configurationList.item" var="item"/>
 <fmt:message key="configurationList.items" var="items"/>

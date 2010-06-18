@@ -183,7 +183,7 @@
 	</td>
 </tr>
 
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<authz:authorize ifAnyGranted="admin,instructor,editor">
 <tr>
 	<th>
 		<fmt:message key="course.reminder" />
@@ -193,7 +193,7 @@
 			pattern="${dateformat} ${timeformat}" />
 	</td>
 </tr>
-</c:if>
+</authz:authorize>
 
 <tr>
 	<th>
@@ -215,7 +215,7 @@
     </td>
 </tr>
 
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<authz:authorize ifAnyGranted="admin,instructor,editor">
 <tr>
 	<th>
 		<fmt:message key="course.url" />
@@ -227,4 +227,4 @@
 				key="javaapp.courseurl" /><c:out value="${course.id}" /></a>
 	</td>
 </tr>
-</c:if>
+</authz:authorize>

@@ -10,9 +10,7 @@ import no.unified.soak.model.User;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.service.UserSynchronizeManager;
-import no.unified.soak.util.UserUtil;
 
-import org.springframework.orm.ObjectRetrievalFailureException;
 
 /**
  * User: gv

@@ -37,12 +37,12 @@
 </form>
 
 <c:set var="buttons">
-	<c:if test="${isAdmin}">
+	<authz:authorize ifAnyGranted="admin">
 		<button type="button" style="margin-right: 5px"
 			onclick="location.href='<c:url value="/editServiceArea.html"/>'">
 			<fmt:message key="button.add" />
 		</button>
-	</c:if>
+	</authz:authorize>
 </c:set>
 
 <c:out value="${buttons}" escapeXml="false" />
@@ -50,14 +50,14 @@
 <display:table name="${serviceAreaList}" cellspacing="0" cellpadding="0"
 	id="serviceAreaList" pagesize="${itemCount}" class="list" export="true"
 	requestURI="">
-    <c:if test="${isAdmin}">
+    <authz:authorize ifAnyGranted="admin">
         <display:column media="html" sortable="false" headerClass="sortable"
             titleKey="button.heading">
         <a href='<c:url value="/editServiceArea.html"><c:param name="id" value="${serviceAreaList.id}"/></c:url>'>
             <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
         </display:column>
-    </c:if>
+    </authz:authorize>
 	<display:column property="name" sortable="true" headerClass="sortable"
 		titleKey="serviceArea.name" />
 
@@ -65,8 +65,7 @@
 		headerClass="sortable" titleKey="serviceArea.organization" />
 
 
-	<c:if
-		test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+	<authz:authorize ifAnyGranted="admin,instructor,editor">
 		<display:column sortable="true" headerClass="sortable"
 			titleKey="serviceArea.selectable">
 			<c:if test="${serviceAreaList.selectable == true}">
@@ -76,7 +75,7 @@
 				<fmt:message key="checkbox.unchecked" />
 			</c:if>
 		</display:column>
-	</c:if>
+	</authz:authorize>
 
 	<display:setProperty name="paging.banner.item_name" value="${item}" />
 	<display:setProperty name="paging.banner.items_name" value="${items}" />

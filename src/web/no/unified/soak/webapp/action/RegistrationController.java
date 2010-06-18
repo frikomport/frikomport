@@ -32,6 +32,7 @@ import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 
+import org.acegisecurity.context.SecurityContextHolder;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
@@ -153,8 +154,11 @@ public class RegistrationController extends BaseFormController {
         registration.setAttended(new Boolean(false));
 
         RegistrationStatusCriteria statusCriteria;
-        if ((Boolean) request.getAttribute("isAdmin") || (Boolean) request.getAttribute("isEducationResponsible")
-                || (Boolean) request.getAttribute("isCourseResponsible")) {
+        // Get user from acegi
+        User user = (User)SecurityContextHolder.getContext().getAuthentication().getDetails();
+        if (user.getRoleNameList().contains("admin") 
+                || user.getRoleNameList().contains("editor") 
+                || user.getRoleNameList().contains("instructor")) {
             statusCriteria = null;
         } else {
             statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();
@@ -219,9 +223,11 @@ public class RegistrationController extends BaseFormController {
             statusCriteria = new RegistrationStatusCriteria(Registration.Status.RESERVED);
         } else if ((reservedRequest != null) &&
                 (reservedRequest.compareTo("2") == 0)) {
-
-            if (!(Boolean) request.getAttribute("isAdmin") && !(Boolean) request.getAttribute("isEducationResponsible")
-                    && !(Boolean) request.getAttribute("isCourseResponsible")) {
+            
+            User user = (User)SecurityContextHolder.getContext().getAuthentication().getDetails();
+            if (user.getRoleNameList().contains("admin") 
+                    || user.getRoleNameList().contains("editor") 
+                    || user.getRoleNameList().contains("instructor")) {
                 statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();
             }
             registration.setStatus((Registration.Status) null);

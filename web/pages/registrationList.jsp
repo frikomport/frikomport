@@ -1,5 +1,10 @@
 <%@ include file="/common/taglibs.jsp"%>
 
+<c:set var="admin" value="false"/>
+<authz:authorize ifAnyGranted="admin,instructor,editor">
+    <c:set var="admin" value="true"/>
+</authz:authorize>
+
 <title><fmt:message key="registrationList.title"/></title>
 <content tag="heading"><fmt:message key="registrationList.heading"/></content>
 
@@ -75,7 +80,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
                 </select>
                 <span class="fieldError"><c:out
                         value="${status.errorMessage}" escapeXml="false" /> </span>
-		    </spring:bind>
+            </spring:bind>
         </li>
         <li>
             <soak:label key="registration.course" styleClass="required"/>
@@ -112,21 +117,21 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
         <li>
             <soak:label key="registration.attended" styleClass="required"/>
             <select id="attendedField" name="attendedField">
-				<option value="2" <c:if test="${attendedValue == 2}"> selected </c:if> /> <c:out value='${attended["null"]}'/></option>
-				<option value="1" <c:if test="${attendedValue == 1}"> selected </c:if> /> <c:out value='${attended["true"]}'/></option>
-				<option value="0" <c:if test="${attendedValue == 0}"> selected </c:if> /> <c:out value='${attended["false"]}'/></option>
-			</select>
+                <option value="2" <c:if test="${attendedValue == 2}"> selected </c:if> /> <c:out value='${attended["null"]}'/></option>
+                <option value="1" <c:if test="${attendedValue == 1}"> selected </c:if> /> <c:out value='${attended["true"]}'/></option>
+                <option value="0" <c:if test="${attendedValue == 0}"> selected </c:if> /> <c:out value='${attended["false"]}'/></option>
+            </select>
         </li>
         <li>
             <soak:label key="course.includeHistoric" styleClass="required"/>
             <INPUT type="hidden" name="_historic" value="0"/>
-		    <INPUT type="checkbox" id="historic" name="historic" value="1"
-		    <c:if test="${historic == true}"> checked </c:if> />
+            <INPUT type="checkbox" id="historic" name="historic" value="1"
+            <c:if test="${historic == true}"> checked </c:if> />
         </li>
         <li>
             <button type="submit" name="search" onclick="bCancel=false" style="margin-right: 5px">
-				<fmt:message key="button.search"/>
-			</button>
+                <fmt:message key="button.search"/>
+            </button>
         </li>
     </ul>
     </form>
@@ -137,38 +142,38 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 
 <c:out value="${buttons}" escapeXml="false"/>
 
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<authz:authorize ifAnyGranted="admin,instructor,editor">
 <display:table name="${registrationList}" cellspacing="0" cellpadding="0"
-    id="registrationList" pagesize="${itemCount}" class="list" 
+    id="registration" pagesize="${itemCount}" class="list" 
     export="true" requestURI="">
 
-	<c:choose> 
-		<c:when test="${registrationList.canceled}">
-		<c:set var="tdClass" value="canceled" />
-		</c:when>
-		<c:otherwise>
-			<c:set var="tdClass" value="" />
-		</c:otherwise>
-	</c:choose>
+    <c:choose> 
+        <c:when test="${registration.canceled}">
+            <c:set var="tdClass" value="canceled" />
+        </c:when>
+        <c:otherwise>
+            <c:set var="tdClass" value="" />
+        </c:otherwise>
+    </c:choose>
     
-    <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+    <authz:authorize ifAnyGranted="admin,instructor,editor">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-<c:if test="${(isAdmin || isEducationResponsible || isCourseResponsible || (isCourseResponsible)) && !registrationList.canceled}">
-        <a href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseId" value="${registrationList.courseid}"/></c:url>'>
+<c:if test="${admin && !registration.canceled}">
+        <a href='<c:url value="/performRegistration.html"><c:param name="id" value="${registration.id}"/><c:param name="courseId" value="${registration.courseid}"/></c:url>'>
             <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
 </c:if>
     </display:column>
-</c:if>
+</authz:authorize>
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="course.name" class="${tdClass}">
-         <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${registrationList.course.id}"/></c:url>" 
-         title="<c:out value="${registrationList.course.description}"/>"><c:out value="${registrationList.course.name}"/></a>
+         <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${registration.course.id}"/></c:url>" 
+         title="<c:out value="${registration.course.description}"/>"><c:out value="${registration.course.name}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="course.name" sortable="true" headerClass="sortable" titleKey="course.name" class="${tdClass}"/>
     
     <display:column sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="course.startTime" class="${tdClass}">
-         <fmt:formatDate value="${registrationList.course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
+         <fmt:formatDate value="${registration.course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
     
     <display:column property="firstName" sortable="true" headerClass="sortable"
@@ -178,7 +183,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
          titleKey="registration.lastName" class="${tdClass}"/>
          
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="registration.email" class="${tdClass}">
-         <a href="mailto:<c:out value="${registrationList.email}"/>"><c:out value="${registrationList.email}"/></a>
+         <a href="mailto:<c:out value="${registration.email}"/>"><c:out value="${registration.email}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="email" sortable="true" headerClass="sortable" titleKey="registration.email"/>
     
@@ -190,31 +195,31 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
          
     <display:column property="organization.name" sortable="true" headerClass="sortable"
          titleKey="registration.organization" class="${tdClass}"/>
-	
-	<display:column property="serviceArea.name" sortable="true" headerClass="sortable" 
-		titleKey="registration.serviceArea" class="${tdClass}"/>
+    
+    <display:column property="serviceArea.name" sortable="true" headerClass="sortable" 
+        titleKey="registration.serviceArea" class="${tdClass}"/>
          
     <display:column sortable="true" headerClass="sortable"
          titleKey="registration.invoiced">
-		<c:if test="${registrationList.invoiced == true}"><fmt:message key="checkbox.checked"/></c:if>
-		<c:if test="${registrationList.invoiced == false}"><fmt:message key="checkbox.unchecked"/></c:if>
+        <c:if test="${registration.invoiced == true}"><fmt:message key="checkbox.checked"/></c:if>
+        <c:if test="${registration.invoiced == false}"><fmt:message key="checkbox.unchecked"/></c:if>
     </display:column>
     
     <display:column sortable="true" headerClass="sortable"
          titleKey="registration.attended">
-		<c:if test="${registrationList.attended == true}"><fmt:message key="checkbox.checked"/></c:if>
-		<c:if test="${registrationList.attended == false}"><fmt:message key="checkbox.unchecked"/></c:if>
+        <c:if test="${registration.attended == true}"><fmt:message key="checkbox.checked"/></c:if>
+        <c:if test="${registration.attended == false}"><fmt:message key="checkbox.unchecked"/></c:if>
     </display:column>
     
-    <display:column media="csv excel xml pdf" property="invoiceName" sortable="true" headerClass="sortable" titleKey="registrationList.invoiceAddress.name"/>
-    <display:column media="csv excel xml pdf" property="invoiceAddress.address" sortable="true" headerClass="sortable" titleKey="registrationList.invoiceAddress.address"/>
-    <display:column media="csv excel xml pdf" property="invoiceAddress.city" sortable="true" headerClass="sortable" titleKey="registrationList.invoiceAddress.city"/>
-    <display:column media="csv excel xml pdf" property="invoiceAddress.postalCode" sortable="true" headerClass="sortable" titleKey="registrationList.invoiceAddress.postalCode"/>
+    <display:column media="csv excel xml pdf" property="invoiceName" sortable="true" headerClass="sortable" titleKey="registration.invoiceAddress.name"/>
+    <display:column media="csv excel xml pdf" property="invoiceAddress.address" sortable="true" headerClass="sortable" titleKey="registration.invoiceAddress.address"/>
+    <display:column media="csv excel xml pdf" property="invoiceAddress.city" sortable="true" headerClass="sortable" titleKey="registration.invoiceAddress.city"/>
+    <display:column media="csv excel xml pdf" property="invoiceAddress.postalCode" sortable="true" headerClass="sortable" titleKey="registration.invoiceAddress.postalCode"/>
     
     <display:setProperty name="paging.banner.item_name" value="${item}"/>
     <display:setProperty name="paging.banner.items_name" value="${items}"/>
 </display:table>
-</c:if>
+</authz:authorize>
 
 <c:out value="${buttons}" escapeXml="false"/>
 

@@ -11,7 +11,7 @@
                 CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
                 PATTERN_TYPE_APACHE_ANT
                 /j_security_check*=httpSessionContextIntegrationFilter,authenticationProcessingFilter
-                /**/*.html*=httpSessionContextIntegrationFilter,remoteUserFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
+                /**/*.html*=httpSessionContextIntegrationFilter,remoteUserFilter,ezAuthenticationFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
                 /**/*.jsp*=httpSessionContextIntegrationFilter,remoteUserFilter,exceptionTranslationFilter,filterInvocationInterceptor
             </value>
         </property>
@@ -29,13 +29,14 @@
             <value>
                 CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
                 PATTERN_TYPE_APACHE_ANT
-                /signup.html=ROLE_ANONYMOUS,admin,anonymous
-                /passwordhint.html*=ROLE_ANONYMOUS,admin,anonymous
-                /**/*.html*=admin,anonymous,ROLE_ANONYMOUS
-                /clickstreams.jsp=admin,ROLE_ANONYMOUS
+                /signup.html=anonymous
+                /passwordhint.html*=anonymous
+                /**/*.html*=anonymous,admin
+                /clickstreams.jsp=admin
             </value>
         </property>
     </bean>
+    
 
     <bean id="authenticationManager" class="org.acegisecurity.providers.ProviderManager">
         <property name="providers">
@@ -44,6 +45,12 @@
                 <ref local="anonymousAuthenticationProvider"/>
             </list>
         </property>
+    </bean>
+    
+    <bean id="ezAuthenticationFilter" class="no.unified.soak.webapp.filter.EZAuthenticationFilter">
+        <property name="userManager" ref="userManager"/>
+        <property name="userSynchronizeManager" ref="userSynchronizeManager"/>
+        <property name="ezUserDAO" ref="ezUserDAO"/>
     </bean>
    
     <!-- Automatically receives AuthenticationEvent messages from DaoAuthenticationProvider -->
@@ -107,7 +114,7 @@
     
     <bean id="anonymousProcessingFilter" class="org.acegisecurity.providers.anonymous.AnonymousProcessingFilter">
         <property name="key" value="anonymous"/>
-        <property name="userAttribute" value="anonymous,admin,ROLE_ANONYMOUS"/>
+        <property name="userAttribute" value="anonymous,ROLE_ANONYMOUS"/>
     </bean>
     
     <bean id="exceptionTranslationFilter" class="org.acegisecurity.ui.ExceptionTranslationFilter">

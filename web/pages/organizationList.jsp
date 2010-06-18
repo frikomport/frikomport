@@ -7,12 +7,12 @@
 <fmt:message key="organizationList.items" var="items"/>
 
 <c:set var="buttons">
-<c:if test="${isAdmin}">
+<authz:authorize ifAnyGranted="admin">
     <button type="button" style="margin-right: 5px"
         onclick="location.href='<c:url value="/editOrganization.html"/>'">
         <fmt:message key="button.add"/>
     </button>
-</c:if>
+</authz:authorize>
 </c:set>
 
 <c:out value="${buttons}" escapeXml="false"/>
@@ -20,13 +20,13 @@
 <display:table name="${organizationList}" cellspacing="0" cellpadding="0"
     id="organizationList" pagesize="${itemCount}" class="list" 
     export="true" requestURI="">
-<c:if test="${isAdmin}">
+<authz:authorize ifAnyGranted="admin">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
 		<a href='<c:url value="/editOrganization.html"><c:param name="id" value="${organizationList.id}"/><c:param name="from" value="list"/></c:url>'>
             <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
     </display:column>
-</c:if>
+</authz:authorize>
     <display:column property="name" sortable="true" headerClass="sortable"
          titleKey="organization.name"/>
          
@@ -35,7 +35,7 @@
          <fmt:formatNumber value="${organizationList.number}" minFractionDigits="0"/>
     </display:column>
     
-<c:if test="${isAdmin}">
+<authz:authorize ifAnyGranted="admin">
     <display:column property="invoiceName" sortable="true" headerClass="sortable"
          titleKey="organizationList.invoiceAddress.name"/>
     <display:column property="invoiceAddress.address" sortable="true" headerClass="sortable"
@@ -44,15 +44,15 @@
          titleKey="organizationList.invoiceAddress.city"/>
    <display:column property="invoiceAddress.postalCode" sortable="true" headerClass="sortable"
          titleKey="organizationList.invoiceAddress.postalCode"/>
-</c:if>    
+</authz:authorize>   
     
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<authz:authorize ifAnyGranted="admin,instructor,editor">
     <display:column sortable="true" headerClass="sortable"
          titleKey="organization.selectable">
 		<c:if test="${organizationList.selectable == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${organizationList.selectable == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 	</display:column>
-</c:if>
+</authz:authorize>
 
 
 

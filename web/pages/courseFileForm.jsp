@@ -50,10 +50,10 @@
     <tr>
         <td></td>
         <td class="buttonBar">
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+            <authz:authorize ifAnyGranted="admin,instructor,editor">
             <input type="submit" name="upload" class="button" onclick="bCancel=false"
                 value="<fmt:message key="button.upload"/>" />
-</c:if>
+            </authz:authorize>
 
             <input type="submit" name="docancel" class="button" onclick="bCancel=true"
                 value="<fmt:message key="button.cancel"/>" />
@@ -80,14 +80,14 @@
     </display:column>
     
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-	            <input type="submit" class="button" name="download"
+        <input type="submit" class="button" name="download"
                 onclick="document.courseFileListForm.attachmentid.value=<c:out value="${attachmentsList.id}"/>;bCancel=true;" 
                 value="<fmt:message key="button.download"/>" />
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
-	            <input type="submit" class="button" name="delete"
+        <authz:authorize ifAnyGranted="admin,instructor,editor">
+        <input type="submit" class="button" name="delete"
                 onclick="document.courseFileListForm.attachmentid.value=<c:out value="${attachmentsList.id}"/>;bCancel=true;" 
                 value="<fmt:message key="button.delete"/>" />
-</c:if>
+        </authz:authorize>
 	</display:column>
 	
     <display:setProperty name="paging.banner.item_name" value="${item}"/>

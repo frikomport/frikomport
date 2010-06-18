@@ -56,7 +56,7 @@
     <tr>
         <td></td>
         <td class="buttonBar">            
-<c:if test="${isAdmin}">
+<authz:authorize ifAnyGranted="admin">
             <input type="submit" class="button" name="save" 
                 onclick="bCancel=false" value="<fmt:message key="button.save"/>" />
 			<c:if test="${!empty serviceArea.id}">
@@ -64,7 +64,7 @@
 	                onclick="bCancel=true;return confirmDelete('<fmt:message key="serviceAreaList.theitem"/>')" 
 	                value="<fmt:message key="button.delete"/>" />
 			</c:if>
-</c:if>
+</authz:authorize>
             <input type="submit" class="button" name="cancel" onclick="bCancel=true"
                 value="<fmt:message key="button.cancel"/>" />        
         </td>

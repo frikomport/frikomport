@@ -102,7 +102,7 @@
     <tr>
         <td></td>
         <td class="buttonBar">            
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<authz:authorize ifAnyGranted="admin,instructor,editor">
             <input type="submit" class="button" name="save" 
                 onclick="bCancel=false" value="<fmt:message key="button.save"/>" />
 			<c:if test="${!empty person.id}">
@@ -110,7 +110,7 @@
     	            onclick="bCancel=true;return confirmDelete('<fmt:message key="personList.theitem"/>')" 
         	        value="<fmt:message key="button.delete"/>" />
         	</c:if>
-</c:if>
+</authz:authorize>
             <input type="submit" class="button" name="cancel" onclick="bCancel=true"
                 value="<fmt:message key="button.cancel"/>" />        
         </td>

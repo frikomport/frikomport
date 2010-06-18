@@ -293,56 +293,55 @@
                 <prop key="/mainMenu.html">filenameController</prop>
                 <prop key="/editUser.html">userFormController</prop> 
                 <prop key="/selectFile.html">fileUploadController</prop>
-                <prop key="/uploadFile.html">fileUploadController</prop>
                 <prop key="/passwordHint.html">passwordHintController</prop>
-
-                <prop key="/editOrganization.html">organizationFormController</prop>
                 <prop key="/listOrganizations.html">organizationController</prop>
                 <prop key="/listMunicipalities.html">organizationController</prop>
-
                 <prop key="/listLocations.html">locationController</prop>
-                <prop key="/editLocation.html">locationFormController</prop>
                 <prop key="/detailsLocation.html">locationDetailsController</prop>
-
                 <prop key="/listPeople.html">personController</prop>
                 <prop key="/editPerson.html">personFormController</prop>
                 <prop key="/detailsPerson.html">personDetailsController</prop>
-                
                 <prop key="/listResponsibles.html">responsibleController</prop>
-
                 <prop key="/listServiceAreas.html">serviceAreaController</prop>
-                <prop key="/editServiceArea.html">serviceAreaFormController</prop>
-                
-                <!--Course-URL-START-->
                 <prop key="/listCourses.html">courseController</prop>
-                <prop key="/editCourse.html">courseFormController</prop>
-                <prop key="/notifyCourse.html">courseNotificationController</prop>
                 <prop key="/detailsCourse.html">courseDetailsController</prop>
-                <prop key="/editFileCourse.html">courseFileFormController</prop>
-                <prop key="/emailCourse.html">courseEmailController</prop>
-                <!--Course-URL-END-->
-                                
-                <!--Registration-URL-START-->
                 <prop key="/listRegistrations.html">registrationController</prop>
                 <prop key="/performRegistration.html">registrationFormController</prop>
                 <prop key="/registrationComplete.html">registrationCompleteController</prop>
                 <prop key="/cancelRegistration.html">cancelRegistrationController</prop>
-                <prop key="/administerRegistration.html">registrationAdministrationController</prop>
-                <!--Registration-URL-END-->
-                
-                <!-- Add additional URL mappings here -->
-                <prop key="/waitingList.html">waitingListController</prop>
+                <prop key="/administerRegistration.html">registrationAdministrationController</prop>                   
                 <prop key="/detailsUser.html">userDetailsController</prop>
 				<prop key="/listUsers.html">userController</prop>
 				<prop key="/profileUser.html">userRegistrationController</prop>
-
-                <prop key="/administerConfiguration.html">configurationFormController</prop>
-
                 <prop key="/listCategories.html">categoryController</prop>
                 <prop key="/detailsCategory.html">categoryDetailsController</prop>
-                <prop key="/editCategory.html">categoryFormController</prop>
             </props>
         </property>
+    </bean>
+    
+    <bean id="instructorUrlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="interceptors">
+            <list>
+                <ref bean="instructorInterceptor"/>
+            </list>
+        </property>
+        <property name="mappings">
+            <props>
+                <prop key="/uploadFile.html">fileUploadController</prop>
+                <prop key="/editLocation.html">locationFormController</prop>
+                <prop key="/editCourse.html">courseFormController</prop>
+                <prop key="/notifyCourse.html">courseNotificationController</prop>
+                <prop key="/editFileCourse.html">courseFileFormController</prop>
+                <prop key="/emailCourse.html">courseEmailController</prop>
+                <prop key="/activeUsers.html">filenameController</prop>
+                <prop key="/users.html">userController</prop>           
+                <prop key="/reload.html">reloadController</prop>
+            </props>
+        </property>
+    </bean>
+    
+    <bean id="instructorInterceptor" class="org.springframework.web.servlet.handler.UserRoleAuthorizationInterceptor">
+        <property name="authorizedRoles" value="admin,instructor,editor"/>
     </bean>
 
     <bean id="adminUrlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
@@ -353,16 +352,17 @@
         </property>
         <property name="mappings">
             <props>
-                <prop key="/activeUsers.html">filenameController</prop>
-                <prop key="/users.html">userController</prop>
-                <prop key="/flushCache.html">filenameController</prop>                
-                <prop key="/reload.html">reloadController</prop>
+                <prop key="/editOrganization.html">organizationFormController</prop>
+                <prop key="/editServiceArea.html">serviceAreaFormController</prop>
+                <prop key="/editCategory.html">categoryFormController</prop>
+                <prop key="/waitingList.html">waitingListController</prop>  
+                <prop key="/administerConfiguration.html">configurationFormController</prop>
             </props>
         </property>
     </bean>
 
     <bean id="adminInterceptor" class="org.springframework.web.servlet.handler.UserRoleAuthorizationInterceptor">
-        <property name="authorizedRoles" value="admin,anonymous"/>
+        <property name="authorizedRoles" value="admin"/>
     </bean>
 
     <bean id="filenameController" class="org.springframework.web.servlet.mvc.UrlFilenameViewController"/>

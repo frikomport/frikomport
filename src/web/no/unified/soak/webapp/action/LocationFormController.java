@@ -110,14 +110,8 @@ public class LocationFormController extends BaseFormController {
         boolean isNew = (location.getId() == null);
         Locale locale = request.getLocale();
 
-        // Are we to return to the list?
-        if (request.getParameter("return") != null) {
-            if (log.isDebugEnabled()) {
-                log.debug("recieved 'return' from jsp");
-            }
-            
-        } // or to delete?
-        else if (request.getParameter("delete") != null) {
+
+        if (request.getParameter("delete") != null) {
             locationManager.removeLocation(location.getId().toString());
 
             saveMessage(request, getText("location.deleted", locale));

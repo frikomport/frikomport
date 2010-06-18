@@ -7,12 +7,12 @@
 </content>
 
 <c:set var="buttons">
-<c:if test="${isAdmin || isEducationResponsible}">
+<authz:authorize ifAnyGranted="admin,editor">
     <button type="button" style="margin-right: 5px"
         onclick="location.href='<c:url value="/editCategory.html"/>?method=Add&from=list'">
         <fmt:message key="button.add"/>
     </button>
-</c:if>
+</authz:authorize>
 </c:set>
 
 <c:out value="${buttons}" escapeXml="false" />
@@ -26,15 +26,13 @@
         headerClass="sortable" url="/detailsCategory.html?from=list"
         paramId="id" paramProperty="id" titleKey="category.name" />
 
-<c:if test="${isAdmin || isEducationResponsible}">
+<authz:authorize ifAnyGranted="admin,editor">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-<c:if test="${isAdmin || isEducationResponsible}">
         <button type="button" onclick="location.href='<c:url value="/editCategory.html"><c:param name="id" value="${category.id}"/></c:url>'">
             <fmt:message key="button.edit"/>
         </button>
-</c:if>
     </display:column>
-</c:if>
+</authz:authorize>
 
     <fmt:message var="category" key="categoryList.category" />
     <fmt:message var="categories" key="categoryList.categories" />

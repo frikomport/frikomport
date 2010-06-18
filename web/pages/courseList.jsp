@@ -1,4 +1,8 @@
 <%@ include file="/common/taglibs.jsp"%>
+<c:set var="admin" value="false"/>
+<authz:authorize ifAnyGranted="admin,instructor,editor">
+    <c:set var="admin" value="true"/>
+</authz:authorize>
 
 <title><fmt:message key="courseList.title"/></title>
 <content tag="heading"><fmt:message key="courseList.heading"/></content>
@@ -116,12 +120,12 @@ function fillSelect(obj){
     </div>
 </form:form>
 <c:set var="buttons">
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<authz:authorize ifAnyGranted="admin,instructor,editor">
     <button type="button" style="margin-right: 5px"
         onclick="location.href='<c:url value="/editCourse.html"/>'">
         <fmt:message key="button.add"/>
     </button>
-</c:if>
+</authz:authorize>
 </c:set>
 
 <c:out value="${buttons}" escapeXml="false"/>
@@ -129,15 +133,25 @@ function fillSelect(obj){
     id="courseList" pagesize="${itemCount}" class="list" 
     export="true" requestURI="listCourses.html">
 
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+    <%-- Check username for instructors, only responsible instructor can edit. --%>
+    <authz:authorize ifAnyGranted="instructor">
+    <c:set var="admin" value="true"/>
+    <c:if test="${courseList.responsible.username != username}">
+        <c:set var="admin" value="false"/>
+    </c:if>
+    </authz:authorize>
+    
+<authz:authorize ifAnyGranted="admin,instructor,editor">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible && username == courseList.responsible.username}">
+    <authz:authorize ifAnyGranted="admin,instructor,editor">
+        <c:if test="${admin}">
         <a href='<c:url value="/editCourse.html"><c:param name="id" value="${courseList.id}"/><c:param name="from" value="list"/></c:url>'>
             <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
-</c:if>
+        </c:if>
+    </authz:authorize>
     </display:column>
-</c:if>
+</authz:authorize>
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="name">
         <c:if test="${courseList.status == 3}"><img src="<c:url value="/images/cancel.png"/>"
@@ -147,14 +161,14 @@ function fillSelect(obj){
     </display:column>
     <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="course.name"/>
 
-    <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+    <authz:authorize ifAnyGranted="admin,instructor,editor">
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.status">
         <c:if test="${courseList.status == 0}"><img src="<c:url value="/images/add.png"/>" alt="<fmt:message key="course.status.created"/>" title="<fmt:message key="course.status.created"/>" class="icon"/></c:if>
         <c:if test="${courseList.status == 1}"><img src="<c:url value="/images/stop.png"/>" alt="<fmt:message key="course.status.finished"/>" title="<fmt:message key="course.status.finished"/>" class="icon"/></c:if>
         <c:if test="${courseList.status == 2}"><img src="<c:url value="/images/accept.png"/>" alt="<fmt:message key="course.status.published"/>" title="<fmt:message key="course.status.published"/>" class="icon"/></c:if>
         <c:if test="${courseList.status == 3}"><img src="<c:url value="/images/cancel.png"/>" alt="<fmt:message key="course.status.cancelled"/>" title="<fmt:message key="course.status.cancelled"/>" class="icon"/></c:if>
     </display:column>
-    </c:if>
+    </authz:authorize>
 
     <display:column sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
          <fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
@@ -232,7 +246,7 @@ function fillSelect(obj){
 
 <c:out value="${buttons}" escapeXml="false"/>
 
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<authz:authorize ifAnyGranted="admin,instructor,editor">
 <c:set var="parameters">
 	<fmt:message key="javaapp.baseurl"/><fmt:message key="javaapp.courselisturl"/>
 	<c:if test="${course.name != null && course.name ne ''}">name=<c:out value="${course.name}"/>%26</c:if>
@@ -245,7 +259,7 @@ function fillSelect(obj){
 <div class="searchUrl" style="padding:3px;">
     <fmt:message key="url-to-this-search"/>: <a class="external" href="<c:out value="${parameters}"/>" target="_blank"><c:out value="${parameters}"/></a>
 </div>
-</c:if>
+</authz:authorize>
 <%--
 <script type="text/javascript">
 highlightTableRows("courseList");

@@ -1,9 +1,14 @@
 <%@ include file="/common/taglibs.jsp"%>
 
-<c:set var="admin" value="${false}"/>
-<c:if test="${isAdmin || isEducationResponsible || (isCourseResponsible && course.responsible.username == username)}">
-	<c:set var="admin" value="${true}"/>
-</c:if>
+<c:set var="admin" value="false"/>
+<authz:authorize ifAnyGranted="admin,instructor,editor">
+    <c:set var="admin" value="true"/>
+    <authz:authorize ifAnyGranted="instructor">
+        <c:if test="${course.responsible.username != username}">
+            <c:set var="admin" value="false"/>
+        </c:if>
+    </authz:authorize>
+</authz:authorize>
 
 <title><fmt:message key="registrationAdministration.title"/></title>
 <content tag="heading">
@@ -90,10 +95,10 @@
 	<display:column property="lastName" sortable="true" headerClass="sortable" class="${tdClass}" 
 		titleKey="registration.lastName"/>
 
-    <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+    <authz:authorize ifAnyGranted="admin,instructor,editor">
     <display:column media="ccsv cexcel cxml cpdf" property="email" sortable="true" headerClass="sortable" class="${tdClass}"
         titleKey="registration.email"/>
-    </c:if>
+    </authz:authorize>
 
 	<display:column property="organization.name" sortable="true" headerClass="sortable" class="${tdClass}"
 		titleKey="registration.organization"/>
@@ -107,7 +112,7 @@
 	<display:column property="workplace" sortable="true" headerClass="sortable" class="${tdClass}"
 		titleKey="registration.workplace"/>
 
-    <c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+    <authz:authorize ifAnyGranted="admin,instructor,editor">
 	<display:column property="phone" sortable="true" headerClass="sortable" class="${tdClass}"
 		titleKey="registration.phone"/>
 
@@ -181,7 +186,7 @@
 		<c:if test="${registrationList.attended == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${registrationList.attended == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 	</display:column>
-    </c:if>
+    </authz:authorize>
 
 	<display:setProperty name="paging.banner.item_name" value="${item}"/>
 	<display:setProperty name="paging.banner.items_name" value="${items}"/>

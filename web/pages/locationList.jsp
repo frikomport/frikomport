@@ -34,12 +34,12 @@
 </form>
 
 <c:set var="buttons">
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<authz:authorize ifAnyGranted="admin,instructor,editor">
     <button type="button" style="margin-right: 5px"
         onclick="location.href='<c:url value="/editLocation.html"/>'">
         <fmt:message key="button.add"/>
     </button>
-</c:if>
+</authz:authorize>
 </c:set>
 
 <c:out value="${buttons}" escapeXml="false"/>
@@ -47,13 +47,13 @@
 <display:table name="${locationList}" cellspacing="0" cellpadding="0"
     id="locationList" pagesize="${itemCount}" class="list" 
     export="true" requestURI="">
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+<authz:authorize ifAnyGranted="admin,instructor,editor">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
         <a href='<c:url value="/editLocation.html"><c:param name="id" value="${locationList.id}"/><c:param name="from" value="list"/></c:url>'>
             <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
     </display:column>
-</c:if>
+</authz:authorize>
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="location.name" sortProperty="name">
          <a href="<c:url value="/detailsLocation.html"><c:param name="id" value="${locationList.id}"/></c:url>" 
          title="<c:out value="${locationList.description}"/>"><c:out value="${locationList.name}"/></a>
@@ -72,7 +72,7 @@
     </display:column>
     <display:column media="csv excel xml pdf" property="address" sortable="true" headerClass="sortable" titleKey="location.address"/>
     
-<c:if test="${isAdmin || isEducationResponsible || isCourseResponsible}">
+    <authz:authorize ifAnyGranted="admin,instructor,editor">
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="location.contactName" sortProperty="contactName">
          <a href="mailto:<c:out value="${locationList.email}"/>"><c:out value="${locationList.contactName}"/></a>
     </display:column>
@@ -90,7 +90,7 @@
         <c:if test="${locationList.selectable == true}"><fmt:message key="checkbox.checked"/></c:if>
         <c:if test="${locationList.selectable == false}"><fmt:message key="checkbox.unchecked"/></c:if>
     </display:column>
-</c:if>
+    </authz:authorize>
 
     <display:setProperty name="paging.banner.item_name" value="${item}"/>
     <display:setProperty name="paging.banner.items_name" value="${items}"/>
