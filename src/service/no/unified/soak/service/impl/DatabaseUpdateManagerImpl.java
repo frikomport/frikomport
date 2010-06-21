@@ -33,14 +33,11 @@ import no.unified.soak.service.UserManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.DefaultQuotedNamingStrategy;
 
-import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.validator.EmailValidator;
 import org.springframework.context.MessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.rowset.SqlRowSet;
-import org.springframework.jdbc.support.rowset.SqlRowSetMetaData;
 
 /**
  * User: gv Date: 05.jun.2008 Time: 10:26:23
@@ -432,6 +429,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	configurationsToInsert.add(new Configuration("access.course.useAttendants", true, null));
         	configurationsToInsert.add(new Configuration("access.course.useRegisterBy", false, null));
         	configurationsToInsert.add(new Configuration("access.course.useOrganization2", true, null));
+        	configurationsToInsert.add(new Configuration("access.course.showDescriptionToPublic", false, null));
         	
         	// profile
         	configurationsToInsert.add(new Configuration("access.profile.showInvoiceaddress", false, null));
@@ -455,6 +453,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	configurationsToInsert.add(new Configuration("access.course.showCourseName", false, null));
         	configurationsToInsert.add(new Configuration("access.course.useAttendants", false, null));
         	configurationsToInsert.add(new Configuration("access.course.useRegisterBy", true, null));
+        	configurationsToInsert.add(new Configuration("access.course.showDescriptionToPublic", true, null));
 
         	// profile
         	configurationsToInsert.add(new Configuration("access.profile.showInvoiceaddress", true, null));

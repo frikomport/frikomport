@@ -24,7 +24,7 @@
 </tr>
 </c:if>
 
-<c:if test="${showDescription}">
+<c:if test="${showDescription && ((isReader || isEventResponsible || isEducationResponsible || isAdmin) || (showDescriptionToPublic))}">
 <tr>
 	<th>
 		<fmt:message key="course.description" />

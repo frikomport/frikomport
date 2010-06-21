@@ -152,6 +152,7 @@ public class ActionFilter implements Filter {
         session.setAttribute("usePayment", configurationManager.isActive("access.course.usePayment", true));
         session.setAttribute("showDuration", configurationManager.isActive("access.course.showDuration", true));
         session.setAttribute("showDescription", configurationManager.isActive("access.course.showDescription", true));
+        session.setAttribute("showDescriptionToPublic", configurationManager.isActive("access.course.showDescriptionToPublic", true));
         session.setAttribute("showRole", configurationManager.isActive("access.course.showRole", true));
         session.setAttribute("showType", configurationManager.isActive("access.course.showType", true));
         session.setAttribute("showRestricted", configurationManager.isActive("access.course.showRestricted", true));

@@ -162,7 +162,7 @@ function fillSelect(obj){
 
 
 <c:choose>
-<c:when test="${showDescription}">
+<c:when test="${showDescription && ((isReader || isEventResponsible || isEducationResponsible || isAdmin) || (showDescriptionToPublic))}">
 		<tr>
 			<th>
 				<soak:label key="course.description" />
