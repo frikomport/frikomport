@@ -47,7 +47,7 @@ public class CourseEmailController extends CourseNotificationController
         Map model = new HashMap();
         Locale locale = request.getLocale();
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(Constants.USER_KEY);
+        User user = getUser(request);
 
         model.put("mailsenders",getMailSenders((Course)command, user, locale));
 

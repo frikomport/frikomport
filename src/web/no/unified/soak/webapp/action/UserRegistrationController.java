@@ -59,7 +59,7 @@ public class UserRegistrationController extends BaseFormController{
  
         User user = null;
         if(configurationManager.isActive("access.registration.userdefaults",false)){
-            user = (User) session.getAttribute(Constants.USER_KEY);
+            user = getUser(request);
             if(user != null && user.getUsername().equals(Constants.ANONYMOUS_ROLE)){
                 user = (User) session.getAttribute(Constants.ALT_USER_KEY);
             }
@@ -114,7 +114,7 @@ public class UserRegistrationController extends BaseFormController{
 
         User user = null;
         if(configurationManager.isActive("access.registration.userdefaults",false)){
-            user = (User) session.getAttribute(Constants.USER_KEY);
+            user = getUser(request);
             if(user != null && user.getUsername().equals(Constants.ANONYMOUS_ROLE)){
                 user = (User) session.getAttribute(Constants.ALT_USER_KEY);
             }            

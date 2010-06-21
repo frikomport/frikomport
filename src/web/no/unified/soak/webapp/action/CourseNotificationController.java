@@ -97,8 +97,7 @@ public class CourseNotificationController extends BaseFormController {
         Course course = (Course)command;
         String courseid = request.getParameter("id");
 		model.put("id", courseid);
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(Constants.USER_KEY);
+        User user = getUser(request);
 
         // course is changed - waitingList should be processed
         waitingListManager.processIfNeeded(course.getId(), locale);
@@ -148,7 +147,7 @@ public class CourseNotificationController extends BaseFormController {
 		} else {
 			course = new Course();
 	        // Check if a default organization should be applied
-			User user = (User) request.getSession().getAttribute(Constants.USER_KEY);
+			User user = getUser(request);
 			Object omid = user.getOrganizationid();
 	        if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
 	            course.setOrganizationid(new Long(omid.toString()));

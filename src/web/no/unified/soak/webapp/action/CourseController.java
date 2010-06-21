@@ -113,7 +113,7 @@ public class CourseController extends BaseFormController {
         Date starttime = new Date();
         Date stoptime = null;
 
-        User user = (User) session.getAttribute(Constants.USER_KEY);
+        User user = getUser(request);
         Boolean isAdmin = false;
         List<String> roles = null;
         if(user != null){
@@ -264,7 +264,7 @@ public class CourseController extends BaseFormController {
         Date starttime = new Date();
         Date stoptime = null;
 
-        User user = (User) session.getAttribute(Constants.USER_KEY);
+        User user = getUser(request);
         Boolean isAdmin = false;
         List<String> roles = null;
         if(user != null){

@@ -86,7 +86,7 @@ public class LocationFormController extends BaseFormController {
         } else {
             location = new Location();
 	        // Check if a default organization should be applied
-            User user = (User) request.getSession().getAttribute(Constants.USER_KEY);
+            User user = getUser(request);
             Object omid = user.getOrganizationid();
 	        if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
 	            location.setOrganizationid(new Long(omid.toString()));

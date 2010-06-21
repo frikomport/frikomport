@@ -341,7 +341,7 @@ public class CourseFormController extends BaseFormController {
             course.setCategoryid(1L);
             course.setCategory(categoryManager.getCategory(1L));
             // Check if a default organization should be applied
-            User user = (User) request.getSession().getAttribute(Constants.USER_KEY);// TODO: change from sessionuser til acegiuser
+            User user = getUser(request);
             Object omid = user.getOrganizationid();
             if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
                 course.setOrganizationid(new Long(omid.toString()));

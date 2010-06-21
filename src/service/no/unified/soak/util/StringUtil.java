@@ -7,7 +7,6 @@
  */
 package no.unified.soak.util;
 
-import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.List;
 
@@ -86,9 +85,7 @@ public class StringUtil {
 	 * @return String
 	 */
 	public static String encodeString(String str) {
-		sun.misc.BASE64Encoder encoder = new sun.misc.BASE64Encoder();
-
-		return encoder.encodeBuffer(str.getBytes()).trim();
+		return BASE64Util.encodeString(str);
 	}
 
 	/**
@@ -98,13 +95,7 @@ public class StringUtil {
 	 * @return String
 	 */
 	public static String decodeString(String str) {
-		sun.misc.BASE64Decoder dec = new sun.misc.BASE64Decoder();
-
-		try {
-			return new String(dec.decodeBuffer(str));
-		} catch (IOException io) {
-			throw new RuntimeException(io.getMessage(), io.getCause());
-		}
+		return BASE64Util.decodeString(str);
 	}
 
 	public static String ifEmpty(Integer number, String returnvalue) {

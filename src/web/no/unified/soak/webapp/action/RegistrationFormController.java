@@ -103,7 +103,7 @@ public class RegistrationFormController extends BaseFormController {
         }
 
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute(Constants.USER_KEY);
+        User user = getUser(request);
         User altUser = (User) session.getAttribute(Constants.ALT_USER_KEY);
 
         Boolean isAdmin = false;
@@ -185,7 +185,7 @@ public class RegistrationFormController extends BaseFormController {
         } else {
             registration = new Registration();
             registration.setCourseid(new Long(courseId));
-            User user = (User) session.getAttribute(Constants.USER_KEY);
+            User user = getUser(request);
             if(user != null && user.getOrganization() != null){
                 registration.setOrganization(user.getOrganization());
                 registration.setOrganizationid(user.getOrganization().getId());

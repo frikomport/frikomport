@@ -77,14 +77,14 @@ public class EZAuthenticationFilter implements Filter {
             ezUser = ezUserDAO.findUserBySessionID(cookie.getValue());
             if(ezUser != null && ezUser.getUsername() != null ){
                 user = userSynchronizeManager.processUser(ezUser);
-                session.setAttribute(Constants.USER_KEY, user);
+//                session.setAttribute(Constants.USER_KEY, user);
                 anonymous = false;
             }
         }
 
         if(!anonymous) {
             Authentication authentificationToken = new EZAuthentificationToken(user, eZSessionId);
-            session.setAttribute("authenticationToken", authentificationToken);
+//            session.setAttribute("authenticationToken", authentificationToken);
             SecurityContextHolder.getContext().setAuthentication(authentificationToken);
             
             // if user wants to be remembered, create a remember me cookie

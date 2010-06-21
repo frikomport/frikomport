@@ -191,7 +191,7 @@ public class RegistrationAdministrationController extends BaseFormController {
 		}
 
 		RegistrationStatusCriteria statusCriteria;
-		User user = (User)SecurityContextHolder.getContext().getAuthentication().getDetails();
+		User user = getUser(request);
 		if (user.getRoleNameList().contains("admin") 
                 || user.getRoleNameList().contains("editor") 
                 || user.getRoleNameList().contains("instructor")) {

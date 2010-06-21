@@ -27,6 +27,7 @@ import no.unified.soak.service.UserManager;
 import no.unified.soak.webapp.util.SslUtil;
 
 import org.acegisecurity.context.SecurityContextHolder;
+import org.acegisecurity.userdetails.UserDetails;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,9 +38,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * This class is used to filter all requests to the <code>Action</code>
- * servlet and detect if a user is authenticated. If a user is authenticated,
- * but no user object exists, this class populates the <code>UserForm</code>
- * from the user store.
+ * servlet.
  * 
  * <p>
  * <a href="ActionFilter.java.html"><i>View Source</i></a>
@@ -124,9 +123,11 @@ public class ActionFilter implements Filter {
         session.setAttribute("showComment", configurationManager.isActive("access.registration.showComment",true));
         session.setAttribute("itemCount", configurationManager.getValue("list.itemCount", "25"));
         
-        User user = (User)SecurityContextHolder.getContext().getAuthentication().getDetails();
-        if (user != null) {
-            request.setAttribute("username", user.getUsername());
+        Object username = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (username instanceof UserDetails) {
+            request.setAttribute("username", ((UserDetails) username).getUsername());
+        } else {
+            request.setAttribute("username", username);
         }
         
         String hash = request.getParameter("hash");

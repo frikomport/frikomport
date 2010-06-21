@@ -89,7 +89,7 @@ public class EZAuthentificationToken implements Authentication {
     }
 
     /**
-     * Either username or UserDetails object. Here username
+     * Either username or UserDetails object.
      */
     public Object getPrincipal() {
         return ezUser.getUsername();

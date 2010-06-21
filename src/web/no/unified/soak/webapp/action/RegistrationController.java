@@ -95,7 +95,7 @@ public class RegistrationController extends BaseFormController {
         String postback = request.getParameter("ispostbackregistrationlist");
         if ((postback == null) || (postback.compareTo("1") != 0)) {
             // Check if a default organization should be applied
-            User user = (User) session.getAttribute(Constants.USER_KEY);
+            User user = getUser(request);
             if (user != null && user.getOrganizationid() != null) {
                 registration.setOrganizationid(user.getOrganizationid());
             }
@@ -154,8 +154,7 @@ public class RegistrationController extends BaseFormController {
         registration.setAttended(new Boolean(false));
 
         RegistrationStatusCriteria statusCriteria;
-        // Get user from acegi
-        User user = (User)SecurityContextHolder.getContext().getAuthentication().getDetails();
+        User user = getUser(request);
         if (user.getRoleNameList().contains("admin") 
                 || user.getRoleNameList().contains("editor") 
                 || user.getRoleNameList().contains("instructor")) {
@@ -224,7 +223,7 @@ public class RegistrationController extends BaseFormController {
         } else if ((reservedRequest != null) &&
                 (reservedRequest.compareTo("2") == 0)) {
             
-            User user = (User)SecurityContextHolder.getContext().getAuthentication().getDetails();
+            User user = getUser(request);
             if (user.getRoleNameList().contains("admin") 
                     || user.getRoleNameList().contains("editor") 
                     || user.getRoleNameList().contains("instructor")) {

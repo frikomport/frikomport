@@ -12,6 +12,8 @@ import no.unified.soak.model.User;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.UserManager;
 
+import org.acegisecurity.context.SecurityContextHolder;
+import org.acegisecurity.userdetails.UserDetails;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -128,7 +130,11 @@ public class BaseFormController extends SimpleFormController {
      * @return the user's populated object from the session
      */
     protected User getUser(HttpServletRequest request) {
-        return (User) request.getSession().getAttribute(Constants.USER_KEY);
+        Object username = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(username instanceof UserDetails) {
+            return (User) userManager.getUser(((UserDetails) username).getUsername());
+        }
+        return (User) userManager.getUser((String)username);
     }
 
     /**
