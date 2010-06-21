@@ -734,6 +734,9 @@ public class User extends BaseObject implements Serializable {
     }
     
     public Address getInvoiceAddressCopy() {
+    	if (invoiceAddress == null) {
+    		return null;
+    	}
     	Address copy = new Address();
     	copy.setAddress(invoiceAddress.getAddress());
     	copy.setCity(invoiceAddress.getCity());
