@@ -189,20 +189,20 @@ public class DateUtil {
 
 	/**
 	 * @param date
-	 * @param beginEnd
+	 * @param beginOrEndOfDay
 	 *            True if time should be at beginning of date. False if time
 	 *            should be at end of date. null if time should be unchanged.
 	 * @return
 	 */
-	public static String convertDateTimeToISOString(Date date, Boolean beginEnd) {
+	public static String convertDateTimeToISOString(Date date, Boolean beginOrEndOfDay) {
 		// 1970-01-01 10:00:01.0
-		if (beginEnd == null) {
+		if (beginOrEndOfDay == null) {
 			String isoPattern = ApplicationResourcesUtil.getText("datetime.formatISO");
 			return getDateTime(isoPattern, date);
 		}
 		String isoPattern = ApplicationResourcesUtil.getText("date.formatISO");
 		String dateTimeStr = getDateTime(isoPattern, date);
-		if (beginEnd) {
+		if (beginOrEndOfDay) {
 			dateTimeStr += " 00:00:00.0";
 		} else {
 			dateTimeStr += " 23:59:59.999";

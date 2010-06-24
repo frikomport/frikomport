@@ -146,7 +146,7 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
         }
 
         if (stopDate != null) {
-            criteria.add(Restrictions.lt("stopTime", stopDate));
+            criteria.add(Restrictions.lt("startTime", stopDate));
         }
 
         criteria.addOrder(Order.asc("status"));

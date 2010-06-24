@@ -706,7 +706,7 @@ public class CourseFormController extends BaseFormController {
 		StringBuffer msg = null;
 		switch(event) {
 			case Constants.EMAIL_EVENT_COURSEDELETED:
-				msg = MailUtil.create_EMAIL_EVENT_COURSEDELETED_body(course, mailComment);
+				msg = MailUtil.create_EMAIL_EVENT_COURSEDELETED_body(course, mailComment, configurationManager.getConfigurationsMap());
 				break;
 			default:
 				if(log.isDebugEnabled()) log.debug("sendMail: Handling of event:" + event + " not implemented..!");

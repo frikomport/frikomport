@@ -1,5 +1,5 @@
 <%-- Error Messages --%>
-<c:if test="${not empty errors}">
+<c:if test="${not empty listOfErrorMessages}">
     <div class="error" id="errorMessages">
         <c:forEach var="error" items="${listOfErrorMessages}">
             <img src="<c:url value="/images/iconWarning.gif"/>"
@@ -7,7 +7,7 @@
             <c:out value="${error}" escapeXml="false"/><br />
         </c:forEach>
     </div>
-    <c:remove var="listOfErrorMessages"/>
+    <c:remove var="listOfErrorMessages" scope="session"/>
 </c:if>
 
 <%-- Success Messages --%>

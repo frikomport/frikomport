@@ -8,6 +8,7 @@
 package no.unified.soak.webapp.filter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpSession;
 import no.unified.soak.Constants;
 import no.unified.soak.dao.ExtUserDAO;
 import no.unified.soak.ez.ExtUser;
+import no.unified.soak.model.RoleEnum;
 import no.unified.soak.model.User;
 import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.UserManager;
@@ -305,6 +307,17 @@ public class ActionFilter implements Filter {
             request.setAttribute("isAdmin", roleNameList.contains(Constants.ADMIN_ROLE));
             request.setAttribute("username", user.getUsername());
             request.setAttribute("user", user);
+
+            
+            ExtUserDAO extUserDAO = (ExtUserDAO) getBean("extUserDAO");
+            ArrayList<String> roleListTranslated = new ArrayList<String>();
+			for (String roleDBString : roleNameList) {
+				//There is no reason to show the confusing anonymous role to the user.
+				if (!roleDBString.equals(RoleEnum.ANONYMOUS.getJavaDBRolename())) {
+					roleListTranslated.add(extUserDAO.getStringForRole(RoleEnum.getRoleEnumFromJavaDBRolename(roleDBString)));
+				}
+			}
+			request.setAttribute("userRolesString", StringUtils.join(roleListTranslated.iterator(), ", "));
         } else {
             // User is not logged in, removing all role settings.
             request.setAttribute("isCourseParticipant", false);
@@ -314,6 +327,7 @@ public class ActionFilter implements Filter {
             request.setAttribute("isAdmin", false);
             request.setAttribute("username", null);
             request.setAttribute("user", null);
+            request.setAttribute("userRolesString", null);
         }
     }
 

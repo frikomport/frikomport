@@ -36,6 +36,7 @@ import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.impl.CategoryManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.CourseStatus;
+import no.unified.soak.util.DateUtil;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
@@ -332,15 +333,21 @@ public class CourseController extends BaseFormController {
         Date startInterval = course.getStartTime();
         Date stopInterval = course.getStopTime();
         
-        if (startInterval != null) {
-        	// if startInterval is in the past, the search will include historic data
-        	if(startInterval.before(new Date())){
-        		historic = new Boolean(true);
-        		course.setStatus(CourseStatus.COURSE_FINISHED);
-        	}
-        	starttime = startInterval;
-            model.put("startTime", startInterval);
-        }
+		if (startInterval != null) {
+			if (stopInterval != null && startInterval.after(stopInterval)) {
+				saveErrorMessage(request, getText("errors.XMustBeLessThanY", new String[] {
+						DateUtil.convertDateToString(startInterval),
+						DateUtil.convertDateToString(stopInterval) }, locale));
+			}
+
+			// if startInterval is in the past, the search will include historic data
+			if (startInterval.before(new Date())) {
+				historic = new Boolean(true);
+				course.setStatus(CourseStatus.COURSE_FINISHED);
+			}
+			starttime = startInterval;
+			model.put("startTime", startInterval);
+		}
 
         if (stopInterval != null) {
         	// legger på 24timer for å sikre til-og-med sluttdato

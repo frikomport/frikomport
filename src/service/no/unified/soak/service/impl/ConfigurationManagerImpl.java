@@ -79,5 +79,12 @@ public class ConfigurationManagerImpl extends BaseManager implements
 		//Also update the cache.
 		configurationsCache.put(configuration.getName(), configuration);
 	}
+
+	public Map<String, Configuration> getConfigurationsMap() {
+		if (configurationsCache != null) {
+			return configurationsCache;
+		}
+		return null;
+	}
 	
 }

@@ -323,7 +323,6 @@ function fillSelect(obj){
     <fmt:message key="url-to-this-search"/>: <a class="external" href="<c:out value="${parameters}"/>" target="_blank"><c:out value="${parameters}"/></a>
 </div>
 </c:if>
-
 <%--
 <script type="text/javascript">
 highlightTableRows("courseList");

@@ -13,7 +13,7 @@ public enum RoleEnum {
 		return javaDBValue;
 	}
 	
-	public RoleEnum getRoleEnumFromJavaDBRolename(String javaDBValue) {
+	public static RoleEnum getRoleEnumFromJavaDBRolename(String javaDBValue) {
 		for (RoleEnum roleEnum : values()) {
 			if (roleEnum.getJavaDBRolename().equals(javaDBValue)) {
 				return roleEnum;

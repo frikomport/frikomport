@@ -114,7 +114,7 @@ public class CancelRegistrationController implements Controller {
 	        	// confirm cancellation mail
 	        	boolean ccToResponsible = configurationManager.isActive("mail.registration.notifyResponsible", false);
 	        	
-	        	StringBuffer msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_DELETED_body(course, chargeOverdue);
+	        	StringBuffer msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_DELETED_body(course, chargeOverdue, configurationManager.getConfigurationsMap());
 	    		ArrayList<MimeMessage> email = MailUtil.getMailMessages(registration, Constants.EMAIL_EVENT_REGISTRATION_DELETED, course, msg, mailSender, ccToResponsible);
 	    		MailUtil.sendMimeMails(email, mailEngine);
 

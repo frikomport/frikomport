@@ -17,6 +17,7 @@ import no.unified.soak.dao.NotificationDao;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Notification;
 import no.unified.soak.model.Registration;
+import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.NotificationManager;
 import no.unified.soak.service.RegistrationManager;
@@ -34,7 +35,8 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 	protected MailEngine mailEngine = null;
 
 	private RegistrationManager registrationManager = null;
-
+	private ConfigurationManager configurationManager = null;
+	
     private MailSender mailSender = null;
 
     public void executeTask() {
@@ -64,6 +66,13 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 		this.registrationManager = registrationManager;
 	}
 
+	/**
+	 * @param configurationManager the registrationManager to set
+	 */
+	public void setConfigurationManager(ConfigurationManager configurationManager) {
+		this.configurationManager = configurationManager;
+	}
+	
 	/**
 	 * Set the Dao for communication with the data layer.
 	 * 
@@ -145,7 +154,7 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 						// Store that it has been successfully sent - cleanup by
 						// cleanup manager
 						boolean isReserved = notification.getRegistration().getReserved();
-                        StringBuffer msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_body(course, null, isReserved);
+                        StringBuffer msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_body(course, null, isReserved, configurationManager.getConfigurationsMap());
 						ArrayList<Registration> registrations = new ArrayList<Registration>();
 						registrations.add(notification.getRegistration());
 						ArrayList<MimeMessage> newEmails = MailUtil.getMailMessages(registrations, Constants.EMAIL_EVENT_NOTIFICATION, course, msg, null, mailSender, false);
@@ -222,7 +231,7 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 				
 				if(log.isDebugEnabled()) log.debug(listOfNames.toString());
 				
-				StringBuffer msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_SUMMARY_body(course, listOfNames.toString());
+				StringBuffer msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_SUMMARY_body(course, listOfNames.toString(), configurationManager.getConfigurationsMap());
 				String subject = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.summarysubject", course.getName()));
 				MimeMessage mail = MailUtil.getMailMessage(new String[]{course.getInstructor().getEmail()}, new String[]{course.getResponsible().getEmail()}, null, null, subject, msg, null, null, mailSender);
 				mailEngine.send(mail);

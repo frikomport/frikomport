@@ -230,7 +230,7 @@ public class CourseNotificationController extends BaseFormController {
 				msg = MailUtil.createChangedBody(course, locale, messageSource, mailComment, changedList); 
 				break;
 			case Constants.EMAIL_EVENT_COURSECANCELLED:
-				msg = MailUtil.create_EMAIL_EVENT_COURSECANCELLED_body(course, mailComment);
+				msg = MailUtil.create_EMAIL_EVENT_COURSECANCELLED_body(course, mailComment, configurationManager.getConfigurationsMap());
 				break;
 			default:
 				if(log.isDebugEnabled()) log.debug("sendMail: Handling of event:" + event + " not implemented..!");
@@ -261,7 +261,7 @@ public class CourseNotificationController extends BaseFormController {
 		StringBuffer msg = null;
 		switch(event) {
 			case Constants.EMAIL_EVENT_NEW_COURSE_NOTIFICATION:
-				msg = MailUtil.create_EMAIL_EVENT_NEW_COURSE_NOTIFICATION_body(course, mailComment);
+				msg = MailUtil.create_EMAIL_EVENT_NEW_COURSE_NOTIFICATION_body(course, mailComment, configurationManager.getConfigurationsMap());
 				break;
 			default:
 				if(log.isDebugEnabled()) log.debug("sendMailToWaitingList: Handling of event:" + event + " not implemented..!");

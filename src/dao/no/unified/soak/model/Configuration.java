@@ -122,4 +122,11 @@ public class Configuration extends BaseObject implements Serializable {
                                         .append("value",value)
                                         .toString();
     }
+
+	public static boolean getActiveAcceptNull(Configuration configuration) {
+		if (configuration == null) {
+			return false;
+		}
+		return configuration.getActive();
+	}
 }

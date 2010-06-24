@@ -21,6 +21,7 @@ import javax.mail.internet.MimeMessage;
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
+import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.RegistrationManager;
@@ -38,6 +39,7 @@ import org.springframework.mail.MailSender;
  */
 public class WaitingListManagerImpl extends BaseManager implements WaitingListManager {
     private RegistrationManager registrationManager;
+    private ConfigurationManager configurationManager;
     private CourseManager courseManager;
     protected MailEngine mailEngine = null;
     protected MailSender mailSender = null;
@@ -71,6 +73,10 @@ public class WaitingListManagerImpl extends BaseManager implements WaitingListMa
         this.registrationManager = registrationManager;
     }
 
+    public void setConfigurationManager(ConfigurationManager configurationManager) {
+    	this.configurationManager = configurationManager;
+    }
+    
     /**
      * @see no.unified.soak.service.WaitingListManager#setMailEngine(no.unified.soak.service.MailEngine)
      */
@@ -285,7 +291,7 @@ public class WaitingListManagerImpl extends BaseManager implements WaitingListMa
     	
     	// Create the body of the e-mail
 //    	StringBuffer msg = MailUtil.createStandardBody(course, Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION, locale, messageSource, null, confirmed);
-    	StringBuffer msg = MailUtil.create_EMAIL_EVENT_WAITINGLIST_NOTIFICATION_body(course, currentRegistration, null, confirmed);
+    	StringBuffer msg = MailUtil.create_EMAIL_EVENT_WAITINGLIST_NOTIFICATION_body(course, currentRegistration, null, confirmed, configurationManager.getConfigurationsMap());
 
     	// Create the email
     	ArrayList<MimeMessage> theEmails = MailUtil.getMailMessages(currentRegistration, Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION, course, msg, mailSender, false);

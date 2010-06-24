@@ -466,10 +466,10 @@ public class RegistrationFormController extends BaseFormController {
     	StringBuffer msg = null;
     	switch(event) {
 	    	case Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED:
-	    		msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_CONFIRMED_body(course, registration, null); // bør endre navn
+	    		msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_CONFIRMED_body(course, registration, null, configurationManager.getConfigurationsMap()); // bør endre navn
 	    		break;
 	    	case Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION:
-	    		msg = MailUtil.create_EMAIL_EVENT_WAITINGLIST_NOTIFICATION_body(course, registration, null, false);
+	    		msg = MailUtil.create_EMAIL_EVENT_WAITINGLIST_NOTIFICATION_body(course, registration, null, false, configurationManager.getConfigurationsMap());
 	    		break;
 			case Constants.EMAIL_EVENT_REGISTRATION_DELETED:
 				boolean chargeOverdue = false;
@@ -478,7 +478,7 @@ public class RegistrationFormController extends BaseFormController {
 	        			chargeOverdue = true;
 	        		}
 	        	}
-				msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_DELETED_body(course, chargeOverdue);
+				msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_DELETED_body(course, chargeOverdue, configurationManager.getConfigurationsMap());
 				break;
     	}
     	boolean ccToResponsible = configurationManager.isActive("mail.registration.notifyResponsible", false);

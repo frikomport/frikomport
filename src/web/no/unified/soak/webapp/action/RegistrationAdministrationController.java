@@ -409,7 +409,7 @@ public class RegistrationAdministrationController extends BaseFormController {
 		
 		switch(event) {
 			case Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED:
-				msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_CONFIRMED_body(course, registration, null);
+				msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_CONFIRMED_body(course, registration, null, configurationManager.getConfigurationsMap());
 				break;
 			case Constants.EMAIL_EVENT_REGISTRATION_DELETED:
 				boolean chargeOverdue = false;
@@ -418,10 +418,10 @@ public class RegistrationAdministrationController extends BaseFormController {
 	        			chargeOverdue = true;
 	        		}
 	        	}
-	        	msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_DELETED_body(course, chargeOverdue);
+	        	msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_DELETED_body(course, chargeOverdue, configurationManager.getConfigurationsMap());
 				break;
 			case Constants.EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST:
-				msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST_body(course, null);
+				msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST_body(course, null, configurationManager.getConfigurationsMap());
 				break;
 			default:
 				if(log.isDebugEnabled()) log.debug("sendMail: Handling of event:" + event + " not implemented..!");

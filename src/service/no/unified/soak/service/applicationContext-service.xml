@@ -205,6 +205,7 @@
             <bean class="no.unified.soak.service.impl.NotificationManagerImpl">
                 <property name="notificationDao" ref="notificationDao"/>
                 <property name="registrationManager" ref="registrationManager"/>
+                <property name="configurationManager" ref="configurationManager"/>
                 <property name="messageSource" ref="messageSource"/>
 			    <property name="mailEngine" ref="mailEngine"/>
 			    <property name="mailSender" ref="mailSender"/>

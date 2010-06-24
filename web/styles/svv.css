@@ -135,6 +135,11 @@ div#content ul.bulletlist {
 	padding-left: 20px;
 }
 
+div#loggedin {
+	text-align: right;
+	display:block;
+}
+
 /* 
 ----------------------------------------
  SVV-variant of menuExpandable.css 

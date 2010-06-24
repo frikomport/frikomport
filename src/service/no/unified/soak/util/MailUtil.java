@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -32,6 +33,7 @@ import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.util.UidGenerator;
 import net.fortuna.ical4j.util.Uris;
 import no.unified.soak.Constants;
+import no.unified.soak.model.Configuration;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.User;
@@ -67,9 +69,10 @@ public class MailUtil {
 	 *            The course in question
 	 * @param mailComment
 	 *            Optional comment from the admin initiating the sending of this mail
+	 * @param listConfigurations 
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_COURSECANCELLED_body(Course course, String mailComment) {
+    public static StringBuffer create_EMAIL_EVENT_COURSECANCELLED_body(Course course, String mailComment, Map<String, Configuration> configurationsMap) {
         StringBuffer msg = new StringBuffer();
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
@@ -83,7 +86,7 @@ public class MailUtil {
         msg.append("\n");
 
         // coursedetails are appended in separate method
-        appendCourseDetails(course, msg);
+        appendCourseDetails(course, msg, configurationsMap);
 
         msg.append("\n\n"); // empty lines
         
@@ -106,9 +109,10 @@ public class MailUtil {
 	 * @param mailComment
 	 *            Optional comment from the admin initiating the sending of this
 	 *            mail
+	 * @param configurationsMap 
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_COURSEDELETED_body(Course course, String mailComment) {
+    public static StringBuffer create_EMAIL_EVENT_COURSEDELETED_body(Course course, String mailComment, Map<String, Configuration> configurationsMap) {
         StringBuffer msg = new StringBuffer();
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
@@ -121,7 +125,7 @@ public class MailUtil {
         msg.append("\n");
 
         // coursedetails are appended in separate method
-        appendCourseDetails(course, msg);
+        appendCourseDetails(course, msg, configurationsMap);
 
         msg.append("\n\n");
 
@@ -145,9 +149,10 @@ public class MailUtil {
 	 * @param reservationConfirmed
 	 *            Set to true if the reservation is confirmed, and to false if
 	 *            the attendee is on the waiting list
+	 * @param configurationsMap 
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_NOTIFICATION_body(Course course, String mailComment, boolean reservationConfirmed) {
+    public static StringBuffer create_EMAIL_EVENT_NOTIFICATION_body(Course course, String mailComment, boolean reservationConfirmed, Map<String, Configuration> configurationsMap) {
         StringBuffer msg = new StringBuffer();
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
@@ -163,7 +168,7 @@ public class MailUtil {
         msg.append("\n");
 
         // coursedetails are appended in separate method
-        appendCourseDetails(course, msg);
+        appendCourseDetails(course, msg, configurationsMap);
 
         msg.append("\n\n"); // empty lines
 
@@ -187,6 +192,7 @@ public class MailUtil {
 	 * 
 	 * @param course
 	 *            The course in question
+	 * @param configurationsMap 
 	 * @param mailComment
 	 *            Optional comment from the admin initiating the sending of this
 	 *            mail
@@ -195,7 +201,7 @@ public class MailUtil {
 	 *            the attendee is on the waiting list
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_NOTIFICATION_SUMMARY_body(Course course, String summary) {
+    public static StringBuffer create_EMAIL_EVENT_NOTIFICATION_SUMMARY_body(Course course, String summary, Map<String, Configuration> configurationsMap) {
         StringBuffer msg = new StringBuffer();
 
         String instructor = " " + course.getInstructor().getName() + " ";
@@ -211,7 +217,7 @@ public class MailUtil {
         msg.append("\n");
 
         // coursedetails are appended in separate method
-        appendCourseDetails(course, msg);
+        appendCourseDetails(course, msg, configurationsMap);
 
         msg.append("\n\n"); // empty lines
 
@@ -236,9 +242,10 @@ public class MailUtil {
 	 * @param reservationConfirmed
 	 *            Set to true if the reservation is confirmed, and to false if
 	 *            the attendee is on the waiting list
+	 * @param configurationsMap 
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_WAITINGLIST_NOTIFICATION_body(Course course, Registration registration, String mailComment, boolean reservationConfirmed) {
+    public static StringBuffer create_EMAIL_EVENT_WAITINGLIST_NOTIFICATION_body(Course course, Registration registration, String mailComment, boolean reservationConfirmed, Map<String, Configuration> configurationsMap) {
         StringBuffer msg = new StringBuffer();
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
@@ -254,7 +261,7 @@ public class MailUtil {
         msg.append("\n");
 
         // coursedetails are appended in separate method
-        appendCourseDetails(course, msg);
+        appendCourseDetails(course, msg, configurationsMap);
 
         msg.append("\n\n"); // emptyt lines
 
@@ -296,9 +303,10 @@ public class MailUtil {
 	 *            The course in question
 	 * @param chargeOverdue
 	 *            If true unit has to pay for cancelled course
+	 * @param configurationsMap 
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_REGISTRATION_DELETED_body(Course course, boolean chargeOverdue) {
+    public static StringBuffer create_EMAIL_EVENT_REGISTRATION_DELETED_body(Course course, boolean chargeOverdue, Map<String, Configuration> configurationsMap) {
         StringBuffer msg = new StringBuffer();
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
@@ -312,7 +320,7 @@ public class MailUtil {
         msg.append("\n");
 
         // coursedetails are appended in separate method
-        appendCourseDetails(course, msg);
+        appendCourseDetails(course, msg, configurationsMap);
 
         msg.append("\n\n");
 
@@ -334,16 +342,17 @@ public class MailUtil {
 	 * 
 	 * @param course
 	 *            The course in question
+	 * @param configurationsMap 
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_REGISTRATIONLIST_body(Course course) {
+    public static StringBuffer create_EMAIL_EVENT_REGISTRATIONLIST_body(Course course, Map<String, Configuration> configurationsMap) {
         StringBuffer msg = new StringBuffer();
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
         msg.append("\n");
         
         // coursedetails are appended in separate method
-        appendCourseDetails(course, msg);
+        appendCourseDetails(course, msg, configurationsMap);
 
         msg.append("\n\n");
 
@@ -366,9 +375,10 @@ public class MailUtil {
 	 * @param mailComment
 	 *            Optional comment from the admin initiating the sending of this
 	 *            mail
+	 * @param configurationsMap 
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST_body(Course course, String mailComment) {
+    public static StringBuffer create_EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST_body(Course course, String mailComment, Map<String, Configuration> configurationsMap) {
         StringBuffer msg = new StringBuffer();
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
@@ -381,7 +391,7 @@ public class MailUtil {
         msg.append("\n");
 
         // coursedetails are appended in separate method
-        appendCourseDetails(course, msg);
+        appendCourseDetails(course, msg, configurationsMap);
 
         msg.append("\n\n");
 
@@ -413,7 +423,7 @@ public class MailUtil {
 	 *            the attendee is on the waiting list
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_REGISTRATION_CONFIRMED_body(Course course, Registration registration, String mailComment) {
+    public static StringBuffer create_EMAIL_EVENT_REGISTRATION_CONFIRMED_body(Course course, Registration registration, String mailComment, Map<String, Configuration> configurationsMap) {
         StringBuffer msg = new StringBuffer();
         
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
@@ -427,7 +437,7 @@ public class MailUtil {
         
         msg.append("\n"); // empty line
 
-        appendCourseDetails(course, msg);
+        appendCourseDetails(course, msg, configurationsMap);
 
         msg.append("\n\n"); // empty lines
         
@@ -464,7 +474,7 @@ public class MailUtil {
 	 *            mail
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_NEW_COURSE_NOTIFICATION_body(Course course, String mailComment) {
+    public static StringBuffer create_EMAIL_EVENT_NEW_COURSE_NOTIFICATION_body(Course course, String mailComment, Map<String, Configuration> configurationsMap) {
         StringBuffer msg = new StringBuffer();
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
@@ -477,7 +487,7 @@ public class MailUtil {
         msg.append("\n");
 
         // coursedetails are appended in separate method
-        appendCourseDetails(course, msg);
+        appendCourseDetails(course, msg, configurationsMap);
 
         msg.append("\n\n");
 
@@ -571,8 +581,9 @@ public class MailUtil {
      * @param locale
      * @param messageSource
      * @param msg
+     * @param configurationsMap 
      */
-	private static void appendCourseDetails(Course course, StringBuffer msg) {
+	private static void appendCourseDetails(Course course, StringBuffer msg, Map<String, Configuration> configurationsMap) {
 		// Include all the course details
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.name")) + ": "
                 + course.getName() + "\n");
@@ -621,10 +632,12 @@ public class MailUtil {
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.instructor")) + ": "
                 + course.getInstructor().getName() + ", mailto:" + course.getInstructor().getEmail() + "\n");
         
-        if(!StringUtils.isEmpty(course.getDescription())){
-	        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.description")) + ": "
-	                + course.getDescription() + "\n");
-        }
+		if (!StringUtils.isEmpty(course.getDescription())
+				&& Configuration.getActiveAcceptNull(configurationsMap.get("access.course.showDescriptionToPublic"))
+				&& Configuration.getActiveAcceptNull(configurationsMap.get("access.course.showDescription"))) {
+			msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.description")) + ": "
+					+ course.getDescription() + "\n");
+		}
 	}
 
     /**

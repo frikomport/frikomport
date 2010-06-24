@@ -22,6 +22,7 @@ import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.Registration.Status;
+import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.RegisterByDateManager;
@@ -39,6 +40,7 @@ import org.springframework.mail.MailSender;
  */
 public class RegisterByDateManagerImpl extends BaseManager implements RegisterByDateManager {
     private RegistrationManager registrationManager;
+    private ConfigurationManager configurationManager;
     private CourseManager courseManager;
     protected MailEngine mailEngine = null;
     protected MailSender mailSender = null;
@@ -66,6 +68,13 @@ public class RegisterByDateManagerImpl extends BaseManager implements RegisterBy
         this.registrationManager = registrationManager;
     }
 
+    /**
+     * @see no.unified.soak.service.WaitingListManager#setRegistrationManager(no.unified.soak.service.RegistrationManager)
+     */
+    public void setConfigurationRegistrationManager(ConfigurationManager configurationManager) {
+    	this.configurationManager = configurationManager;
+    }
+    
     /**
      * @see no.unified.soak.service.WaitingListManager#setMailEngine(no.unified.soak.service.MailEngine)
      */
@@ -112,7 +121,7 @@ public class RegisterByDateManagerImpl extends BaseManager implements RegisterBy
 	        DateFormat f = new SimpleDateFormat("dd-MM-yyyy");
 	        String filenameInMail = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.id")) + "-" + course.getId() + "_" + f.format(course.getStartTime()) + ".pdf";
 	        
-	    	StringBuffer msg = MailUtil.create_EMAIL_EVENT_REGISTRATIONLIST_body(course);
+	    	StringBuffer msg = MailUtil.create_EMAIL_EVENT_REGISTRATIONLIST_body(course, configurationManager.getConfigurationsMap());
 			MimeMessage email = MailUtil.getMailMessage(to, null, null, null, (course.getName() + ", " + date), msg, filenameInMail, new File(attachementFilename), mailSender);
 
 			if(email != null && attachementFilename != null) {
