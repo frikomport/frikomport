@@ -8,6 +8,7 @@
  */
 package no.unified.soak.webapp.action;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,7 +26,6 @@ import javax.servlet.http.HttpSession;
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Organization;
-import no.unified.soak.model.RoleEnum;
 import no.unified.soak.model.User;
 import no.unified.soak.model.Organization.Type;
 import no.unified.soak.service.CourseManager;
@@ -183,6 +183,41 @@ public class CourseController extends BaseFormController {
 
         List<Course> courseList = new ArrayList<Course>();
 
+        boolean avoidSearch = false;
+        String startTimeString = request.getParameter("startTime");
+		if (!StringUtils.isBlank(startTimeString)) {
+			try {
+				starttime = DateUtil.convertStringToDate(startTimeString);
+				model.put("startTime", starttime);
+			} catch (ParseException e) {
+				String[] msgArgs = new String[] { startTimeString,
+						getText("date.format", ApplicationResourcesUtil.getNewLocaleWithDefaultCountryAndVariant(null)), "" };
+				saveMessage(request, getText("errors.dateformat", msgArgs, ApplicationResourcesUtil
+						.getNewLocaleWithDefaultCountryAndVariant(null)));
+				avoidSearch = true;
+			}
+		}
+		
+		String stopTimeString = request.getParameter("stopTime");
+		if (!StringUtils.isBlank(stopTimeString)) {
+			try {
+				stoptime = DateUtil.convertStringToDate(stopTimeString);
+				model.put("stopTime", stoptime);
+			} catch (ParseException e) {
+				String[] msgArgs = new String[] { stopTimeString,
+						getText("date.format", ApplicationResourcesUtil.getNewLocaleWithDefaultCountryAndVariant(null)), "" };
+				saveMessage(request, getText("errors.dateformat", msgArgs, ApplicationResourcesUtil
+						.getNewLocaleWithDefaultCountryAndVariant(null)));
+				avoidSearch = true;
+			}
+		}
+
+		model.put("JSESSIONID", session.getId());
+
+		if (avoidSearch) {
+			return model;
+		}
+		
         if(ApplicationResourcesUtil.isSVV()){ // alle LDAP-brukere ser alle møter (kurs), men endringstilgang styres av JSP.
         	Integer[] status = null; 
         		
@@ -212,7 +247,6 @@ public class CourseController extends BaseFormController {
         }
 
         model.put("courseList", courseList);
-        model.put("JSESSIONID", session.getId());
 
         return model;
     }
@@ -224,7 +258,7 @@ public class CourseController extends BaseFormController {
         }
         return false;
     }
-
+ 
     private List<Course> filterByRole(Boolean admin, List<String> roles, List courses) {
         List<Course> filtered = new ArrayList<Course>();
         // Filter all courses not visible for the user.
@@ -263,84 +297,86 @@ public class CourseController extends BaseFormController {
      *      javax.servlet.http.HttpServletResponse, java.lang.Object, org.springframework.validation.BindException)
      */
     public ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object command, BindException errors)
-            throws Exception {
-        Map model = new HashMap();
-        HttpSession session = request.getSession();
+			throws Exception {
+		Map model = new HashMap();
+		HttpSession session = request.getSession();
 
-        Locale locale = request.getLocale();
+		Locale locale = request.getLocale();
+		boolean avoidSearch = false;
 
-        Course course = (Course) command;
-        Course unpublished = new Course();
+		Course course = (Course) command;
+		Course unpublished = new Course();
 
-        course.setStatus(CourseStatus.COURSE_PUBLISHED);
+		course.setStatus(CourseStatus.COURSE_PUBLISHED);
 
-        // Set up parameters, and return them to the view
-        model = addServiceAreas(model, locale);
-        model = addOrganization(model, locale);
-        model = addOrganization2(model, locale);
-        model = addLocations(model, locale);
-        model = addCategories(model, locale);
-        model.put("course", course);
+		// Set up parameters, and return them to the view
+		model = addServiceAreas(model, locale);
+		model = addOrganization(model, locale);
+		model = addOrganization2(model, locale);
+		model = addLocations(model, locale);
+		model = addCategories(model, locale);
+		model.put("course", course);
 
-        Boolean historic = new Boolean(false);
-        Boolean past = new Boolean(false);
+		Boolean historic = new Boolean(false);
+		Boolean past = new Boolean(false);
 
-        Date starttime = new Date();
-        Date stoptime = null;
+		Date starttime = new Date();
+		Date stoptime = null;
 
-        User user = (User) session.getAttribute(Constants.USER_KEY);
-        Boolean isAdmin = false;
-        List<String> roles = null;
-        if (user != null) {
-            roles = user.getRoleNameList();
-            isAdmin = (Boolean) roles.contains(Constants.ADMIN_ROLE);
-        }
-        if (roles == null) {
-            roles = new ArrayList<String>();
-            roles.add(Constants.ANONYMOUS_ROLE); // Make sure not logged in users sees
-            // anonymous courses
-        }
+		User user = (User) session.getAttribute(Constants.USER_KEY);
+		Boolean isAdmin = false;
+		List<String> roles = null;
+		if (user != null) {
+			roles = user.getRoleNameList();
+			isAdmin = (Boolean) roles.contains(Constants.ADMIN_ROLE);
+		}
+		if (roles == null) {
+			roles = new ArrayList<String>();
+			// Make sure not logged in users sees anonymous courses
+			roles.add(Constants.ANONYMOUS_ROLE); 
+		}
 
-        // Check whether we should display historic data as well
-        String hist = request.getParameter("historic");
-        if ((hist != null) && StringUtils.isNumeric(hist)) {
-            if (hist.compareTo("0") != 0) {
-                starttime = null;
-                historic = new Boolean(true);
-                // also finished courses
-                course.setStatus(CourseStatus.COURSE_FINISHED);
-            }
-        }
+		// Check whether we should display historic data as well
+		String hist = request.getParameter("historic");
+		if ((hist != null) && StringUtils.isNumeric(hist)) {
+			if (hist.compareTo("0") != 0) {
+				starttime = null;
+				historic = new Boolean(true);
+				// also finished courses
+				course.setStatus(CourseStatus.COURSE_FINISHED);
+			}
+		}
 
-        // Check whether we should only display past data
-        String pastreq = request.getParameter("past");
-        if ((pastreq != null) && StringUtils.isNumeric(pastreq)) {
-            if (pastreq.compareTo("0") != 0) {
-                starttime = null;
-                stoptime = new Date();
-                past = new Boolean(true);
-                // also finished courses
-                course.setStatus(CourseStatus.COURSE_FINISHED);
-            }
-        }
-        
-        // Check whether a specific search is requested
-        String name = request.getParameter("name");
-        if (name != null) {
-            course.setName(name);
-        }
+		// Check whether we should only display past data
+		String pastreq = request.getParameter("past");
+		if ((pastreq != null) && StringUtils.isNumeric(pastreq)) {
+			if (pastreq.compareTo("0") != 0) {
+				starttime = null;
+				stoptime = new Date();
+				past = new Boolean(true);
+				// also finished courses
+				course.setStatus(CourseStatus.COURSE_FINISHED);
+			}
+		}
 
-        Date startInterval = course.getStartTime();
-        Date stopInterval = course.getStopTime();
-        
+		// Check whether a specific search is requested
+		String name = request.getParameter("name");
+		if (name != null) {
+			course.setName(name);
+		}
+
+		Date startInterval = course.getStartTime();
+		Date stopInterval = course.getStopTime();
+
 		if (startInterval != null) {
 			if (stopInterval != null && startInterval.after(stopInterval)) {
-				saveErrorMessage(request, getText("errors.XMustBeLessThanY", new String[] {
-						DateUtil.convertDateToString(startInterval),
-						DateUtil.convertDateToString(stopInterval) }, locale));
+				saveMessage(request, getText("errors.FromDateMustBeLessThanToDate", new String[] {
+						DateUtil.convertDateToString(startInterval), DateUtil.convertDateToString(stopInterval) }, locale));
+				avoidSearch = true;
 			}
 
-			// if startInterval is in the past, the search will include historic data
+			// if startInterval is in the past, the search will include historic
+			// data
 			if (startInterval.before(new Date())) {
 				historic = new Boolean(true);
 				course.setStatus(CourseStatus.COURSE_FINISHED);
@@ -349,65 +385,73 @@ public class CourseController extends BaseFormController {
 			model.put("startTime", startInterval);
 		}
 
-        if (stopInterval != null) {
-        	// legger på 24timer for å sikre til-og-med sluttdato
-        	Calendar stop = new GregorianCalendar();
-        	stop.setTime(stopInterval);
-        	stop.add(Calendar.HOUR, 24);
-        	stopInterval = stop.getTime();
-        	stoptime = stopInterval;
-            model.put("stopTime", course.getStopTime());
-        }
+		if (stopInterval != null) {
+			// legger på 24timer for å sikre til-og-med sluttdato
+			Calendar stop = new GregorianCalendar();
+			stop.setTime(stopInterval);
+			stop.add(Calendar.HOUR, 24);
+			stopInterval = stop.getTime();
+			stoptime = stopInterval;
+			model.put("stopTime", course.getStopTime());
+		}
 
-        List<Course> courseList = new ArrayList<Course>();
+		List<Course> courseList = new ArrayList<Course>();
+		model.put("historic", historic);
+		model.put("past", past);
 
-        if(ApplicationResourcesUtil.isSVV()){ // alle LDAP-brukere ser alle møter (kurs), men endringstilgang styres av JSP.
-        	Integer[] status = null; 
-        		
-        	if(roles.contains(Constants.ANONYMOUS_ROLE) && roles.size() == 1){ 
-        		// publikumsbruker
-        		status = new Integer[]{ CourseStatus.COURSE_PUBLISHED };
-        	}
-        	else{ 
-        		// isReader / isEventResponsible / isEducationResponsible / isAdministrator
-        		status = new Integer[]{ CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED, CourseStatus.COURSE_CANCELLED };
-        	}
-        	courseList = courseManager.searchCourses(course, starttime, stoptime, status);
-        	courseList = updateAvailableAttendants(courseList);
-        }
-        else {
-        	List courses = courseManager.searchCourses(course, starttime, stoptime, null);
-	        courseList = filterByRole(isAdmin, roles, courses);
+		if (avoidSearch) {
+			return new ModelAndView(getSuccessView(), model);
+		}
 
-	        if (course.getOrganizationid() != null) {
-	            unpublished.setOrganizationid(course.getOrganizationid());
-	        }
+		if (ApplicationResourcesUtil.isSVV()) { // alle LDAP-brukere ser
+			// alle møter (kurs), men
+			// endringstilgang styres av
+			// JSP.
+			Integer[] status = null;
 
-	        if (course.getOrganization2id() != null) {
-	            unpublished.setOrganization2id(course.getOrganization2id());
-	        }
+			if (roles.contains(Constants.ANONYMOUS_ROLE) && roles.size() == 1) {
+				// publikumsbruker
+				status = new Integer[] { CourseStatus.COURSE_PUBLISHED };
+			} else {
+				// isReader / isEventResponsible / isEducationResponsible /
+				// isAdministrator
+				status = new Integer[] { CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED,
+						CourseStatus.COURSE_CANCELLED };
+			}
+			courseList = courseManager.searchCourses(course, starttime, stoptime, status);
+			courseList = updateAvailableAttendants(courseList);
+		} else {
+			List courses = courseManager.searchCourses(course, starttime, stoptime, null);
+			courseList = filterByRole(isAdmin, roles, courses);
 
-	        if (course.getLocationid() != null) {
-	            unpublished.setLocationid(course.getLocationid());
-	        }
+			if (course.getOrganizationid() != null) {
+				unpublished.setOrganizationid(course.getOrganizationid());
+			}
 
-	        User responsible = null;
-	        if (user != null && roles.contains(Constants.EVENTRESPONSIBLE_ROLE)) {
-	            responsible = user;
-	            unpublished.setResponsible(responsible);
-	        }
-	        List unpubCourses = courseManager.getUnpublished(unpublished);// Søke på samme måte som på kurs.
-	        if (!past && unpubCourses != null && !unpubCourses.isEmpty() && isAdmin(roles)) {
-	        	courseList.addAll(0, unpubCourses);
-	        }
-        }
+			if (course.getOrganization2id() != null) {
+				unpublished.setOrganization2id(course.getOrganization2id());
+			}
 
-        model.put("historic", historic);
-        model.put("past", past);
-        model.put("courseList", courseList);
+			if (course.getLocationid() != null) {
+				unpublished.setLocationid(course.getLocationid());
+			}
 
-        return new ModelAndView(getSuccessView(), model);
-    }
+			User responsible = null;
+			if (user != null && roles.contains(Constants.EVENTRESPONSIBLE_ROLE)) {
+				responsible = user;
+				unpublished.setResponsible(responsible);
+			}
+			List unpubCourses = courseManager.getUnpublished(unpublished);
+			// Søke på samme måte som på kurs.
+			if (!past && unpubCourses != null && !unpubCourses.isEmpty() && isAdmin(roles)) {
+				courseList.addAll(0, unpubCourses);
+			}
+		}
+
+		model.put("courseList", courseList);
+
+		return new ModelAndView(getSuccessView(), model);
+	}
 
     /**
      * Bygger opp bakgrunnsobjekt
@@ -443,6 +487,7 @@ public class CourseController extends BaseFormController {
         if (name != null) {
             course.setName(name);
         }
+
         return course;
     }
 

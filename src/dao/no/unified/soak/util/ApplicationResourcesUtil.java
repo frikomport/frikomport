@@ -108,6 +108,9 @@ public class ApplicationResourcesUtil {
     }
 
     public static Locale getNewLocaleWithDefaultCountryAndVariant(Locale preferredLocale) {
+    	if (preferredLocale == null) {
+    		preferredLocale = new Locale("no", "NO");
+    	}
         String localeCountry = preferredLocale.getCountry();
         Locale returnLocale;
         if (StringUtils.isEmpty(localeCountry)) {

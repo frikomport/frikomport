@@ -40,7 +40,7 @@ public class DateUtil {
 	 * 
 	 * @return a string representing the date pattern on the UI
 	 */
-	public static synchronized String getDatePattern() {
+	public static String getDatePattern() {
 		return ApplicationResourcesUtil.getText("date.format");
 	}
 
@@ -75,6 +75,9 @@ public class DateUtil {
      */
     public static final Date convertStringToDate(String aMask, String strDate)
         throws ParseException {
+    	if (strDate == null) {
+    		return null;
+    	}
         SimpleDateFormat df = null;
         Date date = null;
         df = new SimpleDateFormat(aMask);
@@ -162,7 +165,7 @@ public class DateUtil {
     /**
      * This method converts a String to a date using the datePattern
      *
-     * @param strDate the date to convert (in format MM/dd/yyyy)
+     * @param strDate the date to convert
      * @return a date object
      *
      * @throws ParseException
