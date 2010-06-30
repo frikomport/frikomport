@@ -29,6 +29,7 @@ import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.validation.Email;
+import no.unified.soak.validation.MinValue;
 import no.unified.soak.validation.Required;
 
 import org.apache.commons.lang.StringUtils;
@@ -319,9 +320,37 @@ public class BaseFormController extends SimpleFormController {
 			}
 
 			i += validateRequired(obj, errors, method);
+			i += validateMinValue(obj, errors, method);
 			i += validateEmail(obj, errors, method);
 		}
 		return i;
+	}
+
+	private int validateMinValue(Object obj, BindException errors, Method method) {
+		int nErrors = 0;
+		MinValue minValueAnnotation = method.getAnnotation(MinValue.class);
+		if (minValueAnnotation != null) {
+			String fieldNameCamelCase = method.getName().substring(3);
+			String fieldName = lowercaseFirstLetter(fieldNameCamelCase);
+			Class<? extends Object> objClass = obj.getClass();
+
+			try {
+				Method getMethod = objClass.getMethod("get" + fieldNameCamelCase);
+				Object methodResult = getMethod.invoke(obj);
+
+				int minValue = Integer.parseInt(minValueAnnotation.value());
+				if (methodResult != null && methodResult instanceof Integer && ((Integer)methodResult) < minValue ) {
+					String fieldText = getFieldDisplayName(obj, fieldName);
+					Object[] args = new Object[] { fieldText, minValue};
+					nErrors = 1;
+					errors.rejectValue(fieldName, "errors.XMustBeGreaterThanY", args, fieldName + " is required.");
+				}
+			} catch (Exception e) {
+				log.warn("Feil under validering av " + fieldName + ": " + e);
+			}
+		}
+
+		return nErrors;
 	}
 
 	private int validateEmail(Object obj, BindException errors, Method method) {
@@ -336,14 +365,7 @@ public class BaseFormController extends SimpleFormController {
 				if (methodResult != null && methodResult instanceof String && !StringUtils.isEmpty((String) methodResult)
 						&& !EmailValidator.getInstance().isValid((String) methodResult)) {
 
-					String fieldText = ApplicationResourcesUtil.getText(obj.getClass().getSimpleName().toLowerCase() + "."
-							+ fieldName);
-					if (StringUtils.isEmpty(fieldText)) {
-						fieldText = ApplicationResourcesUtil.getText(fieldName);
-					}
-					if (StringUtils.isEmpty(fieldText)) {
-						fieldText = fieldName;
-					}
+					String fieldText = getFieldDisplayName(obj, fieldName);
 					Object[] args = new Object[] { fieldText };
 					nErrors = 1;
 					errors.rejectValue(fieldName, "errors.email", args, methodResult
@@ -377,14 +399,7 @@ public class BaseFormController extends SimpleFormController {
 				Object methodResult = getMethod.invoke(obj);
 
 				if (methodResult == null || (methodResult instanceof String && StringUtils.isEmpty((String) methodResult))) {
-					String fieldText = ApplicationResourcesUtil.getText(obj.getClass().getSimpleName().toLowerCase() + "."
-							+ fieldName);
-					if (StringUtils.isEmpty(fieldText)) {
-						fieldText = ApplicationResourcesUtil.getText(fieldName);
-					}
-					if (StringUtils.isEmpty(fieldText)) {
-						fieldText = fieldName;
-					}
+					String fieldText = getFieldDisplayName(obj, fieldName);
 					Object[] args = new Object[] { fieldText };
 					nErrors = 1;
 					errors.rejectValue(fieldName, "errors.required", args, fieldName + " is required.");
@@ -394,6 +409,18 @@ public class BaseFormController extends SimpleFormController {
 			}
 		}
 		return nErrors;
+	}
+
+	private String getFieldDisplayName(Object obj, String fieldName) {
+		String fieldText = ApplicationResourcesUtil.getText(obj.getClass().getSimpleName().toLowerCase() + "."
+				+ fieldName);
+		if (StringUtils.isEmpty(fieldText)) {
+			fieldText = ApplicationResourcesUtil.getText(fieldName);
+		}
+		if (StringUtils.isEmpty(fieldText)) {
+			fieldText = fieldName;
+		}
+		return fieldText;
 	}
 
 	private String lowercaseFirstLetter(String fieldNameCamelCase) {

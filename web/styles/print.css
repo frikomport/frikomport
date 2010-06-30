@@ -8,9 +8,6 @@ a {
 }
 
 /* from http://diveintomark.org/archives/2002/04/26/printfriendly_links */
-a:after {
-  content: " (" attr(href) ")";
-}
 
 a:visited {
 	color: blue;

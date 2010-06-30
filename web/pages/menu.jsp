@@ -2,7 +2,7 @@
 <c:if test="${empty eZSessionid || showMenu}">
 <div id="menuDiv">
 <menu:useMenuDisplayer name="ListMenu" permissions="rolesAdapter">
-    <menu:displayMenu name="FriKomMenu"/>
+    <menu:displayMenu name="FriKomMenu_SVV"/>
 </menu:useMenuDisplayer>
 </div>
 </c:if>

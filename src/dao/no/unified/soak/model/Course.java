@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+import no.unified.soak.validation.MinValue;
 import no.unified.soak.validation.Required;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -106,6 +107,7 @@ public class Course extends BaseObject implements Serializable {
 	/**
 	 * @param attendants the number of attendants to set
 	 */
+    @MinValue("0")
 	public void setAttendants(Integer attendants) {
 		this.attendants = attendants;
 	}
@@ -350,8 +352,6 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      *
-     * /**
-     *
      * @return Returns the maxAttendants.
      * @hibernate.property column="maxattendants" not-null="true"
      */
@@ -365,6 +365,7 @@ public class Course extends BaseObject implements Serializable {
      * @spring.validator type="required"
      */
     @Required
+    @MinValue("1")
     public void setMaxAttendants(Integer maxAttendants) {
         this.maxAttendants = maxAttendants;
     }
