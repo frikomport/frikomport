@@ -429,6 +429,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	configurationsToInsert.add(new Configuration("access.course.useAttendants", true, null));
         	configurationsToInsert.add(new Configuration("access.course.useRegisterBy", false, null));
         	configurationsToInsert.add(new Configuration("access.course.useOrganization2", true, null));
+        	configurationsToInsert.add(new Configuration("access.course.showAttendantDetails", false, null));
         	configurationsToInsert.add(new Configuration("access.course.showDescriptionToPublic", false, null));
         	
         	// profile

@@ -163,6 +163,7 @@ public class ActionFilter implements Filter {
         session.setAttribute("useAttendants", configurationManager.isActive("access.course.useAttendants", false));
         session.setAttribute("useRegisterBy", configurationManager.isActive("access.course.useRegisterBy", true));
         session.setAttribute("useOrganization2", configurationManager.isActive("access.course.useOrganization2", false));
+        session.setAttribute("showAttendantDetails", configurationManager.isActive("access.course.showAttendantDetails", false));
         
         // registration
         session.setAttribute("canDelete", configurationManager.isActive("access.registration.delete", false));
@@ -188,7 +189,7 @@ public class ActionFilter implements Filter {
         String usernameFromHTTPHeader = request.getHeader(Constants.USERID_HTTPHEADERNAME);
         
         // for IE testing
-        // usernameFromHTTPHeader="extsam";
+        // usernameFromHTTPHeader="geinot";
         
         String usernameFromSession = (String) session.getAttribute(Constants.USERID_HTTPHEADERNAME);
         ExtUser extUser = null;

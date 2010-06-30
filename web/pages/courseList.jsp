@@ -230,6 +230,20 @@ function fillSelect(obj){
     
     <display:column property="availableAttendants" sortable="true" headerClass="sortable" titleKey="course.availableAttendants"/>
 
+<c:if test="${showAttendantDetails}">
+	<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+    <display:column sortable="true" headerClass="sortable" titleKey="course.registered"><c:out value="${(courseList.maxAttendants - courseList.availableAttendants)}"/></display:column>
+	</c:if>
+
+	<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+    <display:column property="attendants" sortable="true" headerClass="sortable" titleKey="course.attendants"/>
+	</c:if>
+
+	<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+    <display:column property="maxAttendants" sortable="true" headerClass="sortable" titleKey="course.maxAttendants"/>
+	</c:if>
+</c:if>
+
 <c:if test="${useRegisterBy}">
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.registerBy" sortProperty="registerBy">
 		<c:choose>
