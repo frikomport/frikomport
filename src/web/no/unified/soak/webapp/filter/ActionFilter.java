@@ -185,54 +185,9 @@ public class ActionFilter implements Filter {
     }
 
     private void doHttpheaderAccessing(HttpServletRequest request, HttpSession session) {
-
-        String usernameFromHTTPHeader = request.getHeader(Constants.USERID_HTTPHEADERNAME);
-        
-        // for IE testing
-        // usernameFromHTTPHeader="geinot";
-        
-        String usernameFromSession = (String) session.getAttribute(Constants.USERID_HTTPHEADERNAME);
-        ExtUser extUser = null;
-        User user = null;
-
-        if (StringUtils.isEmpty(usernameFromHTTPHeader)) {
-            log.debug("header " + Constants.USERID_HTTPHEADERNAME + "=" + usernameFromHTTPHeader + " (ikke innlogget)");
-        } else {
-            log.debug("header " + Constants.USERID_HTTPHEADERNAME + "=" + usernameFromHTTPHeader + " (innlogget)");
-        }
-
-        //A different user-id from the one in the session object might come in the current http request.
-        if (!StringUtils.equals(usernameFromHTTPHeader, usernameFromSession)) {
-        	usernameFromSession = null;
-        	session.setAttribute(Constants.USERID_HTTPHEADERNAME, null);
-        }
-        
-        if (StringUtils.isNotBlank(usernameFromHTTPHeader)) {
-            if (StringUtils.isEmpty(usernameFromSession)) {
-                ExtUserDAO extUserDAO = (ExtUserDAO) getBean("extUserDAO");
-                extUser = extUserDAO.findUserByUsername(usernameFromHTTPHeader);
-                if (extUser == null || StringUtils.isEmpty(extUser.getUsername())) {
-                    log.warn("No LDAP user found for username=[" + usernameFromHTTPHeader
-                            + "] Cannot grant any roles to the presumed logged in user.");
-                } else {
-                    user = copyUserToLocalDBAndSession(extUser, session);
-                    session.setAttribute(Constants.USERID_HTTPHEADERNAME, user.getUsername());
-                }
-            } else {
-                // Brukeren kan (kanskje ha vært avlogget en kort stund og så kommet tilbake med USER-ID i header, uten
-                // at Tomcat-sesjonen har timet ut. Da må user atter settes for å få tilbake rollesettingene i request
-                // attribute'ene.
-                user = (User) session.getAttribute(Constants.USER_KEY);
-            }
-        } else if (StringUtils.isNotBlank(usernameFromSession)) {
-            request.setAttribute(Constants.MESSAGES_INFO_KEY, Arrays
-                    .asList("Din innlogging er utg&aring;tt. Vennligst logg inn p&aring;ny."));
-        }
-
-        setAcegiAutenticationToken(session, extUser, usernameFromHTTPHeader); // Vi antar at acegi trenger dette
-
         authenticateFromHash(request, session);
-
+        
+        User user = (User) session.getAttribute(Constants.USER_KEY);
         setRoleRequestAttributes(request, user);
     }
 
