@@ -136,7 +136,8 @@ div#content ul.bulletlist {
 	padding-left: 20px;
 }
 
-div#loggedin {
+div#loggedin,
+div#userusing {
 	text-align: right;
 	display:block;
 }

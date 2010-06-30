@@ -5,6 +5,7 @@
 <%@ include file="/common/taglibs.jsp"%>
 
 <%@page import="org.apache.taglibs.standard.lang.jpath.encoding.HtmlEncoder"%>
+<%@page import="no.unified.soak.Constants"%>
 <%@page import="no.unified.soak.model.User"%>
 
 <%@page import="org.apache.commons.lang.StringUtils"%><fmt:message key="global.pageDecorator.url" var="decorURL"/>
@@ -116,11 +117,15 @@ useCmsUrl = false;
 %>
         </head>
         <body<decorator:getProperty property="body.id" writeEntireProperty="true"/>>
-<%        
+<%
     }
 User user = (User) request.getAttribute("user");
+User hashUser = (User)session.getAttribute(Constants.ALT_USER_KEY);
 if (user != null) {
 	out.write("<div id='loggedin'>Innlogget: " + user.getUsername() + " ["+ (request.getAttribute("userRolesString")==null?"":request.getAttribute("userRolesString")) + "]</div>");
+}
+if (hashUser != null) {
+	out.write("<div id='userusing'>Bruker: " + user.getUsername() + " ["+ (request.getAttribute("userRolesString")==null?"":request.getAttribute("userRolesString")) + "]</div>");
 }
 %>
 

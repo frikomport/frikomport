@@ -22,14 +22,15 @@ div#menuDiv ul.menuList li.menubar {
 }
 
 div#menuDiv ul.menuList li.menubar > a { 
-	display:inline; //Må vises for at menyen skal bli synlig i Chrome.
+	display:none;
 }
 
-div#menuDiv ul.menuList li.menubar > ul {
+div#menuDiv ul.menuList li.menubar > ul.menu {
 	margin:0;
 	padding:0;
+	display:block;
 }
-
+	
 div#menuDiv ul.menuList li.menubar > ul > li { 
 	background-image:none;
 	list-style-image:none;

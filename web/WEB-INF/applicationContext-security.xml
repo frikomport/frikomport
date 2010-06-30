@@ -11,8 +11,8 @@
                 CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
                 PATTERN_TYPE_APACHE_ANT
                 /j_security_check*=httpSessionContextIntegrationFilter,authenticationProcessingFilter
-                /**/*.html*=httpSessionContextIntegrationFilter,remoteUserFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
-                /**/*.jsp*=httpSessionContextIntegrationFilter,remoteUserFilter,exceptionTranslationFilter,filterInvocationInterceptor
+                /**/*.html*=httpSessionContextIntegrationFilter,remoteUserFilter,svvAuthenticationFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
+                /**/*.jsp*=httpSessionContextIntegrationFilter,remoteUserFilter,svvAuthenticationFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
             </value>
         </property>
     </bean>
@@ -29,10 +29,10 @@
             <value>
                 CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
                 PATTERN_TYPE_APACHE_ANT
-                /signup.html=ROLE_ANONYMOUS,admin,anonymous
-                /passwordhint.html*=ROLE_ANONYMOUS,admin,anonymous
-                /**/*.html*=admin,anonymous,ROLE_ANONYMOUS
-                /clickstreams.jsp=admin,ROLE_ANONYMOUS
+                /signup.html=admin,anonymous
+                /passwordhint.html*=admin,anonymous
+                /**/*.html*=admin,anonymous,ROLE_ANONYMOUS,editor,eventresponsible,reader
+                /clickstreams.jsp=admin,ROLE_ADMIN,editor,eventresponsible,reader
             </value>
         </property>
     </bean>
@@ -45,7 +45,13 @@
             </list>
         </property>
     </bean>
-   
+
+	<bean id="svvAuthenticationFilter" class="no.unified.soak.webapp.filter.SVVAuthenticationFilter">
+        <property name="userManager" ref="userManager"/>
+        <property name="userSynchronizeManager" ref="userSynchronizeManager"/>
+        <property name="extUserDAO" ref="extUserDAO"/>
+    </bean>
+       
     <!-- Automatically receives AuthenticationEvent messages from DaoAuthenticationProvider -->
     <bean id="loggerListener" class="org.acegisecurity.event.authentication.LoggerListener"/>
     
@@ -107,7 +113,7 @@
     
     <bean id="anonymousProcessingFilter" class="org.acegisecurity.providers.anonymous.AnonymousProcessingFilter">
         <property name="key" value="anonymous"/>
-        <property name="userAttribute" value="anonymous,admin,ROLE_ANONYMOUS"/>
+        <property name="userAttribute" value="anonymous,ROLE_ANONYMOUS"/>
     </bean>
     
     <bean id="exceptionTranslationFilter" class="org.acegisecurity.ui.ExceptionTranslationFilter">

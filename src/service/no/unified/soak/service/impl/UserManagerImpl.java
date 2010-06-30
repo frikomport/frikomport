@@ -401,34 +401,14 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 			
 			if (ArrayUtils.contains(adminRolenames, rolename)) {
                 user.addRole(roleManager.getRole(Constants.ADMIN_ROLE));
-                // legger til roller lenger ned i hierarkiet
-                user.addRole(roleManager.getRole(Constants.EDITOR_ROLE));
-                user.addRole(roleManager.getRole(Constants.EVENTRESPONSIBLE_ROLE));
-                user.addRole(roleManager.getRole(Constants.READER_ROLE));
-                user.addRole(roleManager.getRole(Constants.EMPLOYEE_ROLE));
-                user.addRole(roleManager.getRole(Constants.ANONYMOUS_ROLE));
             } else if (ArrayUtils.contains(editorRolenames, rolename)) {
 				user.addRole(roleManager.getRole(Constants.EDITOR_ROLE));
-                // legger til roller lenger ned i hierarkiet
-                user.addRole(roleManager.getRole(Constants.EVENTRESPONSIBLE_ROLE));
-                user.addRole(roleManager.getRole(Constants.READER_ROLE));
-                user.addRole(roleManager.getRole(Constants.EMPLOYEE_ROLE));
-                user.addRole(roleManager.getRole(Constants.ANONYMOUS_ROLE));
 			} else if (ArrayUtils.contains(eventresponsibleRolenames, rolename)) {
 				user.addRole(roleManager.getRole(Constants.EVENTRESPONSIBLE_ROLE));
-                // legger til roller lenger ned i hierarkiet
-                user.addRole(roleManager.getRole(Constants.READER_ROLE));
-                user.addRole(roleManager.getRole(Constants.EMPLOYEE_ROLE));
-                user.addRole(roleManager.getRole(Constants.ANONYMOUS_ROLE));
 			} else if (ArrayUtils.contains(readerRolenames, rolename)) {
 			    user.addRole(roleManager.getRole(Constants.READER_ROLE));
-                // legger til roller lenger ned i hierarkiet
-                user.addRole(roleManager.getRole(Constants.EMPLOYEE_ROLE));
-                user.addRole(roleManager.getRole(Constants.ANONYMOUS_ROLE));
 			} else if (ArrayUtils.contains(emplyeeRolenames, rolename)) {
                 user.addRole(roleManager.getRole(Constants.EMPLOYEE_ROLE));
-                // legger til roller lenger ned i hierarkiet
-                user.addRole(roleManager.getRole(Constants.ANONYMOUS_ROLE));
             } else if (ArrayUtils.contains(anonymousRolenames, rolename)) {
                 user.addRole(roleManager.getRole(Constants.ANONYMOUS_ROLE));
             } else if (roleManager.findRole(rolename) != null) {
