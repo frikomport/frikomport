@@ -1,5 +1,6 @@
 package no.unified.soak.webapp.action;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -50,7 +51,11 @@ public class StatisticsController implements Controller {
 		String beginDateStr = request.getParameter("dateBeginInclusive");
 		Date beginDate = null;
 		if (!StringUtils.isEmpty(beginDateStr)) {
-			beginDate = DateUtil.convertStringToDate(beginDateStr);
+			try {
+				beginDate = DateUtil.convertStringToDate(beginDateStr);
+			}catch(ParseException e){
+				ApplicationResourcesUtil.saveMessage(request, ApplicationResourcesUtil.getText("statistics.message.dateBeginInclusive.formaterror"));
+			}
 			modelAndView.addObject("dateBeginInclusive", beginDateStr);
 		} else {
 			ApplicationResourcesUtil.saveMessage(request, ApplicationResourcesUtil.getText("statistics.message.dateBeginInclusive"));
@@ -59,7 +64,11 @@ public class StatisticsController implements Controller {
 		String endDateStr = request.getParameter("dateEndInclusive");
 		Date endDate = null;
 		if (!StringUtils.isEmpty(endDateStr)) {
+			try {
 			endDate = DateUtil.convertStringToDate(endDateStr);
+			}catch(ParseException e){
+				ApplicationResourcesUtil.saveMessage(request, ApplicationResourcesUtil.getText("statistics.message.dateEndInclusive.formaterror"));
+			}
 			modelAndView.addObject("dateEndInclusive", endDateStr);
 		} else {
 			ApplicationResourcesUtil.saveMessage(request, ApplicationResourcesUtil.getText("statistics.message.dateEndInclusive"));

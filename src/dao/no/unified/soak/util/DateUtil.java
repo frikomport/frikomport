@@ -81,6 +81,7 @@ public class DateUtil {
         SimpleDateFormat df = null;
         Date date = null;
         df = new SimpleDateFormat(aMask);
+        df.setLenient(false); // test!! SA
 
         if (log.isDebugEnabled()) {
             log.debug("converting '" + strDate + "' to date with mask '" +
