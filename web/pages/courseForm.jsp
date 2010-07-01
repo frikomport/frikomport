@@ -662,33 +662,6 @@ function fillSelect(obj){
 				<input type="submit" class="button" name="cancel"
 					onclick="bCancel=true" value="<fmt:message key="button.cancel"/>" />
 
-				<c:if test="${!empty course.id && !empty course.name}">
-					<c:choose>
-						<c:when
-							test="${isAdmin || isEducationResponsible || isEventResponsible}">
-							<button type="button" class="large"
-								onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
-								<fmt:message key="button.administerRegistrations" />
-							</button>
-						</c:when>
-						<c:otherwise>
-							<c:if test="${isCourseParticipant}">
-								<button type="button" class="large"
-									onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
-									<fmt:message key="button.displayRegistrations" />
-								</button>
-							</c:if>
-						</c:otherwise>
-					</c:choose>
-
-					<c:if
-						test="${isAdmin || isEducationResponsible || isEventResponsible}">
-						<button type="button" class="large"
-							onclick="location.href='<c:url value="/editFileCourse.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
-							<fmt:message key="button.administerFiles" />
-						</button>
-					</c:if>
-				</c:if>
 			</td>
 		</tr>
 	</table>
