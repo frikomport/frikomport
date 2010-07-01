@@ -38,6 +38,8 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
     <form method="post" action="<c:url value="/listRegistrations.html"/>" id="registrationList" name="registrationList">
     <INPUT type="hidden" id="ispostbackregistrationlist" name="ispostbackregistrationlist" value="1"/> 
     <ul>
+
+<c:if test="${!isSVV}">
         <li>
             <spring:bind path="registration.organizationid">
                   <select id="<c:out value="${status.expression}"/>" name="<c:out value="${status.expression}"/>" onchange="fillSelect(this);">
@@ -51,6 +53,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
                 <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
             </spring:bind>
         </li>
+</c:if>
 
 <c:if test="${useServiceArea}">
         <li>
@@ -225,12 +228,19 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
     <display:column property="mobilePhone" sortable="true" headerClass="sortable"
          titleKey="registration.mobilePhone" class="${tdClass}"/>
          
+	<c:if test="${!isSVV}">
     <display:column property="organization.name" sortable="true" headerClass="sortable"
          titleKey="registration.organization" class="${tdClass}"/>
+	</c:if>
+
+	<c:if test="${isSVV}">
+    <display:column sortable="true" headerClass="sortable" titleKey="registrationList.invoiceAddress.city" class="${tdClass}">
+    	<c:out value="${registrationList.invoiceAddress.postalCode}"/> <c:out value="${registrationList.invoiceAddress.city}"/>
+    </display:column>
+	</c:if>
 
     <!-- display:column property="course.organization2.name" sortable="true" headerClass="sortable"
          titleKey="course.organization2" class="${tdClass}"/ -->
-
 	
 <c:if test="${useServiceArea}">
 	<display:column property="serviceArea.name" sortable="true" headerClass="sortable" 
