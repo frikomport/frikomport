@@ -81,12 +81,19 @@ public class StatisticsController implements Controller {
         	end.setTime(endDate);
         	end.add(Calendar.HOUR, 24);
         	endDate = end.getTime();
-			
-			List<StatisticsTableRow> statisticsRows = statisticsManager.findByDates(beginDate, endDate);
-			modelAndView.addObject("statisticsRows", statisticsRows);
-			
-			List<Course> emptyCourses = statisticsManager.findEmptyCoursesByDates(beginDate, endDate);
-			modelAndView.addObject("courseList", emptyCourses);
+
+        	if(beginDate.before(endDate)){
+        		List<StatisticsTableRow> statisticsRows = statisticsManager.findByDates(beginDate, endDate);
+        		modelAndView.addObject("statisticsRows", statisticsRows);
+        		
+        		List<Course> emptyCourses = statisticsManager.findEmptyCoursesByDates(beginDate, endDate);
+        		modelAndView.addObject("courseList", emptyCourses);
+        	}
+        	else{
+    			ApplicationResourcesUtil.saveMessage(request, ApplicationResourcesUtil.getText("statistics.message.beginBeforeEnd"));
+    			modelAndView.addObject("dateBeginInclusive", beginDateStr);
+    			modelAndView.addObject("dateEndInclusive", endDateStr);
+        	}
 		}
 		return modelAndView;
 	}
