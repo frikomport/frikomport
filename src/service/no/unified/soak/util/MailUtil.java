@@ -161,9 +161,9 @@ public class MailUtil {
         addMailComment(mailComment, msg);
 
         if(reservationConfirmed)
-            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.mail.body.reserved")));
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.mail.body.reserved", course.getName())));
         else
-            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.mail.body.waitinglist")));
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.mail.body.waitinglist", course.getName())));
 
         msg.append("\n");
 
