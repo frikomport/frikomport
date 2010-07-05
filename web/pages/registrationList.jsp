@@ -265,7 +265,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 
 <c:if test="${isSVV}">
 	<display:column property="participants" sortable="true" headerClass="sortable" 
-		titleKey="registration.participants.number" class="${tdClass}"/>
+		titleKey="registration.participants" class="${tdClass}"/>
 </c:if>
     
 <c:if test="${usePayment}">

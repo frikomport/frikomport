@@ -179,7 +179,7 @@
 	</c:if>
 
 	<c:if test="${isSVV}">
-	    <display:column property="participants" sortable="true" headerClass="sortable" titleKey="registration.participants.number"/>
+	    <display:column property="participants" sortable="true" headerClass="sortable" titleKey="registration.participants"/>
 	</c:if>
 
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">

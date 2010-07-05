@@ -205,7 +205,7 @@
 
 	<c:if test="${isSVV}">
 	<display:column media="ccsv cexcel cxml cpdf" property="participants" sortable="true" headerClass="sortable" 
-		titleKey="registration.participants.number" class="${tdClass}"/>
+		titleKey="registration.participants" class="${tdClass}"/>
 	</c:if>
     </c:if>
 
