@@ -119,8 +119,10 @@ public class StatisticsDAOHibernate extends BaseDAOHibernate implements Statisti
 	public List<Course> findEmptyCoursesByDates(Date beginPeriod, Date endPeriod){
 		String sql;
 		List<Course> emptyCourses = new ArrayList<Course>();
+		
+		// henter kun kurs/møter som har status FINISHED
 		if (DefaultQuotedNamingStrategy.usesOracle()) {
-			sql = "select \"id\", \"organization2id\" from course where \"id\" not in \r\n"
+			sql = "select \"id\", \"organization2id\" from course where \"status\" = 1 and \"id\" not in \r\n"
 				+ "(select distinct \"courseid\" from REGISTRATION o, COURSE c \r\n" 
 				+ "where o.\"courseid\" = c.\"id\" and c.\"starttime\" >= :beginPeriod and c.\"starttime\" <= :endPeriod) \r\n" 
 				+ "and (\"attendants\" is null or \"attendants\" = 0) \r\n" 
