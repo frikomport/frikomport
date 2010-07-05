@@ -60,6 +60,10 @@ div#content {
 width:995px;
 }
 
+div#ContentFrameMiddle {
+margin-top:-15px;
+}
+
 /* Overskift Temainnganger */
 div#content h1,
 div#content h2 {
@@ -136,10 +140,10 @@ div#content ul.bulletlist {
 	padding-left: 20px;
 }
 
-div#loggedin,
-div#userusing {
+div#loggedin {
 	text-align: right;
 	display:block;
+	font-size: 0.9em;
 }
 
 /* 

@@ -245,6 +245,10 @@
         <property name="viewName" value="waitingList"/>
     </bean>
     
+    <bean id="pageDecorationCacheController" class="no.unified.soak.webapp.action.PageDecorationCacheController" autowire="byName">
+        <property name="viewName" value="pageDecorationCache"/>
+    </bean>
+    
     <bean id="userDetailsController" class="no.unified.soak.webapp.action.UserDetailsController" autowire="byName">
         <property name="commandName" value="user"/>
         <property name="commandClass" value="no.unified.soak.model.User"/>
@@ -346,6 +350,7 @@
                 
                 <!-- Add additional URL mappings here -->
                 <prop key="/waitingList.html">waitingListController</prop>
+                <prop key="/pageDecarationCacheTimeout.html">pageDecorationCacheController</prop>
                 <prop key="/detailsUser.html">userDetailsController</prop>
 				<prop key="/listUsers.html">userController</prop>
 				<prop key="/profileUser.html">userRegistrationController</prop>

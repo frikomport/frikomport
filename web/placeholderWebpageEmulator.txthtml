@@ -7,6 +7,9 @@
       <link rel="stylesheet" type="text/css"
             href="http://www.vegvesen.no/resources/styles/styles.css"
             media="all" />
+      <link rel="stylesheet" type="text/css"
+            href="http://www.vegvesen.no/_public/www.vegvesen.no/styles/styles.css?_ts=12945c020fc"
+            media="all" />
       			<!--[if IE 6]>
       			<link rel="stylesheet" type="text/css" href="http://www.vegvesen.no/resources/styles/ie6_override.css" media="all" />
       			<![endif]-->
@@ -43,17 +46,17 @@
          <div class="logo">
          <a href="http://svvud6app01.vegvesen.no:7921/">
          <img alt="Til forsiden" id="logo" 
-src="http://www.vegvesen.no/images/logo.gif" title="Til forsiden">
+src="http://www.vegvesen.no/_public/www.vegvesen.no/images/logo.gif" title="Til forsiden">
          </a>
          </div>
          </div>
          <div class="noindex">
-         <a 
+         <!--a 
 href="http://svvud6app01.vegvesen.no:7921/cms/site/1/Forerkort/Foreropplaering/Ovelseskjoring/%5Btest%5D+Mengdetrening/mengdetrening#ContentFrameMiddle"
  style="position: absolute;" title="Til innholdet">
          <img alt="Til innholdet" 
 src="http://www.vegvesen.no/images/transparent.gif">
-         </a>
+         </a-->
          </div>
          <div class="noindex" id="printLogo">
          <img alt="Til forsiden" src="http://www.vegvesen.no/images/printLogo.gif"
@@ -61,7 +64,7 @@ src="http://www.vegvesen.no/images/transparent.gif">
          </div>
          <div class="noindex">
          <div class="narrowHeaderPictureContainer"><img 
-src="http://www.vegvesen.no/binary?id=34989" alt="Førerkort" 
+src="http://www.vegvesen.no/Forerkort/Foreropplaering/Ovelseskjoring/_image/70077.png" alt="Førerkort" 
 id="sublevelHeaderPicture"></div>
          </div>
          <div class="headerContentContainer">
@@ -160,15 +163,13 @@ href="http://svvud6app01.vegvesen.no:7921/cms/site/1/Forerkort">Førerkort</a><sp
  class="brodsmulemenySeparator">/</span><a 
 href="http://svvud6app01.vegvesen.no:7921/cms/site/1/Forerkort/Foreropplaering/Ovelseskjoring">Øvelseskjøring</a><span
  class="brodsmulemenySeparator">/</span><a 
-href="http://svvud6app01.vegvesen.no:7921/cms/site/1/Forerkort/Foreropplaering/Ovelseskjoring/%5Btest%5D+Mengdetrening">[test]
-
-               Mengdetrening</a></div><div class="noindex">
+href="http://svvud6app01.vegvesen.no:7921/cms/site/1/Forerkort/Foreropplaering/Ovelseskjoring/%5Btest%5D+Mengdetrening">Mengdetrening</a></div><div class="noindex">
                <div class="topbar">
                <span>
                <a style="display: inline;" class="contentprint" href="#"
  title="Skriv ut">
                <img style="display: inline;" alt="Skriverikon" 
-src="http://www.vegvesen.no/images/printerikon.gif">Skriv ut
+src="http://www.vegvesen.no/_public/www.vegvesen.no/images/printerikon.gif">Skriv ut
                </a>
                </span>
                </div>

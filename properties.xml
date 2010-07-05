@@ -182,6 +182,7 @@
         <pathelement location="${commons-lang.jar}"/>
         <pathelement location="${commons-validator.jar}"/>
         <pathelement location="${commons-codec.jar}"/>
+        <pathelement location="${commons-httpclient.jar}"/>
         <pathelement location="${servletapi.jar}"/>
         <pathelement location="${dom4j.jar}"/>
         <fileset dir="${javamail.dir}" includes="*.jar"/>

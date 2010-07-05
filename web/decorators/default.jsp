@@ -8,82 +8,8 @@
 <%@page import="no.unified.soak.Constants"%>
 <%@page import="no.unified.soak.model.User"%>
 
-<%@page import="org.apache.commons.lang.StringUtils"%><fmt:message key="global.pageDecorator.url" var="decorURL"/>
-<fmt:message key="global.pageDecorator.headPlaceholder" var="headPlaceholder"/>
-<fmt:message key="global.pageDecorator.bodyPlaceholder" var="bodyPlaceholder"/>
-<%
-    Boolean useCmsUrl = true;
-%>
-<c:choose>
-<c:when test="${decorURL != null && !empty decorURL}">
-<c:catch var="exception">
-	<c:import url="${decorURL}" var="ctmpl" charEncoding="utf-8"/>
-</c:catch>
-<c:if test="${exception != null}">
-<%
-    Exception exception = (Exception) pageContext.getAttribute("exception");
-	if (exception != null) {
- 	    System.out.println("En mulig håndterbar feil har oppstått");
- 	    System.out.println("default.jsp: decorURL=["+pageContext.getAttribute("decorURL")+"]");
- 	    System.out.println("default.jsp: ctmpl / sidedekor=["+pageContext.getAttribute("ctmpl")+"]");
- 	    System.out.println("Bruker ikke CMS, da den gir exception="+exception);
-        useCmsUrl = false;
-	}
-	else {
-		System.out.println("default.jsp: En uventet situasjon har oppstått.<br/>");			
-		System.out.println("default.jsp: getPathInfo=["+request.getPathInfo()+"]<br/>");			
-		System.out.println("default.jsp: getQueryString=["+request.getQueryString()+"]<br/>");			
-		System.out.println("default.jsp: getServletPath=["+request.getServletPath()+"]<br/>");			
-		System.out.println("default.jsp: getRequestURI=["+request.getRequestURI()+"]<br/>");			
+<c:out value="${pageDecorationBeforeHeadPleaceholder}" escapeXml="false"/>
 
-		Exception exceptionHttp = (Exception) request.getAttribute("exception");
-		System.out.println("default.jsp: request.'exception'=["+exceptionHttp+"]<br/>");			
- 	    //System.out.println("default.jsp: decorURL=["+pageContext.getAttribute("decorURL")+"]");
- 	    //System.out.println("default.jsp: ctmpl / sidedekor=["+pageContext.getAttribute("ctmpl")+"]");
-	}
-%>
-</c:if>
-</c:when>
-<c:otherwise>
-<%
-useCmsUrl = false;
-%>
-</c:otherwise>
-</c:choose>
-
-<%
-    String ctmpl = (String) pageContext.getAttribute("ctmpl");
-    String headPlaceholder = (String) pageContext.getAttribute("headPlaceholder");
-    String bodyPlaceholder = (String) pageContext.getAttribute("bodyPlaceholder");
-
-    if (StringUtils.isEmpty(ctmpl) || StringUtils.isEmpty(headPlaceholder) || StringUtils.isEmpty(bodyPlaceholder)) {
-        ctmpl = "";
-        useCmsUrl = false;
-    }
-    // Get the position of the placeholders
-    int baseStartPos = ctmpl.indexOf("<base ");
-    int baseEndPos = ctmpl.indexOf(">", baseStartPos+1);
-    int headStartPos = ctmpl.indexOf(headPlaceholder);
-    int bodyStartPos = ctmpl.indexOf(bodyPlaceholder, headStartPos+1);
-
-    if (headStartPos == -1 || bodyStartPos == -1) {
-        useCmsUrl = false;
-    }
-
-    if (useCmsUrl) {
-        if (baseStartPos > -1 && baseStartPos < headStartPos) {
-            out.write(ctmpl.substring(0, baseStartPos));
-            out.write(ctmpl.substring(baseEndPos + 1, headStartPos));
-        } else {
-            out.write(ctmpl.substring(0, headStartPos));  // Write out from start of file to the head placeholder.
-        }
-    } else {
-%>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-    <head>
-<%
-    }
-%>
         <%-- Include common set of meta tags for each layout --%>
         <%@ include file="/common/meta.jsp" %>
         <title><fmt:message key="webapp.prefix"/><decorator:title/></title>
@@ -105,27 +31,28 @@ useCmsUrl = false;
         <style type="text/css" media="all">
             div.standardsNote {background: #FFFFCC; border: 1px solid blue; margin-bottom: 10px; padding: 5px}
         </style>
+
+<c:out value="${pageDecorationBetweenHeadAndBodyPleaceholders}" escapeXml="false"/>
+
 <%
-    if (useCmsUrl) {
-        if (baseStartPos > headStartPos) {
-            out.write(ctmpl.substring(headStartPos + headPlaceholder.length(), baseStartPos));
-            out.write(ctmpl.substring(baseEndPos + 1, bodyStartPos));
-        } else {
-            out.write(ctmpl.substring(headStartPos + headPlaceholder.length(), bodyStartPos));
-        }
-    } else {
-%>
-        </head>
-        <body<decorator:getProperty property="body.id" writeEntireProperty="true"/>>
-<%
-    }
-User user = (User) request.getAttribute("user");
+User user = (User)session.getAttribute(Constants.USER_KEY);
 User hashUser = (User)session.getAttribute(Constants.ALT_USER_KEY);
+boolean divstart = false;
 if (user != null) {
-	out.write("<div id='loggedin'>Innlogget: " + user.getUsername() + " ["+ (request.getAttribute("userRolesString")==null?"":request.getAttribute("userRolesString")) + "]</div>");
+	out.write("<div id='loggedin'>Innlogget: " + user.getUsername() + " ["+ (request.getAttribute("userRolesString")==null?"":request.getAttribute("userRolesString")) + "]");
+	divstart=true;
 }
 if (hashUser != null) {
-	out.write("<div id='userusing'>Bruker: " + user.getUsername() + " ["+ (request.getAttribute("userRolesString")==null?"":request.getAttribute("userRolesString")) + "]</div>");
+	if (!divstart) {
+		out.write("<div id='loggedin'>");
+		divstart=true;
+	} else {
+		out.write("&nbsp;&nbsp;&nbsp;");
+	}
+	out.write("Publikumsbruker: " + hashUser.getUsername());
+}
+if (divstart) {
+	out.write("</div>");
 }
 %>
 
@@ -144,13 +71,5 @@ if (hashUser != null) {
         </div>
     </div>
     <%@ include file="/common/tracker.jsp" %>
-<%
-    if (useCmsUrl) {
-        out.write(ctmpl.substring(bodyStartPos + bodyPlaceholder.length()));
-    } else {
-%>
-        </body>
-        </html>
-<%      
-    }
-%>
+
+<c:out value="${pageDecorationAfterBodyPleaceholder}" escapeXml="false"/>

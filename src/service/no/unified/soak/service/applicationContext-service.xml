@@ -16,9 +16,14 @@
         <property name="transactionAttributes">
             <props>
                 <prop key="process*">PROPAGATION_REQUIRED</prop>
+                <prop key="execute*">PROPAGATION_REQUIRED</prop>
+                <prop key="reset*">PROPAGATION_REQUIRED</prop>
                 <prop key="save*">PROPAGATION_REQUIRED</prop>
                 <prop key="remove*">PROPAGATION_REQUIRED</prop>
-                <prop key="*">PROPAGATION_REQUIRED</prop>
+                <prop key="update*">PROPAGATION_REQUIRED</prop>
+                <prop key="add*">PROPAGATION_REQUIRED</prop>
+                <prop key="create*">PROPAGATION_REQUIRED</prop>
+                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
             </props>
         </property>
     </bean>
@@ -47,7 +52,8 @@
         <!-- Override default transaction attributes b/c of LoginCookie methods -->
         <property name="transactionAttributes">
             <props>
-                <prop key="save*">PROPAGATION_REQUIRED,-UserExistsException</prop>
+                <prop key="disableUser">PROPAGATION_REQUIRED</prop>
+                <prop key="enableUser">PROPAGATION_REQUIRED</prop>
             </props>
         </property>
         <!-- This property is overriden in applicationContext-security.xml to add
@@ -211,6 +217,11 @@
 			    <property name="mailSender" ref="mailSender"/>
             </bean>
         </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="send*">PROPAGATION_REQUIRED</prop>
+            </props>
+        </property>
     </bean>
     <!--Notification-END-->
 
@@ -229,7 +240,7 @@
         </property>
         <property name="transactionAttributes">
             <props>
-                <prop key="save*">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
+                <prop key="synchronizeUsers">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
             </props>
         </property>
     </bean>

@@ -118,7 +118,7 @@ public class StartupListener extends ContextLoaderListener implements
     	recurring.addTask(waitingListManager);
 
         // Here we set the intervals for how often
-		timer.schedule(recurring, Constants.TASK_INITIAL_DELAY, Constants.TASK_RUN_INTERVAL);
+		timer.schedule(recurring, Constants.TASK_INITIAL_DELAY, Constants.TASK_RUN_INTERVAL_MILLISECOND);
 
 		if (log.isDebugEnabled()) {
 			log.debug("drop-down initialization complete [OK]");

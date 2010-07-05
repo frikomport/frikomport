@@ -290,7 +290,7 @@ public class Constants {
     // Timers
     public static final long TASK_IMMEDIATE = 2000; // 2 second
     public static final long TASK_INITIAL_DELAY = 10000; // 10 sekunder
-    public static final long TASK_RUN_INTERVAL = 1800000; // 30 minutter
+    public static final long TASK_RUN_INTERVAL_MILLISECOND = 1800000; // 30 minutter
 
     /**
      * The http header used to read user id (username) if it should be present. 

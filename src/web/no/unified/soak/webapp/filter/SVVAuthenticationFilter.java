@@ -82,21 +82,25 @@ public class SVVAuthenticationFilter implements Filter {
         }
         
         if (StringUtils.isNotBlank(usernameFromHTTPHeader)) {
-            if (StringUtils.isEmpty(usernameFromSession)) {
-                extUser = extUserDAO.findUserByUsername(usernameFromHTTPHeader);
-                if (extUser == null || StringUtils.isEmpty(extUser.getUsername())) {
-                    log.warn("No LDAP user found for username=[" + usernameFromHTTPHeader
-                            + "] Cannot grant any roles to the presumed logged in user.");
-                } else {
-                    user = copyUserToLocalDBAndSession(extUser, session);
-                    session.setAttribute(Constants.USERID_HTTPHEADERNAME, user.getUsername());
-                }
-            } else {
-                // Brukeren kan (kanskje ha vært avlogget en kort stund og så kommet tilbake med USER-ID i header, uten
-                // at Tomcat-sesjonen har timet ut. Da må user atter settes for å få tilbake rollesettingene i request
-                // attribute'ene.
-                user = (User) session.getAttribute(Constants.USER_KEY);
-            }
+            User userTmp = (User)session.getAttribute(Constants.USER_KEY);
+			if (StringUtils.isEmpty(usernameFromSession) || !usernameFromSession.equals(usernameFromHTTPHeader) || userTmp == null
+					|| !StringUtils.equals(userTmp.getUsername(), usernameFromHTTPHeader)) {
+				extUser = extUserDAO.findUserByUsername(usernameFromHTTPHeader);
+				if (extUser == null || StringUtils.isEmpty(extUser.getUsername())) {
+					log.warn("No LDAP user found for username=[" + usernameFromHTTPHeader
+							+ "] Cannot grant any roles to the presumed logged in user.");
+				} else {
+					user = copyUserToLocalDBAndSession(extUser, session);
+					session.setAttribute(Constants.USERID_HTTPHEADERNAME, user.getUsername());
+				}
+			} else {
+				// Brukeren kan (kanskje) ha vært avlogget en kort stund og så
+				// kommet tilbake med USER-ID i header, uten
+				// at Tomcat-sesjonen har timet ut. Da må user atter settes for
+				// å få tilbake rollesettingene i request
+				// attribute'ene.
+				user = userTmp;
+			}
         } else if (StringUtils.isNotBlank(usernameFromSession)) {
             request.setAttribute(Constants.MESSAGES_INFO_KEY, Arrays
                     .asList("Din innlogging er utg&aring;tt. Vennligst logg inn p&aring;ny."));
@@ -105,9 +109,11 @@ public class SVVAuthenticationFilter implements Filter {
         if(user != null && isAdminPath(request)) {
             Authentication authentificationToken = new SVVAuthentificationToken(user, usernameFromHTTPHeader);
             SecurityContextHolder.getContext().setAuthentication(authentificationToken);
+            session.setAttribute(Constants.USER_KEY, user);
         } else {
-            session.setAttribute(Constants.USER_KEY, null);
             SecurityContextHolder.getContext().setAuthentication(null);
+            session.setAttribute(Constants.USER_KEY, null);
+			session.setAttribute(Constants.USERID_HTTPHEADERNAME, null);
         }
 
         chain.doFilter(request, response);
@@ -115,7 +121,8 @@ public class SVVAuthenticationFilter implements Filter {
     
     private boolean isAdminPath(HttpServletRequest request) {
     	String contextPath = request.getContextPath();
-		return true;
+    	//TODO SSO-tilpasning inn her.
+    	return true;
 	}
 
     private User copyUserToLocalDBAndSession(ExtUser extUser, HttpSession session) {

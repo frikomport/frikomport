@@ -495,5 +495,7 @@ td.canceled, tr.canceled {
 }
 
 #loggedin {
+	text-align: right;
 	display:none;
+	font-size: 0.8em;
 }
