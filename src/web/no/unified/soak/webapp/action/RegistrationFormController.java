@@ -227,7 +227,7 @@ public class RegistrationFormController extends BaseFormController {
                 regUser = (User) session.getAttribute(Constants.ALT_USER_KEY);
             }
 
-            if (regUser != null) {
+            if (regUser != null && !ApplicationResourcesUtil.isSVV()) {
                 registration.setFirstName(regUser.getFirstName());
                 registration.setLastName(regUser.getLastName());
                 registration.setEmail(regUser.getEmail());
