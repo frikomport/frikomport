@@ -220,6 +220,7 @@
         <property name="transactionAttributes">
             <props>
                 <prop key="send*">PROPAGATION_REQUIRED</prop>
+                <prop key="save*">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
             </props>
         </property>
     </bean>
