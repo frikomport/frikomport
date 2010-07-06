@@ -34,7 +34,6 @@
         <!-- ====================   FriKom for SVV  =========================== -->
         <Menu name="FriKomMenu_SVV" title="menu.main" page="/listCourses.html">
             <Item name="CourseMenu" title="courseList.heading.short" page="/listCourses.html"/>
-            <Item name="PastCourseMenu" title="pastCourseList.heading" page="/listCourses.html?past=1" roles="editor,admin,eventresponsible,reader"/>
             <Item name="OrganizationMenu" title="organizationList.heading" page="/listOrganizations.html" roles="admin,reader"/>
             <Item name="LocationMenu" title="locationList.heading" page="/listLocations.html" roles="editor,admin,eventresponsible,reader"/>
             <Item name="PersonMenu" title="personList.heading" page="/listPeople.html" roles="editor,admin,eventresponsible,reader"/>

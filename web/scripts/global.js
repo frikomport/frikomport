@@ -341,6 +341,17 @@ function confirmDeleteRegistration(obj) {
     }
 }
 
+function confirmCancellation(obj) {   
+    var msg = "Vil du avlyse " + obj + "?";
+    ans = confirm(msg);
+    if (ans) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
 function highlightTableRows(tableId) {
     var previousClass = null;
     var table = document.getElementById(tableId); 
