@@ -28,11 +28,15 @@ import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
+import no.unified.soak.validation.DigitsOnly;
 import no.unified.soak.validation.Email;
+import no.unified.soak.validation.MinLength;
 import no.unified.soak.validation.MinValue;
 import no.unified.soak.validation.Required;
+import no.unified.soak.validation.ValidateOnlyIfConfigurationIsTrue;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.validator.EmailValidator;
@@ -274,11 +278,6 @@ public class BaseFormController extends SimpleFormController {
 
         Map model = new HashMap();
         model.put("user", user);
-
-        // TODO: once you figure out how to get the global resource bundle in
-        // WebWork, then figure it out here too. In the meantime, the Username
-        // and Password labels are hard-coded into the template.
-        // model.put("bundle", getTexts());
         model.put("message", msg);
         model.put("applicationURL", url);
         mailEngine.sendMessage(message, templateName, model);
@@ -322,8 +321,100 @@ public class BaseFormController extends SimpleFormController {
 			i += validateRequired(obj, errors, method);
 			i += validateMinValue(obj, errors, method);
 			i += validateEmail(obj, errors, method);
+			i += validateDigitsOnly(obj, errors, method);
+			i += validateMinLength(obj, errors, method);
 		}
 		return i;
+	}
+
+	private int validateMinLength(Object obj, BindException errors, Method method) {
+		int nErrors=0;
+		MinLength minLengthAnnotation = method.getAnnotation(MinLength.class);
+		if (minLengthAnnotation != null) {
+			String fieldNameCamelCase = method.getName().substring(3);
+			String fieldName = lowercaseFirstLetter(fieldNameCamelCase);
+			Class<? extends Object> objClass = obj.getClass();
+			
+			if (isDisabledByAnnotatedConfiguration(method)) {
+				return nErrors;
+			}
+
+			try {
+				Method getMethod = objClass.getMethod("get" + fieldNameCamelCase);
+				Object methodResult = getMethod.invoke(obj);
+				int minLength = Integer.parseInt(minLengthAnnotation.value());
+
+				if (methodResult != null && methodResult instanceof String && StringUtils.isNotBlank((String) methodResult) && ((String) methodResult).length() < minLength) {
+					String fieldText = getFieldDisplayName(obj, fieldName);
+					Object[] args = new Object[] { fieldText, minLength };
+					nErrors = 1;
+					errors.rejectValue(fieldName, "errors.minlength", args, fieldName + " must have at least "+minLength+" charcters.");
+				} else if (methodResult != null && !(methodResult instanceof String)) {
+					Object[] args = new String[] { "Tried to validate the length of a non-string field \"" + fieldName
+							+ "\". Cannot validate." };
+					errors.rejectValue(fieldName, "errors.detail", args, "Illegal internal state tied to the value of "
+							+ fieldName + ".");
+				}
+			} catch (Exception e) {
+				log.warn("Feil under validering av " + fieldName + ": " + e);
+			}
+		}
+		return nErrors;
+	}
+
+	private int validateDigitsOnly(Object obj, BindException errors, Method method) {
+		int nErrors=0;
+		DigitsOnly digitsOnlyAnnotation = method.getAnnotation(DigitsOnly.class);
+		if (digitsOnlyAnnotation != null) {
+			String fieldNameCamelCase = method.getName().substring(3);
+			String fieldName = lowercaseFirstLetter(fieldNameCamelCase);
+			Class<? extends Object> objClass = obj.getClass();
+			
+			if (isDisabledByAnnotatedConfiguration(method)) {
+				return nErrors;
+			}
+			
+			try {
+				Method getMethod = objClass.getMethod("get" + fieldNameCamelCase);
+				Object methodResult = getMethod.invoke(obj);
+
+				if (methodResult != null && methodResult instanceof String) {
+					String methodResultStr = (String) methodResult;
+					if (StringUtils.isEmpty(methodResultStr)) {
+						methodResultStr = null;
+					}
+					
+					Integer methodResultInt = NumberUtils.createInteger(methodResultStr);
+					if (methodResultInt != null && methodResultInt < 0) {
+						String fieldText = getFieldDisplayName(obj, fieldName);
+						Object[] args = new Object[] { fieldText };
+						nErrors = 1;
+						errors.rejectValue(fieldName, "errors.digitsOnly", args, fieldName + " can only have digits.");
+					}
+				} else if (methodResult != null && !(methodResult instanceof String)) {
+					Object[] args = new String[] { "Tried to validate the length of a non-string field \"" + fieldName
+							+ "\". Cannot validate." };
+					errors.rejectValue(fieldName, "errors.detail", args, "Illegal internal state tied to the value of "
+							+ fieldName + ".");
+				}
+			} catch (NumberFormatException e) {
+				String fieldText = getFieldDisplayName(obj, fieldName);
+				Object[] args = new Object[] { fieldText };
+				nErrors = 1;
+				errors.rejectValue(fieldName, "errors.digitsOnly", args, fieldName + " can only have digits.");
+			} catch (Exception e) {
+				log.warn("Feil under validering av " + fieldName + ": " + e);
+			}
+		}
+		return nErrors;
+	}
+
+	private boolean isDisabledByAnnotatedConfiguration(Method method) {
+		ValidateOnlyIfConfigurationIsTrue onlyIfConfigurationIsTrue = method.getAnnotation(ValidateOnlyIfConfigurationIsTrue.class);
+		if (onlyIfConfigurationIsTrue == null) {
+			return false;
+		}
+		return !configurationManager.isActive(onlyIfConfigurationIsTrue.value(), false);
 	}
 
 	private int validateMinValue(Object obj, BindException errors, Method method) {
@@ -339,11 +430,16 @@ public class BaseFormController extends SimpleFormController {
 				Object methodResult = getMethod.invoke(obj);
 
 				int minValue = Integer.parseInt(minValueAnnotation.value());
-				if (methodResult != null && methodResult instanceof Integer && ((Integer)methodResult) < minValue ) {
-					String fieldText = getFieldDisplayName(obj, fieldName);
-					Object[] args = new Object[] { fieldText, minValue};
+				String fieldText = getFieldDisplayName(obj, fieldName);
+				if (methodResult != null && methodResult instanceof Integer && ((Integer) methodResult) < minValue) {
+					Object[] args = new Object[] { fieldText, minValue };
 					nErrors = 1;
-					errors.rejectValue(fieldName, "errors.XMustBeGreaterThanY", args, fieldName + " is required.");
+					errors.rejectValue(fieldName, "errors.XMustBeGreaterThanY", args, fieldName + " can not be lower than "
+							+ minValue + ".");
+				} else if (methodResult != null && !(methodResult instanceof Integer)) {
+					Object[] args = new Object[] { fieldText };
+					nErrors = 1;
+					errors.rejectValue(fieldName, "errors.integer", args, fieldName + " must be an integer number.");
 				}
 			} catch (Exception e) {
 				log.warn("Feil under validering av " + fieldName + ": " + e);

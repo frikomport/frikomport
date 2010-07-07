@@ -13,8 +13,11 @@ package no.unified.soak.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import no.unified.soak.validation.DigitsOnly;
 import no.unified.soak.validation.Email;
+import no.unified.soak.validation.MinLength;
 import no.unified.soak.validation.Required;
+import no.unified.soak.validation.ValidateOnlyIfConfigurationIsTrue;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -361,6 +364,9 @@ public class Registration extends BaseObject implements Serializable {
 	 * @param mobilePhone
 	 *            The mobilePhone to set.
 	 */
+	@DigitsOnly
+	@MinLength("8")
+	@ValidateOnlyIfConfigurationIsTrue("access.registration.mobilePhone.digitsOnly.minLength8")
 	public void setMobilePhone(String mobilePhone) {
 		this.mobilePhone = mobilePhone;
 	}

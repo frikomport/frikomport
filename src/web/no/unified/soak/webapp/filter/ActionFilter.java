@@ -105,7 +105,7 @@ public class ActionFilter implements Filter {
 
 		if (!singletonCacheManager.cacheExists("pageDecoration")) {
 			int ttlSeconds = Math.round(Constants.TASK_RUN_INTERVAL_MILLISECOND / 1000);
-			Cache pageDecorationCache = new Cache("pageDecoration", 3, true, false, ttlSeconds, ttlSeconds, true, ttlSeconds * 2);
+			Cache pageDecorationCache = new Cache("pageDecoration", 3, true, false, ttlSeconds, ttlSeconds,  true, ttlSeconds * 2);
 			pageDecorationCache.setDiskStorePath(tempdirPath);
 			singletonCacheManager.addCache(pageDecorationCache);
 		}
