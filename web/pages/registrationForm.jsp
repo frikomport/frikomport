@@ -85,6 +85,21 @@
 		<table class="detail">
 			<form:hidden path="id" />
 			<form:hidden path="courseid" />
+
+			<c:if test="${!empty registration.id}">
+			<tr>
+				<th>
+					<soak:label key="registration.status" />
+				</th>
+				<td>
+					<c:if test="${registration.status == 0}">&nbsp;<fmt:message key="registration.status.invited" /></c:if>
+					<c:if test="${registration.status == 1}">&nbsp;<fmt:message key="registration.status.waiting" /></c:if>
+					<c:if test="${registration.status == 2}">&nbsp;<fmt:message key="registration.status.reserved" /></c:if>
+					<c:if test="${registration.status == 3}">&nbsp;<fmt:message key="registration.status.cancelled" /></c:if>
+				</td>
+			</tr>
+			</c:if>
+
 			<c:if test="${showEmployeeFields}">
 			<tr>
 				<th>
@@ -436,11 +451,13 @@
 					<c:if test="${!empty registration.id}">
                     <input type="submit" class="button" name="save" id="savebutton" onclick="bCancel=false" value="<fmt:message key="button.register.update"/>" />
 						<c:if test="${isAdmin}">
-							<input type="submit" class="button" name="delete" onclick="bCancel=true;return confirmDeleteRegistration()"
-								value="<fmt:message key="button.delete"/>" />
+						<input type="submit" class="button" name="delete" onclick="bCancel=true;return confirmDeleteRegistration()"
+							value="<fmt:message key="button.delete"/>" />
 						</c:if>
+						<c:if test="${registration.status != 3}">
 						<input type="submit" class="button" name="unregister" onclick="bCancel=true;return confirmUnregistration()"
 							value="<fmt:message key="button.unregister"/>" />
+						</c:if>							
 					</c:if>
 					<input type="submit" class="button" name="cancel"
 						onclick="bCancel=true" value="<fmt:message key="button.cancel"/>" />
