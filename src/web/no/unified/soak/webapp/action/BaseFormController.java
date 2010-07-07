@@ -7,6 +7,7 @@
 */
 package no.unified.soak.webapp.action;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.mail.Address;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -311,23 +313,53 @@ public class BaseFormController extends SimpleFormController {
         return this.cancelView;
     }
     
-	protected int validateAnnotations(Object obj, BindException errors) {
+	protected int validateAnnotations(Object obj, BindException errors, String referencingObjectFieldnamePrefix) {
 		int i = 0;
+		if (referencingObjectFieldnamePrefix == null) {
+			referencingObjectFieldnamePrefix = "";
+		}
 		for (Method method : obj.getClass().getMethods()) {
-			if (!method.getName().substring(0, 3).equals("set")) {
+			String methodName = method.getName();
+			if (!methodName.substring(0, 3).equals("set")) {
 				continue;
 			}
 
-			i += validateRequired(obj, errors, method);
-			i += validateMinValue(obj, errors, method);
-			i += validateEmail(obj, errors, method);
-			i += validateDigitsOnly(obj, errors, method);
-			i += validateMinLength(obj, errors, method);
+			if (Address.class.getSimpleName().equals(method.getParameterTypes()[0].getSimpleName())
+					&& !hasValidationAnnotation(method)) {
+				try {
+					Method getterMethod = obj.getClass().getMethod("get" + methodName.substring(3), (Class[]) null);
+					Object objUsed = getterMethod.invoke(obj, (Object[]) null);
+					String fieldNameCamelCase = method.getName().substring(3);
+					String fieldName = lowercaseFirstLetter(fieldNameCamelCase);
+					i += validateAnnotations(objUsed, errors, fieldName+".");
+				} catch (Exception e) {
+					log.warn("Validation error connected to obj=[]" + obj + " and method=[" + method + "].");
+				}
+			}
+
+			i += validateRequired(obj, errors, method, referencingObjectFieldnamePrefix);
+			i += validateMinValue(obj, errors, method, referencingObjectFieldnamePrefix);
+			i += validateEmail(obj, errors, method, referencingObjectFieldnamePrefix);
+			i += validateDigitsOnly(obj, errors, method, referencingObjectFieldnamePrefix);
+			i += validateMinLength(obj, errors, method, referencingObjectFieldnamePrefix);
 		}
 		return i;
 	}
 
-	private int validateMinLength(Object obj, BindException errors, Method method) {
+	private boolean hasValidationAnnotation(Method method) {
+		Annotation[] annotations = method.getAnnotations();
+		for (Annotation annotation : annotations) {
+			if (MinLength.class.equals(annotation.annotationType()) || MinValue.class.equals(annotation.annotationType())
+					|| DigitsOnly.class.equals(annotation.annotationType()) || Required.class.equals(annotation.annotationType()) || Email.class
+					.equals(annotation.annotationType())) {
+				return true;
+			}
+
+		}
+		return false;
+	}
+
+	private int validateMinLength(Object obj, BindException errors, Method method, String referencingObjectFieldnamePrefix) {
 		int nErrors=0;
 		MinLength minLengthAnnotation = method.getAnnotation(MinLength.class);
 		if (minLengthAnnotation != null) {
@@ -345,14 +377,14 @@ public class BaseFormController extends SimpleFormController {
 				int minLength = Integer.parseInt(minLengthAnnotation.value());
 
 				if (methodResult != null && methodResult instanceof String && StringUtils.isNotBlank((String) methodResult) && ((String) methodResult).length() < minLength) {
-					String fieldText = getFieldDisplayName(obj, fieldName);
+					String fieldText = getFieldDisplayName(obj, referencingObjectFieldnamePrefix+fieldName);
 					Object[] args = new Object[] { fieldText, minLength };
 					nErrors = 1;
-					errors.rejectValue(fieldName, "errors.minlength", args, fieldName + " must have at least "+minLength+" charcters.");
+					errors.rejectValue(referencingObjectFieldnamePrefix+fieldName, "errors.minlength", args, fieldName + " must have at least "+minLength+" charcters.");
 				} else if (methodResult != null && !(methodResult instanceof String)) {
 					Object[] args = new String[] { "Tried to validate the length of a non-string field \"" + fieldName
 							+ "\". Cannot validate." };
-					errors.rejectValue(fieldName, "errors.detail", args, "Illegal internal state tied to the value of "
+					errors.rejectValue(referencingObjectFieldnamePrefix+fieldName, "errors.detail", args, "Illegal internal state tied to the value of "
 							+ fieldName + ".");
 				}
 			} catch (Exception e) {
@@ -362,7 +394,7 @@ public class BaseFormController extends SimpleFormController {
 		return nErrors;
 	}
 
-	private int validateDigitsOnly(Object obj, BindException errors, Method method) {
+	private int validateDigitsOnly(Object obj, BindException errors, Method method, String referencingObjectFieldnamePrefix) {
 		int nErrors=0;
 		DigitsOnly digitsOnlyAnnotation = method.getAnnotation(DigitsOnly.class);
 		if (digitsOnlyAnnotation != null) {
@@ -386,22 +418,22 @@ public class BaseFormController extends SimpleFormController {
 					
 					Integer methodResultInt = NumberUtils.createInteger(methodResultStr);
 					if (methodResultInt != null && methodResultInt < 0) {
-						String fieldText = getFieldDisplayName(obj, fieldName);
+						String fieldText = getFieldDisplayName(obj, referencingObjectFieldnamePrefix+fieldName);
 						Object[] args = new Object[] { fieldText };
 						nErrors = 1;
-						errors.rejectValue(fieldName, "errors.digitsOnly", args, fieldName + " can only have digits.");
+						errors.rejectValue(referencingObjectFieldnamePrefix+fieldName, "errors.digitsOnly", args, fieldName + " can only have digits.");
 					}
 				} else if (methodResult != null && !(methodResult instanceof String)) {
 					Object[] args = new String[] { "Tried to validate the length of a non-string field \"" + fieldName
 							+ "\". Cannot validate." };
-					errors.rejectValue(fieldName, "errors.detail", args, "Illegal internal state tied to the value of "
+					errors.rejectValue(referencingObjectFieldnamePrefix+fieldName, "errors.detail", args, "Illegal internal state tied to the value of "
 							+ fieldName + ".");
 				}
 			} catch (NumberFormatException e) {
-				String fieldText = getFieldDisplayName(obj, fieldName);
+				String fieldText = getFieldDisplayName(obj, referencingObjectFieldnamePrefix+fieldName);
 				Object[] args = new Object[] { fieldText };
 				nErrors = 1;
-				errors.rejectValue(fieldName, "errors.digitsOnly", args, fieldName + " can only have digits.");
+				errors.rejectValue(referencingObjectFieldnamePrefix+fieldName, "errors.digitsOnly", args, fieldName + " can only have digits.");
 			} catch (Exception e) {
 				log.warn("Feil under validering av " + fieldName + ": " + e);
 			}
@@ -417,7 +449,7 @@ public class BaseFormController extends SimpleFormController {
 		return !configurationManager.isActive(onlyIfConfigurationIsTrue.value(), false);
 	}
 
-	private int validateMinValue(Object obj, BindException errors, Method method) {
+	private int validateMinValue(Object obj, BindException errors, Method method, String referencingObjectFieldnamePrefix) {
 		int nErrors = 0;
 		MinValue minValueAnnotation = method.getAnnotation(MinValue.class);
 		if (minValueAnnotation != null) {
@@ -430,16 +462,16 @@ public class BaseFormController extends SimpleFormController {
 				Object methodResult = getMethod.invoke(obj);
 
 				int minValue = Integer.parseInt(minValueAnnotation.value());
-				String fieldText = getFieldDisplayName(obj, fieldName);
+				String fieldText = getFieldDisplayName(obj, referencingObjectFieldnamePrefix+fieldName);
 				if (methodResult != null && methodResult instanceof Integer && ((Integer) methodResult) < minValue) {
 					Object[] args = new Object[] { fieldText, minValue };
 					nErrors = 1;
-					errors.rejectValue(fieldName, "errors.XMustBeGreaterThanY", args, fieldName + " can not be lower than "
+					errors.rejectValue(referencingObjectFieldnamePrefix+fieldName, "errors.XMustBeGreaterThanY", args, fieldName + " can not be lower than "
 							+ minValue + ".");
 				} else if (methodResult != null && !(methodResult instanceof Integer)) {
 					Object[] args = new Object[] { fieldText };
 					nErrors = 1;
-					errors.rejectValue(fieldName, "errors.integer", args, fieldName + " must be an integer number.");
+					errors.rejectValue(referencingObjectFieldnamePrefix+fieldName, "errors.integer", args, fieldName + " must be an integer number.");
 				}
 			} catch (Exception e) {
 				log.warn("Feil under validering av " + fieldName + ": " + e);
@@ -449,7 +481,7 @@ public class BaseFormController extends SimpleFormController {
 		return nErrors;
 	}
 
-	private int validateEmail(Object obj, BindException errors, Method method) {
+	private int validateEmail(Object obj, BindException errors, Method method, String referencingObjectFieldnamePrefix) {
 		int nErrors = 0;
 		if (method.getAnnotation(Email.class) != null) {
 			String fieldNameCamelCase = method.getName().substring(3);
@@ -461,10 +493,10 @@ public class BaseFormController extends SimpleFormController {
 				if (methodResult != null && methodResult instanceof String && !StringUtils.isEmpty((String) methodResult)
 						&& !EmailValidator.getInstance().isValid((String) methodResult)) {
 
-					String fieldText = getFieldDisplayName(obj, fieldName);
+					String fieldText = getFieldDisplayName(obj, referencingObjectFieldnamePrefix+fieldName);
 					Object[] args = new Object[] { fieldText };
 					nErrors = 1;
-					errors.rejectValue(fieldName, "errors.email", args, methodResult
+					errors.rejectValue(referencingObjectFieldnamePrefix+fieldName, "errors.email", args, methodResult
 							+ " er ikke en gyldig epostadresse i feltet " + fieldName + ".");
 				}
 			} catch (Exception e) {
@@ -474,7 +506,7 @@ public class BaseFormController extends SimpleFormController {
 		return nErrors;
 	}
 
-	private int validateRequired(Object obj, BindException errors, Method method) {
+	private int validateRequired(Object obj, BindException errors, Method method, String referencingObjectFieldnamePrefix) {
 		int nErrors=0;
 		if (method.getAnnotation(Required.class) != null) {
 			String fieldNameCamelCase = method.getName().substring(3);
@@ -495,10 +527,10 @@ public class BaseFormController extends SimpleFormController {
 				Object methodResult = getMethod.invoke(obj);
 
 				if (methodResult == null || (methodResult instanceof String && StringUtils.isEmpty((String) methodResult))) {
-					String fieldText = getFieldDisplayName(obj, fieldName);
+					String fieldText = getFieldDisplayName(obj, referencingObjectFieldnamePrefix+fieldName);
 					Object[] args = new Object[] { fieldText };
 					nErrors = 1;
-					errors.rejectValue(fieldName, "errors.required", args, fieldName + " is required.");
+					errors.rejectValue(referencingObjectFieldnamePrefix+fieldName, "errors.required", args, fieldName + " is required.");
 				}
 			} catch (Exception e) {
 				log.warn("Feil under validering av " + fieldName + ": " + e);
@@ -508,11 +540,18 @@ public class BaseFormController extends SimpleFormController {
 	}
 
 	private String getFieldDisplayName(Object obj, String fieldName) {
-		String fieldText = ApplicationResourcesUtil.getText(obj.getClass().getSimpleName().toLowerCase() + "."
-				+ fieldName);
+		String fieldText = ApplicationResourcesUtil.getText(obj.getClass().getSimpleName().toLowerCase() + "." + fieldName);
 		if (StringUtils.isEmpty(fieldText)) {
 			fieldText = ApplicationResourcesUtil.getText(fieldName);
 		}
+
+		// Checks if fieldname is prefixed with referencing fieldname from
+		// another class. Like Registration.invoiceAddress is referencing
+		// Address class.
+		if (StringUtils.isEmpty(fieldText) && fieldName.contains(".")) {
+			fieldText = ApplicationResourcesUtil.getText(fieldName.substring(fieldName.indexOf(".") + 1));
+		}
+
 		if (StringUtils.isEmpty(fieldText)) {
 			fieldText = fieldName;
 		}

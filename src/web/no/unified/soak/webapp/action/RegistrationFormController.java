@@ -357,7 +357,7 @@ public class RegistrationFormController extends BaseFormController {
 				errors.rejectValue("invoiceAddress.postalCode", "errors.required", args, "");
 			}
 			
-			if (validateAnnotations(registration, errors) > 0) {
+			if (validateAnnotations(registration, errors, null) > 0) {
 				args = new Object[] {};
 			}
 

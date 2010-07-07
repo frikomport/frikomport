@@ -7,6 +7,9 @@
 */
 package no.unified.soak.model;
 
+import no.unified.soak.validation.DigitsOnly;
+import no.unified.soak.validation.MinLength;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -126,6 +129,8 @@ public class Address extends BaseObject implements Serializable {
      * @param postalCode The postalCode to set
      *
      */
+    @MinLength("4")
+    @DigitsOnly
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }

@@ -533,7 +533,7 @@ public class CourseFormController extends BaseFormController {
 				enrichWithDefaultvaluesToAvoidErrors(course);
 			}
 
-			if (validateAnnotations(course, errors) > 0) {
+			if (validateAnnotations(course, errors, null) > 0) {
 				args = new Object[] {};
 			}
 

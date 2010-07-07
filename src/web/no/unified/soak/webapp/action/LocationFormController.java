@@ -162,7 +162,7 @@ public class LocationFormController extends BaseFormController {
         	}
         	
         	// validering flyttet fra klient til kontroller
-			if (validateAnnotations(location, errors) > 0) {
+			if (validateAnnotations(location, errors, null) > 0) {
 				locationManager.evict(location);
 				return showForm(request, response, errors);
 			}

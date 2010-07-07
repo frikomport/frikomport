@@ -106,7 +106,7 @@ public class PersonFormController extends BaseFormController {
         	// person is new or updated
         	
         	// validering flyttet fra klient til kontroller
-			if (validateAnnotations(person, errors) > 0) {
+			if (validateAnnotations(person, errors, null) > 0) {
 				personManager.evict(person);
 				return showForm(request, response, errors);
 			}
