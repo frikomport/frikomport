@@ -277,6 +277,11 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
     
     <display:setProperty name="paging.banner.item_name" value="${item}"/>
     <display:setProperty name="paging.banner.items_name" value="${items}"/>
+
+<c:if test="${!isSVV}">
+    <display:setProperty name="export.ics" value="true"/>
+</c:if>
+
 </display:table>
 </c:if>
 

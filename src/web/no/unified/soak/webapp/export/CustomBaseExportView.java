@@ -321,12 +321,14 @@ public abstract class CustomBaseExportView implements TextExportView
 	            	write(out, escapeColumnValue(date));
 	            	write(out, CELL_END);
 
-	            	write(out, CELL_START);
-	            	write(out, escapeColumnValue(duration));
-	            	write(out, CELL_END);
+	            	if(!ApplicationResourcesUtil.isSVV()){
+		            	write(out, CELL_START);
+		            	write(out, escapeColumnValue(duration));
+		            	write(out, CELL_END);
+	            	}
                     write(out, ROW_END);
-                    
-	                // adds courseresponsible, instructor
+
+	            	// adds courseresponsible, instructor
 	            	write(out, ROW_START);
 	            	write(out, CELL_START);
 	            	write(out, escapeColumnValue(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.responsible"))));
@@ -376,7 +378,7 @@ public abstract class CustomBaseExportView implements TextExportView
             // adds attendant counts and time of update
         	write(out, ROW_START);
         	write(out, CELL_START);
-        	write(out, escapeColumnValue(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.attendants")) + ": " + rCount));
+        	write(out, escapeColumnValue(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationList.attendants")) + ": " + rCount));
         	write(out, CELL_END);
 
         	write(out, CELL_START);

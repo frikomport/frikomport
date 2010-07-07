@@ -131,6 +131,11 @@
 		titleKey="registration.comment"/>
 	</c:if>
 
+	<c:if test="${useAttendants}">
+	<display:column property="participants" sortable="true" headerClass="sortable" 
+		titleKey="registration.participants" class="${tdClass}"/>
+	</c:if>
+
 	<c:if test="${(admin == true || isReader) && usePayment}">
 	<display:column media="ccsv cexcel cxml cpdf" property="invoiceName" sortable="true" headerClass="sortable"
 		titleKey="registration.invoiceAddress.name"/>
@@ -202,11 +207,6 @@
 		<c:if test="${registrationList.attended == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 	</display:column>
 	</c:if>
-
-	<c:if test="${isSVV}">
-	<display:column media="ccsv cexcel cxml cpdf" property="participants" sortable="true" headerClass="sortable" 
-		titleKey="registration.participants" class="${tdClass}"/>
-	</c:if>
     </c:if>
 
 
@@ -219,7 +219,11 @@
     <display:setProperty name="export.csv" value="false"/>
     <display:setProperty name="export.ccsv" value="true"/>
     <display:setProperty name="export.xml" value="false"/>
+
+	<c:if test="${!isSVV}">
     <display:setProperty name="export.cxml" value="true"/>
+    </c:if>
+    
 </display:table>
 
 <input type="hidden" id="regid" name="regid" value="0"/>

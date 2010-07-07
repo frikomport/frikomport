@@ -203,6 +203,9 @@ public class RegistrationListExcelExportView implements BinaryExportView
 	            	String stop = f.format(course.getStopTime());
 	            	String date = start.equals(stop)? start : start + " - " + stop;
 	            	String duration = course.getDuration()!=null ? course.getDuration() : "";
+	            	if(ApplicationResourcesUtil.isSVV()){
+	            		duration = "";
+	            	}
 	            	
 	            	short colNum = 0;
 	            	// adds coursename, date, duration
@@ -241,7 +244,7 @@ public class RegistrationListExcelExportView implements BinaryExportView
 			short colNum = 0;
             // adds attendant counts and time of update
 			HSSFRow r = sheet.createRow(rowNum++);
-            writeCell(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.attendants")) + ": " + rCount, r.createCell(colNum++));
+            writeCell(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationList.attendants")) + ": " + rCount, r.createCell(colNum++));
             writeCell(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.waitlist")) + ": " + wCount, r.createCell(colNum++));
             writeCell(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationsSent.updated")) + " " + f.format(new Date()), r.createCell(colNum++));
 
@@ -281,39 +284,39 @@ public class RegistrationListExcelExportView implements BinaryExportView
      */
     protected void writeCell(Object value, HSSFCell cell)
     {
-        if (value == null) {
+    	if (value == null) {
             cell.setCellValue(new HSSFRichTextString(""));
         }
-        else if (value instanceof Integer)
-        {
-            Integer integer = (Integer) value;
-            // due to a weird bug in HSSF where it uses shorts, we need to input this as a double value :(
-            cell.setCellValue(integer.doubleValue());
-            cell.setCellStyle(cellStyles.get(CellFormatTypes.INTEGER));
-        }
-        else if (value instanceof Number)
-        {
-            Number num = (Number) value;
-            if (num.equals(Double.NaN))
-            {
-                cell.setCellValue(new HSSFRichTextString(""));
-            }
-            else
-            {
-                cell.setCellValue(num.doubleValue());
-            }
-            cell.setCellStyle(cellStyles.get(CellFormatTypes.NUMBER));
-        }
-        else if (value instanceof Date)
-        {
-            cell.setCellValue((Date) value);
-            cell.setCellStyle(cellStyles.get(CellFormatTypes.DATE));
-        }
-        else if (value instanceof Calendar)
-        {
-            cell.setCellValue((Calendar) value);
-            cell.setCellStyle(cellStyles.get(CellFormatTypes.DATE));
-        }
+//        else if (value instanceof Integer)
+//        {
+//            Integer integer = (Integer) value;
+//            // due to a weird bug in HSSF where it uses shorts, we need to input this as a double value :(
+//            cell.setCellValue(integer.doubleValue());
+//            cell.setCellStyle(cellStyles.get(CellFormatTypes.INTEGER));
+//        }
+//        else if (value instanceof Number)
+//        {
+//            Number num = (Number) value;
+//            if (num.equals(Double.NaN))
+//            {
+//                cell.setCellValue(new HSSFRichTextString(""));
+//            }
+//            else
+//            {
+//                cell.setCellValue(num.doubleValue());
+//            }
+//            cell.setCellStyle(cellStyles.get(CellFormatTypes.NUMBER));
+//        }
+//        else if (value instanceof Date)
+//        {
+//            cell.setCellValue((Date) value);
+//            cell.setCellStyle(cellStyles.get(CellFormatTypes.DATE));
+//        }
+//        else if (value instanceof Calendar)
+//        {
+//            cell.setCellValue((Calendar) value);
+//            cell.setCellStyle(cellStyles.get(CellFormatTypes.DATE));
+//        }
         else
         {
             cell.setCellValue(new HSSFRichTextString(escapeColumnValue(value)));

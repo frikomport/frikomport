@@ -204,6 +204,12 @@ function fillSelect(obj){
         <c:if test="${courseList.status == 2}"><img src="<c:url value="/images/accept.png"/>" alt="<fmt:message key="course.status.published"/>" title="<fmt:message key="course.status.published"/>" class="icon"/></c:if>
         <c:if test="${courseList.status == 3}"><img src="<c:url value="/images/cancel.png"/>" alt="<fmt:message key="course.status.cancelled"/>" title="<fmt:message key="course.status.cancelled"/>" class="icon"/></c:if>
     </display:column>
+    <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="course.status">
+        <c:if test="${courseList.status == 0}"><fmt:message key="course.status.created"/></c:if>
+        <c:if test="${courseList.status == 1}"><fmt:message key="course.status.finished"/></c:if>
+        <c:if test="${courseList.status == 2}"><fmt:message key="course.status.published"/></c:if>
+        <c:if test="${courseList.status == 3}"><fmt:message key="course.status.cancelled"/></c:if>
+    </display:column>
 </c:if>
 
 <c:choose>
@@ -292,11 +298,16 @@ function fillSelect(obj){
 
     <display:column media="excel" property="maxAttendants" sortable="true" headerClass="sortable" titleKey="course.maxAttendants.export"/>
 
+<c:if test="${!singleprice && usePayment}">
     <display:column media="excel" property="reservedInternal" sortable="true" headerClass="sortable" titleKey="course.reservedInternal.export"/>
 
     <display:column media="excel" property="feeInternal" sortable="true" headerClass="sortable" titleKey="course.feeInternal.export"/>
+</c:if>
 
+
+<c:if test="${usePayment}">
     <display:column media="excel" property="feeExternal" sortable="true" headerClass="sortable" titleKey="course.feeExternal.export"/>
+</c:if>
 
     <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.registerStart.export" sortProperty="registerStart">
          <fmt:formatDate value="${courseList.registerStart}" type="both" pattern="${dateformat} ${timeformat}"/>
@@ -318,7 +329,15 @@ function fillSelect(obj){
 
     <display:setProperty name="paging.banner.item_name" value="${item}"/>
     <display:setProperty name="paging.banner.items_name" value="${items}"/>
+
+<c:if test="${!isSVV}">
     <display:setProperty name="export.ics" value="true"/>
+</c:if>
+
+<c:if test="${isSVV}">
+    <display:setProperty name="export.xml" value="false"/>
+</c:if>
+
 </display:table>
 
 <c:out value="${buttons}" escapeXml="false"/>

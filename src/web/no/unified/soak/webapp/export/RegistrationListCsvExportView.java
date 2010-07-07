@@ -56,7 +56,7 @@ public class RegistrationListCsvExportView extends CustomBaseExportView
      */
     public String getMimeType()
     {
-        return "text/csv"; //$NON-NLS-1$
+        return "text/csv; charset=iso8859-1"; //$NON-NLS-1$
     }
 
     /**
