@@ -161,7 +161,7 @@ public class UserFormController extends BaseFormController {
                 // redisplay the unencrypted passwords
                 user.setPassword(user.getConfirmPassword());
 
-                return showForm(request, response, errors);
+                return showForm2(request, response, errors);
             }
 
             if (!StringUtils.equals(request.getParameter("from"), "list")) {
@@ -208,7 +208,7 @@ public class UserFormController extends BaseFormController {
 //        return showForm(request, response, errors);
     }
 
-    protected ModelAndView showForm(HttpServletRequest request,
+    protected ModelAndView showForm2(HttpServletRequest request,
         HttpServletResponse response, BindException errors)
         throws Exception {
         if (request.getRequestURI().indexOf("editProfile") > -1) {
