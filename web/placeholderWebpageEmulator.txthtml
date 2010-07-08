@@ -5,24 +5,18 @@
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
       <title>Påmelding til mengdetreningsmøte - vegvesen.no </title>
       <link rel="stylesheet" type="text/css"
-            href="http://www.vegvesen.no/resources/styles/styles.css"
+            href="styles/svv/styles.css"
             media="all" />
-      <link rel="stylesheet" type="text/css"
-            href="http://www.vegvesen.no/_public/www.vegvesen.no/styles/styles.css?_ts=12945c020fc"
-            media="all" />
-      			<!--[if IE 6]>
-      			<link rel="stylesheet" type="text/css" href="http://www.vegvesen.no/resources/styles/ie6_override.css" media="all" />
-      			<![endif]-->
+		<!--[if IE 6]>
+		<link rel="stylesheet" type="text/css" href="http://www.vegvesen.no/_public/www.vegvesen.no/styles/ie6_override.css?_ts=128bb1e5658" media="all" />
+		<![endif]-->
       		
       <link rel="stylesheet" type="text/css"
-            href="http://www.vegvesen.no/resources/styles/print.css"
+            href="styles/svv/print.css"
             media="print" />
-      <link id="contrast" rel="stylesheet" type="text/css"
-            href="http://www.vegvesen.no/resources/styles/empty.css"
-            media="screen" /><script type="text/javascript"
-              src="http://www.vegvesen.no/resources/scripts/jquery-1.2.6.js">// avoid self-enclosing tag</script><script type="text/javascript" src="http://www.google-analytics.com/ga.js">// avoid self-enclosing tag</script><script type="text/javascript"
-              src="http://www.vegvesen.no/resources/scripts/global.js">// avoid self-enclosing tag</script><link href="http://www.vegvesen.no/s/favicon.ico" rel="shortcut icon"
-            type="image/x-icon" />
+      <script type="text/javascript" src="scripts/svv/jquery-1.2.6.js">// avoid self-enclosing tag</script>
+      <script type="text/javascript" src="scripts/svv/global.js">// avoid self-enclosing tag</script>
+      <link href="images/SVV/pagecache/favicon.ico" rel="shortcut icon" type="image/x-icon" />
       <meta content="no" http-equiv="content-language" />
       <meta content="text/javascript" http-equiv="content-script-type" />
       <meta content="text/css" http-equiv="content-style-type" />
@@ -46,7 +40,7 @@
          <div class="logo">
          <a href="http://svvud6app01.vegvesen.no:7921/">
          <img alt="Til forsiden" id="logo" 
-src="http://www.vegvesen.no/_public/www.vegvesen.no/images/logo.gif" title="Til forsiden">
+src="images/SVV/logo.gif" title="Til forsiden">
          </a>
          </div>
          </div>
@@ -55,16 +49,16 @@ src="http://www.vegvesen.no/_public/www.vegvesen.no/images/logo.gif" title="Til 
 href="http://svvud6app01.vegvesen.no:7921/cms/site/1/Forerkort/Foreropplaering/Ovelseskjoring/%5Btest%5D+Mengdetrening/mengdetrening#ContentFrameMiddle"
  style="position: absolute;" title="Til innholdet">
          <img alt="Til innholdet" 
-src="http://www.vegvesen.no/images/transparent.gif">
+src="images/SVV/transparent.gif">
          </a-->
          </div>
          <div class="noindex" id="printLogo">
-         <img alt="Til forsiden" src="http://www.vegvesen.no/images/printLogo.gif"
+         <img alt="Til forsiden" src="images/SVV/printLogo.gif"
  title="Til forsiden">
          </div>
          <div class="noindex">
          <div class="narrowHeaderPictureContainer"><img 
-src="http://www.vegvesen.no/Forerkort/Foreropplaering/Ovelseskjoring/_image/70077.png" alt="Førerkort" 
+src="images/SVV/70077.png" alt="Førerkort" 
 id="sublevelHeaderPicture"></div>
          </div>
          <div class="headerContentContainer">
@@ -88,7 +82,7 @@ href="http://svvud6app01.vegvesen.no:7921/cms/site/1/en/Home">English</a></li>
          <li class="selected last"><span>Norsk</span></li>
          </ul>
          </div>
-         <div id="headerTitle"><img src="http://www.vegvesen.no/images/binary.png"
+         <div id="headerTitle"><img src="images/SVV/headerTitle.png"
  alt=""></div>
          </div>
          </div>
@@ -169,7 +163,7 @@ href="http://svvud6app01.vegvesen.no:7921/cms/site/1/Forerkort/Foreropplaering/O
                <a style="display: inline;" class="contentprint" href="#"
  title="Skriv ut">
                <img style="display: inline;" alt="Skriverikon" 
-src="http://www.vegvesen.no/_public/www.vegvesen.no/images/printerikon.gif">Skriv ut
+src="images/SVV/printerikon.gif">Skriv ut
                </a>
                </span>
                </div>
