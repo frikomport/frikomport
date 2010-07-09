@@ -499,3 +499,8 @@ td.canceled, tr.canceled {
 	display:none;
 	font-size: 0.8em;
 }
+
+tr.sum, 
+td.sum {
+	font-weight:bold;
+}

@@ -1,4 +1,5 @@
 <%@ include file="/common/taglibs.jsp"%>
+<%@page import="java.util.Map"%>
 
 <title><fmt:message key="courseList.title"/></title>
 <content tag="heading"><fmt:message key="courseList.heading"/></content>
@@ -8,6 +9,8 @@
 
 <fmt:message key="courseList.item" var="item"/>
 <fmt:message key="courseList.items" var="items"/>
+<c:set var="nCells" value="0"/>
+<c:set var="nRows" value="0"/>
 
 <SCRIPT LANGUAGE="JavaScript" ID="js1">
 var cal1 = new CalendarPopup();
@@ -175,7 +178,8 @@ function fillSelect(obj){
 <c:out value="${buttons}" escapeXml="false"/>
 <display:table name="${courseList}" cellspacing="0" cellpadding="0"
     id="courseList" pagesize="${itemCount}" class="list" 
-    export="true" requestURI="listCourses.html">
+    export="true" requestURI="listCourses.html" varTotals="totals">
+    <c:set var="nRows"><c:out value="${nRows + 1}"/></c:set>
 
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
@@ -185,6 +189,7 @@ function fillSelect(obj){
         </a>
 </c:if>
     </display:column>
+    <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
 </c:if>
 
 <c:if test="${showCourseName}">
@@ -195,6 +200,7 @@ function fillSelect(obj){
          title="<c:out value="${courseList.description}"/>"><c:out value="${courseList.name}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="course.name"/>
+    <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
 </c:if>
 
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
@@ -210,6 +216,7 @@ function fillSelect(obj){
         <c:if test="${courseList.status == 2}"><fmt:message key="course.status.published"/></c:if>
         <c:if test="${courseList.status == 3}"><fmt:message key="course.status.cancelled"/></c:if>
     </display:column>
+    <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
 </c:if>
 
 <c:choose>
@@ -217,6 +224,7 @@ function fillSelect(obj){
     <display:column sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
 		<fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
+    <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
 </c:when>
 <c:otherwise>
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
@@ -226,6 +234,7 @@ function fillSelect(obj){
     <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
 		<fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
+    <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
 </c:otherwise>    
 </c:choose>
 
@@ -234,19 +243,24 @@ function fillSelect(obj){
          <fmt:formatDate value="${courseList.stopTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
     
-    <display:column property="availableAttendants" sortable="true" headerClass="sortable" titleKey="course.availableAttendants"/>
+    <display:column property="availableAttendants" sortable="true" headerClass="sortable" titleKey="course.availableAttendants" total="true"/>
+    <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
+    <c:set var="nCellsSumCell1"><c:out value="${nCells}"/></c:set>
 
 <c:if test="${showAttendantDetails}">
 	<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <display:column sortable="true" headerClass="sortable" titleKey="course.registered"><c:out value="${(courseList.maxAttendants - courseList.availableAttendants)}"/></display:column>
+    <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
 	</c:if>
 
 	<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <display:column property="attendants" sortable="true" headerClass="sortable" titleKey="course.attendants"/>
+    <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
 	</c:if>
 
 	<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <display:column property="maxAttendants" sortable="true" headerClass="sortable" titleKey="course.maxAttendants"/>
+    <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
 	</c:if>
 </c:if>
 
@@ -264,33 +278,40 @@ function fillSelect(obj){
     <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="course.registerBy.export">
         <fmt:formatDate value="${courseList.registerBy}" type="both" pattern="${dateformat} ${timeformat}" />
     </display:column>
+    <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
 </c:if>
 
 <c:if test="${showDuration}">
     <display:column property="duration" sortable="true" headerClass="sortable"
          titleKey="course.duration"/>
+    <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
 </c:if>
     <display:column property="organization.name" sortable="true" headerClass="sortable"
          titleKey="course.organization"/>
+    <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
 
 <c:if test="${useOrganization2 && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
     <display:column property="organization2.name" sortable="true" headerClass="sortable"
          titleKey="course.organization2"/>
+    <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
 </c:if>
 
 <c:if test="${useServiceArea}">
     <display:column property="serviceArea.name" sortable="true" headerClass="sortable"
          titleKey="course.serviceArea"/>
+    <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
 </c:if>
          
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.location">
          <a href="<c:url value="/detailsLocation.html"><c:param name="id" value="${courseList.location.id}"/></c:url>" title="<c:out value="${courseList.location.description}"/>"><c:out value="${courseList.location.name}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="location.name" sortable="true" headerClass="sortable" titleKey="course.location"/>
+    <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
 	
 	<display:column media="html" sortable="true" headerClass="sortable" titleKey="course.responsible">
          <a href="<c:url value="/detailsUser.html"><c:param name="username" value="${courseList.responsible.username}"/></c:url>"><c:out value="${courseList.responsible.fullName}"/></a>
     </display:column>
+    <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
     
     <display:column media="csv excel xml pdf" property="responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible"/>
 
@@ -337,7 +358,32 @@ function fillSelect(obj){
 <c:if test="${isSVV}">
     <display:setProperty name="export.xml" value="false"/>
 </c:if>
+<%
 
+String nCells = (String) pageContext.getAttribute("nCells");
+String nRows = (String) pageContext.getAttribute("nRows");
+String nCellsToSumCol = (String) pageContext.getAttribute("nCellsSumCell1");
+
+Integer nCellsI = Integer.valueOf(nCells);
+Integer nRowsI = Integer.valueOf(nRows);
+Integer nColsI = nCellsI/nRowsI;
+Integer nCellsToSumColI = Integer.valueOf(nCellsToSumCol);
+
+Integer colspan1 = (nCellsToSumColI % nColsI) - 1;
+pageContext.setAttribute("colspan1", colspan1);
+
+%>
+<display:footer><tr><td class="sum" colspan="<c:out value="${colspan1}"/>">Sum:</td> 
+<%
+Map totals = (Map)pageContext.getAttribute("totals");
+Object sumObj = totals.get("column" + (Integer)(colspan1 + 1));
+pageContext.setAttribute("sumToShow", sumObj);
+%>
+<td class="sum">
+<fmt:formatNumber value="${sumToShow}" />
+</td>
+<td colspan="<%=(nCellsI - nCellsToSumColI)%>" class="sum"></td>
+</tr></display:footer>
 </display:table>
 
 <c:out value="${buttons}" escapeXml="false"/>
