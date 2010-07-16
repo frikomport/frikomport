@@ -109,6 +109,11 @@ public class SVVAuthenticationFilter implements Filter {
         }
 
 		if (user != null && isAdminPath(request)) {
+			// Give logged in users access also as anonymous. 
+			if (!user.getRoleNameList().contains(RoleEnum.ANONYMOUS.getJavaDBRolename())) {
+				Role role = new Role(RoleEnum.ANONYMOUS.getJavaDBRolename());
+				user.addRole(role);
+			}
 			Authentication authentificationToken = new SVVAuthentificationToken(user, usernameFromHTTPHeader);
 			SecurityContextHolder.getContext().setAuthentication(authentificationToken);
 			session.setAttribute(Constants.USER_KEY, user);

@@ -160,7 +160,7 @@
 				<td>
 					<fmt:formatDate value="${startYear}" type="date" pattern="${dateformat}" var="init" />
 					<fmt:formatDate value="${registration.birthdate}" type="date" pattern="${dateformat}" var="birthdate" />
-					<input type="text" readonly="readonly" size="12" name="birthdate" id="birthdate" value="<c:out value="${birthdate}"/>" 
+					<input type="text" size="12" name="birthdate" id="birthdate" value="<c:choose><c:when test="${empty birthdateFromRequest}" ><c:out value="${birthdate}"/></c:when><c:otherwise><c:out value="${birthdateFromRequest}"/></c:otherwise></c:choose>" 
 						title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
 					<a href="#" name="a1" id="Anch_birthdate"
 						onClick="cal1.select(document.registration.birthdate,'Anch_birthdate','<fmt:message key="date.format"/>',(document.registration.birthdate.value=='')?'<c:out value="${init}"/>':document.registration.birthdate.value,''); return false;"
@@ -357,9 +357,29 @@
 			</c:if>
 		</table>
 		&nbsp;<br/>
-				
+
 		<table>	
-			<c:if test="${!empty courseList && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
+			<tr>
+				<td class="buttonBar" colspan="2" align="left">
+					<c:if test="${empty registration.id}">
+	                    <input type="submit" class="button" name="save" onclick="bCancel=false" value="<fmt:message key="button.register.save"/>" />
+    	            </c:if>
+					<c:if test="${!empty registration.id}">
+                    <input type="submit" class="button" name="save" id="savebutton" onclick="bCancel=false" value="<fmt:message key="button.register.update"/>" />
+						<c:if test="${isAdmin}">
+						<input type="submit" class="button" name="delete" onclick="bCancel=true;return confirmDeleteRegistration()"
+							value="<fmt:message key="button.delete"/>" />
+						</c:if>
+						<c:if test="${registration.status != 3}">
+						<input type="submit" class="button" name="unregister" onclick="bCancel=true;return confirmUnregistration()"
+							value="<fmt:message key="button.unregister"/>" />
+						</c:if>							
+					</c:if>
+					<input type="submit" class="button" name="cancel"
+						onclick="bCancel=true" value="<fmt:message key="button.cancel"/>" />
+				</td>
+			</tr>
+			<c:if test="${!empty courseList && (isAdmin || isEducationResponsible || isEventResponsible || isReader || isSVV)}">
 			<tr>
 				<th>
 					<soak:label key="registration.changeCourse" />
@@ -367,7 +387,7 @@
 			</tr>
 			<tr>
 			<td>				
-				<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
+				<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isSVV}">
 					<display:table name="${courseList}" cellspacing="0" cellpadding="0"
 						id="courseList" pagesize="${itemCount}" class="list" export="false"
 						requestURI="performRegistration.html">
@@ -441,7 +461,6 @@
 				</td>
 
 			</tr>
-			</c:if>
 
 			<tr>
 				<td class="buttonBar" colspan="2" align="left">
@@ -463,6 +482,7 @@
 						onclick="bCancel=true" value="<fmt:message key="button.cancel"/>" />
 				</td>
 			</tr>
+			</c:if>
 		</table>
 	</form:form>
 </c:if>

@@ -373,7 +373,9 @@ Integer colspan1 = (nCellsToSumColI % nColsI) - 1;
 pageContext.setAttribute("colspan1", colspan1);
 
 %>
-<display:footer><tr><td class="sum" colspan="<c:out value="${colspan1}"/>">Sum:</td> 
+<c:if test="${isSVV && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
+<display:footer>
+<tr><td class="sum" colspan="<c:out value="${colspan1}"/>"><fmt:message key="courseList.pageSum"/></td> 
 <%
 Map totals = (Map)pageContext.getAttribute("totals");
 Object sumObj = totals.get("column" + (Integer)(colspan1 + 1));
@@ -383,7 +385,16 @@ pageContext.setAttribute("sumToShow", sumObj);
 <fmt:formatNumber value="${sumToShow}" />
 </td>
 <td colspan="<%=(nCellsI - nCellsToSumColI)%>" class="sum"></td>
-</tr></display:footer>
+</tr>
+
+<tr><td class="sum" colspan="<c:out value="${colspan1}"/>"><fmt:message key="courseList.totalSum"/></td> 
+<td class="sum">
+<fmt:formatNumber value="${sumTotal}" />
+</td>
+<td colspan="<%=(nCellsI - nCellsToSumColI)%>" class="sum"></td>
+</tr>
+</display:footer>
+</c:if>
 </display:table>
 
 <c:out value="${buttons}" escapeXml="false"/>

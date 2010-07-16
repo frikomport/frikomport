@@ -7,7 +7,10 @@
  */
 package no.unified.soak.util;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.security.MessageDigest;
 import java.util.List;
 
@@ -120,5 +123,45 @@ public class StringUtil {
 			stringAr[i] = emails.get(i);
 		}
 		return stringAr;
+	}
+
+	/**
+	 * Converts an InputStream to a String by using given charset to interpret
+	 * the Stream.
+	 * 
+	 * @param is
+	 *            the InputStream to convert into String.
+	 * @param charset
+	 *            the charset to interpret the Stream. If null, "ISO8859-" is
+	 *            used by default.
+	 * @return
+	 * @throws IOException
+	 */
+	public static String convertStreamToString(InputStream is, String charset) throws IOException {
+		if (charset == null) {
+			charset = "ISO8859-1";
+		}
+		/*
+		 * To convert the InputStream to String we use the
+		 * BufferedReader.readLine() method. We iterate until the BufferedReader
+		 * return null which means there's no more data to read. Each line will
+		 * appended to a StringBuilder and returned as String.
+		 */
+		if (is != null) {
+			StringBuilder sb = new StringBuilder();
+			String line;
+
+			try {
+				BufferedReader reader = new BufferedReader(new InputStreamReader(is, charset));
+				while ((line = reader.readLine()) != null) {
+					sb.append(line).append("\n");
+				}
+			} finally {
+				is.close();
+			}
+			return sb.toString();
+		} else {
+			return "";
+		}
 	}
 }

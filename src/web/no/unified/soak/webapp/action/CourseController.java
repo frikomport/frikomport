@@ -39,6 +39,7 @@ import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.DateUtil;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
@@ -230,7 +231,7 @@ public class CourseController extends BaseFormController {
         		status = new Integer[]{ CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED, CourseStatus.COURSE_CANCELLED };
         	}
         	courseList = courseManager.searchCourses(course, starttime, stoptime, status);
-        	courseList = updateAvailableAttendants(courseList);
+        	courseList = updateAvailableAttendants(courseList, request);
         }
         else {
 	        List courses = courseManager.searchCourses(course, starttime, stoptime, null);
@@ -279,18 +280,23 @@ public class CourseController extends BaseFormController {
         return filtered;
     }
 
-    private List<Course> updateAvailableAttendants(List courses){
-    	List<Course> updated = new ArrayList<Course>();
-    	for (Iterator iterator = courses.iterator(); iterator.hasNext();) {
-    		Course course = (Course) iterator.next();
-    		course.setAvailableAttendants(0);
-    		if (course.getStopTime().after(new Date())) {
-    			course.setAvailableAttendants(registrationManager.getAvailability(true, course));
-    		}
-    		updated.add(course);
-    	}
-    	return updated;
-    }
+	private List<Course> updateAvailableAttendants(List courses, HttpServletRequest request) {
+		List<Course> updated = new ArrayList<Course>();
+		Integer availableSum = NumberUtils.INTEGER_ZERO;
+		for (Iterator iterator = courses.iterator(); iterator.hasNext();) {
+			Course course = (Course) iterator.next();
+			course.setAvailableAttendants(NumberUtils.INTEGER_ZERO);
+			if (course.getStopTime().after(new Date())) {
+				Integer available = registrationManager.getAvailability(true, course);
+				course.setAvailableAttendants(available);
+				availableSum += available;
+			}
+			updated.add(course);
+		}
+
+		request.setAttribute("sumTotal", availableSum);
+		return updated;
+	}
     
     /**
      * @see org.springframework.web.servlet.mvc.SimpleFormController#onSubmit(javax.servlet.http.HttpServletRequest,
@@ -419,7 +425,7 @@ public class CourseController extends BaseFormController {
 						CourseStatus.COURSE_CANCELLED };
 			}
 			courseList = courseManager.searchCourses(course, starttime, stoptime, status);
-			courseList = updateAvailableAttendants(courseList);
+			courseList = updateAvailableAttendants(courseList, request);
 		} else {
 			List courses = courseManager.searchCourses(course, starttime, stoptime, null);
 			courseList = filterByRole(isAdmin, roles, courses);

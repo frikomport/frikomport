@@ -8,6 +8,7 @@
 package no.unified.soak.webapp.filter;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,6 +38,7 @@ import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.service.UserSynchronizeManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
+import no.unified.soak.util.StringUtil;
 import no.unified.soak.webapp.util.RequestUtil;
 import no.unified.soak.webapp.util.SslUtil;
 
@@ -308,7 +310,8 @@ public class ActionFilter implements Filter {
 		String ctmpl = null;
 		try {
 			resultCode = client.executeMethod(getMethod);
-			ctmpl = getMethod.getResponseBodyAsString();
+			InputStream ctmplStream = getMethod.getResponseBodyAsStream();
+			ctmpl = StringUtil.convertStreamToString(ctmplStream, null);
 			if (StringUtils.isBlank(ctmpl) || resultCode != 200) {
 				log.warn("Page decoration is blank [" + ctmpl + "] with resultcode=" + resultCode
 						+ ". Unable to fetch page decoration from url " + decorationUrl + ".");

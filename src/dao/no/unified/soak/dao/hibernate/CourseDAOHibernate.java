@@ -20,8 +20,10 @@ import no.unified.soak.model.Course;
 import no.unified.soak.model.Organization;
 import no.unified.soak.model.Person;
 import no.unified.soak.model.Organization.Type;
+import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.CourseStatus;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -149,8 +151,11 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
             criteria.add(Restrictions.lt("startTime", stopDate));
         }
 
-        criteria.addOrder(Order.asc("status"));
-        criteria.addOrder(Order.asc("startTime"));
+		String sortorderCSVString = ApplicationResourcesUtil.getText("courseList.order");
+		String[] sortorderArray = StringUtils.split(sortorderCSVString, ",");
+		for (String fieldName : sortorderArray) {
+			criteria.addOrder(Order.asc(fieldName));
+		}
 
         return getHibernateTemplate().findByCriteria(criteria);
     }

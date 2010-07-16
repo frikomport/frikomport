@@ -139,9 +139,6 @@ public class Registration extends BaseObject implements Serializable {
 	 * @hibernate.property column="participants" not-null="false"
 	 */
 	public Integer getParticipants() {
-		if (participants == null) {
-			return 1;
-		}
 		return participants;
 	}
 
@@ -153,10 +150,8 @@ public class Registration extends BaseObject implements Serializable {
 	 * @param participants
 	 *            the number of participants to set
 	 */
+	@Required
 	public void setParticipants(Integer participants) {
-		if (participants == null) {
-			participants = 1;
-		}
 		this.participants = participants;
 	}
 

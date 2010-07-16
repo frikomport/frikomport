@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -63,40 +64,31 @@ public class DateUtil {
         return (returnValue);
     }
 
-    /**
-     * This method generates a string representation of a date/time
-     * in the format you specify on input
-     *
-     * @param aMask the date pattern the string is in
-     * @param strDate a string representation of a date
-     * @return a converted Date object
-     * @see java.text.SimpleDateFormat
-     * @throws ParseException
-     */
-    public static final Date convertStringToDate(String aMask, String strDate)
-        throws ParseException {
-    	if (strDate == null) {
-    		return null;
-    	}
-        SimpleDateFormat df = null;
-        Date date = null;
-        df = new SimpleDateFormat(aMask);
-        df.setLenient(false); // test!! SA
+	/**
+	 * This method generates a string representation of a date/time in the
+	 * format you specify on input
+	 * 
+	 * @param aMask
+	 *            the date pattern the string is in
+	 * @param strDate
+	 *            a string representation of a date
+	 * @return a converted Date object
+	 * @see java.text.SimpleDateFormat
+	 * @throws ParseException
+	 */
+	public static Date convertStringToDate(String strDate, String aMask) throws ParseException {
+		if (StringUtils.isBlank(strDate) || StringUtils.isBlank(aMask)) {
+			return null;
+		}
+		SimpleDateFormat df = new SimpleDateFormat(aMask);
+		df.setLenient(false); // test!! SA
 
-        if (log.isDebugEnabled()) {
-            log.debug("converting '" + strDate + "' to date with mask '" +
-                aMask + "'");
-        }
+		if (log.isDebugEnabled()) {
+			log.debug("converting '" + strDate + "' to date with mask '" + aMask + "'");
+		}
 
-        try {
-            date = df.parse(strDate);
-        } catch (ParseException pe) {
-            //log.error("ParseException: " + pe);
-            throw new ParseException(pe.getMessage(), pe.getErrorOffset());
-        }
-
-        return (date);
-    }
+		return df.parse(strDate);
+	}
 
     /**
      * This method returns the current date time in the format:
@@ -180,7 +172,7 @@ public class DateUtil {
                 log.debug("converting date with pattern: " + getDatePattern());
             }
 
-            aDate = convertStringToDate(getDatePattern(), strDate);
+            aDate = convertStringToDate(strDate, getDatePattern());
         } catch (ParseException pe) {
             log.error("Could not convert '" + strDate +
                 "' to a date, throwing exception");

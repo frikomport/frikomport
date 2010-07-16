@@ -476,11 +476,11 @@ public class BaseFormController extends SimpleFormController {
 				if (methodResult != null && methodResult instanceof String) {
 					String methodResultStr = (String) methodResult;
 					if (StringUtils.isEmpty(methodResultStr)) {
-						methodResultStr = null;
+						return nErrors;
 					}
 					
-					Integer methodResultInt = NumberUtils.createInteger(methodResultStr);
-					if (methodResultInt != null && methodResultInt < 0) {
+					Integer methodResultInt = Integer.parseInt(methodResultStr);
+					if (methodResultInt < 0) {
 						String fieldText = getFieldDisplayName(obj, referencingObjectFieldnamePrefix+fieldName);
 						Object[] args = new Object[] { fieldText };
 						nErrors = 1;

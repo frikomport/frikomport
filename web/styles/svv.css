@@ -37,6 +37,12 @@ html body {
 	font-size:75% !important;
 }
 
+div form input, 
+div form textarea, 
+div form select {
+	color:#37424A;
+}
+
 table.detail {
 	width:auto;
 }

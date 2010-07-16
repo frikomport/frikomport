@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * Angir hvilken Configuration name (key) som må være aktiv for at validering
- * skal skje for dette felt.
+ * skal skje for dette felt. Benyttes på set-metoden for feltet. 
  * 
  */
 @Target(ElementType.METHOD)

@@ -10,8 +10,6 @@
  */
 package no.unified.soak.webapp.action;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -249,6 +247,11 @@ public class RegistrationFormController extends BaseFormController {
                 registration.setClosestLeader(regUser.getClosestLeader());
             }
         }
+        
+        String birthdateFromRequest = request.getParameter("birthdate");
+        if (StringUtils.isNotBlank(birthdateFromRequest)) {
+        	request.setAttribute("birthdateFromRequest", birthdateFromRequest);
+        }
 
         return registration;
     }
@@ -330,7 +333,7 @@ public class RegistrationFormController extends BaseFormController {
 				String birthdate_str = request.getParameter("birthdate");
 				if(StringUtils.isNotEmpty(birthdate_str)){ 
 					// utfylt, men ukjent format
-					Date birthdate = parseDate(birthdate_str, format);
+					Date birthdate = DateUtil.convertStringToDate(birthdate_str, format);
 					if (birthdate != null) {
 						// utfylt riktig format
 						registration.setBirthdate(birthdate);
@@ -536,16 +539,6 @@ public class RegistrationFormController extends BaseFormController {
             filtered = courses;
         }
         return filtered;
-    }
-    
-    private Date parseDate(String date, String format) throws ParseException {
-	    SimpleDateFormat formatter = new SimpleDateFormat(format);
-	    formatter.setLenient(false);
-	    if (StringUtils.isEmpty(date)) {
-	        return null;
-	    } else {
-	        return (Date) formatter.parse(date);
-	    }
     }
     
 }

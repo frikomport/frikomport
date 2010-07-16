@@ -54,6 +54,8 @@
             <props>
                 <prop key="disableUser">PROPAGATION_REQUIRED</prop>
                 <prop key="enableUser">PROPAGATION_REQUIRED</prop>
+                <prop key="addUser">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
+                <prop key="saveUser">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
             </props>
         </property>
         <!-- This property is overriden in applicationContext-security.xml to add
@@ -220,6 +222,7 @@
         <property name="transactionAttributes">
             <props>
                 <prop key="send*">PROPAGATION_REQUIRED</prop>
+                <prop key="reset*">PROPAGATION_REQUIRED</prop>
                 <prop key="save*">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
             </props>
         </property>
