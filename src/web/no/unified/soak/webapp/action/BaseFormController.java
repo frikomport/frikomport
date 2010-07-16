@@ -30,8 +30,10 @@ import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
+import no.unified.soak.util.DateUtil;
 import no.unified.soak.validation.DigitsOnly;
 import no.unified.soak.validation.Email;
+import no.unified.soak.validation.LessThanField;
 import no.unified.soak.validation.MinLength;
 import no.unified.soak.validation.MinValue;
 import no.unified.soak.validation.Required;
@@ -342,8 +344,69 @@ public class BaseFormController extends SimpleFormController {
 			i += validateEmail(obj, errors, method, referencingObjectFieldnamePrefix);
 			i += validateDigitsOnly(obj, errors, method, referencingObjectFieldnamePrefix);
 			i += validateMinLength(obj, errors, method, referencingObjectFieldnamePrefix);
+			i += validateLessThanField(obj, errors, method, referencingObjectFieldnamePrefix);
 		}
 		return i;
+	}
+
+	private int validateLessThanField(Object obj, BindException errors, Method method, String referencingObjectFieldnamePrefix) {
+		int nErrors = 0;
+		LessThanField lessThanFieldAnnotation = method.getAnnotation(LessThanField.class);
+		if (lessThanFieldAnnotation != null) {
+			String fieldNameCamelCase = method.getName().substring(3);
+			String fieldName = lowercaseFirstLetter(fieldNameCamelCase);
+			Class<? extends Object> objClass = obj.getClass();
+
+			try {
+				Method getMethod = objClass.getMethod("get" + fieldNameCamelCase);
+				Object methodResult = getMethod.invoke(obj);
+				if (methodResult == null) {
+					return nErrors;
+				}
+
+				String lessThanField = lessThanFieldAnnotation.value();
+				Object lessThanFieldValue = callGetterOfField(obj, lessThanField);
+				if (lessThanFieldValue instanceof Date && methodResult instanceof Date) {
+					Date lessThanFieldValueDate = (Date) lessThanFieldValue;
+					if (((Date) methodResult).after(lessThanFieldValueDate)) {
+						String fieldText = getFieldDisplayName(obj, referencingObjectFieldnamePrefix + fieldName);
+						String lessThanFieldsText = getFieldDisplayName(obj, referencingObjectFieldnamePrefix + lessThanField);
+						String LessThanValueMessage = DateUtil.getDateTime("dd.MM.yyyy HH:mm", lessThanFieldValueDate) + " ("
+								+ lessThanFieldsText + ")";
+						
+						Object[] args = new Object[] { fieldText, LessThanValueMessage };
+						nErrors = 1;
+						errors.rejectValue(referencingObjectFieldnamePrefix + fieldName, "errors.XCanNotBeLessThanY", args,
+								fieldName + " can not be lower than " + LessThanValueMessage + ".");
+					}
+
+				} else if (lessThanFieldValue != null) {
+					log.warn("Feil under validering av regel lessThanField for feltet " + lessThanField
+							+ ": Kan ikke validere felt av datatypen " + methodResult.getClass());
+					return nErrors;
+				}
+
+			} catch (Exception e) {
+				log.warn("Feil under validering av " + fieldName + ": " + e);
+			}
+		}
+
+		return nErrors;
+	}
+
+	private Object callGetterOfField(Object obj, String field) {
+		if (StringUtils.isBlank(field)) {
+			return null;
+		}
+		Method getMethod;
+		Object methodResult = null;
+		try {
+			getMethod = obj.getClass().getMethod("get" + StringUtils.capitalize(field));
+			methodResult = getMethod.invoke(obj);
+		} catch (Exception e) {
+			log.warn("Feil under validering av feltet " + field + " for objektet " + obj + ": " + e);
+		}
+		return methodResult;
 	}
 
 	private boolean hasValidationAnnotation(Method method) {
@@ -466,7 +529,7 @@ public class BaseFormController extends SimpleFormController {
 				if (methodResult != null && methodResult instanceof Integer && ((Integer) methodResult) < minValue) {
 					Object[] args = new Object[] { fieldText, minValue };
 					nErrors = 1;
-					errors.rejectValue(referencingObjectFieldnamePrefix+fieldName, "errors.XMustBeGreaterThanY", args, fieldName + " can not be lower than "
+					errors.rejectValue(referencingObjectFieldnamePrefix+fieldName, "errors.XCanNotBeLessThanY", args, fieldName + " can not be lower than "
 							+ minValue + ".");
 				} else if (methodResult != null && !(methodResult instanceof Integer)) {
 					Object[] args = new Object[] { fieldText };

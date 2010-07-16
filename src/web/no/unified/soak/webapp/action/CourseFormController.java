@@ -445,18 +445,6 @@ public class CourseFormController extends BaseFormController {
         } // or to save/update?
 		else {
 			// Save or publish
-			if (request.getParameter("save") != null && isNew) {
-				course.setStatus(CourseStatus.COURSE_CREATED);
-			}
-			if (request.getParameter("unpublish") != null) {
-				course.setStatus(CourseStatus.COURSE_CREATED);
-			}
-			if (request.getParameter("publish") != null) {
-				course.setStatus(CourseStatus.COURSE_PUBLISHED);
-			}
-			if (request.getParameter("cancelled") != null) {
-				course.setStatus(CourseStatus.COURSE_CANCELLED);
-			}
 			log.debug("recieved 'save/publish/cancel' from jsp");
 			// Parse date and time fields together
 			String format = getText("date.format", request.getLocale()) + " " + getText("time.format", request.getLocale());
@@ -528,7 +516,23 @@ public class CourseFormController extends BaseFormController {
 				errors.rejectValue("registerBy", "errors.dateformat", args, "Invalid date or time");
 			}
 
-			
+			if (request.getParameter("save") != null && isNew) {
+				course.setStatus(CourseStatus.COURSE_CREATED);
+			}
+			if (request.getParameter("save") != null && CourseStatus.COURSE_FINISHED.equals(course.getStatus())
+					&& course.getStartTime() != null && new Date().before(course.getStartTime())) {
+				course.setStatus(CourseStatus.COURSE_CREATED);
+			}
+			if (request.getParameter("unpublish") != null) {
+				course.setStatus(CourseStatus.COURSE_CREATED);
+			}
+			if (request.getParameter("publish") != null) {
+				course.setStatus(CourseStatus.COURSE_PUBLISHED);
+			}
+			if (request.getParameter("cancelled") != null) {
+				course.setStatus(CourseStatus.COURSE_CANCELLED);
+			}
+
 			if (!configurationManager.isActive("access.course.usePayment", true)) {
 				enrichWithDefaultvaluesToAvoidErrors(course);
 			}

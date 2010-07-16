@@ -173,6 +173,24 @@
 				<include name="*.txt"/>
 			</fileset>
 		</copy>
+		<!-- Copy styles, images and scripts also to public folder for SVVs Policy Agent security mechanism. -->
+		<mkdir dir="${webapp.target}/public"/>
+		<copy todir="${webapp.target}/public">
+			<fileset dir="${basedir}/web/public/">
+				<include name="index.jsp"/>
+			</fileset>
+			<fileset dir="${basedir}/web/">
+				<include name="styles/**/*.css"/>
+			</fileset>
+			<fileset dir="${basedir}/web/">
+				<include name="scripts/**/*.js"/>
+			</fileset>
+			<fileset dir="${basedir}/web/">
+				<include name="images/**/*.gif"/>
+				<include name="images/**/*.png"/>
+				<include name="images/**/*.jeg"/>
+			</fileset>
+		</copy>
 	</target>
 
 	<!-- =================================================================== -->
@@ -466,6 +484,9 @@
           <fileset dir="${webapp.dist}" includes="*.war"/>
           <fileset dir="ear" includes="META-INF/orion-application.xml"/>
     	</ear>
+    	<!-- Copy ear-file for Oracle App.server (OC4J)
+    	<copy todir="c:/Programfiler/OCJ4/j2ee/home/applications" file="${webapp.dist}/${webapp.name}.ear"/>
+    	-->
     </target>
 
     <target name="test-web" depends="webdoclet,db-load,check-debug" description="Test web module">

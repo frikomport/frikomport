@@ -13,7 +13,8 @@
 		<c:choose>
 			<c:when test="${not empty course.detailURL}">
 				<a class="external" href="<c:out value="${course.detailURL}"/>" target="_blank"
-					title="<c:out value="${course.description}"/>"><c:out
+					title="<c:if test="${showDescription && ((isReader || isEventResponsible || isEducationResponsible || isAdmin) || (showDescriptionToPublic))}">
+					<c:out value="${course.description}"/></c:if>"><c:out
 						value="${course.name}" /></a>
 			</c:when>
 			<c:otherwise>

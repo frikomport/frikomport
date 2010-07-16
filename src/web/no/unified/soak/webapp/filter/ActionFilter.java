@@ -179,9 +179,19 @@ public class ActionFilter implements Filter {
 			}
 		}
 
+		setJspLinkPathPrefix(request, session);
 		chain.doFilter(request, response);
 	}
 
+	public void setJspLinkPathPrefix(HttpServletRequest request, HttpSession session) {
+		String publicPrefix = ApplicationResourcesUtil.getText("publicUrlprefix");
+		if (StringUtils.isNotBlank(publicPrefix) && request.getRequestURI().contains(publicPrefix)) {
+			session.setAttribute("urlContext", request.getContextPath()+publicPrefix);
+		} else {
+			session.setAttribute("urlContext", request.getContextPath());
+		}
+	}
+	
 	private void ensurePageDecoration(ServletContext servletContext) {
 		Cache pageDecorationCache = singletonCacheManager.getCache("pageDecoration");
 		Element element1 = pageDecorationCache.get("pageDecorationBeforeHeadPleaceholder");

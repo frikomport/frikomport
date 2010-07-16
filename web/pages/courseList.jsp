@@ -128,14 +128,14 @@ function fillSelect(obj){
 				<input id="startTime" name="startTime" value="<fmt:formatDate value="${startTime}" pattern="${dateformat}"/>" type="text" size="12" />
 				<a href="#" name="a1" id="Anch_startTime"
 					onClick="cal1.select(document.courseList.startTime,'Anch_startTime','<fmt:message key="date.format"/>'); return false;"
-					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
+					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url context="${urlContext}" value="/images/calendar.png"/>"></a>
 			</li>
 			<li>
 				<label class="required">Til:</label>
 				<input id="stopTime" name="stopTime" value="<fmt:formatDate value="${stopTime}" pattern="${dateformat}"/>" type="text" size="12"/>
 				<a href="#" name="a1" id="Anch_stopTime"
 					onClick="cal1.select(document.courseList.stopTime,'Anch_stopTime','<fmt:message key="date.format"/>'); return false;"
-					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
+					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url context="${urlContext}" value="/images/calendar.png"/>"></a>
 			</li>
 
 <c:if test="${!isSVV}">
@@ -169,7 +169,7 @@ function fillSelect(obj){
 <c:set var="buttons">
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <button type="button" style="margin-right: 5px"
-        onclick="location.href='<c:url value="/editCourse.html"/>'">
+        onclick="location.href='<c:url context="${urlContext}" value="/editCourse.html"/>'">
         <fmt:message key="button.add"/>
     </button>
 </c:if>
@@ -184,8 +184,8 @@ function fillSelect(obj){
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible && username == courseList.responsible.username || (isSVV && courseList.organization2id == user.organization2id)}">
-        <a href='<c:url value="/editCourse.html"><c:param name="id" value="${courseList.id}"/><c:param name="from" value="list"/></c:url>'>
-            <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
+        <a href='<c:url context="${urlContext}" value="/editCourse.html"><c:param name="id" value="${courseList.id}"/><c:param name="from" value="list"/></c:url>'>
+            <img src="<c:url context="${urlContext}" value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
 </c:if>
     </display:column>
@@ -194,9 +194,9 @@ function fillSelect(obj){
 
 <c:if test="${showCourseName}">
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="name">
-        <c:if test="${courseList.status == 3}"><img src="<c:url value="/images/cancel.png"/>"
+        <c:if test="${courseList.status == 3}"><img src="<c:url context="${urlContext}" value="/images/cancel.png"/>"
                		alt="<fmt:message key="icon.warning"/>" class="icon" /><fmt:message key="course.cancelled.alert"/><br/></c:if>
-         <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>" 
+         <a href="<c:url context="${urlContext}" value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>" 
          title="<c:out value="${courseList.description}"/>"><c:out value="${courseList.name}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="course.name"/>
@@ -205,10 +205,10 @@ function fillSelect(obj){
 
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.status">
-        <c:if test="${courseList.status == 0}"><img src="<c:url value="/images/add.png"/>" alt="<fmt:message key="course.status.created"/>" title="<fmt:message key="course.status.created"/>" class="icon"/></c:if>
-        <c:if test="${courseList.status == 1}"><img src="<c:url value="/images/stop.png"/>" alt="<fmt:message key="course.status.finished"/>" title="<fmt:message key="course.status.finished"/>" class="icon"/></c:if>
-        <c:if test="${courseList.status == 2}"><img src="<c:url value="/images/accept.png"/>" alt="<fmt:message key="course.status.published"/>" title="<fmt:message key="course.status.published"/>" class="icon"/></c:if>
-        <c:if test="${courseList.status == 3}"><img src="<c:url value="/images/cancel.png"/>" alt="<fmt:message key="course.status.cancelled"/>" title="<fmt:message key="course.status.cancelled"/>" class="icon"/></c:if>
+        <c:if test="${courseList.status == 0}"><img src="<c:url context="${urlContext}" value="/images/add.png"/>" alt="<fmt:message key="course.status.created"/>" title="<fmt:message key="course.status.created"/>" class="icon"/></c:if>
+        <c:if test="${courseList.status == 1}"><img src="<c:url context="${urlContext}" value="/images/stop.png"/>" alt="<fmt:message key="course.status.finished"/>" title="<fmt:message key="course.status.finished"/>" class="icon"/></c:if>
+        <c:if test="${courseList.status == 2}"><img src="<c:url context="${urlContext}" value="/images/accept.png"/>" alt="<fmt:message key="course.status.published"/>" title="<fmt:message key="course.status.published"/>" class="icon"/></c:if>
+        <c:if test="${courseList.status == 3}"><img src="<c:url context="${urlContext}" value="/images/cancel.png"/>" alt="<fmt:message key="course.status.cancelled"/>" title="<fmt:message key="course.status.cancelled"/>" class="icon"/></c:if>
     </display:column>
     <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="course.status">
         <c:if test="${courseList.status == 0}"><fmt:message key="course.status.created"/></c:if>
@@ -228,7 +228,7 @@ function fillSelect(obj){
 </c:when>
 <c:otherwise>
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
-         <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>" 
+         <a href="<c:url context="${urlContext}" value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>" 
          title="<c:out value="${courseList.description}"/>"><fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
@@ -302,14 +302,14 @@ function fillSelect(obj){
     <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
 </c:if>
          
-    <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.location">
-         <a href="<c:url value="/detailsLocation.html"><c:param name="id" value="${courseList.location.id}"/></c:url>" title="<c:out value="${courseList.location.description}"/>"><c:out value="${courseList.location.name}"/></a>
+    <display:column media="html" property="location.name" sortable="true" headerClass="sortable" titleKey="course.location">
+         <a href="<c:url context="${urlContext}" value="/detailsLocation.html"><c:param name="id" value="${courseList.location.id}"/></c:url>" title="<c:out value="${courseList.location.description}"/>"><c:out value="${courseList.location.name}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="location.name" sortable="true" headerClass="sortable" titleKey="course.location"/>
     <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
 	
-	<display:column media="html" sortable="true" headerClass="sortable" titleKey="course.responsible">
-         <a href="<c:url value="/detailsUser.html"><c:param name="username" value="${courseList.responsible.username}"/></c:url>"><c:out value="${courseList.responsible.fullName}"/></a>
+	<display:column media="html" property="responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible">
+         <a href="<c:url context="${urlContext}" value="/detailsUser.html"><c:param name="username" value="${courseList.responsible.username}"/></c:url>"><c:out value="${courseList.responsible.fullName}"/></a>
     </display:column>
     <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
     

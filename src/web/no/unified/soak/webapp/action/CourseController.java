@@ -536,7 +536,7 @@ public class CourseController extends BaseFormController {
         }
 
         String typeDBvalue = ApplicationResourcesUtil.getText("show.organization.pulldown.typeDBvalue");
-        if (typeDBvalue != null) {
+        if (StringUtils.isNotBlank(typeDBvalue)) {
         	Integer value = Integer.valueOf(typeDBvalue);
         	Type type = Organization.Type.getTypeFromDBValue(value);
             model.put("organizations", organizationManager.getByTypeIncludingDummy(type, getText("misc.all.organizations", locale)));

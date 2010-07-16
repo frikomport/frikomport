@@ -16,6 +16,8 @@ import javax.servlet.http.HttpSession;
 import no.unified.soak.Constants;
 import no.unified.soak.dao.ExtUserDAO;
 import no.unified.soak.ez.ExtUser;
+import no.unified.soak.model.Role;
+import no.unified.soak.model.RoleEnum;
 import no.unified.soak.model.User;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.service.UserSynchronizeManager;
@@ -106,22 +108,24 @@ public class SVVAuthenticationFilter implements Filter {
                     .asList("Din innlogging er utg&aring;tt. Vennligst logg inn p&aring;ny."));
         }
 
-        if(user != null && isAdminPath(request)) {
-            Authentication authentificationToken = new SVVAuthentificationToken(user, usernameFromHTTPHeader);
-            SecurityContextHolder.getContext().setAuthentication(authentificationToken);
-            session.setAttribute(Constants.USER_KEY, user);
-        } else {
-            SecurityContextHolder.getContext().setAuthentication(null);
-            session.setAttribute(Constants.USER_KEY, null);
+		if (user != null && isAdminPath(request)) {
+			Authentication authentificationToken = new SVVAuthentificationToken(user, usernameFromHTTPHeader);
+			SecurityContextHolder.getContext().setAuthentication(authentificationToken);
+			session.setAttribute(Constants.USER_KEY, user);
+		} else {
+			SecurityContextHolder.getContext().setAuthentication(null);
+			session.setAttribute(Constants.USER_KEY, null);
 			session.setAttribute(Constants.USERID_HTTPHEADERNAME, null);
-        }
+		}
 
         chain.doFilter(request, response);
     }
     
     private boolean isAdminPath(HttpServletRequest request) {
-    	String contextPath = request.getContextPath();
-    	//TODO SSO-tilpasning inn her.
+    	String contextPath = request.getRequestURI();
+    	if (contextPath.contains("public/")) {
+    		return false;
+    	}
     	return true;
 	}
 

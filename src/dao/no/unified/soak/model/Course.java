@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+import no.unified.soak.validation.LessThanField;
 import no.unified.soak.validation.MinValue;
 import no.unified.soak.validation.Required;
 
@@ -470,6 +471,7 @@ public class Course extends BaseObject implements Serializable {
      * @spring.validator type="required"
      */
     @Required
+    @LessThanField("stopTime")
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }

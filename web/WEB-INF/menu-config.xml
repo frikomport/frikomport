@@ -33,13 +33,15 @@
 
         <!-- ====================   FriKom for SVV  =========================== -->
         <Menu name="FriKomMenu_SVV" title="menu.main" page="/listCourses.html">
-            <Item name="CourseMenu" title="courseList.heading.short" page="/listCourses.html"/>
+            <Item name="CourseMenu" title="courseList.heading.short" page="/listCourses.html" roles="admin,reader,editor,eventresponsible"/>
+            <Item name="CourseMenuPublic" title="courseList.heading.short" page="/public/listCourses.html" roles="ROLE_ANONYMOUS,anonymous"/>
             <Item name="OrganizationMenu" title="organizationList.heading" page="/listOrganizations.html" roles="admin,reader"/>
             <Item name="LocationMenu" title="locationList.heading" page="/listLocations.html" roles="editor,admin,eventresponsible,reader"/>
+            <Item name="LocationMenuPublic" title="locationList.heading" page="/listLocations.html" roles="ROLE_ANONYMOUS,anonymous"/>
             <Item name="PersonMenu" title="personList.heading" page="/listPeople.html" roles="editor,admin,eventresponsible,reader"/>
             <Item name="ResponsibleMenu" title="responsibleList.heading" page="/listResponsibles.html" roles="editor,admin,eventresponsible,reader"/>
             <Item name="UsersMenu" title="userList.heading" page="/listUsers.html" roles="editor,admin,eventresponsible,reader"/>
-            <Item name="RegistrationMenu" title="registrationList.heading" page="/listRegistrations.html" roles="editor,admin,eventresponsible,reader"/>
+            <Item name="RegistrationMenu" title="registrationList.heading" page="/listRegistrations.html" roles="editor,admin,eventresponsible"/>
             <Item name="StatisticsMenu" title="statistics.name" page="/statistics.html" roles="editor,admin,eventresponsible,reader"/>
             <Item name="ConfigurationMenu" title="configuration.name" page="/administerConfiguration.html" roles="admin,reader"/>
         </Menu>
