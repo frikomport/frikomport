@@ -192,7 +192,8 @@ function fillSelect(obj){
     <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
 </c:if>
 
-<c:if test="${showCourseName}">
+<c:choose>
+<c:when test="${showCourseName}">
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="name">
         <c:if test="${courseList.status == 3}"><img src="<c:url context="${urlContext}" value="/images/cancel.png"/>"
                		alt="<fmt:message key="icon.warning"/>" class="icon" /><fmt:message key="course.cancelled.alert"/><br/></c:if>
@@ -201,7 +202,17 @@ function fillSelect(obj){
     </display:column>
     <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="course.name"/>
     <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
-</c:if>
+</c:when>
+<c:otherwise>
+    <display:column media="html" sortable="false" class="mediumButtonWidth">
+	    <button type="button"
+	        onclick="location.href='<c:url context="${urlContext}" value="/performRegistration.html"><c:param name="courseId" value="${courseList.id}" /></c:url>'">
+	        <fmt:message key="button.signup"/>
+	    </button>
+    </display:column>
+    <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
+</c:otherwise>
+</c:choose>
 
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.status">
