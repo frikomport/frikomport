@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="urn:no:vegvesen:ldap:soa2:SVVTopType:cct:1:0" attributeFormDefault="unqualified" elementFormDefault="qualified" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:no:vegvesen:ldap:soa2:SVVTopType:cct:1:0" xmlns="http://www.w3.org/2001/XMLSchema">
+  <xsd:annotation>
+    <xsd:documentation>Schema representation of an LDAP
+            top object type</xsd:documentation>
+  </xsd:annotation>
+  <xsd:complexType name="SVVTopType">
+    <xsd:sequence>
+      <xsd:element name="ObjectClass" type="xsd:string"/>
+      <xsd:element name="CreateTimestamp" minOccurs="0" type="xsd:string"/>
+      <xsd:element name="ModifiyTimestamp" minOccurs="0" type="xsd:string"/>
+      <xsd:element name="CreatorsName" minOccurs="0" type="xsd:string"/>
+      <xsd:element name="ModifiersName" minOccurs="0" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
