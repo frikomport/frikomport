@@ -38,6 +38,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.validator.EmailValidator;
 import org.springframework.context.MessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.orm.ObjectRetrievalFailureException;
 
 /**
  * User: gv Date: 05.jun.2008 Time: 10:26:23
@@ -353,14 +354,16 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
 
     	// CATEGORIES
-//        try { categoryManager.getCategory(1L); }
-//        catch(ObjectRetrievalFailureException e){
-//	        Category cat = new Category();
-//	        cat.setName("Hendelse");
-//	        cat.setSelectable(true);
-//	        categoryManager.saveCategory(cat);
-//	        log.info("\"Category\" lagt til i DB: " + cat);
-//    	}
+        try {
+        	categoryManager.getCategory(Category.Name.HENDELSE.getDBValue()); 
+        }
+        catch(ObjectRetrievalFailureException e){
+	        Category cat = new Category();
+	        cat.setName(Category.Name.HENDELSE.getDBValue());
+	        cat.setSelectable(true);
+	        categoryManager.saveCategory(cat);
+	        log.info("\"Category\" lagt til i DB: " + cat);
+    	}
 
     	try {
 	        String[][] sqlSelectAndInsertCategoryArray = { { "select count(*) from category",

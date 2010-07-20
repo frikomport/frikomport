@@ -204,13 +204,15 @@ function fillSelect(obj){
     <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
 </c:when>
 <c:otherwise>
-    <display:column media="html" sortable="false" class="mediumButtonWidth">
-	    <button type="button"
-	        onclick="location.href='<c:url context="${urlContext}" value="/performRegistration.html"><c:param name="courseId" value="${courseList.id}" /></c:url>'">
-	        <fmt:message key="button.signup"/>
-	    </button>
+   <display:column media="html" sortable="false" class="mediumButtonWidth" titleKey="button.signup">
+		<c:if test="${courseList.status == 2}">
+		    <button type="button"
+		        onclick="location.href='<c:url context="${urlContext}" value="/performRegistration.html"><c:param name="courseId" value="${courseList.id}" /></c:url>'">
+		        <fmt:message key="button.signup"/>
+		    </button>
+		</c:if>
+		<c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
     </display:column>
-    <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
 </c:otherwise>
 </c:choose>
 

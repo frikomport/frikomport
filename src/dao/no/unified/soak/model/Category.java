@@ -90,6 +90,7 @@ public class Category extends BaseObject implements Serializable {
     public String toString() {
          return new ToStringBuilder(this).append("id", id)
                                         .append("name", name)
+                                        .append("selectable", selectable)
                                         .toString();
     }
 

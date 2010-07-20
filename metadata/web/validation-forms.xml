@@ -54,6 +54,7 @@
             <field property="invoiceAddress.city" depends="required"/>
             <field property="organization" depends="required"/>
             <field property="organizationid" depends="required"/>
+            <field property="participants" depends="required"/>
        </form>
 
        <form name="organization">
