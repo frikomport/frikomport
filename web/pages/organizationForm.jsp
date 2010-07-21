@@ -10,7 +10,7 @@
 	<c:if test="${not empty status.errorMessages}">
 		<div class="error">
 			<c:forEach var="error" items="${status.errorMessages}">
-				<img src="<c:url value="/images/iconWarning.gif"/>"
+				<img src="<c:url context="${urlContext}" value="/images/iconWarning.gif"/>"
 					alt="<fmt:message key="icon.warning"/>" class="icon" />
 				<c:out value="${error}" escapeXml="false" />
 				<br />
@@ -131,10 +131,10 @@
 <v:javascript formName="organization" cdata="false"
 	dynamicJavascript="true" staticJavascript="false" />
 <script type="text/javascript"
-	src="<c:url value="/scripts/validator.jsp"/>"></script>
+	src="<c:url context="${urlContext}" value="/scripts/validator.jsp"/>"></script>
 
 
 <html:javascript formName="organization" cdata="false"
 	dynamicJavascript="true" staticJavascript="false" />
 <script type="text/javascript"
-	src="<c:url value="/script/validators.jsp"/>"></script>
+	src="<c:url context="${urlContext}" value="/script/validators.jsp"/>"></script>

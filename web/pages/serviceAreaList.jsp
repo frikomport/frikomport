@@ -12,7 +12,7 @@
 <c:choose>
 <c:when test="${!isSVV && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
 
-<form method="post" action="<c:url value="/listServiceAreas.html"/>" id="serviceAreaList">
+<form method="post" action="<c:url context="${urlContext}" value="/listServiceAreas.html"/>" id="serviceAreaList">
    	<input type="hidden" id="ispostbackservicearealist" name="ispostbackservicearealist" value="1"/>
 
 	<table>
@@ -42,7 +42,7 @@
 <c:set var="buttons">
 	<c:if test="${isAdmin}">
 		<button type="button" style="margin-right: 5px"
-			onclick="location.href='<c:url value="/editServiceArea.html"/>'">
+			onclick="location.href='<c:url context="${urlContext}" value="/editServiceArea.html"/>'">
 			<fmt:message key="button.add" />
 		</button>
 	</c:if>
@@ -56,8 +56,8 @@
     <c:if test="${isAdmin}">
         <display:column media="html" sortable="false" headerClass="sortable"
             titleKey="button.heading">
-        <a href='<c:url value="/editServiceArea.html"><c:param name="id" value="${serviceAreaList.id}"/></c:url>'>
-            <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
+        <a href='<c:url context="${urlContext}" value="/editServiceArea.html"><c:param name="id" value="${serviceAreaList.id}"/></c:url>'>
+            <img src="<c:url context="${urlContext}" value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
         </display:column>
     </c:if>

@@ -9,7 +9,7 @@
 <c:set var="buttons">
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <button type="button" style="margin-right: 5px"
-        onclick="location.href='<c:url value="/editPerson.html"/>'">
+        onclick="location.href='<c:url context="${urlContext}" value="/editPerson.html"/>'">
         <fmt:message key="button.add"/>
     </button>
 </c:if>
@@ -22,13 +22,13 @@
     export="true" requestURI="">
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-        <a href='<c:url value="/editPerson.html"><c:param name="id" value="${personList.id}"/><c:param name="from" value="list"/></c:url>'>
-            <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
+        <a href='<c:url context="${urlContext}" value="/editPerson.html"><c:param name="id" value="${personList.id}"/><c:param name="from" value="list"/></c:url>'>
+            <img src="<c:url context="${urlContext}" value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
     </display:column>
 </c:if>
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="person.name" sortProperty="name">
-         <a href="<c:url value="/detailsPerson.html"><c:param name="id" value="${personList.id}"/></c:url>" 
+         <a href="<c:url context="${urlContext}" value="/detailsPerson.html"><c:param name="id" value="${personList.id}"/></c:url>" 
          title="<c:out value="${personList.description}"/>"><c:out value="${personList.name}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="person.name"/>

@@ -16,7 +16,7 @@
     <c:if test="${not empty status.errorMessages}">
     <div class="error">	
         <c:forEach var="error" items="${status.errorMessages}">
-            <img src="<c:url value="/images/iconWarning.gif"/>"
+            <img src="<c:url context="${urlContext}" value="/images/iconWarning.gif"/>"
                 alt="<fmt:message key="icon.warning"/>" class="icon" />
             <c:out value="${error}" escapeXml="false"/><br />
         </c:forEach>
@@ -40,7 +40,7 @@
     <tr>
         <td colspan="2">
             <div class="error">
-           		<img src="<c:url value="/images/iconWarning.gif"/>"
+           		<img src="<c:url context="${urlContext}" value="/images/iconWarning.gif"/>"
                		alt="<fmt:message key="icon.warning"/>" class="icon" />
            		<fmt:message key="errors.courseFull.warning"/><br />
     		</div>
@@ -49,7 +49,7 @@
 	</c:if>
 </table>
 
-<form method="post" action="<c:url value="/administerRegistration.html"/>" name="registrationAdministrationForm" id="registrationAdministrationForm">
+<form method="post" action="<c:url context="${urlContext}" value="/administerRegistration.html"/>" name="registrationAdministrationForm" id="registrationAdministrationForm">
 
 <input type="hidden" name="<c:out value="courseId"/>" value="<c:out value="${course.id}"/>"/>
 
@@ -69,10 +69,10 @@
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
         <c:choose>
         <c:when test="${!registrationList.canceled}">
-	        <a href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseId" value="${registrationList.courseid}"/></c:url>'>
-	            <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
+	        <a href='<c:url context="${urlContext}" value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseId" value="${registrationList.courseid}"/></c:url>'>
+	            <img src="<c:url context="${urlContext}" value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
 	        </a>
-	        <input src="<c:url value="/images/cross.png"/>" title="<fmt:message key="button.unregister"/>" 
+	        <input src="<c:url context="${urlContext}" value="/images/cross.png"/>" title="<fmt:message key="button.unregister"/>" 
 		       alt="<fmt:message key="button.unregister"/>" type="image" value="unregister" name="unregister" 
 		       onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmUnregistration()"/>
         </c:when>
@@ -80,7 +80,7 @@
         </c:choose>
 
         <c:if test="${admin == true}">
-        <input src="<c:url value="/images/bin.png"/>" title="<fmt:message key="button.delete"/>" alt="<fmt:message key="button.delete"/>" type="image" value="delete" name="delete" onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmDeleteRegistration()"/>
+        <input src="<c:url context="${urlContext}" value="/images/bin.png"/>" title="<fmt:message key="button.delete"/>" alt="<fmt:message key="button.delete"/>" type="image" value="delete" name="delete" onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmDeleteRegistration()"/>
         </c:if>
     </display:column>
     </c:if>
@@ -237,7 +237,7 @@
 	value="<fmt:message key="button.cancel"/>" />
 	
 <c:if test="${allowRegistration == true}">
-	<button type="button" class="large" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
+	<button type="button" class="large" onclick="location.href='<c:url context="${urlContext}" value="/performRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
     	<fmt:message key="button.signup"/>
 	</button>
 </c:if>

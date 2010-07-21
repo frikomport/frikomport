@@ -1,9 +1,17 @@
 <%@ include file="/common/taglibs.jsp"%>
 <c:if test="${empty eZSessionid || showMenu}">
 <div id="menuDiv">
+<authz:authorize ifAnyGranted="admin,eventresponsible,editor,reader">
 <menu:useMenuDisplayer name="ListMenu" permissions="rolesAdapter">
     <menu:displayMenu name="FriKomMenu_SVV"/>
 </menu:useMenuDisplayer>
+</authz:authorize>
+
+<authz:authorize ifNotGranted="admin,eventresponsible,editor,reader">
+<menu:useMenuDisplayer name="ListMenu" permissions="rolesAdapter">
+    <menu:displayMenu name="FriKomMenu_SVV_public"/>
+</menu:useMenuDisplayer>
+</authz:authorize>
 </div>
 </c:if>
 
@@ -20,7 +28,7 @@
 
     initializeMenus();
     <c:if test="${alternativeUserForm != null && !(isAdmin || isEducationResponsible || isEventResponsible || isReader || isSVV)}">
-    personalizeMenu('<c:out value="${alternativeUserForm.fullName}" />','<c:url value='/profileUser.html'/>');
+    personalizeMenu('<c:out value="${alternativeUserForm.fullName}" />','<c:url context="${urlContext}" value='/profileUser.html'/>');
     </c:if>
    
 </script>

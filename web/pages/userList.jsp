@@ -9,11 +9,11 @@
 <%-- 
 <c:set var="buttons">
     <button type="button" style="margin-right: 5px"
-        onclick="location.href='<c:url value="/editUser.html"/>?method=Add&from=list'">
+        onclick="location.href='<c:url context="${urlContext}" value="/editUser.html"/>?method=Add&from=list'">
         <fmt:message key="button.add"/>
     </button>
     
-    <button type="button" onclick="location.href='<c:url value="/mainMenu.html" />'">
+    <button type="button" onclick="location.href='<c:url context="${urlContext}" value="/mainMenu.html" />'">
         <fmt:message key="button.cancel"/>
     </button>
 </c:set>
@@ -56,8 +56,8 @@
     class="list userList" export="true">
     <c:if test="${isAdmin || isEducationResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-        <a href='<c:url value="/editUser.html"><c:param name="username" value="${userList.username}"/><c:param name="from" value="list"/></c:url>'>
-            <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
+        <a href='<c:url context="${urlContext}" value="/editUser.html"><c:param name="username" value="${userList.username}"/><c:param name="from" value="list"/></c:url>'>
+            <img src="<c:url context="${urlContext}" value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
     </display:column>
     </c:if>

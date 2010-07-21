@@ -8,14 +8,14 @@
 <spring:bind path="course.*">
     <c:if test="${not empty status.errorMessages}">
         <div class="error"><c:forEach var="error" items="${status.errorMessages}">
-            <img src="<c:url value="/images/iconWarning.gif"/>" alt="<fmt:message key="icon.warning"/>" class="icon" />
+            <img src="<c:url context="${urlContext}" value="/images/iconWarning.gif"/>" alt="<fmt:message key="icon.warning"/>" class="icon" />
             <c:out value="${error}" escapeXml="false" />
             <br />
         </c:forEach></div>
     </c:if>
 </spring:bind>
 
-<form method="post" action="<c:url value="/notifyCourse.html"/>" id="courseForm" onsubmit="return validateCourse(this)">
+<form method="post" action="<c:url context="${urlContext}" value="/notifyCourse.html"/>" id="courseForm" onsubmit="return validateCourse(this)">
 
 <fmt:message key="date.format" var="dateformat" /> 
 <fmt:message key="time.format" var="timeformat" /> 
@@ -57,7 +57,7 @@
             <td colspan="2" class="buttonBar">
                 <c:if test="${isAdmin || isEducationResponsible || (isEventResponsible && username == course.responsibleUsername)}">
                 <button type="button"
-                    onclick="location.href='<c:url value="/editCourse.html"><c:param name="id" value="${course.id}"/></c:url>'">
+                    onclick="location.href='<c:url context="${urlContext}" value="/editCourse.html"><c:param name="id" value="${course.id}"/></c:url>'">
                 <fmt:message key="button.reedit" /></button>
                 </c:if> 
                 <input type="submit" class="button" name="skip" onclick="bCancel = true;" value="<fmt:message key="button.skipmail"/>" /> 
@@ -77,7 +77,7 @@
             <td colspan="2" class="buttonBar">
                 <c:if test="${isAdmin || isEducationResponsible || (isEventResponsible)}">
                 <button type="button"
-                    onclick="location.href='<c:url value="/editCourse.html"><c:param name="id" value="${course.id}"/></c:url>'">
+                    onclick="location.href='<c:url context="${urlContext}" value="/editCourse.html"><c:param name="id" value="${course.id}"/></c:url>'">
                 <fmt:message key="button.reedit" /></button>
                 </c:if> 
                 <input type="submit" class="button large" name="confirm" onclick="bCancel = true;" value="<fmt:message key="button.continue"/>" /> 
@@ -98,4 +98,4 @@
 </form>
 
 <v:javascript formName="course" cdata="false" dynamicJavascript="true" staticJavascript="false" />
-<script type="text/javascript" src="<c:url value="/scripts/validator.jsp"/>"></script>
+<script type="text/javascript" src="<c:url context="${urlContext}" value="/scripts/validator.jsp"/>"></script>

@@ -23,6 +23,7 @@ cal1.setTodayText("Idag");
 <script type="text/javascript">
 // Code to change the select list for service aera based on organization id.
 function fillSelect(obj){
+	<c:if test="${useServiceArea}">
  var orgid=obj.options[obj.selectedIndex].value;
  var serviceArea= document.courseList.serviceAreaid;
 
@@ -41,6 +42,7 @@ function fillSelect(obj){
 	        j++ ;
 	    }
 	</c:forEach>
+	</c:if>
 }
 </script>
 
@@ -386,7 +388,7 @@ Integer colspan1 = (nCellsToSumColI % nColsI) - 1;
 pageContext.setAttribute("colspan1", colspan1);
 
 %>
-<c:if test="${isSVV && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
+<c:if test="${isSVV && (isAdmin || isEducationResponsible || isEventResponsible || isReader) && sumTotal>0}">
 <display:footer>
 <tr><td class="sum" colspan="<c:out value="${colspan1}"/>"><fmt:message key="courseList.pageSum"/></td> 
 <%

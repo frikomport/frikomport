@@ -2,10 +2,10 @@
 
 <div id="validators">
     <a href="http://jigsaw.w3.org/css-validator/check/referer"><img 
-        src="<c:url value="/images/vcss.png"/>" 
+        src="<c:url context="${urlContext}" value="/images/vcss.png"/>" 
             alt="Valid CSS!" class="badge" /></a> 
     <a href="http://validator.w3.org/check/referer"><img
-        src="<c:url value="/images/valid-xhtml10.png"/>"
+        src="<c:url context="${urlContext}" value="/images/valid-xhtml10.png"/>"
             alt="Valid XHTML 1.0!" class="badge" /></a>
 </div>
 

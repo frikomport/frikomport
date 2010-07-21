@@ -10,7 +10,7 @@
 <fmt:message key="time.format" var="timeformat" />
 
 <c:if test="${cancel.ask_for_confirmation == true}">
-    <form method="post" action="<c:url value="/cancelRegistration.html"/>" name="form" id="cform">
+    <form method="post" action="<c:url context="${urlContext}" value="/cancelRegistration.html"/>" name="form" id="cform">
         <input type="hidden" name="rid" value="<c:out value="${cancel.rid}"/>"/>
         <input type="hidden" name="hash" value="<c:out value="${cancel.hash}"/>"/>
         <input type="hidden" name="confirm" value="false"/>

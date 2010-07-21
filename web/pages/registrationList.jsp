@@ -35,7 +35,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 <c:choose>
 <c:when test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 <div class="searchForm">
-    <form method="post" action="<c:url value="/listRegistrations.html"/>" id="registrationList" name="registrationList">
+    <form method="post" action="<c:url context="${urlContext}" value="/listRegistrations.html"/>" id="registrationList" name="registrationList">
     <INPUT type="hidden" id="ispostbackregistrationlist" name="ispostbackregistrationlist" value="1"/> 
     <ul>
 
@@ -179,8 +179,8 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
 		<c:if test="${(isAdmin || isEducationResponsible || (!isSVV && isEventResponsible && registrationList.course.responsible.username == username) || (isSVV && isEventResponsible && registrationList.course.organization2id == user.organization2id)) && !registrationList.canceled}">
-        <a href='<c:url value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseId" value="${registrationList.courseid}"/></c:url>'>
-            <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
+        <a href='<c:url context="${urlContext}" value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseId" value="${registrationList.courseid}"/></c:url>'>
+            <img src="<c:url context="${urlContext}" value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
 		</c:if>
     </display:column>
@@ -188,7 +188,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 
 <c:if test="${showCourseName}">
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="course.name" class="${tdClass}">
-         <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${registrationList.course.id}"/></c:url>" 
+         <a href="<c:url context="${urlContext}" value="/detailsCourse.html"><c:param name="id" value="${registrationList.course.id}"/></c:url>" 
          title="<c:out value="${registrationList.course.description}"/>"><c:out value="${registrationList.course.name}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="course.name" sortable="true" headerClass="sortable" titleKey="course.name" class="${tdClass}"/>
@@ -202,7 +202,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 </c:when>
 <c:otherwise>
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="course.startTime">
-         <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${registrationList.course.id}"/></c:url>" 
+         <a href="<c:url context="${urlContext}" value="/detailsCourse.html"><c:param name="id" value="${registrationList.course.id}"/></c:url>" 
          title="<c:out value="${registrationList.course.description}"/>"><fmt:formatDate value="${registrationList.course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="course.startTime">

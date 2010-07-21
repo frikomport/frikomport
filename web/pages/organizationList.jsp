@@ -12,7 +12,7 @@
 <c:set var="buttons">
 <c:if test="${isAdmin}">
     <button type="button" style="margin-right: 5px"
-        onclick="location.href='<c:url value="/editOrganization.html"/>'">
+        onclick="location.href='<c:url context="${urlContext}" value="/editOrganization.html"/>'">
         <fmt:message key="button.add"/>
     </button>
 </c:if>
@@ -25,8 +25,8 @@
     export="true" requestURI="">
 <c:if test="${isAdmin}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-		<a href='<c:url value="/editOrganization.html"><c:param name="id" value="${organizationList.id}"/><c:param name="from" value="list"/></c:url>'>
-            <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
+		<a href='<c:url context="${urlContext}" value="/editOrganization.html"><c:param name="id" value="${organizationList.id}"/><c:param name="from" value="list"/></c:url>'>
+            <img src="<c:url context="${urlContext}" value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
     </display:column>
 </c:if>

@@ -43,6 +43,10 @@
             <Item name="StatisticsMenu" title="statistics.name" page="/statistics.html" roles="editor,admin,eventresponsible,reader"/>
             <Item name="ConfigurationMenu" title="configuration.name" page="/administerConfiguration.html" roles="admin,reader"/>
         </Menu>
+        <Menu name="FriKomMenu_SVV_public" title="menu.main" page="/public/listCourses.html">
+            <Item name="CourseMenu" title="courseList.heading.short" page="/public/listCourses.html"/>
+            <Item name="LocationMenu" title="locationList.heading" page="/public/listLocations.html"/>
+        </Menu>
 
         <!--Registration-END-->
     </Menus>

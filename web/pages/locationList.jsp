@@ -6,7 +6,7 @@
 <fmt:message key="locationList.item" var="item"/>
 <fmt:message key="locationList.items" var="items"/>
 
-<form method="post" action="<c:url value="/listLocations.html"/>" id="locationList">
+<form method="post" action="<c:url context="${urlContext}" value="/listLocations.html"/>" id="locationList">
     <INPUT type="hidden" id="ispostbacklocationlist" name="ispostbacklocationlist" value="1"/> 
     <div class="searchForm">
 	<ul>
@@ -50,7 +50,7 @@
 <c:set var="buttons">
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <button type="button" style="margin-right: 5px"
-        onclick="location.href='<c:url value="/editLocation.html"/>'">
+        onclick="location.href='<c:url context="${urlContext}" value="/editLocation.html"/>'">
         <fmt:message key="button.add"/>
     </button>
 </c:if>
@@ -63,13 +63,13 @@
     export="true" requestURI="">
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-        <a href='<c:url value="/editLocation.html"><c:param name="id" value="${locationList.id}"/><c:param name="from" value="list"/></c:url>'>
-            <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
+        <a href='<c:url context="${urlContext}" value="/editLocation.html"><c:param name="id" value="${locationList.id}"/><c:param name="from" value="list"/></c:url>'>
+            <img src="<c:url context="${urlContext}" value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
     </display:column>
 </c:if>
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="location.name" sortProperty="name">
-         <a href="<c:url value="/detailsLocation.html"><c:param name="id" value="${locationList.id}"/></c:url>" 
+         <a href="<c:url context="${urlContext}" value="/detailsLocation.html"><c:param name="id" value="${locationList.id}"/></c:url>" 
          title="<c:out value="${locationList.description}"/>"><c:out value="${locationList.name}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="location.name"/>

@@ -13,15 +13,15 @@
 	<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
 		<c:if test="${isAdmin || isEducationResponsible || (isEventResponsible && currentUserForm.organization2id == responsibleList.organization2id)}">
-        <a href='<c:url value="/editUser.html"><c:param name="username" value="${responsibleList.username}"/><c:param name="from" value="list"/></c:url>'>
-            <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
+        <a href='<c:url context="${urlContext}" value="/editUser.html"><c:param name="username" value="${responsibleList.username}"/><c:param name="from" value="list"/></c:url>'>
+            <img src="<c:url context="${urlContext}" value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
 		</c:if>
     </display:column>
 	</c:if>
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="user.fullname" sortProperty="fullName">
-         <a href="<c:url value="/detailsUser.html"><c:param name="username" value="${responsibleList.username}"/></c:url>" 
+         <a href="<c:url context="${urlContext}" value="/detailsUser.html"><c:param name="username" value="${responsibleList.username}"/></c:url>" 
          title="responsibleListDescription"><c:out value="${responsibleList.fullName}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="fullName" sortable="true" headerClass="sortable" titleKey="user.fullname"/>
