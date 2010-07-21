@@ -189,6 +189,7 @@
 				<include name="images/**/*.gif"/>
 				<include name="images/**/*.png"/>
 				<include name="images/**/*.jeg"/>
+				<include name="images/**/*.ico"/>
 			</fileset>
 		</copy>
 	</target>
@@ -484,9 +485,8 @@
           <fileset dir="${webapp.dist}" includes="*.war"/>
           <fileset dir="ear" includes="META-INF/orion-application.xml"/>
     	</ear>
-    	<!-- Copy ear-file for Oracle App.server (OC4J)
+    	<!-- Copy ear-file for Oracle App.server (OC4J)-->
     	<copy todir="c:/Programfiler/OCJ4/j2ee/home/applications" file="${webapp.dist}/${webapp.name}.ear"/>
-    	-->
     </target>
 
     <target name="test-web" depends="webdoclet,db-load,check-debug" description="Test web module">
