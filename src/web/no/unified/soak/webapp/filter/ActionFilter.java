@@ -186,11 +186,14 @@ public class ActionFilter implements Filter {
 	}
 
 	public void setJspLinkPathPrefix(HttpServletRequest request, HttpSession session) {
-		String publicPrefix = ApplicationResourcesUtil.getText("publicUrlprefix");
-		if (StringUtils.isNotBlank(publicPrefix) && request.getRequestURI().contains(publicPrefix)) {
-			session.setAttribute("urlContext", request.getContextPath()+publicPrefix);
+		String publicPrefix = StringUtils.strip(ApplicationResourcesUtil.getText("publicUrlprefix"), "/");
+		String urlContextEnding = "/"+publicPrefix;
+		if (StringUtils.isNotBlank(publicPrefix) && request.getRequestURI().contains(urlContextEnding)) {
+			session.setAttribute("urlContext", request.getContextPath()+urlContextEnding);
+			ApplicationResourcesUtil.setUrlContextAppendix(publicPrefix+"/");
 		} else {
 			session.setAttribute("urlContext", request.getContextPath());
+			ApplicationResourcesUtil.setUrlContextAppendix("");
 		}
 	}
 	
