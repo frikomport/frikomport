@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="urn:no:vegvesen:felles:wrapper:cct:1:0" elementFormDefault="qualified" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:no:vegvesen:felles:wrapper:cct:1:0" xmlns="http://www.w3.org/2001/XMLSchema">
+  <xsd:complexType name="WrapperType">
+    <xsd:sequence>
+      <xsd:element name="Name" type="xsd:string"/>
+      <xsd:element name="Opaque" minOccurs="0" type="tns:OpaqueType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="OpaqueType" mixed="true">
+    <xsd:sequence>
+      <xsd:any namespace="##any" minOccurs="0" maxOccurs="unbounded" processContents="skip"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="WrapperListType">
+    <xsd:sequence>
+      <xsd:element name="WrapperElement" minOccurs="0" maxOccurs="unbounded" type="tns:WrapperType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,171 @@
+@CHARSET "ISO-8859-1";
+@import url(menuTop.css);
+
+body a,
+body a:VISITED,
+body a.highlight,
+body#login div#menu a:visited {
+	color:#F48600 !important; /* For lite kontrast med den originale #ff9000 */
+	text-decoration: none;
+}
+
+div#PageContainer div#ContentContainer div#content form input[class~="large"],
+div#MainContentContainer button[class~="large"]
+{
+	background-image:url("../images/SVV/buttonLarge.gif");
+	width:auto;
+	min-width:128px;
+}
+
+td.mediumButtonWidth {
+	width: 79px;
+}
+
+div#MainContentContainer button {
+	background-color:#FFFFFF;
+	background-image:url("../images/SVV/buttonMedium.gif");
+	background-position:left top;
+	background-repeat:no-repeat;
+	border:medium none;
+	font-size:12px;
+	height:27px;
+	padding-bottom:0;
+	vertical-align:middle;
+	padding-left: 1px;
+	padding-right: 1px;
+	width:auto;
+	min-width:79px;
+}
+
+html body {
+	font-family: Frutiger,Verdana,Arial,Helvetica,sans-serif !important;
+	color:#37424A !important;
+	font-size:75% !important;
+}
+
+div form input, 
+div form textarea, 
+div form select {
+	color:#37424A;
+}
+
+table.detail {
+	width:auto;
+}
+
+div#content table.list {
+	margin-left:1px;
+}
+
+table.detail tr th {
+	padding-left:3px !important;
+}
+
+tr th,
+tr.sumfinal {
+	background-color:#C9CDCF; 	
+}
+
+div#MainContentContainer.fullwidth,
+div#ContentFrameMiddle,
+div#content {
+width:995px;
+}
+
+div#ContentFrameMiddle {
+margin-top:-15px;
+}
+
+/* Overskift Temainnganger */
+div#content h1,
+div#content h2 {
+	color:#37424A;
+}
+
+#content span.pagebanner {
+	color:#37424A;
+}
+
+#content div.exportlinks  {
+	color:#37424A;
+}
+
+#content div.error, 
+#content div.message {
+	color:#37424A;
+	font-family: Frutiger,Verdana,Arial,Helvetica,sans-serif !important;
+}
+
+body thead tr th.sortable a,
+body thead tr th.sortable a:visited {
+	color:#FFD199 !important;
+}
+
+table.list thead th.sorted,
+table.list thead tr th {
+	background-color:#5f686E;
+}
+
+#content table.list tr.odd {
+	color:inherit;
+}
+
+div#content table thead tr th {
+	color:#FFFFFF;
+}
+
+#content table.list tr.even {
+	background-color:#EDEEF0;
+	color:inherit;
+}
+
+tr.sum1 {
+	background-color:#EDEEF0;
+}
+
+div.indentleft {
+	padding-left:15px;
+}
+	
+table.list thead th.sortable:hover {
+	background-color:#FF8C00; /* #FFD199; */
+}
+
+table.list thead th a:hover {
+	color:#FFFFFF !important;
+	text-decoration:none;
+}
+	
+#content table.list th.sortable a {
+	background-image:url("../images/SVV/arrow_off_SVV.png");
+}
+
+#content table.list th.order1 a {
+	background-image:url("../images/SVV/arrow_down_SVV.png") !important;
+}
+
+#content table.list th.order2 a {
+background-image:url("../images/SVV/arrow_up_SVV.png") !important;
+}
+
+div#content ul.bulletlist {
+	padding-left: 20px;
+}
+
+div#loggedin {
+	text-align: right;
+	display:block;
+	font-size: 0.9em;
+}
+
+/* 
+----------------------------------------
+ SVV-variant of menuExpandable.css 
+---------------------------------------- 
+*/
+div .menu li, 
+div .submenu li {
+background:url("../images/SVV/themeMenuArrow.gif") no-repeat scroll 0% 50% transparent;
+list-style:none outside none;
+}
+

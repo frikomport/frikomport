@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+          "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans>
+
+    <!-- ======================== FILTER CHAIN ======================= -->
+    <bean id="filterChainProxy" class="org.acegisecurity.util.FilterChainProxy">
+        <property name="filterInvocationDefinitionSource">
+            <value>
+                CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
+                PATTERN_TYPE_APACHE_ANT
+                /j_security_check*=httpSessionContextIntegrationFilter,authenticationProcessingFilter
+                /**/*.html*=httpSessionContextIntegrationFilter,remoteUserFilter,svvAuthenticationFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
+                /**/*.jsp*=httpSessionContextIntegrationFilter,remoteUserFilter,svvAuthenticationFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
+            </value>
+        </property>
+    </bean>
+
+    <!-- ======================== AUTHENTICATION ======================= -->
+    
+    <!-- Note the order that entries are placed against the objectDefinitionSource is critical.
+         The FilterSecurityInterceptor will work from the top of the list down to the FIRST pattern that matches the request URL.
+         Accordingly, you should place MOST SPECIFIC (ie a/b/c/d.*) expressions first, with LEAST SPECIFIC (ie a/.*) expressions last -->
+    <bean id="filterInvocationInterceptor" class="org.acegisecurity.intercept.web.FilterSecurityInterceptor">
+        <property name="authenticationManager" ref="authenticationManager"/>
+        <property name="accessDecisionManager" ref="accessDecisionManager"/>
+         <property name="objectDefinitionSource">
+            <value>
+                CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
+                PATTERN_TYPE_APACHE_ANT
+                /signup.html=admin,anonymous
+                /passwordhint.html*=admin,anonymous
+                /**/*.html*=admin,anonymous,ROLE_ANONYMOUS,editor,eventresponsible,reader
+                /clickstreams.jsp=admin,ROLE_ADMIN,editor,eventresponsible,reader
+            </value>
+        </property>
+    </bean>
+
+    <bean id="authenticationManager" class="org.acegisecurity.providers.ProviderManager">
+        <property name="providers">
+            <list>
+                <ref local="daoAuthenticationProvider"/>
+                <ref local="anonymousAuthenticationProvider"/>
+            </list>
+        </property>
+    </bean>
+
+	<bean id="svvAuthenticationFilter" class="no.unified.soak.webapp.filter.SVVAuthenticationFilter">
+        <property name="userManager" ref="userManager"/>
+        <property name="userSynchronizeManager" ref="userSynchronizeManager"/>
+        <property name="extUserDAO" ref="extUserDAO"/>
+    </bean>
+       
+    <!-- Automatically receives AuthenticationEvent messages from DaoAuthenticationProvider -->
+    <bean id="loggerListener" class="org.acegisecurity.event.authentication.LoggerListener"/>
+    
+    <bean id="daoAuthenticationProvider" class="org.acegisecurity.providers.dao.DaoAuthenticationProvider">
+         <property name="userDetailsService" ref="jdbcAuthenticationDao"/>
+         <property name="userCache" ref="userCache"/>
+    </bean>
+    
+    <!-- Read users from database -->
+    <bean id="jdbcAuthenticationDao" class="org.acegisecurity.userdetails.jdbc.JdbcDaoImpl">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="usersByUsernameQuery">
+            <value>SELECT username,password,enabled FROM app_user WHERE username = ?</value>
+        </property>
+        <property name="authoritiesByUsernameQuery">
+            <value>SELECT username,role_name FROM user_role WHERE username = ?</value>
+        </property>
+    </bean>
+
+    <bean id="userCache" class="org.acegisecurity.providers.dao.cache.EhCacheBasedUserCache">
+        <property name="cache">
+            <bean class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+                <property name="cacheManager">
+                    <bean class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
+                </property>
+                <property name="cacheName" value="userCache"/>
+            </bean>
+        </property>
+    </bean>
+   
+    <bean id="anonymousAuthenticationProvider" class="org.acegisecurity.providers.anonymous.AnonymousAuthenticationProvider">
+        <property name="key" value="anonymous"/>
+    </bean>
+    
+    <bean id="roleVoter" class="org.acegisecurity.vote.RoleVoter">
+        <property name="rolePrefix" value=""/>
+    </bean>
+
+    <bean id="accessDecisionManager" class="org.acegisecurity.vote.AffirmativeBased">
+        <property name="allowIfAllAbstainDecisions" value="false"/>
+        <property name="decisionVoters">
+            <list>
+                <ref local="roleVoter"/>
+            </list>
+        </property>
+    </bean>
+    
+    <!-- ===================== HTTP REQUEST SECURITY ==================== -->
+    <bean id="httpSessionContextIntegrationFilter" class="org.acegisecurity.context.HttpSessionContextIntegrationFilter">
+        <property name="context" value="org.acegisecurity.context.SecurityContextImpl"/>
+    </bean>
+    
+    <bean id="authenticationProcessingFilter" class="org.acegisecurity.ui.webapp.AuthenticationProcessingFilter">
+        <property name="authenticationManager" ref="authenticationManager"/>
+        <property name="authenticationFailureUrl" value="/login.jsp?error=true"/>
+        <property name="defaultTargetUrl" value="/"/>
+        <property name="filterProcessesUrl" value="/j_security_check"/>
+    </bean>
+    
+    <bean id="anonymousProcessingFilter" class="org.acegisecurity.providers.anonymous.AnonymousProcessingFilter">
+        <property name="key" value="anonymous"/>
+        <property name="userAttribute" value="anonymous,ROLE_ANONYMOUS"/>
+    </bean>
+    
+    <bean id="exceptionTranslationFilter" class="org.acegisecurity.ui.ExceptionTranslationFilter">
+        <property name="authenticationEntryPoint" ref="authenticationProcessingFilterEntryPoint"/>
+    </bean>
+    
+    <bean id="remoteUserFilter" class="org.acegisecurity.wrapper.SecurityContextHolderAwareRequestFilter"/>
+
+    <bean id="authenticationProcessingFilterEntryPoint" class="org.acegisecurity.ui.webapp.AuthenticationProcessingFilterEntryPoint">
+        <property name="loginFormUrl" value="/login.jsp"/>
+        <property name="forceHttps" value="false"/>
+    </bean>
+
+    <!-- Override 'userManager' bean definition to add userManagerSecurity interceptor -->
+    <bean id="userManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.UserManagerImpl">
+                <property name="userDAO" ref="userDAO"/>
+                <property name="extUserDAO" ref="extUserDAO"/>
+                <property name="roleManager" ref="roleManager"/>
+                <property name="messageSource" ref="messageSource"/>
+                <property name="organizationManager" ref="organizationManager"/>
+            </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="save*">PROPAGATION_REQUIRED,-UserExistsException</prop>
+                <prop key="add*">PROPAGATION_REQUIRED,-UserExistsException</prop>
+                <prop key="update*">PROPAGATION_REQUIRED,-UserExistsException</prop>
+                <prop key="reset*">PROPAGATION_REQUIRED,-UserExistsException</prop>
+                <prop key="remove*">PROPAGATION_REQUIRED</prop>
+                <prop key="*LoginCookie">PROPAGATION_REQUIRED</prop>
+            </props>
+        </property>
+        <property name="preInterceptors">
+            <list>
+                <ref bean="userSecurityInterceptor"/>
+                <ref bean="userManagerSecurity"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="userManagerSecurity" class="org.acegisecurity.intercept.method.aopalliance.MethodSecurityInterceptor">
+        <property name="authenticationManager" ref="authenticationManager"/>
+        <property name="accessDecisionManager" ref="accessDecisionManager"/>
+        <property name="objectDefinitionSource">
+             <value>
+                 no.unified.soak.service.UserManager.removeUser=admin
+             </value>
+        </property>
+    </bean>
+</beans>
