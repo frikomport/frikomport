@@ -341,29 +341,34 @@ public class CourseFormController extends BaseFormController {
             newCourse = new Course();
             newCourse.copyAllButId(course);
             newCourse.setCopyid(new Long(copyid));
-        } else {
-            course = new Course();
-            course.setRole(Constants.ANONYMOUS_ROLE);
-            course.setCategoryid(1L);
-            course.setCategory(categoryManager.getCategory(Category.Name.HENDELSE.getDBValue()));
-            // Check if a default organization should be applied
-            User user = (User) request.getSession().getAttribute(Constants.USER_KEY);
+		} else {
+			course = new Course();
+			course.setRole(Constants.ANONYMOUS_ROLE);
+			Category hendelseCategory = categoryManager.getCategory(Category.Name.HENDELSE.getDBValue());
+			if (hendelseCategory != null) {
+				course.setCategoryid(hendelseCategory.getId());
+			} else {
+				course.setCategoryid(1L);
+			}
+			course.setCategory(hendelseCategory);
+			// Check if a default organization should be applied
+			User user = (User) request.getSession().getAttribute(Constants.USER_KEY);
 
-            // default organizations
-            Object orgId = user.getOrganizationid();
-	        if ((orgId != null) && StringUtils.isNumeric(orgId.toString())) {
-	        	course.setOrganizationid(new Long(orgId.toString()));
-	        }
+			// default organizations
+			Object orgId = user.getOrganizationid();
+			if ((orgId != null) && StringUtils.isNumeric(orgId.toString())) {
+				course.setOrganizationid(new Long(orgId.toString()));
+			}
 
-	        Object org2id = user.getOrganization2id();
-	        if ((org2id != null) && StringUtils.isNumeric(org2id.toString())) {
-	        	course.setOrganization2id(new Long(org2id.toString()));
-	        }
-            
-            // Default responsible
-            course.setResponsibleUsername(user.getUsername());
+			Object org2id = user.getOrganization2id();
+			if ((org2id != null) && StringUtils.isNumeric(org2id.toString())) {
+				course.setOrganization2id(new Long(org2id.toString()));
+			}
 
-        }
+			// Default responsible
+			course.setResponsibleUsername(user.getUsername());
+
+		}
         if (newCourse != null) {
             return newCourse;
         } else {
