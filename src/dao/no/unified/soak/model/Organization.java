@@ -11,6 +11,7 @@
 package no.unified.soak.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import no.unified.soak.util.ApplicationResourcesUtil;
 
@@ -104,6 +105,9 @@ public class Organization extends BaseObject implements Serializable {
     	setType(type);
     	setSelectable(selectable);
     	setParent(parent);
+    	if (parent!= null && parent.getId() != null && parent.getId() > 0) {
+    		setParentid(parent.getId());
+    	}
     }
 
     public Organization(String aName, long number, int type, boolean selectable, Organization parent, Long parentid){
@@ -300,5 +304,14 @@ public class Organization extends BaseObject implements Serializable {
     public void setType(Integer type) {
         this.type = Type.getTypeFromDBValue(type);
     }
+
+	public static Organization getFirstOrgByNumber(List<Organization> orgList, long i) {
+		for (Organization org : orgList) {
+			if (org.getNumber() == i) {
+				return org;
+			}
+		}
+		return null;
+	}
 
 }

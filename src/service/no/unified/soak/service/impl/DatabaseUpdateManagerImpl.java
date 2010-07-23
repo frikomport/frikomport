@@ -500,69 +500,87 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	Vector<Organization> organizationsToInsert = new Vector<Organization>();
         	
         	List regioner = organizationManager.getOrganizationsByType(Type.REGION);
-        	if(regioner.isEmpty()){
+        	List omrader = organizationManager.getOrganizationsByType(Type.AREA);
+        	Organization north;
+        	Organization mid;
+			Organization west;
+			Organization south;
+			Organization east;
+			Integer regionTypeDBValue = Type.REGION.getTypeDBValue();
+			Integer areaTypeDBValue = Type.AREA.getTypeDBValue();
+			Integer countyTypeDBValue = Type.COUNTY.getTypeDBValue();
+			
+			if(regioner.isEmpty()){
         		// regioner
-        		Organization north = new Organization("Region Nord", 1, 4, true, null);
-        		Organization mid = new Organization("Region Midt", 2, 4, true, null);
-        		Organization west = new Organization("Region Vest", 3, 4, true, null);
-        		Organization south = new Organization("Region Sør", 4, 4, true, null);
-        		Organization east = new Organization("Region Øst", 5, 4, true, null);
+				north = new Organization("Region Nord", 1, regionTypeDBValue, true, null);
+        		mid = new Organization("Region Midt", 2, regionTypeDBValue, true, null);
+        		west = new Organization("Region Vest", 3, regionTypeDBValue, true, null);
+        		south = new Organization("Region Sør", 4, regionTypeDBValue, true, null);
+        		east = new Organization("Region Øst", 5, regionTypeDBValue, true, null);
         		organizationManager.saveOrganization(north);
         		organizationManager.saveOrganization(mid);
         		organizationManager.saveOrganization(west);
         		organizationManager.saveOrganization(south);
         		organizationManager.saveOrganization(east);
-        		
-            	// områder
-            	organizationsToInsert.add(new Organization("Område Helgeland", 0, 3, true, north));
-            	organizationsToInsert.add(new Organization("Område Salten", 0, 3, true, north));
-            	organizationsToInsert.add(new Organization("Område Midtre Hålogaland", 0, 3, true, north));
-            	organizationsToInsert.add(new Organization("Område Midtre Troms", 0, 3, true, north));
-            	organizationsToInsert.add(new Organization("Område Nord-Troms og Vest-Finnmark", 0, 3, true, north));
-            	organizationsToInsert.add(new Organization("Område Øst-Finnmark", 0, 3, true, north));
-            	
-            	organizationsToInsert.add(new Organization("Område Møre og Romsdal", 0, 3, true, mid));
-            	organizationsToInsert.add(new Organization("Område Sør-Trøndelag", 0, 3, true, mid));
-            	organizationsToInsert.add(new Organization("Område Nord-Trøndelag", 0, 3, true, mid));
-            	
-            	organizationsToInsert.add(new Organization("Område Sør-Rogaland", 0, 3, true, west));
-            	organizationsToInsert.add(new Organization("Område Haugaland og Sunnhordaland", 0, 3, true, west));
-            	organizationsToInsert.add(new Organization("Område Bergen og Nordhordaland", 0, 3, true, west));
-            	organizationsToInsert.add(new Organization("Område Indre Hordaland og Sogn og Fjordane", 0, 3, true, west));
-            	
-            	organizationsToInsert.add(new Organization("Område Agder", 0, 3, true, south));
-            	organizationsToInsert.add(new Organization("Område Nedre-Telemark og Vestfold", 0, 3, true, south));
-            	organizationsToInsert.add(new Organization("Område Øvre-Telemark og Buskerud", 0, 3, true, south));
-
-            	organizationsToInsert.add(new Organization("Område Follo og Østfold", 0, 3, true, east));
-            	organizationsToInsert.add(new Organization("Område Asker, Bærum og Oslo", 0, 3, true, east));
-            	organizationsToInsert.add(new Organization("Område Glåmdal og Romerike", 0, 3, true, east));
-            	organizationsToInsert.add(new Organization("Område Hedemarken-Østerdalen", 0, 3, true, east));
-            	organizationsToInsert.add(new Organization("Område Oppland", 0, 3, true, east));
-
-            	// fylker
-            	organizationsToInsert.add(new Organization("Østfold", 1, 2, true, east));
-            	organizationsToInsert.add(new Organization("Akershus", 2, 2, true, east));
-            	organizationsToInsert.add(new Organization("Oslo", 3, 2, true, east));
-            	organizationsToInsert.add(new Organization("Hedmark", 4, 2, true, east));
-            	organizationsToInsert.add(new Organization("Oppland", 5, 2, true, east));
-            	organizationsToInsert.add(new Organization("Buskerud", 6, 2, true, south));
-            	organizationsToInsert.add(new Organization("Vestfold", 7, 2, true, south));
-            	organizationsToInsert.add(new Organization("Telemark", 8, 2, true, south));
-            	organizationsToInsert.add(new Organization("Aust-Agder", 9, 2, true, south));
-            	organizationsToInsert.add(new Organization("Vest-Agder", 10, 2, true, south));
-            	organizationsToInsert.add(new Organization("Rogaland", 11, 2, true, west));
-            	organizationsToInsert.add(new Organization("Hordaland", 12, 2, true, west));
-            	organizationsToInsert.add(new Organization("Sogn og Fjordane", 14, 2, true, west));
-            	organizationsToInsert.add(new Organization("Møre og Romsdal", 15, 2, true, mid));
-            	organizationsToInsert.add(new Organization("Sør-Trøndelag", 16, 2, true, mid));
-            	organizationsToInsert.add(new Organization("Nord-Trøndelag", 17, 2, true, mid));
-            	organizationsToInsert.add(new Organization("Nordland", 18, 2, true, north));
-            	organizationsToInsert.add(new Organization("Troms", 19, 2, true, north));
-            	organizationsToInsert.add(new Organization("Finnmark", 20, 2, true, north));
+        	} else {
+        		north = Organization.getFirstOrgByNumber(regioner, 1);
+        		mid = Organization.getFirstOrgByNumber(regioner, 2);
+        		west = Organization.getFirstOrgByNumber(regioner, 3);
+        		south = Organization.getFirstOrgByNumber(regioner, 4);
+        		east = Organization.getFirstOrgByNumber(regioner, 5);
         	}
         	
-            if(organizationsInDB.isEmpty()){
+        	if (omrader.isEmpty()) {
+				// områder
+            	organizationsToInsert.add(new Organization("Område Helgeland", 0, areaTypeDBValue, true, north));
+            	organizationsToInsert.add(new Organization("Område Salten", 0, areaTypeDBValue, true, north));
+            	organizationsToInsert.add(new Organization("Område Midtre Hålogaland", 0, areaTypeDBValue, true, north));
+            	organizationsToInsert.add(new Organization("Område Midtre Troms", 0, areaTypeDBValue, true, north));
+            	organizationsToInsert.add(new Organization("Område Nord-Troms og Vest-Finnmark", 0, areaTypeDBValue, true, north));
+            	organizationsToInsert.add(new Organization("Område Øst-Finnmark", 0, areaTypeDBValue, true, north));
+            	
+            	organizationsToInsert.add(new Organization("Område Møre og Romsdal", 0, areaTypeDBValue, true, mid));
+            	organizationsToInsert.add(new Organization("Område Sør-Trøndelag", 0, areaTypeDBValue, true, mid));
+            	organizationsToInsert.add(new Organization("Område Nord-Trøndelag", 0, areaTypeDBValue, true, mid));
+            	
+            	organizationsToInsert.add(new Organization("Område Sør-Rogaland", 0, areaTypeDBValue, true, west));
+            	organizationsToInsert.add(new Organization("Område Haugaland og Sunnhordaland", 0, areaTypeDBValue, true, west));
+            	organizationsToInsert.add(new Organization("Område Bergen og Nordhordaland", 0, areaTypeDBValue, true, west));
+            	organizationsToInsert.add(new Organization("Område Indre Hordaland og Sogn og Fjordane", 0, areaTypeDBValue, true, west));
+            	
+            	organizationsToInsert.add(new Organization("Område Agder", 0, areaTypeDBValue, true, south));
+            	organizationsToInsert.add(new Organization("Område Nedre-Telemark og Vestfold", 0, areaTypeDBValue, true, south));
+            	organizationsToInsert.add(new Organization("Område Øvre-Telemark og Buskerud", 0, areaTypeDBValue, true, south));
+
+            	organizationsToInsert.add(new Organization("Område Follo og Østfold", 0, areaTypeDBValue, true, east));
+            	organizationsToInsert.add(new Organization("Område Asker, Bærum og Oslo", 0, areaTypeDBValue, true, east));
+            	organizationsToInsert.add(new Organization("Område Glåmdal og Romerike", 0, areaTypeDBValue, true, east));
+            	organizationsToInsert.add(new Organization("Område Hedemarken-Østerdalen", 0, areaTypeDBValue, true, east));
+            	organizationsToInsert.add(new Organization("Område Oppland", 0, areaTypeDBValue, true, east));
+
+            	// fylker
+            	organizationsToInsert.add(new Organization("Østfold", 1, countyTypeDBValue, true, east));
+            	organizationsToInsert.add(new Organization("Akershus", 2, countyTypeDBValue, true, east));
+            	organizationsToInsert.add(new Organization("Oslo", 3, countyTypeDBValue, true, east));
+            	organizationsToInsert.add(new Organization("Hedmark", 4, countyTypeDBValue, true, east));
+            	organizationsToInsert.add(new Organization("Oppland", 5, countyTypeDBValue, true, east));
+            	organizationsToInsert.add(new Organization("Buskerud", 6, countyTypeDBValue, true, south));
+            	organizationsToInsert.add(new Organization("Vestfold", 7, countyTypeDBValue, true, south));
+            	organizationsToInsert.add(new Organization("Telemark", 8, countyTypeDBValue, true, south));
+            	organizationsToInsert.add(new Organization("Aust-Agder", 9, countyTypeDBValue, true, south));
+            	organizationsToInsert.add(new Organization("Vest-Agder", 10, countyTypeDBValue, true, south));
+            	organizationsToInsert.add(new Organization("Rogaland", 11, countyTypeDBValue, true, west));
+            	organizationsToInsert.add(new Organization("Hordaland", 12, countyTypeDBValue, true, west));
+            	organizationsToInsert.add(new Organization("Sogn og Fjordane", 14, countyTypeDBValue, true, west));
+            	organizationsToInsert.add(new Organization("Møre og Romsdal", 15, countyTypeDBValue, true, mid));
+            	organizationsToInsert.add(new Organization("Sør-Trøndelag", 16, countyTypeDBValue, true, mid));
+            	organizationsToInsert.add(new Organization("Nord-Trøndelag", 17, countyTypeDBValue, true, mid));
+            	organizationsToInsert.add(new Organization("Nordland", 18, countyTypeDBValue, true, north));
+            	organizationsToInsert.add(new Organization("Troms", 19, countyTypeDBValue, true, north));
+            	organizationsToInsert.add(new Organization("Finnmark", 20, countyTypeDBValue, true, north));
+        	}
+        	
+            if(organizationsInDB.isEmpty() || omrader.isEmpty()) {
             	// insert organizations for env
             	for(int i=0; i<organizationsToInsert.size(); i++){
             		Organization o = organizationsToInsert.get(i);

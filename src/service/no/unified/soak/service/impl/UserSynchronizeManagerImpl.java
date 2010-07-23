@@ -117,6 +117,7 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
         try {
             emailuser = userManager.getUser(current.getEmail().toLowerCase());
         } catch (ObjectRetrievalFailureException e) {
+        	// extUser finnes ikke. Forsøker med annen vri.
             User tmpUser = userManager.findUserByEmail(current.getEmail().toLowerCase());
             if ((tmpUser != null) && !tmpUser.getUsername().equals(current.getUsername())) {
                 emailuser = tmpUser;
@@ -127,15 +128,16 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
             byttNavnOgDisable(emailuser);
         }
 
-        try {
-            user = userManager.getUser(current.getUsername());
-            userManager.updateUser(user, current.getFirst_name(), current.getLast_name(), current.getEmail().toLowerCase(), current
-                    .getId(), current.getRolenames(), current.getKommune(), current.getMobilePhone(), current.getPhoneNumber());
-        } catch (Exception e) {
-            // extUser finnes ikkje og må opprettes
-            user = userManager.addUser(current.getUsername(), current.getFirst_name(), current.getLast_name(), current.getEmail()
-                    .toLowerCase(), current.getId(), current.getRolenames(), current.getKommune(), current.getMobilePhone(), current.getPhoneNumber());
-        }
+		try {
+			user = userManager.getUser(current.getUsername());
+			userManager.updateUser(user, current.getFirst_name(), current.getLast_name(), current.getEmail().toLowerCase(), current
+					.getId(), current.getRolenames(), current.getKommune(), current.getMobilePhone(), current.getPhoneNumber());
+		} catch (ObjectRetrievalFailureException e) {
+			// extUser finnes ikkje og må opprettes
+			user = userManager.addUser(current.getUsername(), current.getFirst_name(), current.getLast_name(), current.getEmail()
+					.toLowerCase(), current.getId(), current.getRolenames(), current.getKommune(), current.getMobilePhone(),
+					current.getPhoneNumber());
+		} 
 
         // Flytt registreringer
         if (emailuser != null) {

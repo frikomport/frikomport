@@ -13,6 +13,20 @@ cal1.setDayHeaders('S','M','T','O','T','F','L');
 cal1.setWeekStartDay(1); 
 cal1.setTodayText("Idag");
 
+
+function changeGUIBasedOnField(fieldName) {
+	if (fieldName == "startTimeDate") {
+		dateStr= $('startTimeDate').value;
+		startTimeDate = new Date(dateStr.substring(6), (Number(dateStr.substring(3,5))-1), dateStr.substring(0,2), 23, 59, 0, 0);
+		
+		if (new Date() > startTimeDate) {
+			Element.hide($('publishButton'));
+		} else {
+			Element.show($('publishButton'));
+		}
+	}
+}
+		
 function setStopDate() {
 	if (document.getElementById('stopTimeDate').value == ""){
 		document.getElementById('stopTimeDate').value = document.getElementById('startTimeDate').value
@@ -239,7 +253,7 @@ function fillSelect(obj){
 				<fmt:formatDate value="${course.startTime}" type="date" pattern="${dateformat}" var="startTimeDate" />
 				<fmt:formatDate value="${course.startTime}" type="time" pattern="${timeformat}" var="startTimeTime" />
 				<input type="text" size="12" name="startTimeDate" id="startTimeDate" value="<c:out value="${startTimeDate}"/>" 
-					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
+					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" onChange="changeGUIBasedOnField('startTimeDate');"/>
 				<a href="#" name="a1" id="Anch_startTimeDate"
 					onClick="cal1.select(document.course.startTimeDate,'Anch_startTimeDate','<fmt:message key="date.format"/>'); return false;"
 					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url context="${urlContext}" value="/images/calendar.png"/>"></a>
@@ -300,7 +314,7 @@ function fillSelect(obj){
 				<soak:label key="course.organization" />
 			</th>
 			<td>
-				<form:select path="organizationid" onchange="fillSelect(this);">
+				<form:select path="organizationid" onchange="fillSelect(this);" id="organizationidElement">
 					<form:options items="${organizations}" itemValue="id" itemLabel="name" />
 				</form:select>
 				<form:errors cssClass="fieldError" htmlEscape="false" path="organizationid" />
@@ -639,7 +653,7 @@ function fillSelect(obj){
 						value="<fmt:message key="button.course.save"/>" />
 					<c:if test="${!isPublished || isCancelled}">
 						<input type="submit" class="button large" name="publish"
-							onclick="bCancel=false"
+							onclick="bCancel=false" id="publishButton"
 							value="<fmt:message key="button.course.publish"/>" />
 					</c:if>
 					<c:if test="${isPublished && !isCancelled}">
@@ -670,4 +684,9 @@ function fillSelect(obj){
 <v:javascript formName="course" cdata="false" dynamicJavascript="true"
 	staticJavascript="false" />
 <script type="text/javascript"
-	src="<c:url context="${urlContext}" value="/scripts/validator.jsp"/>"></script>
+	src="<c:url context="${urlContext}" value="/scripts/validator.jsp"/>">
+</script>
+<script language="JavaScript">
+changeGUIBasedOnField('startTimeDate');
+fillSelect($("organizationidElement"));
+</script>

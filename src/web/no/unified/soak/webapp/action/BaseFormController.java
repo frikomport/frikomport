@@ -368,7 +368,7 @@ public class BaseFormController extends SimpleFormController {
 				Object lessThanFieldValue = callGetterOfField(obj, lessThanField);
 				if (lessThanFieldValue instanceof Date && methodResult instanceof Date) {
 					Date lessThanFieldValueDate = (Date) lessThanFieldValue;
-					if (((Date) methodResult).after(lessThanFieldValueDate)) {
+					if (((Date) methodResult).after(lessThanFieldValueDate) || ((Date)methodResult).equals(lessThanFieldValueDate)) {
 						String fieldText = getFieldDisplayName(obj, referencingObjectFieldnamePrefix + fieldName);
 						String lessThanFieldsText = getFieldDisplayName(obj, referencingObjectFieldnamePrefix + lessThanField);
 						String LessThanValueMessage = DateUtil.getDateTime("dd.MM.yyyy HH:mm", lessThanFieldValueDate) + " ("
@@ -376,7 +376,7 @@ public class BaseFormController extends SimpleFormController {
 						
 						Object[] args = new Object[] { fieldText, LessThanValueMessage };
 						nErrors = 1;
-						errors.rejectValue(referencingObjectFieldnamePrefix + fieldName, "errors.XCanNotBeLessThanY", args,
+						errors.rejectValue(referencingObjectFieldnamePrefix + fieldName, "errors.XMustBeLessThanY", args,
 								fieldName + " can not be lower than " + LessThanValueMessage + ".");
 					}
 

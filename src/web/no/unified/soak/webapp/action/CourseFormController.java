@@ -461,6 +461,7 @@ public class CourseFormController extends BaseFormController {
 				if (time != null) {
 					course.setStartTime(time);
 				} else {
+					course.setStartTime(null);
 					throw new BindException(course, "startTime");
 				}
 			} catch (Exception e) {
@@ -476,6 +477,7 @@ public class CourseFormController extends BaseFormController {
 				if (time != null) {
 					course.setStopTime(time);
 				} else {
+					course.setStopTime(null);
 					throw new BindException(course, "stopTime");
 				}
 			} catch (Exception e) {
@@ -528,7 +530,7 @@ public class CourseFormController extends BaseFormController {
 					&& course.getStartTime() != null && new Date().before(course.getStartTime())) {
 				course.setStatus(CourseStatus.COURSE_CREATED);
 			}
-			if (request.getParameter("unpublish") != null) {
+			if (request.getParameter("unpublish") != null && isNew) {
 				course.setStatus(CourseStatus.COURSE_CREATED);
 			}
 			if (request.getParameter("publish") != null) {
@@ -565,10 +567,10 @@ public class CourseFormController extends BaseFormController {
 			courseManager.saveCourse(course);
 
 			String key = null;
-			if (course.getStatus().equals(CourseStatus.COURSE_CREATED)) {
-				key = "course.created";
-			} else if (course.getStatus().equals(CourseStatus.COURSE_PUBLISHED)) {
+			if (course.getStatus().equals(CourseStatus.COURSE_PUBLISHED)) {
 				key = "course.published";
+			} else if (course.getStatus().equals(CourseStatus.COURSE_CREATED) || isNew) {
+				key = "course.created"; 
 			} else if (course.getStatus().equals(CourseStatus.COURSE_CANCELLED)) {
 				key = "course.cancelled";
 			} else {
