@@ -1,0 +1,63 @@
+       <form name="fileUpload">
+            <field property="name" depends="required">
+                <arg0 key="uploadForm.name"/>
+            </field>
+            <!-- Client-side Javascript won't catch this in IE, but server-side will. -->
+            <field property="file" depends="required">
+                <arg0 key="uploadForm.file"/>
+            </field>
+       </form>       
+       <form name="user">
+            <field property="username" depends="required">
+            </field>
+       </form>
+       <form name="location">
+            <field property="name" depends="required"/>
+            <field property="address" depends="required"/>
+            <field property="organizationid" depends="required"/>
+            <field property="organization" depends="required"/>
+            <field property="organization2id" depends="required"/>
+            <field property="organization2" depends="required"/>
+       </form>
+       <form name="person">
+            <field property="name" depends="required"/>
+            <field property="email" depends="required"/>
+       </form>
+       <form name="serviceArea">
+            <field property="name" depends="required">
+            </field>
+       </form>
+       <form name="course">
+            <field property="name" depends="required"/>
+            <field property="instructorid" depends="required"/>
+            <field property="categoryid" depends="required"/>
+            <field property="responsibleUsername" depends="required"/>
+            <field property="organizationid" depends="required"/>
+            <field property="organization" depends="required"/>
+            <field property="organization2id" depends="required"/>
+            <field property="organization2" depends="required"/>
+            <field property="serviceArea" depends="required"/>
+            <field property="serviceAreaid" depends="required"/>
+            <field property="location" depends="required"/>
+            <field property="locationid" depends="required"/>
+            <field property="maxAttendants" depends="required"/>
+            <field property="registerBy" depends="required"/>
+            <field property="startTime" depends="required"/>
+            <field property="stopTime" depends="required"/>
+       </form>
+       <form name="registration">
+            <field property="email" depends="required"/>
+            <field property="firstName" depends="required"/>
+            <field property="lastName" depends="required"/>
+            <field property="birthdate" depends="required"/>
+            <field property="invoiceAddress.postalCode" depends="required"/>
+            <field property="invoiceAddress.city" depends="required"/>
+            <field property="organization" depends="required"/>
+            <field property="organizationid" depends="required"/>
+            <field property="participants" depends="required"/>
+       </form>
+
+       <form name="organization">
+            <field property="name" depends="required">
+            </field>
+       </form>

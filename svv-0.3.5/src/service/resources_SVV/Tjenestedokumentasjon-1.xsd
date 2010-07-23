@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="urn:no:vegvesen:soagov:Tjenestedokumentasjon:1:0" attributeFormDefault="unqualified" elementFormDefault="qualified" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:no:vegvesen:soagov:Tjenestedokumentasjon:1:0" xmlns="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="Tjenestedokumentasjon" type="tns:TjenestedokumentasjonType"/>
+  <xsd:complexType name="KontaktType">
+    <xsd:annotation>
+      <xsd:documentation>Kontaktinformasjon</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Navn" type="xsd:string"/>
+      <xsd:element name="Epost" type="xsd:string"/>
+      <xsd:element name="Telefon" minOccurs="0" maxOccurs="unbounded" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TjenestedokumentasjonType">
+    <xsd:annotation>
+      <xsd:documentation>Dette er typen som definerer hvilke felt
+                som skal være med når man dokumenterer tjenesten</xsd:documentation>
+    </xsd:annotation>
+    <xsd:sequence>
+      <xsd:element name="Navn" type="xsd:string"/>
+      <xsd:element name="Beskrivelse" type="xsd:string"/>
+      <xsd:element name="Versjon" type="xsd:decimal"/>
+      <xsd:element name="Ansvarlig" type="tns:KontaktType"/>
+      <xsd:element name="SynkronTjeneste" type="xsd:boolean"/>
+      <xsd:element name="Tjenestekompleksistet" type="tns:TjenestekompleksitetType"/>
+      <xsd:element name="EndrerTilstand" type="xsd:boolean">
+        <xsd:annotation>
+          <xsd:documentation>Hvis "true" kan
+                        tjensten potensielt gjøre skriveoperasjoner</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="SjekkTjenesteURL" minOccurs="0" type="xsd:anyURI">
+        <xsd:annotation>
+          <xsd:documentation>URL som peker på
+                        "SjekkTjeneste" WSDL. Benyttes hvis
+                        tjenesten har en "sjekk"- tjeneste som
+                        kan kalles før selve "skrivetjenesten"
+                        utføres for å unngå kompensajon</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="KompanserendeTjenesteURL" minOccurs="0" type="xsd:anyURI">
+        <xsd:annotation>
+          <xsd:documentation>URL som peker på Kompanserende
+                        tjenestes WSDL.      Benyttes hvis tjenesten kan
+                        kreve kompensasjon</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="Kommentar" minOccurs="0" maxOccurs="unbounded" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:simpleType name="TjenestekompleksitetType">
+    <xsd:annotation>
+      <xsd:documentation>Dette beskriver hvor kompleks tjenesten
+                er i form av eksekveringstid og skalerbarhet.     Hvis
+                en tjeneste baserer seg på andre tjenester, kan
+                kompleksiteten kan aldri være lavere enn den mest
+                komplekse deltjenesten.     Tjenester som baserer seg på
+                veldig mange andre tjenester, rykker gjerne ett hakk opp
+                i kompleksistet.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Lav">
+        <xsd:annotation>
+          <xsd:documentation>Lavnivåtjeneste som har lav
+                        eksekveringstid. Tjenesten er ikke bygd på andre
+                        tjenester i særlig grad,       men kan inngå i
+                        andre komposittjenester. Tjenesten skalerer
+                        meget bra.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="Middels">
+        <xsd:annotation>
+          <xsd:documentation>Normal tjeneste som jobber på
+                        større informasjonselementer og/eller kan være
+                        bygd på andre gjenbrukbare tjenester (dog i
+                        mindre grad).      Tjenesten har lav nok
+                        eksekveringstid til at tjenesten skal kunne
+                        benyttes synkront i en brukerapplikasjon.
+                        Tjenesten skalerer bra.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="Hoy">
+        <xsd:annotation>
+          <xsd:documentation>Tjeneste med høy kompleksitet,
+                        potensielt høy eksekveringstid og kan ikke
+                        skaleres veldig mye. Tjenesten opererer på
+                        komplekse datastrukturer og/eller er bygd opp av
+                        mange andre gjenbrukbare tjenester.
+                        Tjenesten bør i utganspunktet ikke benyttes
+                        synkront hvis konsument er en brukerapplikasjon.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="Prosess">
+        <xsd:annotation>
+          <xsd:documentation>Prosess som orkestrerer mange
+                        andre tjenester.      Prosessen kan være
+                        langtlevende og man kan derfor ikke forvente
+                        "svar" innen rimelig tid.      I de
+                        fleste tilfeller vil en Prosess være asynkron</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>
