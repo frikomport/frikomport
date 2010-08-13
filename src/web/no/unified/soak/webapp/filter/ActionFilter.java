@@ -314,7 +314,7 @@ public class ActionFilter implements Filter {
 		try {
 			resultCode = client.executeMethod(getMethod);
 			InputStream ctmplStream = getMethod.getResponseBodyAsStream();
-			ctmpl = StringUtil.convertStreamToString(ctmplStream, null);
+			ctmpl = StringUtil.convertStreamToString(ctmplStream, "UTF8");
 			if (StringUtils.isBlank(ctmpl) || resultCode != 200) {
 				log.warn("Page decoration is blank [" + ctmpl + "] with resultcode=" + resultCode
 						+ ". Unable to fetch page decoration from url " + decorationUrl + ".");
