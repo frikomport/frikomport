@@ -418,7 +418,7 @@ public class RegistrationAdministrationController extends BaseFormController {
 	        			chargeOverdue = true;
 	        		}
 	        	}
-	        	msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_DELETED_body(course, chargeOverdue, configurationManager.getConfigurationsMap());
+	        	msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_CANCELLED_body(course, registration, chargeOverdue, configurationManager.getConfigurationsMap());
 				break;
 			case Constants.EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST:
 				msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST_body(course, null, configurationManager.getConfigurationsMap());

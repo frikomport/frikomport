@@ -481,7 +481,7 @@ public class RegistrationFormController extends BaseFormController {
 	        			chargeOverdue = true;
 	        		}
 	        	}
-				msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_DELETED_body(course, chargeOverdue, configurationManager.getConfigurationsMap());
+				msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_CANCELLED_body(course, registration, chargeOverdue, configurationManager.getConfigurationsMap());
 				break;
     	}
     	boolean ccToResponsible = configurationManager.isActive("mail.registration.notifyResponsible", false);
