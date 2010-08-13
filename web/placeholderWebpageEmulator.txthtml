@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="no" xml:lang="no">
    <head><base href="http://www.vegvesen.no/"/>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-      <title>Påmelding til mengdetreningsmøte - vegvesen.no </title>
+      <title>PÃ¥melding til mengdetreningsmÃ¸te - vegvesen.no </title>
       <link rel="stylesheet" type="text/css"
             href="styles/svv/styles.css"
             media="all" />
@@ -26,7 +26,7 @@
       <meta content="yes" http-equiv="MSThemeCompatible" />
       <meta content="document" name="resource-type" />
       <meta content="http://www.vegvesen.no/Kjoretoy/Fakta+og+statistikk/Kjoretoyopplysninger/SMS+tjeneste/56050.cms"
-            name="contenturl" /><meta content="Statens vegvesen tilbyr nå kjøretøyopplysninger via SMS."
+            name="contenturl" /><meta content="Statens vegvesen tilbyr nÃ¥ kjÃ¸retÃ¸yopplysninger via SMS."
       name="description"></meta>
 	  <!--${head}-->
    </head>
@@ -58,17 +58,17 @@ src="images/SVV/transparent.gif">
          </div>
          <div class="noindex">
          <div class="narrowHeaderPictureContainer"><img 
-src="images/SVV/70077.png" alt="Førerkort" 
+src="images/SVV/70077.png" alt="FÃ¸rerkort" 
 id="sublevelHeaderPicture"></div>
          </div>
          <div class="headerContentContainer">
          <div id="globalOptions" class="noindex">
          <ul>
          <li><a id="changeContrast" 
-href="http://svvud6app01.vegvesen.no:7921/cms/site/1/Forerkort/Foreropplaering/Ovelseskjoring/%5Btest%5D+Mengdetrening/mengdetrening">Høykontrast</a></li>
+href="http://svvud6app01.vegvesen.no:7921/cms/site/1/Forerkort/Foreropplaering/Ovelseskjoring/%5Btest%5D+Mengdetrening/mengdetrening">HÃ¸ykontrast</a></li>
          <li><span class="skillelinje">|</span></li>
          <li><a id="changeFontSize" 
-href="http://svvud6app01.vegvesen.no:7921/cms/site/1/Forerkort/Foreropplaering/Ovelseskjoring/%5Btest%5D+Mengdetrening/mengdetrening">Skriftstørrelse</a>
+href="http://svvud6app01.vegvesen.no:7921/cms/site/1/Forerkort/Foreropplaering/Ovelseskjoring/%5Btest%5D+Mengdetrening/mengdetrening">SkriftstÃ¸rrelse</a>
          <a id="setNormalFontSize" title="Liten skrift" 
 href="http://svvud6app01.vegvesen.no:7921/cms/site/1/Forerkort/Foreropplaering/Ovelseskjoring/%5Btest%5D+Mengdetrening/mengdetrening">A</a>
          <a id="setLargeFontSize" title="Mellomstor skrift" 
@@ -105,11 +105,11 @@ href="http://svvud6app01.vegvesen.no:7921/cms/site/1/Trafikkinformasjon">
                <li>
                <a 
 href="http://svvud6app01.vegvesen.no:7921/cms/site/1/Kjoretoy">
-               <span>Kjøretøy</span>
+               <span>KjÃ¸retÃ¸y</span>
                </a>
                </li>
                <li class="selected">
-               <span>Førerkort</span>
+               <span>FÃ¸rerkort</span>
                </li>
                <li>
                <a 
@@ -142,7 +142,7 @@ action="http://svvud6app01.vegvesen.no:7921/cms/site/1/Sok" method="get"
                <div id="searchbox">
                <input name="query" id="searchquery" class="query" 
 type="text">
-               <input class="searchboxbutton" value="" alt="Søk" 
+               <input class="searchboxbutton" value="" alt="SÃ¸k" 
 type="submit">
                </div>
                </form>
@@ -153,9 +153,9 @@ type="submit">
 class="noindex"><a 
 href="http://svvud6app01.vegvesen.no:7921/cms/site/1/Hovedside">Hovedside</a><span
  class="brodsmulemenySeparator">/</span><a 
-href="http://svvud6app01.vegvesen.no:7921/cms/site/1/Forerkort">Førerkort</a><span
+href="http://svvud6app01.vegvesen.no:7921/cms/site/1/Forerkort">FÃ¸rerkort</a><span
  class="brodsmulemenySeparator">/</span><a 
-href="http://svvud6app01.vegvesen.no:7921/cms/site/1/Forerkort/Foreropplaering/Ovelseskjoring">Øvelseskjøring</a><span
+href="http://svvud6app01.vegvesen.no:7921/cms/site/1/Forerkort/Foreropplaering/Ovelseskjoring">Ã˜velseskjÃ¸ring</a><span
  class="brodsmulemenySeparator">/</span><a 
 href="http://svvud6app01.vegvesen.no:7921/cms/site/1/Forerkort/Foreropplaering/Ovelseskjoring/%5Btest%5D+Mengdetrening">Mengdetrening</a></div><div class="noindex">
                <div class="topbar">
