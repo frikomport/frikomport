@@ -109,7 +109,7 @@ public class CourseEmailController extends CourseNotificationController
 		StringBuffer msg = null;
 		switch(event) {
 			case Constants.EMAIL_EVENT_NOTIFICATION:
-				msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_body(course, mailComment, true, configurationManager.getConfigurationsMap());
+				msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_body(course, null, mailComment, true, configurationManager.getConfigurationsMap());
 				break;
 			default:
 				if(log.isDebugEnabled()) log.debug("sendMail: Handling of event:" + event + " not implemented..!");

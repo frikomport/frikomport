@@ -28,6 +28,7 @@ import no.unified.soak.util.MailUtil;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.mail.MailSender;
 
 public class NotificationManagerImpl extends BaseManager implements NotificationManager {
@@ -128,6 +129,9 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 	 * @see no.unified.soak.service.NotificationManager#sendReminders()
 	 */
 	public void sendReminders() {
+		
+		LocaleContextHolder.setLocale(ApplicationResourcesUtil.getNewLocaleWithDefaultCountryAndVariant(null));
+		
 		NotificationSummary notificationSummary = new NotificationSummary();
 
 		// Fetch all the Notifications that does not have the sent-flag set.
@@ -161,7 +165,7 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 						// Store that it has been successfully sent - cleanup by
 						// cleanup manager
 						boolean isReserved = notification.getRegistration().getReserved();
-                        StringBuffer msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_body(course, null, isReserved, configurationManager.getConfigurationsMap());
+                        StringBuffer msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_body(course, registration, null, isReserved, configurationManager.getConfigurationsMap());
 						ArrayList<Registration> registrations = new ArrayList<Registration>();
 						registrations.add(registration);
 						ArrayList<MimeMessage> newEmails = MailUtil.getMailMessages(registrations, Constants.EMAIL_EVENT_NOTIFICATION, course, msg, null, mailSender, false);

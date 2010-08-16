@@ -156,7 +156,7 @@ public class MailUtil {
 	 * @param configurationsMap 
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_NOTIFICATION_body(Course course, String mailComment, boolean reservationConfirmed, Map<String, Configuration> configurationsMap) {
+    public static StringBuffer create_EMAIL_EVENT_NOTIFICATION_body(Course course, Registration registration, String mailComment, boolean reservationConfirmed, Map<String, Configuration> configurationsMap) {
         StringBuffer msg = new StringBuffer();
 
         if(!ApplicationResourcesUtil.isSVV()){
@@ -176,12 +176,24 @@ public class MailUtil {
         // coursedetails are appended in separate method
         appendCourseDetails(course, msg, configurationsMap);
 
-        msg.append("\n\n"); // empty lines
+        msg.append("\n"); // empty line
 
-        addDetailsLink(course, msg);
+        if(registration != null){
+	        addParticipants(registration, msg);
+	        
+	        msg.append("\n"); // empty line
+	        
+	        if(ApplicationResourcesUtil.isSVV()){
+	        	addEditRegistrationLink(course, registration, msg);
+	        }
+	        else {
+	        	addDetailsLink(course, msg);
+	        	msg.append("\n"); // empty line
+	        	addCancelLink(course, registration, msg);
+	        }
+	        msg.append("\n");
+        }
         
-        msg.append("\n\n");
-
         if(!ApplicationResourcesUtil.isSVV()){
 	        if(reservationConfirmed)
 	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.mail.footer.registered")));
@@ -189,7 +201,7 @@ public class MailUtil {
 	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.mail.footer.waitinglist")));
         }
         
-        msg.append("\n\n");
+        msg.append("\n");
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from"))) + "\n");
         return msg;
     }
@@ -227,11 +239,13 @@ public class MailUtil {
         // coursedetails are appended in separate method
         appendCourseDetails(course, msg, configurationsMap);
 
-        msg.append("\n\n"); // empty lines
+        msg.append("\n"); // empty lines
 
         addDetailsLink(course, msg);
         
-        msg.append("\n\n");
+        msg = new StringBuffer(msg.toString().replaceAll("&hash=<userhash/>", "")); // removes "&hash=<userhash/>" from link
+        
+        msg.append("\n");
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from"))) + "\n");
         return msg;
     }
