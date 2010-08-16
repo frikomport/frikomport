@@ -17,6 +17,7 @@ import no.unified.soak.dao.NotificationDao;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Notification;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.Registration.Status;
 import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.NotificationManager;
@@ -142,10 +143,16 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 			for (int i = 0; i < notifications.size(); i++) {
 				Date today = new Date();
 				Notification notification = notifications.get(i);
+				Registration registration = notification.getRegistration();
+				// The if-test is added mostly because of bad sample data (lazy programmer)
+				if (registration != null && registration.getCourse() != null) {
 
-				// The if-test is added mostly because of bad sample data (lazy
-				// programmer)
-				if (notification.getRegistration() != null && notification.getRegistration().getCourse() != null) {
+					if(registration.getStatusAsEnum() == Status.CANCELED || registration.getStatusAsEnum() == Status.INVITED){
+						// notification is only to be sent to reserved/waiting registrations
+						dao.removeNotification(notification.getId());
+						continue;
+					}
+					
 					Course course = notification.getRegistration().getCourse();
 					// Are we after the time of notification?
 					if (course.getStatus().equals(CourseStatus.COURSE_PUBLISHED) 
@@ -156,7 +163,7 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 						boolean isReserved = notification.getRegistration().getReserved();
                         StringBuffer msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_body(course, null, isReserved, configurationManager.getConfigurationsMap());
 						ArrayList<Registration> registrations = new ArrayList<Registration>();
-						registrations.add(notification.getRegistration());
+						registrations.add(registration);
 						ArrayList<MimeMessage> newEmails = MailUtil.getMailMessages(registrations, Constants.EMAIL_EVENT_NOTIFICATION, course, msg, null, mailSender, false);
 						emails.addAll(newEmails);
 						

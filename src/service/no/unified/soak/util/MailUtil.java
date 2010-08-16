@@ -182,11 +182,13 @@ public class MailUtil {
         
         msg.append("\n\n");
 
-        if(reservationConfirmed)
-            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.mail.footer.registered")));
-        else
-            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.mail.footer.waitinglist")));
-
+        if(!ApplicationResourcesUtil.isSVV()){
+	        if(reservationConfirmed)
+	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.mail.footer.registered")));
+	        else
+	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.mail.footer.waitinglist")));
+        }
+        
         msg.append("\n\n");
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from"))) + "\n");
         return msg;
@@ -598,7 +600,7 @@ public class MailUtil {
      * @param locale
      * @param messageSource
      * @param msg
-     * @param configurationsMap 
+     * @param configurationsMap
      */
 	private static void appendCourseDetails(Course course, StringBuffer msg, Map<String, Configuration> configurationsMap) {
 		// Include all the course details
