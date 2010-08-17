@@ -300,6 +300,9 @@
         <property name="statisticsManager" ref="statisticsManager"/>
     </bean>
 
+    <bean id="welcomeController" class="no.unified.soak.webapp.action.WelcomeController" autowire="byName">
+    </bean>
+
     <bean id="healthCheckController" class="no.unified.soak.webapp.action.HealthCheckController" autowire="byName">
         <property name="categoryManager" ref="categoryManager"/>
     </bean>
@@ -307,6 +310,7 @@
     <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
         <property name="mappings">
             <props>
+                <prop key="/public/welcome.html">welcomeController</prop>
                 <prop key="/public/editProfile.html">userFormController</prop>
                 <prop key="/public/mainMenu.html">filenameController</prop>
                 <prop key="/public/editUser.html">userFormController</prop> 
@@ -365,6 +369,7 @@
                 <prop key="/lb/test">healthCheckController</prop>
 
 
+                <prop key="/welcome.html">welcomeController</prop>
                 <prop key="/editProfile.html">userFormController</prop>
                 <prop key="/mainMenu.html">filenameController</prop>
                 <prop key="/editUser.html">userFormController</prop> 

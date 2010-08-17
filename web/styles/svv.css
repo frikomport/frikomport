@@ -21,7 +21,8 @@ td.mediumButtonWidth {
 	width: 79px;
 }
 
-div#MainContentContainer button {
+div#MainContentContainer button, 
+div#MainContentContainer input[type="submit"] {
 	background-color:#FFFFFF;
 	background-image:url("../images/SVV/buttonMedium.gif");
 	background-position:left top;
