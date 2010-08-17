@@ -1,4 +1,0 @@
-<Context path="/@WEBAPP-NAME@" docBase="@WEBAPP-NAME@" debug="99" reloadable="true"
-    antiJARLocking="true" antiResourceLocking="false">
-
-</Context>
