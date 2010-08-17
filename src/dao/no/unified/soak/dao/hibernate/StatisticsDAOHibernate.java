@@ -34,10 +34,10 @@ public class StatisticsDAOHibernate extends BaseDAOHibernate implements Statisti
 	public List<StatisticsTableRow> findByDates(Date beginPeriod, Date endPeriod) {
 		String sql;
 		if (DefaultQuotedNamingStrategy.usesOracle()) {
-			sql = "select OP.\"name\" as Region, O.\"name\" as område, \r\n" + "count(distinct C.\"id\") as numCourses, \r\n"
-					+ "count(distinct R.\"id\") as numRegistrations, \r\n"
-					+ "sum(distinct R.\"participants\") as numRegistered, \r\n"
-					+ "sum(distinct C.\"attendants\") as numAttendants " + "from ORGANIZATION O \r\n"
+			sql = "select OP.\"name\" as Region, O.\"name\" as område, \r\n" + "count(C.\"id\") as numCourses, \r\n"
+					+ "count(R.\"id\") as numRegistrations, \r\n"
+					+ "sum(R.\"participants\") as numRegistered, \r\n"
+					+ "sum(C.\"attendants\") as numAttendants " + "from ORGANIZATION O \r\n"
 
 					+ "inner join COURSE C on O.\"id\" = C.\"organization2id\" \r\n"
 					+ "left outer join REGISTRATION R on (R.\"courseid\" = C.\"id\" and R.\"status\" = 2) \r\n"
@@ -49,10 +49,10 @@ public class StatisticsDAOHibernate extends BaseDAOHibernate implements Statisti
 					
 					+ "union \r\n"
 
-					+ "select OP.\"name\" as Region, O.\"name\" as område, \r\n" + "count(distinct C.\"id\") as numCourses, \r\n"
-					+ "count(distinct R.\"id\") as numRegistrations, \r\n"
-					+ "sum(distinct R.\"participants\") as numRegistered, \r\n"
-					+ "sum(distinct R.\"participants\") as numAttendants from ORGANIZATION O \r\n"
+					+ "select OP.\"name\" as Region, O.\"name\" as område, \r\n" + "count(C.\"id\") as numCourses, \r\n"
+					+ "count(R.\"id\") as numRegistrations, \r\n"
+					+ "sum(R.\"participants\") as numRegistered, \r\n"
+					+ "sum(R.\"participants\") as numAttendants from ORGANIZATION O \r\n"
 
 					+ "inner join COURSE C on O.\"id\" = C.\"organization2id\" \r\n"
 					+ "inner join REGISTRATION R on R.\"courseid\" = C.\"id\" \r\n"
