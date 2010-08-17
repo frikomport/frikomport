@@ -21,6 +21,7 @@ import no.unified.soak.model.RoleEnum;
 import no.unified.soak.model.User;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.service.UserSynchronizeManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 
 import org.acegisecurity.Authentication;
 import org.acegisecurity.context.SecurityContextHolder;
@@ -128,7 +129,7 @@ public class SVVAuthenticationFilter implements Filter {
     
     private boolean isAdminPath(HttpServletRequest request) {
     	String contextPath = request.getRequestURI();
-    	if (contextPath.contains("public/")) {
+    	if (contextPath.contains(ApplicationResourcesUtil.getPublicUrlContextAppendix())) {
     		return false;
     	}
     	return true;

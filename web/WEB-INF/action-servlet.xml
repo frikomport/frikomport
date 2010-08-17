@@ -339,10 +339,8 @@
                 <prop key="/public/listCourses.html">courseController</prop>
                 <prop key="/public">courseController</prop>
                 <prop key="/public/">courseController</prop>
-                <prop key="/public/editCourse.html">courseFormController</prop>
                 <prop key="/public/notifyCourse.html">courseNotificationController</prop>
                 <prop key="/public/detailsCourse.html">courseDetailsController</prop>
-                <prop key="/public/editFileCourse.html">courseFileFormController</prop>
                 <prop key="/public/emailCourse.html">courseEmailController</prop>
                 <!--Course-URL-END-->
                                 
@@ -363,7 +361,6 @@
 
                 <prop key="/public/listCategories.html">categoryController</prop>
                 <prop key="/public/detailsCategory.html">categoryDetailsController</prop>
-                <prop key="/public/editCategory.html">categoryFormController</prop>
                 <prop key="/public/statistics.html">statisticsController</prop>
 
                 <prop key="/lb/test">healthCheckController</prop>
@@ -424,6 +421,63 @@
                 <prop key="/detailsCategory.html">categoryDetailsController</prop>
                 <prop key="/editCategory.html">categoryFormController</prop>
                 <prop key="/statistics.html">statisticsController</prop>
+
+
+                <prop key="/admin/welcome.html">welcomeController</prop>
+                <prop key="/admin/editProfile.html">userFormController</prop>
+                <prop key="/admin/mainMenu.html">filenameController</prop>
+                <prop key="/admin/editUser.html">userFormController</prop> 
+                <prop key="/admin/selectFile.html">fileUploadController</prop>
+                <prop key="/admin/uploadFile.html">fileUploadController</prop>
+                <prop key="/admin/passwordHint.html">passwordHintController</prop>
+
+                <prop key="/admin/editOrganization.html">organizationFormController</prop>
+                <prop key="/admin/listOrganizations.html">organizationController</prop>
+                <prop key="/admin/listMunicipalities.html">organizationController</prop>
+
+                <prop key="/admin/listLocations.html">locationController</prop>
+                <prop key="/admin/editLocation.html">locationFormController</prop>
+                <prop key="/admin/detailsLocation.html">locationDetailsController</prop>
+
+                <prop key="/admin/listPeople.html">personController</prop>
+                <prop key="/admin/editPerson.html">personFormController</prop>
+                <prop key="/admin/detailsPerson.html">personDetailsController</prop>
+                
+                <prop key="/admin/listResponsibles.html">responsibleController</prop>
+
+                <prop key="/admin/listServiceAreas.html">serviceAreaController</prop>
+                <prop key="/admin/editServiceArea.html">serviceAreaFormController</prop>
+                
+                <!--Course-URL-START-->
+                <prop key="/admin/listCourses.html">courseController</prop>
+                <prop key="/admin/editCourse.html">courseFormController</prop>
+                <prop key="/admin/notifyCourse.html">courseNotificationController</prop>
+                <prop key="/admin/detailsCourse.html">courseDetailsController</prop>
+                <prop key="/admin/editFileCourse.html">courseFileFormController</prop>
+                <prop key="/admin/emailCourse.html">courseEmailController</prop>
+                <!--Course-URL-END-->
+                                
+                <!--Registration-URL-START-->
+                <prop key="/admin/listRegistrations.html">registrationController</prop>
+                <prop key="/admin/performRegistration.html">registrationFormController</prop>
+                <prop key="/admin/registrationComplete.html">registrationCompleteController</prop>
+                <prop key="/admin/cancelRegistration.html">cancelRegistrationController</prop>
+                <prop key="/admin/administerRegistration.html">registrationAdministrationController</prop>
+                <!--Registration-URL-END-->
+                
+                <!-- Add additional URL mappings here -->
+                <prop key="/admin/waitingList.html">waitingListController</prop>
+                <prop key="/admin/pageDecarationCacheTimeout.html">pageDecorationCacheController</prop>
+                <prop key="/admin/detailsUser.html">userDetailsController</prop>
+				<prop key="/admin/listUsers.html">userController</prop>
+				<prop key="/admin/profileUser.html">userRegistrationController</prop>
+
+                <prop key="/admin/administerConfiguration.html">configurationFormController</prop>
+
+                <prop key="/admin/listCategories.html">categoryController</prop>
+                <prop key="/admin/detailsCategory.html">categoryDetailsController</prop>
+                <prop key="/admin/editCategory.html">categoryFormController</prop>
+                <prop key="/admin/statistics.html">statisticsController</prop>
             </props>
         </property>
     </bean>
@@ -440,6 +494,10 @@
                 <prop key="/users.html">userController</prop>
                 <prop key="/flushCache.html">filenameController</prop>                
                 <prop key="/reload.html">reloadController</prop>
+                <prop key="/admin/activeUsers.html">filenameController</prop>
+                <prop key="/admin/users.html">userController</prop>
+                <prop key="/admin/flushCache.html">filenameController</prop>                
+                <prop key="/admin/reload.html">reloadController</prop>
             </props>
         </property>
     </bean>

@@ -186,13 +186,21 @@ public class ActionFilter implements Filter {
 	}
 
 	public void setJspLinkPathPrefix(HttpServletRequest request, HttpSession session) {
-		String publicPrefix = StringUtils.strip(ApplicationResourcesUtil.getText("publicUrlprefix"), "/");
-		String urlContextEnding = "/"+publicPrefix;
-		if (StringUtils.isNotBlank(publicPrefix) && request.getRequestURI().contains(urlContextEnding)) {
-			session.setAttribute("urlContext", request.getContextPath()+urlContextEnding);
-			ApplicationResourcesUtil.setUrlContextAppendix(publicPrefix+"/");
+		String publicPrefix = ApplicationResourcesUtil.getPublicUrlContextAppendix();
+		String loggedinPrefix = ApplicationResourcesUtil.getLoggedinUrlContextAppendix();
+		String publicUrlContextEnding = "/" + publicPrefix;
+		String loggedinUrlContextEnding = "/" + loggedinPrefix;
+		if (StringUtils.isNotBlank(publicPrefix) && request.getRequestURI().contains(publicUrlContextEnding)) {
+			session.setAttribute("urlContext", request.getContextPath() + StringUtils.stripEnd(publicUrlContextEnding, "/"));
+			session.setAttribute("urlContextAppendix", StringUtils.stripStart(publicUrlContextEnding, "/"));
+			ApplicationResourcesUtil.setUrlContextAppendix(publicPrefix + "/");
+		} else if (StringUtils.isNotBlank(loggedinPrefix) && request.getRequestURI().contains(loggedinUrlContextEnding)) {
+			session.setAttribute("urlContext", request.getContextPath() + StringUtils.stripEnd(loggedinUrlContextEnding, "/"));
+			session.setAttribute("urlContextAppendix", StringUtils.stripStart(loggedinUrlContextEnding, "/"));
+			ApplicationResourcesUtil.setUrlContextAppendix(loggedinPrefix + "/");
 		} else {
 			session.setAttribute("urlContext", request.getContextPath());
+			session.setAttribute("urlContextAppendix", "");
 			ApplicationResourcesUtil.setUrlContextAppendix("");
 		}
 	}

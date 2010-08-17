@@ -415,14 +415,13 @@ pageContext.setAttribute("sumToShow", sumObj);
 <c:out value="${buttons}" escapeXml="false"/>
 
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
-<c:set var="parameters">
-	<fmt:message key="javaapp.baseurl"/><fmt:message key="javaapp.courselisturl"/>
-	<c:if test="${course.name != null && course.name ne ''}">name=<c:out value="${course.name}"/>%26</c:if>
-	<c:if test="${course.organizationid > 0}">organizationid=<c:out value="${course.organizationid}"/>%26</c:if>
-	<c:if test="${course.serviceAreaid > 0}">serviceArea=<c:out value="${course.serviceAreaid}"/>%26</c:if>
-	<c:if test="${course.categoryid > 0}">categoryid=<c:out value="${course.categoryid}"/>%26</c:if>
-	<c:if test="${past == true}">past=1</c:if>
-	<c:if test="${historic == true}">historic=1</c:if>
+<c:set var="parameters"><fmt:message key="javaapp.baseurl"/><c:out value="${urlContextAppendix}"/><fmt:message key="javaapp.courselisturl"/>
+<c:if test="${course.name != null && course.name ne ''}">name=<c:out value="${course.name}"/>%26</c:if>
+<c:if test="${course.organizationid > 0}">organizationid=<c:out value="${course.organizationid}"/>%26</c:if>
+<c:if test="${course.serviceAreaid > 0}">serviceArea=<c:out value="${course.serviceAreaid}"/>%26</c:if>
+<c:if test="${course.categoryid > 0}">categoryid=<c:out value="${course.categoryid}"/>%26</c:if>
+<c:if test="${past == true}">past=1</c:if>
+<c:if test="${historic == true}">historic=1</c:if>
 </c:set>
 <div class="searchUrl" style="padding:3px;">
     <fmt:message key="url-to-this-search"/>: <a class="external" href="<c:out value="${parameters}"/>" target="_blank"><c:out value="${parameters}"/></a>

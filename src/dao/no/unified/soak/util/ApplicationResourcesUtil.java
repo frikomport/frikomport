@@ -16,6 +16,8 @@ public class ApplicationResourcesUtil {
 
     private static MessageSource messageSource = null;
 	private static String urlContextAppendix;
+	private static String publicUrlContextAppendix;
+	private static String loggedinUrlContextAppendix;
     private static final Log log = LogFactory.getLog(ApplicationResourcesUtil.class);
 
     private static final String localeVariant = System.getenv("FRIKOMPORT_VARIANT");
@@ -179,5 +181,19 @@ public class ApplicationResourcesUtil {
 			return urlContextAppendix;
 		}
 		return "";
+	}
+
+	public static String getPublicUrlContextAppendix() {
+		if (publicUrlContextAppendix == null) {
+			publicUrlContextAppendix = StringUtils.strip(ApplicationResourcesUtil.getText("publicUrlprefix"), "/") + "/";
+		}
+		return publicUrlContextAppendix;
+	}
+
+	public static String getLoggedinUrlContextAppendix() {
+		if (loggedinUrlContextAppendix == null) {
+			loggedinUrlContextAppendix = StringUtils.strip(ApplicationResourcesUtil.getText("loggedinUrlprefix"), "/") + "/";
+		}
+		return loggedinUrlContextAppendix;
 	}
 }

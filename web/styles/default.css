@@ -456,7 +456,8 @@ th, td, pre, code {
     font-size: 1.0em; //12px; //uc
 }
 
-th label {
+th label,
+form label {
 	margin: 0;
 	font-size: 1.0em; //10px;
 	font-weight: bold;

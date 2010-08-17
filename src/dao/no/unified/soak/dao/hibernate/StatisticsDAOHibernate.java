@@ -21,7 +21,6 @@ import no.unified.soak.model.StatisticsTableRow;
 import no.unified.soak.util.DefaultQuotedNamingStrategy;
 
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 
 /**

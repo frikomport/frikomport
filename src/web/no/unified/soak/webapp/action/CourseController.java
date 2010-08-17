@@ -24,7 +24,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import no.unified.soak.Constants;
+import no.unified.soak.model.Address;
 import no.unified.soak.model.Course;
+import no.unified.soak.model.Location;
 import no.unified.soak.model.Organization;
 import no.unified.soak.model.User;
 import no.unified.soak.model.Organization.Type;
@@ -40,7 +42,6 @@ import no.unified.soak.util.DateUtil;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.springframework.context.MessageSource;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 import org.springframework.web.servlet.ModelAndView;
@@ -57,7 +58,6 @@ public class CourseController extends BaseFormController {
     private RegistrationManager registrationManager = null;
     private CategoryManager categoryManager = null;
     private LocationManager locationManager = null;
-    private MessageSource messageSource = null;
 
     public void setCourseManager(CourseManager courseManager) {
         this.courseManager = courseManager;
@@ -81,10 +81,6 @@ public class CourseController extends BaseFormController {
 
     public void setLocationManager(LocationManager locationManager) {
         this.locationManager = locationManager;
-    }
-
-    public void setMessageSource(MessageSource messageSource) {
-        this.messageSource = messageSource;
     }
 
     /**
@@ -252,7 +248,12 @@ public class CourseController extends BaseFormController {
         return model;
     }
 
-    private boolean isAdmin(List<String> roles) {
+    private Object findByPostalcode(String postalcode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private boolean isAdmin(List<String> roles) {
         if (roles.contains(Constants.EVENTRESPONSIBLE_ROLE) || roles.contains(Constants.EDITOR_ROLE)
                 || roles.contains(Constants.ADMIN_ROLE)) {
             return true;
@@ -424,8 +425,13 @@ public class CourseController extends BaseFormController {
 				status = new Integer[] { CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED,
 						CourseStatus.COURSE_CANCELLED };
 			}
-			courseList = courseManager.searchCourses(course, starttime, stoptime, status);
-			courseList = updateAvailableAttendants(courseList, request);
+	        String postalcode = request.getParameter("postalcode");
+			if (StringUtils.isBlank(postalcode)) {
+				courseList = courseManager.searchCourses(course, starttime, stoptime, status);
+				courseList = updateAvailableAttendants(courseList, request);
+	        } else {
+//				courseList = courseManager.findByPostalcode(postalcode);
+	        }
 		} else {
 			List courses = courseManager.searchCourses(course, starttime, stoptime, null);
 			courseList = filterByRole(isAdmin, roles, courses);
@@ -493,6 +499,7 @@ public class CourseController extends BaseFormController {
         if (name != null) {
             course.setName(name);
         }
+
 
         return course;
     }

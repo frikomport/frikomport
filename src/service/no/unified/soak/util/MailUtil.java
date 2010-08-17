@@ -562,17 +562,20 @@ public class MailUtil {
 	
 	/**
 	 * Adds link to details of current course
+	 * 
 	 * @param course
 	 * @param msg
 	 */
-    private static void addDetailsLink(Course course, StringBuffer msg) {
-    	// link til detaljer om registrering
-    	String baseurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.baseurl"));
-    	
-    	msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.findurlhere")) + "\n");
-    	String coursedetailurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.coursedetailurl", ""+course.getId()));
-    	msg.append(baseurl + ApplicationResourcesUtil.getUrlContextAppendix() +  coursedetailurl + "\n");
-    }
+	private static void addDetailsLink(Course course, StringBuffer msg) {
+		// link til detaljer om registrering
+		String baseurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.baseurl"));
+
+		msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.findurlhere")) + "\n");
+		String coursedetailurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.coursedetailurl", ""
+				+ course.getId()));
+		msg.append(baseurl + ApplicationResourcesUtil.getPublicUrlContextAppendix() + coursedetailurl
+				+ "\n");
+	}
 
     /**
      * Adds link to direct cancellation of registration, including info about chargeoverdue if present
@@ -586,7 +589,7 @@ public class MailUtil {
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.cancelcourse")) + "\n");
         String coursecancelurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.coursecancelurl", ""+registration.getId()));
-        msg.append(baseurl + ApplicationResourcesUtil.getUrlContextAppendix() + coursecancelurl + "\n");
+        msg.append(baseurl + ApplicationResourcesUtil.getPublicUrlContextAppendix() + coursecancelurl + "\n");
         
         if(course.getChargeoverdue()) msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationConfirmed.mail.footer.overdue")) + "\n");
 	}
@@ -602,7 +605,7 @@ public class MailUtil {
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.editregistration")) + "\n");
         String editregistrationurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.editregistrationurl", new String[]{""+registration.getId(), ""+course.getId()}));
-        msg.append(baseurl + ApplicationResourcesUtil.getUrlContextAppendix() + editregistrationurl + "\n");
+        msg.append(baseurl + ApplicationResourcesUtil.getPublicUrlContextAppendix() + editregistrationurl + "\n");
         
         if(course.getChargeoverdue()) msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationConfirmed.mail.footer.overdue")) + "\n");
 	}

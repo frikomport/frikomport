@@ -192,6 +192,23 @@
 				<include name="images/**/*.ico"/>
 			</fileset>
 		</copy>
+		<copy todir="${webapp.target}/admin">
+			<fileset dir="${basedir}/web/admin/">
+				<include name="index.jsp"/>
+			</fileset>
+			<fileset dir="${basedir}/web/">
+				<include name="styles/**/*.css"/>
+			</fileset>
+			<fileset dir="${basedir}/web/">
+				<include name="scripts/**/*.js"/>
+			</fileset>
+			<fileset dir="${basedir}/web/">
+				<include name="images/**/*.gif"/>
+				<include name="images/**/*.png"/>
+				<include name="images/**/*.jeg"/>
+				<include name="images/**/*.ico"/>
+			</fileset>
+		</copy>
 	</target>
 
 	<!-- =================================================================== -->

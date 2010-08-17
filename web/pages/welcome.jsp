@@ -8,7 +8,7 @@
 <content tag="heading"><fmt:message key="welcome.title"/></content>
 <fmt:message key="welcome.body1"></fmt:message>
 <div style="padding-top:15px; padding-bottom:5px;" class="detail">
-<form action="listCourses.html" name="postalcode">
+<form action="listCourses.html" name="postalcode" method="post">
 	<label><fmt:message key="welcome.postalcode"/></label>
 	<input type="text" name="postalcode" size="5" maxlength="4" style="vertical-align:middle;"/> &nbsp;
     <input type="submit" value="<fmt:message key="welcome.searchButtonlabel"/>"/>    	

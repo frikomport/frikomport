@@ -23,7 +23,6 @@ import no.unified.soak.service.NotificationManager;
 import no.unified.soak.service.RegisterByDateManager;
 import no.unified.soak.service.UserSynchronizeManager;
 import no.unified.soak.service.WaitingListManager;
-import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.webapp.action.ScheduledTasks;
 
 import org.apache.commons.logging.Log;

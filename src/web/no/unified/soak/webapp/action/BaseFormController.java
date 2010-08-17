@@ -40,7 +40,6 @@ import no.unified.soak.validation.Required;
 import no.unified.soak.validation.ValidateOnlyIfConfigurationIsTrue;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.validator.EmailValidator;
