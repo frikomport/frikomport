@@ -65,4 +65,15 @@ public class BaseManager implements Manager {
         dao.saveObject(o);
     }
 
+	public void evict(Object entity) {
+		dao.evict(entity);
+	}
+
+	public void flush() {
+		dao.flush();
+	}
+
+	public boolean contains(Object entity) {
+		return dao.contains(entity);
+	}
 }

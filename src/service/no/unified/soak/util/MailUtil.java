@@ -1213,7 +1213,7 @@ public class MailUtil {
 	
 	
 	public static void sendCourseCreatedMail(Course course, MailEngine mailEngine, MailSender mailSender, Map<String, Configuration> configurationsMap){
-		String[] to = {course.getResponsible().getEmail(), course.getInstructor().getEmail()};
+		String[] to = {course.getResponsible().getEmail()};
 		String from = null; // default from is used
 		
 		String start = DateUtil.convertDateToString(course.getStartTime());

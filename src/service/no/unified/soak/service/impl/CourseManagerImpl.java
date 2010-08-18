@@ -156,14 +156,19 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
     public List<Course> getCoursesWhereRegisterByExpired(long millis){
         return dao.getCoursesWhereRegisterByExpired(millis);
     }
-
-	/**
-	 * Evict entity for hibernate sessions. This avoids automatic saving
-	 * (flush) of the entity.
-	 * 
-	 * @param entity
-	 */
-	public void evict(Object entity) {
-		dao.evict(entity);
-	}
+    
+    @Override
+    public void evict(Object entity) {
+    	dao.evict(entity);
+    }
+    
+    @Override
+    public void flush() {
+    	dao.flush();
+    }
+    
+    @Override 
+    public boolean contains(Object entity) {
+    	return dao.contains(entity);
+    }
 }

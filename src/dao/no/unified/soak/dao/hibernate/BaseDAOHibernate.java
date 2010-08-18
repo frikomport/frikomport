@@ -67,12 +67,28 @@ public class BaseDAOHibernate extends HibernateDaoSupport implements DAO {
     }
     
 	/**
-	 * Evict entity for hibernate sessions. This avoids automatic saving
-	 * (flush) of the entity.
+	 * @see no.unified.soak.dao.DAO#evict(entity) 
 	 * 
 	 * @param entity
 	 */
 	public void evict(Object entity) {
 		getHibernateTemplate().evict(entity);
 	}
+	
+	/**
+	 * @see no.unified.soak.dao.DAO#flush() 
+	 */
+	public void flush() {
+		getHibernateTemplate().flush();
+	}
+	
+	/**
+	 * @see no.unified.soak.dao.DAO#conatins(entity) 
+	 * @param entity
+	 */
+	public boolean contains(Object entity) {
+		return getHibernateTemplate().contains(entity);
+	}
+	
+	
 }

@@ -32,6 +32,7 @@ import no.unified.soak.model.Category;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Location;
 import no.unified.soak.model.Organization;
+import no.unified.soak.model.Person;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.User;
 import no.unified.soak.model.Organization.Type;
@@ -566,11 +567,6 @@ public class CourseFormController extends BaseFormController {
 			
 			courseManager.saveCourse(course);
 
-			if(isNew){
-				// lage flush-metode eller hente responsible/instructor manuelt og sette på course-objektet
-				MailUtil.sendCourseCreatedMail(course, mailEngine, mailSender, configurationManager.getConfigurationsMap());
-			}
-			
 			String key = null;
 			if (course.getStatus().equals(CourseStatus.COURSE_PUBLISHED)) {
 				key = "course.published";
@@ -605,6 +601,22 @@ public class CourseFormController extends BaseFormController {
 				}
 				model.put("newCourse", "true");
 				courseId = course.getId();
+
+				//Sender epost til responsible og instructor. 
+				User responsible = userManager.getUser(course.getResponsibleUsername());
+				course.setResponsible(responsible);
+				
+				Person instructor = personManager.getPerson(course.getInstructorid().toString());
+				course.setInstructor(instructor);
+				
+				Location location = locationManager.getLocation(course.getLocationid().toString());
+				course.setLocation(location);
+				
+				Organization organization = organizationManager.getOrganization(course.getOrganizationid());
+				course.setOrganization(organization);
+				
+				MailUtil.sendCourseCreatedMail(course, mailEngine, mailSender, configurationManager.getConfigurationsMap());
+
 			} else {
 				List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null,
 						(Status) null, null, null, null, null);
@@ -643,6 +655,7 @@ public class CourseFormController extends BaseFormController {
 					}
 				}
 			}
+			
 			model.put("enablemail", enablemail);
 			model.put("waitinglist", waitinglist);
 		}
