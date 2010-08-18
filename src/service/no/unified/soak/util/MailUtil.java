@@ -1210,6 +1210,29 @@ public class MailUtil {
 		MimeMessage summary = getMailMessage(to, cc, null, from, subject, summaryMsg, null, null, mailSender);
 		mailEngine.send(summary);
 	}
+	
+	
+	public static void sendCourseCreatedMail(Course course, MailEngine mailEngine, MailSender mailSender, Map<String, Configuration> configurationsMap){
+		String[] to = {course.getResponsible().getEmail(), course.getInstructor().getEmail()};
+		String from = null; // default from is used
+		
+		String start = DateUtil.convertDateToString(course.getStartTime());
+		String subject = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseCreated.subject", new Object[]{course.getName(), start, course.getLocation().getName()}));
+		
+		StringBuffer msg = new StringBuffer();
+		if(course.getStatus() == CourseStatus.COURSE_CREATED){
+			msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.status.created") + "\n\n"));
+		}else{
+			msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.status.published") + "\n\n"));
+		}
+				
+		appendCourseDetails(course, msg, configurationsMap);
+		addDetailsLink(course, msg);
+		
+		MimeMessage created = getMailMessage(to, null, null, from, subject, msg, null, null, mailSender);
+		mailEngine.send(created);
+	}
+	
 
 
 }

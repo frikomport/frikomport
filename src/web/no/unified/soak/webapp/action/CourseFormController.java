@@ -88,7 +88,7 @@ public class CourseFormController extends BaseFormController {
     private RegistrationManager registrationManager = null;
 
     private NotificationManager notificationManager = null;
-
+    
     private MessageSource messageSource = null;
 
     protected MailEngine mailEngine = null;
@@ -566,6 +566,11 @@ public class CourseFormController extends BaseFormController {
 			
 			courseManager.saveCourse(course);
 
+			if(isNew){
+				// lage flush-metode eller hente responsible/instructor manuelt og sette på course-objektet
+				MailUtil.sendCourseCreatedMail(course, mailEngine, mailSender, configurationManager.getConfigurationsMap());
+			}
+			
 			String key = null;
 			if (course.getStatus().equals(CourseStatus.COURSE_PUBLISHED)) {
 				key = "course.published";
