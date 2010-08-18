@@ -59,9 +59,15 @@
 		document.getElementById('courseid').value = courseId;
 		if(courseId == "<c:out value="${registration.courseid}"/>"){
 			document.getElementById('savebutton').value = "<fmt:message key="button.register.update"/>";
+			if (!(document.getElementById('savebutton2') === null)) {
+				document.getElementById('savebutton2').value = "<fmt:message key="button.register.update"/>";
+			}
 		}
 		else {
 			document.getElementById('savebutton').value = "<fmt:message key="button.register.change"/>";
+			if (!(document.getElementById('savebutton2') === null)) {
+				document.getElementById('savebutton2').value = "<fmt:message key="button.register.change"/>";
+			}
 		}
 	}
 </SCRIPT>	
@@ -468,7 +474,7 @@
 	                    <input type="submit" class="button" name="save" onclick="bCancel=false" value="<fmt:message key="button.register.save"/>" />
     	            </c:if>
 					<c:if test="${!empty registration.id}">
-                    <input type="submit" class="button" name="save" id="savebutton" onclick="bCancel=false" value="<fmt:message key="button.register.update"/>" />
+                    <input type="submit" class="button" name="save" id="savebutton2" onclick="bCancel=false" value="<fmt:message key="button.register.update"/>" />
 						<c:if test="${isAdmin}">
 						<input type="submit" class="button" name="delete" onclick="bCancel=true;return confirmDeleteRegistration()"
 							value="<fmt:message key="button.delete"/>" />

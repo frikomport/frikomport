@@ -184,6 +184,7 @@
 			</fileset>
 			<fileset dir="${basedir}/web/">
 				<include name="scripts/**/*.js"/>
+				<include name="scripts/**/*.jsp"/>
 			</fileset>
 			<fileset dir="${basedir}/web/">
 				<include name="images/**/*.gif"/>
@@ -201,6 +202,7 @@
 			</fileset>
 			<fileset dir="${basedir}/web/">
 				<include name="scripts/**/*.js"/>
+				<include name="scripts/**/*.jsp"/>
 			</fileset>
 			<fileset dir="${basedir}/web/">
 				<include name="images/**/*.gif"/>
