@@ -203,7 +203,7 @@
         <!--  property name="validator" ref="beanValidator"/ -->
         <property name="formView" value="registrationForm"/>
         <property name="successView" value="redirect:registrationComplete.html"/>
-        <property name="cancelView" value="redirect:listCourses.html"/>
+        <property name="cancelView" value="redirect:welcome.html"/>
     </bean>
 
     <bean id="registrationAdministrationController" class="no.unified.soak.webapp.action.RegistrationAdministrationController" autowire="byName">

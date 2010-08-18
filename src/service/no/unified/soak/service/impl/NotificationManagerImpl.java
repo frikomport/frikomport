@@ -161,7 +161,8 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 					// Are we after the time of notification?
 					if (course.getStatus().equals(CourseStatus.COURSE_PUBLISHED) 
 					        && course.getReminder() != null 
-					        && course.getReminder().before(today)) {
+					        && course.getReminder().before(today)
+					        && registration.getRegistered().before(course.getReminder())) {
 						// Store that it has been successfully sent - cleanup by
 						// cleanup manager
 						boolean isReserved = notification.getRegistration().getReserved();
