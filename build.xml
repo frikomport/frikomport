@@ -248,7 +248,7 @@
         <!-- Copy Spring configuration files -->
         <mkdir dir="${build.dir}/dao/gen/META-INF"/>
         <copy overwrite="true" tofile="${build.dir}/dao/gen/META-INF/applicationContext-${dao.type}.xml">
-            <fileset dir="src/dao" includes="**/*-${dao.type}.xml"/>
+            <fileset dir="src/dao" includes="**/*-${dao.type}.xml" excludes="resources/**,target/**"/>
             <filterset refid="variables.to.replace"/>
         </copy>
         <jar destfile="${dist.dir}/${webapp.name}-dao.jar">
@@ -274,7 +274,7 @@
     <target name="package-service" depends="compile-service">
         <mkdir dir="${build.dir}/service/classes/META-INF"/>
         <copy tofile="${build.dir}/service/classes/META-INF/applicationContext-service.xml">
-            <fileset dir="src/service" includes="**/*-service.xml"/>
+            <fileset dir="src/service" includes="**/*-service.xml"  excludes="resources/**,target/**"/>
         </copy>
         <jar destfile="${dist.dir}/${webapp.name}-service.jar">
             <manifest>

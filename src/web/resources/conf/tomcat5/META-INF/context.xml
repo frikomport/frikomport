@@ -1,0 +1,110 @@
+<Context path="/soak" docBase="soak" debug="99" reloadable="true">
+    <Logger className="org.apache.catalina.logger.FileLogger" 
+        prefix="soak_log." suffix=".txt" timestamp="true"/>
+
+    <Resource name="jdbc/soakdb" auth="Container" type="javax.sql.DataSource"/>
+    <ResourceParams name="jdbc/soakdb">
+        <parameter>
+            <name>factory</name>
+            <value>org.apache.commons.dbcp.BasicDataSourceFactory</value>
+        </parameter>
+        <parameter>
+            <name>maxActive</name>
+            <value>100</value>
+        </parameter>
+        <parameter>
+            <name>maxIdle</name>
+            <value>30</value>
+        </parameter>
+        <parameter>
+            <name>maxWait</name>
+            <value>10000</value>
+        </parameter>
+        <parameter>
+            <name>username</name>
+            <value>${jdbc.username}</value>
+        </parameter>
+        <parameter>
+            <name>password</name>
+            <value>${jdbc.password}</value>
+        </parameter>
+        <parameter>
+            <name>driverClassName</name>
+            <value>${jdbc.driverClassName}</value>
+        </parameter>
+        <parameter>
+            <name>defaultAutoCommit</name>
+            <value>true</value>
+        </parameter>
+        <parameter>
+            <name>url</name>
+            <value>${jdbc.url}</value>
+        </parameter>
+        <parameter>
+            <name>removeAbandoned</name>
+            <value>true</value>
+        </parameter>
+        <parameter>
+            <name>removeAbandonedTimeout</name>
+            <value>60</value>
+        </parameter>
+        <parameter>
+            <name>logAbandoned</name>
+            <value>true</value>
+        </parameter>
+    </ResourceParams>
+    
+    <!-- eZ resource -->
+    <Resource name="jdbc/ezdb" auth="Container" type="javax.sql.DataSource"/>
+    <ResourceParams name="jdbc/ezdb">
+        <parameter>
+            <name>factory</name>
+            <value>org.apache.commons.dbcp.BasicDataSourceFactory</value>
+        </parameter>
+        <parameter>
+            <name>maxActive</name>
+            <value>100</value>
+        </parameter>
+        <parameter>
+            <name>maxIdle</name>
+            <value>30</value>
+        </parameter>
+        <parameter>
+            <name>maxWait</name>
+            <value>10000</value>
+        </parameter>
+        <parameter>
+            <name>username</name>
+            <value>${ez.username}</value>
+        </parameter>
+        <parameter>
+            <name>password</name>
+            <value>${ez.password}</value>
+        </parameter>
+        <parameter>
+            <name>driverClassName</name>
+            <value>${ez.driverClassName}</value>
+        </parameter>
+        <parameter>
+            <name>defaultAutoCommit</name>
+            <value>true</value>
+        </parameter>
+        <parameter>
+            <name>url</name>
+            <value>${ez.url}</value>
+        </parameter>
+        <parameter>
+            <name>removeAbandoned</name>
+            <value>true</value>
+        </parameter>
+        <parameter>
+            <name>removeAbandonedTimeout</name>
+            <value>60</value>
+        </parameter>
+        <parameter>
+            <name>logAbandoned</name>
+            <value>true</value>
+        </parameter>
+    </ResourceParams>
+
+</Context>

@@ -1,0 +1,22 @@
+<!-- config for tomcat 5.5 -->
+
+<Context path="/soak" docBase="soak" debug="99" reloadable="true"
+    antiJARLocking="true" antiResourceLocking="false">
+
+    <Resource name="jdbc/soakdb" auth="Container" type="javax.sql.DataSource"
+              maxActive="100" maxIdle="30" maxWait="10000"
+              driverClassName="${jdbc.driverClassName}"
+              username="${jdbc.username}" password="${jdbc.password}" 
+              url="${jdbc.url}"
+              defaultAutoCommit="true" removeAbandoned="true" 
+              removeAbandonedTimeout="60" logAbandoned="true"/>
+              
+    <!-- eZ resource, remove when possible -->
+    <Resource name="jdbc/ezdb" auth="Container" type="javax.sql.DataSource"
+    	maxActive="100" maxIdle="30" maxWait="10000" 
+    	username="${ez.username}" password="${ez.password}" 
+    	driverClassName="${ez.driverClassName}" defaultAutoCommit="true" 
+    	url="${ez.url}" removeAbandoned="true" 
+    	removeAbandonedTimeout="60" logAbandoned="true"/>
+    	
+</Context>
