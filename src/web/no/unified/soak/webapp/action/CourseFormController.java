@@ -452,94 +452,11 @@ public class CourseFormController extends BaseFormController {
 		else {
 			// Save or publish
 			log.debug("recieved 'save/publish/cancel' from jsp");
-			// Parse date and time fields together
-			String format = getText("date.format", request.getLocale()) + " " + getText("time.format", request.getLocale());
 			Object[] args = null;
 
-			try {
-				Date time = parseDateAndTime(request, "startTime", format);
+			args = setDatesToCourseAndMakeErrorMessages(request, errors, course, args);
 
-				if (time != null) {
-					course.setStartTime(time);
-				} else {
-					course.setStartTime(null);
-					throw new BindException(course, "startTime");
-				}
-			} catch (Exception e) {
-				args = new Object[] { getText("course.startTime", request.getLocale()),
-						getText("date.format.localized", request.getLocale()),
-						getText("time.format.localized", request.getLocale()) };
-				errors.rejectValue("startTime", "errors.dateformat", args, "Invalid date or time");
-			}
-
-			try {
-				Date time = parseDateAndTime(request, "stopTime", format);
-
-				if (time != null) {
-					course.setStopTime(time);
-				} else {
-					course.setStopTime(null);
-					throw new BindException(course, "stopTime");
-				}
-			} catch (Exception e) {
-				args = new Object[] { getText("course.stopTime", request.getLocale()),
-						getText("date.format.localized", request.getLocale()),
-						getText("time.format.localized", request.getLocale()) };
-				errors.rejectValue("stopTime", "errors.dateformat", args, "Invalid date or time");
-			}
-
-			try {
-				course.setRegisterStart(parseDateAndTime(request, "registerStart", format));
-			} catch (Exception e) {
-				args = new Object[] { getText("course.registerStart", request.getLocale()),
-						getText("date.format.localized", request.getLocale()),
-						getText("time.format.localized", request.getLocale()) };
-				errors.rejectValue("registerStart", "errors.dateformat", args, "Invalid date or time");
-			}
-
-			try {
-				course.setReminder(parseDateAndTime(request, "reminder", format));
-			} catch (Exception e) {
-				args = new Object[] { getText("course.reminder", request.getLocale()),
-						getText("date.format.localized", request.getLocale()),
-						getText("time.format.localized", request.getLocale()) };
-				errors.rejectValue("reminder", "errors.dateformat", args, "Invalid date or time");
-			}
-
-			try {
-				Date time = parseDateAndTime(request, "registerBy", format);
-				
-				if(time == null && !configurationManager.isActive("access.course.useRegisterBy", true)){
-					time = course.getStartTime();
-				}
-				if (time != null) {
-					course.setRegisterBy(time);
-				} else {
-					throw new BindException(course, "registerBy");
-				}
-			} catch (Exception e) {
-				args = new Object[] { getText("course.registerBy", request.getLocale()),
-						getText("date.format.localized", request.getLocale()),
-						getText("time.format.localized", request.getLocale()) };
-				errors.rejectValue("registerBy", "errors.dateformat", args, "Invalid date or time");
-			}
-
-			if (request.getParameter("save") != null && isNew) {
-				course.setStatus(CourseStatus.COURSE_CREATED);
-			}
-			if (request.getParameter("save") != null && CourseStatus.COURSE_FINISHED.equals(course.getStatus())
-					&& course.getStartTime() != null && new Date().before(course.getStartTime())) {
-				course.setStatus(CourseStatus.COURSE_CREATED);
-			}
-			if (request.getParameter("unpublish") != null && isNew) {
-				course.setStatus(CourseStatus.COURSE_CREATED);
-			}
-			if (request.getParameter("publish") != null) {
-				course.setStatus(CourseStatus.COURSE_PUBLISHED);
-			}
-			if (request.getParameter("cancelled") != null) {
-				course.setStatus(CourseStatus.COURSE_CANCELLED);
-			}
+			setCourseStatus(request, course, isNew);
 
 			if (!configurationManager.isActive("access.course.usePayment", true)) {
 				enrichWithDefaultvaluesToAvoidErrors(course);
@@ -567,21 +484,11 @@ public class CourseFormController extends BaseFormController {
 			
 			courseManager.saveCourse(course);
 
-			String key = null;
-			if (course.getStatus().equals(CourseStatus.COURSE_PUBLISHED)) {
-				key = "course.published";
-			} else if (course.getStatus().equals(CourseStatus.COURSE_CREATED) || isNew) {
-				key = "course.created"; 
-			} else if (course.getStatus().equals(CourseStatus.COURSE_CANCELLED)) {
-				key = "course.cancelled";
-			} else {
-				key = "course.updated";
-			}
+			String key = getUserMessageKey(request, course, isNew);
+			saveMessage(request, getText(key, locale));
 
 			boolean enablemail = false;
 			boolean waitinglist = false;
-
-			saveMessage(request, getText(key, locale));
 
 			// If not new, we need to send out a message to everyone registered
 			// to the course that things have changed
@@ -601,21 +508,7 @@ public class CourseFormController extends BaseFormController {
 				}
 				model.put("newCourse", "true");
 				courseId = course.getId();
-
-				//Sender epost til responsible og instructor. 
-				User responsible = userManager.getUser(course.getResponsibleUsername());
-				course.setResponsible(responsible);
-				
-				Person instructor = personManager.getPerson(course.getInstructorid().toString());
-				course.setInstructor(instructor);
-				
-				Location location = locationManager.getLocation(course.getLocationid().toString());
-				course.setLocation(location);
-				
-				Organization organization = organizationManager.getOrganization(course.getOrganizationid());
-				course.setOrganization(organization);
-				
-				MailUtil.sendCourseCreatedMail(course, mailEngine, mailSender, configurationManager.getConfigurationsMap());
+				sendEmailToResponsible(course);
 
 			} else {
 				List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null,
@@ -639,6 +532,7 @@ public class CourseFormController extends BaseFormController {
 					Course originalCourse = (Course) request.getSession().getAttribute(Constants.ORG_COURSE_KEY);
 					List<String> changedList = new ArrayList<String>();
 					if (originalCourse != null) {
+						String format = getText("date.format", request.getLocale()) + " " + getText("time.format", request.getLocale());
 						changedList = courseManager.getChangedList(originalCourse, course, format);
 						if (changedList.size() != 0) {
 							enablemail = true;
@@ -665,6 +559,126 @@ public class CourseFormController extends BaseFormController {
 
         return new ModelAndView(getSuccessView(), model);
     }
+
+	private void sendEmailToResponsible(Course course) {
+		User responsible = userManager.getUser(course.getResponsibleUsername());
+		course.setResponsible(responsible);
+		
+		Person instructor = personManager.getPerson(course.getInstructorid().toString());
+		course.setInstructor(instructor);
+		
+		Location location = locationManager.getLocation(course.getLocationid().toString());
+		course.setLocation(location);
+		
+		Organization organization = organizationManager.getOrganization(course.getOrganizationid());
+		course.setOrganization(organization);
+		
+		MailUtil.sendCourseCreatedMailToResponsible(course, mailEngine, mailSender, configurationManager.getConfigurationsMap());
+	}
+
+	private Object[] setDatesToCourseAndMakeErrorMessages(HttpServletRequest request, BindException errors, Course course,
+			Object[] args) {
+		String format = getText("date.format", request.getLocale()) + " " + getText("time.format", request.getLocale());
+
+		try {
+			Date time = parseDateAndTime(request, "startTime", format);
+
+			if (time != null) {
+				course.setStartTime(time);
+			} else {
+				course.setStartTime(null);
+				throw new BindException(course, "startTime");
+			}
+		} catch (Exception e) {
+			args = new Object[] { getText("course.startTime", request.getLocale()),
+					getText("date.format.localized", request.getLocale()), getText("time.format.localized", request.getLocale()) };
+			errors.rejectValue("startTime", "errors.dateformat", args, "Invalid date or time");
+		}
+
+		try {
+			Date time = parseDateAndTime(request, "stopTime", format);
+
+			if (time != null) {
+				course.setStopTime(time);
+			} else {
+				course.setStopTime(null);
+				throw new BindException(course, "stopTime");
+			}
+		} catch (Exception e) {
+			args = new Object[] { getText("course.stopTime", request.getLocale()),
+					getText("date.format.localized", request.getLocale()), getText("time.format.localized", request.getLocale()) };
+			errors.rejectValue("stopTime", "errors.dateformat", args, "Invalid date or time");
+		}
+
+		try {
+			course.setRegisterStart(parseDateAndTime(request, "registerStart", format));
+		} catch (Exception e) {
+			args = new Object[] { getText("course.registerStart", request.getLocale()),
+					getText("date.format.localized", request.getLocale()), getText("time.format.localized", request.getLocale()) };
+			errors.rejectValue("registerStart", "errors.dateformat", args, "Invalid date or time");
+		}
+
+		try {
+			course.setReminder(parseDateAndTime(request, "reminder", format));
+		} catch (Exception e) {
+			args = new Object[] { getText("course.reminder", request.getLocale()),
+					getText("date.format.localized", request.getLocale()), getText("time.format.localized", request.getLocale()) };
+			errors.rejectValue("reminder", "errors.dateformat", args, "Invalid date or time");
+		}
+
+		try {
+			Date time = parseDateAndTime(request, "registerBy", format);
+
+			if (time == null && !configurationManager.isActive("access.course.useRegisterBy", true)) {
+				time = course.getStartTime();
+			}
+			if (time != null) {
+				course.setRegisterBy(time);
+			} else {
+				throw new BindException(course, "registerBy");
+			}
+		} catch (Exception e) {
+			args = new Object[] { getText("course.registerBy", request.getLocale()),
+					getText("date.format.localized", request.getLocale()), getText("time.format.localized", request.getLocale()) };
+			errors.rejectValue("registerBy", "errors.dateformat", args, "Invalid date or time");
+		}
+		return args;
+	}
+
+	private void setCourseStatus(HttpServletRequest request, Course course, boolean isNew) {
+		if (request.getParameter("save") != null && isNew) {
+			course.setStatus(CourseStatus.COURSE_CREATED);
+		}
+		if (request.getParameter("save") != null && CourseStatus.COURSE_FINISHED.equals(course.getStatus())
+				&& course.getStartTime() != null && new Date().before(course.getStartTime())) {
+			course.setStatus(CourseStatus.COURSE_CREATED);
+		}
+		if (request.getParameter("unpublish") != null) {
+			course.setStatus(CourseStatus.COURSE_CREATED);
+		}
+		if (request.getParameter("publish") != null) {
+			course.setStatus(CourseStatus.COURSE_PUBLISHED);
+		}
+		if (request.getParameter("cancelled") != null) {
+			course.setStatus(CourseStatus.COURSE_CANCELLED);
+		}
+	}
+
+	private String getUserMessageKey(HttpServletRequest request, Course course, boolean isNew) {
+		String key = null;
+		if (course.getStatus().equals(CourseStatus.COURSE_PUBLISHED)) {
+			key = "course.published";
+		} else if (StringUtils.isNotBlank(request.getParameter("unpublish"))) {
+			key = "course.unpublished";
+		} else if (course.getStatus().equals(CourseStatus.COURSE_CREATED) || isNew) {
+			key = "course.created";
+		} else if (course.getStatus().equals(CourseStatus.COURSE_CANCELLED)) {
+			key = "course.cancelled";
+		} else {
+			key = "course.updated";
+		}
+		return key;
+	}
 
 	private void enrichWithDefaultvaluesToAvoidErrors(Course course) {
 		if(!configurationManager.isActive("access.course.usePayment", true)){ // dersom betaling for kurs er deaktivert

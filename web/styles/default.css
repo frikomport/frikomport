@@ -11,7 +11,7 @@
 }
 
 table {
-	font-size: 100%; //1.0em; /* IE5.x fix */
+	font-size: 100%; /* IE5.x fix. Could have used 1.0em; */
 }
 
 a {
@@ -25,7 +25,7 @@ a:visited, body#login div#menu a:visited  {
 a:hover {
     background-color: transparent;
     color: #0000ff !important; 
-    text-decoration: none; //underline overline;
+    text-decoration: none;
 }
 
 a img { border: 0 }
@@ -39,7 +39,7 @@ body {
     background: #FFFFFF;
     color: #000000;
     font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 0.6em; //12px;
+    font-size: 0.6em; /* 12px; */
     margin: 0 !important;
     padding: 0 !important;
 }
@@ -266,7 +266,6 @@ input.button {
 
 input.button {
     /* fix button size in IE */
-    //line-height: 17px;
 }
 
 form input.focus, form textarea.focus {
@@ -290,7 +289,7 @@ h1 {
 
 h2 {
 	margin: 0;
-	font-size: 1em; //10px;
+	font-size: 1em; /* 10px; */
 	font-weight: bold;
 	color: #000;
 	padding-top: 2px;
@@ -453,13 +452,13 @@ table.pickList td select {
 }
 
 th, td, pre, code {
-    font-size: 1.0em; //12px; //uc
+    font-size: 1.0em; /* 12px; */
 }
 
 th label,
 form label {
 	margin: 0;
-	font-size: 1.0em; //10px;
+	font-size: 1.0em; /* 10px; */
 	font-weight: bold;
 	color: #000;
 	padding-top: 2px;
@@ -479,7 +478,7 @@ pre {
 }
 div#content table th {
 	margin: 0;
-	font-size: 1.0em; //10px;
+	font-size: 1.0em; /* 10px; */
 	font-weight: bold;
 	color: #000;
 	padding-top: 3px;

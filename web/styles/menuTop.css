@@ -41,9 +41,9 @@ div#menuDiv ul.menuList li.menubar > ul > li {
 	background-image: url("../images/GraGradient.png");
 	background-repeat: repeat-x;
 	background-position: bottom;
-	background-color: #37424A; //5f686E;
-	border: 1px dotted #5f686E; //37424A;
-	color: #FFFFFF; //FFE8CC;
+	background-color: #37424A; 
+	border: 1px dotted #5f686E;
+	color: #FFFFFF;
 }
 
 div#menuDiv ul.menuList li.menubar > ul > li:HOVER {

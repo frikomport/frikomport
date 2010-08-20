@@ -1,7 +1,7 @@
 div.exportlinks {
     width: 100%;
     background-color: #FFFFFF;
-    font-size: 1.0em; //10px;
+    font-size: 1.0em; /* 10px; */
     font-weight: normal;
     color: #000;
     margin: 0 0 0 0;
@@ -55,7 +55,7 @@ span.pagebanner {
     width: 100%;
     background-color: #FFFFFF;
     margin: 0;
-    font-size: 1.0em; //10px;
+    font-size: 1.0em; /* 10px; */
     font-weight: normal;
     color: #000;
     padding-top: 3px;
@@ -144,7 +144,7 @@ table.list thead tr {
 table.list tr.even {
     background-color: #f0f0f0;
     margin: 0;
-    font-size: 1.0em; //10px;
+    font-size: 1.0em; /* 10px; */
     font-weight: normal;
     color: #000;
     padding-top: 3px;
@@ -155,7 +155,7 @@ table.list tr.even {
 table.list tr.odd {
     background-color: #FFFFFF;
     margin: 0;
-    font-size: 1.0em; //10px;
+    font-size: 1.0em; /* 10px; */
     font-weight: normal;
     color: #000;
     padding-top: 3px;

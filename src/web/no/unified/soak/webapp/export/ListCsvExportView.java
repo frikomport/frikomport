@@ -7,7 +7,7 @@ import org.displaytag.model.TableModel;
 /**
  * @author sa
  */
-public class RegistrationListCsvExportView extends CustomBaseExportView
+public class ListCsvExportView extends CustomBaseExportView
 {
 
     /**

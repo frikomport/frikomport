@@ -15,14 +15,14 @@ cal1.setTodayText("Idag");
 
 
 function changeGUIBasedOnField(fieldName) {
-	if (fieldName == "startTimeDate") {
-		dateStr= $('startTimeDate').value;
+	if (fieldName == "startTimeDate" && !($p('publishButton') === null)) {
+		dateStr= $p('startTimeDate').value;
 		startTimeDate = new Date(dateStr.substring(6), (Number(dateStr.substring(3,5))-1), dateStr.substring(0,2), 23, 59, 0, 0);
 		
 		if (new Date() > startTimeDate) {
-			Element.hide($('publishButton'));
+			Element.hide($p('publishButton'));
 		} else {
-			Element.show($('publishButton'));
+			Element.show($p('publishButton'));
 		}
 	}
 }
@@ -52,7 +52,7 @@ function fillSelect(obj){
  var serviceArea = document.course.serviceAreaid;
 
  if(serviceArea != null){
-	 while(serviceArea.firstChild){
+    while(serviceArea.firstChild){
         serviceArea.removeChild(serviceArea.firstChild);
     }
 
@@ -76,12 +76,13 @@ function fillSelect(obj){
     }
     var k = 0;
 <c:forEach var="location" items="${locations}">
-    if ("<c:out value="${location.id}"/>" == ""){
-        location.options[k]=new Option("<c:out value="${location.name}"/>", "<c:out value="${location.id}"/>", true);
-        k++;
-    }
-    else if ("<c:out value="${location.organizationid}"/>" == orgid){
-        location.options[k]=new Option("<c:out value="${location.name}"/>", "<c:out value="${location.id}"/>");
+    if ("<c:out value="${location.organizationid}"/>" == orgid || "<c:out value="${location.id}"/>" == "") {
+	    if ("<c:out value="${location.id}"/>" == "<c:out value="${course.locationid}"/>") {
+	        select = true;
+	    } else {
+	        select = false;
+	    } 
+        location.options[k]=new Option("<c:out value="${location.name}"/>", "<c:out value="${location.id}"/>", select);
         k++ ;
     }
 </c:forEach>
@@ -390,7 +391,7 @@ function fillSelect(obj){
 								<c:when test="${empty location.id}">
 									<option value="<c:out value="${location.id}"/>"
 										<c:if test="${location.id == course.locationid}"> selected="selected"</c:if>>
-										<c:out value="${location.name}" />
+										<c:out value="${location.name}" />(he1)
 									</option>
 								</c:when>
 								<c:otherwise>
@@ -398,7 +399,7 @@ function fillSelect(obj){
 										test="${location.organizationid == course.organizationid}">
 										<option value="<c:out value="${location.id}"/>"
 											<c:if test="${location.id == course.locationid}"> selected="selected"</c:if>>
-											<c:out value="${location.name}" />
+											<c:out value="${location.name}" />(he2)
 										</option>
 									</c:if>
 								</c:otherwise>
@@ -688,5 +689,5 @@ function fillSelect(obj){
 </script>
 <script language="JavaScript">
 changeGUIBasedOnField('startTimeDate');
-fillSelect($("organizationidElement"));
+fillSelect($p("organizationidElement"));
 </script>
