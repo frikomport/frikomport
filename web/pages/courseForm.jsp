@@ -12,7 +12,24 @@ cal1.setMonthNames('Januar','Februar','Mars','April','Mai','Juni','Juli','August
 cal1.setDayHeaders('S','M','T','O','T','F','L'); 
 cal1.setWeekStartDay(1); 
 cal1.setTodayText("Idag");
+cal1.setReturnFunction("handleCalResult");
 
+function handleCalResult(y,m,d) {
+	document.course.startTimeDate.value = PadDigits(d, 2) + "." + PadDigits(m, 2) + "." + PadDigits(y, 4);
+	changeGUIBasedOnField("startTimeDate");
+	document.course.stopTimeDate.value = document.course.startTimeDate.value;
+}
+
+function PadDigits(n, totalDigits) { 
+    n = n.toString(); 
+    var pd = ''; 
+    if (totalDigits > n.length) { 
+        for (i=0; i < (totalDigits-n.length); i++) { 
+            pd += '0'; 
+        } 
+    } 
+    return pd + n.toString(); 
+} 
 
 function changeGUIBasedOnField(fieldName) {
 	if (fieldName == "startTimeDate" && !($p('publishButton') === null)) {

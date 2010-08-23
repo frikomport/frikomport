@@ -734,7 +734,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
     private ColumnInfo getColumnInfo(String table, String column) {
 		ResultSet rsColumns = null;
-		DatabaseMetaData meta;
+		DatabaseMetaData meta = null; 
 		try {
 			meta = jt.getDataSource().getConnection().getMetaData();
 			rsColumns = meta.getColumns(null, null, table.toUpperCase(), column);
@@ -748,7 +748,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 				}
 			}
 		} catch (SQLException e) {
-			log.warn("Error fetching metadata of column " + column + " in table " + table + ". ", e);
+			log.warn("Error fetching metadata of column " + column + " in table " + table + ". \nMetadata object="+meta+"\nrsColumns"+rsColumns, e);
 		}
 		return null;
     }
