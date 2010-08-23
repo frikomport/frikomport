@@ -423,9 +423,13 @@ pageContext.setAttribute("sumToShow", sumObj);
 <c:if test="${past == true}">past=1</c:if>
 <c:if test="${historic == true}">historic=1</c:if>
 </c:set>
+
+<c:if test="${!isSVV}">
 <div class="searchUrl" style="padding:3px;">
     <fmt:message key="url-to-this-search"/>: <a class="external" href="<c:out value="${parameters}"/>" target="_blank"><c:out value="${parameters}"/></a>
 </div>
+</c:if>
+
 </c:if>
 <%--
 <script type="text/javascript">

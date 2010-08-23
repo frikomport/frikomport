@@ -97,6 +97,18 @@
 	</tr>
 </c:if>
 
+<c:if test="${useAttendants}">
+	<tr>
+		<th>
+			<fmt:message key="registration.participants" />
+		</th>
+		<td>
+			<spring:bind path="registration.participants">
+				<c:out value="${status.value}" />
+			</spring:bind>
+		</td>
+	</tr>
+</c:if>
 
 <c:if test="${!isSVV}">
 	<tr>
@@ -255,7 +267,6 @@
 	</tr>
 </c:if>
 
-	<c:if test="${!isSVV}">
 	<tr>
 		<th>
 			<fmt:message key="registration.organization" />
@@ -268,7 +279,6 @@
 			</c:if>
 		</td>
 	</tr>
-	</c:if>
 
 
 	<tr>

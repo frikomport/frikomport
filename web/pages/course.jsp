@@ -96,8 +96,7 @@
 	</td>
 </tr>
 
-
-<c:if test="${useOrganization2}">
+<c:if test="${useOrganization2 && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
 <tr>
 	<th>
 		<fmt:message key="course.organization2" />
@@ -135,6 +134,7 @@
 	</td>
 </tr>
 
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 <tr>
 	<th>
 		<fmt:message key="course.responsible" />
@@ -145,7 +145,9 @@
 				value="${course.responsible.fullName}" /> </a>
 	</td>
 </tr>
+</c:if>
 
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 <tr>
 	<th>
 		<fmt:message key="course.instructor" />
@@ -157,6 +159,7 @@
 				value="${course.instructor.name}" /></a>
 	</td>
 </tr>
+</c:if>
 
 <tr>
 	<th>
@@ -212,6 +215,7 @@
 	</tr>
 </c:if>
 
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 <tr>
 	<th>
 		<fmt:message key="course.registerStart" />
@@ -221,8 +225,9 @@
 			pattern="${dateformat} ${timeformat}" />
 	</td>
 </tr>
+</c:if>
 
-<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 <tr>
 	<th>
 		<fmt:message key="course.reminder" />
@@ -258,7 +263,7 @@
 	</tr>
 </c:if>
 
-<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+<c:if test="${!isSVV}">
 <tr>
 	<th>
 		<fmt:message key="course.url" />

@@ -440,7 +440,7 @@
 							headerClass="sortable" titleKey="course.serviceArea" />
 </c:if>
 
-<c:if test="${useOrganization2}">
+<c:if test="${useOrganization2 && !isCourseParticipant}">
 						<display:column property="organization2.name" sortable="true"
 							headerClass="sortable" titleKey="course.organization2" />
 </c:if>
@@ -452,13 +452,15 @@
 								title="<c:out value="${courseList.location.description}"/>"><c:out
 									value="${courseList.location.name}" /> </a>
 						</display:column>
+
+<c:if test="${!isCourseParticipant}">
 						<display:column media="html" sortable="true"
 							headerClass="sortable" titleKey="course.responsible">
 							<a
 								href="<c:url context="${urlContext}" value="/detailsUser.html"><c:param name="username" value="${courseList.responsible.username}"/></c:url>"><c:out
 									value="${courseList.responsible.fullName}" /> </a>
 						</display:column>
-
+</c:if>
 						<display:setProperty name="paging.banner.item_name" value="${item}" />
 						<display:setProperty name="paging.banner.items_name" value="${items}" />
 
