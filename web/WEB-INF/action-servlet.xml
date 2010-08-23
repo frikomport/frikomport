@@ -342,6 +342,7 @@
                 <prop key="/public/notifyCourse.html">courseNotificationController</prop>
                 <prop key="/public/detailsCourse.html">courseDetailsController</prop>
                 <prop key="/public/emailCourse.html">courseEmailController</prop>
+                <prop key="/public/editCourse.html">courseFormController</prop>
                 <!--Course-URL-END-->
                                 
                 <!--Registration-URL-START-->
