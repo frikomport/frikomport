@@ -38,6 +38,14 @@
 </h4>
 
 <table class="detail">
+	<tr>
+		<th>
+			<fmt:message key="course.name" />
+		</th>
+		<td>
+			<c:out value="${registration.course.name}" escapeXml="false" />, <c:out value="${registration.course.location.name}"/> - <fmt:formatDate value="${registration.course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
+		</td>
+	</tr>
 
 <c:if test="${showEmployeeFields}">
 	<tr>
