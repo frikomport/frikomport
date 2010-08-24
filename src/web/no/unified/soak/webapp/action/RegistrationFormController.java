@@ -272,7 +272,6 @@ public class RegistrationFormController extends BaseFormController {
         String key = null;
         Map<String,Object> model = new HashMap<String,Object>();
         Boolean courseFull = null;
-        Boolean alreadyRegistered = false;
         Boolean changedCourse = false;
 
         // Fetch the object from the form
@@ -385,9 +384,9 @@ public class RegistrationFormController extends BaseFormController {
                     return new ModelAndView(getCancelView(), "courseId", registration.getCourseid());
                 }
                 if (userRegistraionsForCourse.size() > 0) {
-                    alreadyRegistered = true;
-                    model.put("alreadyRegistered", alreadyRegistered);
-                    return new ModelAndView(getCancelView(), "alreadyRegistered", true);
+            		String start = DateUtil.convertDateToString(course.getStartTime());
+                    saveMessage(request, getText("courseList.alreadyRegistered", new Object[]{course.getName(), start, course.getLocation().getName()}, locale) + "");
+                    return new ModelAndView(getCancelView(), model);
                 }
             }
 

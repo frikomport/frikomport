@@ -46,12 +46,6 @@ function fillSelect(obj){
 }
 </script>
 
-<c:if test="${alreadyRegistered}">
-	<div class="message" style="font-size: 12px">
-		<fmt:message key="courseList.alreadyRegistered" />
-	</div>
-</c:if>
-
 <form:form commandName="course" name="courseList" action="listCourses.html">
     <div class="searchForm">
         <ul>

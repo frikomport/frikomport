@@ -1222,12 +1222,18 @@ public class MailUtil {
 		StringBuffer msg = new StringBuffer();
 		if(course.getStatus() == CourseStatus.COURSE_CREATED){
 			msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.status.created") + "\n\n"));
-		}else{
+		}
+		else if(course.getStatus() == CourseStatus.COURSE_FINISHED){
+			msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.status.finished") + "\n\n"));
+		}
+		else {
 			msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.status.published") + "\n\n"));
 		}
 				
 		appendCourseDetails(course, msg, configurationsMap);
+		msg.append("\n");
 		addDetailsLink(course, msg);
+		msg = new StringBuffer(msg.toString().replaceAll("&hash=<userhash/>", ""));
 		
 		MimeMessage created = getMailMessage(to, null, null, from, subject, msg, null, null, mailSender);
 		mailEngine.send(created);
