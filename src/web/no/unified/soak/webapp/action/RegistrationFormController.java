@@ -271,7 +271,6 @@ public class RegistrationFormController extends BaseFormController {
 
         String key = null;
         Map<String,Object> model = new HashMap<String,Object>();
-        Boolean courseFull = null;
         Boolean changedCourse = false;
 
         // Fetch the object from the form
@@ -312,7 +311,7 @@ public class RegistrationFormController extends BaseFormController {
 
             return new ModelAndView(getCancelView(), "courseid", registration.getCourseid());
         } else {
-            // Perform a new registration
+            // Perform a new registration / update personal information
 
             // Check email
             if(configurationManager.isActive("access.registration.emailrepeat",false) &&  !registration.getEmail().equals(registration.getEmailRepeat())){
@@ -416,22 +415,32 @@ public class RegistrationFormController extends BaseFormController {
 
             Integer availability = registrationManager.getAvailability(localAttendant, course);
 
+
+            // update only ?? 
+            boolean update = false;
+            if(!changedCourse && (registration.getId() != null && registration.getId().longValue() != 0)){
+            	update = true; // no change of course / not a new registration -- no email needed
+            }
+            
             if (availability.intValue() >= registration.getParticipants()) {
                 // There's room - save the registration
-                courseFull = new Boolean(false);
                 registration.setStatus(Registration.Status.RESERVED);
                 registrationManager.saveRegistration(registration);
                 Notification notification = new Notification();
                 notification.setRegistrationid(registration.getId());
                 notification.setReminderSent(false);
                 notificationManager.saveNotification(notification);
-                key = "registrationComplete.completed";
-                saveMessage(request, getText(key, locale));
-                sendMail(locale, course, registration, Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED);
+                if(update){
+                	key = "registrationComplete.updated";
+                	saveMessage(request, getText(key, locale));
+                }else{
+                	key = "registrationComplete.completed";
+                	saveMessage(request, getText(key, locale));
+                	sendMail(locale, course, registration, Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED);
+                }
 
             } else {
                 // The course is fully booked, put the applicant on the waiting list
-                courseFull = new Boolean(true);
                 registration.setStatus(Registration.Status.WAITING);
                 registrationManager.saveRegistration(registration);
                 Notification notification = new Notification();
@@ -446,9 +455,6 @@ public class RegistrationFormController extends BaseFormController {
 
             // Let the next page know what registration we were editing here
             model.put("registrationid", registration.getId().toString());
-
-            // Let us also put whether the applicant is put on the waiting list
-            model.put("courseFull", courseFull);
         }
 
         return new ModelAndView(getSuccessView(), model);

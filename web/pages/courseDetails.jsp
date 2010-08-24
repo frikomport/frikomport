@@ -53,7 +53,7 @@
         <td colspan="2" class="buttonBar">
 
             <input type="submit" class="button" name="return" onclick="bCancel=true"
-                value="<fmt:message key="button.course.list"/>" />
+                value="<fmt:message key="button.return"/>" />
 
 <c:if test="${isPublished}">
             <c:if test="${allowRegistration == true}">

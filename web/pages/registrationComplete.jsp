@@ -1,10 +1,8 @@
 <%@ include file="/common/taglibs.jsp"%>
 
-<title><fmt:message key="registrationComplete.title" />
-</title>
-<content tag="heading">
-<fmt:message key="registrationComplete.heading" />
-</content>
+<title><fmt:message key="registrationComplete.title" /></title>
+
+<content tag="heading"><fmt:message key="registrationComplete.heading" /></content>
 
 <spring:bind path="registration.*">
 	<c:if test="${not empty status.errorMessages}">
@@ -18,17 +16,6 @@
 		</div>
 	</c:if>
 </spring:bind>
-
-<c:if test="${courseFull == false}">
-	<div class="message" style="font-size: 12px">
-		<fmt:message key="registrationComplete.completed" />
-	</div>
-</c:if>
-<c:if test="${courseFull == true}">
-	<div class="message" style="font-size: 12px">
-		<fmt:message key="registrationComplete.waitinglist" />
-	</div>
-</c:if>
 
 <fmt:message key="date.format" var="dateformat" />
 <fmt:message key="time.format" var="timeformat" />
@@ -299,7 +286,7 @@
 					value="<c:out value="${status.value}"/>" />
 			</spring:bind>
 			<input type="submit" class="button" name="return"
-				onclick="bCancel=true" value="<fmt:message key="button.course.list"/>" />
+				onclick="bCancel=true" value="<fmt:message key="button.return"/>" />
 			<c:if test="userdefaults == true">
 				<button type="button"
 					onclick="location.href='<c:url context="${urlContext}" value="/performRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
