@@ -370,22 +370,20 @@
 					<c:if test="${empty registration.id}">
 	                    <input type="submit" class="button" name="save" onclick="bCancel=false" value="<fmt:message key="button.register.save"/>" />
     	            </c:if>
-					<c:if test="${!empty registration.id}">
+					<c:if test="${!empty registration.id && registration.status < 3}">
                     <input type="submit" class="button" name="save" id="savebutton" onclick="bCancel=false" value="<fmt:message key="button.register.update"/>" />
 						<c:if test="${isAdmin}">
 						<input type="submit" class="button" name="delete" onclick="bCancel=true;return confirmDeleteRegistration()"
 							value="<fmt:message key="button.delete"/>" />
 						</c:if>
-						<c:if test="${registration.status != 3}">
 						<input type="submit" class="button" name="unregister" onclick="bCancel=true;return confirmUnregistration()"
 							value="<fmt:message key="button.unregister"/>" />
-						</c:if>							
 					</c:if>
 					<input type="submit" class="button" name="cancel"
 						onclick="bCancel=true" value="<fmt:message key="button.cancel"/>" />
 				</td>
 			</tr>
-			<c:if test="${!empty courseList && (isAdmin || isEducationResponsible || isEventResponsible || isReader || isSVV)}">
+			<c:if test="${!empty courseList && (isAdmin || isEducationResponsible || isEventResponsible || isReader || isSVV) && registration.status < 3}">
 			<tr>
 				<th>
 					<soak:label key="registration.changeCourse" />
