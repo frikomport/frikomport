@@ -204,15 +204,15 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	}
 
 	public List getResponsibles() {
-		List ezUsers = getEZResponsibles();
+		List extUsers = getExtResponsibles();
 		List users = new ArrayList();
-		for (Iterator iter = ezUsers.iterator(); iter.hasNext();) {
-			ExtUser ezUser = (ExtUser) iter.next();
+		for (Iterator iter = extUsers.iterator(); iter.hasNext();) {
+			ExtUser extUser = (ExtUser) iter.next();
 			try {
-				users.add(dao.getUser(ezUser.getUsername()));
+				users.add(dao.getUser(extUser.getUsername()));
 			} catch (ObjectRetrievalFailureException objectRetrievalFailureException) {
-				User user = addUser(ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), ezUser
-						.getEmail(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune(), null, null);
+				User user = addUser(extUser.getUsername(), extUser.getFirst_name(), extUser.getLast_name(), extUser
+						.getEmail(), extUser.getId(), extUser.getRolenames(), extUser.getKommune(), null, null);
 				users.add(user);
 			}
 		}
@@ -475,7 +475,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		return roles;
 	}
 
-	private List getEZResponsibles() {
+	private List getExtResponsibles() {
         List<String> roles = new ArrayList();
 //        roles.add(messageSource.getMessage("role.eventresponsible", null, locale));
 //        roles.add(messageSource.getMessage("role.editor", null, locale));

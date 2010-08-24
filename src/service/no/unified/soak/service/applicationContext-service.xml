@@ -73,7 +73,8 @@
         <property name="patterns" value=".*saveUser"/>
     </bean>
 
-    <bean id="userSecurityAdvice" class="no.unified.soak.service.UserSecurityAdvice"/>
+    <bean id="userSecurityAdvice" class="no.unified.soak.service.UserSecurityAdvice">
+    </bean>
 
     <bean id="roleManager" parent="txProxyTemplate">
         <property name="target">

@@ -135,6 +135,7 @@
 				<form:errors cssClass="fieldError" path="address.city" />
 			</td>
 		</tr>
+    <c:if test="${useCountryForUser}">
 		<tr>
 			<th>
 				<soak:label key="user.address.country" />
@@ -144,6 +145,7 @@
 				<form:errors cssClass="fieldError" path="address.country" />
 			</td>
 		</tr>
+    </c:if>
 </c:if>
 		
 		<tr>
@@ -164,7 +166,7 @@
 			</td>
 		</tr>
 
-<c:if test="${useBirthdate}">
+<c:if test="${useBirthdateForUser}">
 		<tr>
 			<th>
 				<soak:label key="user.birthdate" />
@@ -236,6 +238,7 @@
 		</tr>
 </c:if>
 
+<c:if test="${useWebsiteForUser}">
 		<tr>
 			<th>
 				<soak:label key="user.website" />
@@ -249,6 +252,7 @@
 				</c:if>
 			</td>
 		</tr>
+</c:if>
 		<tr>
 			<th>
 				<soak:label key="course.organization" />

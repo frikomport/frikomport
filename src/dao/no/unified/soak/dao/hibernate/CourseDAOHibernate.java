@@ -156,6 +156,7 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
 
 		String sortorderCSVString = ApplicationResourcesUtil.getText("courseList.order");
 		String[] sortorderArray = StringUtils.split(sortorderCSVString, ",");
+		criteria.createAlias("organization", "O");
 		for (String fieldName : sortorderArray) {
 			criteria.addOrder(Order.asc(fieldName));
 		}

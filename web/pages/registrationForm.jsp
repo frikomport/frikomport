@@ -158,7 +158,7 @@
             </tr>
             </c:if>
 
-            <c:if test="${useBirthdate}">
+            <c:if test="${useBirthdateForRegistration}">
 			<tr>
 				<th>
 					<soak:label key="registration.birthdate" />

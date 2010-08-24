@@ -36,7 +36,7 @@
         </td>
     </tr>
 
-<c:if test="${useBirthdate}">
+<c:if test="${useBirthdateForUser}">
     <tr>
         <th>
             <fmt:message key="user.birthdate"/>

@@ -435,7 +435,12 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	configurationsToInsert.add(new Configuration("access.course.useOrganization2", true, null));
         	configurationsToInsert.add(new Configuration("access.course.showAttendantDetails", false, null));
         	configurationsToInsert.add(new Configuration("access.course.showDescriptionToPublic", false, null));
-        	
+
+        	//User
+        	configurationsToInsert.add(new Configuration("access.user.useBirthdate", false, null));
+        	configurationsToInsert.add(new Configuration("access.user.useWebsite", false, null));
+        	configurationsToInsert.add(new Configuration("access.user.useCountry", false, null));
+
         	// profile
         	configurationsToInsert.add(new Configuration("access.profile.showInvoiceaddress", false, null));
 
@@ -460,6 +465,11 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	configurationsToInsert.add(new Configuration("access.course.useAttendants", false, null));
         	configurationsToInsert.add(new Configuration("access.course.useRegisterBy", true, null));
         	configurationsToInsert.add(new Configuration("access.course.showDescriptionToPublic", true, null));
+
+        	//User
+        	configurationsToInsert.add(new Configuration("access.user.useBirthdate", true, null));
+        	configurationsToInsert.add(new Configuration("access.user.useWebsite", true, null));
+        	configurationsToInsert.add(new Configuration("access.user.useCountry", true, null));
 
         	// profile
         	configurationsToInsert.add(new Configuration("access.profile.showInvoiceaddress", true, null));

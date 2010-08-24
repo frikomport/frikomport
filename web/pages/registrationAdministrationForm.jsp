@@ -95,7 +95,7 @@
         titleKey="registration.email"/>
     </c:if>
 
-	 <c:if test="${useBirthdate}">
+	 <c:if test="${useBirthdateForRegistration}">
 	<display:column sortable="true" headerClass="sortable" titleKey="registration.birthdate" sortProperty="birthdate">
 		<fmt:formatDate value="${registrationList.birthdate}" type="date" pattern="${dateformat}"/>
     </display:column>

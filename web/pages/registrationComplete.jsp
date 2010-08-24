@@ -1,7 +1,6 @@
 <%@ include file="/common/taglibs.jsp"%>
 
 <title><fmt:message key="registrationComplete.title" /></title>
-
 <content tag="heading"><fmt:message key="registrationComplete.heading" /></content>
 
 <spring:bind path="registration.*">
@@ -79,7 +78,7 @@
 		</td>
 	</tr>
 
-<c:if test="${useBirthdate}">
+<c:if test="${useBirthdateForRegistration}">
 	<tr>
 		<th>
 			<fmt:message key="registration.birthdate" />
