@@ -138,8 +138,11 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
             if(status != null && status.length > 0){ // gir mulighet for å hente flere typer samtidig
                 criteria.add(Restrictions.in("status", status));
             }
-            else {
+            else if(course.getStatus() != null){
             	criteria.add(Restrictions.eq("status", course.getStatus()));
+            }
+            else {
+            	// alle statuser..
             }
         }
 

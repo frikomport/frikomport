@@ -139,6 +139,7 @@ public class LocationFormController extends BaseFormController {
         } // or to delete?
         else if (request.getParameter("delete") != null) {
             Course course = new Course();
+            course.setStatus(null); // se etter alle statuser
             course.setLocationid(location.getId());
             List<Course> searchedCourses = courseManager.searchCourses(course, null, null, null);
             if (searchedCourses == null || searchedCourses.size() == 0) {
