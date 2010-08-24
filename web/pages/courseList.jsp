@@ -323,9 +323,13 @@ function fillSelect(obj){
     <display:column media="csv excel xml pdf" property="location.name" sortable="true" headerClass="sortable" titleKey="course.location"/>
     <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
 	
+
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 	<display:column media="html" property="responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible">
          <a href="<c:url context="${urlContext}" value="/detailsUser.html"><c:param name="username" value="${courseList.responsible.username}"/></c:url>"><c:out value="${courseList.responsible.fullName}"/></a>
     </display:column>
+</c:if>
+
     <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
     
     <display:column media="csv excel xml pdf" property="responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible"/>
