@@ -87,7 +87,7 @@
 </c:if>
 
 <c:choose>
-	<c:when test="${admin == true && isPublished}">
+	<c:when test="${(admin == true || isReader) && isPublished}">
 		    <button type="button" class="large" onclick="location.href='<c:url context="${urlContext}" value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.administerRegistrations"/>
 		    </button>
