@@ -31,6 +31,7 @@ import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.WaitingListManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.MailUtil;
 
@@ -189,6 +190,10 @@ public class RegistrationAdministrationController extends BaseFormController {
                 || BooleanUtils.toBoolean((Boolean) request.getAttribute("isReader"))) {
             statusCriteria = null;
         } else {
+            statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();
+        }
+        
+        if(ApplicationResourcesUtil.isSVV()){
             statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();
         }
 		
