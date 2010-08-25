@@ -512,7 +512,7 @@ public class CourseFormController extends BaseFormController {
 
 			} else {
 				List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null,
-						(Status) null, null, null, null, null);
+						(Status) null, null, null, null, null, null, null);
 				if (registrations.isEmpty()) {
 					// check if this course is a copy and is being published
 					if ((course.getCopyid() != null) && (request.getParameter("publish") != null)) {
@@ -743,7 +743,7 @@ public class CourseFormController extends BaseFormController {
     private void sendMail(Locale locale, Course course, int event, String mailComment) {
         log.debug("Sending mail from CourseFormController");
         // Get all registrations
-        List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, (Status) null, null, null, null, null);
+        List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, (Status) null, null, null, null, null, null, null);
 
         // Build standard e-mail body
 		StringBuffer msg = null;

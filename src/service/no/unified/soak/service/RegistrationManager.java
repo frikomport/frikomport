@@ -122,7 +122,7 @@ public interface RegistrationManager extends Manager {
 	 * @return List of Courses
 	 */
 	public List getSpecificRegistrations(Long courseId, Long organizationId, Long serviceareaId, Registration.Status status,
-			Boolean invoiced, Boolean attended, Collection limitToCourses, String[] orderBy);
+			String firstname, String lastname, Boolean invoiced, Boolean attended, Collection limitToCourses, String[] orderBy);
 
 	/**
 	 * Returns a list of registration based on serveral given vital attributes.
@@ -152,7 +152,7 @@ public interface RegistrationManager extends Manager {
 	 * @return List of Courses
 	 */
 	public List getSpecificRegistrations(Long courseId, Long organizationId, Long serviceareaId, RegistrationStatusCriteria statusCriteria,
-			Boolean invoiced, Boolean attended, Collection limitToCourses, String[] orderBy);
+			String firstname, String lastname, Boolean invoiced, Boolean attended, Collection limitToCourses, String[] orderBy);
 
 	/**
 	 * Returns all registrations that are not confirmed (and thus are on the

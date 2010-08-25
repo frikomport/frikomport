@@ -167,9 +167,15 @@ public class RegistrationController extends BaseFormController {
             statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();
         }
 
+        String firstname = request.getParameter("firstName");
+        registration.setFirstName(firstname);
+
+        String lastname = request.getParameter("lastName");
+        registration.setLastName(lastname);
+        
         // Fetch all registrations that match the parameters
         List registrations = registrationManager.getSpecificRegistrations(registration.getCourseid(), registration
-                .getOrganizationid(), registration.getServiceAreaid(), statusCriteria, invoiced, attended, courseIds, null);
+                .getOrganizationid(), registration.getServiceAreaid(), statusCriteria, firstname, lastname, invoiced, attended, courseIds, null);
 
         if (registrations != null && registrations.size() > 0) {
             model.put("registrationList", registrations);
@@ -308,11 +314,16 @@ public class RegistrationController extends BaseFormController {
         	}
         }
 
+        String firstname = request.getParameter("firstName");
+        registration.setFirstName(firstname);
+
+        String lastname = request.getParameter("lastName");
+        registration.setLastName(lastname);
         // Find the courses that match the parameters
         model.put("registrationList",
             registrationManager.getSpecificRegistrations(
                 registration.getCourseid(), registration.getOrganizationid(),
-                registration.getServiceAreaid(), statusCriteria,
+                registration.getServiceAreaid(), statusCriteria, firstname, lastname, 
                 registration.getInvoiced(), registration.getAttended(), courseIds, null));
 
         return new ModelAndView(getSuccessView(), model);

@@ -162,14 +162,14 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 		return new Integer(availableSeats);
 	}
 
-	public List getSpecificRegistrations(Long courseId, Long organizationId, Long serviceAreaId, Status status, Boolean invoiced,
+	public List getSpecificRegistrations(Long courseId, Long organizationId, Long serviceAreaId, Status status, String firstname, String lastname, Boolean invoiced,
 			Boolean attended, Collection limitToCourses, String[] orderBy) {
-		return getSpecificRegistrations(courseId, organizationId, serviceAreaId, new RegistrationStatusCriteria(status), invoiced,
+		return getSpecificRegistrations(courseId, organizationId, serviceAreaId, new RegistrationStatusCriteria(status), firstname, lastname, invoiced,
 				attended, limitToCourses, orderBy);
 	}
 	
 	public List getSpecificRegistrations(Long courseId, Long organizationId,
-			Long serviceAreaId, RegistrationStatusCriteria statusCriteria, Boolean invoiced,
+			Long serviceAreaId, RegistrationStatusCriteria statusCriteria, String firstname, String lastname, Boolean invoiced,
 			Boolean attended, Collection limitToCourses, String[] orderBy) {
 		// The default setup - returns everything
 		DetachedCriteria criteria = DetachedCriteria
@@ -197,6 +197,13 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 			criteria.add(Restrictions.in("status", statusCriteria.getStatusValueList()));
 		}
 
+        if(firstname != null && !"".equals(firstname)) {
+            criteria.add(Restrictions.like("firstName", "%" + firstname + "%").ignoreCase());
+        }
+        if(lastname != null && !"".equals(lastname)) {
+            criteria.add(Restrictions.like("lastName", "%" + lastname + "%").ignoreCase());
+        }
+		
 		// Is an invoice sent
 		if (invoiced != null) {
 			criteria.add(Restrictions.eq("invoiced", invoiced));

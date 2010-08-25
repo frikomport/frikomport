@@ -113,7 +113,7 @@ public interface RegistrationDAO extends DAO {
 	 * @return List of Courses
 	 */
 	public List getSpecificRegistrations(Long courseId, Long organizationId,
-			Long serviceAreaId, Registration.Status status, Boolean invoiced,
+			Long serviceAreaId, Registration.Status status, String firstname, String lastname, Boolean invoiced,
 			Boolean attended, Collection limitToCourses, String[] orderBy);
 
 	/**
@@ -144,7 +144,7 @@ public interface RegistrationDAO extends DAO {
 	 * @return List of Courses
 	 */
 	public List getSpecificRegistrations(Long courseId, Long organizationId,
-			Long serviceAreaId, RegistrationStatusCriteria statusCriteria, Boolean invoiced,
+			Long serviceAreaId, RegistrationStatusCriteria statusCriteria, String firstname, String lastname, Boolean invoiced,
 			Boolean attended, Collection limitToCourses, String[] orderBy);
 
 	/**

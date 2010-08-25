@@ -103,7 +103,7 @@ public class CourseEmailController extends CourseNotificationController
      */
 	private void sendMail(Locale locale, Course course, int event, String mailComment, String from) {
 		log.debug("Sending mail from CourseEmailController");
-		List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, Registration.Status.RESERVED, null, null, null, null);
+		List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, Registration.Status.RESERVED, null, null, null, null, null, null);
 
 		// Sender mail til kun reserverte.
 		StringBuffer msg = null;

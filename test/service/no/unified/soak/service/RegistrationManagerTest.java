@@ -156,6 +156,8 @@ public class RegistrationManagerTest extends BaseManagerTestCase {
         Long organizationId = new Long(1);
         Long serviceareaId = new Long(1);
         Registration.Status status = Registration.Status.RESERVED;
+        String firstname = null;
+        String lastname = null;
         Boolean invoiced = new Boolean(true);
         Boolean attended = new Boolean(true);
 		List limitToCourses = null;
@@ -163,7 +165,7 @@ public class RegistrationManagerTest extends BaseManagerTestCase {
         registrationDAO.expects(once()).method("getSpecificRegistrations")
                        .will(returnValue(new ArrayList()));
         registrationManager.getSpecificRegistrations(courseId, organizationId,
-            serviceareaId, status, invoiced, attended, limitToCourses, null);
+            serviceareaId, status, firstname, lastname, invoiced, attended, limitToCourses, null);
         registrationDAO.verify();
     }
 

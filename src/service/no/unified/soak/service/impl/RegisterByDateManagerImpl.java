@@ -113,7 +113,7 @@ public class RegisterByDateManagerImpl extends BaseManager implements RegisterBy
 	        
 	        String[] orderBy = new String[] {"lastName", "firstName"};
 	        
-	        List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, (Status)null, null, null, null, orderBy);
+	        List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, (Status)null, null, null, null, null, null, orderBy);
 	        
 	        String attachementFilename = createPdf(course, registrations);
 	        log.debug("attachementFilename: " + attachementFilename);

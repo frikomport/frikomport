@@ -112,10 +112,10 @@ public class RegistrationManagerImpl extends BaseManager implements
 	 *      java.lang.Boolean)
 	 */
 	public List getSpecificRegistrations(Long courseId, Long organizationId,
-			Long serviceareaId, Registration.Status status, Boolean invoiced,
+			Long serviceareaId, Registration.Status status, String firstname, String lastname, Boolean invoiced,
 			Boolean attended, Collection limitToCourses, String[] orderBy) {
 		return dao.getSpecificRegistrations(courseId, organizationId,
-				serviceareaId, status, invoiced, attended, limitToCourses,
+				serviceareaId, status, firstname, lastname, invoiced, attended, limitToCourses,
 				orderBy);
 	}
 
@@ -125,9 +125,9 @@ public class RegistrationManagerImpl extends BaseManager implements
 	 *      Collection, String[])
 	 */
 	public List getSpecificRegistrations(Long courseId, Long organizationId, Long serviceareaId,
-			RegistrationStatusCriteria statusCriteria, Boolean invoiced, Boolean attended, Collection limitToCourses,
+			RegistrationStatusCriteria statusCriteria, String firstname, String lastname, Boolean invoiced, Boolean attended, Collection limitToCourses,
 			String[] orderBy) {
-		return dao.getSpecificRegistrations(courseId, organizationId, serviceareaId, statusCriteria, invoiced, attended,
+		return dao.getSpecificRegistrations(courseId, organizationId, serviceareaId, statusCriteria, firstname, lastname, invoiced, attended,
 				limitToCourses, orderBy);
 	}
 
