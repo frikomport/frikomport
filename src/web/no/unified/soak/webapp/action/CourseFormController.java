@@ -276,7 +276,7 @@ public class CourseFormController extends BaseFormController {
                 }
 
                 //Check if course is published
-                model.put("isPublished", Boolean.valueOf(course.getStatus().intValue() > CourseStatus.COURSE_CREATED.intValue()));
+                model.put("isPublished", CourseStatus.COURSE_PUBLISHED.equals(course.getStatus()));
                 model.put("isCancelled", Boolean.valueOf(course.getStatus().equals(CourseStatus.COURSE_CANCELLED)));
             }
             
