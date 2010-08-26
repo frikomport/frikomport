@@ -186,6 +186,15 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 			<c:set var="tdClass" value="" />
 		</c:otherwise>
 	</c:choose>
+	
+	<c:choose> 
+		<c:when test="${!empty registrationList && registrationList.course.status == 3}">
+		<c:set var="tdClass2" value="canceled" />
+		</c:when>
+		<c:otherwise>
+			<c:set var="tdClass2" value="" />
+		</c:otherwise>
+	</c:choose>
     
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
@@ -198,25 +207,25 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 </c:if>
 
 <c:if test="${showCourseName}">
-    <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="course.name" class="${tdClass}">
+    <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="course.name" class="${tdClass2}">
          <a href="<c:url context="${urlContext}" value="/detailsCourse.html"><c:param name="id" value="${registrationList.course.id}"/></c:url>" 
          title="<c:out value="${registrationList.course.description}"/>"><c:out value="${registrationList.course.name}"/></a>
     </display:column>
-    <display:column media="csv excel xml pdf" property="course.name" sortable="true" headerClass="sortable" titleKey="course.name" class="${tdClass}"/>
+    <display:column media="csv excel xml pdf" property="course.name" sortable="true" headerClass="sortable" titleKey="course.name" class="${tdClass2}"/>
 </c:if>
 
 <c:choose>
 <c:when test="${showCourseName}">
-    <display:column sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="course.startTime" class="${tdClass}">
+    <display:column sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="course.startTime" class="${tdClass2}">
          <fmt:formatDate value="${registrationList.course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
 </c:when>
 <c:otherwise>
-    <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="course.startTime">
+    <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="course.startTime" class="${tdClass2}">
          <a href="<c:url context="${urlContext}" value="/detailsCourse.html"><c:param name="id" value="${registrationList.course.id}"/></c:url>" 
          title="<c:out value="${registrationList.course.description}"/>"><fmt:formatDate value="${registrationList.course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/></a>
     </display:column>
-    <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="course.startTime">
+    <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="course.startTime" class="${tdClass2}">
 		<fmt:formatDate value="${registrationList.course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
 </c:otherwise>    

@@ -79,11 +79,9 @@ public class MailUtil {
         	msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
         }
         
-        msg.append("\n"); // empty line
-
         addMailComment(mailComment, msg);
 
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseCancelled.mail.body", " " + course.getName())));
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseCancelled.mail.body")) + "\n");
 
         msg.append("\n");
 
@@ -96,9 +94,6 @@ public class MailUtil {
 
         msg.append("\n\n"); // empty lines
 
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseCancelled.mail.body", " " + course.getName() + "\n")));
-
-        msg.append("\n\n");
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from")))	+ "\n");
         return msg;
     }
