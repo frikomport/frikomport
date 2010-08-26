@@ -101,7 +101,7 @@
 	</c:otherwise>
 </c:choose>
 
-<c:if test="${admin == true}">
+<c:if test="${admin == true && !isSVV}">
 		    <button type="button" class="large" onclick="location.href='<c:url context="${urlContext}" value="/editFileCourse.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.administerFiles"/>
 		    </button>
