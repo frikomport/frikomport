@@ -55,9 +55,10 @@ public interface UserManager {
     /**
 	 * Retrieves a list of users, filtering with parameters on a user object
 	 * @param user parameters to filter on
+	 * @param hashuserFilter 
 	 * @return List
 	 */
-	public List getUsers(User user);
+	public List getUsers(User user, boolean hashuserFilter);
 
 	/**
 	 * Retrieves a user by hash.  An exception is thrown if no user

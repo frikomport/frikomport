@@ -97,8 +97,8 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	/**
 	 * @see no.unified.soak.service.UserManager#getUsers(no.unified.soak.model.User)
 	 */
-	public List getUsers(User user) {
-		return dao.getUsers(user);
+	public List getUsers(User user, boolean hashuserFilter) {
+		return dao.getUsers(user, hashuserFilter);
 	}
 
 	public User findUserByEmail(String email) {

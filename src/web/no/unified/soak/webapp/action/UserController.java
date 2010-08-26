@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 
 import no.unified.soak.model.User;
 import no.unified.soak.service.UserManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -57,8 +58,16 @@ public class UserController extends BaseFormController {
         if(comm != null) {
             user = (User)comm;
         }
-        
-        List users = userManager.getUsers(user);
+
+        List users = null;
+        if(ApplicationResourcesUtil.isSVV()){
+        	// SVV ønsker IKKE visning av annet enn interne brukere under "Brukerliste"
+        	user.setHashuser(false);
+        	users = userManager.getUsers(user, true);
+        }
+        else {
+        	users = userManager.getUsers(user, false);
+        }
         
         if (users != null) {
             model.put("userList", users);
@@ -77,8 +86,16 @@ public class UserController extends BaseFormController {
         User user = (User) command;
         model.put("user", user);
         session.setAttribute("user", user);
-        
-        List users = userManager.getUsers(user);
+
+        List users = null;
+        if(ApplicationResourcesUtil.isSVV()){
+        	// SVV ønsker IKKE visning av annet enn interne brukere under "Brukerliste"
+        	user.setHashuser(false);
+        	users = userManager.getUsers(user, true);
+        }
+        else {
+        	users = userManager.getUsers(user, false);
+        }
         
         if (users != null) {
             model.put("userList", users);

@@ -63,7 +63,7 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
     /**
      * @see no.unified.soak.dao.UserDAO#getUsers(no.unified.soak.model.User)
      */
-    public List getUsers(User user) {
+    public List getUsers(User user, boolean hashuserFilter) {
         DetachedCriteria criteria = DetachedCriteria.forClass(User.class);
         
         if(user != null) {
@@ -78,6 +78,10 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
             }
             if(user.getEmail() != null && !"".equals(user.getEmail())) {
                 criteria.add(Restrictions.like("email", "%" + user.getEmail() + "%").ignoreCase());
+            }
+            
+            if(hashuserFilter){
+            	criteria.add(Restrictions.eq("hashuser", user.getHashuser()));
             }
         }
         

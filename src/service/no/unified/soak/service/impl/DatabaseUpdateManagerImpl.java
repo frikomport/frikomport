@@ -795,7 +795,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
      * @since 1.5
      */
     private void updateUsers() {
-        List<User> users = userManager.getUsers(new User());
+        List<User> users = userManager.getUsers(new User(), false);
         if (users != null && !users.isEmpty()) {
             Iterator<User> it = users.iterator();
             while (it.hasNext()) {

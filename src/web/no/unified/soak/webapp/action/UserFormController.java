@@ -204,15 +204,7 @@ public class UserFormController extends BaseFormController {
                 }
             }
         }
-        
-        if(ApplicationResourcesUtil.isSVV()){
-        	// endring av view siden "Brukerliste" er deaktivert for SVV
-        	// setter derfor view til å være "Ansvarlige" i stedet
-        	return new ModelAndView("redirect:listResponsibles.html");
-        }
-        
         return new ModelAndView(getCancelView());
-//        return showForm(request, response, errors);
     }
 
     protected ModelAndView showForm2(HttpServletRequest request,
