@@ -43,7 +43,7 @@ div#menuDiv ul.menuList li.menubar > ul > li {
 	background-position: bottom;
 	background-color: #37424A; 
 	border: 1px dotted #5f686E;
-	color: #FFFFFF;
+	color: #FFFFFF !important;
 }
 
 div#menuDiv ul.menuList li.menubar > ul > li:HOVER {
