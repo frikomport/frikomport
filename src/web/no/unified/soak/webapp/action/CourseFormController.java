@@ -266,8 +266,23 @@ public class CourseFormController extends BaseFormController {
                 if ((courseid != null) && StringUtils.isNumeric(courseid)
                         && StringUtils.isNotBlank(courseid)
                         && (Long.parseLong(courseid) != 0)) {
-                    Integer available = registrationManager.getAvailability(true, course);
-                    model.put("isCourseFull", new Boolean(available.intValue() == 0 ));
+
+                	// evnt. deaktivering av ventelistefunksjonalitet
+                    Integer availability = registrationManager.getAvailability(true, course);
+                    if (availability.intValue() > 0)
+                    	model.put("isCourseFull", new Boolean(false));
+                    else { 
+                    	if(configurationManager.isActive("access.registration.useWaitlists", true)){
+                    		// ventelistefunksjonalitet er aktivert, påmelding tillatt uten ledige plasser
+            	        	model.put("isCourseFull", new Boolean(false));
+                    		saveMessage(request, getText("errors.courseFull.waitlistwarning", locale));
+                    	}
+                    	else {
+                    		model.put("isCourseFull", new Boolean(true));
+                    		saveMessage(request, getText("errors.courseFull.warning", locale));
+                    	}
+                    }
+                    
                     Integer registrations = registrationManager.getNumberOfAttendants(false, course);
                     Integer attachments = attachmentManager.getCourseAttachments(course.getId()).size();
                     // Course with registrations cannot be deleted.

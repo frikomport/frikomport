@@ -148,9 +148,6 @@ function fillSelect(obj){
 
 <form:form commandName="course" onsubmit="return validateCourse(this)" name="course">
 
-
-
-
     <table class="detail">
 
 		<form:hidden path="id" />

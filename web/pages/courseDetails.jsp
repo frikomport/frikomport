@@ -27,7 +27,6 @@
 <fmt:message key="attachmentList.items" var="items"/>
 
 <table class="detail">
-
     <spring:bind path="course.id">
     <input type="hidden" name="<c:out value="${status.expression}"/>" value="<c:out value="${status.value}"/>"/>
     </spring:bind>
@@ -36,19 +35,6 @@
 		<jsp:param name="course" value="${course}"/>
 	</jsp:include>
 
-
-<c:if test="${allowRegistration == true && isCourseFull == true}">
-    <tr>
-        <td colspan="2">
-            <div class="error">
-           		<img src="<c:url context="${urlContext}" value="/images/iconWarning.gif"/>"
-               		alt="<fmt:message key="icon.warning"/>" class="icon" />
-           		<fmt:message key="errors.courseFull.warning"/><br />
-    		</div>
-        </td>
-    </tr>
-</c:if>
-
     <tr>
         <td colspan="2" class="buttonBar">
 
@@ -56,7 +42,7 @@
                 value="<fmt:message key="button.return"/>" />
 
 <c:if test="${isPublished}">
-            <c:if test="${allowRegistration == true}">
+            <c:if test="${allowRegistration == true && isCourseFull == false}">
 			    <button type="button" onclick="location.href='<c:url context="${urlContext}" value="/performRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 		    	    <fmt:message key="button.signup"/>
 			    </button>

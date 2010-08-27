@@ -190,7 +190,23 @@ public class RegistrationFormController extends BaseFormController {
         start.setTime(new Date());
         start.add(Calendar.YEAR, -16);
         model.put("startYear", start.getTime());
-        
+
+        // evnt. deaktivering av ventelistefunksjonalitet
+        Integer availability = registrationManager.getAvailability(true, courseManager.getCourse(courseId));
+        if (availability.intValue() > 0)
+        	model.put("isCourseFull", new Boolean(false));
+        else { 
+        	if(configurationManager.isActive("access.registration.useWaitlists", true)){
+        		// ventelistefunksjonalitet er aktivert, påmelding tillatt uten ledige plasser
+	        	model.put("isCourseFull", new Boolean(false));
+        		saveMessage(request, getText("errors.courseFull.waitlistwarning", locale));
+        	}
+        	else {
+        		model.put("isCourseFull", new Boolean(true));
+        		saveMessage(request, getText("errors.courseFull.warning", locale));
+        	}
+        }
+
         return model;
     }
 
@@ -357,7 +373,30 @@ public class RegistrationFormController extends BaseFormController {
 				args = new Object[] { getText("registration.invoiceAddress.postalCode", request.getLocale()), "", ""};
 				errors.rejectValue("invoiceAddress.postalCode", "errors.required", args, "");
 			}
+
+			String participants = request.getParameter("participants");
+			if(!StringUtils.isNumeric(participants) && Integer.parseInt(participants) < 1){
+				args = new Object[] { getText("registration.participants", request.getLocale()), "", ""};
+				errors.rejectValue("participants", "errors.positivNumber", args, "");
+			}
 			
+            // Lets find out if the course has room for this one
+            Boolean localAttendant = new Boolean(false);
+            if (registration.getOrganizationid() != null) {
+                if (registration.getOrganizationid().longValue() == course.getOrganizationid().longValue()) {
+                    localAttendant = new Boolean(true);
+                }
+            }
+            // sjekk om det er nok plasser til alle deltakere
+            Integer availability = registrationManager.getAvailability(localAttendant, course);
+        	if(configurationManager.isActive("access.registration.useWaitlists", true)){
+            	if (availability.intValue() < registration.getParticipants()) {
+            		// det er ikke plass til alle deltakere i registreringen
+            		args = new Object[] {availability, getText("courseList.theitem", request.getLocale()).toLowerCase(), ""};
+    				errors.rejectValue("participants", "errors.limitedNumberOfSeats", args, "");
+            	}
+            }
+            
 			if (validateAnnotations(registration, errors, null) > 0) {
 				args = new Object[] {};
 			}
@@ -403,18 +442,6 @@ public class RegistrationFormController extends BaseFormController {
 
             registration.setUser(user);
             registration.setUsername(user.getUsername());
-
-            // Lets find out if the course has room for this one
-            Boolean localAttendant = new Boolean(false);
-
-            if (registration.getOrganizationid() != null) {
-                if (registration.getOrganizationid().longValue() == course.getOrganizationid().longValue()) {
-                    localAttendant = new Boolean(true);
-                }
-            }
-
-            Integer availability = registrationManager.getAvailability(localAttendant, course);
-
 
             // update only ?? 
             boolean update = false;

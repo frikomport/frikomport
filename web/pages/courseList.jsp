@@ -201,7 +201,7 @@ function fillSelect(obj){
 </c:when>
 <c:otherwise>
    <display:column media="html" sortable="false" class="mediumButtonWidth" titleKey="button.signup">
-		<c:if test="${courseList.status == 2}">
+		<c:if test="${courseList.status == 2 && (courseList.availableAttendants > 0 || useWaitlists)}">
 		    <button type="button"
 		        onclick="location.href='<c:url context="${urlContext}" value="/performRegistration.html"><c:param name="courseId" value="${courseList.id}" /></c:url>'">
 		        <fmt:message key="button.signup"/>

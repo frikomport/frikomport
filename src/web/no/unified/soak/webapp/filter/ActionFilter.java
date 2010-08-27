@@ -32,6 +32,7 @@ import net.sf.ehcache.Element;
 import no.unified.soak.Constants;
 import no.unified.soak.dao.ExtUserDAO;
 import no.unified.soak.ez.ExtUser;
+import no.unified.soak.model.Configuration;
 import no.unified.soak.model.RoleEnum;
 import no.unified.soak.model.User;
 import no.unified.soak.service.ConfigurationManager;
@@ -375,7 +376,8 @@ public class ActionFilter implements Filter {
 		session.setAttribute("showWorkplace", configurationManager.isActive("access.registration.showWorkplace", true));
 		session.setAttribute("showComment", configurationManager.isActive("access.registration.showComment", true));
 		session.setAttribute("useBirthdateForRegistration", configurationManager.isActive("access.registration.useBirthdate", false));
-
+		session.setAttribute("useWaitlists", configurationManager.isActive("access.registration.useWaitlists", true));
+		
 		// user
 		session.setAttribute("useBirthdateForUser", configurationManager.isActive("access.user.useBirthdate", false));
 		session.setAttribute("useWebsiteForUser", configurationManager.isActive("access.user.useWebsite", false));

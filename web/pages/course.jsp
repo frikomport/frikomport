@@ -5,7 +5,6 @@
 <fmt:message key="attachmentList.items" var="items" />
 
 <tr>
-<c:if test="${showCourseName}">
 	<th>
 		<fmt:message key="course.name" />
 	</th>
@@ -23,7 +22,6 @@
 		</c:choose>
 	</td>
 </tr>
-</c:if>
 
 <c:if test="${showDescription && ((isReader || isEventResponsible || isEducationResponsible || isAdmin) || (showDescriptionToPublic))}">
 <tr>
@@ -161,6 +159,7 @@
 </tr>
 </c:if>
 
+<c:if test="${!isSVV  || (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
 <tr>
 	<th>
 		<fmt:message key="course.maxAttendants" />
@@ -170,6 +169,7 @@
 			minFractionDigits="0" />
 	</td>
 </tr>
+</c:if>
 
 <c:if test="${useAttendants && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
 <tr>

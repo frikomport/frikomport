@@ -421,6 +421,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	configurationsToInsert.add(new Configuration("access.registration.showWorkplace", false, null));
         	configurationsToInsert.add(new Configuration("access.registration.useBirthdate", true, null));
         	configurationsToInsert.add(new Configuration("access.registration.mobilePhone.digitsOnly.minLength8", true, null));
+        	configurationsToInsert.add(new Configuration("access.registration.useWaitlists", false, null));
         	
         	//course
         	configurationsToInsert.add(new Configuration("access.course.usePayment", false, null));
@@ -454,6 +455,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         	configurationsToInsert.add(new Configuration("access.registration.showWorkplace", true, null));
         	configurationsToInsert.add(new Configuration("access.registration.useBirthdate", false, null));
         	configurationsToInsert.add(new Configuration("access.registration.mobilePhone.digitsOnly.minLength8", false, null));
+        	configurationsToInsert.add(new Configuration("access.registration.useWaitlists", true, null));
 
         	//course
         	configurationsToInsert.add(new Configuration("access.course.usePayment", true, null));

@@ -83,14 +83,19 @@
 	</div>
 	</c:if>
 
-	<div class="message" style="font-size: 12px">
-		<c:out value="${course.name}" escapeXml="false" />, <c:out value="${course.location.name}"/> - <fmt:formatDate value="${course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
-	</div>
-
 	<form:form commandName="registration" onsubmit="return validateRegistration(this)" name="registration">
 		<table class="detail">
 			<form:hidden path="id" />
 			<form:hidden path="courseid" />
+
+			<tr>
+				<th>
+					<soak:label key="course.name" />
+				</th>
+				<td>
+					<c:out value="${course.name}" escapeXml="false" />, <c:out value="${course.location.name}"/> - <fmt:formatDate value="${course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
+				</td>
+			</tr>
 
 			<c:if test="${!empty registration.id}">
 			<tr>
@@ -367,7 +372,7 @@
 		<table>	
 			<tr>
 				<td class="buttonBar" colspan="2" align="left">
-					<c:if test="${empty registration.id}">
+					<c:if test="${empty registration.id && isCourseFull == false}">
 	                    <input type="submit" class="button" name="save" onclick="bCancel=false" value="<fmt:message key="button.register.save"/>" />
     	            </c:if>
 					<c:if test="${!empty registration.id && registration.status < 3}">
