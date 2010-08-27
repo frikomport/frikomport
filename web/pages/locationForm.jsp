@@ -119,6 +119,7 @@
         </td>
     </tr>
 
+	<c:if test="${!isSVV}">
     <tr>
         <th>
             <soak:label key="location.owner"/>
@@ -138,7 +139,8 @@
             <form:errors cssClass="fieldError" path="feePerDay"/>
         </td>
     </tr>
-
+	</c:if>
+    
     <tr>
         <th>
             <soak:label key="location.organization"/>

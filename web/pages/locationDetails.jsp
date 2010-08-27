@@ -48,7 +48,7 @@
         </td>
     </tr>
 
-<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+<c:if test="${(isAdmin || isEducationResponsible || isEventResponsible || isReader) && !isSVV}">
     <tr>
         <th>
             <fmt:message key="location.owner"/>
