@@ -15,7 +15,7 @@
             href="styles/svv/print.css"
             media="print" />
       <script type="text/javascript" src="scripts/svv/jquery-1.2.6.js">// avoid self-enclosing tag</script>
-      <script type="text/javascript" src="scripts/svv/global.js">// avoid self-enclosing tag</script>
+      <script type="text/javascript" src="scripts/svv/global_noConflict.js">// avoid self-enclosing tag</script>
       <link href="images/SVV/pagecache/favicon.ico" rel="shortcut icon" type="image/x-icon" />
       <meta content="no" http-equiv="content-language" />
       <meta content="text/javascript" http-equiv="content-script-type" />

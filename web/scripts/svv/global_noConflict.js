@@ -1,3 +1,6 @@
+// For samspill med andre javascriptrammeverk //
+var $j = jQuery.noConflict();
+
 //---------------------------------------------------------------------------------------
 //
 //  Set active CSS
@@ -6,33 +9,33 @@
 
 function changeFontsize() {
 	if(finnesPaaSiden("body.fontsizeLargest")){
-		 $("body").removeClass("fontsizeLargest");
-		 $("body").addClass("fontsizeNormal");
+		 $j("body").removeClass("fontsizeLargest");
+		 $j("body").addClass("fontsizeNormal");
 	}
 	else if(finnesPaaSiden("body.fontsizeNormal")){
-		 $("body").removeClass("fontsizeNormal");
-		 $("body").addClass("fontsizeLarge");
+		 $j("body").removeClass("fontsizeNormal");
+		 $j("body").addClass("fontsizeLarge");
 	}
 	else {
-		 $("body").removeClass("fontsizeLarge");
-		 $("body").addClass("fontsizeLargest");
+		 $j("body").removeClass("fontsizeLarge");
+		 $j("body").addClass("fontsizeLargest");
 	}
 	
 }
 	
 function setFontsize(size){
 	if(size == "normal"){
-		$("body").removeClass("fontsizeLarge");
-		$("body").removeClass("fontsizeLargest");
-		$("body").addClass("fontsizeNormal");
+		$j("body").removeClass("fontsizeLarge");
+		$j("body").removeClass("fontsizeLargest");
+		$j("body").addClass("fontsizeNormal");
 	}else if(size == "large"){
-		$("body").removeClass("fontsizeLargest");
-		$("body").removeClass("fontsizeNormal");
-		$("body").addClass("fontsizeLarge");
+		$j("body").removeClass("fontsizeLargest");
+		$j("body").removeClass("fontsizeNormal");
+		$j("body").addClass("fontsizeLarge");
 	}else{
-		$("body").removeClass("fontsizeNormal");
-		$("body").removeClass("fontsizeLarge");
-		$("body").addClass("fontsizeLargest");
+		$j("body").removeClass("fontsizeNormal");
+		$j("body").removeClass("fontsizeLarge");
+		$j("body").addClass("fontsizeLargest");
 	}
 
 }
@@ -63,51 +66,51 @@ function setContrastText(contrast) {
 			contrast: "Standard kontrast"
 		}
 	}
-	$("#changeContrast").text(contrastText[contrast]);
+	$j("#changeContrast").text(contrastText[contrast]);
 }
 
 
 function setContrast(contrast) {
 	if (contrast == "empty") {
 	    /*change css src*/
-	    var oldHrefCss = $("#contrast").attr("href");
+	    var oldHrefCss = $j("#contrast").attr("href");
 		var newHrefCss = oldHrefCss.replace('contrast.css','empty.css');
-		$("#contrast").attr("href", newHrefCss);
+		$j("#contrast").attr("href", newHrefCss);
 		
 		/*change css src for external css (used when EVS decorates another application)*/
 		if(finnesPaaSiden("#contrast_external") ){
-			var oldHrefCssExt = $("#contrast_external").attr("href");
+			var oldHrefCssExt = $j("#contrast_external").attr("href");
 			var newHrefCssExt = oldHrefCssExt.replace('contrast.css','empty.css');
-			$("#contrast_external").attr("href", newHrefCssExt);
+			$j("#contrast_external").attr("href", newHrefCssExt);
 		}
 		
 		/*change print-icon*/
 		if(finnesPaaSiden(".topbar a.contentprint img") ){
-			var oldHrefPrinter = $(".topbar a.contentprint img").attr("src");
+			var oldHrefPrinter = $j(".topbar a.contentprint img").attr("src");
 			var newHrefPrinter = oldHrefPrinter.replace('printerikon-hoykontrast.gif','printerikon.gif');
-			$(".topbar a.contentprint img").attr("src", newHrefPrinter);
+			$j(".topbar a.contentprint img").attr("src", newHrefPrinter);
 		}
-		$("#PageContainer").removeClass("highContrast");
+		$j("#PageContainer").removeClass("highContrast");
 	} else {
 		/*change css src*/
-		var oldHrefCss = $("#contrast").attr("href");
+		var oldHrefCss = $j("#contrast").attr("href");
 		var newHrefCss = oldHrefCss.replace('empty.css','contrast.css');
-		$("#contrast").attr("href", newHrefCss);
+		$j("#contrast").attr("href", newHrefCss);
 		
 		/*change css src for external css (used when EVS decorates another application)*/
 		if(finnesPaaSiden("#contrast_external") ){
-			var oldHrefCssExt = $("#contrast_external").attr("href");
+			var oldHrefCssExt = $j("#contrast_external").attr("href");
 			var newHrefCssExt = oldHrefCssExt.replace('empty.css','contrast.css');
-			$("#contrast_external").attr("href", newHrefCssExt);
+			$j("#contrast_external").attr("href", newHrefCssExt);
 		}
 		
 		/*change print-icon*/
 		if(finnesPaaSiden(".topbar a.contentprint img") ){
-			var oldHrefPrinter = $(".topbar a.contentprint img").attr("src");
+			var oldHrefPrinter = $j(".topbar a.contentprint img").attr("src");
 			var newHrefPrinter = oldHrefPrinter.replace('printerikon.gif','printerikon-hoykontrast.gif');
-			$(".topbar a.contentprint img").attr("src", newHrefPrinter);
+			$j(".topbar a.contentprint img").attr("src", newHrefPrinter);
 		}
-		$("#PageContainer").addClass("highContrast");
+		$j("#PageContainer").addClass("highContrast");
 	}
 	setContrastText(contrast);
 }
@@ -173,14 +176,14 @@ function loadContrastAndFontsize() {
 	setContrast(contrast);
 	
 	// Prepare saving of contrast when leaving page
-	$(window).unload(saveContrast_eh);
+	$j(window).unload(saveContrast_eh);
 	
 	var cookief = readCookie("fontsize");
   var fontsize = cookief ? cookief : 'normal'
   setFontsize(fontsize);
   
   // Prepare saving of fontsize when leaving page
-	$(window).unload(saveFontsize_eh);
+	$j(window).unload(saveFontsize_eh);
 }
 
 
@@ -217,7 +220,7 @@ function eh_autoSubmitForm(e) {
 var turnOffVPmapSrc = "images/vegprosjekterKart.gif";
 
 function nullstill() {
-	var form = $("#vpAvansertSokForm").get(0);
+	var form = $j("#vpAvansertSokForm").get(0);
 	form.fylke.selectedIndex = 0;
 	form.kommune.selectedIndex = 0;
 	form.veg.selectedIndex = 0;
@@ -227,42 +230,42 @@ function nullstill() {
 }
 
 function fjernSokeresultat() {
-	$("#vpSok #resultatDirekteSok").empty();
-	$("#vpSok .pagenavigation").hide();
+	$j("#vpSok #resultatDirekteSok").empty();
+	$j("#vpSok .pagenavigation").hide();
 }
 
 function aktiverMenypunkt(id) {
-	$("#vpFritekstSokMenypunkt").removeClass("selected");
-	$("#vpSokIKartMenypunkt").removeClass("selected");
-	$("#vpAvansertSokMenypunkt").removeClass("selected");
-	$(id).addClass("selected");	
+	$j("#vpFritekstSokMenypunkt").removeClass("selected");
+	$j("#vpSokIKartMenypunkt").removeClass("selected");
+	$j("#vpAvansertSokMenypunkt").removeClass("selected");
+	$j(id).addClass("selected");	
 }
 
 function showAvansertVPSok() {
 	aktiverMenypunkt("#vpAvansertSokMenypunkt");
-	$("#velgFylke").hide();
-	$(".sokeMeny").hide();
-	$("#avansertSok").show();
-	$("#valgtMetodeHeader").text("Avansert søk");
-	$("#hiddenSokemetode").attr("value", "avansert");
+	$j("#velgFylke").hide();
+	$j(".sokeMeny").hide();
+	$j("#avansertSok").show();
+	$j("#valgtMetodeHeader").text("Avansert søk");
+	$j("#hiddenSokemetode").attr("value", "avansert");
 }
 
 function showFritekstVPSok() {
 	aktiverMenypunkt("#vpFritekstSokMenypunkt");
-	//$("#velgFylke").hide();
-	$("#avansertSok").hide();
-	$(".sokeMeny").show();
-	$("#valgtMetodeHeader").text("Fritekstsøk");
-	$("#hiddenFritekstSokemetode").attr("value", "fritekst");
+	//$j("#velgFylke").hide();
+	$j("#avansertSok").hide();
+	$j(".sokeMeny").show();
+	$j("#valgtMetodeHeader").text("Fritekstsøk");
+	$j("#hiddenFritekstSokemetode").attr("value", "fritekst");
 }
 
 function showVPSokIKart() {
 	aktiverMenypunkt("#vpSokIKartMenypunkt");
-	$("#avansertSok").hide();
-	$(".sokeMeny").show();
-	$("#velgFylke").show();
-	$("#valgtMetodeHeader").text("Velg fylke");
-	$("#hiddenSokemetode").attr("value", "kart");
+	$j("#avansertSok").hide();
+	$j(".sokeMeny").show();
+	$j("#velgFylke").show();
+	$j("#valgtMetodeHeader").text("Velg fylke");
+	$j("#hiddenSokemetode").attr("value", "kart");
 }
 	
 function eh_showAvansertVPSok(e) {
@@ -289,13 +292,13 @@ function eh_showVPSokIKart(e) {
 
 function initVegprosjekter(highlightArea) {
 	
-	$("#vpSokIKartLink").click(eh_showVPSokIKart);
-	$("#vpAvansertSokLink").click(eh_showAvansertVPSok);
-	$("#vpFritekstSokLink").click(eh_showFritekstVPSok);
+	$j("#vpSokIKartLink").click(eh_showVPSokIKart);
+	$j("#vpAvansertSokLink").click(eh_showAvansertVPSok);
+	$j("#vpFritekstSokLink").click(eh_showFritekstVPSok);
 
-	if ($("#hiddenSokemetode").attr("value") == "avansert") {
+	if ($j("#hiddenSokemetode").attr("value") == "avansert") {
 		showAvansertVPSok();
-	} else if ($("#hiddenSokemetode").attr("value") == "fritekst") {
+	} else if ($j("#hiddenSokemetode").attr("value") == "fritekst") {
 		showFritekstVPSok();
 	} else {
 		showVPSokIKart();
@@ -314,60 +317,60 @@ var valgtBilde = 0;
 
 // Henter angitt tekst fra bildegalleridata-span'ene (eks bildetekst0)
 function tekst(type, id) {
-	return $('#datagrunnlag #' + type + id).text()
+	return $j('#datagrunnlag #' + type + id).text()
 }
 
 function antallBilder() {
-	return parseInt($('#antallBilder').text());
+	return parseInt($j('#antallBilder').text());
 }		
 
 function byttTilBilde(id) {
-	$('#bilde').attr('src', '');
-	$('#bilde').hide();
-	$('#bilde').attr('src', tekst('bilde', id));
-	$('#bilde').attr('alt', tekst('alttekst', id));
-	$('#bilde').fadeIn('slow');
-	$('.bildetekst').html(tekst('bildetekst', id));														
-	$('#bildeIndex').html(id + 1 + ' '); // Ekstra space for IE6
-	$('#bildelenke').attr('href', tekst('orginalStorrelse', id));					
+	$j('#bilde').attr('src', '');
+	$j('#bilde').hide();
+	$j('#bilde').attr('src', tekst('bilde', id));
+	$j('#bilde').attr('alt', tekst('alttekst', id));
+	$j('#bilde').fadeIn('slow');
+	$j('.bildetekst').html(tekst('bildetekst', id));														
+	$j('#bildeIndex').html(id + 1 + ' '); // Ekstra space for IE6
+	$j('#bildelenke').attr('href', tekst('orginalStorrelse', id));					
 }
 
 function skjulBilde(navn) {
-	$('#' + navn + 'Bilde').hide();
-	$('#' + navn + 'Pil').css("cursor", "default");
+	$j('#' + navn + 'Bilde').hide();
+	$j('#' + navn + 'Pil').css("cursor", "default");
 }
 
 function visBilde(navn) {
-	$('#' + navn + 'Bilde').show();
-	$('#' + navn + 'Pil').css("cursor", "pointer");
+	$j('#' + navn + 'Bilde').show();
+	$j('#' + navn + 'Pil').css("cursor", "pointer");
 }
 
 
 function disableLeftArrow() {
-	$('.venstrePil a').addClass('disabled');
+	$j('.venstrePil a').addClass('disabled');
 }
 
 function enableLeftArrow() {
-	$('.venstrePil a').removeClass('disabled');
+	$j('.venstrePil a').removeClass('disabled');
 }
 
 function disableRightArrow() {
-	$('.hoyrePil a').addClass('disabled');
+	$j('.hoyrePil a').addClass('disabled');
 }
 
 function enableRightArrow() {
-	$('.hoyrePil a').removeClass('disabled');
+	$j('.hoyrePil a').removeClass('disabled');
 }
 
 function hoyre() {					
 	visBilde('venstre');				
 	if (valgtBilde < antallBilder() - 1) {
-		$('#venstreBilde').attr('src', tekst('thumbnail', valgtBilde));
-		$('#midtBilde').attr('src', tekst('thumbnail', valgtBilde + 1));
+		$j('#venstreBilde').attr('src', tekst('thumbnail', valgtBilde));
+		$j('#midtBilde').attr('src', tekst('thumbnail', valgtBilde + 1));
 		if (valgtBilde == antallBilder() - 2) {
 			skjulBilde('hoyre');						
 		} else {
-			$('#hoyreBilde').attr('src', tekst('thumbnail', valgtBilde + 2));
+			$j('#hoyreBilde').attr('src', tekst('thumbnail', valgtBilde + 2));
 		}
 		valgtBilde++;
 		byttTilBilde(valgtBilde);
@@ -384,12 +387,12 @@ function hoyre() {
 function venstre() {
 	visBilde('hoyre');
 	if (valgtBilde > 0) {
-		$('#hoyreBilde').attr('src', tekst('thumbnail', valgtBilde));
-		$('#midtBilde').attr('src', tekst('thumbnail', valgtBilde - 1));
+		$j('#hoyreBilde').attr('src', tekst('thumbnail', valgtBilde));
+		$j('#midtBilde').attr('src', tekst('thumbnail', valgtBilde - 1));
 		if (valgtBilde == 1) {
 			skjulBilde('venstre');
 		} else {
-			$('#venstreBilde').attr('src', tekst('thumbnail', valgtBilde - 2));
+			$j('#venstreBilde').attr('src', tekst('thumbnail', valgtBilde - 2));
 		}
 		valgtBilde--;
 		byttTilBilde(valgtBilde);
@@ -405,20 +408,20 @@ function venstre() {
 
 function initBildegalleri() {
 	// Setter opp initiell tilstand p? bildene
-	$('#midtBilde').attr('src', tekst('thumbnail', 0));
-	$('#hoyreBilde').attr('src', tekst('thumbnail', 1));
+	$j('#midtBilde').attr('src', tekst('thumbnail', 0));
+	$j('#hoyreBilde').attr('src', tekst('thumbnail', 1));
 	
 	byttTilBilde(0);
 				
 	// Laster alle thumbnails for myk overgang n?r man skifter bilde
-	$('#datagrunnlag .thumbnail').each( function() {
+	$j('#datagrunnlag .thumbnail').each( function() {
 			var preloader = new Image();
 			preloader.src = this.innerHTML;
 		}
 	);
 	
-	$("#bildegalleri").show();
-	$("#bildeCounter").show();
+	$j("#bildegalleri").show();
+	$j("#bildeCounter").show();
 }
 
 //---------------------------------------------------------------------------------------
@@ -441,7 +444,7 @@ function byttImagemapBilde(hovedbildeId, mouseoverBildeUrl) {
 
 //Checks all elements named 'name' in 'form'
 function checkAll(formId, name) {
-	var form = $("#" + formId)[0];
+	var form = $j("#" + formId)[0];
 	for (var i = 0; i < form.elements.length; i++) {
 		var e = form.elements[i];
 		if (e.name == name) {
@@ -452,7 +455,7 @@ function checkAll(formId, name) {
 
 //Unchecks all elements named 'name' in 'form'
 function uncheckAll(formId, name) {
-	var form = $("#" + formId)[0];
+	var form = $j("#" + formId)[0];
 	for (var i = 0; i < form.elements.length; i++) {
 		var e = form.elements[i];
 		if (e.name == name) {
@@ -470,6 +473,7 @@ function uncheckAll(formId, name) {
 //---------------------------------------------------------------------------------------
 
 var pageTracker;
+
 function googleAnalytics(){
 	pageTracker = _gat._getTracker("UA-2627771-1");
 	pageTracker._trackPageview();
@@ -486,65 +490,65 @@ function initSokeboks() {
 	var path = window.location.pathname;
 	
 	if(path.indexOf("/en/") != -1){
-		$("#searchquery").val("Search..");
+		$j("#searchquery").val("Search..");
 	}else{
-		$("#searchquery").val("Søk..");
+		$j("#searchquery").val("Søk..");
 	}
 	
 	
-	$("#searchquery").bind("focus", function() {
+	$j("#searchquery").bind("focus", function() {
 		if(path.indexOf("/en/") != -1){
-			if($(this).val() == "Search.."){
-				$(this).val("");	
+			if($j(this).val() == "Search.."){
+				$j(this).val("");	
 			}
 		}else{
-			if($(this).val() == "Søk.."){
-				$(this).val("");	
+			if($j(this).val() == "Søk.."){
+				$j(this).val("");	
 			}
 		}
 	});
 	
-	$("#searchquery").bind("blur", function() {
-		if($(this).val() == ""){
+	$j("#searchquery").bind("blur", function() {
+		if($j(this).val() == ""){
 			if(path.indexOf("/en/") != -1){
-				$(this).val("Search..");	
+				$j(this).val("Search..");	
 			}else{
-				$(this).val("Søk..");	
+				$j(this).val("Søk..");	
 			}
 		}
 	});
 }
 
 function initVegmeldingerPaaForsiden() {
-	$("#vmPaaForsidenLenke").show();
-	$("#venteTekst").show();
-	var url = $("#lenkeTilXmlKilde").text();
-	var request = $.get(url, null, function(data, status) {
+	$j("#vmPaaForsidenLenke").show();
+	$j("#venteTekst").show();
+	var url = $j("#lenkeTilXmlKilde").text();
+	var request = $j.get(url, null, function(data, status) {
 		// skjul ventetekst
-		$("#venteTekst").hide();
+		$j("#venteTekst").hide();
 		
-		var error = $(data).find("exception");
+		var error = $j(data).find("exception");
 		if (error.length != 0) {
-			$("#feilmeldingTekst").show();
+			$j("#feilmeldingTekst").show();
 			return;
 		}
 		
-		var messages = $(data).find("message");
+		var messages = $j(data).find("message");
 		if (messages.length == 0) {
-			$("#ingenFunnetTekst").show();
+			$j("#ingenFunnetTekst").show();
 			return;
 		}
 		 
 		messages.each(function() {
-	        var message = $(this);
-	        var messageType = $(message).children("messageType");
-	        var heading = $(message).children("heading");
-	        var hash = $(message).children("hash");
-	        var validFrom = $(message).children("validFrom");
+	        var message = $j(this);
+	        var messageType = $j(message).children("messageType");
+	        var heading = $j(message).children("heading");
+	        var hash = $j(message).children("hash");
+	        var validFrom = $j(message).children("validFrom");
 	        
 			// opprette listeelement		        
-	        var listElem = $("#vmPaaForsidenMal").clone().show();
-	        var spans = $(listElem).find("span");
+	        var listElem = $j("#vmPaaForsidenMal").clone().show();
+	        var spans = $j(listElem).find("span");
 	        spans.eq(0).html(messageType.text());
 	        spans.eq(1).html(heading.text());
 	        if(validFrom != null && validFrom != ''){
@@ -565,13 +569,13 @@ function initVegmeldingerPaaForsiden() {
 function initSkjemabygger() {
 	// Disse feilmeldingene m? synkroniseres med feilmeldingene for server-side validering
 	// i skjemabygger.xsl, displayErrorMessage
-	$.extend($.validator.messages, {  
+	$j.extend($j.validator.messages, {  
 		required: "Påkrevet felt",  
 		email: "Ugyldig epostadresse",
 		number: "Ugyldig tall"
 	});
 		
-    $("#skjema").validate();
+    $j("#skjema").validate();
 }
 
 //---------------------------------------------------------------------------------------
@@ -599,23 +603,23 @@ function lightboxPopupClose(){
 	if(lightboxPopupStatus==1){
 		if (jQuery.browser.msie) {
 			//disable ClearType for better animation
-			$("#lightboxPopup").css({ 'background-color': '#fff'});
+			$j("#lightboxPopup").css({ 'background-color': '#fff'});
 		}
-		$("#lightboxPopup .kart").empty(); /*clear out the google map*/
-		$("#lightboxPopup").fadeOut(500, function () {
+		$j("#lightboxPopup .kart").empty(); /*clear out the google map*/
+		$j("#lightboxPopup").fadeOut(500, function () {
 			lightboxPopupReset();
 		});
-		$("#lightboxBackground").fadeOut(500);
+		$j("#lightboxBackground").fadeOut(500);
 		lightboxPopupStatus = 0;
 	}
 }
 
 function lightboxPopupReset(){
-	$("#lightboxPopup").css({'left':'378px'});
-	$("#lightboxPopup #innhold").css({'width':'225px'});
-	$("#lightboxPopup #info").hide();
-	$("#lightboxPopup #liste").hide();
-	$("#lightboxPopup").css('width','auto');
+	$j("#lightboxPopup").css({'left':'378px'});
+	$j("#lightboxPopup #innhold").css({'width':'225px'});
+	$j("#lightboxPopup #info").hide();
+	$j("#lightboxPopup #liste").hide();
+	$j("#lightboxPopup").css('width','auto');
 	lightboxPopupExpanded = 0;
 }
 
@@ -623,34 +627,34 @@ function lightboxPopupReset(){
 function lightboxLoadContent(url){
 	if (jQuery.browser.msie) {
 		//disable ClearType for better animation
-		$("#lightboxPopup #info").css({ 'background-color': '#fbfbfb'});
+		$j("#lightboxPopup #info").css({ 'background-color': '#fbfbfb'});
 	}
 	
 	if(lightboxPopupExpanded==0){
-		$("#lightboxPopup").css('width','777px'); // Må sette bredde for å unngå wrap i IE6. 30 + 714 + 30 (+ 3 ekstra piksler for IE6) = 777.
-		$("#lightboxPopup #innhold").animate({width:'714px'},750, function () {
-			$("#lightboxPopup #info").load(url, function () {
-				$("#lightboxPopup #info").fadeIn(300 , function () { 
-				$("#lightboxPopup #trafikkstasjonKart").show();
+		$j("#lightboxPopup").css('width','777px'); // Må sette bredde for å unngå wrap i IE6. 30 + 714 + 30 (+ 3 ekstra piksler for IE6) = 777.
+		$j("#lightboxPopup #innhold").animate({width:'714px'},750, function () {
+			$j("#lightboxPopup #info").load(url, function () {
+				$j("#lightboxPopup #info").fadeIn(300 , function () { 
+				$j("#lightboxPopup #trafikkstasjonKart").show();
 				initTrafikkstasjonKart();
 				if (jQuery.browser.msie) {
-					$("#lightboxPopup #info").css({ 'background-color': 'transparent'});
+					$j("#lightboxPopup #info").css({ 'background-color': 'transparent'});
 				}	
 				});
 			});
 		} );
-		$("#lightboxPopup").animate({"left": "200px"},750);
+		$j("#lightboxPopup").animate({"left": "200px"},750);
 		lightboxPopupExpanded = 1;
 	}
 	else{
-		$("#lightboxPopup #trafikkstasjonKart").hide();
-		$("#lightboxPopup #info").fadeOut(300, function () { 
-			$("#lightboxPopup #info").load(url, function () {
-				$("#lightboxPopup #info").fadeIn(300, function () { 
-					$("#lightboxPopup #trafikkstasjonKart").show();
+		$j("#lightboxPopup #trafikkstasjonKart").hide();
+		$j("#lightboxPopup #info").fadeOut(300, function () { 
+			$j("#lightboxPopup #info").load(url, function () {
+				$j("#lightboxPopup #info").fadeIn(300, function () { 
+					$j("#lightboxPopup #trafikkstasjonKart").show();
 					initTrafikkstasjonKart();
 					if (jQuery.browser.msie) {
-					$("#lightboxPopup #info").css({ 'background-color': 'transparent'});
+					$j("#lightboxPopup #info").css({ 'background-color': 'transparent'});
 				}
 				});
 			});
@@ -664,23 +668,23 @@ function lightboxPopupOpen(url){
 	if(lightboxPopupStatus==0){
 		if (jQuery.browser.msie) {
 			//disable ClearType for better animation
-			$("#lightboxPopup").css({ 'background-color': '#fff'});
-			$("#lightboxPopup #liste").css({ 'background-color': '#fbfbfb'});
+			$j("#lightboxPopup").css({ 'background-color': '#fff'});
+			$j("#lightboxPopup #liste").css({ 'background-color': '#fbfbfb'});
 		}
-		$("#lightboxBackground").css({ "opacity": "0.8" });
-		$("#lightboxBackground").fadeIn(500);
+		$j("#lightboxBackground").css({ "opacity": "0.8" });
+		$j("#lightboxBackground").fadeIn(500);
 		
-		$("#lightboxPopup").fadeIn(300, function () {
+		$j("#lightboxPopup").fadeIn(300, function () {
 			if (jQuery.browser.msie) {
-				$("#lightboxPopup").css({ 'background-color': 'transparent'});
+				$j("#lightboxPopup").css({ 'background-color': 'transparent'});
 			}
-			$("#lightboxPopup #liste").load(url, function () {
-				$("#lightboxPopup #liste").fadeIn(300, function () {
+			$j("#lightboxPopup #liste").load(url, function () {
+				$j("#lightboxPopup #liste").fadeIn(300, function () {
 					if (jQuery.browser.msie) {
-					$("#lightboxPopup #liste").css({ 'background-color': 'transparent'});
+					$j("#lightboxPopup #liste").css({ 'background-color': 'transparent'});
 					}
 				});
-				$("#lightboxPopup #liste #fylkesnavn").focus();
+				$j("#lightboxPopup #liste #fylkesnavn").focus();
 
 			});
 		});
@@ -692,7 +696,7 @@ function lightboxPopupPosition(){ // Fix for IE6 slik at #lightboxBackground str
 	if (jQuery.browser.msie) {
 		var windowWidth = document.documentElement.clientWidth;
 		var windowHeight = 991;
-		$("#lightboxBackground").css({
+		$j("#lightboxBackground").css({
 			"height": windowHeight,
 			"width": windowWidth
 		});
@@ -712,15 +716,15 @@ function showInfoForStation(stationUrl) {
 
 function initTrafikkstasjonerLightbox() {
 				
-	$("#closeButton").click(function(){
+	$j("#closeButton").click(function(){
 		lightboxPopupClose();
 	});
 
-	$("#lightboxBackground").click(function(){
+	$j("#lightboxBackground").click(function(){
 		lightboxPopupClose();
 	});
 	
-	$(document).keypress(function(e){
+	$j(document).keypress(function(e){
 		if(e.keyCode==27 && lightboxPopupStatus==1){
 			//Pressed "escape"
 			lightboxPopupClose();
@@ -741,17 +745,17 @@ var norgeskartImagemap_basisbilde_original = "_public/www.vegvesen.no/images/nor
 /*vi forsinker mouseout, og sørger for at denne sjekker flagger før den eventuelt utfører sin action. */
 var highlightFylkeFlagg = 0;
 function eh_norgeskartImagemap_markereFylke() {
-	$("#norgeskart").attr("src", "_public/www.vegvesen.no/images/norgeskart/norgeskart-mapArea" + this.id.substr(7) + ".gif");
+	$j("#norgeskart").attr("src", "_public/www.vegvesen.no/images/norgeskart/norgeskart-mapArea" + this.id.substr(7) + ".gif");
 	highlightFylkeFlagg = 1;
 }
 
 function eh_norgeskartImagemap_fjernMarkering() {
 	highlightFylkeFlagg = 0; //alltid nullstill flagg.
 	//fadeTo(100,1) => vent for 100ms
-	$("#norgeskart").fadeTo(100, 1, function(){
+	$j("#norgeskart").fadeTo(100, 1, function(){
 		//sjekk om flagg er blitt satt av mouseover i tiden vi sov
 		if(highlightFylkeFlagg==0){	
-			$("#norgeskart").attr("src", norgeskartImagemap_basisbilde);
+			$j("#norgeskart").attr("src", norgeskartImagemap_basisbilde);
 		}
 	});
 	highlightFylkeFlagg = 0; //alltid nullstill flagg.
@@ -799,14 +803,14 @@ function initNorgeskartImagemap(valgtFylke) {
 	preloadNorgeskartImageMap();
 
 	for (var i=1; i<=19; i++) {
-			$("#mapArea" + i).mouseover(eh_norgeskartImagemap_markereFylke);
-			$("#mapArea" + i).mouseout(eh_norgeskartImagemap_fjernMarkering);
+			$j("#mapArea" + i).mouseover(eh_norgeskartImagemap_markereFylke);
+			$j("#mapArea" + i).mouseout(eh_norgeskartImagemap_fjernMarkering);
 	}
 	
 	/*vis kart med markert fylke*/
 	if(valgtFylke != "-1" && valgtFylke != undefined){
 		norgeskartImagemap_basisbilde = "_public/www.vegvesen.no/images/norgeskart/norgeskart-" + valgtFylke + ".gif";
-		$("#norgeskart").attr("src", norgeskartImagemap_basisbilde);
+		$j("#norgeskart").attr("src", norgeskartImagemap_basisbilde);
 	}
 
 }
@@ -823,21 +827,21 @@ var regionskartImagemap_basisbilde = "_public/www.vegvesen.no/images/orgkart/kar
 /*vi forsinker mouseout, og sørger for at denne sjekker flagger før den eventuelt utfører sin action. */
 var highlightRegionFlagg = 0;
 function eh_regionskartImagemap_markereRegion() {
-	$("#regionskart").attr("src", "_public/www.vegvesen.no/images/orgkart/kart-region-" + this.id.substr(7,1) + ".gif");
-	$("#mapArea"+this.id.substr(7,1)+"_text").addClass("hover");
+	$j("#regionskart").attr("src", "_public/www.vegvesen.no/images/orgkart/kart-region-" + this.id.substr(7,1) + ".gif");
+	$j("#mapArea"+this.id.substr(7,1)+"_text").addClass("hover");
 	highlightRegionFlagg = 1;
 }
 
 function eh_regionskartImagemap_fjernMarkering() {
 	highlightRegionFlagg = 0; //alltid nullstill flagg.
 	//fadeTo(100,1) => vent for 100ms
-	$("#regionskart").fadeTo(100, 1, function(){
+	$j("#regionskart").fadeTo(100, 1, function(){
 		//sjekk om flagg er blitt satt av mouseover i tiden vi sov
 		if(highlightRegionFlagg==0){	
-			$("#regionskart").attr("src", regionskartImagemap_basisbilde);
+			$j("#regionskart").attr("src", regionskartImagemap_basisbilde);
 		}
 	});
-	$("#regioner a").removeClass("hover");
+	$j("#regioner a").removeClass("hover");
 	highlightRegionFlagg = 0; //alltid nullstill flagg.
 }
 
@@ -870,10 +874,10 @@ function initRegionskartImagemap() {
 	preloadRegionskartImageMap();
 	
 	for (var i=1; i<=5; i++) {
-		$("#mapArea" + i).mouseover(eh_regionskartImagemap_markereRegion);
-		$("#mapArea" + i).mouseout(eh_regionskartImagemap_fjernMarkering);
-		$("#mapArea" + i + "_text").mouseover(eh_regionskartImagemap_markereRegion);
-		$("#mapArea" + i + "_text").mouseout(eh_regionskartImagemap_fjernMarkering);
+		$j("#mapArea" + i).mouseover(eh_regionskartImagemap_markereRegion);
+		$j("#mapArea" + i).mouseout(eh_regionskartImagemap_fjernMarkering);
+		$j("#mapArea" + i + "_text").mouseover(eh_regionskartImagemap_markereRegion);
+		$j("#mapArea" + i + "_text").mouseout(eh_regionskartImagemap_fjernMarkering);
 	}
 
 }
@@ -888,17 +892,17 @@ var regkontakt_regionskartImagemap_basisbilde = "_public/www.vegvesen.no/images/
 /*vi forsinker mouseout, og sørger for at denne sjekker flagger før den eventuelt utfører sin action. */
 var highlightRegionFlagg = 0;
 function eh_regkontakt_regionskartImagemap_markereRegion() {
-	$("#regionskart").attr("src", "_public/www.vegvesen.no/images/regionskontakt/kart-region-" + this.id.substr(7,1) + ".gif");
+	$j("#regionskart").attr("src", "_public/www.vegvesen.no/images/regionskontakt/kart-region-" + this.id.substr(7,1) + ".gif");
 	highlightRegionFlagg = 1;
 }
 
 function eh_regkontakt_regionskartImagemap_fjernMarkering() {
 	highlightRegionFlagg = 0; //alltid nullstill flagg.
 	//fadeTo(100,1) => vent for 100ms
-	$("#regionskart").fadeTo(100, 1, function(){
+	$j("#regionskart").fadeTo(100, 1, function(){
 		//sjekk om flagg er blitt satt av mouseover i tiden vi sov
 		if(highlightRegionFlagg==0){	
-			$("#regionskart").attr("src", regkontakt_regionskartImagemap_basisbilde);
+			$j("#regionskart").attr("src", regkontakt_regionskartImagemap_basisbilde);
 		}
 	});
 	highlightRegionFlagg = 0; //alltid nullstill flagg.
@@ -934,20 +938,20 @@ function initRegionsKontaktRegionskartImagemap() {
 	markerValgtFylkeIRegionskart();	
 	
 	for (var i=1; i<=5; i++) {
-		$("#mapArea" + i).mouseover(eh_regkontakt_regionskartImagemap_markereRegion);
-		$("#mapArea" + i).mouseout(eh_regkontakt_regionskartImagemap_fjernMarkering);
-		$("#mapArea" + i + "_text").mouseover(eh_regkontakt_regionskartImagemap_markereRegion);
-		$("#mapArea" + i + "_text").mouseout(eh_regkontakt_regionskartImagemap_fjernMarkering);
+		$j("#mapArea" + i).mouseover(eh_regkontakt_regionskartImagemap_markereRegion);
+		$j("#mapArea" + i).mouseout(eh_regkontakt_regionskartImagemap_fjernMarkering);
+		$j("#mapArea" + i + "_text").mouseover(eh_regkontakt_regionskartImagemap_markereRegion);
+		$j("#mapArea" + i + "_text").mouseout(eh_regkontakt_regionskartImagemap_fjernMarkering);
 	}
 
 }
 
 function markerValgtFylkeIRegionskart() {
-	var valgtRegionIdAttributt = $("#r_Kart area[class='selected']").attr("id");
+	var valgtRegionIdAttributt = $j("#r_Kart area[class='selected']").attr("id");
 	if (valgtRegionIdAttributt) {
 		var valgtRegion = valgtRegionIdAttributt.substr(7,1);
 		regkontakt_regionskartImagemap_basisbilde = "_public/www.vegvesen.no/images/regionskontakt/kart-region-" + valgtRegion + ".gif";
-		$("#regionskart").attr("src", regkontakt_regionskartImagemap_basisbilde);
+		$j("#regionskart").attr("src", regkontakt_regionskartImagemap_basisbilde);
 	}
 }
 
@@ -958,7 +962,7 @@ function markerValgtFylkeIRegionskart() {
 //---------------------------------------------------------------------------------------
 
 function finnesPaaSiden(element) {
-	return $(element).length > 0;
+	return (!(element === null) && $j(element).length > 0);
 }
 
 function eh_initPage() {
@@ -975,7 +979,7 @@ function eh_initPage() {
 
 	if (finnesPaaSiden("#norgeskart") && finnesPaaSiden("#m_Kart")) { //sjekk om vi er på en side med norgeskart imagemap
 		var valgtFylke = "-1";
-		var selectedAreaElement = $("#m_Kart area[class='selected']");
+		var selectedAreaElement = $j("#m_Kart area[class='selected']");
 		var valgtFylke = selectedAreaElement.attr("id");
 		initNorgeskartImagemap(valgtFylke);
 	}
@@ -990,8 +994,8 @@ function eh_initPage() {
 	}
 	
 	if (finnesPaaSiden("#offentligJournal")) {
-		var picker = $('#datepicker').datePicker({startDate:'01.01.2003'});
-		if ($('#datepicker').attr("value").length == 0) {
+		var picker = $j('#datepicker').datePicker({startDate:'01.01.2003'});
+		if ($j('#datepicker').attr("value").length == 0) {
 			var today = new Date();
 			var yesterday = today.setDate(today.getDate()-1);
 			picker.val(new Date(yesterday).asString()).trigger('change');
@@ -1000,6 +1004,10 @@ function eh_initPage() {
 
 	if (finnesPaaSiden("#trafikkWebkameraKart")) {
 		initTrafikkWebkameraKart();	
+	}
+	
+	if (finnesPaaSiden("#trafikkWebkameraGoogleKart")) {
+		initTrafikkWebkameraGoogleKart();	
 	}
 	
 	if (finnesPaaSiden("#trafikkstasjonerKontaktinfo")) {
@@ -1016,7 +1024,7 @@ function eh_initPage() {
 	}
 	
 	if (finnesPaaSiden("#vmEgenrapportSkjema")) {
-		$(".markeringsknapper").show();
+		$j(".markeringsknapper").show();
 	}	
 		
 	if (finnesPaaSiden("#skjema")) {
@@ -1026,45 +1034,201 @@ function eh_initPage() {
 	if (finnesPaaSiden("#bildegalleri")) {
 		initBildegalleri();
 	}
+	
+	if(finnesPaaSiden(".topbar a.contentprint img") ){
+		$j(".topbar a.contentprint").attr("style", "display:inline;");
+		$j(".topbar a.contentprint img").attr("style", "display:inline;");
+	}
+	
+	if (finnesPaaSiden("#kriseForside")) {
+	    //Todo rydd opp og skill ut height og width
+	    var kriseUrl = "#TB_inline?height=505&width=1004&inlineId=hiddenContent";
+	    $j(".thickbox[id='kriseForside']").each(function () {
+        $j(this).attr("href", kriseUrl);
+        }).unbind("click").click(function () {
+        var a = this.href || this.alt;
+        tb_show('', a, null);
+        this.blur();
+        return false;
+    });
+	   tb_show('', kriseUrl, null);
+	}
+	
+	// Test av ny karttjeneste
+	if(finnesPaaSiden("#WMSmap")) {
+	    // Lag kartet
+        var map = new OpenLayers.Map( 'WMSmap', {
+          //projection: new OpenLayers.Projection('EPSG:900913'),
+		  projection: new OpenLayers.Projection('EPSG:32633'),
+		  //displayProjection: new OpenLayers.Projection("EPSG:4326"),
+		  //displayProjection: new OpenLayers.Projection("EPSG:32633"),
+          maxExtent: new OpenLayers.Bounds(-20037508.34, -20037508.34, 20037508.34, 20037508.34),
+          //units: 'm', 
+		  units: 'dd', 
+          maxResolution: 156543.0339, // tilsvarer zoom level 3 (hele er 21664.0)
+          numZoomLevels: 18 // egentlig 21, men maxResolution tilsvarer zoom level 3 (følgelig er 0-3 skrudd av)
+        } );
+        map.addControl(new OpenLayers.Control.MouseDefaults());
 
-        if(finnesPaaSiden(".topbar a.contentprint img") ){
-		$(".topbar a.contentprint").attr("style", "display:inline;");
-		$(".topbar a.contentprint img").attr("style", "display:inline;");
+         
+         var point = new OpenLayers.LonLat(5.681571, 58.550532);
+
+         // Hvorfor dukker ikke disse opp!?
+         //var markers = new OpenLayers.Layer.Markers( "Markers" );
+		 var markers = new OpenLayers.Layer.Markers( "Markers",  {sphericalMercator: true});
+         map.addLayer(markers);
+         var size = new OpenLayers.Size(21,25);
+         var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);
+         var icon = new OpenLayers.Icon('http://www.openstreetmap.org/openlayers/img/marker.png',size);
+         icon.setOpacity(0.5); 
+         //Disse vises: 
+		 //markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(166361,6834916),icon));
+		 
+		 //Rv. 53 Tyinosen - googlemap koordinater:   61.274399, 8.140033
+		 //alert(OpenLayers.Layer.SphericalMercator.forwardMercator(61.274399,8.140033).lon); --> gir nesten riktig; 6821034.8943944
+		 //alert(OpenLayers.Layer.SphericalMercator.forwardMercator(61.274399,8.140033).lat); --> gir feil 
+		 
+		 //marker = new OpenLayers.Marker(new OpenLayers.LonLat(166361,6800000),icon);
+		 //marker2 = new OpenLayers.Marker(new OpenLayers.LonLat(169361,6820000),icon.clone());
+		 
+		 //Lik som på googlemaps tyinosen
+		 //marker = new OpenLayers.Marker(new OpenLayers.LonLat(132606.90583,6812451.91051),icon);
+		 marker = new OpenLayers.Marker(new OpenLayers.LonLat(132606.90583,6821034.8943944),icon);
+		 
+		 marker.events.register('mousedown', marker, function(evt) { alert(this.icon.url); OpenLayers.Event.stop(evt); }); 
+		 markers.addMarker(marker);
+		 //markers.addMarker(marker2);
+		 
+		 markers.addMarker(new OpenLayers.Marker((OpenLayers.Layer.SphericalMercator.forwardMercator(61.274399,8.140033),icon.clone())));
+		  markers.addMarker(new OpenLayers.Marker((OpenLayers.Layer.SphericalMercator.inverseMercator(61.274399,8.140033),icon.clone())));
+		   markers.addMarker(new OpenLayers.Marker((OpenLayers.Layer.SphericalMercator.forwardMercator(8.140033,61.274399),icon.clone())));
+		    markers.addMarker(new OpenLayers.Marker((OpenLayers.Layer.SphericalMercator.inverseMercator(8.140033,61.274399),icon.clone())));
+		 
+		 //markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(176361,6934916),icon.clone()));
+         
+		 //Disse kommer da ikke opp...
+		 // markers.addMarker(new OpenLayers.Marker((OpenLayers.Layer.SphericalMercator.forwardMercator(10.421000,59.937989),icon)));
+		 // markers.addMarker(new OpenLayers.Marker((OpenLayers.Layer.SphericalMercator.inverseMercator(10.421000,59.937989),icon.clone())));
+		 // markers.addMarker(new OpenLayers.Marker((OpenLayers.Layer.SphericalMercator.forwardMercator(59.937989,10.421000),icon.clone())));
+		 // markers.addMarker(new OpenLayers.Marker((OpenLayers.Layer.SphericalMercator.inverseMercator(59.937989,10.421000),icon.clone())));
+       
+	     // alert('lon1' + OpenLayers.Layer.SphericalMercator.forwardMercator(10.421000,59.937989).lon);
+         // alert('lat' + OpenLayers.Layer.SphericalMercator.forwardMercator(10.421000,59.937989).lat);
+	   
+	     // alert('lon2' + OpenLayers.Layer.SphericalMercator.inverseMercator(10.421000,59.937989).lon);
+         // alert('lat' + OpenLayers.Layer.SphericalMercator.inverseMercator(10.421000,59.937989).lat);
+		 
+		 // alert('lon3' + OpenLayers.Layer.SphericalMercator.forwardMercator(59.937989,10.421000).lon);
+         // alert('lat' + OpenLayers.Layer.SphericalMercator.forwardMercator(59.937989,10.421000).lat);
+		 
+		 // alert('lon4' + OpenLayers.Layer.SphericalMercator.inverseMercator(59.937989,10.421000).lon);
+         // alert('lat' + OpenLayers.Layer.SphericalMercator.inverseMercator(59.937989,10.421000).lat);
+	   
+         markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(767427.763983, 9006846.112024),icon.clone()));
+		 markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(767427, 9006846),icon.clone()));
+		 markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(112024, 763983),icon.clone()));
+		 markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(9006846, 767427),icon.clone()));
+		 
+		
+         
+         // markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(160060,85944),icon.clone()));
+		 // markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(160060,859447),icon.clone()));
+		 // markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(160060,385944),icon.clone()));
+         
+           
+         //Note that if you pass an icon into the Marker constructor, it will take that icon and use it.  
+         //This means that you should not share icons between markers -- you use them once, but you should clone() for any additional markers using that same icon.
+ 
+		map.addControl(new OpenLayers.Control.Navigation());
+		map.addControl(new OpenLayers.Control.PanZoomBar());
+		map.addControl(new OpenLayers.Control.Permalink());
+		map.addControl(new OpenLayers.Control.MousePosition());
+		map.addControl(new OpenLayers.Control.LayerSwitcher()); 
+         
+
+         // Definer karttjenesten(e)
+         var topo2 = new OpenLayers.Layer.WMS(
+    		  
+			
+            //"topo2","http://wms.geonorge.no/skwms1/wms.kartdata2",
+            
+			
+			//"topo2","http://openwms.statkart.no/skwms1/wms.kartdata2",
+			
+			"topo2","http://www.webatlas.no/wms-vegvesen_test",
+            
+			
+			//{layers: 'Hoydelag,Veger,N5000Vegnavn,N2000Vegnavn,N1000Vegnavn,N500Vegnavn,N250Vegnavn,Stedsnavn,Tekst,Vannflate,N5000Vegnavn,N2000Vegnavn,N1000Vegnavn,N500Vegnavn,N250Vegnavn'},{attribution:'<a href="http://www.statkart.no">Statens kartverk</a>, <a href="http://www.statkart.no/nor/Land/Fagomrader/Geovekst/">Geovekst</a> og <a href="http://www.statkart.no/?module=Articles;action=Article.publicShow;ID=14194">kommuner</a>'}
+            //{layers: 'Kartdata2_WMS'},{attribution:'<a href="http://www.statkart.no">Statens kartverk</a>, <a href="http://www.statkart.no/nor/Land/Fagomrader/Geovekst/">Geovekst</a> og <a href="http://www.statkart.no/?module=Articles;action=Article.publicShow;ID=14194">kommuner</a>'}
+            //{layers: 'Hoydelag'},{attribution:'<a href="http://www.statkart.no">Statens kartverk</a>, <a href="http://www.statkart.no/nor/Land/Fagomrader/Geovekst/">Geovekst</a> og <a href="http://www.statkart.no/?module=Articles;action=Article.publicShow;ID=14194">kommuner</a>'}
+            //{layers: 'global_mosaic,Navn,Hoydelag,Vann,Omraadenavn'},{attribution:'<a href="http://www.statkart.no">Statens kartverk</a>, <a href="http://www.statkart.no/nor/Land/Fagomrader/Geovekst/">Geovekst</a> og <a href="http://www.statkart.no/?module=Articles;action=Article.publicShow;ID=14194">kommuner</a>'}
+            //{layers: 'ortofoto,Navn,Hoydelag,Vann,Omraadenavn'},{attribution:'<a href="http://www.statkart.no">Statens kartverk</a>, <a href="http://www.statkart.no/nor/Land/Fagomrader/Geovekst/">Geovekst</a> og <a href="http://www.statkart.no/?module=Articles;action=Article.publicShow;ID=14194">kommuner</a>'}
+            //{layers: 'Navn,Hoydelag,Markslag,Vann,Omraadenavn,Samferdsel'},{attribution:'<a href="http://www.statkart.no">Statens kartverk</a>, <a href="http://www.statkart.no/nor/Land/Fagomrader/Geovekst/">Geovekst</a> og <a href="http://www.statkart.no/?module=Articles;action=Article.publicShow;ID=14194">kommuner</a>'}
+         
+         {layers: 'Navn,Hoydelag,Markslag,Vann,Omraadenavn,Samferdsel'}
+         //{layers: 'Kartdata2_WMS'}
+		 
+		 
+		 //,{sphericalMercator: true}
+		 );
+         
+		  var statkart_sjo = new OpenLayers.Layer.WMS
+		  (
+			"Sjøkart hovedkartserien 2",
+			"http://opencache.statkart.no/gatekeeper/gk/gk.open",
+		 {
+		 layers: 'sjo_hovedkart2',
+		 format: 'image/png'
+		 },
+		 {
+		 //
+		 isBaseLayer: true,
+		 attribution:'<a href="http://www.statkart.no">Statens kartverk</a>, <a href="http://www.statkart.no/nor/Land/Fagomrader/Geovekst/">Geovekst</a> og <a href="http://www.statkart.no/?module=Articles;action=Article.publicShow;ID=14194">kommuner</a>'
+		 }
+		 ); 
+		 
+         // Legg tjenesten(e) til kartet
+         map.addLayer(topo2);
+         OpenLayers.IMAGE_RELOAD_ATTEMPTS = 3;
+         map.setCenter(new OpenLayers.LonLat(258181,7150509),5); //Hele norge
+       
+      
+         
 	}
 
 	if(finnesPaaSiden("#feedbackForm")) {
 	   
-	   $("#articleWasUseful").click(function(){
+	   $j("#articleWasUseful").click(function(){
 	       alert('Takk for tilbakemelding. Hilsen Statens vegvesen');
-	       $("#feedbackForm").submit();
+	       $j("#feedbackForm").submit();
 	       });
 	       
-	   $("#articleWasNotUseful").click(function(){
-	       $("#articleCommentTextarea").attr("style", "display:block;");
-	       $("#submitFormButton").attr("style", "display:block;");
-	       $(".savnerText").attr("style", "display:block;");
+	   $j("#articleWasNotUseful").click(function(){
+	       $j("#articleCommentTextarea").attr("style", "display:block;");
+	       $j("#submitFormButton").attr("style", "display:block;");
+	       $j(".savnerText").attr("style", "display:block;");
 	   });
 	   
-	   $("#submitFormButton").click(function(){
+	   $j("#submitFormButton").click(function(){
 	       alert('Takk for tilbakemelding. Hilsen Statens vegvesen');
 	       });
 	     
 	}
 	
 	
-	$("#vpSokNullstillKnapp").show(); // Vis "nullstill"-knapp for brukere med javascript
+	$j("#vpSokNullstillKnapp").show(); // Vis "nullstill"-knapp for brukere med javascript
 
 	
 	loadContrastAndFontsize();
 	
-	$(".external, .lastexternal").click(eh_openInNewWindow); // All links with this class should open in an external window
-	$(".autosubmit").change(eh_autoSubmitForm);  // All dropdown lists with this class should autosubmit the form when changed
-	$(".contentprint").click(eh_print);
-	$("#changeContrast").click(eh_toggleContrast);
-	$("#changeFontSize").click(eh_toggleFontsize);
-	$("#setNormalFontSize").click(function(e){e.preventDefault(); setFontsize('normal')});
-	$("#setLargeFontSize").click(function(e){e.preventDefault(); setFontsize('large')});
-	$("#setLargestFontSize").click(function(e){e.preventDefault(); setFontsize('largest')});
+	$j(".external, .lastexternal").click(eh_openInNewWindow); // All links with this class should open in an external window
+	$j(".autosubmit").change(eh_autoSubmitForm);  // All dropdown lists with this class should autosubmit the form when changed
+	$j(".contentprint").click(eh_print);
+	$j("#changeContrast").click(eh_toggleContrast);
+	$j("#changeFontSize").click(eh_toggleFontsize);
+	$j("#setNormalFontSize").click(function(e){e.preventDefault(); setFontsize('normal')});
+	$j("#setLargeFontSize").click(function(e){e.preventDefault(); setFontsize('large')});
+	$j("#setLargestFontSize").click(function(e){e.preventDefault(); setFontsize('largest')});
 	
 	// Kommentert ut siden vi heller vil ha ordet "søk" på selve søkeknappen
 	//initSokeboks();
@@ -1079,4 +1243,4 @@ function eh_initPage() {
 // 
 //---------------------------------------------------------------------------------------
 
-$(document).ready(eh_initPage);
+$j(document).ready(eh_initPage);
