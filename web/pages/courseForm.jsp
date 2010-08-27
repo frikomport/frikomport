@@ -111,7 +111,7 @@ function fillSelect(obj){
 <title><fmt:message key="courseEdit.title" />
 </title>
 <c:choose>
-	<c:when test="${empty course.id && !empty course.name}">
+	<c:when test="${empty course.id && !empty course.name && not empty status.errorMessages}">
 		<content tag="heading">
 		<fmt:message key="courseEdit.heading.copy" />
 		</content>
