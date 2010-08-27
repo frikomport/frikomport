@@ -249,6 +249,8 @@
 			</spring:bind>
 		</td>
 	</tr>
+
+	<c:if test="${!isSVV}">
 	<tr>
 		<th>
 			<fmt:message key="registration.invoiceAddress.city" />
@@ -259,6 +261,8 @@
 			</spring:bind>
 		</td>
 	</tr>
+	</c:if>
+
 </c:if>
 
 	<tr>

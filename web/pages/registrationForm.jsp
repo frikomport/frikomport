@@ -340,10 +340,15 @@
 					</th>
 					<td>
 						<form:input path="invoiceAddress.postalCode" maxlength="15"/>
-						<form:errors cssClass="fieldError"
-							path="invoiceAddress.postalCode" />
+						<form:errors cssClass="fieldError" path="invoiceAddress.postalCode" />
 					</td>
 				</tr>
+
+				<c:choose>
+				<c:when test="${isSVV}">
+					<input type="hidden" name="invoiceAddress.city" id="invoiceAddress.city" value="N/A" />
+				</c:when>
+				<c:otherwise>
 				<tr>
 					<th>
 						<soak:label key="registration.invoiceAddress.city" />
@@ -353,6 +358,8 @@
 						<form:errors cssClass="fieldError" path="invoiceAddress.city" />
 					</td>
 				</tr>
+				</c:otherwise>
+				</c:choose>
 			</c:if>
 			
 			<c:if test="${isSVV}">
@@ -373,7 +380,7 @@
 			<tr>
 				<td class="buttonBar" colspan="2" align="left">
 					<c:if test="${empty registration.id && isCourseFull == false}">
-	                    <input type="submit" class="button" name="save" onclick="bCancel=false" value="<fmt:message key="button.register.save"/>" />
+	                    <input type="submit" class="button" name="save" onclick="bCancel=false" value="<fmt:message key="button.register.send"/>" />
     	            </c:if>
 					<c:if test="${!empty registration.id && registration.status < 3}">
                     <input type="submit" class="button" name="save" id="savebutton" onclick="bCancel=false" value="<fmt:message key="button.register.update"/>" />
