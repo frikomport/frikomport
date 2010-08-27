@@ -92,10 +92,17 @@ public class CourseController extends BaseFormController {
 
         Course course = (Course) command;
         Course unpublished = new Course();
-
+        
         // use course from session if set
         HttpSession session = request.getSession();
-
+        
+        User user = (User) session.getAttribute(Constants.USER_KEY);
+        if(ApplicationResourcesUtil.isSVV()){
+	        // default visning knyttet til org2 for SVV
+	        course.setOrganization2(user.getOrganization2());
+	        course.setOrganization2id(user.getOrganization2id());
+        }
+        
         String alreadyRegistered = request.getParameter("alreadyRegistered");
         if (alreadyRegistered != null && alreadyRegistered.equals("true")) {
             model.put("alreadyRegistered", true);
@@ -110,7 +117,6 @@ public class CourseController extends BaseFormController {
         Date starttime = new Date();
         Date stoptime = null;
 
-        User user = (User) session.getAttribute(Constants.USER_KEY);
         Boolean isAdmin = false;
         List<String> roles = null;
         if (user != null) {
