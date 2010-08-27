@@ -254,8 +254,8 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 	</c:if>
 
 	<c:if test="${isSVV}">
-    <display:column sortable="true" headerClass="sortable" titleKey="registration.invoiceAddress.city" class="${tdClass}">
-    	<c:out value="${registrationList.invoiceAddress.postalCode}"/> <c:out value="${registrationList.invoiceAddress.city}"/>
+    <display:column sortable="true" headerClass="sortable" titleKey="registration.invoiceAddress.postalCode.short" class="${tdClass}">
+    	<c:out value="${registrationList.invoiceAddress.postalCode}"/>
     </display:column>
 	</c:if>
 
