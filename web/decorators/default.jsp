@@ -1,6 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-        
 <%-- Include common set of tag library declarations for each layout --%>
 <%@ include file="/common/taglibs.jsp"%>
 
@@ -13,7 +10,9 @@
         <%-- Include common set of meta tags for each layout --%>
         <%@ include file="/common/meta.jsp" %>
         <title><fmt:message key="webapp.prefix"/><decorator:title/></title>
-        
+        <!--[if IE]>
+        <meta http-equiv="X-UA-Compatible" content="IE=IE8"/>
+        <![endif]-->
         <link rel="stylesheet" type="text/css" media="all" href="<c:url context="${urlContext}" value='/styles/default.css'/>" /> 
         <link rel="stylesheet" type="text/css" media="all" href="<c:url context="${urlContext}" value='/styles/helptip.css'/>" />
         <link rel="stylesheet" type="text/css" media="print" href="<c:url context="${urlContext}" value='/styles/print.css'/>" />    
