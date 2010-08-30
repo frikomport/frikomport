@@ -194,8 +194,16 @@ function fillSelect(obj){
 <c:when test="${showDescription && ((isReader || isEventResponsible || isEducationResponsible || isAdmin) || (showDescriptionToPublic))}">
 		<tr>
 			<th>
-				<soak:label key="course.description" />
+				<c:choose>
+				<c:when test="${showDescriptionToPublic}">
+					<soak:label key="course.description" />
+				</c:when>
+				<c:otherwise>
+					<soak:label key="course.description.internal" />
+				</c:otherwise>
+				</c:choose>
 			</th>
+
 			<td>
 				<form:textarea cols="50" rows="3" path="description"/>
 				<form:errors cssClass="fieldError" htmlEscape="false"

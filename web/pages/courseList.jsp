@@ -12,6 +12,7 @@
 <c:set var="nCells" value="0"/>
 <c:set var="nRows" value="0"/>
 
+
 <SCRIPT LANGUAGE="JavaScript" ID="js1">
 var cal1 = new CalendarPopup();
 cal1.setMonthNames('Januar','Februar','Mars','April','Mai','Juni','Juli','August','September','Oktober','November','Desember'); 
@@ -191,10 +192,14 @@ function fillSelect(obj){
 <c:choose>
 <c:when test="${showCourseName}">
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="name">
+		<c:set var="courseDescription" value="" />
+		<c:if test="${showDescriptionToPublic || isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+			<c:set var="courseDescription"><c:out value="${courseList.description}"/></c:set>
+		</c:if>
         <c:if test="${courseList.status == 3}"><img src="<c:url context="${urlContext}" value="/images/cancel.png"/>"
                		alt="<fmt:message key="icon.warning"/>" class="icon" /><fmt:message key="course.cancelled.alert"/><br/></c:if>
          <a href="<c:url context="${urlContext}" value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>" 
-         title="<c:out value="${courseList.description}"/>"><c:out value="${courseList.name}"/></a>
+         title="<c:out value="${courseDescription}"/>"><c:out value="${courseList.name}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="course.name"/>
     <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
@@ -237,8 +242,13 @@ function fillSelect(obj){
 </c:when>
 <c:otherwise>
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
+		<c:set var="courseDescription" value="" />
+		<c:if test="${showDescriptionToPublic || isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+			<c:set var="courseDescription"><c:out value="${courseList.description}"/></c:set>
+		</c:if>
+
          <a href="<c:url context="${urlContext}" value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>" 
-         title="<c:out value="${courseList.description}"/>"><fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/></a>
+         title="<c:out value="${courseDescription}"/>"><fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
 		<fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
