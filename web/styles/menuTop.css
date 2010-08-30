@@ -31,42 +31,39 @@ div#menuDiv ul.menuList li.menubar > ul.menu {
 	display:block;
 }
 	
-div#menuDiv ul.menuList li.menubar > ul > li { 
+div#menuDiv ul.menuList li.menubar > ul.menu > li { 
 	background-image:none;
 	list-style-image:none;
 	display: inline;
-	
-	margin: 0px -1px 0px -2px;
-	padding: 4px 5px 4px 5px;
-	background-image: url("../images/GraGradient.png");
-	background-repeat: repeat-x;
-	background-position: bottom;
-	background-color: #37424A; 
-	border: 1px dotted #5f686E;
-	color: #FFFFFF !important;
+	margin: 0px 0px 0px 0px;
 }
 
-div#menuDiv ul.menuList li.menubar > ul > li:HOVER {
+div#menuDiv ul.menuList li.menubar > ul.menu > li > a:HOVER {
 	background-color: #FFE8CC; 
 	border-color: #DBDEDF;
 	background-image: none;
 	color: #F48600;
 }
 
-div#menuDiv ul.menuList li.menubar > ul > li > a { 
-	padding-left:0;
-	color: inherit !important;
+div#menuDiv ul.menuList li.menubar > ul.menu > li > a { 
+	border: 1px dotted #5f686E;
+	padding-left: 0;
+	color: #FFFFFF;
+	padding: 4px 5px 4px 5px;
+	margin: 0px -1px 0px -2px;
+    background-image: url("../images/GraGradient.png");
+    background-repeat: repeat-x;
+    background-position: bottom;
+    background-color: #37424A; 
 }
 
-div#menuDiv ul.menuList li.menubar > ul > li > a.highlight {
-	padding: 4px 5px 4px 5px;
-	margin: 0 -5px 0 -5px;
-	background-color: #FFE8CC; 
+div#menuDiv ul.menuList li.menubar > ul.menu > li > a.highlight {
+	background-color: #FFE8CC;
+	background-image: none; 
 	color: #F48600 !important;
 	font-weight: normal;
 }
  
 div#menuDiv ul.menuList li.menubar > ul > li > a:HOVER { 
 	text-decoration:none;
-	color: inherit !important;
 }
