@@ -40,6 +40,10 @@ import org.apache.commons.logging.LogFactory;
  * 
  */
 public class SVVUserDAOWS implements ExtUserDAO {
+	final String ROLE_ADMINISTRATOR = "FKPAdministrator";
+	final String ROLE_REGIONSADMINISTRATOR = "FKPRegionsadministrator";
+	final String ROLE_MOTEADMINISTRATOR = "FKPMoteadministrator";
+	final String ROLE_LESEBRUKER = "FKPLesebruker";
 
 	UserDAO userDAO;
 	RoleDAO roleDAO;
@@ -313,18 +317,28 @@ public class SVVUserDAOWS implements ExtUserDAO {
 	public String getStringForRole(RoleEnum role) {
 		switch (role) {
 		case ADMIN_ROLE:
-			return "FKPAdministrator";
+			return ROLE_ADMINISTRATOR;
 		case EDITOR_ROLE:
-			return "FKPRegionsadministrator";
+			return ROLE_REGIONSADMINISTRATOR;
 		case EVENTRESPONSIBLE_ROLE:
-			return "FKPMoteadministrator";
+			return ROLE_MOTEADMINISTRATOR;
 		case READER_ROLE:
-			return "FKPLesebruker";
+			return ROLE_LESEBRUKER;
 		case EMPLOYEE:
 			return "Ansatt";
 		case ANONYMOUS:
 			return "Anonymous";
 		}
 		return null;
+	}
+	
+	public boolean isExternalStringRole(String roleStringFromExternal) {
+		if (StringUtils.isNotBlank(roleStringFromExternal)) {
+			if (ROLE_ADMINISTRATOR.equals(roleStringFromExternal) || ROLE_REGIONSADMINISTRATOR.equals(roleStringFromExternal)
+					|| ROLE_MOTEADMINISTRATOR.equals(roleStringFromExternal) || ROLE_LESEBRUKER.equals(roleStringFromExternal)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

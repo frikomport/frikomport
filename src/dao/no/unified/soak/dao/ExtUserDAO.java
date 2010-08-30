@@ -49,4 +49,12 @@ public interface ExtUserDAO {
 	 */
 	public abstract String getStringForRole(RoleEnum role);
 
+	/**
+	 * Return true if the string is a role string used by the application.
+	 * 
+	 * @param roleStringFromLdap
+	 * @return
+	 */
+	public boolean isExternalStringRole(String roleStringFromExternal);
+
 }

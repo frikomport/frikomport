@@ -132,4 +132,8 @@ public class EzUserDAOWS implements ExtUserDAO {
 		}
 		return null;
 	}
+
+	public boolean isExternalStringRole(String roleStringFromExternal) {
+		throw new RuntimeException("Method isExternalStringRole(String) is not implemented in EzUserDAOWS implementation of ExtUserDAO.");
+	}
 }
