@@ -131,11 +131,10 @@ public class SVVUserDAOWS implements ExtUserDAO {
 				String adminRoles = getStringForRole(RoleEnum.ADMIN_ROLE);
 				String editorRoles = getStringForRole(RoleEnum.EDITOR_ROLE);
 				String eventResponsible = getStringForRole(RoleEnum.EVENTRESPONSIBLE_ROLE);
-				String ansattRoles = getStringForRole(RoleEnum.EMPLOYEE);
 				String readerRoles = getStringForRole(RoleEnum.READER_ROLE);
 
-				extUser.setRolenames(SVVUserDAOWS.getInnerTagValuesInTag(xmlString, "urn1:svvrole", "Key", new String[] {
-						adminRoles, editorRoles, eventResponsible, ansattRoles, readerRoles }));
+				extUser.setRolenames(SVVUserDAOWS.getInnerTagValuesInTag(xmlString, "urn1:svvrole", "Key", 
+						adminRoles, editorRoles, eventResponsible, readerRoles ));
 
 			}
 		} catch (Exception e) {
@@ -217,7 +216,7 @@ public class SVVUserDAOWS implements ExtUserDAO {
 	}
 
 	public static List<String> getInnerTagValuesInTag(String xml, String outerTagname, String innerTagEndfix,
-			String[] keyCSVToSearch) {
+			String... keyCSVToSearch) {
 		try {
 			int startTagFirstpos = xml.indexOf("<" + outerTagname);
 			int startTagLastpos = xml.indexOf(">", startTagFirstpos);

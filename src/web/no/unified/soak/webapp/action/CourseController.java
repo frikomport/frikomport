@@ -97,7 +97,7 @@ public class CourseController extends BaseFormController {
         HttpSession session = request.getSession();
         
         User user = (User) session.getAttribute(Constants.USER_KEY);
-        if(ApplicationResourcesUtil.isSVV()){
+        if(ApplicationResourcesUtil.isSVV() && user != null){
 	        // default visning knyttet til org2 for SVV
 	        course.setOrganization2(user.getOrganization2());
 	        course.setOrganization2id(user.getOrganization2id());

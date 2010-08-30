@@ -92,7 +92,11 @@ public class SVVAuthenticationFilter implements Filter {
 				if (extUser == null || StringUtils.isEmpty(extUser.getUsername())) {
 					log.warn("No LDAP user found for username=[" + usernameFromHTTPHeader
 							+ "] Cannot grant any roles to the presumed logged in user.");
-				} else {
+				}
+				else if(extUser.getRolenames().isEmpty()){
+					// SVV-ansatt uten FKP-roller - skal ikke lagres i database
+				}
+				else {
 					user = copyUserToLocalDBAndSession(extUser, session);
 					session.setAttribute(Constants.USERID_HTTPHEADERNAME, user.getUsername());
 				}
