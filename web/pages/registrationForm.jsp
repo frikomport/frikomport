@@ -365,11 +365,11 @@
 			<c:if test="${isSVV}">
 			<tr>
 				<th>
-					<soak:label key="registration.organization" />
+					<soak:label key="registration.organizationid" />
 				</th>
 				<td>
 					<form:select path="organizationid" items="${organizations}" itemLabel="name" itemValue="id" />
-					<form:errors cssClass="fieldError" path="organizationid" />
+					<form:errors cssClass="fieldError" htmlEscape="false" path="organizationid" />
 				</td>
 			</tr>
 			</c:if>

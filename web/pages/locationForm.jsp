@@ -143,7 +143,7 @@
     
     <tr>
         <th>
-            <soak:label key="location.organization"/>
+            <soak:label key="location.organizationid"/>
         </th>
         <td>
             <form:select path="organizationid" items="${organizations}" itemLabel="name" itemValue="id"/>
@@ -153,7 +153,7 @@
 
     <tr>
         <th>
-            <soak:label key="location.organization2"/>
+            <soak:label key="location.organization2id"/>
         </th>
         <td>
             <form:select path="organization2id" items="${organizations2}" itemLabel="name" itemValue="id"/>

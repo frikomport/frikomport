@@ -334,7 +334,7 @@ function fillSelect(obj){
 
 		<tr>
 			<th>
-				<soak:label key="course.organization" />
+				<soak:label key="course.organizationid" />
 			</th>
 			<td>
 				<form:select path="organizationid" onchange="fillSelect(this);" id="organizationidElement">
@@ -348,7 +348,7 @@ function fillSelect(obj){
 	<c:when test="${useOrganization2}">
 		<tr>
 			<th>
-				<soak:label key="course.organization2" />
+				<soak:label key="course.organization2id" />
 			</th>
 			<td>
 				<form:select path="organization2id">
@@ -401,7 +401,7 @@ function fillSelect(obj){
 		
 		<tr>
 			<th>
-				<soak:label key="course.location" />
+				<soak:label key="course.locationid" />
 			</th>
 			<td>
                 <c:choose>
