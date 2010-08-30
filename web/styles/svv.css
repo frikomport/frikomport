@@ -5,7 +5,7 @@ body a,
 body a:VISITED,
 body a.highlight,
 body#login div#menu a:visited {
-	color:#F48600 !important; /* For lite kontrast med den originale #ff9000 */
+	color:#F48600; /* For lite kontrast med den originale #ff9000 */
 	text-decoration: none;
 }
 
@@ -40,7 +40,7 @@ div#MainContentContainer input[type="submit"] {
 
 html body {
 	font-family: Frutiger,Verdana,Arial,Helvetica,sans-serif !important;
-	color:#37424A !important;
+	color:#37424A;
 	font-size:75% !important;
 }
 
@@ -166,7 +166,6 @@ div#loggedin {
 */
 div .menu li, 
 div .submenu li {
-background:url("../images/SVV/themeMenuArrow.gif") no-repeat scroll 0% 50% transparent;
 list-style:none outside none;
 }
 

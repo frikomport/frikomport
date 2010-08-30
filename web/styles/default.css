@@ -24,7 +24,7 @@ a:visited, body#login div#menu a:visited  {
 
 a:hover {
     background-color: transparent;
-    color: #0000ff !important; 
+    color: #0000ff; 
     text-decoration: none;
 }
 
