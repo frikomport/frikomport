@@ -341,8 +341,18 @@ function confirmDeleteRegistration(obj) {
     }
 }
 
-function confirmCancellation(obj) {   
+function confirmCancellation(obj) {
     var msg = "Vil du avlyse " + obj + "?";
+    ans = confirm(msg);
+    if (ans) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function confirmCancellation(obj, prefix) {
+	var msg = prefix + "\n" + "Vil du avlyse " + obj + "?";
     ans = confirm(msg);
     if (ans) {
         return true;

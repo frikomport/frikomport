@@ -227,7 +227,7 @@ public class CourseFormController extends BaseFormController {
         String courseid = request.getParameter("id");
 
         // Check whether or not we allow registrations
-        if ((courseid != null) && StringUtils.isNumeric(courseid)) {
+        if ((courseid != null) && StringUtils.isNotBlank(courseid) && StringUtils.isNumeric(courseid)) {
             Course course = courseManager.getCourse(courseid);
 
             HttpSession session = request.getSession(true);
@@ -288,6 +288,7 @@ public class CourseFormController extends BaseFormController {
                     // Course with registrations cannot be deleted.
                     model.put("canDelete", Boolean.valueOf(registrations.intValue() == 0 && attachments.intValue() == 0));
                     model.put("canUnpublish", Boolean.valueOf(registrations.intValue() == 0));
+                    model.put("cancelPrefix", getText("course.numberOfParticipants", new Object[]{registrations}, locale));
                 }
 
                 //Check if course is published

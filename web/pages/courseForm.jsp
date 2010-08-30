@@ -673,7 +673,7 @@ function fillSelect(obj){
 					</c:if>
 					<c:if test="${isPublished && !isCancelled}">
 						<input type="submit" class="button" name="cancelled"
-							onclick="bCancel=true;return confirmCancellation('<fmt:message key="courseList.theitem"/>')"
+							onclick="bCancel=true;return confirmCancellation('<fmt:message key="courseList.theitem"/>', '<c:out value="${cancelPrefix}"/>')"
 							value="<fmt:message key="button.course.cancel"/>" />
 					</c:if>
 					<c:if test="${isPublished && canUnpublish}">
