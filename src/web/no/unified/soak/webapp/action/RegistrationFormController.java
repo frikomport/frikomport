@@ -46,6 +46,7 @@ import no.unified.soak.util.DateUtil;
 import no.unified.soak.util.MailUtil;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.MailSender;
 import org.springframework.validation.BindException;
@@ -130,6 +131,7 @@ public class RegistrationFormController extends BaseFormController {
             Course courseForSearch = new Course();
             courseForSearch.setStatus(CourseStatus.COURSE_PUBLISHED);
             List<Course> courses = courseManager.searchCourses(courseForSearch, null, null, null);
+            courses = updateAvailableAttendants(courses, request);
             List<Course> filtered = filterByRole(isAdmin, roles, courses);
 
             if (courses != null) {
@@ -573,4 +575,21 @@ public class RegistrationFormController extends BaseFormController {
         return filtered;
     }
     
+	private List<Course> updateAvailableAttendants(List courses, HttpServletRequest request) {
+		List<Course> updated = new ArrayList<Course>();
+		Integer availableSum = NumberUtils.INTEGER_ZERO;
+		for (Iterator iterator = courses.iterator(); iterator.hasNext();) {
+			Course course = (Course) iterator.next();
+			course.setAvailableAttendants(NumberUtils.INTEGER_ZERO);
+			if (course.getStopTime().after(new Date())) {
+				Integer available = registrationManager.getAvailability(true, course);
+				course.setAvailableAttendants(available);
+				availableSum += available;
+			}
+			updated.add(course);
+		}
+
+		request.setAttribute("sumTotal", availableSum);
+		return updated;
+	}
 }

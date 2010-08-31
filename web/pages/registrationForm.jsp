@@ -24,6 +24,9 @@
 <fmt:message key="date.format.localized" var="datelocalized" />
 <fmt:message key="time.format" var="timeformat" />
 
+<fmt:message key="courseList.item" var="item"/>
+<fmt:message key="courseList.items" var="items"/>
+
 <SCRIPT LANGUAGE="JavaScript" ID="js1">
 	var cal1 = new CalendarPopup();
 	cal1.setMonthNames('Januar','Februar','Mars','April','Mai','Juni','Juli','August','September','Oktober','November','Desember'); 
@@ -88,12 +91,16 @@
 			<form:hidden path="id" />
 			<form:hidden path="courseid" />
 
+			<c:set var="courseStatus"></c:set>
+			<c:if test="${registration.course.status == 1}">&nbsp;<c:set var="courseStatus">(<fmt:message key="course.status.finished" />)</c:set></c:if>
+			<c:if test="${registration.course.status == 3}">&nbsp;<c:set var="courseStatus">(<fmt:message key="course.status.cancelled" />)</c:set></c:if>
+
 			<tr>
 				<th>
 					<soak:label key="course.name" />
 				</th>
 				<td>
-					<c:out value="${course.name}" escapeXml="false" />, <c:out value="${course.location.name}"/> - <fmt:formatDate value="${course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
+					<c:out value="${course.name}" escapeXml="false" />, <c:out value="${course.location.name}"/> - <fmt:formatDate value="${course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/> <c:out value="${courseStatus}"/>
 				</td>
 			</tr>
 
@@ -388,8 +395,10 @@
 						<input type="submit" class="button" name="delete" onclick="bCancel=true;return confirmDeleteRegistration()"
 							value="<fmt:message key="button.delete"/>" />
 						</c:if>
+						<c:if test="${registration.status != 3 && registration.course.status != 3}">
 						<input type="submit" class="button" name="unregister" onclick="bCancel=true;return confirmUnregistration()"
 							value="<fmt:message key="button.unregister"/>" />
+						</c:if>
 					</c:if>
 					<input type="submit" class="button" name="cancel"
 						onclick="bCancel=true" value="<fmt:message key="button.cancel"/>" />
@@ -398,7 +407,14 @@
 			<c:if test="${!empty courseList && (isAdmin || isEducationResponsible || isEventResponsible || isReader || isSVV) && registration.status < 3}">
 			<tr>
 				<th>
-					<soak:label key="registration.changeCourse" />
+					<c:choose>
+						<c:when test="registration.course.status != 3">
+							<soak:label key="registration.changeCourse" />
+						</c:when>
+						<c:otherwise>
+							<soak:label key="registration.changeCourse.cancelled" />
+						</c:otherwise>
+					</c:choose>
 				</th>
 			</tr>
 			<tr>
@@ -415,24 +431,37 @@
 								<c:if test="${courseList.id == registration.courseid}">checked</c:if> />
 						</display:column>
 
-						<display:column media="html" sortable="true"
-							headerClass="sortable" titleKey="course.name" sortProperty="name">
+						<c:if test="${showCourseName}">
+						<display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="name">
+							<c:set var="courseDescription" value="" />
+							<c:if test="${showDescriptionToPublic || isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+								<c:set var="courseDescription"><c:out value="${courseList.description}"/></c:set>
+							</c:if>
 							<c:if test="${courseList.status == 3}">
 								<img src="<c:url context="${urlContext}" value="/images/cancel.png"/>"
 									alt="<fmt:message key="icon.warning"/>" class="icon" />
 								<fmt:message key="course.cancelled.alert" />
 								<br />
 							</c:if>
-							<a
-								href="<c:url context="${urlContext}" value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>"
-								title="<c:out value="${courseList.description}"/>"><c:out
-									value="${courseList.name}" /> </a>
+							<a href="<c:url context="${urlContext}" value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>"
+								title="<c:out value="${courseDescription}"/>"><c:out value="${courseList.name}" /> </a>
 						</display:column>
+						</c:if>
 
-						<display:column sortable="true" headerClass="sortable"
-							titleKey="course.startTime" sortProperty="startTime">
-							<fmt:formatDate value="${courseList.startTime}" type="both"
-								pattern="${dateformat} ${timeformat}" />
+						<display:column sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
+							<c:if test="${showCourseName}">
+								<fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}" />
+							</c:if>
+							<c:if test="${!showCourseName}">
+								<c:set var="courseDescription" value="" />
+								<c:if test="${showDescriptionToPublic || isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+									<c:set var="courseDescription"><c:out value="${courseList.description}"/></c:set>
+								</c:if>
+								<a href="<c:url context="${urlContext}" value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>"
+									title="<c:out value="${courseDescription}"/>">
+									<fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}" />
+								</a>
+							</c:if>
 						</display:column>
 
 						<display:column property="availableAttendants" sortable="true"
@@ -450,7 +479,7 @@
 							headerClass="sortable" titleKey="course.serviceArea" />
 </c:if>
 
-<c:if test="${useOrganization2 && !isCourseParticipant}">
+<c:if test="${useOrganization2 && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
 						<display:column property="organization2.name" sortable="true"
 							headerClass="sortable" titleKey="course.organization2" />
 </c:if>
@@ -463,7 +492,7 @@
 									value="${courseList.location.name}" /> </a>
 						</display:column>
 
-<c:if test="${!isCourseParticipant}">
+<c:if test="${!isSVV || (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
 						<display:column media="html" sortable="true"
 							headerClass="sortable" titleKey="course.responsible">
 							<a
@@ -491,7 +520,7 @@
 						<input type="submit" class="button" name="delete" onclick="bCancel=true;return confirmDeleteRegistration()"
 							value="<fmt:message key="button.delete"/>" />
 						</c:if>
-						<c:if test="${registration.status != 3}">
+						<c:if test="${registration.status != 3 && registration.course.status != 3}">
 						<input type="submit" class="button" name="unregister" onclick="bCancel=true;return confirmUnregistration()"
 							value="<fmt:message key="button.unregister"/>" />
 						</c:if>							

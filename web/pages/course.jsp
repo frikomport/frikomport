@@ -4,6 +4,21 @@
 <fmt:message key="attachmentList.item" var="item" />
 <fmt:message key="attachmentList.items" var="items" />
 
+
+<c:if test="${isReader || isEventResponsible || isEducationResponsible || isAdmin}">
+<tr>
+	<th>
+		<fmt:message key="course.status" />
+	</th>
+	<td>
+        <c:if test="${course.status == 0}"><fmt:message key="course.status.created"/></c:if>
+        <c:if test="${course.status == 1}"><fmt:message key="course.status.finished"/></c:if>
+        <c:if test="${course.status == 2}"><fmt:message key="course.status.published"/></c:if>
+        <c:if test="${course.status == 3}"><fmt:message key="course.status.cancelled"/></c:if>
+	</td>
+</tr>
+</c:if>
+
 <tr>
 	<th>
 		<fmt:message key="course.name" />
