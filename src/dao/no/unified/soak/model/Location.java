@@ -10,6 +10,7 @@
  */
 package no.unified.soak.model;
 
+import no.unified.soak.validation.MinValue;
 import no.unified.soak.validation.Required;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -240,6 +241,8 @@ public class Location extends BaseObject implements Serializable {
     /**
      * @param maxAttendants The maxAttendants to set.
      */
+    @Required
+    @MinValue("0")
     public void setMaxAttendants(Integer maxAttendants) {
         this.maxAttendants = maxAttendants;
     }
