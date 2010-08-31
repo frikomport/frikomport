@@ -24,9 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import no.unified.soak.Constants;
-import no.unified.soak.model.Address;
 import no.unified.soak.model.Course;
-import no.unified.soak.model.Location;
 import no.unified.soak.model.Organization;
 import no.unified.soak.model.User;
 import no.unified.soak.model.Organization.Type;
@@ -97,7 +95,13 @@ public class CourseController extends BaseFormController {
         HttpSession session = request.getSession();
         
         User user = (User) session.getAttribute(Constants.USER_KEY);
-        if(ApplicationResourcesUtil.isSVV() && user != null){
+        String queryString = request.getQueryString();
+        
+		/**
+		 * queryString er forskjellig fra null dersom referenceData er kalt fra
+		 * displayTag-rammeverket, geografidata skal da IKKE overskrives
+		 */
+        if(ApplicationResourcesUtil.isSVV() && user != null && queryString == null){
 	        // default visning knyttet til org2 for SVV
 	        course.setOrganization2(user.getOrganization2());
 	        course.setOrganization2id(user.getOrganization2id());
