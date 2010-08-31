@@ -126,8 +126,8 @@ public class MailEngine {
 		} catch (MailException ex) {
 			// log it and go on
 			log.error(ex.getMessage());
-		} catch (MessagingException e) {
-			log.warn("Unable to log info about a sent email. Exception: " + e);
+		} catch (Exception e) {
+			log.warn("Sending of email failed" + e);
 		}
 	}
 

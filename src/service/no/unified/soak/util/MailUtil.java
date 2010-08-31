@@ -51,7 +51,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 public class MailUtil {
-    // public static final Log log = LogFactory.getLog(MailUtil.class);
+    public static final Log log = LogFactory.getLog(MailUtil.class);
 
     public static void sendMimeMails(ArrayList<MimeMessage> Emails, MailEngine engine) {
         if (Emails != null) {
@@ -1192,18 +1192,22 @@ public class MailUtil {
 	 * @param mailSender
 	 */
 	public static void sendSummaryToResponsibleAndInstructor(Course course, String from, List<Registration> registrations, StringBuffer orginalMessageBody, MailEngine mailEngine, MailSender mailSender) {
-		String[] to = new String[] {course.getResponsible().getEmail()};
-		String[] cc = new String[] {course.getInstructor().getEmail()};
-		String subject = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.summarysubject", course.getName()));
-		String attendants = MailUtil.getAttendantsNameAndEmail(registrations);
-		StringBuffer summaryMsg = new StringBuffer();
-		summaryMsg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.summaryheader")) + ":\n\n");
-		summaryMsg.append(attendants);
-		summaryMsg.append("-- " + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.summarymiddle")) + " --\n");
-		String replacedorginalMessageBody = orginalMessageBody.toString().replace("&hash=<userhash/>", ""); // removed incomplete link-attribute
-		summaryMsg.append(replacedorginalMessageBody);
-		MimeMessage summary = getMailMessage(to, cc, null, from, subject, summaryMsg, null, null, mailSender);
-		mailEngine.send(summary);
+		try {
+			String[] to = new String[] {course.getResponsible().getEmail()};
+			String[] cc = new String[] {course.getInstructor().getEmail()};
+			String subject = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.summarysubject", course.getName()));
+			String attendants = MailUtil.getAttendantsNameAndEmail(registrations);
+			StringBuffer summaryMsg = new StringBuffer();
+			summaryMsg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.summaryheader")) + ":\n\n");
+			summaryMsg.append(attendants);
+			summaryMsg.append("-- " + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.summarymiddle")) + " --\n");
+			String replacedorginalMessageBody = orginalMessageBody.toString().replace("&hash=<userhash/>", ""); // removed incomplete link-attribute
+			summaryMsg.append(replacedorginalMessageBody);
+			MimeMessage summary = getMailMessage(to, cc, null, from, subject, summaryMsg, null, null, mailSender);
+			mailEngine.send(summary);
+		}catch(Exception e){
+			log.error("Sending of email failed", e);
+		}
 	}
 	
 	
