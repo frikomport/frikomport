@@ -320,8 +320,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	}
 
 	public void updateUser(User user, String firstName, String lastName, String email, Integer id,
- List<String> rolenames, Integer kommune,
-			String mobilePhone, String phoneNumber) {
+			List<String> rolenames, Integer kommune, String mobilePhone, String phoneNumber) {
 		Boolean save = false;
 		if (!firstName.equals(user.getFirstName())) {
 			user.setFirstName(firstName);
@@ -344,16 +343,19 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 
 		// Since eZ publish does not give these phone numbers but SVVs ldap
 		// does, only update phone numbers when one is presented.
-		if (mobilePhone != null && mobilePhone.equals(user.getMobilePhone())) {
+		if (mobilePhone != null && !mobilePhone.equals(user.getMobilePhone())) {
 			user.setMobilePhone(mobilePhone);
 			save = true;
 		}
-		if (phoneNumber != null && phoneNumber.equals(user.getPhoneNumber())) {
+		if (phoneNumber != null && !phoneNumber.equals(user.getPhoneNumber())) {
 			user.setPhoneNumber(phoneNumber);
 			save = true;
 		}
 
-		setRoles(rolenames, user, save);
+		if(setRoles(rolenames, user)){
+			save = true;
+		}
+		
 		if (user.getHash() == null || user.getHash().length() == 0) {
 			user.setHash(StringUtil.encodeString(user.getUsername()));
 			save = true;
@@ -374,18 +376,13 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 
 	}
 
-	private void setRoles(List<String> rolenames, User user) {
-		setRoles(rolenames, user, true);
-	}
-
-	private void setRoles(List<String> rolenames, User user, Boolean save) {
+	private boolean setRoles(List<String> rolenames, User user) {
 		// check if roles are the same as the ones set on user.
 		if (equalRoles(user, rolenames)) {
-			return;
+			return false;
 		}
 		// Roles are different and needs to be saved.
-		save = true;
-
+		
 		// remove existing roles before new ones are added.
 		user.removeAllRoles();
 
@@ -420,6 +417,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 				user.addRole(role);
 			}
 		}
+		return true;
 	}
 
 	private boolean equalRoles(User user, List<String> rolenames) {
