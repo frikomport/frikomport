@@ -118,25 +118,18 @@ public class UserFormController extends BaseFormController {
             return new ModelAndView(getSuccessView());
         } else {
             if ("true".equals(request.getParameter("encryptPass"))) {
-                String algorithm = (String) getConfiguration()
-                                                .get(Constants.ENC_ALGORITHM);
+                String algorithm = (String) getConfiguration().get(Constants.ENC_ALGORITHM);
 
                 if (algorithm == null) { // should only happen for test case
-
                     if (log.isDebugEnabled()) {
-                        log.debug(
-                            "assuming testcase, setting algorithm to 'SHA'");
+                        log.debug("assuming testcase, setting algorithm to 'SHA'");
                     }
-
                     algorithm = "SHA";
                 }
-
-                user.setPassword(StringUtil.encodePassword(user.getPassword(),
-                        algorithm));
+                user.setPassword(StringUtil.encodePassword(user.getPassword(), algorithm));
             }
 
             String[] userRoles = request.getParameterValues("userRoles");
-
             if (userRoles != null) {
                 // for some reason, Spring seems to hang on to the roles in
                 // the User object, even though isSessionForm() == false
