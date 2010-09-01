@@ -18,6 +18,7 @@
             <field property="organization" depends="required"/>
             <field property="organization2id" depends="required"/>
             <field property="organization2" depends="required"/>
+            <field property="maxAttendants" depends="required"/>
        </form>
        <form name="person">
             <field property="name" depends="required"/>
