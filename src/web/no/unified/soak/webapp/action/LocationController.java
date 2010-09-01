@@ -19,8 +19,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import no.unified.soak.Constants;
 import no.unified.soak.model.Location;
 import no.unified.soak.model.Organization;
+import no.unified.soak.model.User;
 import no.unified.soak.model.Organization.Type;
 import no.unified.soak.service.LocationManager;
 import no.unified.soak.service.OrganizationManager;
@@ -66,6 +68,19 @@ public class LocationController extends BaseFormController {
 
         if (location != null) {
             location = new Location();
+        }
+        
+        User user = (User) session.getAttribute(Constants.USER_KEY);
+        String queryString = request.getQueryString();
+        
+		/**
+		 * queryString er forskjellig fra null dersom referenceData er kalt fra
+		 * displayTag-rammeverket, geografidata skal da IKKE overskrives
+		 */
+        if(ApplicationResourcesUtil.isSVV() && user != null && queryString == null){
+	        // default visning knyttet til org2 for SVV
+	        location.setOrganization2(user.getOrganization2());
+	        location.setOrganization2id(user.getOrganization2id());
         }
         
         // Don't modify organization if in postback
