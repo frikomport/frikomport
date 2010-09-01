@@ -70,6 +70,16 @@
 
     <tr>
         <th>
+            <soak:label key="location.postalCode"/>
+        </th>
+        <td>
+            <form:input path="postalCode" size="8"/>
+            <form:errors cssClass="fieldError" path="postalCode"/>
+        </td>
+    </tr>
+
+    <tr>
+        <th>
             <soak:label key="location.mapURL"/>
         </th>
         <td>
@@ -78,7 +88,7 @@
         </td>
     </tr>
 
-
+	<c:if test="${!isSVV}">
     <tr>
         <th>
             <soak:label key="location.mailAddress"/>
@@ -88,7 +98,8 @@
             <form:errors cssClass="fieldError" path="mailAddress"/>
         </td>
     </tr>
-
+	</c:if>
+	
     <tr>
         <th>
             <soak:label key="location.contactName"/>

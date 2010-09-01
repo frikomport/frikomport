@@ -10,6 +10,8 @@
  */
 package no.unified.soak.model;
 
+import no.unified.soak.validation.DigitsOnly;
+import no.unified.soak.validation.MinLength;
 import no.unified.soak.validation.MinValue;
 import no.unified.soak.validation.Required;
 
@@ -37,6 +39,7 @@ public class Location extends BaseObject implements Serializable {
     private Long id;
     private String name;
     private String address;
+    private String postalCode;
     private String mailAddress;
     private String contactName;
     private String email;
@@ -339,6 +342,27 @@ public class Location extends BaseObject implements Serializable {
     }
     
 
+    /**
+     * Returns the postalCode.
+     * @return String
+     *
+     * @hibernate.property not-null="false" length="15"
+     * @hibernate.column name="postal_code"
+     */
+    public String getPostalCode() {
+        return postalCode;
+    }
+    
+    /**
+     * Sets the postalCode.
+     * @param postalCode The postalCode to set
+     *
+     */
+    @MinLength("4")
+    @DigitsOnly
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
 
     /**
      * @see java.lang.Object#toString()

@@ -14,6 +14,7 @@
        <form name="location">
             <field property="name" depends="required"/>
             <field property="address" depends="required"/>
+            <field property="postalCode" depends="required"/>
             <field property="organizationid" depends="required"/>
             <field property="organization" depends="required"/>
             <field property="organization2id" depends="required"/>

@@ -97,8 +97,19 @@
         </td>
     </tr>
 
-<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <tr>
+        <th>
+            <fmt:message key="location.postalCode"/>
+        </th>
+        <td>
+            <spring:bind path="location.postalCode">
+            	<c:out value="${status.value}"/>
+            </spring:bind>
+        </td>
+    </tr>
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+	<c:if test="${!isSVV}">    
+	<tr>
         <th>
             <fmt:message key="location.mailAddress"/>
         </th>
@@ -108,7 +119,8 @@
             </spring:bind>
         </td>
     </tr>
-
+	</c:if>
+    
     <tr>
         <th>
             <fmt:message key="location.contactName"/>
