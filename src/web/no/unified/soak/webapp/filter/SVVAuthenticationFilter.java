@@ -25,6 +25,7 @@ import no.unified.soak.util.ApplicationResourcesUtil;
 
 import org.acegisecurity.Authentication;
 import org.acegisecurity.context.SecurityContextHolder;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -115,10 +116,10 @@ public class SVVAuthenticationFilter implements Filter {
 
 		if (user != null && isAdminPath(request)) {
 			// Give logged in users access also as anonymous. 
-			if (!user.getRoleNameList().contains(RoleEnum.ANONYMOUS.getJavaDBRolename())) {
-				Role role = new Role(RoleEnum.ANONYMOUS.getJavaDBRolename());
-				user.addRole(role);
-			}
+//			if (!user.getRoleNameList().contains(RoleEnum.ANONYMOUS.getJavaDBRolename())) {
+//				Role role = new Role(RoleEnum.ANONYMOUS.getJavaDBRolename());
+//				user.addRole(role);
+//			} // sa 01.09.2010 - Utkommentert da sjekk av roller i "CollectionUtils.isEqualCollection(userRoles, authorizedRoles)" i UserSecurityAdvice feiler
 			Authentication authentificationToken = new SVVAuthentificationToken(user, usernameFromHTTPHeader);
 			SecurityContextHolder.getContext().setAuthentication(authentificationToken);
 			session.setAttribute(Constants.USER_KEY, user);
