@@ -389,7 +389,6 @@ function fillSelect(obj){
 
 <c:if test="${isSVV}">
     <display:setProperty name="export.xml" value="false"/>
-    <display:setProperty name="export.csv" value="false"/>
 </c:if>
 <%
 
