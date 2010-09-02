@@ -119,6 +119,7 @@ public class PostalCodeDistanceCalculator {
 				PostalCodeCoordinate pc2 = (PostalCodeCoordinate) iterator2.next();
 
 				if (pc1.compareTo(pc2) >= 0 || avoidableByHeuristics(pc1, pc2)) {
+					//Skip calculating distances both directions or between far away places.
 					continue inner;
 				}
 
