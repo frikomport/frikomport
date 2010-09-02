@@ -230,12 +230,6 @@ public class SVVUserDAOWS implements ExtUserDAO {
 				}
 			}
 
-			// TEST TEST TEST -- pga. manglende definasjon av nødvendige roller
-			// i SVV's LDAP
-			// roleList.add("FKPMoteadministrator");
-			// roleList.add("FKPMoteansvarlig");
-			// --------------------------
-
 			return roleList;
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
