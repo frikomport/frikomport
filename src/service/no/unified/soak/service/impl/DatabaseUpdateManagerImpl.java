@@ -32,6 +32,7 @@ import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.DefaultQuotedNamingStrategy;
+import no.unified.soak.util.PostalCodeDistances;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -135,6 +136,8 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
         // update configuration content
         updateConfigurations();
+        
+        PostalCodeDistances.loadKmlFileIfNecessary("postnummer.kml");
     }
 
 	/**

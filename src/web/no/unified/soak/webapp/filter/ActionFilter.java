@@ -325,10 +325,11 @@ public class ActionFilter implements Filter {
 			InputStream ctmplStream = getMethod.getResponseBodyAsStream();
 			ctmpl = StringUtil.convertStreamToString(ctmplStream, "UTF8");
 			if (StringUtils.isBlank(ctmpl) || resultCode != 200) {
-				log.warn("Page decoration is blank [" + ctmpl + "] with resultcode=" + resultCode
-						+ ". Unable to fetch page decoration from url " + decorationUrl + ".");
+				log.warn("Page decoration is blank from [" + ctmpl + "] or have bad resultcode (" + resultCode
+						+ ").\nUnable to fetch page decoration from url " + decorationUrl);
 				failureFetching = true;
 			} else {
+				log.info("Got page decoration from "+ctmpl+" with resultcode="+resultCode);
 				failureFetching = false;
 			}
 		} catch (HttpException e) {
