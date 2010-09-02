@@ -12,11 +12,9 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import no.unified.soak.dao.ExtUserDAO;
 import no.unified.soak.dao.RoleDAO;
@@ -33,8 +31,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Class for fetching user info at SVV with no possibility of fetching 1) users
- * based on role or 2) fetching roles or 3) fatching all users.
+ * Class for fetching user info at SVV with no possibility of:<br/>
+ * 1) fetching users based on role or <br/>
+ * 2) fetching roles or <br/>
+ * 3) fetching all users.
  * 
  * @author kst
  * 
@@ -47,12 +47,8 @@ public class SVVUserDAOWS implements ExtUserDAO {
 
 	UserDAO userDAO;
 	RoleDAO roleDAO;
-//	String endpoint = "http://klaus-PC:8089/mockportOppslagSVVAnsatt";
-	String endpoint = "http://svvjcapsu04.vegvesen.no:18201/ldap_searchemployees/portOppslagSVVAnsattBndPort";
+	String endpoint;
 	private transient final static Log log = LogFactory.getLog(SVVUserDAOWS.class);
-
-	// Only used for testing when real web service is unavailable.
-	private static Map<String, ExtUser> hardcodedExtUsers = new HashMap<String, ExtUser>(6);
 
 	public void setEndpoint(String endpoint) {
 		this.endpoint = endpoint;
@@ -110,7 +106,7 @@ public class SVVUserDAOWS implements ExtUserDAO {
 		ExtUser extUser = null;
 		try {
 			String xmlString = getUserXMLFromWebservice(username);
-			if (!StringUtils.isEmpty(xmlString)) {
+			if (StringUtils.isNotBlank(xmlString)) {
 				extUser = new ExtUser();
 
 				String uid = getTagValue("urn1:uid", xmlString);
@@ -135,7 +131,6 @@ public class SVVUserDAOWS implements ExtUserDAO {
 
 				extUser.setRolenames(SVVUserDAOWS.getInnerTagValuesInTag(xmlString, "urn1:svvrole", "Key", 
 						adminRoles, editorRoles, eventResponsible, readerRoles ));
-
 			}
 		} catch (Exception e) {
 			log.error("Feilet ved tolkning av data funnet ved oppslag på [" + username.toUpperCase() + "] fra webservice!", e);
@@ -143,12 +138,7 @@ public class SVVUserDAOWS implements ExtUserDAO {
 		}
 
 		if (extUser == null) {
-			log.info("Intet svar fra web service. Prøver å hente brukernavn [" + username.toUpperCase()
-					+ "] fra hardkodede testbrukere.");
-			extUser = getHardcodedExtUser(username);
-			if (extUser == null) {
-				log.error("Fant ikke [" + username.toUpperCase() + "] blant hardkodede testbrukere.");
-			}
+			log.error("Fant ikke brukernavn [" + username.toUpperCase() + "] ved oppslag mot ldap.");
 		}
 		return extUser;
 	}
@@ -157,19 +147,19 @@ public class SVVUserDAOWS implements ExtUserDAO {
 		String responseString = null;
 		PrintWriter output = null;
 		InputStream inputStream = null;
+		String requestXML = null;
 		try {
-			URL url = new URL("http://svvjcapsu04.vegvesen.no:18201/ldap_searchemployees/portOppslagSVVAnsattBndPort");
+			URL url = new URL(endpoint);
 			URLConnection connection = url.openConnection();
 			connection.setDoOutput(true);
-			connection.setDoInput(true); // Only if you expect to read a
-			// response...
-			connection.setUseCaches(false); // Highly recommended...
+			connection.setDoInput(true);
+			connection.setUseCaches(false);
 			connection.setRequestProperty("Content-Type", "text/xml;charset=UTF-8");
 			connection.setRequestProperty("SOAPAction",
 					"\"urn:no:vegvesen:ldap.wsdl:OppslagSVVAnsatt:1:0/portOppslagSVVAnsatt/opOppslagSVVAnsatt\"");
 			connection.setRequestProperty("Host", "svvjcapsu04.vegvesen.no:18201");
 
-			String requestXML = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:no:vegvesen:ldap.wsdl.OppslagSVVAnsattContract:cc:1:0\" xmlns:urn1=\"urn:no:vegvesen:ldap:soa2:SVVUIDType:cct:1:0\">"
+			requestXML = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:urn=\"urn:no:vegvesen:ldap.wsdl.OppslagSVVAnsattContract:cc:1:0\" xmlns:urn1=\"urn:no:vegvesen:ldap:soa2:SVVUIDType:cct:1:0\">"
 					+ "<soapenv:Body><urn:Request><urn1:UID>"
 					+ username
 					+ "</urn1:UID></urn:Request></soapenv:Body></soapenv:Envelope>";
@@ -197,6 +187,9 @@ public class SVVUserDAOWS implements ExtUserDAO {
 			if (output != null) {
 				output.close();
 			}
+		}
+		if (StringUtils.isBlank(responseString)) {
+			log.error("Webservice-kall gav tom streng. Prøvde URL: " + endpoint + " \nRequest string=" + requestXML);
 		}
 
 		return responseString;
@@ -277,25 +270,6 @@ public class SVVUserDAOWS implements ExtUserDAO {
 		}
 	}
 
-	private ExtUser getHardcodedExtUser(String username) {
-		if (hardcodedExtUsers.isEmpty()) {
-			hardcodedExtUsers.put("admin", new ExtUser(14, "admin", "admin_@stafto.no", "Truls", "Testesen", "FKPAdministrator",
-					"90102030"));
-			hardcodedExtUsers.put("sindre", new ExtUser(15, "sindre", "sa@knowit.no", "Sindre", "Amundsen", "FKPAdministrator",
-					"90597725"));
-			hardcodedExtUsers.put("klaus", new ExtUser(16, "klaus", "kst@knowit.no", "Klaus", "Stafto", "FKPAdministrator",
-					"98257893"));
-			hardcodedExtUsers.put("moteadmin", new ExtUser(17, "moteadmin", "moteadmin_@stafto.no", "Møte", "Adminssønn",
-					"FKPMoteansvarlig", "40414243"));
-			hardcodedExtUsers.put("regionadmin", new ExtUser(18, "regionadmin", "regionadmin_@stafto.no", "Regiona",
-					"Adminsdatter", "FKPMoteadministrator", null));
-			hardcodedExtUsers.put("lese", new ExtUser(19, "lese", "lese_@stafto.no", "Lese", "Brukersønn", "FKPLesebruker",
-					"80040085"));
-		}
-
-		return hardcodedExtUsers.get(username);
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -306,12 +280,11 @@ public class SVVUserDAOWS implements ExtUserDAO {
 				"findUserBySessionID(sessionId) is unsupported in SVV environment. Use findUserByUsername(username) instead.");
 	}
 
-	/*
+	/**
 	 * The roles expected from the SVV webservice for user info.
 	 * 
-	 * @see
-	 * no.unified.soak.dao.ExtUserDAO#getStringForRole(no.unified.soak.model
-	 * .RoleEnum)
+	 * @see no.unified.soak.dao.ExtUserDAO#getStringForRole(no.unified.soak.model
+	 *      .RoleEnum)
 	 */
 	public String getStringForRole(RoleEnum role) {
 		switch (role) {
