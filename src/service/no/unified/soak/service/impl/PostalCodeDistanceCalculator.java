@@ -137,6 +137,10 @@ public class PostalCodeDistanceCalculator {
 	 * them from distance calculation. <br/>
 	 * Assumes pCoordinateA.getPostalCode() < pCoordinateB.getPostalCode()
 	 * because those cases are not checked.
+	 * <p/>
+	 * The heuristics is based on this map of postal codes: <a
+	 * href="http://epab.posten.no/Norsk/Nedlasting/_files/Postnummerkart.pdf"
+	 * >http://epab.posten.no/Norsk/Nedlasting/_files/Postnummerkart.pdf</a>
 	 * 
 	 * @param pCoordinateA
 	 * @param pCoordinateB
