@@ -284,8 +284,6 @@ function fillSelect(obj){
 				<input type="text" size="6" name="startTimeTime" id="startTimeTime" value="<c:out value="${startTimeTime}"/>"
 					title="<fmt:message key="time.format.title"/>: <fmt:message key="time.format.localized"/>" />
 				<spring:bind path="course.startTime">
-					<input type="hidden" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>"
-						value="<fmt:formatDate value="${time[0]}" type="date" pattern="${dateformat}"/>" />
 					<span class="fieldError"><c:out
 							value="${status.errorMessage}" escapeXml="false" /> </span>
 				</spring:bind>
@@ -308,8 +306,6 @@ function fillSelect(obj){
 				<input type="text" size="6" name="stopTimeTime" id="stopTimeTime" value="<c:out value="${stopTimeTime}"/>"
 					title="<fmt:message key="time.format.title"/>: <fmt:message key="time.format.localized"/>" />
 				<spring:bind path="course.stopTime">
-					<input type="hidden" name="<c:out value="${status.expression}"/>" id="<c:out value="${status.expression}"/>"
-						value="<fmt:formatDate value="${time[0]}" type="date" pattern="${dateformat}"/>" />
 					<span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false" /> </span>
 				</spring:bind>
 			</td>
@@ -623,9 +619,6 @@ function fillSelect(obj){
 					id="registerByTime" value="<c:out value="${registerByTime}"/>"
 					title="<fmt:message key="time.format.title"/>: <fmt:message key="time.format.localized"/>" />
 				<spring:bind path="course.registerBy">
-					<input type="hidden" name="<c:out value="${status.expression}"/>"
-						id="<c:out value="${status.expression}"/>"
-						value="<fmt:formatDate value="${time[0]}" type="date" pattern="${dateformat}"/>" />
 					<span class="fieldError"><c:out
 							value="${status.errorMessage}" escapeXml="false" /> </span>
 				</spring:bind>
