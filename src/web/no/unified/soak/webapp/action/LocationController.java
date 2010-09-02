@@ -66,7 +66,7 @@ public class LocationController extends BaseFormController {
         
         Locale locale = request.getLocale();
 
-        if (location != null) {
+        if (location == null) {
             location = new Location();
         }
         

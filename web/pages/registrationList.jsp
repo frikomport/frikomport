@@ -85,6 +85,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
         </li>
 </c:if>
 
+<c:if test="${!isSVV}">
         <li>
             <spring:bind path="registration.courseid">
                   <select id="<c:out value="${status.expression}"/>" name="<c:out value="${status.expression}"/>">
@@ -99,6 +100,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
                 <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
             </spring:bind>
         </li>
+</c:if>
 
 <c:if test="${!isSVV}">
     </ul>

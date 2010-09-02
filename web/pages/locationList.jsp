@@ -74,7 +74,7 @@
     </display:column>
     <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="location.name"/>
     
-    <display:column media="html" sortable="true" headerClass="sortable" titleKey="location.address">
+    <display:column media="html" headerClass="sortable" titleKey="location.address">
         <c:choose>
             <c:when test="${not empty locationList.mapURL}">
                 <a href="<c:out value="${locationList.mapURL}"/>" target="_blank"><c:out value="${locationList.address}"/></a>
