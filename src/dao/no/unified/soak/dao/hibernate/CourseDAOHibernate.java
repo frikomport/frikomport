@@ -232,4 +232,9 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
         criteria.add(Restrictions.between("registerBy", from, to));
         return getHibernateTemplate().findByCriteria(criteria);
     }
+
+	public List<Course> findByPostalCodeGeoProximity(String postalCode, Integer numberOfHits) {
+		
+		return null;
+	}
 }

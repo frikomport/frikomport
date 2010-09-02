@@ -17,6 +17,7 @@ import no.unified.soak.model.Configuration;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Organization;
 import no.unified.soak.model.Person;
+import no.unified.soak.model.PostalCodeCoordinate;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.ServiceArea;
 import no.unified.soak.model.User;
@@ -137,7 +138,16 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         // update configuration content
         updateConfigurations();
         
-        PostalCodeDistances.loadKmlFileIfNecessary("postnummer.kml");
+        List<PostalCodeCoordinate> coordinates = null;
+        
+        try {
+			coordinates = PostalCodeDistances.loadKmlFileIfNecessary_EmulatedTest("postnummer.kml");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		PostalCodeDistanceCalculator.makeDistancesInDatabase(coordinates);
+        
     }
 
 	/**

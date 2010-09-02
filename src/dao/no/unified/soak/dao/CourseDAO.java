@@ -75,4 +75,22 @@ public interface CourseDAO extends DAO {
     public List<Course> findByInstructor(Person person);
     
     public List<Course> getCoursesWhereRegisterByExpired(long millis);
+
+	/**
+	 * Finds courses geographically nearest to postalCode and returns maximum
+	 * numberOfHits courses.
+	 * <ol>
+	 * <li>The search starts with the course location nearest to postalCode and
+	 * fetches courses at that location.</li>
+	 * <li>If enough courses is not found (numberOfHits), search continues to
+	 * the secound nearest course location.</li>
+	 * <li>The search continues geographically further and further away from the
+	 * course location, until the hit list has numberOfHits courses.</li>
+	 * </ol>
+	 * 
+	 * @param postalCode
+	 * @param numberOfHits
+	 * @return
+	 */
+	public List<Course> findByPostalCodeGeoProximity(String postalCode, Integer numberOfHits);
 }

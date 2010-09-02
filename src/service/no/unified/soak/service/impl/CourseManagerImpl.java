@@ -94,6 +94,10 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
         return dao.findByInstructor(person);
     }
 
+    public List<Course> findByPostalCodeGeoProximity(String postalCode, Integer numberOfHits) {
+    	return dao.findByPostalCodeGeoProximity(postalCode, numberOfHits);
+    }
+    
     /**
      * @see no.unified.soak.service.CourseManager#getUnpublished()
      */
