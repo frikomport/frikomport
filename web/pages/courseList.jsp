@@ -338,9 +338,13 @@ function fillSelect(obj){
     
     <display:column media="csv excel xml pdf" property="responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible"/>
 
+<c:if test="${!isSVV}">
     <display:column media="excel" property="instructor.name" sortable="true" headerClass="sortable" titleKey="course.instructor.export"/>
+</c:if>
 
-    <display:column media="excel" property="maxAttendants" sortable="true" headerClass="sortable" titleKey="course.maxAttendants.export"/>
+<c:if test="${!showAttendantDetails}">
+    <display:column media="csv excel pdf" property="maxAttendants" sortable="true" headerClass="sortable" titleKey="course.maxAttendants.export"/>
+</c:if>
 
 <c:if test="${!singleprice && usePayment}">
     <display:column media="excel" property="reservedInternal" sortable="true" headerClass="sortable" titleKey="course.reservedInternal.export"/>
@@ -353,24 +357,29 @@ function fillSelect(obj){
     <display:column media="excel" property="feeExternal" sortable="true" headerClass="sortable" titleKey="course.feeExternal.export"/>
 </c:if>
 
+<c:if test="${!isSVV}">
     <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.registerStart.export" sortProperty="registerStart">
          <fmt:formatDate value="${courseList.registerStart}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
+</c:if>
 
-	<c:if test="${useRegisterBy}">
+<c:if test="${useRegisterBy && !isSVV}">
     <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.registerBy.export" sortProperty="registerBy">
          <fmt:formatDate value="${courseList.registerBy}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
-	</c:if>
+</c:if>
 
+<c:if test="${!isSVV}">
     <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.reminder.export" sortProperty="reminder">
          <fmt:formatDate value="${courseList.reminder}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
+</c:if>
 
+<c:if test="${!isSVV}">
     <display:column media="excel" property="description" sortable="true" headerClass="sortable" titleKey="course.description.export"/>
-
     <display:column media="excel" property="detailURL" sortable="true" headerClass="sortable" titleKey="course.detailURL.export"/>
-
+</c:if>
+    
     <display:setProperty name="paging.banner.item_name" value="${item}"/>
     <display:setProperty name="paging.banner.items_name" value="${items}"/>
 
@@ -380,6 +389,7 @@ function fillSelect(obj){
 
 <c:if test="${isSVV}">
     <display:setProperty name="export.xml" value="false"/>
+    <display:setProperty name="export.csv" value="false"/>
 </c:if>
 <%
 

@@ -125,8 +125,7 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 		Integer availableSeats = null;
 
 		// Find number of registrations totally on the course
-		int allAttendants = getNumberOfAttendants(new Boolean(false), course,
-				true).intValue();
+		int allAttendants = getNumberOfAttendants(new Boolean(false), course, true).intValue();
 		int maxAttendants = course.getMaxAttendants().intValue();
 
 		// if local attendant
@@ -137,21 +136,16 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 				availableSeats = 0;
 			}
 		} else { // if non-local attendant
-			int localAttendants = getNumberOfAttendants(new Boolean(true),
-					course, true).intValue();
+			int localAttendants = getNumberOfAttendants(new Boolean(true), course, true).intValue();
 			int otherAttendants = allAttendants - localAttendants; // non-locals
-			// with a
-			// reserved
-			// seat
+			// with a reserved seat
 
 			// Find number of seats reserved for the locals
 			int reservedInternal = course.getReservedInternal().intValue();
 			int seatsOtherAvailable = 0;
 			if (reservedInternal > 0 && reservedInternal >= localAttendants) {
-				// reserved seats are not taken, but still not available for
-				// non-locals
-				seatsOtherAvailable = maxAttendants - reservedInternal
-						- otherAttendants;
+				// reserved seats are not taken, but still not available for non-locals
+				seatsOtherAvailable = maxAttendants - reservedInternal - otherAttendants;
 			} else {
 				// no reserved seats or all reserved seats taken
 				seatsOtherAvailable = maxAttendants - allAttendants;

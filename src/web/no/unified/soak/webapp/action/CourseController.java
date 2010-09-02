@@ -297,11 +297,11 @@ public class CourseController extends BaseFormController {
 		for (Iterator iterator = courses.iterator(); iterator.hasNext();) {
 			Course course = (Course) iterator.next();
 			course.setAvailableAttendants(NumberUtils.INTEGER_ZERO);
-			if (course.getStopTime().after(new Date())) {
+//			if (course.getStopTime().after(new Date())) {
 				Integer available = registrationManager.getAvailability(true, course);
 				course.setAvailableAttendants(available);
 				availableSum += available;
-			}
+//			}
 			updated.add(course);
 		}
 
