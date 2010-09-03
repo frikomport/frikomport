@@ -27,8 +27,8 @@ public class PostalCodesSuperduperLoader {
 				try {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 
-					System.out.println("public static List<PostalCodeCoordinate> loadPostalCodes() {\n" +
-						"    List list = new ArrayList<PostalCodeCoordinate>();\n");
+					System.out.println("public static List<PostalCodeCoordinate> loadPostalCodes() {");
+					System.out.println("    List list = new ArrayList<PostalCodeCoordinate>();");
 					
 					int pos = 0;
 					int start = 0;
