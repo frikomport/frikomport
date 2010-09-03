@@ -79,7 +79,7 @@
         <c:otherwise>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;</c:otherwise>
         </c:choose>
 
-        <c:if test="${admin == true}">
+        <c:if test="${isAdmin}">
         <input src="<c:url context="${urlContext}" value="/images/bin.png"/>" title="<fmt:message key="button.delete"/>" alt="<fmt:message key="button.delete"/>" type="image" value="delete" name="delete" onclick="document.registrationAdministrationForm.regid.value=<c:out value="${registrationList.id}"/>;bCancel=true;return confirmDeleteRegistration()"/>
         </c:if>
     </display:column>
