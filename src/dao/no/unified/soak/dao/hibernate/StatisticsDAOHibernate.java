@@ -112,6 +112,9 @@ public class StatisticsDAOHibernate extends BaseDAOHibernate implements Statisti
 				prevRow = currentRow;
 			}
 		}
+		
+		if(statRows.isEmpty()) statRows = null;
+		
 		return statRows;
 	}
 

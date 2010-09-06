@@ -39,56 +39,72 @@ cal1.setTodayText("Idag");
 </div>
 </form>
 
-<table class="list" style="width:auto;">
-<thead>
-<tr>
-<th><fmt:message key="statistics.unit"/></th>
-<th><fmt:message key="statistics.numCourses"/></th>
-<th><fmt:message key="statistics.numRegistrations"/></th>
-<th><fmt:message key="statistics.numRegistered"/></th>
-<th><fmt:message key="statistics.numAttended"/></th>
-</tr>
-</thead>
+<c:if test="${not empty statisticsRows}">
+	<fmt:message key="statisticsList.item" var="item"/>
+	<fmt:message key="statisticsList.items" var="items"/>
 
-<c:forEach items="${statisticsRows}" var="statRow">
-<tr class="<c:out value="${statRow.cssClass}"/>">
-<td><c:if test="${empty statRow.cssClass}"><div class="indentleft"></c:if><c:out value="${statRow.unit}"/><c:if test="${empty statRow.cssClass}"></div></c:if></td>
-<td align="right">
-<c:out value="${statRow.numCourses}"/>
-</td>
-<td align="right">
-<c:out value="${statRow.numRegistrations}"/>
-</td>
-<td align="right">
-<c:out value="${statRow.numRegistered}"/>
-</td>
-<td align="right">
-<c:out value="${statRow.numAttendants}"/>
-</td>
-</tr>
-</c:forEach>
+	<display:table name="${statisticsRows}" cellspacing="0" cellpadding="0" 
+	    id="statisticsRows" pagesize="${itemCount}" class="list" export="true" requestURI="statistics.html">
+		
+		<!--  REGION -->
+		<c:set var="levelTd" value="level2" />
+		<display:setProperty name="css.tr.even" value=""/>
+		<display:setProperty name="css.tr.odd" value=""/>
 
-</table>
+		<!--  HELE LANDET / SUM -->
+		<c:if test="${empty statisticsRows.unitParent}">
+			<c:set var="levelTd" value="level1" />
+		</c:if>
 
-<p/><br/>
+		<!--  OMRÅDE -->
+		<c:if test="${not empty statisticsRows.unitParent && empty statisticsRows.cssClass}">
+			<c:set var="levelTd" value="level3_name" />
+		</c:if>
+	
+	
+	    <display:column titleKey="statistics.unit" class="${levelTd}">
+	    	<c:out value="${statisticsRows.unit}"/>
+	    </display:column>
+
+		<!--  OMRÅDE -->
+		<c:if test="${not empty statisticsRows.unitParent && empty statisticsRows.cssClass}">
+			<c:set var="levelTd" value="level3" />
+		</c:if>
+
+	    <display:column titleKey="statistics.numCourses" class="${levelTd}">
+	    	<c:out value="${statisticsRows.numCourses}"/>
+	    </display:column>
+	
+	    <display:column titleKey="statistics.numRegistrations" class="${levelTd}">
+	    	<c:out value="${statisticsRows.numRegistrations}"/>
+	    </display:column>
+	
+	    <display:column titleKey="statistics.numRegistered" class="${levelTd}">
+	    	<c:out value="${statisticsRows.numRegistered}"/>
+	    </display:column>
+	
+	    <display:column titleKey="statistics.numAttended" class="${levelTd}">
+	    	<c:out value="${statisticsRows.numAttendants}"/>
+	    </display:column>
+
+	    <display:setProperty name="paging.banner.item_name" value="${item}"/>
+	    <display:setProperty name="paging.banner.items_name" value="${items}"/>
+	    <display:setProperty name="export.xml" value="false"/>
+	</display:table>
+</c:if>
+
 <h2>Forklaring</h2>
 <ul class="bulletlist">
-<li>"<b>Ant. fremmøtte</b>": Tas fra oppmøteregistreringen som er gjort for møtet. Dersom denne ikke er gjort, tas summen av "ant. påmeldte" for møtets påmeldinger. Tallet beregnes for møter innen området/regionen i statistikkperioden.
-</li>
-
-<li>"<b>Ant. påmeldte</b>": Summen av feltet "Antall deltakere" for påmeldingene til møter innen området/regionen i statistikkperioden.
-</li>
-<li>"<b>Ant. representerte førerkortkandidater</b>": Antall påmeldinger til møter innen området/regionen i statistikkperioden.
-</li>
-
-<li>Upubliserte møter teller med på linje med publiserte møter.
-</li>
+	<li>"<b>Ant. fremmøtte</b>": Tas fra oppmøteregistreringen som er gjort for møtet. Dersom denne ikke er gjort, tas summen av "ant. påmeldte" for møtets påmeldinger. Tallet beregnes for møter innen området/regionen i statistikkperioden.</li>
+	<li>"<b>Ant. påmeldte</b>": Summen av feltet "Antall deltakere" for påmeldingene til møter innen området/regionen i statistikkperioden.</li>
+	<li>"<b>Ant. representerte førerkortkandidater</b>": Antall påmeldinger til møter innen området/regionen i statistikkperioden.</li>
+	<li>Upubliserte møter teller med på linje med publiserte møter.</li>
 </ul>
 
-<br/>
+<p/><br/>
 
 <c:if test="${!empty courseList}">
-<h2>Informasjonsmøter uten påmeldinger/registering av deltakere</h2>
+<h2>Informasjonsmøter uten påmeldinger eller etterregistert oppmøte</h2>
 
 <fmt:message key="courseList.item" var="item"/>
 <fmt:message key="courseList.items" var="items"/>
@@ -97,7 +113,7 @@ cal1.setTodayText("Idag");
 
 <display:table name="${courseList}" cellspacing="0" cellpadding="0"
     id="courseList" pagesize="${itemCount}" class="list" 
-    export="true" requestURI="listCourses.html">
+    export="true" requestURI="statistics.html">
 
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
@@ -189,36 +205,10 @@ cal1.setTodayText("Idag");
     
     <display:column media="csv excel xml pdf" property="responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible"/>
 
-    <display:column media="excel" property="instructor.name" sortable="true" headerClass="sortable" titleKey="course.instructor.export"/>
-
-    <display:column media="excel" property="maxAttendants" sortable="true" headerClass="sortable" titleKey="course.maxAttendants.export"/>
-
-    <display:column media="excel" property="reservedInternal" sortable="true" headerClass="sortable" titleKey="course.reservedInternal.export"/>
-
-    <display:column media="excel" property="feeInternal" sortable="true" headerClass="sortable" titleKey="course.feeInternal.export"/>
-
-    <display:column media="excel" property="feeExternal" sortable="true" headerClass="sortable" titleKey="course.feeExternal.export"/>
-
-    <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.registerStart.export" sortProperty="registerStart">
-         <fmt:formatDate value="${courseList.registerStart}" type="both" pattern="${dateformat} ${timeformat}"/>
-    </display:column>
-
-	<c:if test="${useRegisterBy}">
-    <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.registerBy.export" sortProperty="registerBy">
-         <fmt:formatDate value="${courseList.registerBy}" type="both" pattern="${dateformat} ${timeformat}"/>
-    </display:column>
-	</c:if>
-
-    <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.reminder.export" sortProperty="reminder">
-         <fmt:formatDate value="${courseList.reminder}" type="both" pattern="${dateformat} ${timeformat}"/>
-    </display:column>
-
-    <display:column media="excel" property="description" sortable="true" headerClass="sortable" titleKey="course.description.export"/>
-
-    <display:column media="excel" property="detailURL" sortable="true" headerClass="sortable" titleKey="course.detailURL.export"/>
-
     <display:setProperty name="paging.banner.item_name" value="${item}"/>
     <display:setProperty name="paging.banner.items_name" value="${items}"/>
+    <display:setProperty name="export.xml" value="false"/>
+
 </display:table>
 </c:if>
 
