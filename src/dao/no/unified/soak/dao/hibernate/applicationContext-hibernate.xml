@@ -100,6 +100,8 @@
     <bean id="courseDAO" class="no.unified.soak.dao.hibernate.CourseDAOHibernate" autowire="byName"/>
     <!--Course-END-->
     
+    <bean id="postalCodeDistanceDAO" class="no.unified.soak.dao.hibernate.PostalCodeDistanceDAOHibernate" autowire="byName"/>
+    
     <bean id="statisticsDAO" class="no.unified.soak.dao.hibernate.StatisticsDAOHibernate" autowire="byName"/>
     
     <!--Registration-START-->

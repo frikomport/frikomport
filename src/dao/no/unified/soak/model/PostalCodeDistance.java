@@ -10,38 +10,30 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 /**
  * Class for holding the distance between two postalCodes.
  * 
- * This class is used to generate Spring Validation rules as well as the
- * Hibernate mapping file.
- * 
  * <p>
  * <a href="PostalCodeDistance.java.html"><i>View Source</i></a>
  * </p>
  * 
  * @author extkla
- * @hibernate.class table="postalCodeDistance" lazy="false"
- * 
  */
 public class PostalCodeDistance extends BaseObject implements Serializable, Comparable<Object> {
 	private static final long serialVersionUID = 3862426132173359411L;
-
 	private String postalCode1;
 	private String postalCode2;
 	private Integer distance;
-
-	public PostalCodeDistance(String postalCodeA, String postalCodeB) {
-		this.postalCode1 = postalCodeA;
-		this.postalCode2 = postalCodeB;
-	}
-
+	
 	public PostalCodeDistance() {
 	}
-	
+
+	public PostalCodeDistance(String postalCode1, String postalCode2) {
+		setPostalcode1(postalCode1);
+		setPostalcode2(postalCode2);
+	}
+
 	/**
 	 * Returns the postalCode1.
 	 * 
 	 * @return postalCode1 string
-	 * 
-	 * @hibernate.id column="postalCode1" not-null="true" length="5"
 	 */
 	public String getPostalCode1() {
 		return postalCode1;
@@ -59,8 +51,6 @@ public class PostalCodeDistance extends BaseObject implements Serializable, Comp
 	 * Returns the postalCode2.
 	 * 
 	 * @return postalCode2 string
-	 * 
-	 * @hibernate.id column="postalCode2" not-null="true" length="4"
 	 */
 	public String getPostalCode2() {
 		return postalCode2;
@@ -75,7 +65,6 @@ public class PostalCodeDistance extends BaseObject implements Serializable, Comp
 	}
 
 	/**
-	 * @hibernate.property column="distance" not-null="true"
 	 * @return the distance in meters
 	 */
 	public Integer getDistance() {

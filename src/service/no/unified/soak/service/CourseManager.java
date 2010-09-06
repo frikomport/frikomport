@@ -16,6 +16,7 @@ import java.util.List;
 import no.unified.soak.dao.CourseDAO;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Person;
+import no.unified.soak.model.PostalCodeCoordinate;
 
 
 /**
@@ -109,4 +110,6 @@ public interface CourseManager extends Manager {
     public List<String> getChangedList(Course originalCourse, Course changedCourse, String dateFormat);
     
     public List<Course> getCoursesWhereRegisterByExpired(long millis);
+
+    public void makeDistancesInDatabase(List<PostalCodeCoordinate> pcCoordinates);
 }

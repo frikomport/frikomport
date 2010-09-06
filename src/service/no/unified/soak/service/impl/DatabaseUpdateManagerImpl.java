@@ -138,6 +138,8 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         // update configuration content
         updateConfigurations();
         
+        createPostalCodeTables();
+        
         List<PostalCodeCoordinate> coordinates = null;
         
         try {
@@ -146,9 +148,18 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			e.printStackTrace();
 		}
 
-		PostalCodeDistanceCalculator.makeDistancesInDatabase(coordinates);
+		courseManager.makeDistancesInDatabase(coordinates);
         
     }
+
+	private void createPostalCodeTables() {
+		if (getTableInfo("PostalCodeDistance") == null) {
+			String sql = "CREATE TABLE POSTALCODEDISTANCE ( "
+					+ "postalCode1	VARCHAR2(4) NULL, postalCode2 VARCHAR2(4) NULL, distance NUMBER(10,0) NOT NULL, "
+					+ "PRIMARY KEY(postalCode1, postalCode2))";
+			jt.execute(sql);
+		}
+	}
 
 	/**
 	 * For upgrade from 1.7.X to SVV
@@ -756,6 +767,35 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
             log.info(nRowsAffected + " rows affected by convertion from reserved to status field in database. The field \"reserved\" in table \"registration\" can be dropped.");
         }
     }
+    
+    
+    
+	/**
+	 * Retrieves a description of the table.
+	 * 
+	 * @param table
+	 * @return
+	 */
+	private TableInfo getTableInfo(String table) {
+		ResultSet rsTables = null;
+		DatabaseMetaData meta = null;
+		try {
+			meta = jt.getDataSource().getConnection().getMetaData();
+			rsTables = meta.getTables(null, null, table.toUpperCase(), new String[] { "TABLE" });
+			while (rsTables.next()) {
+				String tableName = rsTables.getString("TABLE_NAME");
+				if (table.equalsIgnoreCase(tableName)) {
+					String type = rsTables.getString("TYPE_NAME");
+					String schema = rsTables.getString("TYPE_SCHEM");
+					String catalog = rsTables.getString("TYPE_CAT");
+					return new TableInfo(tableName, type, catalog, schema);
+				}
+			}
+		} catch (SQLException e) {
+			log.warn("Error fetching metadata of table " + table + ". \nMetadata object=" + meta + "\nrsColumns" + rsTables, e);
+		}
+		return null;
+	}
 
     private ColumnInfo getColumnInfo(String table, String column) {
 		ResultSet rsColumns = null;
@@ -1116,6 +1156,54 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
             .append("nullable", nullable)
             .append("table", table)
             .toString();
+    	}
+    }
+
+    public class TableInfo {
+    	String name;
+    	String type;
+    	String catalog;
+    	String schema;
+    	
+    	public TableInfo(String name, String type, String cat, String schema){
+    		this.name = name;
+    		this.type = type;
+    		this.catalog = cat;
+    		this.schema = schema;
+    	}
+
+    	/**
+		 * @return the name
+		 */
+		public String getName() {
+			return name;
+		}
+
+
+		public String getType(){
+    		return type;
+    	}
+    	
+    	/**
+		 * @return the catalog
+		 */
+		public String getCatalog() {
+			return catalog;
+		}
+
+		/**
+		 * @return the schema
+		 */
+		public String getSchema() {
+			return schema;
+		}
+
+		public String toString(){
+    		return new ToStringBuilder(this).append("name", name)
+    		.append("type", type)
+    		.append("catalog", catalog)
+    		.append("schema", schema)
+    		.toString();
     	}
     }
     

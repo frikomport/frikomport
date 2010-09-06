@@ -14,10 +14,14 @@ import org.apache.commons.lang.StringUtils;
 public class PostalCodesSuperduperLoader {
 
 	/**
-	 * @param args
+	 * The main method is used to load postalcodes with coordinates from a kml
+	 * file. The output to standard out from the main method can be used to make
+	 * Java code to hold all the postal codes.
+	 * 
+	 * @param args -is ignored.
 	 */
 	public static void main(String[] args) {
-		// new PostalCodesSuperduperLoader().loadAndWriteJavaCode();
+		new PostalCodesSuperduperLoader().loadAndWriteJavaCode();
 	}
 
 	public static List<PostalCodeCoordinate> loadPostalCodes(){
