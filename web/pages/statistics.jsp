@@ -95,16 +95,16 @@ cal1.setTodayText("Idag");
 
 <h2>Forklaring</h2>
 <ul class="bulletlist">
-	<li>"<b>Ant. fremmøtte</b>": Tas fra oppmøteregistreringen som er gjort for møtet. Dersom denne ikke er gjort, tas summen av "ant. påmeldte" for møtets påmeldinger. Tallet beregnes for møter innen området/regionen i statistikkperioden.</li>
-	<li>"<b>Ant. påmeldte</b>": Summen av feltet "Antall deltakere" for påmeldingene til møter innen området/regionen i statistikkperioden.</li>
-	<li>"<b>Ant. representerte førerkortkandidater</b>": Antall påmeldinger til møter innen området/regionen i statistikkperioden.</li>
+	<li>"<b>Antall påmeldinger</b>": Antall påmeldinger (representerte førerkortkandidater) til møter innen området/regionen i statistikkperioden.</li>
+	<li>"<b>Antall påmeldte</b>": Summen av feltet "Antall deltakere" for påmeldingene til møter innen området/regionen i statistikkperioden.</li>
+	<li>"<b>Antall fremmøtte</b>": Tas fra oppmøteregistreringen som er gjort for møtet. Dersom denne ikke er gjort, tas summen av "Antall påmeldte" for møtets påmeldinger. Tallet beregnes for møter innen området/regionen i statistikkperioden.</li>
 	<li>Upubliserte møter teller med på linje med publiserte møter.</li>
 </ul>
 
 <p/><br/>
 
 <c:if test="${!empty courseList}">
-<h2>Informasjonsmøter uten påmeldinger eller etterregistert oppmøte</h2>
+<h2>Informasjonsmøter både er uten påmeldinger og etterregistering av fremmøtte deltakere</h2>
 
 <fmt:message key="courseList.item" var="item"/>
 <fmt:message key="courseList.items" var="items"/>
