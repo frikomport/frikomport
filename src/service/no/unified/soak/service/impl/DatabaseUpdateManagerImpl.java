@@ -1,5 +1,6 @@
 package no.unified.soak.service.impl;
 
+import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -150,6 +151,11 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
 		courseManager.makeDistancesInDatabase(coordinates);
         
+		try {
+			jt.getDataSource().getConnection().close();
+		} catch (SQLException e) {
+			log.error("Error closing database connection in DatabaseUpdateManagerImpl.", e);
+		}
     }
 
 	private void createPostalCodeTables() {
@@ -781,19 +787,21 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		ResultSet rsTables = null;
 		DatabaseMetaData meta = null;
 		try {
-			meta = jt.getDataSource().getConnection().getMetaData();
-			rsTables = meta.getTables(null, null, table.toUpperCase(), new String[] { "TABLE" });
+			Connection connection = jt.getDataSource().getConnection();
+			meta = connection.getMetaData();
+			rsTables = meta.getTables(connection.getCatalog(), null, table.toUpperCase(), new String[] { "TABLE" });
 			while (rsTables.next()) {
 				String tableName = rsTables.getString("TABLE_NAME");
+				
 				if (table.equalsIgnoreCase(tableName)) {
-					String type = rsTables.getString("TYPE_NAME");
-					String schema = rsTables.getString("TYPE_SCHEM");
-					String catalog = rsTables.getString("TYPE_CAT");
-					return new TableInfo(tableName, type, catalog, schema);
+					String type = rsTables.getString("TABLE_TYPE");
+					String category = rsTables.getString("TABLE_CAT");
+					String schema = rsTables.getString("TABLE_SCHEM");
+					return new TableInfo(tableName, type, category, schema);
 				}
 			}
 		} catch (SQLException e) {
-			log.warn("Error fetching metadata of table " + table + ". \nMetadata object=" + meta + "\nrsColumns" + rsTables, e);
+			log.warn("Error fetching metadata of table " + table + ". \nMetadata object=" + meta + "\nrsTables=" + rsTables, e);
 		}
 		return null;
 	}
