@@ -26,14 +26,14 @@ public class SMSUtil {
     	String courseStart = DateUtil.getDateTime(ApplicationResourcesUtil.getText("datetime.format"), course.getStartTime());
 
 		String msg = ApplicationResourcesUtil.getText("misc.hello") + " " + registration.getFirstName() + "!\n";
-		msg += "Du er påmeldt \"" + courseName + "\" " + courseStart + " på " + courseLocation + ".\n";
-		msg += "Hilsen Statens vegvesen";
+		msg += ApplicationResourcesUtil.getText("sms.confirmRegistration", new Object[]{courseName, courseStart, courseLocation}) + "\n";
+		msg += ApplicationResourcesUtil.getText("sms.fromTxt");
 		
 		// avventer tekst fra SVV
 		
 		SMS sms = new SMS(mobilnr, msg);
 		log.info(sms);
-		// send sms
+		// send sms -- kanskje SVV-fase 2
 	}
 	
 	public static void sendCourseChangedMessage(Course course, List<Registration> registrations, List<String> changedList){
@@ -48,14 +48,13 @@ public class SMSUtil {
         	if(changedList.contains("status") && course.getStatus() == CourseStatus.COURSE_CANCELLED){
         		// møtet er avlyst
         		// avventer tekst fra SVV
-        		
-        		msg += "\"" + courseName + "\" på " + courseLocation + " " + courseStart + " som du er påmeldt dessverre er avlyst!\n";
-        		msg += "Hilsen Statens vegvesen";
+        		msg +=  ApplicationResourcesUtil.getText("sms.courseCancelled", new Object[]{courseName, courseLocation, courseStart}) + "\n";
+        		msg += ApplicationResourcesUtil.getText("sms.fromTxt");
         	}
         	else if(changedList.contains("startTime") || changedList.contains("location")){
         		// møtet er endret
         		// avventer tekst fra SVV
-        		msg += "\"" + courseName + "\" er endret!\n";
+        		msg += ApplicationResourcesUtil.getText("sms.courseChanged", courseName) +"\n";
         		
         		if (changedList.contains("startTime")) {
 		            msg += StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.startTime"))
@@ -67,8 +66,7 @@ public class SMSUtil {
 		            msg += StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.location")) + ": "
 		                    + course.getLocation().getName() + ", " + course.getLocation().getAddress() + "\n";
 		        }
-		        
-		        msg += "Hilsen Statens vegvesen";
+        		msg += ApplicationResourcesUtil.getText("sms.fromTxt");
         	}
         	
         	if(msg.length() > 0){
@@ -87,7 +85,7 @@ public class SMSUtil {
         		Iterator<SMS> s = toSend.iterator();
         		while(s.hasNext()){
         			SMS m = s.next();
-        			// send m
+        			// send m -- kanskje SVV-fase 2
         			log.info(m);
         		}
         	}
