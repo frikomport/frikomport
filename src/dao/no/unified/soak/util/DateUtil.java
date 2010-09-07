@@ -36,6 +36,8 @@ public class DateUtil {
     private static Log log = LogFactory.getLog(DateUtil.class);
     private static String timePattern = "HH:mm";
 
+    public static String DATETIME = "dd.MM.YYYY HH:mm";
+    
 	/**
 	 * Return default datePattern (MM/dd/yyyy)
 	 * 

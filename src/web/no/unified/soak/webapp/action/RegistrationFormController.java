@@ -44,6 +44,7 @@ import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.DateUtil;
 import no.unified.soak.util.MailUtil;
+import no.unified.soak.util.SMSUtil;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
@@ -466,6 +467,9 @@ public class RegistrationFormController extends BaseFormController {
                 	key = "registrationComplete.completed";
                 	saveMessage(request, getText(key, locale));
                 	sendMail(locale, course, registration, Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED);
+                	if(configurationManager.isActive("sms.confirmedRegistrationChangedCourse", false)){
+                		SMSUtil.sendRegistrationConfirmedMessage(registration, course);
+                	}
                 }
 
             } else {

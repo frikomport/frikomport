@@ -52,6 +52,7 @@ import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.DateUtil;
 import no.unified.soak.util.MailUtil;
+import no.unified.soak.util.SMSUtil;
 import no.unified.soak.webapp.util.FileUtil;
 
 import org.apache.commons.lang.BooleanUtils;
@@ -145,8 +146,7 @@ public class CourseFormController extends BaseFormController {
         this.locationManager = locationManager;
     }
 
-    public void setOrganizationManager(
-            OrganizationManager organizationManager) {
+    public void setOrganizationManager(OrganizationManager organizationManager) {
         this.organizationManager = organizationManager;
     }
 
@@ -154,6 +154,11 @@ public class CourseFormController extends BaseFormController {
         this.categoryManager = categoryManager;
     }
 
+    public void setRegistrationManager(RegistrationManager registrationManager) {
+        this.registrationManager = registrationManager;
+    }
+
+    
     /**
      * @see org.springframework.web.servlet.mvc.SimpleFormController#referenceData(javax.servlet.http.HttpServletRequest)
      */
@@ -552,6 +557,9 @@ public class CourseFormController extends BaseFormController {
 						changedList = courseManager.getChangedList(originalCourse, course, format);
 						if (changedList.size() != 0) {
 							enablemail = true;
+							if(configurationManager.isActive("sms.confirmedRegistrationChangedCourse", false)){
+								SMSUtil.sendCourseChangedMessage(course, registrations, changedList);
+							}
 						}
 					}
 				}
@@ -780,11 +788,4 @@ public class CourseFormController extends BaseFormController {
 		}
     }
 
-    /**
-     * @param registrationManager
-     *            The registrationManager to set.
-     */
-    public void setRegistrationManager(RegistrationManager registrationManager) {
-        this.registrationManager = registrationManager;
-    }
 }
