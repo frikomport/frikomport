@@ -36,6 +36,7 @@ import no.unified.soak.service.UserManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.DefaultQuotedNamingStrategy;
 import no.unified.soak.util.PostalCodeDistances;
+import no.unified.soak.util.PostalCodesSuperduperLoader;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -150,10 +151,12 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         List<PostalCodeCoordinate> coordinates = null;
         try {
 			coordinates = PostalCodeDistances.loadKmlFileIfNecessary_EmulatedTest("postnummer.kml");
+//			coordinates = PostalCodesSuperduperLoader.loadPostalCodes();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		courseManager.makeDistancesInDatabase(coordinates);
+		locationManager.makeDistancesInDatabase(coordinates);
 		try {
 			jt.getDataSource().getConnection().close();
 		} catch (SQLException e) {

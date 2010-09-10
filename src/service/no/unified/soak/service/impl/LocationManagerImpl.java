@@ -11,11 +11,16 @@
 package no.unified.soak.service.impl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import no.unified.soak.dao.LocationDAO;
+import no.unified.soak.dao.PostalCodeDistanceDAO;
 import no.unified.soak.model.Location;
+import no.unified.soak.model.PostalCodeCoordinate;
+import no.unified.soak.model.PostalCodeDistance;
 import no.unified.soak.service.LocationManager;
+import no.unified.soak.util.GeoMathUtil;
 
 
 /**
@@ -25,6 +30,16 @@ import no.unified.soak.service.LocationManager;
  */
 public class LocationManagerImpl extends BaseManager implements LocationManager {
     private LocationDAO dao;
+
+    private PostalCodeDistanceDAO postalCodeDistanceDAO;
+
+    
+    /**
+	 * @param postalCodeDistanceDAO the postalCodeDistanceDAO to set
+	 */
+	public void setPostalCodeDistanceDAO(PostalCodeDistanceDAO postalCodeDistanceDAO) {
+		this.postalCodeDistanceDAO = postalCodeDistanceDAO;
+	}
 
     /**
      * Set the DAO for communication with the data layer.
@@ -93,4 +108,100 @@ public class LocationManagerImpl extends BaseManager implements LocationManager 
 		dao.evict(entity);
 	}
 
+	/**
+	 * Assumes list of PostalCodeCoordinate are ordered by
+	 * {@link no.unified.soak.model.PostalCodeCoordinate#getPostalCode()} in
+	 * ascending order.
+	 * 
+	 * @param pcCoordinates
+	 */
+	public void makeDistancesInDatabase(List<PostalCodeCoordinate> pcCoordinates) {
+		for (Iterator iterator = pcCoordinates.iterator(); iterator.hasNext();) {
+			PostalCodeCoordinate pc1 = (PostalCodeCoordinate) iterator.next();
+
+			inner: for (Iterator iterator2 = pcCoordinates.iterator(); iterator2.hasNext();) {
+				PostalCodeCoordinate pc2 = (PostalCodeCoordinate) iterator2.next();
+
+				if (pc1.compareTo(pc2) >= 0 || avoidableByHeuristics(pc1, pc2)) {
+					//Skip calculating distances both directions or between far away places.
+					continue inner;
+				}
+
+				PostalCodeDistance pcDistance = new PostalCodeDistance(pc1.getPostalCode(), pc2.getPostalCode());
+				pcDistance.setDistance(new Double(1000 * GeoMathUtil.distanceDEG(pc1.getLatitude(), pc1.getLongitude(), pc2.getLatitude(), pc2
+						.getLongitude())).intValue());
+				
+				postalCodeDistanceDAO.savePostalCodeDistance(pcDistance);
+			}
+
+		}
+	}
+
+	/**
+	 * Decides if two postal codes are geographically distant enough to exclude
+	 * them from distance calculation. <br/>
+	 * Assumes pCoordinateA.getPostalCode() < pCoordinateB.getPostalCode()
+	 * because those cases are not checked.
+	 * <p/>
+	 * The heuristics is based on this map of postal codes: <a
+	 * href="http://epab.posten.no/Norsk/Nedlasting/_files/Postnummerkart.pdf"
+	 * >http://epab.posten.no/Norsk/Nedlasting/_files/Postnummerkart.pdf</a>
+	 * 
+	 * @param pCoordinateA
+	 * @param pCoordinateB
+	 * @return
+	 */
+	private static boolean avoidableByHeuristics(PostalCodeCoordinate pCoordinateA, PostalCodeCoordinate pCoordinateB) {
+		char[] omradeA = { pCoordinateA.getPostalCode().charAt(0), pCoordinateA.getPostalCode().charAt(1) };
+		char[] omradeB = { pCoordinateB.getPostalCode().charAt(0), pCoordinateB.getPostalCode().charAt(1) };
+
+		char b0 = omradeB[0];
+		char a0 = omradeA[0];
+		switch (a0) {
+
+		case 6:
+			if (b0 == '9') {
+				return true;
+			}
+			break;
+
+		case 5:
+			if (b0 == '9') {
+				return true;
+			}
+			break;
+
+		case 4:
+			if (b0 > '6') {
+				return true;
+			}
+			break;
+
+		case 3:
+			if (b0 == '9') {
+				return true;
+			}
+			break;
+
+		case 2:
+			if (b0 == '9') {
+				return true;
+			}
+			break;
+
+		case 1:
+			if (b0 > '7') {
+				return true;
+			}
+			break;
+
+		case 0:
+			if (b0 > '7') {
+				return true;
+			}
+			break;
+		}
+
+		return false;
+	}
 }

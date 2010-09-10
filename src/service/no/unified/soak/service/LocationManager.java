@@ -12,6 +12,7 @@ package no.unified.soak.service;
 
 import no.unified.soak.dao.LocationDAO;
 import no.unified.soak.model.Location;
+import no.unified.soak.model.PostalCodeCoordinate;
 
 import java.util.List;
 
@@ -74,4 +75,5 @@ public interface LocationManager extends Manager {
 	 */
 	public void evict(Object entity);
 
+    public void makeDistancesInDatabase(List<PostalCodeCoordinate> pcCoordinates);
 }

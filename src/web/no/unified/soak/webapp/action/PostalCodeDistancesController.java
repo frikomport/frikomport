@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.PostalCodeCoordinate;
 import no.unified.soak.model.StatisticsTableRow;
-import no.unified.soak.service.CourseManager;
+import no.unified.soak.service.LocationManager;
 import no.unified.soak.service.StatisticsManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.DateUtil;
@@ -29,13 +29,13 @@ public class PostalCodeDistancesController implements Controller {
 
 	private StatisticsManager statisticsManager;
 	
-	private CourseManager courseManager;
+	private LocationManager locationManager;
 	
 	/**
 	 * @param courseManager the courseManager to set
 	 */
-	public void setCourseManager(CourseManager courseManager) {
-		this.courseManager = courseManager;
+	public void setLocationManager(LocationManager courseManager) {
+		this.locationManager = courseManager;
 	}
 
 	public void setStatisticsManager(StatisticsManager statisticsManager) {
@@ -54,7 +54,7 @@ public class PostalCodeDistancesController implements Controller {
 
 		if ("NowPlease".equals(request.getParameter("postalCodeDistancesCalculate"))) {
 			List<PostalCodeCoordinate> coordinates = PostalCodeDistances.loadKmlFileIfNecessary_EmulatedTest("postnummer.kml");
-			courseManager.makeDistancesInDatabase(coordinates);
+			locationManager.makeDistancesInDatabase(coordinates);
 		}
 
 		ModelAndView modelAndView = new ModelAndView("statistics");

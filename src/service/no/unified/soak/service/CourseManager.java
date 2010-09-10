@@ -111,5 +111,4 @@ public interface CourseManager extends Manager {
     
     public List<Course> getCoursesWhereRegisterByExpired(long millis);
 
-    public void makeDistancesInDatabase(List<PostalCodeCoordinate> pcCoordinates);
 }
