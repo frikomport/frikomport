@@ -85,6 +85,8 @@
         </c:choose>
     </display:column>
     <display:column media="csv excel xml pdf" property="address" sortable="true" headerClass="sortable" titleKey="location.address"/>
+
+    <display:column property="postalCode" sortable="true" headerClass="sortable" titleKey="location.postalCode"/>
     
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="location.contactName" sortProperty="contactName">
@@ -96,14 +98,11 @@
     <display:column property="phone" sortable="true" headerClass="sortable"
          titleKey="location.phone"/>
          
-    <display:column property="organization.name" sortable="true" headerClass="sortable"
-         titleKey="location.organization"/>
+    <display:column property="organization.name" sortable="true" headerClass="sortable" titleKey="location.organization"/>
 
-    <display:column property="organization2.name" sortable="true" headerClass="sortable"
-         titleKey="location.organization2"/>
+    <display:column property="organization2.name" sortable="true" headerClass="sortable" titleKey="location.organization2"/>
 
-    <display:column sortable="true" headerClass="sortable"
-         titleKey="location.selectable">
+    <display:column sortable="true" headerClass="sortable" titleKey="location.selectable">
         <c:if test="${locationList.selectable == true}"><fmt:message key="checkbox.checked"/></c:if>
         <c:if test="${locationList.selectable == false}"><fmt:message key="checkbox.unchecked"/></c:if>
     </display:column>

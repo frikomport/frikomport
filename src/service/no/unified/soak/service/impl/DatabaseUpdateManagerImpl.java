@@ -26,6 +26,7 @@ import no.unified.soak.model.Organization.Type;
 import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.DatabaseUpdateManager;
+import no.unified.soak.service.LocationManager;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.PersonManager;
 import no.unified.soak.service.RegistrationManager;
@@ -58,6 +59,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     private ConfigurationManager configurationManager = null;
     private RoleManager roleManager = null;
     private PersonManager personManager = null;
+    private LocationManager locationManager = null;
     
     // hack for setting messagesource and locale to ApplicationResourcesUtil
     // once
@@ -110,6 +112,10 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     public void setPersonManager(PersonManager personManager){
     	this.personManager = personManager;
     }
+    
+    public void setLocationManager(LocationManager locationManager){
+    	this.locationManager = locationManager;
+    }
 
     public void updateDatabase() {
     	alterUserAndRoleAndCoursebySQL();
@@ -142,15 +148,12 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         createPostalCodeTables();
         
         List<PostalCodeCoordinate> coordinates = null;
-        
         try {
 			coordinates = PostalCodeDistances.loadKmlFileIfNecessary_EmulatedTest("postnummer.kml");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		courseManager.makeDistancesInDatabase(coordinates);
-        
 		try {
 			jt.getDataSource().getConnection().close();
 		} catch (SQLException e) {
@@ -163,6 +166,13 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			String sql = "CREATE TABLE POSTALCODEDISTANCE ( "
 					+ "postalCode1	VARCHAR2(4) NULL, postalCode2 VARCHAR2(4) NULL, distance NUMBER(10,0) NOT NULL, "
 					+ "PRIMARY KEY(postalCode1, postalCode2))";
+			jt.execute(sql);
+		}
+
+		if (getTableInfo("PostalCodeLocationDistance") == null) {
+			String sql = "CREATE TABLE POSTALCODELOCATIONDISTANCE ( "
+					+ "postalCode   VARCHAR2(4) NOT NULL, locationId NUMBER(19,0) NOT NULL, distance NUMBER(10,0) NOT NULL, "
+					+ "PRIMARY KEY(postalCode1, locationId))";
 			jt.execute(sql);
 		}
 	}
