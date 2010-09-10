@@ -175,7 +175,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		if (getTableInfo("PostalCodeLocationDistance") == null) {
 			String sql = "CREATE TABLE POSTALCODELOCATIONDISTANCE ( "
 					+ "postalCode   VARCHAR2(4) NOT NULL, locationId NUMBER(19,0) NOT NULL, distance NUMBER(10,0) NOT NULL, "
-					+ "PRIMARY KEY(postalCode1, locationId))";
+					+ "PRIMARY KEY(postalCode, locationId))";
 			jt.execute(sql);
 		}
 	}
