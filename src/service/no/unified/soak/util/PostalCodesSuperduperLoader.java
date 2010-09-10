@@ -25,7 +25,7 @@ public class PostalCodesSuperduperLoader {
 	}
 
 	public static List<PostalCodeCoordinate> loadPostalCodes(){
-		List<PostalCodeCoordinate> all = new ArrayList<PostalCodeCoordinate>();
+		List<PostalCodeCoordinate> all = new ArrayList<PostalCodeCoordinate>(4700);
 		all.addAll(loadPostalCodesPart1());
 		all.addAll(loadPostalCodesPart2());
 		all.addAll(loadPostalCodesPart3());
@@ -37,7 +37,7 @@ public class PostalCodesSuperduperLoader {
 	
 	
 	private static List<PostalCodeCoordinate> loadPostalCodesPart1() {
-	    List list = new ArrayList<PostalCodeCoordinate>();
+	    List list = new ArrayList<PostalCodeCoordinate>(800);
 	    list.add(new PostalCodeCoordinate("1501",10.666900, 59.437650));
 	    list.add(new PostalCodeCoordinate("1502",10.666900, 59.437650));
 	    list.add(new PostalCodeCoordinate("1503",10.666900, 59.437650));
@@ -841,7 +841,7 @@ public class PostalCodesSuperduperLoader {
 	   return list;
 	}
 	private static List<PostalCodeCoordinate> loadPostalCodesPart2() {
-	    List list = new ArrayList<PostalCodeCoordinate>();
+	    List list = new ArrayList<PostalCodeCoordinate>(800);
 	    list.add(new PostalCodeCoordinate("0581",10.8165703454, 59.9274831406));
 	    list.add(new PostalCodeCoordinate("0582",10.8325529244, 59.9303007085));
 	    list.add(new PostalCodeCoordinate("0583",10.8197967973, 59.934715686));
@@ -1645,7 +1645,7 @@ public class PostalCodesSuperduperLoader {
 	   return list;
 	}
 	private static List<PostalCodeCoordinate> loadPostalCodesPart3() {
-	    List list = new ArrayList<PostalCodeCoordinate>();
+	    List list = new ArrayList<PostalCodeCoordinate>(800);
 	    list.add(new PostalCodeCoordinate("3612",9.66466122461, 59.6685988888));
 	    list.add(new PostalCodeCoordinate("3613",9.65762450027, 59.673567179));
 	    list.add(new PostalCodeCoordinate("3614",9.58426099384, 59.6854813528));
@@ -2449,7 +2449,7 @@ public class PostalCodesSuperduperLoader {
 	   return list;
 	}
 	private static List<PostalCodeCoordinate> loadPostalCodesPart4() {
-	    List list = new ArrayList<PostalCodeCoordinate>();
+	    List list = new ArrayList<PostalCodeCoordinate>(800);
 	    list.add(new PostalCodeCoordinate("4311",5.86891480468, 58.9192423266));
 	    list.add(new PostalCodeCoordinate("4312",5.70377874746, 58.838606005));
 	    list.add(new PostalCodeCoordinate("4313",5.73135167673, 58.8687084479));
@@ -3253,7 +3253,7 @@ public class PostalCodesSuperduperLoader {
 	   return list;
 	}
 	private static List<PostalCodeCoordinate> loadPostalCodesPart5() {
-	    List list = new ArrayList<PostalCodeCoordinate>();
+	    List list = new ArrayList<PostalCodeCoordinate>(800);
 	    list.add(new PostalCodeCoordinate("6039",6.190322, 62.442128));
 	    list.add(new PostalCodeCoordinate("6040",6.11039297013, 62.5604400813));
 	    list.add(new PostalCodeCoordinate("6045",6.317190, 62.464385));
@@ -4057,7 +4057,7 @@ public class PostalCodesSuperduperLoader {
 	   return list;
 	}
 	private static List<PostalCodeCoordinate> loadPostalCodesPart6() {
-	    List list = new ArrayList<PostalCodeCoordinate>();
+	    List list = new ArrayList<PostalCodeCoordinate>(800);
 	    list.add(new PostalCodeCoordinate("8274",16.2792880118, 67.8852173058));
 	    list.add(new PostalCodeCoordinate("8275",16.0540924229, 68.2528711473));
 	    list.add(new PostalCodeCoordinate("8276",15.8680125883, 68.1181425728));
@@ -4653,7 +4653,6 @@ public class PostalCodesSuperduperLoader {
 		try {
 			InputStream is = new FileInputStream("C:\\FriKomPort_SVV\\postnummer-koordinater\\postnummer.kml");
 			if (is != null) {
-				StringBuilder sb = new StringBuilder();
 				String line;
 
 				int part = 1;

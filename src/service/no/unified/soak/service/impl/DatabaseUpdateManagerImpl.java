@@ -156,7 +156,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		locationManager.makeDistancesInDatabase(coordinates);
+		locationManager.createDistancesInDatabase(coordinates);
 		try {
 			jt.getDataSource().getConnection().close();
 		} catch (SQLException e) {

@@ -75,5 +75,5 @@ public interface LocationManager extends Manager {
 	 */
 	public void evict(Object entity);
 
-    public void makeDistancesInDatabase(List<PostalCodeCoordinate> pcCoordinates);
+    public void createDistancesInDatabase(List<PostalCodeCoordinate> pcCoordinates);
 }
