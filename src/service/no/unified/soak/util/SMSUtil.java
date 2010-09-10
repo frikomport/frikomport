@@ -7,7 +7,6 @@ import java.util.List;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -22,15 +21,11 @@ public class SMSUtil {
 		if(mobilnr == null) return; // no mobilnr in registration
 
     	String courseName = course.getName();
-    	String courseLocation = course.getLocation().getName() + ", " + course.getLocation().getAddress();
+    	String courseLocation = course.getLocation().getName();
     	String courseStart = DateUtil.getDateTime(ApplicationResourcesUtil.getText("datetime.format"), course.getStartTime());
 
-		String msg = ApplicationResourcesUtil.getText("misc.hello") + " " + registration.getFirstName() + "!\n";
-		msg += ApplicationResourcesUtil.getText("sms.confirmRegistration", new Object[]{courseName, courseStart, courseLocation}) + "\n";
-		msg += ApplicationResourcesUtil.getText("sms.fromTxt");
-		
-		// avventer tekst fra SVV
-		
+		String msg = ApplicationResourcesUtil.getText("sms.confirmRegistration", new Object[]{courseName, courseLocation, courseStart});
+
 		SMS sms = new SMS(mobilnr, msg);
 		log.info(sms);
 		// send sms -- kanskje SVV-fase 2
@@ -46,27 +41,16 @@ public class SMSUtil {
         	String courseStart = DateUtil.getDateTime(ApplicationResourcesUtil.getText("datetime.format"), course.getStartTime());
 
         	if(changedList.contains("status") && course.getStatus() == CourseStatus.COURSE_CANCELLED){
-        		// møtet er avlyst
-        		// avventer tekst fra SVV
-        		msg +=  ApplicationResourcesUtil.getText("sms.courseCancelled", new Object[]{courseName, courseLocation, courseStart}) + "\n";
-        		msg += ApplicationResourcesUtil.getText("sms.fromTxt");
+        		msg =  ApplicationResourcesUtil.getText("sms.courseCancelled", new Object[]{courseName, courseLocation, courseStart});
         	}
-        	else if(changedList.contains("startTime") || changedList.contains("location")){
-        		// møtet er endret
-        		// avventer tekst fra SVV
-        		msg += ApplicationResourcesUtil.getText("sms.courseChanged", courseName) +"\n";
-        		
-        		if (changedList.contains("startTime")) {
-		            msg += StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.startTime"))
-		                    + ": "
-		                    + DateUtil.getDateTime(ApplicationResourcesUtil.getText("datetime.format"), course.getStartTime()) + "\n";
-		        }
-	
-		        if (changedList.contains("location")) {
-		            msg += StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.location")) + ": "
-		                    + course.getLocation().getName() + ", " + course.getLocation().getAddress() + "\n";
-		        }
-        		msg += ApplicationResourcesUtil.getText("sms.fromTxt");
+        	else if(changedList.contains("startTime") && !changedList.contains("location")){
+        		msg = ApplicationResourcesUtil.getText("sms.courseTimeChanged", new Object[]{courseName, courseStart});
+        	}
+        	else if(!changedList.contains("startTime") && changedList.contains("location")){
+        		msg = ApplicationResourcesUtil.getText("sms.courseLocationChanged", new Object[]{courseName, courseLocation});
+        	}
+        	else if(changedList.contains("startTime") && changedList.contains("location")){
+        		msg = ApplicationResourcesUtil.getText("sms.courseTimeAndLocationChanged", new Object[]{courseName, courseLocation, courseStart});
         	}
         	
         	if(msg.length() > 0){
@@ -75,9 +59,7 @@ public class SMSUtil {
         			Registration r = it.next();
         			String mobil = r.getMobilePhone();
         			if(mobil != null){
-        				String name = r.getFirstName();
-        				String pmsg = ApplicationResourcesUtil.getText("misc.hello") + " " + name + "!\n" + msg;
-        				SMS sms = new SMS(mobil, pmsg);
+        				SMS sms = new SMS(mobil, msg);
         				toSend.add(sms);
         			}
         		}
