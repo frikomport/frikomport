@@ -144,6 +144,7 @@ public class LocationFormController extends BaseFormController {
             List<Course> searchedCourses = courseManager.searchCourses(course, null, null, null);
             if (searchedCourses == null || searchedCourses.size() == 0) {
                 locationManager.removeLocation(location.getId().toString());
+                locationManager.removePostalCodeLocationDistancesForLocation(location);
                 saveMessage(request, getText("location.deleted", locale));
             } else {
                 String text = getText("location.canNotDeleteDueToCourse", locale);
