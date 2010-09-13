@@ -258,11 +258,6 @@ public class CourseController extends BaseFormController {
         return model;
     }
 
-    private Object findByPostalcode(String postalcode) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	private boolean isAdmin(List<String> roles) {
         if (roles.contains(Constants.EVENTRESPONSIBLE_ROLE) || roles.contains(Constants.EDITOR_ROLE)
                 || roles.contains(Constants.ADMIN_ROLE)) {
@@ -317,8 +312,17 @@ public class CourseController extends BaseFormController {
 			throws Exception {
 		Map model = new HashMap();
 		HttpSession session = request.getSession();
-
 		Locale locale = request.getLocale();
+
+		// validering av postnummer fra welcome.html
+		String postalcode = request.getParameter("postalcode");
+		if(!StringUtils.isBlank(postalcode)){
+			if(postalcode.length() != 4 || !StringUtils.isNumeric(postalcode)){
+				saveErrorMessage(request, getText("welcome.postalcode.error", new String[] { postalcode }, locale));
+				return new ModelAndView("redirect:welcome.html");
+			}
+		}
+
 		boolean avoidSearch = false;
 
 		Course course = (Course) command;
@@ -435,12 +439,31 @@ public class CourseController extends BaseFormController {
 				status = new Integer[] { CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED,
 						CourseStatus.COURSE_CANCELLED };
 			}
-	        String postalcode = request.getParameter("postalcode");
+
 			if (StringUtils.isBlank(postalcode)) {
 				courseList = courseManager.searchCourses(course, starttime, stoptime, status);
 				courseList = updateAvailableAttendants(courseList, request);
 	        } else {
-//				courseList = courseManager.findByPostalcode(postalcode);
+				//List<Long> locationIds = locationManager.getLocationIds(postalcode);
+
+	        	// TODO: testkode ---
+	        	List<Long> locationIds = new ArrayList<Long>();
+	        	locationIds.add(new Long(268));
+	        	locationIds.add(new Long(272));
+	        	locationIds.add(new Long(321));
+	        	locationIds.add(new Long(231));
+	        	locationIds.add(new Long(364));
+	        	// TODO: testkode ---
+	        	
+	        	int numberOfHits = 15; // default
+	        	String numberOfHitsStr = getText("courseList.numberOfHits", locale);
+	        	if(StringUtils.isNumeric(numberOfHitsStr)) numberOfHits = Integer.parseInt(numberOfHitsStr);
+				courseList = courseManager.findByLocationIds(locationIds, numberOfHits);
+				courseList = updateAvailableAttendants(courseList, request);
+
+				// melding til bruker som forklarer postnr-søk
+				saveMessage(request, getText("courseList.postalCodeInfo", new String[] { postalcode }, locale));
+				
 	        }
 		} else {
 			List courses = courseManager.searchCourses(course, starttime, stoptime, null);

@@ -36,7 +36,7 @@ import org.apache.commons.lang.StringUtils;
 public class CourseManagerImpl extends BaseManager implements CourseManager {
     private CourseDAO courseDAO;
 
-    /**
+	/**
      * Set the DAO for communication with the data layer.
      * @param dao
      */
@@ -99,8 +99,8 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
         return courseDAO.findByInstructor(person);
     }
 
-    public List<Course> findByPostalCodeGeoProximity(String postalCode, Integer numberOfHits) {
-    	return courseDAO.findByPostalCodeGeoProximity(postalCode, numberOfHits);
+    public List<Course> findByLocationIds(List<Long> locationIds, Integer numberOfHits){
+    	return courseDAO.findByLocationIds(locationIds, numberOfHits);
     }
     
     /**

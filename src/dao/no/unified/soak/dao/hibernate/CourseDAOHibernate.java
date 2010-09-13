@@ -233,8 +233,26 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
         return getHibernateTemplate().findByCriteria(criteria);
     }
 
-	public List<Course> findByPostalCodeGeoProximity(String postalCode, Integer numberOfHits) {
+	public List<Course> findByLocationIds(List<Long> locationIds, Integer numberOfHits){
+        DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
+
+        criteria.add(Restrictions.in("locationid", locationIds));
+        criteria.add(Restrictions.eq("status", CourseStatus.COURSE_PUBLISHED));
+
+		String sortorderCSVString = ApplicationResourcesUtil.getText("courseList.order");
+		String[] sortorderArray = StringUtils.split(sortorderCSVString, ",");
+		criteria.createAlias("organization", "O");
+		for (String fieldName : sortorderArray) {
+			criteria.addOrder(Order.asc(fieldName));
+		}
 		
-		return null;
+		// bruk av subList er IKKE bra -- men har foreløspig ikke funnet hvordan jeg kan sette LIMIT xx via hibernate
+		// det finnes en del om setMaxresults() på google, men ikke for DetachedCriteria.
+		List courses = getHibernateTemplate().findByCriteria(criteria);
+		if(courses.size() > numberOfHits){
+			courses = courses.subList(0, numberOfHits);
+		}
+		return courses;
 	}
+	
 }
