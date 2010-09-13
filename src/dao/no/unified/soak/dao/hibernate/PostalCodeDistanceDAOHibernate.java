@@ -87,6 +87,19 @@ public class PostalCodeDistanceDAOHibernate extends BaseDAOHibernate implements 
 		int nRows = jt.queryForInt(sql);
 		return (nRows > 0);
 	}
+	
+	public List getLocationIds(String postalcode){
+		List<Long> locationIds = new ArrayList<Long>();
+
+		String sql = "select locationId from PostalCodeLocationDistance where postalCode = '" + postalcode + "' order by distance asc";
+		SqlRowSet idsRS = jt.queryForRowSet(sql);
+		while (idsRS.next()) {
+			Long id = idsRS.getLong("locationid");
+			locationIds.add(id);
+		}
+		return locationIds;
+	}
+	
 
 	public void removePostalCodeLocationDistance(Long locationid) {
 		String sql = "delete from PostalCodeLocationDistance where locationId = " + locationid;
