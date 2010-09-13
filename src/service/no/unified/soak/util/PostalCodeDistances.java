@@ -46,9 +46,11 @@ public class PostalCodeDistances {
 		List list = new ArrayList<PostalCodeCoordinate>();
 		list.add(new PostalCodeCoordinate("1501", 10.666900, 59.437650));
 		list.add(new PostalCodeCoordinate("0187", 10.7637606398,59.9144471445));
+		list.add(new PostalCodeCoordinate("0581", 10.8165703454,59.9274831406));
 		list.add(new PostalCodeCoordinate("0853", 10.7451984259,59.9426039666));
 		list.add(new PostalCodeCoordinate("0854", 10.7382430161,59.9458229218));
 		list.add(new PostalCodeCoordinate("3104", 10.4195367782,59.2697473505));
+		list.add(new PostalCodeCoordinate("5147", 5.28072422154,60.3510818902));
 		list.add(new PostalCodeCoordinate("5610", 6.20648923884,60.3898497536));
 		list.add(new PostalCodeCoordinate("7457", 10.460804,63.416732));
 		list.add(new PostalCodeCoordinate("9013", 18.901958,69.639866));

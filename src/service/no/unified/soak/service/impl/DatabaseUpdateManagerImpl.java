@@ -50,119 +50,145 @@ import org.springframework.orm.ObjectRetrievalFailureException;
  */
 public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUpdateManager {
 
-    private JdbcTemplate jt = new JdbcTemplate();
-    private CourseManager courseManager = null;
-    private RegistrationManager registrationManager = null;
-    private UserManager userManager = null;
-    private ServiceAreaManager serviceAreaManager = null;
-    private OrganizationManager organizationManager = null;
-    private CategoryManager categoryManager = null;
-    private ConfigurationManager configurationManager = null;
-    private RoleManager roleManager = null;
-    private PersonManager personManager = null;
-    private LocationManager locationManager = null;
-    
-    // hack for setting messagesource and locale to ApplicationResourcesUtil
-    // once
-    public void setLocale(Locale locale) {
-        // ApplicationResourcesUtil.setLocale(locale);
-    }
+	private JdbcTemplate jt = new JdbcTemplate();
+	private CourseManager courseManager = null;
+	private RegistrationManager registrationManager = null;
+	private UserManager userManager = null;
+	private ServiceAreaManager serviceAreaManager = null;
+	private OrganizationManager organizationManager = null;
+	private CategoryManager categoryManager = null;
+	private ConfigurationManager configurationManager = null;
+	private RoleManager roleManager = null;
+	private PersonManager personManager = null;
+	private LocationManager locationManager = null;
 
-    public void setMessageSource(MessageSource messageSource) {
-        ApplicationResourcesUtil.setMessageSource(messageSource);
-    }
+	// hack for setting messagesource and locale to ApplicationResourcesUtil
+	// once
+	public void setLocale(Locale locale) {
+		// ApplicationResourcesUtil.setLocale(locale);
+	}
 
-    // --- end hack
+	public void setMessageSource(MessageSource messageSource) {
+		ApplicationResourcesUtil.setMessageSource(messageSource);
+	}
 
-    public void setDataSource(DataSource dataSource) {
-        jt.setDataSource(dataSource);
-    }
+	// --- end hack
 
-    public void setCourseManager(CourseManager courseManager) {
-        this.courseManager = courseManager;
-    }
+	public void setDataSource(DataSource dataSource) {
+		jt.setDataSource(dataSource);
+	}
 
-    public void setRegistrationManager(RegistrationManager registrationManager) {
-        this.registrationManager = registrationManager;
-    }
+	public void setCourseManager(CourseManager courseManager) {
+		this.courseManager = courseManager;
+	}
 
-    public void setUserManager(UserManager userManager) {
-        this.userManager = userManager;
-    }
+	public void setRegistrationManager(RegistrationManager registrationManager) {
+		this.registrationManager = registrationManager;
+	}
 
-    public void setServiceAreaManager(ServiceAreaManager serviceAreaManager) {
-        this.serviceAreaManager = serviceAreaManager;
-    }
+	public void setUserManager(UserManager userManager) {
+		this.userManager = userManager;
+	}
 
-    public void setOrganizationManager(OrganizationManager organizationManager) {
-        this.organizationManager = organizationManager;
-    }
+	public void setServiceAreaManager(ServiceAreaManager serviceAreaManager) {
+		this.serviceAreaManager = serviceAreaManager;
+	}
 
-    public void setCategoryManager(CategoryManager categoryManager) {
-        this.categoryManager = categoryManager;
-    }
+	public void setOrganizationManager(OrganizationManager organizationManager) {
+		this.organizationManager = organizationManager;
+	}
 
-    public void setConfigurationManager(ConfigurationManager configurationManager) {
-        this.configurationManager = configurationManager;
-    }
+	public void setCategoryManager(CategoryManager categoryManager) {
+		this.categoryManager = categoryManager;
+	}
 
-    public void setRoleManager(RoleManager roleManager) {
-        this.roleManager = roleManager;
-    }
-    
-    public void setPersonManager(PersonManager personManager){
-    	this.personManager = personManager;
-    }
-    
-    public void setLocationManager(LocationManager locationManager){
-    	this.locationManager = locationManager;
-    }
+	public void setConfigurationManager(ConfigurationManager configurationManager) {
+		this.configurationManager = configurationManager;
+	}
 
-    public void updateDatabase() {
-    	alterUserAndRoleAndCoursebySQL();
-    	changeRolesBySQL();
-    	
-        insertDefaultValues();
+	public void setRoleManager(RoleManager roleManager) {
+		this.roleManager = roleManager;
+	}
 
-        updateBySQLStatements();
+	public void setPersonManager(PersonManager personManager) {
+		this.personManager = personManager;
+	}
 
-        // ServiceArea updates
-        updateServiceAreas();
-        // User updates
-        updateUsers();
-        // Organization updates
-        updateOrganizations();
-        // Course updates
-        updateCourses();
-        // Registration updates
-        updateRegistrations();
-        
-        // Location updates
-        updateLocations();
-        
-        // Schema updates postactions
-        updateDatabaseSchemaAfter();
+	public void setLocationManager(LocationManager locationManager) {
+		this.locationManager = locationManager;
+	}
 
-        // update configuration content
-        updateConfigurations();
-        
-        createPostalCodeTables();
-        
-        List<PostalCodeCoordinate> coordinates = null;
-        try {
-			coordinates = PostalCodeDistances.loadKmlFileIfNecessary_EmulatedTest("postnummer.kml");
-//			coordinates = PostalCodesSuperduperLoader.loadPostalCodes();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
+	public void updateDatabase() {
+		alterUserAndRoleAndCoursebySQL();
+		changeRolesBySQL();
+
+		insertDefaultValues();
+
+		updateBySQLStatements();
+
+		// ServiceArea updates
+		updateServiceAreas();
+		// User updates
+		updateUsers();
+		// Organization updates
+		updateOrganizations();
+		// Course updates
+		updateCourses();
+		// Registration updates
+		updateRegistrations();
+
+		// Location updates
+		updateLocations();
+
+		// Schema updates postactions
+		updateDatabaseSchemaAfter();
+
+		// update configuration content
+		updateConfigurations();
+
+		createPostalCodeTables();
+		doPostalCodeDistancesIfneeded();
+	}
+
+	private void doPostalCodeDistancesIfneeded() {
+
+		boolean emptyTablePostalCodeDistance = isEmptyTable("PostalCodeDistance");
+		boolean emptyTablePostalCodeLocationDistance = isEmptyTable("PostalCodeLocationDistance");
+
+		List<PostalCodeCoordinate> coordinates = null;
+		if (emptyTablePostalCodeDistance || emptyTablePostalCodeLocationDistance) {
+			try {
+				coordinates = PostalCodeDistances.loadKmlFileIfNecessary_EmulatedTest("postnummer.kml");
+				// coordinates = PostalCodesSuperduperLoader.loadPostalCodes();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			if (emptyTablePostalCodeDistance) {
+				locationManager.createPostalCodeDistancesInDatabase(coordinates);
+			}
+			if (emptyTablePostalCodeLocationDistance) {
+				locationManager.createPostalCodeLocationDistancesInDatabase(coordinates);
+			}
 		}
-		locationManager.createDistancesInDatabase(coordinates);
+	}
+
+	private boolean isEmptyTable(String table) {
+		String sql = "select count(*) from " + table;
+		int numRows = jt.queryForInt(sql);
+		return (numRows == 0);
+	}
+
+	private void closeConnectionIfNeeded(Connection connection, String MethodnameOrCodeIdentifier) {
 		try {
-			jt.getDataSource().getConnection().close();
+			if (connection != null) {
+				connection.close();
+			}
 		} catch (SQLException e) {
-			log.error("Error closing database connection in DatabaseUpdateManagerImpl.", e);
+			log.error("Error closing database connection in DatabaseUpdateManagerImpl." + MethodnameOrCodeIdentifier, e);
 		}
-    }
+	}
 
 	private void createPostalCodeTables() {
 		if (getTableInfo("PostalCodeDistance") == null) {
@@ -195,14 +221,16 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 				log.info("Endret rolle 'instructor' til 'eventresponsible' i Role.");
 			}
 		} catch (Exception e) {
-			log.error("Feil ved dataendring i \"Role\". Dersom det finnes en rad i Role med name='instructor' må dette name endres til 'eventresponsible'.",
+			log
+					.error(
+							"Feil ved dataendring i \"Role\". Dersom det finnes en rad i Role med name='instructor' må dette name endres til 'eventresponsible'.",
 							e);
 		}
 	}
 
-	private void updateLocations(){
+	private void updateLocations() {
 		ColumnInfo mapurl = getColumnInfo("location", "mapurl");
-		if(mapurl != null && mapurl.getSize() < 350){
+		if (mapurl != null && mapurl.getSize() < 350) {
 			String sql = "alter table location modify mapurl varchar2(350)";
 			if (DefaultQuotedNamingStrategy.usesOracle()) {
 				sql = "alter table location modify \"mapurl\" varchar2(350)";
@@ -216,7 +244,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		}
 
 		ColumnInfo detailurl = getColumnInfo("location", "detailurl");
-		if(detailurl != null && detailurl.getSize() < 350){
+		if (detailurl != null && detailurl.getSize() < 350) {
 			String sql = "alter table location modify detailurl varchar2(350)";
 			if (DefaultQuotedNamingStrategy.usesOracle()) {
 				sql = "alter table location modify \"detailurl\" varchar2(350)";
@@ -229,7 +257,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			}
 		}
 	}
-	
+
 	/**
 	 * For upgrade from 1.7.X to SVV
 	 */
@@ -294,502 +322,505 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		}
 
 	}
-    
-    private void insertDefaultValues() {
 
-    	// ROLES
-//    	int addedRoles = 0;
-//        try { 
-//        	Role anonymous = roleManager.getRole("anonymous");
-//        	if(anonymous == null){
-//        		roleManager.saveRole(new Role("anonymous", "Anonymous"));
-//        		addedRoles++;
-//        	}
-//        }
-//        catch(Exception e){ 
-//        	log.error("Feil i opprettelse av \"Role\"", e); 
-//        }
-//
-//        try { 
-//        	Role admin = roleManager.getRole("admin");
-//        	if(admin == null){
-//        		roleManager.saveRole(new Role("admin", "Administrator"));
-//        		addedRoles++;
-//        	}
-//        }
-//        catch(Exception e){ 
-//        	log.error("Feil i opprettelse av \"Role\"", e); 
-//        }
-//
-//        try { 
-//        	Role employee = roleManager.getRole("employee");
-//        	if(employee == null){
-//        		roleManager.saveRole(new Role("employee", "Ansatt"));
-//        		addedRoles++;
-//        	}
-//        }
-//        catch(Exception e){ 
-//        	log.error("Feil i opprettelse av \"Role\"", e); 
-//        }
-//
-//        try { 
-//        	Role eventResponsible = roleManager.getRole("eventresponsible");
-//        	if(eventResponsible == null){
-//        		roleManager.saveRole(new Role("eventresponsible", "Kursansvarlig"));
-//        		addedRoles++;
-//        	}
-//        }
-//        catch(Exception e){ 
-//        	log.error("Feil i opprettelse av \"Role\"", e); 
-//        }
-//
-//        try { 
-//        	Role editor = roleManager.getRole("editor");
-//        	if(editor == null){
-//        		roleManager.saveRole(new Role("editor", "Opplaringsansvarlig"));
-//        		addedRoles++;
-//        	}
-//        }
-//        catch(Exception e){ 
-//        	log.error("Feil i opprettelse av \"Role\"", e); 
-//        }
+	private void insertDefaultValues() {
 
-    	try {
-	        String[][] sqlSelectAndInsertRoleArray = {
-	            // Role insert
-	            { "select count(*) from role where name='anonymous'",
-	                    "INSERT INTO role (name, description) VALUES('anonymous', 'Anonymous')" },
-	            { "select count(*) from role where name='admin'",
-	                    "INSERT INTO role (name, description) VALUES('admin', 'Administrator')" },
-	            { "select count(*) from role where name='employee'",
-	                    "INSERT INTO role (name, description) VALUES('employee', 'Ansatt')" },
-	            { "select count(*) from role where name='eventresponsible'",
-	                    "INSERT INTO role (name, description) VALUES('eventresponsible', 'Kursansvarlig')" },
-	            { "select count(*) from role where name='editor'",
-	                "INSERT INTO role (name, description) VALUES('editor', 'Opplaringsansvarlig')" } };
-	        insertIntoTableBySQLStatements("role", sqlSelectAndInsertRoleArray);
-    	}catch(Exception e){
-    		log.warn("Feil ved insert av roller", e);
-    	}
-    	
-    	if (ApplicationResourcesUtil.isSVV()) {
-        	// inserts new role for SVV
-//        	try { roleManager.getRole("reader"); }
-//        	catch(ObjectRetrievalFailureException e){
-//        		roleManager.saveRole(new Role("reader", "Reader"));
-//        		addedRoles++;
-//        	}
+		// ROLES
+		// int addedRoles = 0;
+		// try {
+		// Role anonymous = roleManager.getRole("anonymous");
+		// if(anonymous == null){
+		// roleManager.saveRole(new Role("anonymous", "Anonymous"));
+		// addedRoles++;
+		// }
+		// }
+		// catch(Exception e){
+		// log.error("Feil i opprettelse av \"Role\"", e);
+		// }
+		//
+		// try {
+		// Role admin = roleManager.getRole("admin");
+		// if(admin == null){
+		// roleManager.saveRole(new Role("admin", "Administrator"));
+		// addedRoles++;
+		// }
+		// }
+		// catch(Exception e){
+		// log.error("Feil i opprettelse av \"Role\"", e);
+		// }
+		//
+		// try {
+		// Role employee = roleManager.getRole("employee");
+		// if(employee == null){
+		// roleManager.saveRole(new Role("employee", "Ansatt"));
+		// addedRoles++;
+		// }
+		// }
+		// catch(Exception e){
+		// log.error("Feil i opprettelse av \"Role\"", e);
+		// }
+		//
+		// try {
+		// Role eventResponsible = roleManager.getRole("eventresponsible");
+		// if(eventResponsible == null){
+		// roleManager.saveRole(new Role("eventresponsible", "Kursansvarlig"));
+		// addedRoles++;
+		// }
+		// }
+		// catch(Exception e){
+		// log.error("Feil i opprettelse av \"Role\"", e);
+		// }
+		//
+		// try {
+		// Role editor = roleManager.getRole("editor");
+		// if(editor == null){
+		// roleManager.saveRole(new Role("editor", "Opplaringsansvarlig"));
+		// addedRoles++;
+		// }
+		// }
+		// catch(Exception e){
+		// log.error("Feil i opprettelse av \"Role\"", e);
+		// }
 
-    		try {
-	            String[][] sqlSelectAndInsertRoleSVVArray = {
-	                // Role insert
-	                { "select count(*) from role where name='reader'",
-	                        "INSERT INTO role (name, description) VALUES('reader', 'Reader')" } };
-	            insertIntoTableBySQLStatements("role", sqlSelectAndInsertRoleSVVArray);
-    		}catch (Exception e) {
+		try {
+			String[][] sqlSelectAndInsertRoleArray = {
+					// Role insert
+					{ "select count(*) from role where name='anonymous'",
+							"INSERT INTO role (name, description) VALUES('anonymous', 'Anonymous')" },
+					{ "select count(*) from role where name='admin'",
+							"INSERT INTO role (name, description) VALUES('admin', 'Administrator')" },
+					{ "select count(*) from role where name='employee'",
+							"INSERT INTO role (name, description) VALUES('employee', 'Ansatt')" },
+					{ "select count(*) from role where name='eventresponsible'",
+							"INSERT INTO role (name, description) VALUES('eventresponsible', 'Kursansvarlig')" },
+					{ "select count(*) from role where name='editor'",
+							"INSERT INTO role (name, description) VALUES('editor', 'Opplaringsansvarlig')" } };
+			insertIntoTableBySQLStatements("role", sqlSelectAndInsertRoleArray);
+		} catch (Exception e) {
+			log.warn("Feil ved insert av roller", e);
+		}
+
+		if (ApplicationResourcesUtil.isSVV()) {
+			// inserts new role for SVV
+			// try { roleManager.getRole("reader"); }
+			// catch(ObjectRetrievalFailureException e){
+			// roleManager.saveRole(new Role("reader", "Reader"));
+			// addedRoles++;
+			// }
+
+			try {
+				String[][] sqlSelectAndInsertRoleSVVArray = {
+				// Role insert
+				{ "select count(*) from role where name='reader'",
+						"INSERT INTO role (name, description) VALUES('reader', 'Reader')" } };
+				insertIntoTableBySQLStatements("role", sqlSelectAndInsertRoleSVVArray);
+			} catch (Exception e) {
 				log.warn("Feil ved insert av rolle", e);
 			}
-    	
-    	}
-//		if (addedRoles != 0) {
-//			log.info("Antall nye roller lagt til i database: " + addedRoles);
-//		}
 
+		}
+		// if (addedRoles != 0) {
+		// log.info("Antall nye roller lagt til i database: " + addedRoles);
+		// }
 
-    	// CATEGORIES
-        try {
-        	categoryManager.getCategory(Category.Name.HENDELSE.getDBValue()); 
-        }
-        catch(ObjectRetrievalFailureException e){
-	        Category cat = new Category();
-	        cat.setName(Category.Name.HENDELSE.getDBValue());
-	        cat.setSelectable(true);
-	        categoryManager.saveCategory(cat);
-	        log.info("\"Category\" lagt til i DB: " + cat);
-    	}
+		// CATEGORIES
+		try {
+			categoryManager.getCategory(Category.Name.HENDELSE.getDBValue());
+		} catch (ObjectRetrievalFailureException e) {
+			Category cat = new Category();
+			cat.setName(Category.Name.HENDELSE.getDBValue());
+			cat.setSelectable(true);
+			categoryManager.saveCategory(cat);
+			log.info("\"Category\" lagt til i DB: " + cat);
+		}
 
-    	try {
-	        String[][] sqlSelectAndInsertCategoryArray = { { "select count(*) from category",
-	        	"INSERT INTO category (name, selectable) VALUES ('Hendelse', true)" } };
-	        insertIntoTableBySQLStatements("category", sqlSelectAndInsertCategoryArray);
-    	}catch (Exception e) {
+		try {
+			String[][] sqlSelectAndInsertCategoryArray = { { "select count(*) from category",
+					"INSERT INTO category (name, selectable) VALUES ('Hendelse', true)" } };
+			insertIntoTableBySQLStatements("category", sqlSelectAndInsertCategoryArray);
+		} catch (Exception e) {
 			log.warn("Feil ved insert av kategori", e);
 		}
-    	
-        // PERSONS
-        if(ApplicationResourcesUtil.isSVV()){
-	        try { 
-	        	List persons = personManager.getPersons(null, false);
-	        	if(persons.isEmpty()){
-	        		Person mengdetrening = new Person();
-	        		mengdetrening.setName("Mengdetrening");
-	        		mengdetrening.setEmail("mengdetrening@vegvesen.no");
-	        		mengdetrening.setSelectable(true);
-	        		personManager.savePerson(mengdetrening);
-	        		log.info("Lagt inn dummy-person i DB: " + mengdetrening);
-	        	}
-	        }
-	        catch(Exception e){
-		        log.error("Feil ved innlegging av dummy-person \"Mengdetrening\"", e);
-	    	}
-        }
-        
-        // CONFIGURATIONS
-        Vector<Configuration> configurationsToInsert = new Vector<Configuration>();
-        // common configurations 
-    	configurationsToInsert.add(new Configuration("access.registration.delete", false, null));
-    	configurationsToInsert.add(new Configuration("access.registration.userdefaults", false, null));
-    	configurationsToInsert.add(new Configuration("access.registration.emailrepeat", false, null));
-    	configurationsToInsert.add(new Configuration("access.registration.showComment", true, null));
-    	configurationsToInsert.add(new Configuration("access.registration.showCancelled", false, null));
-    	configurationsToInsert.add(new Configuration("sms.confirmedRegistrationChangedCourse", false, null));
-    	
-    	configurationsToInsert.add(new Configuration("mail.course.sendSummary", true, null));
-    	configurationsToInsert.add(new Configuration("access.course.showDescription", true, null));
 
-    	configurationsToInsert.add(new Configuration("mail.registration.notifyResponsible", false, null));
+		// PERSONS
+		if (ApplicationResourcesUtil.isSVV()) {
+			try {
+				List persons = personManager.getPersons(null, false);
+				if (persons.isEmpty()) {
+					Person mengdetrening = new Person();
+					mengdetrening.setName("Mengdetrening");
+					mengdetrening.setEmail("mengdetrening@vegvesen.no");
+					mengdetrening.setSelectable(true);
+					personManager.savePerson(mengdetrening);
+					log.info("Lagt inn dummy-person i DB: " + mengdetrening);
+				}
+			} catch (Exception e) {
+				log.error("Feil ved innlegging av dummy-person \"Mengdetrening\"", e);
+			}
+		}
 
-    	configurationsToInsert.add(new Configuration("show.menu", false, null));
+		// CONFIGURATIONS
+		Vector<Configuration> configurationsToInsert = new Vector<Configuration>();
+		// common configurations
+		configurationsToInsert.add(new Configuration("access.registration.delete", false, null));
+		configurationsToInsert.add(new Configuration("access.registration.userdefaults", false, null));
+		configurationsToInsert.add(new Configuration("access.registration.emailrepeat", false, null));
+		configurationsToInsert.add(new Configuration("access.registration.showComment", true, null));
+		configurationsToInsert.add(new Configuration("access.registration.showCancelled", false, null));
+		configurationsToInsert.add(new Configuration("sms.confirmedRegistrationChangedCourse", false, null));
 
-    	// profile
-    	configurationsToInsert.add(new Configuration("access.profile.showAddress", true, null));
+		configurationsToInsert.add(new Configuration("mail.course.sendSummary", true, null));
+		configurationsToInsert.add(new Configuration("access.course.showDescription", true, null));
 
-    	
-        if (ApplicationResourcesUtil.isSVV()) {
-        	// configurations specific for FKPSVV enviroment.
-        	
-        	// registrationForm
-        	configurationsToInsert.add(new Configuration("access.registration.showEmployeeFields", false, null));
-        	configurationsToInsert.add(new Configuration("access.registration.showServiceArea", false, null));
-        	configurationsToInsert.add(new Configuration("access.registration.showJobTitle", false, null));
-        	configurationsToInsert.add(new Configuration("access.registration.showWorkplace", false, null));
-        	configurationsToInsert.add(new Configuration("access.registration.useBirthdate", true, null));
-        	configurationsToInsert.add(new Configuration("access.registration.mobilePhone.digitsOnly.minLength8", true, null));
-        	configurationsToInsert.add(new Configuration("access.registration.useWaitlists", false, null));
-        	
-        	//course
-        	configurationsToInsert.add(new Configuration("access.course.usePayment", false, null));
-        	configurationsToInsert.add(new Configuration("access.course.showDuration", false, null));
-        	configurationsToInsert.add(new Configuration("access.course.showRole", false, null));
-        	configurationsToInsert.add(new Configuration("access.course.showType", false, null));
-        	configurationsToInsert.add(new Configuration("access.course.showRestricted", false, null));
-        	configurationsToInsert.add(new Configuration("access.course.useServiceArea", false, null));
-        	configurationsToInsert.add(new Configuration("access.course.showCourseName", false, null));
-        	configurationsToInsert.add(new Configuration("access.course.useAttendants", true, null));
-        	configurationsToInsert.add(new Configuration("access.course.useRegisterBy", false, null));
-        	configurationsToInsert.add(new Configuration("access.course.useOrganization2", true, null));
-        	configurationsToInsert.add(new Configuration("access.course.showAttendantDetails", false, null));
-        	configurationsToInsert.add(new Configuration("access.course.showDescriptionToPublic", false, null));
+		configurationsToInsert.add(new Configuration("mail.registration.notifyResponsible", false, null));
 
-        	//User
-        	configurationsToInsert.add(new Configuration("access.user.useBirthdate", false, null));
-        	configurationsToInsert.add(new Configuration("access.user.useWebsite", false, null));
-        	configurationsToInsert.add(new Configuration("access.user.useCountry", false, null));
+		configurationsToInsert.add(new Configuration("show.menu", false, null));
 
-        	// profile
-        	configurationsToInsert.add(new Configuration("access.profile.showInvoiceaddress", false, null));
+		// profile
+		configurationsToInsert.add(new Configuration("access.profile.showAddress", true, null));
 
-        } else {
-            // configurations specific for non-FKPSVV enviroment.
-        	
-        	// registrationForm
-        	configurationsToInsert.add(new Configuration("access.registration.showEmployeeFields", true, null));
-        	configurationsToInsert.add(new Configuration("access.registration.showServiceArea", true, null));
-        	configurationsToInsert.add(new Configuration("access.registration.showJobTitle", true, null));
-        	configurationsToInsert.add(new Configuration("access.registration.showWorkplace", true, null));
-        	configurationsToInsert.add(new Configuration("access.registration.useBirthdate", false, null));
-        	configurationsToInsert.add(new Configuration("access.registration.mobilePhone.digitsOnly.minLength8", false, null));
-        	configurationsToInsert.add(new Configuration("access.registration.useWaitlists", true, null));
+		if (ApplicationResourcesUtil.isSVV()) {
+			// configurations specific for FKPSVV enviroment.
 
-        	//course
-        	configurationsToInsert.add(new Configuration("access.course.usePayment", true, null));
-        	configurationsToInsert.add(new Configuration("access.course.showDuration", true, null));
-        	configurationsToInsert.add(new Configuration("access.course.showRole", true, null));
-        	configurationsToInsert.add(new Configuration("access.course.showType", true, null));
-        	configurationsToInsert.add(new Configuration("access.course.showRestricted", true, null));
-        	configurationsToInsert.add(new Configuration("access.course.showCourseName", false, null));
-        	configurationsToInsert.add(new Configuration("access.course.useAttendants", false, null));
-        	configurationsToInsert.add(new Configuration("access.course.useRegisterBy", true, null));
-        	configurationsToInsert.add(new Configuration("access.course.showDescriptionToPublic", true, null));
+			// registrationForm
+			configurationsToInsert.add(new Configuration("access.registration.showEmployeeFields", false, null));
+			configurationsToInsert.add(new Configuration("access.registration.showServiceArea", false, null));
+			configurationsToInsert.add(new Configuration("access.registration.showJobTitle", false, null));
+			configurationsToInsert.add(new Configuration("access.registration.showWorkplace", false, null));
+			configurationsToInsert.add(new Configuration("access.registration.useBirthdate", true, null));
+			configurationsToInsert.add(new Configuration("access.registration.mobilePhone.digitsOnly.minLength8", true, null));
+			configurationsToInsert.add(new Configuration("access.registration.useWaitlists", false, null));
 
-        	//User
-        	configurationsToInsert.add(new Configuration("access.user.useBirthdate", true, null));
-        	configurationsToInsert.add(new Configuration("access.user.useWebsite", true, null));
-        	configurationsToInsert.add(new Configuration("access.user.useCountry", true, null));
+			// course
+			configurationsToInsert.add(new Configuration("access.course.usePayment", false, null));
+			configurationsToInsert.add(new Configuration("access.course.showDuration", false, null));
+			configurationsToInsert.add(new Configuration("access.course.showRole", false, null));
+			configurationsToInsert.add(new Configuration("access.course.showType", false, null));
+			configurationsToInsert.add(new Configuration("access.course.showRestricted", false, null));
+			configurationsToInsert.add(new Configuration("access.course.useServiceArea", false, null));
+			configurationsToInsert.add(new Configuration("access.course.showCourseName", false, null));
+			configurationsToInsert.add(new Configuration("access.course.useAttendants", true, null));
+			configurationsToInsert.add(new Configuration("access.course.useRegisterBy", false, null));
+			configurationsToInsert.add(new Configuration("access.course.useOrganization2", true, null));
+			configurationsToInsert.add(new Configuration("access.course.showAttendantDetails", false, null));
+			configurationsToInsert.add(new Configuration("access.course.showDescriptionToPublic", false, null));
 
-        	// profile
-        	configurationsToInsert.add(new Configuration("access.profile.showInvoiceaddress", true, null));
-        }
+			// User
+			configurationsToInsert.add(new Configuration("access.user.useBirthdate", false, null));
+			configurationsToInsert.add(new Configuration("access.user.useWebsite", false, null));
+			configurationsToInsert.add(new Configuration("access.user.useCountry", false, null));
 
-        List<Configuration> configurationsInDB = configurationManager.getConfigurations();
-        if(configurationsInDB.isEmpty()){
-        	// insert all configurations for env
-        	for(int i=0; i<configurationsToInsert.size(); i++){
-        		Configuration c = configurationsToInsert.get(i);
-        		configurationManager.saveConfiguration(c);
-	        	log.info("\"Configuration\" lagt til i DB: " + c);
-        	}
-        }
-        else {
-        	// insert missing configurations
-    		for(int i=0; i<configurationsToInsert.size(); i++){
-    			Configuration configuration = configurationsToInsert.get(i);
-    			boolean insert = true;
-    			Iterator confList = configurationsInDB.iterator();
-            	while(confList.hasNext()){
-            		Configuration alreadyInDB = (Configuration)confList.next();
-            		if(alreadyInDB.getName().equalsIgnoreCase(configuration.getName())){
-            			insert = false;
-            		}
-            	}
-            	if(insert) {
-            		configurationManager.saveConfiguration(configuration);
-    	        	log.info("\"Configuration\" lagt til i DB: " + configuration);
-            	}
-    		}
-        }
-        
-        if (ApplicationResourcesUtil.isSVV()) {
-        	
-        	List<Organization> organizationsInDB = organizationManager.getAll();
-        	
-        	Vector<Organization> organizationsToInsert = new Vector<Organization>();
-        	
-        	List regioner = organizationManager.getOrganizationsByType(Type.REGION);
-        	List omrader = organizationManager.getOrganizationsByType(Type.AREA);
-        	Organization north;
-        	Organization mid;
+			// profile
+			configurationsToInsert.add(new Configuration("access.profile.showInvoiceaddress", false, null));
+
+		} else {
+			// configurations specific for non-FKPSVV enviroment.
+
+			// registrationForm
+			configurationsToInsert.add(new Configuration("access.registration.showEmployeeFields", true, null));
+			configurationsToInsert.add(new Configuration("access.registration.showServiceArea", true, null));
+			configurationsToInsert.add(new Configuration("access.registration.showJobTitle", true, null));
+			configurationsToInsert.add(new Configuration("access.registration.showWorkplace", true, null));
+			configurationsToInsert.add(new Configuration("access.registration.useBirthdate", false, null));
+			configurationsToInsert.add(new Configuration("access.registration.mobilePhone.digitsOnly.minLength8", false, null));
+			configurationsToInsert.add(new Configuration("access.registration.useWaitlists", true, null));
+
+			// course
+			configurationsToInsert.add(new Configuration("access.course.usePayment", true, null));
+			configurationsToInsert.add(new Configuration("access.course.showDuration", true, null));
+			configurationsToInsert.add(new Configuration("access.course.showRole", true, null));
+			configurationsToInsert.add(new Configuration("access.course.showType", true, null));
+			configurationsToInsert.add(new Configuration("access.course.showRestricted", true, null));
+			configurationsToInsert.add(new Configuration("access.course.showCourseName", false, null));
+			configurationsToInsert.add(new Configuration("access.course.useAttendants", false, null));
+			configurationsToInsert.add(new Configuration("access.course.useRegisterBy", true, null));
+			configurationsToInsert.add(new Configuration("access.course.showDescriptionToPublic", true, null));
+
+			// User
+			configurationsToInsert.add(new Configuration("access.user.useBirthdate", true, null));
+			configurationsToInsert.add(new Configuration("access.user.useWebsite", true, null));
+			configurationsToInsert.add(new Configuration("access.user.useCountry", true, null));
+
+			// profile
+			configurationsToInsert.add(new Configuration("access.profile.showInvoiceaddress", true, null));
+		}
+
+		List<Configuration> configurationsInDB = configurationManager.getConfigurations();
+		if (configurationsInDB.isEmpty()) {
+			// insert all configurations for env
+			for (int i = 0; i < configurationsToInsert.size(); i++) {
+				Configuration c = configurationsToInsert.get(i);
+				configurationManager.saveConfiguration(c);
+				log.info("\"Configuration\" lagt til i DB: " + c);
+			}
+		} else {
+			// insert missing configurations
+			for (int i = 0; i < configurationsToInsert.size(); i++) {
+				Configuration configuration = configurationsToInsert.get(i);
+				boolean insert = true;
+				Iterator confList = configurationsInDB.iterator();
+				while (confList.hasNext()) {
+					Configuration alreadyInDB = (Configuration) confList.next();
+					if (alreadyInDB.getName().equalsIgnoreCase(configuration.getName())) {
+						insert = false;
+					}
+				}
+				if (insert) {
+					configurationManager.saveConfiguration(configuration);
+					log.info("\"Configuration\" lagt til i DB: " + configuration);
+				}
+			}
+		}
+
+		if (ApplicationResourcesUtil.isSVV()) {
+
+			List<Organization> organizationsInDB = organizationManager.getAll();
+
+			Vector<Organization> organizationsToInsert = new Vector<Organization>();
+
+			List regioner = organizationManager.getOrganizationsByType(Type.REGION);
+			List omrader = organizationManager.getOrganizationsByType(Type.AREA);
+			Organization north;
+			Organization mid;
 			Organization west;
 			Organization south;
 			Organization east;
 			Integer regionTypeDBValue = Type.REGION.getTypeDBValue();
 			Integer areaTypeDBValue = Type.AREA.getTypeDBValue();
 			Integer countyTypeDBValue = Type.COUNTY.getTypeDBValue();
-			
-			if(regioner.isEmpty()){
-        		// regioner
+
+			if (regioner.isEmpty()) {
+				// regioner
 				north = new Organization("Region Nord", 1, regionTypeDBValue, true, null);
-        		mid = new Organization("Region Midt", 2, regionTypeDBValue, true, null);
-        		west = new Organization("Region Vest", 3, regionTypeDBValue, true, null);
-        		south = new Organization("Region Sør", 4, regionTypeDBValue, true, null);
-        		east = new Organization("Region Øst", 5, regionTypeDBValue, true, null);
-        		organizationManager.saveOrganization(north);
-        		organizationManager.saveOrganization(mid);
-        		organizationManager.saveOrganization(west);
-        		organizationManager.saveOrganization(south);
-        		organizationManager.saveOrganization(east);
-        	} else {
-        		north = Organization.getFirstOrgByNumber(regioner, 1);
-        		mid = Organization.getFirstOrgByNumber(regioner, 2);
-        		west = Organization.getFirstOrgByNumber(regioner, 3);
-        		south = Organization.getFirstOrgByNumber(regioner, 4);
-        		east = Organization.getFirstOrgByNumber(regioner, 5);
-        	}
-        	
-        	if (omrader.isEmpty()) {
+				mid = new Organization("Region Midt", 2, regionTypeDBValue, true, null);
+				west = new Organization("Region Vest", 3, regionTypeDBValue, true, null);
+				south = new Organization("Region Sør", 4, regionTypeDBValue, true, null);
+				east = new Organization("Region Øst", 5, regionTypeDBValue, true, null);
+				organizationManager.saveOrganization(north);
+				organizationManager.saveOrganization(mid);
+				organizationManager.saveOrganization(west);
+				organizationManager.saveOrganization(south);
+				organizationManager.saveOrganization(east);
+			} else {
+				north = Organization.getFirstOrgByNumber(regioner, 1);
+				mid = Organization.getFirstOrgByNumber(regioner, 2);
+				west = Organization.getFirstOrgByNumber(regioner, 3);
+				south = Organization.getFirstOrgByNumber(regioner, 4);
+				east = Organization.getFirstOrgByNumber(regioner, 5);
+			}
+
+			if (omrader.isEmpty()) {
 				// områder
-            	organizationsToInsert.add(new Organization("Område Helgeland", 0, areaTypeDBValue, true, north));
-            	organizationsToInsert.add(new Organization("Område Salten", 0, areaTypeDBValue, true, north));
-            	organizationsToInsert.add(new Organization("Område Midtre Hålogaland", 0, areaTypeDBValue, true, north));
-            	organizationsToInsert.add(new Organization("Område Midtre Troms", 0, areaTypeDBValue, true, north));
-            	organizationsToInsert.add(new Organization("Område Nord-Troms og Vest-Finnmark", 0, areaTypeDBValue, true, north));
-            	organizationsToInsert.add(new Organization("Område Øst-Finnmark", 0, areaTypeDBValue, true, north));
-            	
-            	organizationsToInsert.add(new Organization("Område Møre og Romsdal", 0, areaTypeDBValue, true, mid));
-            	organizationsToInsert.add(new Organization("Område Sør-Trøndelag", 0, areaTypeDBValue, true, mid));
-            	organizationsToInsert.add(new Organization("Område Nord-Trøndelag", 0, areaTypeDBValue, true, mid));
-            	
-            	organizationsToInsert.add(new Organization("Område Sør-Rogaland", 0, areaTypeDBValue, true, west));
-            	organizationsToInsert.add(new Organization("Område Haugaland og Sunnhordaland", 0, areaTypeDBValue, true, west));
-            	organizationsToInsert.add(new Organization("Område Bergen og Nordhordaland", 0, areaTypeDBValue, true, west));
-            	organizationsToInsert.add(new Organization("Område Indre Hordaland og Sogn og Fjordane", 0, areaTypeDBValue, true, west));
-            	
-            	organizationsToInsert.add(new Organization("Område Agder", 0, areaTypeDBValue, true, south));
-            	organizationsToInsert.add(new Organization("Område Nedre-Telemark og Vestfold", 0, areaTypeDBValue, true, south));
-            	organizationsToInsert.add(new Organization("Område Øvre-Telemark og Buskerud", 0, areaTypeDBValue, true, south));
+				organizationsToInsert.add(new Organization("Område Helgeland", 0, areaTypeDBValue, true, north));
+				organizationsToInsert.add(new Organization("Område Salten", 0, areaTypeDBValue, true, north));
+				organizationsToInsert.add(new Organization("Område Midtre Hålogaland", 0, areaTypeDBValue, true, north));
+				organizationsToInsert.add(new Organization("Område Midtre Troms", 0, areaTypeDBValue, true, north));
+				organizationsToInsert.add(new Organization("Område Nord-Troms og Vest-Finnmark", 0, areaTypeDBValue, true, north));
+				organizationsToInsert.add(new Organization("Område Øst-Finnmark", 0, areaTypeDBValue, true, north));
 
-            	organizationsToInsert.add(new Organization("Område Follo og Østfold", 0, areaTypeDBValue, true, east));
-            	organizationsToInsert.add(new Organization("Område Asker, Bærum og Oslo", 0, areaTypeDBValue, true, east));
-            	organizationsToInsert.add(new Organization("Område Glåmdal og Romerike", 0, areaTypeDBValue, true, east));
-            	organizationsToInsert.add(new Organization("Område Hedemarken-Østerdalen", 0, areaTypeDBValue, true, east));
-            	organizationsToInsert.add(new Organization("Område Oppland", 0, areaTypeDBValue, true, east));
+				organizationsToInsert.add(new Organization("Område Møre og Romsdal", 0, areaTypeDBValue, true, mid));
+				organizationsToInsert.add(new Organization("Område Sør-Trøndelag", 0, areaTypeDBValue, true, mid));
+				organizationsToInsert.add(new Organization("Område Nord-Trøndelag", 0, areaTypeDBValue, true, mid));
 
-            	// fylker
-            	organizationsToInsert.add(new Organization("Østfold", 1, countyTypeDBValue, true, east));
-            	organizationsToInsert.add(new Organization("Akershus", 2, countyTypeDBValue, true, east));
-            	organizationsToInsert.add(new Organization("Oslo", 3, countyTypeDBValue, true, east));
-            	organizationsToInsert.add(new Organization("Hedmark", 4, countyTypeDBValue, true, east));
-            	organizationsToInsert.add(new Organization("Oppland", 5, countyTypeDBValue, true, east));
-            	organizationsToInsert.add(new Organization("Buskerud", 6, countyTypeDBValue, true, south));
-            	organizationsToInsert.add(new Organization("Vestfold", 7, countyTypeDBValue, true, south));
-            	organizationsToInsert.add(new Organization("Telemark", 8, countyTypeDBValue, true, south));
-            	organizationsToInsert.add(new Organization("Aust-Agder", 9, countyTypeDBValue, true, south));
-            	organizationsToInsert.add(new Organization("Vest-Agder", 10, countyTypeDBValue, true, south));
-            	organizationsToInsert.add(new Organization("Rogaland", 11, countyTypeDBValue, true, west));
-            	organizationsToInsert.add(new Organization("Hordaland", 12, countyTypeDBValue, true, west));
-            	organizationsToInsert.add(new Organization("Sogn og Fjordane", 14, countyTypeDBValue, true, west));
-            	organizationsToInsert.add(new Organization("Møre og Romsdal", 15, countyTypeDBValue, true, mid));
-            	organizationsToInsert.add(new Organization("Sør-Trøndelag", 16, countyTypeDBValue, true, mid));
-            	organizationsToInsert.add(new Organization("Nord-Trøndelag", 17, countyTypeDBValue, true, mid));
-            	organizationsToInsert.add(new Organization("Nordland", 18, countyTypeDBValue, true, north));
-            	organizationsToInsert.add(new Organization("Troms", 19, countyTypeDBValue, true, north));
-            	organizationsToInsert.add(new Organization("Finnmark", 20, countyTypeDBValue, true, north));
-        	}
-        	
-            if(organizationsInDB.isEmpty() || omrader.isEmpty()) {
-            	// insert organizations for env
-            	for(int i=0; i<organizationsToInsert.size(); i++){
-            		Organization o = organizationsToInsert.get(i);
-            		organizationManager.saveOrganization(o);
-    	        	log.info("\"Organization\" lagt til i DB: " + o);
-            	}
-            }
-            else {
-            	// insert missing organizations
-        		for(int i=0; i<organizationsToInsert.size(); i++){
-            		Organization organization = organizationsToInsert.get(i);
-        			boolean insert = true;
-        			Iterator orgList = organizationsInDB.iterator();
-                	while(orgList.hasNext()){
-                		Organization alreadyInDB = (Organization)orgList.next();
-                		
-                		Organization parentInDB = alreadyInDB.getParent();
-                		Organization parent = organization.getParent();
-                		                		
-                		if(alreadyInDB.getName().equalsIgnoreCase(organization.getName())){
-                			insert = false;
+				organizationsToInsert.add(new Organization("Område Sør-Rogaland", 0, areaTypeDBValue, true, west));
+				organizationsToInsert.add(new Organization("Område Haugaland og Sunnhordaland", 0, areaTypeDBValue, true, west));
+				organizationsToInsert.add(new Organization("Område Bergen og Nordhordaland", 0, areaTypeDBValue, true, west));
+				organizationsToInsert.add(new Organization("Område Indre Hordaland og Sogn og Fjordane", 0, areaTypeDBValue, true,
+						west));
 
-                			if(parent != null && parentInDB == null){ // update parent for fylker
-                				alreadyInDB.setParent(parent);
-                        		organizationManager.saveOrganization(alreadyInDB);
-                	        	log.info("\"Organization\" oppdatert i DB: " + organization);
-                			}
-                		}
-                		
-                	}
-                	if(insert) {
-                		organizationManager.saveOrganization(organization);
-        	        	log.info("\"Organization\" lagt til i DB: " + organization);
-                	}
-        		}
-            }
-        }
-    }
+				organizationsToInsert.add(new Organization("Område Agder", 0, areaTypeDBValue, true, south));
+				organizationsToInsert.add(new Organization("Område Nedre-Telemark og Vestfold", 0, areaTypeDBValue, true, south));
+				organizationsToInsert.add(new Organization("Område Øvre-Telemark og Buskerud", 0, areaTypeDBValue, true, south));
 
-    /**
-     * For every row, run the first (select) statement (column index 0) and see if it returns a 0 integer. If it does,
-     * then run the insert statement in the next sql statement (column index 1). If the first element (column index 0)
-     * is null, then run only second statement without any checking.
-     * 
-     * @param table
-     * @param sqlStatements
-     */
-    private void insertIntoTableBySQLStatements(String table, String[][] sqlStatements) {
-        int count = 0;
-        for (int i = 0; i < sqlStatements.length; i++) {
-            String[] aSelectAndInsert = sqlStatements[i];
+				organizationsToInsert.add(new Organization("Område Follo og Østfold", 0, areaTypeDBValue, true, east));
+				organizationsToInsert.add(new Organization("Område Asker, Bærum og Oslo", 0, areaTypeDBValue, true, east));
+				organizationsToInsert.add(new Organization("Område Glåmdal og Romerike", 0, areaTypeDBValue, true, east));
+				organizationsToInsert.add(new Organization("Område Hedemarken-Østerdalen", 0, areaTypeDBValue, true, east));
+				organizationsToInsert.add(new Organization("Område Oppland", 0, areaTypeDBValue, true, east));
 
-            int existCount = 0;
-            if (aSelectAndInsert[0] != null) {
-                existCount = jt.queryForInt(adjustToOracle(aSelectAndInsert[0]));
-            }
-            if (existCount == 0 && aSelectAndInsert[1] != null) {
-                count += jt.update(adjustToOracle(aSelectAndInsert[1]));
-            }
-        }
-        if (count > 0 && log.isInfoEnabled()) {
-            log.info("Number of " + table + " rows inserted (or updated) in database: " + count);
-        }
-    }
+				// fylker
+				organizationsToInsert.add(new Organization("Østfold", 1, countyTypeDBValue, true, east));
+				organizationsToInsert.add(new Organization("Akershus", 2, countyTypeDBValue, true, east));
+				organizationsToInsert.add(new Organization("Oslo", 3, countyTypeDBValue, true, east));
+				organizationsToInsert.add(new Organization("Hedmark", 4, countyTypeDBValue, true, east));
+				organizationsToInsert.add(new Organization("Oppland", 5, countyTypeDBValue, true, east));
+				organizationsToInsert.add(new Organization("Buskerud", 6, countyTypeDBValue, true, south));
+				organizationsToInsert.add(new Organization("Vestfold", 7, countyTypeDBValue, true, south));
+				organizationsToInsert.add(new Organization("Telemark", 8, countyTypeDBValue, true, south));
+				organizationsToInsert.add(new Organization("Aust-Agder", 9, countyTypeDBValue, true, south));
+				organizationsToInsert.add(new Organization("Vest-Agder", 10, countyTypeDBValue, true, south));
+				organizationsToInsert.add(new Organization("Rogaland", 11, countyTypeDBValue, true, west));
+				organizationsToInsert.add(new Organization("Hordaland", 12, countyTypeDBValue, true, west));
+				organizationsToInsert.add(new Organization("Sogn og Fjordane", 14, countyTypeDBValue, true, west));
+				organizationsToInsert.add(new Organization("Møre og Romsdal", 15, countyTypeDBValue, true, mid));
+				organizationsToInsert.add(new Organization("Sør-Trøndelag", 16, countyTypeDBValue, true, mid));
+				organizationsToInsert.add(new Organization("Nord-Trøndelag", 17, countyTypeDBValue, true, mid));
+				organizationsToInsert.add(new Organization("Nordland", 18, countyTypeDBValue, true, north));
+				organizationsToInsert.add(new Organization("Troms", 19, countyTypeDBValue, true, north));
+				organizationsToInsert.add(new Organization("Finnmark", 20, countyTypeDBValue, true, north));
+			}
 
-    private String adjustToOracle(String sql) {
-        StringBuffer sqlSB = new StringBuffer(sql.toLowerCase());
-        boolean usesOracle = DefaultQuotedNamingStrategy.usesOracle();
-        if (usesOracle) {
-            // Table name adjustment for Oracle
-            // int fromPos = sqlSB.indexOf(" from ");
-            // int tableStartPos = (fromPos > -1 ? fromPos : sqlSB.indexOf("insert into ")) + 6;
-            // if (tableStartPos == 5) {
-            // return sql;
-            // }
-            // sqlSB.insert(tableStartPos, tablePrefix);
+			if (organizationsInDB.isEmpty() || omrader.isEmpty()) {
+				// insert organizations for env
+				for (int i = 0; i < organizationsToInsert.size(); i++) {
+					Organization o = organizationsToInsert.get(i);
+					organizationManager.saveOrganization(o);
+					log.info("\"Organization\" lagt til i DB: " + o);
+				}
+			} else {
+				// insert missing organizations
+				for (int i = 0; i < organizationsToInsert.size(); i++) {
+					Organization organization = organizationsToInsert.get(i);
+					boolean insert = true;
+					Iterator orgList = organizationsInDB.iterator();
+					while (orgList.hasNext()) {
+						Organization alreadyInDB = (Organization) orgList.next();
 
-            // Column name adjustment for Oracle
-            int startPos = sqlSB.indexOf(" where ");
-            if (startPos > -1) {
-                sqlSB.insert(startPos + 7, '"');
-                int endPos = sqlSB.indexOf(" ", startPos + 8);
-                if (endPos == -1) {
-                    endPos = sqlSB.indexOf("=", startPos + 8);
-                }
-                sqlSB.insert(endPos, '"');
-            }
+						Organization parentInDB = alreadyInDB.getParent();
+						Organization parent = organization.getParent();
 
-            startPos = sqlSB.indexOf(" (") + 2;
-            if (startPos > -1 + 2) {
-                int endPos = sqlSB.indexOf(")");
-                String[] fieldArray = sqlSB.substring(startPos, endPos).replaceAll(" ", "").split(",", 0);
-                String fieldQuoted = "\"" + StringUtils.join(fieldArray, "\",\"") + "\"";
-                sqlSB.delete(startPos, endPos);
-                sqlSB.insert(startPos, fieldQuoted);
-            }
-            
-            //Boolean value adjustment for Oracle. true->1, false->0.
-            startPos = indexOfIgnorecase(sqlSB.toString(), new String[] {" true)", " true,", " true ,", ",true)", ",true )", ",true,", "(true,"});
-            if (startPos > -1) {
-                sqlSB.replace(startPos+1, startPos+5, "1");
-            }
-            startPos = indexOfIgnorecase(sqlSB.toString(), new String[] {" false)", " false,", ",false)", ",false ", ",false,", "(false,", "(false "});
-            if (startPos > -1) {
-                sqlSB.replace(startPos+1, startPos+5, "0");
-            }
+						if (alreadyInDB.getName().equalsIgnoreCase(organization.getName())) {
+							insert = false;
 
-            return sqlSB.toString();
-        } else {
-            return sql;
-        }
-    }
-    
-    private static int indexOfIgnorecase(String sbOrig, String[] strings){
-        String sb = sbOrig.toLowerCase();
-        for (int i = 0; i < strings.length; i++) {
-            String string = strings[i];
-            int index = sb.indexOf(string.toLowerCase());
-            if (index > -1) {
-                return index;
-            }
-            
-        }
-        
-        return -1;
-    }
+							if (parent != null && parentInDB == null) { // update
+								// parent
+								// for
+								// fylker
+								alreadyInDB.setParent(parent);
+								organizationManager.saveOrganization(alreadyInDB);
+								log.info("\"Organization\" oppdatert i DB: " + organization);
+							}
+						}
 
-    private void updateBySQLStatements() {
-        updateRegistrationbySQLStatement();
-    }
+					}
+					if (insert) {
+						organizationManager.saveOrganization(organization);
+						log.info("\"Organization\" lagt til i DB: " + organization);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * For every row, run the first (select) statement (column index 0) and see
+	 * if it returns a 0 integer. If it does, then run the insert statement in
+	 * the next sql statement (column index 1). If the first element (column
+	 * index 0) is null, then run only second statement without any checking.
+	 * 
+	 * @param table
+	 * @param sqlStatements
+	 */
+	private void insertIntoTableBySQLStatements(String table, String[][] sqlStatements) {
+		int count = 0;
+		for (int i = 0; i < sqlStatements.length; i++) {
+			String[] aSelectAndInsert = sqlStatements[i];
+
+			int existCount = 0;
+			if (aSelectAndInsert[0] != null) {
+				existCount = jt.queryForInt(adjustToOracle(aSelectAndInsert[0]));
+			}
+			if (existCount == 0 && aSelectAndInsert[1] != null) {
+				count += jt.update(adjustToOracle(aSelectAndInsert[1]));
+			}
+		}
+		if (count > 0 && log.isInfoEnabled()) {
+			log.info("Number of " + table + " rows inserted (or updated) in database: " + count);
+		}
+	}
+
+	private String adjustToOracle(String sql) {
+		StringBuffer sqlSB = new StringBuffer(sql.toLowerCase());
+		boolean usesOracle = DefaultQuotedNamingStrategy.usesOracle();
+		if (usesOracle) {
+			// Table name adjustment for Oracle
+			// int fromPos = sqlSB.indexOf(" from ");
+			// int tableStartPos = (fromPos > -1 ? fromPos :
+			// sqlSB.indexOf("insert into ")) + 6;
+			// if (tableStartPos == 5) {
+			// return sql;
+			// }
+			// sqlSB.insert(tableStartPos, tablePrefix);
+
+			// Column name adjustment for Oracle
+			int startPos = sqlSB.indexOf(" where ");
+			if (startPos > -1) {
+				sqlSB.insert(startPos + 7, '"');
+				int endPos = sqlSB.indexOf(" ", startPos + 8);
+				if (endPos == -1) {
+					endPos = sqlSB.indexOf("=", startPos + 8);
+				}
+				sqlSB.insert(endPos, '"');
+			}
+
+			startPos = sqlSB.indexOf(" (") + 2;
+			if (startPos > -1 + 2) {
+				int endPos = sqlSB.indexOf(")");
+				String[] fieldArray = sqlSB.substring(startPos, endPos).replaceAll(" ", "").split(",", 0);
+				String fieldQuoted = "\"" + StringUtils.join(fieldArray, "\",\"") + "\"";
+				sqlSB.delete(startPos, endPos);
+				sqlSB.insert(startPos, fieldQuoted);
+			}
+
+			// Boolean value adjustment for Oracle. true->1, false->0.
+			startPos = indexOfIgnorecase(sqlSB.toString(), new String[] { " true)", " true,", " true ,", ",true)", ",true )",
+					",true,", "(true," });
+			if (startPos > -1) {
+				sqlSB.replace(startPos + 1, startPos + 5, "1");
+			}
+			startPos = indexOfIgnorecase(sqlSB.toString(), new String[] { " false)", " false,", ",false)", ",false ", ",false,",
+					"(false,", "(false " });
+			if (startPos > -1) {
+				sqlSB.replace(startPos + 1, startPos + 5, "0");
+			}
+
+			return sqlSB.toString();
+		} else {
+			return sql;
+		}
+	}
+
+	private static int indexOfIgnorecase(String sbOrig, String[] strings) {
+		String sb = sbOrig.toLowerCase();
+		for (int i = 0; i < strings.length; i++) {
+			String string = strings[i];
+			int index = sb.indexOf(string.toLowerCase());
+			if (index > -1) {
+				return index;
+			}
+
+		}
+
+		return -1;
+	}
+
+	private void updateBySQLStatements() {
+		updateRegistrationbySQLStatement();
+	}
 
 	/**
 	 * For upgrade from 1.7.X to SVV
 	 */
-    private void updateRegistrationbySQLStatement() {
+	private void updateRegistrationbySQLStatement() {
 
-    	ColumnInfo reserved = getColumnInfo("registration", "reserved");
-    	if (reserved == null) {
-            // No column 'reserved' to convert data from. No initial writing to 'status' column is done in the database.
-            return;
-        }
+		ColumnInfo reserved = getColumnInfo("registration", "reserved");
+		if (reserved == null) {
+			// No column 'reserved' to convert data from. No initial writing to
+			// 'status' column is done in the database.
+			return;
+		}
 
-        String sql = "update registration set status = reserved + 1 where status is null";
-        int nRowsAffected = jt.update(sql);
-        if (nRowsAffected > 0) {
-            log.info(nRowsAffected + " rows affected by convertion from reserved to status field in database.");
-        } else {
-            log.info(nRowsAffected + " rows affected by convertion from reserved to status field in database. The field \"reserved\" in table \"registration\" can be dropped.");
-        }
-    }
-    
-    
-    
+		String sql = "update registration set status = reserved + 1 where status is null";
+		int nRowsAffected = jt.update(sql);
+		if (nRowsAffected > 0) {
+			log.info(nRowsAffected + " rows affected by convertion from reserved to status field in database.");
+		} else {
+			log
+					.info(nRowsAffected
+							+ " rows affected by convertion from reserved to status field in database. The field \"reserved\" in table \"registration\" can be dropped.");
+		}
+	}
+
 	/**
 	 * Retrieves a description of the table.
 	 * 
@@ -799,13 +830,14 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	private TableInfo getTableInfo(String table) {
 		ResultSet rsTables = null;
 		DatabaseMetaData meta = null;
+		Connection connection = null;
 		try {
-			Connection connection = jt.getDataSource().getConnection();
+			connection = jt.getDataSource().getConnection();
 			meta = connection.getMetaData();
 			rsTables = meta.getTables(connection.getCatalog(), null, table.toUpperCase(), new String[] { "TABLE" });
 			while (rsTables.next()) {
 				String tableName = rsTables.getString("TABLE_NAME");
-				
+
 				if (table.equalsIgnoreCase(tableName)) {
 					String type = rsTables.getString("TABLE_TYPE");
 					String category = rsTables.getString("TABLE_CAT");
@@ -816,14 +848,17 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		} catch (SQLException e) {
 			log.warn("Error fetching metadata of table " + table + ". \nMetadata object=" + meta + "\nrsTables=" + rsTables, e);
 		}
+		closeConnectionIfNeeded(connection, "getTableInfo");
 		return null;
 	}
 
-    private ColumnInfo getColumnInfo(String table, String column) {
+	private ColumnInfo getColumnInfo(String table, String column) {
 		ResultSet rsColumns = null;
-		DatabaseMetaData meta = null; 
+		DatabaseMetaData meta = null;
+		Connection connection = null;
 		try {
-			meta = jt.getDataSource().getConnection().getMetaData();
+			connection = jt.getDataSource().getConnection();
+			meta = connection.getMetaData();
 			rsColumns = meta.getColumns(null, null, table.toUpperCase(), column);
 			while (rsColumns.next()) {
 				String columnName = rsColumns.getString("COLUMN_NAME");
@@ -831,382 +866,381 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 					String type = rsColumns.getString("TYPE_NAME");
 					int size = rsColumns.getInt("COLUMN_SIZE");
 					int nullable = rsColumns.getInt("NULLABLE");
-					return new ColumnInfo(columnName, type, size, (nullable == DatabaseMetaData.columnNullable ? true : false), table);
+					return new ColumnInfo(columnName, type, size, (nullable == DatabaseMetaData.columnNullable ? true : false),
+							table);
 				}
 			}
 		} catch (SQLException e) {
-			log.warn("Error fetching metadata of column " + column + " in table " + table + ". \nMetadata object="+meta+"\nrsColumns"+rsColumns, e);
+			log.warn("Error fetching metadata of column " + column + " in table " + table + ". \nMetadata object=" + meta
+					+ "\nrsColumns" + rsColumns, e);
 		}
+		closeConnectionIfNeeded(connection, "getColumnInfo()");
 		return null;
-    }
-    
-    
-    private void updateDatabaseSchemaAfter() {
-    }
+	}
 
-    /**
-     * Updates invoiceaddress for organization
-     * 
-     * @since 1.5
-     */
-    private void updateOrganizations() {
-        List<Organization> organizations = organizationManager.getAllIncludingDisabled();
-        if (organizations != null && !organizations.isEmpty()) {
-            Iterator<Organization> it = organizations.iterator();
-            while (it.hasNext()) {
-                Organization organization = it.next();
-                // update invoiceaddress
-                if (organization.getInvoiceAddress() == null) {
-                    Address invoice = new Address();
-                    invoice.setPostalCode("0");
-                    organization.setInvoiceAddress(invoice);
-                    organizationManager.saveOrganization(organization);
-                }
-            }
-        }
-    }
+	private void updateDatabaseSchemaAfter() {
+	}
 
-    /**
-     * Updates invoiceaddress for user
-     * 
-     * @since 1.5
-     */
-    private void updateUsers() {
-        List<User> users = userManager.getUsers(new User(), false);
-        if (users != null && !users.isEmpty()) {
-            Iterator<User> it = users.iterator();
-            while (it.hasNext()) {
-                boolean save = false;
-                User user = it.next();
-                // Updates invoice address
-                if (user.getInvoiceAddress() == null) {
-                    Address invoice = new Address();
-                    invoice.setPostalCode("0");
-                    user.setInvoiceAddress(invoice);
-                    save = true;
-                }
-                // updates serviceareas
-                if (user.getOrganization() != null && user.getServiceArea() != null) {
-                    if (!user.getOrganizationid().equals(user.getServiceArea().getOrganizationid())) {
-                        ServiceArea search = new ServiceArea();
-                        search.setOrganizationid(user.getOrganizationid());
-                        List<ServiceArea> serviceAreas = serviceAreaManager.searchServiceAreas(search);
-                        Iterator<ServiceArea> sit = serviceAreas.iterator();
-                        while (sit.hasNext()) {
-                            ServiceArea serviceArea = sit.next();
-                            if (user.getServiceArea().getName().equals(serviceArea.getName())) {
-                                user.setServiceArea(serviceArea);
-                                user.setServiceAreaid(serviceArea.getId());
-                                save = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (save) {
-                    userManager.updateUser(user);
-                }
-            }
-        }
-    }
+	/**
+	 * Updates invoiceaddress for organization
+	 * 
+	 * @since 1.5
+	 */
+	private void updateOrganizations() {
+		List<Organization> organizations = organizationManager.getAllIncludingDisabled();
+		if (organizations != null && !organizations.isEmpty()) {
+			Iterator<Organization> it = organizations.iterator();
+			while (it.hasNext()) {
+				Organization organization = it.next();
+				// update invoiceaddress
+				if (organization.getInvoiceAddress() == null) {
+					Address invoice = new Address();
+					invoice.setPostalCode("0");
+					organization.setInvoiceAddress(invoice);
+					organizationManager.saveOrganization(organization);
+				}
+			}
+		}
+	}
 
-    /**
-     * Checks the registrations table and creates users based on email addresses
-     * 
-     * @since 1.4
-     */
-    private void updateRegistrations() {
-        List<Registration> registrations = registrationManager.getRegistrations(new Registration());
-        if (registrations != null && !registrations.isEmpty()) {
-            Iterator<Registration> it = registrations.iterator();
-            while (it.hasNext()) {
-                boolean save = false;
-                Registration registration = it.next();
-                // Checks the registrations table and creates users based on
-                // email addresses
-                if (registration.getUsername() == null || registration.getUsername().trim().length() == 0) {
-                    if (EmailValidator.getInstance().isValid(registration.getEmail())) {
-                        User user = userManager.findUserByEmail(registration.getEmail());
-                        if (user == null) {
-                            user = userManager.addUser(registration.getEmail(), registration.getFirstName(), registration
-                                    .getLastName(), registration.getEmail(), new Integer(0), null, new Integer(0), null, null);
-                        }
-                        // Connect user with registration
-                        registration.setUser(user);
-                        registration.setUsername(user.getUsername());
-                        save = true;
-                    } else {
-                    	log.warn("Følgende påmelding har ugyldig epostadresse: "+registration.toString());
-                    }
-                }
-                // updates the invoice address
-                if (registration.getInvoiceAddress() == null) {
-                    Address invoice = new Address();
-                    invoice.setPostalCode("0");
-                    registration.setInvoiceAddress(invoice);
-                    save = true;
-                }
-                // updates serviceareas
-                if (registration.getOrganization() != null && registration.getServiceArea() != null) {
-                    if (!registration.getOrganizationid().equals(registration.getServiceArea().getOrganizationid())) {
-                        ServiceArea search = new ServiceArea();
-                        search.setOrganizationid(registration.getOrganizationid());
-                        List<ServiceArea> serviceAreas = serviceAreaManager.searchServiceAreas(search);
-                        Iterator<ServiceArea> sit = serviceAreas.iterator();
-                        while (sit.hasNext()) {
-                            ServiceArea serviceArea = sit.next();
-                            if (registration.getServiceArea().getName().equals(serviceArea.getName())) {
-                                registration.setServiceArea(serviceArea);
-                                registration.setServiceAreaid(serviceArea.getId());
-                                save = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (save) {
-                    registrationManager.saveRegistration(registration);
-                }
-            }
-        }
-    }
+	/**
+	 * Updates invoiceaddress for user
+	 * 
+	 * @since 1.5
+	 */
+	private void updateUsers() {
+		List<User> users = userManager.getUsers(new User(), false);
+		if (users != null && !users.isEmpty()) {
+			Iterator<User> it = users.iterator();
+			while (it.hasNext()) {
+				boolean save = false;
+				User user = it.next();
+				// Updates invoice address
+				if (user.getInvoiceAddress() == null) {
+					Address invoice = new Address();
+					invoice.setPostalCode("0");
+					user.setInvoiceAddress(invoice);
+					save = true;
+				}
+				// updates serviceareas
+				if (user.getOrganization() != null && user.getServiceArea() != null) {
+					if (!user.getOrganizationid().equals(user.getServiceArea().getOrganizationid())) {
+						ServiceArea search = new ServiceArea();
+						search.setOrganizationid(user.getOrganizationid());
+						List<ServiceArea> serviceAreas = serviceAreaManager.searchServiceAreas(search);
+						Iterator<ServiceArea> sit = serviceAreas.iterator();
+						while (sit.hasNext()) {
+							ServiceArea serviceArea = sit.next();
+							if (user.getServiceArea().getName().equals(serviceArea.getName())) {
+								user.setServiceArea(serviceArea);
+								user.setServiceAreaid(serviceArea.getId());
+								save = true;
+								break;
+							}
+						}
+					}
+				}
+				if (save) {
+					userManager.updateUser(user);
+				}
+			}
+		}
+	}
 
-    /**
-     * @since 1.4
-     */
-    private void updateCourses() {
-        List<Course> courses = courseManager.getAllCourses();
-        if (courses != null && !courses.isEmpty()) {
-            Iterator<Course> it = courses.iterator();
-            while (it.hasNext()) {
-                boolean save = false;
-                Course course = it.next();
-                if (course.getRole().equals("Anonymous")) {
-                    course.setRole(Constants.ANONYMOUS_ROLE);
-                    save = true;
-                } else if (course.getRole().equals("Ansatt")) {
-                    course.setRole(Constants.EMPLOYEE_ROLE);
-                    save = true;
-                } else if (course.getRole().equals("Kommuneansatt")) {
-                    course.setRole(Constants.EMPLOYEE_ROLE);
-                    save = true;
-                } else if (course.getRole().equals("Kursansvarlig")) {
-                    course.setRole(Constants.EVENTRESPONSIBLE_ROLE);
-                    save = true;
-                } else if (course.getRole().equals("Opplaringsansvarlig")) {
-                    course.setRole(Constants.EDITOR_ROLE);
-                    save = true;
-                } else if (course.getRole().equals("Opplï¿½ringsansvarlig")) {
-                    course.setRole(Constants.EDITOR_ROLE);
-                    save = true;
-                } else if (course.getRole().equals("Admin")) {
-                    course.setRole(Constants.ADMIN_ROLE);
-                    save = true;
-                }
-                // responsible username
-                if (course.getResponsible() != null && course.getResponsibleUsername() == null) {
-                    course.setResponsibleUsername(course.getResponsible().getUsername());
-                    save = true;
-                }
-                // restrictions
-                if (course.getRestricted() == null) {
-                    course.setRestricted(false);
-                    save = true;
-                }
-                // service areas
-                if (configurationManager.isActive("access.course.useServiceArea", true) && !course.getServiceArea().getOrganizationid().equals(course.getOrganizationid())) {
-                    // må hente servicearea som passer
-                    ServiceArea search = new ServiceArea();
-                    search.setOrganizationid(course.getOrganizationid());
-                    List<ServiceArea> serviceAreas = serviceAreaManager.searchServiceAreas(search);
-                    Iterator<ServiceArea> sit = serviceAreas.iterator();
-                    while (sit.hasNext()) {
-                        ServiceArea serviceArea = sit.next();
-                        if (course.getServiceArea().getName().equals(serviceArea.getName())) {
-                            course.setServiceArea(serviceArea);
-                            course.setServiceAreaid(serviceArea.getId());
-                            save = true;
-                            break;
-                        }
-                    }
-                }
-                if (course.getCategory() == null || course.getCategoryid() == 0) {
-                    Category category = categoryManager.getCategory(Category.Name.HENDELSE.getDBValue());
-                    course.setCategory(category);
-                    course.setCategoryid(category.getId());
-                    save = true;
-                }
+	/**
+	 * Checks the registrations table and creates users based on email addresses
+	 * 
+	 * @since 1.4
+	 */
+	private void updateRegistrations() {
+		List<Registration> registrations = registrationManager.getRegistrations(new Registration());
+		if (registrations != null && !registrations.isEmpty()) {
+			Iterator<Registration> it = registrations.iterator();
+			while (it.hasNext()) {
+				boolean save = false;
+				Registration registration = it.next();
+				// Checks the registrations table and creates users based on
+				// email addresses
+				if (registration.getUsername() == null || registration.getUsername().trim().length() == 0) {
+					if (EmailValidator.getInstance().isValid(registration.getEmail())) {
+						User user = userManager.findUserByEmail(registration.getEmail());
+						if (user == null) {
+							user = userManager.addUser(registration.getEmail(), registration.getFirstName(), registration
+									.getLastName(), registration.getEmail(), new Integer(0), null, new Integer(0), null, null);
+						}
+						// Connect user with registration
+						registration.setUser(user);
+						registration.setUsername(user.getUsername());
+						save = true;
+					} else {
+						log.warn("Følgende påmelding har ugyldig epostadresse: " + registration.toString());
+					}
+				}
+				// updates the invoice address
+				if (registration.getInvoiceAddress() == null) {
+					Address invoice = new Address();
+					invoice.setPostalCode("0");
+					registration.setInvoiceAddress(invoice);
+					save = true;
+				}
+				// updates serviceareas
+				if (registration.getOrganization() != null && registration.getServiceArea() != null) {
+					if (!registration.getOrganizationid().equals(registration.getServiceArea().getOrganizationid())) {
+						ServiceArea search = new ServiceArea();
+						search.setOrganizationid(registration.getOrganizationid());
+						List<ServiceArea> serviceAreas = serviceAreaManager.searchServiceAreas(search);
+						Iterator<ServiceArea> sit = serviceAreas.iterator();
+						while (sit.hasNext()) {
+							ServiceArea serviceArea = sit.next();
+							if (registration.getServiceArea().getName().equals(serviceArea.getName())) {
+								registration.setServiceArea(serviceArea);
+								registration.setServiceAreaid(serviceArea.getId());
+								save = true;
+								break;
+							}
+						}
+					}
+				}
+				if (save) {
+					registrationManager.saveRegistration(registration);
+				}
+			}
+		}
+	}
 
-                // chargeoverdue
-                if (course.getChargeoverdue() == null) {
-                    course.setChargeoverdue(false);
-                    save = true;
-                }
-                if (save) {
-                    courseManager.saveCourse(course);
-                }
-            }
-        }
-    }
+	/**
+	 * @since 1.4
+	 */
+	private void updateCourses() {
+		List<Course> courses = courseManager.getAllCourses();
+		if (courses != null && !courses.isEmpty()) {
+			Iterator<Course> it = courses.iterator();
+			while (it.hasNext()) {
+				boolean save = false;
+				Course course = it.next();
+				if (course.getRole().equals("Anonymous")) {
+					course.setRole(Constants.ANONYMOUS_ROLE);
+					save = true;
+				} else if (course.getRole().equals("Ansatt")) {
+					course.setRole(Constants.EMPLOYEE_ROLE);
+					save = true;
+				} else if (course.getRole().equals("Kommuneansatt")) {
+					course.setRole(Constants.EMPLOYEE_ROLE);
+					save = true;
+				} else if (course.getRole().equals("Kursansvarlig")) {
+					course.setRole(Constants.EVENTRESPONSIBLE_ROLE);
+					save = true;
+				} else if (course.getRole().equals("Opplaringsansvarlig")) {
+					course.setRole(Constants.EDITOR_ROLE);
+					save = true;
+				} else if (course.getRole().equals("Opplï¿½ringsansvarlig")) {
+					course.setRole(Constants.EDITOR_ROLE);
+					save = true;
+				} else if (course.getRole().equals("Admin")) {
+					course.setRole(Constants.ADMIN_ROLE);
+					save = true;
+				}
+				// responsible username
+				if (course.getResponsible() != null && course.getResponsibleUsername() == null) {
+					course.setResponsibleUsername(course.getResponsible().getUsername());
+					save = true;
+				}
+				// restrictions
+				if (course.getRestricted() == null) {
+					course.setRestricted(false);
+					save = true;
+				}
+				// service areas
+				if (configurationManager.isActive("access.course.useServiceArea", true)
+						&& !course.getServiceArea().getOrganizationid().equals(course.getOrganizationid())) {
+					// må hente servicearea som passer
+					ServiceArea search = new ServiceArea();
+					search.setOrganizationid(course.getOrganizationid());
+					List<ServiceArea> serviceAreas = serviceAreaManager.searchServiceAreas(search);
+					Iterator<ServiceArea> sit = serviceAreas.iterator();
+					while (sit.hasNext()) {
+						ServiceArea serviceArea = sit.next();
+						if (course.getServiceArea().getName().equals(serviceArea.getName())) {
+							course.setServiceArea(serviceArea);
+							course.setServiceAreaid(serviceArea.getId());
+							save = true;
+							break;
+						}
+					}
+				}
+				if (course.getCategory() == null || course.getCategoryid() == 0) {
+					Category category = categoryManager.getCategory(Category.Name.HENDELSE.getDBValue());
+					course.setCategory(category);
+					course.setCategoryid(category.getId());
+					save = true;
+				}
 
-    /**
-     * @since 1.5
-     */
-    private void updateServiceAreas() {
-        List<ServiceArea> serviceAreas = serviceAreaManager.getAllIncludingDisabled();
-        List<Organization> organizations = organizationManager.getAllIncludingDisabled();
-        if (serviceAreas != null && !serviceAreas.isEmpty()) {
-            Iterator<ServiceArea> it = serviceAreas.iterator();
-            while (it.hasNext()) {
-                ServiceArea serviceArea = it.next();
-                if (serviceArea.getOrganizationid() == -1) {
-                    for (int i = 0; i < organizations.size(); i++) {
-                        Organization organization = organizations.get(i);
-                        if (i == 0) { // oppdater første og lag kopier
-                            // etterpÃ¥.
-                            serviceArea.setOrganization(organization);
-                            serviceArea.setOrganizationid(organization.getId());
-                            serviceAreaManager.saveServiceArea(serviceArea);
-                        } else {
-                            ServiceArea newServiceArea = new ServiceArea();
-                            newServiceArea.setName(serviceArea.getName());
-                            newServiceArea.setSelectable(serviceArea.getSelectable());
-                            newServiceArea.setOrganization(organization);
-                            newServiceArea.setOrganizationid(organization.getId());
-                            serviceAreaManager.saveServiceArea(newServiceArea);
-                        }
-                    }
-                }
-            }
-        }
-    }
+				// chargeoverdue
+				if (course.getChargeoverdue() == null) {
+					course.setChargeoverdue(false);
+					save = true;
+				}
+				if (save) {
+					courseManager.saveCourse(course);
+				}
+			}
+		}
+	}
 
-    /**
-     * @since 1.7
-     */
-    private void updateConfigurations() {
-        /**
-         * DB has changed from key, value to key, active, value. Most values in DB are boolean defined as strings in
-         * value field, this method moves values to correct new field
-         */
-        List<Configuration> configurations = configurationManager.getConfigurations();
-        if (configurations != null) {
-            Iterator<Configuration> iterator = configurations.iterator();
-            while (iterator.hasNext()) {
-                Configuration configuration = iterator.next();
-                String name = configuration.getName();
-                String value = configuration.getValue();
-                boolean updated = false;
+	/**
+	 * @since 1.5
+	 */
+	private void updateServiceAreas() {
+		List<ServiceArea> serviceAreas = serviceAreaManager.getAllIncludingDisabled();
+		List<Organization> organizations = organizationManager.getAllIncludingDisabled();
+		if (serviceAreas != null && !serviceAreas.isEmpty()) {
+			Iterator<ServiceArea> it = serviceAreas.iterator();
+			while (it.hasNext()) {
+				ServiceArea serviceArea = it.next();
+				if (serviceArea.getOrganizationid() == -1) {
+					for (int i = 0; i < organizations.size(); i++) {
+						Organization organization = organizations.get(i);
+						if (i == 0) { // oppdater første og lag kopier
+							// etterpÃ¥.
+							serviceArea.setOrganization(organization);
+							serviceArea.setOrganizationid(organization.getId());
+							serviceAreaManager.saveServiceArea(serviceArea);
+						} else {
+							ServiceArea newServiceArea = new ServiceArea();
+							newServiceArea.setName(serviceArea.getName());
+							newServiceArea.setSelectable(serviceArea.getSelectable());
+							newServiceArea.setOrganization(organization);
+							newServiceArea.setOrganizationid(organization.getId());
+							serviceAreaManager.saveServiceArea(newServiceArea);
+						}
+					}
+				}
+			}
+		}
+	}
 
-                if (value != null && value.equals("true")) {
-                    configuration.setActive(new Boolean(true));
-                    configuration.setValue(null);
-                    updated = true;
-                }
-                if (value != null && value.equals("false")) {
-                    configuration.setActive(new Boolean(false));
-                    configuration.setValue(null);
-                    updated = true;
-                }
+	/**
+	 * @since 1.7
+	 */
+	private void updateConfigurations() {
+		/**
+		 * DB has changed from key, value to key, active, value. Most values in
+		 * DB are boolean defined as strings in value field, this method moves
+		 * values to correct new field
+		 */
+		List<Configuration> configurations = configurationManager.getConfigurations();
+		if (configurations != null) {
+			Iterator<Configuration> iterator = configurations.iterator();
+			while (iterator.hasNext()) {
+				Configuration configuration = iterator.next();
+				String name = configuration.getName();
+				String value = configuration.getValue();
+				boolean updated = false;
 
-                // invers properties from hide* to show*
-                if (name.equals("access.registration.hideEmployeeFields")) {
-                    configuration.setName("access.registration.showEmployeeFields");
-                    if (configuration.getActive())
-                        configuration.setActive(new Boolean(false));
-                    else
-                        configuration.setActive(new Boolean(true));
-                    updated = true;
-                }
+				if (value != null && value.equals("true")) {
+					configuration.setActive(new Boolean(true));
+					configuration.setValue(null);
+					updated = true;
+				}
+				if (value != null && value.equals("false")) {
+					configuration.setActive(new Boolean(false));
+					configuration.setValue(null);
+					updated = true;
+				}
 
-                if (name.equals("access.registration.hideServiceArea")) {
-                    configuration.setName("access.registration.showServiceArea");
-                    if (configuration.getActive())
-                        configuration.setActive(new Boolean(false));
-                    else
-                        configuration.setActive(new Boolean(true));
-                    updated = true;
-                }
+				// invers properties from hide* to show*
+				if (name.equals("access.registration.hideEmployeeFields")) {
+					configuration.setName("access.registration.showEmployeeFields");
+					if (configuration.getActive())
+						configuration.setActive(new Boolean(false));
+					else
+						configuration.setActive(new Boolean(true));
+					updated = true;
+				}
 
-                if (name.equals("access.registration.hideComment")) {
-                    configuration.setName("access.registration.showComment");
-                    if (configuration.getActive())
-                        configuration.setActive(new Boolean(false));
-                    else
-                        configuration.setActive(new Boolean(true));
-                    updated = true;
-                }
-                // -- end invers
+				if (name.equals("access.registration.hideServiceArea")) {
+					configuration.setName("access.registration.showServiceArea");
+					if (configuration.getActive())
+						configuration.setActive(new Boolean(false));
+					else
+						configuration.setActive(new Boolean(true));
+					updated = true;
+				}
 
-                if (updated)
-                    configurationManager.saveConfiguration(configuration);
-            }
-        }
-    }
+				if (name.equals("access.registration.hideComment")) {
+					configuration.setName("access.registration.showComment");
+					if (configuration.getActive())
+						configuration.setActive(new Boolean(false));
+					else
+						configuration.setActive(new Boolean(true));
+					updated = true;
+				}
+				// -- end invers
 
-    public class ColumnInfo {
-    	String name;
-    	String type;
-    	int size;
-    	boolean nullable;
-    	String table;
-    	
-    	public ColumnInfo(String name, String type, int size, boolean nullable, String table){
-    		this.name = name;
-    		this.type = type;
-    		this.size = size;
-    		this.nullable = nullable;
-    		this.table = table;
-    	}
-    	
-    	public String getType(){
-    		return type;
-    	}
+				if (updated)
+					configurationManager.saveConfiguration(configuration);
+			}
+		}
+	}
 
-    	public int getSize(){
-    		return size;
-    	}
-    	
-    	public boolean isNullable(){
-    		return nullable;
-    	}
+	public class ColumnInfo {
+		String name;
+		String type;
+		int size;
+		boolean nullable;
+		String table;
 
-    	public String toString(){
-            return new ToStringBuilder(this).append("name", name)
-            .append("type", type)
-            .append("size", size)
-            .append("nullable", nullable)
-            .append("table", table)
-            .toString();
-    	}
-    }
+		public ColumnInfo(String name, String type, int size, boolean nullable, String table) {
+			this.name = name;
+			this.type = type;
+			this.size = size;
+			this.nullable = nullable;
+			this.table = table;
+		}
 
-    public class TableInfo {
-    	String name;
-    	String type;
-    	String catalog;
-    	String schema;
-    	
-    	public TableInfo(String name, String type, String cat, String schema){
-    		this.name = name;
-    		this.type = type;
-    		this.catalog = cat;
-    		this.schema = schema;
-    	}
+		public String getType() {
+			return type;
+		}
 
-    	/**
+		public int getSize() {
+			return size;
+		}
+
+		public boolean isNullable() {
+			return nullable;
+		}
+
+		public String toString() {
+			return new ToStringBuilder(this).append("name", name).append("type", type).append("size", size).append("nullable",
+					nullable).append("table", table).toString();
+		}
+	}
+
+	public class TableInfo {
+		String name;
+		String type;
+		String catalog;
+		String schema;
+
+		public TableInfo(String name, String type, String cat, String schema) {
+			this.name = name;
+			this.type = type;
+			this.catalog = cat;
+			this.schema = schema;
+		}
+
+		/**
 		 * @return the name
 		 */
 		public String getName() {
 			return name;
 		}
 
+		public String getType() {
+			return type;
+		}
 
-		public String getType(){
-    		return type;
-    	}
-    	
-    	/**
+		/**
 		 * @return the catalog
 		 */
 		public String getCatalog() {
@@ -1220,17 +1254,14 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			return schema;
 		}
 
-		public String toString(){
-    		return new ToStringBuilder(this).append("name", name)
-    		.append("type", type)
-    		.append("catalog", catalog)
-    		.append("schema", schema)
-    		.toString();
-    	}
-    }
-    
-    public void executeTask() {
-        log.info("running databaseUpdateManager");
-        updateDatabase();
-    }
+		public String toString() {
+			return new ToStringBuilder(this).append("name", name).append("type", type).append("catalog", catalog).append("schema",
+					schema).toString();
+		}
+	}
+
+	public void executeTask() {
+		log.info("running databaseUpdateManager");
+		updateDatabase();
+	}
 }

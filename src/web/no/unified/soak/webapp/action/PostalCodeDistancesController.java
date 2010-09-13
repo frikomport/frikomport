@@ -54,7 +54,8 @@ public class PostalCodeDistancesController implements Controller {
 
 		if ("NowPlease".equals(request.getParameter("postalCodeDistancesCalculate"))) {
 			List<PostalCodeCoordinate> coordinates = PostalCodeDistances.loadKmlFileIfNecessary_EmulatedTest("postnummer.kml");
-			locationManager.createDistancesInDatabase(coordinates);
+			locationManager.createPostalCodeDistancesInDatabase(coordinates);
+			locationManager.createPostalCodeLocationDistancesInDatabase(coordinates);
 		}
 
 		ModelAndView modelAndView = new ModelAndView("statistics");

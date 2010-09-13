@@ -110,41 +110,40 @@ public class LocationManagerImpl extends BaseManager implements LocationManager 
 		dao.evict(entity);
 	}
 
-	/**
-	 * Assumes list of PostalCodeCoordinate are ordered by
-	 * {@link no.unified.soak.model.PostalCodeCoordinate#getPostalCode()} in
-	 * ascending order.
-	 * 
-	 * @param pcCoordinates
-	 */
-	public void createDistancesInDatabase(List<PostalCodeCoordinate> pcCoordinates) {
-		createPostalCodeDistancesInDatabase(pcCoordinates);
-		createPostalCodeLocationDistancesInDatabase(pcCoordinates);
-	}
-
 	public void createPostalCodeLocationDistancesInDatabase(List<PostalCodeCoordinate> pcCoordinates) {
 		List<Location> locations = dao.getObjects(Location.class);
-		avoidLocationsWithoutPostalCode(locations);
+		List<Location> locationsCleaned = avoidLocationsWithoutPostalCode(locations);
+		int iOuter = 1;
+		log.info("Building content for table PostalCodeLocationDistance.");
+		System.out.print("Teller antall postnummer opp til "+pcCoordinates.size()+": ");
 
 		for (PostalCodeCoordinate pc1 : pcCoordinates) {
 
-			List<PostalCodeDistance> postalCodeDistanceList = postalCodeDistanceDAO.findDistancesByPostalCode(pc1.getPostalCode());
+			String thePostalCode = pc1.getPostalCode();
+			List<PostalCodeDistance> postalCodeDistanceList = postalCodeDistanceDAO.findDistancesByPostalCode(thePostalCode);
 			Map<String, Integer> postalCodeDistanceMap = new HashMap<String, Integer>(4600);
 			for (PostalCodeDistance postalCodeDistance : postalCodeDistanceList) {
-				postalCodeDistanceMap.put(getOtherPostalCode(postalCodeDistance, pc1.getPostalCode()), postalCodeDistance
+				postalCodeDistanceMap.put(getOtherPostalCode(postalCodeDistance, thePostalCode), postalCodeDistance
 						.getDistance());
 			}
 
-			for (Location location : locations) {
+			for (Location location : locationsCleaned) {
 				String locationPostalCode = location.getPostalCode();
 				Long locationId = location.getId();
 
-				Integer locationPostalCodeDistance = postalCodeDistanceMap.get(locationPostalCode);
-
-				postalCodeDistanceDAO.savePostalCodeLocationDistance(pc1.getPostalCode(), locationId, locationPostalCodeDistance);
-
+				Integer locationPostalCodeDistance = 0;
+				if (!locationPostalCode.equals(thePostalCode)) {
+					locationPostalCodeDistance = postalCodeDistanceMap.get(locationPostalCode);
+				}
+				if (locationPostalCodeDistance != null) {
+					postalCodeDistanceDAO.savePostalCodeLocationDistance(thePostalCode, locationId, locationPostalCodeDistance);
+				} else {
+					log.warn("Could not calculate distance from postalcode "+ thePostalCode + " to location postalcode " + locationPostalCode+". Not saving in table PostalCodeLocationDistance.");
+				}
 			}
+			System.out.print((iOuter++) + "-");
 		}
+		System.out.println();
 	}
 
 	private String getOtherPostalCode(PostalCodeDistance postalCodeDistance, String postalCode) {
@@ -156,14 +155,18 @@ public class LocationManagerImpl extends BaseManager implements LocationManager 
 		throw new RuntimeException("Unable to find postalCode " + postalCode + " in object " + postalCodeDistance);
 	}
 
-	private void avoidLocationsWithoutPostalCode(List<Location> locations) {
+	private List<Location> avoidLocationsWithoutPostalCode(List<Location> locations) {
+		List<Location> retLocations = new ArrayList(locations.size());
 		for (Location location : locations) {
 			if (StringUtils.isBlank(location.getPostalCode())) {
 				log.warn("Unable to calculate distances for location without postalCode: " + location);
-				locations.remove(location);
 				continue;
+			} else  {
+				retLocations.add(location);
 			}
 		}
+		
+		return retLocations;
 	}
 
 	/**
@@ -175,6 +178,7 @@ public class LocationManagerImpl extends BaseManager implements LocationManager 
 	 */
 	public void createPostalCodeDistancesInDatabase(List<PostalCodeCoordinate> pcCoordinates) {
 		int iOuter = 1;
+		log.info("Building content for table PostalCodeDistance.");
 		for (Iterator iterator = pcCoordinates.iterator(); iterator.hasNext();) {
 			PostalCodeCoordinate pc1 = (PostalCodeCoordinate) iterator.next();
 
