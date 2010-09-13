@@ -358,6 +358,7 @@ public class Location extends BaseObject implements Serializable {
      * @param postalCode The postalCode to set
      *
      */
+    @Required
     @MinLength("4")
     @DigitsOnly
     public void setPostalCode(String postalCode) {
