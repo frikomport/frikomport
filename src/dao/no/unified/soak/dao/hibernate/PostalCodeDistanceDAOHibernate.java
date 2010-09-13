@@ -16,6 +16,9 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
  * 
  */
 public class PostalCodeDistanceDAOHibernate extends BaseDAOHibernate implements PostalCodeDistanceDAO {
+	public final static String POSTALCODE_DISTANCE_TABLE = "PostalCodeDistance";
+	public final static String POSTALCODE_LOCATION_DISTANCE_TABLE = "PostalCodeLocationDistance";
+
 	private JdbcTemplate jt = new JdbcTemplate();
 
 	public void setDataSource(DataSource dataSource) {
@@ -29,10 +32,14 @@ public class PostalCodeDistanceDAOHibernate extends BaseDAOHibernate implements 
 					+ distance.getPostalCode1() + "' and postalCode2 = '" + distance.getPostalCode2() + "'";
 			jt.update(sql);
 		} else {
-			sql = "insert into PostalCodeDistance values ('" + distance.getPostalCode1() + "','" + distance.getPostalCode2()
-					+ "', " + distance.getDistance() + ")";
-			jt.update(sql);
+			insertPostalCodeDistance(distance);
 		}
+	}
+
+	public void insertPostalCodeDistance(PostalCodeDistance distance) {
+		String sql = "insert into PostalCodeDistance values ('" + distance.getPostalCode1() + "','" + distance.getPostalCode2()
+				+ "', " + distance.getDistance() + ")";
+		jt.update(sql);
 	}
 
 	private boolean existPostalCodeDistance(PostalCodeDistance distance) {
@@ -44,8 +51,7 @@ public class PostalCodeDistanceDAOHibernate extends BaseDAOHibernate implements 
 
 	public List<PostalCodeDistance> findDistancesByPostalCode(String postalCode) {
 		List<PostalCodeDistance> postalCodeDistances = new ArrayList<PostalCodeDistance>(4600);
-		String sql = "select * from PostalCodeDistance where PostalCode1 = '" + postalCode + "' or PostalCode2 = '" + postalCode
-				+ "'";
+		String sql = "select * from PostalCodeDistance where PostalCode1 = '" + postalCode + "' or PostalCode2 = '" + postalCode + "'";
 		SqlRowSet postalCodeDistancesRS = jt.queryForRowSet(sql);
 
 		while (postalCodeDistancesRS.next()) {
@@ -66,9 +72,13 @@ public class PostalCodeDistanceDAOHibernate extends BaseDAOHibernate implements 
 					+ "' and locationId = " + locationid;
 			jt.update(sql);
 		} else {
-			sql = "insert into PostalCodeLocationDistance values ('" + postalCode + "'," + locationid + ", " + distance + ")";
-			jt.update(sql);
+			insertPostalCodeLocationDistance(postalCode, locationid, distance);
 		}
+	}
+
+	public void insertPostalCodeLocationDistance(String postalCode, Long locationid, int distance) {
+		String sql = "insert into PostalCodeLocationDistance values ('" + postalCode + "'," + locationid + ", " + distance + ")";
+		jt.update(sql);
 	}
 
 	private boolean existPostalCodeLocationDistance(String postalCode, Long locationId) {
@@ -76,5 +86,19 @@ public class PostalCodeDistanceDAOHibernate extends BaseDAOHibernate implements 
 				+ locationId + "'";
 		int nRows = jt.queryForInt(sql);
 		return (nRows > 0);
+	}
+
+	public void removePostalCodeLocationDistance(Long locationid) {
+		String sql = "delete from PostalCodeLocationDistance where locationId = " + locationid;
+		int nRows = jt.update(sql);
+		log.info("Deleted " + nRows + " rows from PostalCodeLocationDistance.");
+	}
+
+	public void createIndexes() {
+		String sql = "CREATE INDEX MENGDETRENING.POSTALCODE2_IDX ON MENGDETRENING." + POSTALCODE_DISTANCE_TABLE + "(POSTALCODE2)";
+		jt.execute(sql);
+
+		sql = "create index locationid_distance_idx on " + POSTALCODE_LOCATION_DISTANCE_TABLE + " (locationid, distance)";
+		jt.execute(sql);
 	}
 }

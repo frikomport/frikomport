@@ -136,7 +136,7 @@ public class LocationManagerImpl extends BaseManager implements LocationManager 
 					locationPostalCodeDistance = postalCodeDistanceMap.get(locationPostalCode);
 				}
 				if (locationPostalCodeDistance != null) {
-					postalCodeDistanceDAO.savePostalCodeLocationDistance(thePostalCode, locationId, locationPostalCodeDistance);
+					postalCodeDistanceDAO.insertPostalCodeLocationDistance(thePostalCode, locationId, locationPostalCodeDistance);
 				} else {
 					log.warn("Could not calculate distance from postalcode "+ thePostalCode + " to location postalcode " + locationPostalCode+". Not saving in table PostalCodeLocationDistance.");
 				}
@@ -179,6 +179,7 @@ public class LocationManagerImpl extends BaseManager implements LocationManager 
 	public void createPostalCodeDistancesInDatabase(List<PostalCodeCoordinate> pcCoordinates) {
 		int iOuter = 1;
 		log.info("Building content for table PostalCodeDistance.");
+		
 		for (Iterator iterator = pcCoordinates.iterator(); iterator.hasNext();) {
 			PostalCodeCoordinate pc1 = (PostalCodeCoordinate) iterator.next();
 
@@ -195,7 +196,7 @@ public class LocationManagerImpl extends BaseManager implements LocationManager 
 				pcDistance.setDistance(new Double(1000 * GeoMathUtil.distanceDEG(pc1.getLatitude(), pc1.getLongitude(), pc2
 						.getLatitude(), pc2.getLongitude())).intValue());
 
-				postalCodeDistanceDAO.savePostalCodeDistance(pcDistance);
+				postalCodeDistanceDAO.insertPostalCodeDistance(pcDistance);
 			}
 			System.out.print(pc1.getPostalCode() + "(" + (iOuter++) + "/" + pcCoordinates.size()+ ") ");
 		}
@@ -268,5 +269,9 @@ public class LocationManagerImpl extends BaseManager implements LocationManager 
 		}
 
 		return false;
+	}
+
+	public void removePostalCodeLocationDistancesForLocation(Location location) {
+		postalCodeDistanceDAO.removePostalCodeLocationDistance(location.getId());
 	}
 }

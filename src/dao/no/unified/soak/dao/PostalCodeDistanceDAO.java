@@ -12,7 +12,8 @@ public interface PostalCodeDistanceDAO extends DAO {
 	 * @param distance
 	 */
 	public void savePostalCodeDistance(PostalCodeDistance distance);
-
+	public void insertPostalCodeDistance(PostalCodeDistance distance);
+	
 	/**
 	 * Finds all distances for postalCode from table PostalCodeDistance,
 	 * regardless if postalCode is in field postalCode1 or postalCode2.
@@ -30,5 +31,9 @@ public interface PostalCodeDistanceDAO extends DAO {
 	 * @param distance
 	 */
 	public void savePostalCodeLocationDistance(String postalCode, Long locationid, int distance);
-
+	public void insertPostalCodeLocationDistance(String postalCode, Long locationid, int distance);
+	
+	public void removePostalCodeLocationDistance(Long locationid);
+	
+	public void createIndexes();
 }
