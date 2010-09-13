@@ -197,7 +197,7 @@ public class LocationManagerImpl extends BaseManager implements LocationManager 
 
 				postalCodeDistanceDAO.savePostalCodeDistance(pcDistance);
 			}
-			System.out.print("Pnr. " + pc1.getPostalCode() + " " + (iOuter++) + "/" + pcCoordinates.size()+ "  ");
+			System.out.print(pc1.getPostalCode() + "(" + (iOuter++) + "/" + pcCoordinates.size()+ ") ");
 		}
 		System.out.println();
 	}

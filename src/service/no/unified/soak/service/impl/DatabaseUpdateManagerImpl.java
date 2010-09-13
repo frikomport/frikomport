@@ -35,7 +35,6 @@ import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.DefaultQuotedNamingStrategy;
-import no.unified.soak.util.PostalCodeDistances;
 import no.unified.soak.util.PostalCodesSuperduperLoader;
 
 import org.apache.commons.lang.StringUtils;
@@ -49,6 +48,9 @@ import org.springframework.orm.ObjectRetrievalFailureException;
  * User: gv Date: 05.jun.2008 Time: 10:26:23
  */
 public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUpdateManager {
+
+	public final static String POSTALCODE_DISTANCE_TABLE = "PostalCodeDistance";
+	public final static String POSTALCODE_LOCATION_DISTANCE_TABLE = "PostalCodeLocationDistance";
 
 	private JdbcTemplate jt = new JdbcTemplate();
 	private CourseManager courseManager = null;
@@ -146,32 +148,35 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		// update configuration content
 		updateConfigurations();
 
+		updatePostalCodetables();
+	}
+
+	private void updatePostalCodetables() {
 		createPostalCodeTables();
-		doPostalCodeDistancesIfneeded();
+//		doPostalCodeDistancesIfneeded();
 	}
 
 	private void doPostalCodeDistancesIfneeded() {
-
-		boolean emptyTablePostalCodeDistance = isEmptyTable("PostalCodeDistance");
-		boolean emptyTablePostalCodeLocationDistance = isEmptyTable("PostalCodeLocationDistance");
+		boolean emptyTablePostalCodeDistance = isEmptyTable(POSTALCODE_DISTANCE_TABLE);
 
 		List<PostalCodeCoordinate> coordinates = null;
-		if (emptyTablePostalCodeDistance || emptyTablePostalCodeLocationDistance) {
+		if (emptyTablePostalCodeDistance) {
+			deleteTable(POSTALCODE_LOCATION_DISTANCE_TABLE);
 			try {
-				coordinates = PostalCodeDistances.loadKmlFileIfNecessary_EmulatedTest("postnummer.kml");
-				// coordinates = PostalCodesSuperduperLoader.loadPostalCodes();
+//				 coordinates = PostalCodeDistances.loadKmlFileIfNecessary_EmulatedTest("postnummer.kml");
+				coordinates = PostalCodesSuperduperLoader.loadPostalCodes();
 
+				locationManager.createPostalCodeDistancesInDatabase(coordinates);
+				locationManager.createPostalCodeLocationDistancesInDatabase(coordinates);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
-			if (emptyTablePostalCodeDistance) {
-				locationManager.createPostalCodeDistancesInDatabase(coordinates);
-			}
-			if (emptyTablePostalCodeLocationDistance) {
-				locationManager.createPostalCodeLocationDistancesInDatabase(coordinates);
-			}
 		}
+	}
+
+	private void deleteTable(String tablename) {
+		String sql = "delete from " + tablename;
+		jt.execute(sql);
 	}
 
 	private boolean isEmptyTable(String table) {
@@ -191,17 +196,23 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	}
 
 	private void createPostalCodeTables() {
-		if (getTableInfo("PostalCodeDistance") == null) {
-			String sql = "CREATE TABLE POSTALCODEDISTANCE ( "
+		if (getTableInfo(POSTALCODE_DISTANCE_TABLE) == null) {
+			String sql = "CREATE TABLE " + POSTALCODE_DISTANCE_TABLE + " ( "
 					+ "postalCode1	VARCHAR2(4) NULL, postalCode2 VARCHAR2(4) NULL, distance NUMBER(10,0) NOT NULL, "
 					+ "PRIMARY KEY(postalCode1, postalCode2))";
 			jt.execute(sql);
+
+			sql = "CREATE INDEX MENGDETRENING.POSTALCODE2_IDX ON MENGDETRENING." + POSTALCODE_DISTANCE_TABLE + "(POSTALCODE2)";
+			jt.execute(sql);
 		}
 
-		if (getTableInfo("PostalCodeLocationDistance") == null) {
-			String sql = "CREATE TABLE POSTALCODELOCATIONDISTANCE ( "
+		if (getTableInfo(POSTALCODE_LOCATION_DISTANCE_TABLE) == null) {
+			String sql = "CREATE TABLE " + POSTALCODE_LOCATION_DISTANCE_TABLE + " ( "
 					+ "postalCode   VARCHAR2(4) NOT NULL, locationId NUMBER(19,0) NOT NULL, distance NUMBER(10,0) NOT NULL, "
 					+ "PRIMARY KEY(postalCode, locationId))";
+			jt.execute(sql);
+
+			sql = "create index locationid_distance_idx on " + POSTALCODE_LOCATION_DISTANCE_TABLE + " (locationid, distance)";
 			jt.execute(sql);
 		}
 	}

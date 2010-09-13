@@ -17,6 +17,7 @@ import no.unified.soak.service.StatisticsManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.DateUtil;
 import no.unified.soak.util.PostalCodeDistances;
+import no.unified.soak.util.PostalCodesSuperduperLoader;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -54,6 +55,7 @@ public class PostalCodeDistancesController implements Controller {
 
 		if ("NowPlease".equals(request.getParameter("postalCodeDistancesCalculate"))) {
 			List<PostalCodeCoordinate> coordinates = PostalCodeDistances.loadKmlFileIfNecessary_EmulatedTest("postnummer.kml");
+//			List<PostalCodeCoordinate> coordinates = PostalCodesSuperduperLoader.loadPostalCodes();
 			locationManager.createPostalCodeDistancesInDatabase(coordinates);
 			locationManager.createPostalCodeLocationDistancesInDatabase(coordinates);
 		}
