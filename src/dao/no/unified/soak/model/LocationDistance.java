@@ -1,6 +1,8 @@
 package no.unified.soak.model;
 
 import org.apache.commons.lang.builder.CompareToBuilder;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
@@ -56,18 +58,18 @@ public class LocationDistance implements Comparable<Object> {
 		this.distance = distance;
 	}
 
-//	public int hashCode() {
-//		return new HashCodeBuilder().append(distance).toHashCode();
-//	}
-//
-//	@Override
-//	public boolean equals(Object o) {
-//		if (o == null || !(o instanceof LocationDistance)) {
-//			return false;
-//		}
-//		LocationDistance distance = (LocationDistance) o;
-//		return new EqualsBuilder().append(locationid, distance.getDistance()).isEquals();
-//	}
+	public int hashCode() {
+		return new HashCodeBuilder().append(distance).toHashCode();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || !(o instanceof LocationDistance)) {
+			return false;
+		}
+		LocationDistance distance = (LocationDistance) o;
+		return new EqualsBuilder().append(distance, distance.getDistance()).isEquals();
+	}
 
 	@Override
 	public String toString() {
