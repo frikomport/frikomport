@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,6 +15,8 @@ import no.unified.soak.model.LocationDistance;
 import no.unified.soak.model.PostalCodeCoordinate;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class PostalCodesSuperduperLoader {
 
@@ -58,18 +61,25 @@ public class PostalCodesSuperduperLoader {
 	 * @return list of locationid in order of distance from postalCode.
 	 */
 	public static List<Long> calculateDistance(String postalCode, List<Location> locations, Integer maxResultCount) {
+		final Log log = LogFactory.getLog(PostalCodesSuperduperLoader.class);
 		List<LocationDistance> locationDistances = new ArrayList<LocationDistance>();
 		
 		final PostalCodeCoordinate postalCodeCoordinate = getPostalCodeCoordinate(postalCode);
 		for (Location location : locations) {
 			final PostalCodeCoordinate locationCoordinate = getPostalCodeCoordinate(location.getPostalCode());
+			if (locationCoordinate == null) {
+				log.warn("Coordinates not found for location "+location+". Maybe due to postalCode==null.");
+				continue;
+			}
 			Integer distance = new Double(1000 * GeoMathUtil.distanceDEG(postalCodeCoordinate.getLatitude(), postalCodeCoordinate
 					.getLongitude(), locationCoordinate.getLatitude(), locationCoordinate.getLongitude())).intValue();
 
 			LocationDistance locationDistance = new LocationDistance(location.getId(), distance);
 			locationDistances.add(locationDistance);
 		}
+		Collections.sort(locationDistances);
 
+		List<Long> idList = new LinkedList<Long>();
 		int i = 1;
 		for (LocationDistance locationDistance : locationDistances) {
 			if (i++ > maxResultCount) {
