@@ -17,7 +17,6 @@ import org.apache.commons.lang.StringUtils;
 
 public class PostalCodesSuperduperLoader {
 
-	static List<PostalCodeCoordinate> all = new ArrayList<PostalCodeCoordinate>(4700);
 	static HashMap<String, PostalCodeCoordinate> allMap = new HashMap<String, PostalCodeCoordinate>(4700);
 	
 	/**
@@ -29,10 +28,11 @@ public class PostalCodesSuperduperLoader {
 	 *            -is ignored.
 	 */
 	public static void main(String[] args) {
-		new PostalCodesSuperduperLoader().loadAndWriteJavaCode();
+		
 	}
 
 	private static void loadPostalCodes() {
+		List<PostalCodeCoordinate> all = new ArrayList<PostalCodeCoordinate>(4700);
 		all.addAll(loadPostalCodesPart1());
 		all.addAll(loadPostalCodesPart2());
 		all.addAll(loadPostalCodesPart3());
@@ -46,6 +46,9 @@ public class PostalCodesSuperduperLoader {
 	}
 	
 	public static PostalCodeCoordinate getPostalCodeCoordinate(String postalCode) {
+		if (allMap.size() == 0) {
+			loadPostalCodes();
+		}
 		return allMap.get(postalCode);
 	}
 	
