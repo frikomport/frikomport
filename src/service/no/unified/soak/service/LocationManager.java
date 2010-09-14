@@ -10,11 +10,10 @@
  */
 package no.unified.soak.service;
 
+import java.util.List;
+
 import no.unified.soak.dao.LocationDAO;
 import no.unified.soak.model.Location;
-import no.unified.soak.model.PostalCodeCoordinate;
-
-import java.util.List;
 
 /**
  * Business Service Interface to handle communication between web and
@@ -67,6 +66,12 @@ public interface LocationManager extends Manager {
 	 */
 	public List searchLocations(Location location);
 
+    /**
+     * @param postalcode for user
+     * @return list of locationIds ordered by distance to user's postalcode asc
+     */
+    public List getLocationIds(String postalcode);
+
 	/**
 	 * Gets all locations including a dummy
 	 * 
@@ -91,10 +96,10 @@ public interface LocationManager extends Manager {
 	 * 
 	 * @param pcCoordinates
 	 */
-	public void createPostalCodeDistancesInDatabase(List<PostalCodeCoordinate> pcCoordinates);
-
-	public void createPostalCodeLocationDistancesInDatabase(List<PostalCodeCoordinate> pcCoordinates);
-
-	public void removePostalCodeLocationDistancesForLocation(Location location);
+//	public void createPostalCodeDistancesInDatabase(List<PostalCodeCoordinate> pcCoordinates);
+//
+//	public void createPostalCodeLocationDistancesInDatabase(List<PostalCodeCoordinate> pcCoordinates);
+//
+//	public void removePostalCodeLocationDistancesForLocation(Location location);
 
 }

@@ -28,6 +28,7 @@ import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.LocationManager;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
+import no.unified.soak.util.PostalCodesSuperduperLoader;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
@@ -144,7 +145,7 @@ public class LocationFormController extends BaseFormController {
             List<Course> searchedCourses = courseManager.searchCourses(course, null, null, null);
             if (searchedCourses == null || searchedCourses.size() == 0) {
                 locationManager.removeLocation(location.getId().toString());
-                locationManager.removePostalCodeLocationDistancesForLocation(location);
+//                locationManager.removePostalCodeLocationDistancesForLocation(location);
                 saveMessage(request, getText("location.deleted", locale));
             } else {
                 String text = getText("location.canNotDeleteDueToCourse", locale);
@@ -163,12 +164,19 @@ public class LocationFormController extends BaseFormController {
         		location.setDetailURL("http://" + detailURL);
         	}
         	
-        	// validering flyttet fra klient til kontroller
-			if (validateAnnotations(location, errors, null) > 0) {
+        	Object[] args = null;
+        	String postalcode = location.getPostalCode();
+        	if(StringUtils.isNumeric(postalcode) && postalcode.length() == 4){
+        		if(!PostalCodesSuperduperLoader.isValidPostalCode(postalcode)){
+        			args = new Object[]{postalcode};
+        			errors.rejectValue("postalCode", "errors.postalCodeInvalid", args, "");
+        		}
+        	}
+        	
+			if (validateAnnotations(location, errors, null) > 0 || args != null) {
 				locationManager.evict(location);
 				return showForm(request, response, errors);
 			}
-        	// ---
         	
         	locationManager.saveLocation(location);
 

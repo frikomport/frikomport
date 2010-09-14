@@ -1,5 +1,6 @@
 package no.unified.soak.dao.hibernate;
 
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,10 +109,44 @@ public class PostalCodeDistanceDAOHibernate extends BaseDAOHibernate implements 
 	}
 
 	public void createIndexes() {
-		String sql = "CREATE INDEX MENGDETRENING.POSTALCODE2_IDX ON MENGDETRENING." + POSTALCODE_DISTANCE_TABLE + "(POSTALCODE2)";
+		String sql = "CREATE INDEX POSTALCODE2_IDX ON " + POSTALCODE_DISTANCE_TABLE + "(POSTALCODE2)";
 		jt.execute(sql);
 
 		sql = "create index locationid_distance_idx on " + POSTALCODE_LOCATION_DISTANCE_TABLE + " (locationid, distance)";
 		jt.execute(sql);
+	}
+	
+	
+	// test
+	private String PCDFile = "C:\\PostalCodeDistanceExport.csv";
+	FileWriter fw = null; 
+	
+	public void openPCDFile(){
+		log.info("Opening file: " + PCDFile);
+		try {
+			fw = new FileWriter(PCDFile, true);
+	        String th = "\"POSTALCODE1\",\"POSTALCODE2\",\"DISTANCE\"\n";
+	        fw.write(th);
+		}catch(Exception e){
+			log.error("Error opening file: " + PCDFile, e);
+		}
+	}
+	
+	public void	appendToExportFilePCD(PostalCodeDistance pcd){
+		String row = "\"" + pcd.getPostalCode1() + "\"," + "\"" + pcd.getPostalCode2() + "\"," + pcd.getDistance() + "\n";
+		try {
+			fw.write(row);
+		}catch(Exception e){
+			log.error("Error writing row to file: " + PCDFile, e);
+		}
+	}
+
+	public void closePDCFile(){
+		try {
+			fw.close();
+		}catch(Exception e){
+			log.error("Error closing file: " + PCDFile, e);
+		}
+		log.info("Closing file: " + PCDFile);
 	}
 }

@@ -444,17 +444,7 @@ public class CourseController extends BaseFormController {
 				courseList = courseManager.searchCourses(course, starttime, stoptime, status);
 				courseList = updateAvailableAttendants(courseList, request);
 	        } else {
-				//List<Long> locationIds = locationManager.getLocationIds(postalcode);
-
-	        	// TODO: testkode ---
-	        	List<Long> locationIds = new ArrayList<Long>();
-	        	locationIds.add(new Long(268));
-	        	locationIds.add(new Long(272));
-	        	locationIds.add(new Long(321));
-	        	locationIds.add(new Long(231));
-	        	locationIds.add(new Long(364));
-	        	// TODO: testkode ---
-	        	
+				List<Long> locationIds = locationManager.getLocationIds(postalcode);
 	        	int numberOfHits = 15; // default
 	        	String numberOfHitsStr = getText("courseList.numberOfHits", locale);
 	        	if(StringUtils.isNumeric(numberOfHitsStr)) numberOfHits = Integer.parseInt(numberOfHitsStr);

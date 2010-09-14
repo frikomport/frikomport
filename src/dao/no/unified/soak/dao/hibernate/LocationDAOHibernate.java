@@ -36,8 +36,7 @@ public class LocationDAOHibernate extends BaseDAOHibernate
     /**
      * @see no.unified.soak.dao.LocationDAO#getLocations(no.unified.soak.model.Location)
      */
-    public List getLocations(final Location location,
-        final Boolean includeDisabled) {
+    public List getLocations(final Location location, final Boolean includeDisabled) {
         DetachedCriteria criteria = DetachedCriteria.forClass(Location.class);
 
         // If the includeDisabled is not true, we only return enabled locations

@@ -236,7 +236,10 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
 	public List<Course> findByLocationIds(List<Long> locationIds, Integer numberOfHits){
         DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
 
-        criteria.add(Restrictions.in("locationid", locationIds));
+        if(!locationIds.isEmpty()){
+        	criteria.add(Restrictions.in("locationid", locationIds));
+        }
+        
         criteria.add(Restrictions.eq("status", CourseStatus.COURSE_PUBLISHED));
 
 		String sortorderCSVString = ApplicationResourcesUtil.getText("courseList.order");

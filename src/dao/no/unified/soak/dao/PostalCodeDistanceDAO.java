@@ -36,4 +36,13 @@ public interface PostalCodeDistanceDAO extends DAO {
 	public void removePostalCodeLocationDistance(Long locationid);
 	
 	public void createIndexes();
+	
+	public List getLocationIds(String postalcode);
+	
+	
+	// testing
+	public void openPCDFile();
+	public void	appendToExportFilePCD(PostalCodeDistance pcd);
+	public void closePDCFile();
+	
 }

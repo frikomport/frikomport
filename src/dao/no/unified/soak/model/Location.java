@@ -370,7 +370,7 @@ public class Location extends BaseObject implements Serializable {
      */
     public String toString() {
         return new ToStringBuilder(this).append("id", id).append("name", name)
-                                        .append("address", address).toString();
+                                        .append("address", address).append("postalCode", postalCode).toString();
     }
 
     /**

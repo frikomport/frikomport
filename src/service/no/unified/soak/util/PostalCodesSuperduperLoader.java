@@ -54,14 +54,14 @@ public class PostalCodesSuperduperLoader {
 	
 	/**
 	 * @param postalCode
-	 * @param locationPostalCodes
+	 * @param locations
 	 * @return list of locationid in order of distance from postalCode.
 	 */
-	public static List<Long> calculateDistance(String postalCode, List<Location> locationPostalCodes, Integer maxResultCount) {
+	public static List<Long> calculateDistance(String postalCode, List<Location> locations, Integer maxResultCount) {
 		List<LocationDistance> locationDistances = new ArrayList<LocationDistance>();
 		
 		final PostalCodeCoordinate postalCodeCoordinate = getPostalCodeCoordinate(postalCode);
-		for (Location location : locationPostalCodes) {
+		for (Location location : locations) {
 			final PostalCodeCoordinate locationCoordinate = getPostalCodeCoordinate(location.getPostalCode());
 			Integer distance = new Double(1000 * GeoMathUtil.distanceDEG(postalCodeCoordinate.getLatitude(), postalCodeCoordinate
 					.getLongitude(), locationCoordinate.getLatitude(), locationCoordinate.getLongitude())).intValue();
@@ -70,7 +70,6 @@ public class PostalCodesSuperduperLoader {
 			locationDistances.add(locationDistance);
 		}
 
-		List<Long> idList = new LinkedList<Long>();
 		int i = 1;
 		for (LocationDistance locationDistance : locationDistances) {
 			if (i++ > maxResultCount) {
@@ -78,8 +77,13 @@ public class PostalCodesSuperduperLoader {
 			}
 			idList.add(locationDistance.getLocationid());
 		}
-
 		return idList;
+	}
+	
+	public static boolean isValidPostalCode(String postalcode){
+		if(postalcode == null) return false;
+		if(allMap.isEmpty()) { loadPostalCodes(); }
+		return allMap.containsKey(postalcode); 
 	}
 	
 	private static List<PostalCodeCoordinate> loadPostalCodesPart1() {
