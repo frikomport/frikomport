@@ -51,7 +51,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
 	public final static String POSTALCODE_DISTANCE_TABLE = "PostalCodeDistance";
 	public final static String POSTALCODE_LOCATION_DISTANCE_TABLE = "PostalCodeLocationDistance";
-
+	
 	private JdbcTemplate jt = new JdbcTemplate();
 	private CourseManager courseManager = null;
 	private RegistrationManager registrationManager = null;
@@ -152,11 +152,15 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	}
 
 	private void updatePostalCodetables() {
-		createPostalCodeTables();
+//		createPostalCodeTables();
 //		doPostalCodeDistancesIfneeded();
 	}
 
 	private void doPostalCodeDistancesIfneeded() {
+//		PostalCodesSuperduperLoader.loadPostalCodes();
+		
+	}
+	private void doPostalCodeDistancesIfneededOld() {
 		boolean emptyTablePostalCodeDistance = isEmptyTable(POSTALCODE_DISTANCE_TABLE);
 
 		List<PostalCodeCoordinate> coordinates = null;
@@ -164,7 +168,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			deleteTable(POSTALCODE_LOCATION_DISTANCE_TABLE);
 			try {
 //				 coordinates = PostalCodeDistances.loadKmlFileIfNecessary_EmulatedTest("postnummer.kml");
-				coordinates = PostalCodesSuperduperLoader.loadPostalCodes();
+//				coordinates = PostalCodesSuperduperLoader.loadPostalCodes();
 
 				locationManager.createPostalCodeDistancesInDatabase(coordinates);
 				locationManager.createPostalCodeLocationDistancesInDatabase(coordinates);
@@ -201,18 +205,12 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 					+ "postalCode1	VARCHAR2(4) NULL, postalCode2 VARCHAR2(4) NULL, distance NUMBER(10,0) NOT NULL, "
 					+ "PRIMARY KEY(postalCode1, postalCode2))";
 			jt.execute(sql);
-
-			sql = "CREATE INDEX MENGDETRENING.POSTALCODE2_IDX ON MENGDETRENING." + POSTALCODE_DISTANCE_TABLE + "(POSTALCODE2)";
-			jt.execute(sql);
 		}
 
 		if (getTableInfo(POSTALCODE_LOCATION_DISTANCE_TABLE) == null) {
 			String sql = "CREATE TABLE " + POSTALCODE_LOCATION_DISTANCE_TABLE + " ( "
 					+ "postalCode   VARCHAR2(4) NOT NULL, locationId NUMBER(19,0) NOT NULL, distance NUMBER(10,0) NOT NULL, "
 					+ "PRIMARY KEY(postalCode, locationId))";
-			jt.execute(sql);
-
-			sql = "create index locationid_distance_idx on " + POSTALCODE_LOCATION_DISTANCE_TABLE + " (locationid, distance)";
 			jt.execute(sql);
 		}
 	}

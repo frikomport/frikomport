@@ -53,14 +53,8 @@ public class PostalCodeDistancesController implements Controller {
 			log.debug("entering 'onSubmit' method in PostalCodeDistancesController...");
 		}
 
-		if ("NowPlease".equals(request.getParameter("postalCodeDistancesCalculate"))) {
-			List<PostalCodeCoordinate> coordinates = PostalCodeDistances.loadKmlFileIfNecessary_EmulatedTest("postnummer.kml");
-//			List<PostalCodeCoordinate> coordinates = PostalCodesSuperduperLoader.loadPostalCodes();
-			locationManager.createPostalCodeDistancesInDatabase(coordinates);
-			locationManager.createPostalCodeLocationDistancesInDatabase(coordinates);
-		}
 
-		ModelAndView modelAndView = new ModelAndView("statistics");
+		ModelAndView modelAndView = new ModelAndView("welcome");
 
 		if (!((Boolean) request.getAttribute("isAdmin") || (Boolean) request.getAttribute("isEducationResponsible")
 				|| (Boolean) request.getAttribute("isEventResponsible") || (Boolean) request.getAttribute("isReader"))) {
@@ -68,53 +62,19 @@ public class PostalCodeDistancesController implements Controller {
 			return modelAndView;
 		}
 
-		String beginDateStr = request.getParameter("dateBeginInclusive");
-		Date beginDate = null;
-		if (!StringUtils.isEmpty(beginDateStr)) {
-			try {
-				beginDate = DateUtil.convertStringToDate(beginDateStr);
-			}catch(ParseException e){
-				ApplicationResourcesUtil.saveMessage(request, ApplicationResourcesUtil.getText("statistics.message.dateBeginInclusive.formaterror"));
-			}
-			modelAndView.addObject("dateBeginInclusive", beginDateStr);
-		} else {
-			ApplicationResourcesUtil.saveMessage(request, ApplicationResourcesUtil.getText("statistics.message.dateBeginInclusive"));
+		if (StringUtils.equals("NowPlease", request.getParameter("postalCodeDistancesCalculate"))) {
+			return modelAndView;
 		}
+		
+//		final String fromPC = request.getParameter("fromPC");
+//		final String toPC = request.getParameter("toPC");
+//		if (fromPC != null && toPC != null) {
+//			List<PostalCodeCoordinate> coordinates = PostalCodesSuperduperLoader.loadPostalCodes(fromPC, toPC);
+//			locationManager.createPostalCodeDistancesInDatabase(coordinates);
+//			locationManager.createPostalCodeLocationDistancesInDatabase(coordinates);
+//			ApplicationResourcesUtil.saveMessage(request, "");
+//		}
 
-		String endDateStr = request.getParameter("dateEndInclusive");
-		Date endDate = null;
-		if (!StringUtils.isEmpty(endDateStr)) {
-			try {
-			endDate = DateUtil.convertStringToDate(endDateStr);
-			}catch(ParseException e){
-				ApplicationResourcesUtil.saveMessage(request, ApplicationResourcesUtil.getText("statistics.message.dateEndInclusive.formaterror"));
-			}
-			modelAndView.addObject("dateEndInclusive", endDateStr);
-		} else {
-			ApplicationResourcesUtil.saveMessage(request, ApplicationResourcesUtil.getText("statistics.message.dateEndInclusive"));
-		}
-
-		if (beginDate != null && endDate != null) {
-
-			// legger på 24H for at sluttdato skal bli med i søket
-        	Calendar end = new GregorianCalendar();
-        	end.setTime(endDate);
-        	end.add(Calendar.HOUR, 24);
-        	endDate = end.getTime();
-
-        	if(beginDate.before(endDate)){
-        		List<StatisticsTableRow> statisticsRows = statisticsManager.findByDates(beginDate, endDate);
-        		modelAndView.addObject("statisticsRows", statisticsRows);
-        		
-        		List<Course> emptyCourses = statisticsManager.findEmptyCoursesByDates(beginDate, endDate);
-        		modelAndView.addObject("courseList", emptyCourses);
-        	}
-        	else{
-    			ApplicationResourcesUtil.saveMessage(request, ApplicationResourcesUtil.getText("statistics.message.beginBeforeEnd"));
-    			modelAndView.addObject("dateBeginInclusive", beginDateStr);
-    			modelAndView.addObject("dateEndInclusive", endDateStr);
-        	}
-		}
 		return modelAndView;
 	}
 
