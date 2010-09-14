@@ -75,7 +75,7 @@ span.pagelinks {
 
 table.list {
     border-collapse: collapse;
-    margin: 10px;
+    margin: 10px 0px 10px 5px;
     margin-top: 0px;
     width: 100%;
 }

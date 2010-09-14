@@ -17,7 +17,7 @@ div#activeUsers, div#header, div#menu, div#validators {
     display:none;
 }
 
-div#content {
+div#fkp-content {
 	margin: 10px !important;
 }
 

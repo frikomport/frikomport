@@ -38,6 +38,10 @@ div#MainContentContainer input[type="submit"] {
 	min-width:79px;
 }
 
+div#PageContainer div#ContentContainer {
+    width:990px;
+}
+
 html body {
 	font-family: Frutiger,Verdana,Arial,Helvetica,sans-serif !important;
 	color:#37424A;
@@ -54,7 +58,7 @@ table.detail {
 	width:auto;
 }
 
-div#content table.list {
+div#fkp-content table.list {
 	margin-left:1px;
 }
 
@@ -68,9 +72,15 @@ tr.sumfinal {
 }
 
 div#MainContentContainer.fullwidth,
-div#ContentFrameMiddle,
-div#content {
-width:995px;
+div#ContentFrameMiddle {
+ width:990px;
+}
+div#fkp-content {
+ width:985px;
+}
+
+body div#PageContainer div#ContentContainer div#fkp-content {
+margin:0 0 0 5px !important;
 }
 
 div#ContentFrameMiddle {
@@ -78,21 +88,21 @@ margin-top:-15px;
 }
 
 /* Overskift Temainnganger */
-div#content h1,
-div#content h2 {
+div#fkp-content h1,
+div#fkp-content h2 {
 	color:#37424A;
 }
 
-#content span.pagebanner {
+#fkp-content span.pagebanner {
 	color:#37424A;
 }
 
-#content div.exportlinks  {
+#fkp-content div.exportlinks  {
 	color:#37424A;
 }
 
-#content div.error, 
-#content div.message {
+#fkp-content div.error, 
+#fkp-content div.message {
 	color:#37424A;
 	font-family: Frutiger,Verdana,Arial,Helvetica,sans-serif !important;
 }
@@ -107,15 +117,15 @@ table.list thead tr th {
 	background-color:#5f686E;
 }
 
-#content table.list tr.odd {
+#fkp-content table.list tr.odd {
 	color:inherit;
 }
 
-div#content table thead tr th {
+div#fkp-content table thead tr th {
 	color:#FFFFFF;
 }
 
-#content table.list tr.even {
+#fkp-content table.list tr.even {
 	background-color:#EDEEF0;
 	color:inherit;
 }
@@ -137,19 +147,19 @@ table.list thead th a:hover {
 	text-decoration:none;
 }
 	
-#content table.list th.sortable a {
+#fkp-content table.list th.sortable a {
 	background-image:url("../images/SVV/arrow_off_SVV.png");
 }
 
-#content table.list th.order1 a {
+#fkp-content table.list th.order1 a {
 	background-image:url("../images/SVV/arrow_down_SVV.png") !important;
 }
 
-#content table.list th.order2 a {
+#fkp-content table.list th.order2 a {
 background-image:url("../images/SVV/arrow_up_SVV.png") !important;
 }
 
-div#content ul.bulletlist {
+div#fkp-content ul.bulletlist {
 	padding-left: 20px;
 }
 

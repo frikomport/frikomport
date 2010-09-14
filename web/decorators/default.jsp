@@ -60,7 +60,7 @@ if (divstart) {
 
     <div id="screen">
         <c:import url="/WEB-INF/pages/menu.jsp" charEncoding="UTF-8"/>
-        <div id="content">
+        <div id="fkp-content">
             <h1><decorator:getProperty property="page.heading"/></h1>
             <%@ include file="/common/messages.jsp" %>
             <decorator:body/>

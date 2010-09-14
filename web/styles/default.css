@@ -58,16 +58,16 @@ div#activeUsers {
     color: #000;
 }
 
-div#content {
+div#fkp-content {
     margin: 0px 10px 10px 1px;
-    padding: 10px 10px 10px 0px;
+    padding: 10px 0px 10px 0px;
     text-align: left;
 }
 
-div#content>p {margin:10px 0px}
+div#fkp-content>p {margin:10px 0px}
 
 
-/*div#content button {
+/*div#fkp-content button {
 	margin-top: 0.3em;
 	margin-bottom: 0.3em;
 }*/
@@ -351,6 +351,9 @@ table.detail {
     font-weight: normal;
 }
 
+div.screen {
+margin:0 0 0 -2px;
+}
 
 table tbody td button {
   vertical-align: middle;
@@ -472,7 +475,7 @@ pre {
     color: #000000;
     padding: 5px 5px 5px 7px;
 }
-div#content table th {
+div#fkp-content table th {
 	margin: 0;
 	font-size: 1.0em; /* 10px; */
 	font-weight: bold;
