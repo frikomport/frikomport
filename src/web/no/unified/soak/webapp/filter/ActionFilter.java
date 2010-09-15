@@ -328,7 +328,16 @@ public class ActionFilter implements Filter {
 				log.warn("Page decoration is blank from [" + ctmpl + "] or have bad resultcode (" + resultCode
 						+ ").\nUnable to fetch page decoration from url " + decorationUrl);
 				failureFetching = true;
-			} else {
+			}
+			else if(!StringUtils.isBlank(ctmpl) && resultCode == 200 
+					&& (ctmpl.indexOf(ApplicationResourcesUtil.getText("global.pageDecorator.headPlaceholder")) == -1 
+							|| ctmpl.indexOf(ApplicationResourcesUtil.getText("global.pageDecorator.bodyPlaceholder")) == -1)){
+				log.error(" -*-*-*-*-*-*-*-*-*- HTTP:200, men ikke placeHolder(s) fra " + decorationUrl + " -*-*-*-*-*-*-*-*-*-");
+				log.error(ctmpl);
+				log.error(" -*-*-*-*-*-*--*-*-*-*-*-*--*-*-*-*-*-*--*-*-*-*-*-*--*-*-*-*-*-*-");
+				failureFetching = true;
+			}
+			else {
 				log.info("Got page decoration from "+ctmpl+" with resultcode="+resultCode);
 				failureFetching = false;
 			}
