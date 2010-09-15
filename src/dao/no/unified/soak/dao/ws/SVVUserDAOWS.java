@@ -44,6 +44,7 @@ public class SVVUserDAOWS implements ExtUserDAO {
 	final String ROLE_REGIONSADMINISTRATOR = "FKPRegionsadministrator";
 	final String ROLE_MOTEADMINISTRATOR = "FKPMoteadministrator";
 	final String ROLE_LESEBRUKER = "FKPLesebruker";
+	final String ROLEKEY_FROM_WEBSERVICE = "FKPM";
 
 	UserDAO userDAO;
 	RoleDAO roleDAO;
@@ -131,6 +132,10 @@ public class SVVUserDAOWS implements ExtUserDAO {
 
 				extUser.setRolenames(SVVUserDAOWS.getInnerTagValuesInTag(xmlString, "urn1:svvrole", "Key", 
 						adminRoles, editorRoles, eventResponsible, readerRoles ));
+
+// Parsing av rollene etter endring hos SVV:
+//				extUser.setRolenames(SVVUserDAOWS.getTagvaluesAfterSiblingTagInOuterTag(xmlString, "urn1:svvrole", "urn2:Key", ROLEKEY_FROM_WEBSERVICE, 
+//						"urn2:Value", adminRoles, editorRoles, eventResponsible, readerRoles ));
 			}
 		} catch (Exception e) {
 			log.error("Feilet ved tolkning av data funnet ved oppslag på [" + username.toUpperCase() + "] fra webservice!", e);
@@ -208,6 +213,38 @@ public class SVVUserDAOWS implements ExtUserDAO {
 		}
 	}
 
+	public static List<String> getTagvaluesAfterSiblingTagInOuterTag(String xml, String outerTagname, String siblingTagBefore,
+			String siblingtagValue, String valueTagname, String... valueTagValues) {
+		try {
+			int outerTagStartFirstpos = xml.indexOf("<" + outerTagname);
+			int outerTagStartLastpos = xml.indexOf(">", outerTagStartFirstpos);
+			int outerTagEndFirstpos = xml.indexOf("</" + outerTagname + ">", outerTagStartLastpos);
+			int siblingTagBeforeStartFirstPos = xml.indexOf("<" + siblingTagBefore, outerTagStartLastpos);
+
+			List<String> roleList = new ArrayList<String>();
+			if (outerTagStartFirstpos == -1 || siblingTagBeforeStartFirstPos == -1 || outerTagEndFirstpos == -1) {
+				return roleList;
+			}
+			
+			List<String> keyList = new ArrayList<String>();
+			CollectionUtils.addAll(keyList, valueTagValues);
+
+			for (String rolename : keyList) {
+				int rolePosition = xml.indexOf("<" + valueTagname + ">" + rolename + "</" + valueTagname + ">",
+						siblingTagBeforeStartFirstPos + 2);
+				if (rolePosition < outerTagEndFirstpos && rolePosition > -1) {
+					roleList.add(rolename);
+				}
+			}
+
+			return roleList;
+		} catch (Exception e) {
+			if (log.isDebugEnabled())
+				log.debug("Problem ved uthenting av <" + outerTagname + "> fra xml.");
+			return new ArrayList<String>(); // tom liste uten verdier
+		}
+	}
+	
 	public static List<String> getInnerTagValuesInTag(String xml, String outerTagname, String innerTagEndfix,
 			String... keyCSVToSearch) {
 		try {
@@ -216,11 +253,7 @@ public class SVVUserDAOWS implements ExtUserDAO {
 			int endTagFirstpos = xml.indexOf("</" + outerTagname + ">", startTagLastpos);
 
 			List<String> keyList = new ArrayList<String>();
-			for (int i = 0; i < keyCSVToSearch.length; i++) {
-				String string = keyCSVToSearch[i];
-				String[] keyValues = StringUtils.split(string, ',');
-				CollectionUtils.addAll(keyList, keyValues);
-			}
+			CollectionUtils.addAll(keyList, keyCSVToSearch);
 
 			List<String> roleList = new ArrayList<String>();
 			for (String rolename : keyList) {
@@ -233,7 +266,7 @@ public class SVVUserDAOWS implements ExtUserDAO {
 			return roleList;
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
-				log.debug("Problem ved uthenting av <" + outerTagname + ">");
+				log.debug("Problem ved uthenting av <" + outerTagname + "> fra xml.");
 			return new ArrayList<String>(); // tom liste uten verdier
 		}
 

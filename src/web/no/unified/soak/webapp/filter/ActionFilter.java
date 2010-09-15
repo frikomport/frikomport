@@ -325,7 +325,7 @@ public class ActionFilter implements Filter {
 			InputStream ctmplStream = getMethod.getResponseBodyAsStream();
 			ctmpl = StringUtil.convertStreamToString(ctmplStream, "UTF8");
 			if (StringUtils.isBlank(ctmpl) || resultCode != 200) {
-				log.warn("Page decoration is blank from [" + ctmpl + "] or have bad resultcode (" + resultCode
+				log.warn("Page decoration is blank [" + ctmpl + "] or have bad resultcode (" + resultCode
 						+ ").\nUnable to fetch page decoration from url " + decorationUrl);
 				failureFetching = true;
 			}
@@ -338,7 +338,7 @@ public class ActionFilter implements Filter {
 				failureFetching = true;
 			}
 			else {
-				log.info("Got page decoration from "+ctmpl+" with resultcode="+resultCode);
+				log.info("Got resultcode=["+resultCode+"] and this page decoration:\n"+ctmpl);
 				failureFetching = false;
 			}
 		} catch (HttpException e) {
