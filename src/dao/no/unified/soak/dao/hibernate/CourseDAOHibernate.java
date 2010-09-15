@@ -233,29 +233,36 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
         return getHibernateTemplate().findByCriteria(criteria);
     }
 
+    /**
+     * @see no.unified.soak.dao.CourseDAO#findByLocationIds(List<Long>, Integer)
+     */
 	public List<Course> findByLocationIds(List<Long> locationIds, Integer numberOfHits){
-        DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
-
-        if(!locationIds.isEmpty()){
-        	criteria.add(Restrictions.in("locationid", locationIds));
+        List<Course> courses = new ArrayList<Course>(numberOfHits);
+		if(!locationIds.isEmpty()){
+        	Iterator<Long> ids = locationIds.iterator();
+        	while(ids.hasNext()){ // find courses pr locationid
+        		Long locationid = ids.next();
+        		DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
+        		criteria.add(Restrictions.eq("locationid", locationid));
+        		criteria.add(Restrictions.eq("status", CourseStatus.COURSE_PUBLISHED));
+        		criteria.createAlias("organization", "O");
+    			criteria.addOrder(Order.asc("startTime"));
+    			List coursesForLocation = getHibernateTemplate().findByCriteria(criteria);
+    			if(!coursesForLocation.isEmpty()){
+	    			Iterator<Course> it = coursesForLocation.iterator();
+    				while(it.hasNext()){
+	    				courses.add(it.next());
+	    				if(courses.size() == numberOfHits){
+	    					break;
+	    				}
+	    			}
+    			}
+				if(courses.size() == numberOfHits){
+					break;
+				}
+        	}
         }
-        
-        criteria.add(Restrictions.eq("status", CourseStatus.COURSE_PUBLISHED));
-
-		String sortorderCSVString = ApplicationResourcesUtil.getText("courseList.order");
-		String[] sortorderArray = StringUtils.split(sortorderCSVString, ",");
-		criteria.createAlias("organization", "O");
-		for (String fieldName : sortorderArray) {
-			criteria.addOrder(Order.asc(fieldName));
-		}
-		
-		// bruk av subList er IKKE bra -- men har foreløspig ikke funnet hvordan jeg kan sette LIMIT xx via hibernate
-		// det finnes en del om setMaxresults() på google, men ikke for DetachedCriteria.
-		List courses = getHibernateTemplate().findByCriteria(criteria);
-		if(courses.size() > numberOfHits){
-			courses = courses.subList(0, numberOfHits);
-		}
 		return courses;
 	}
-	
+
 }

@@ -89,19 +89,18 @@
     <display:column property="postalCode" sortable="true" headerClass="sortable" titleKey="location.postalCode"/>
     
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+    <display:column property="organization.name" sortable="true" headerClass="sortable" titleKey="location.organization"/>
+
+    <display:column property="organization2.name" sortable="true" headerClass="sortable" titleKey="location.organization2"/>
+
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="location.contactName" sortProperty="contactName">
          <a href="mailto:<c:out value="${locationList.email}"/>"><c:out value="${locationList.contactName}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="contactName" sortable="true" headerClass="sortable" titleKey="location.contactName"/>
     <display:column media="csv excel xml pdf" property="email" sortable="true" headerClass="sortable" titleKey="location.email"/>
     
-    <display:column property="phone" sortable="true" headerClass="sortable"
-         titleKey="location.phone"/>
+    <display:column property="phone" sortable="true" headerClass="sortable" titleKey="location.phone"/>
          
-    <display:column property="organization.name" sortable="true" headerClass="sortable" titleKey="location.organization"/>
-
-    <display:column property="organization2.name" sortable="true" headerClass="sortable" titleKey="location.organization2"/>
-
     <display:column sortable="true" headerClass="sortable" titleKey="location.selectable">
         <c:if test="${locationList.selectable == true}"><fmt:message key="checkbox.checked"/></c:if>
         <c:if test="${locationList.selectable == false}"><fmt:message key="checkbox.unchecked"/></c:if>

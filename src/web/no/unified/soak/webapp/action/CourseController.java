@@ -37,6 +37,7 @@ import no.unified.soak.service.impl.CategoryManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.DateUtil;
+import no.unified.soak.util.PostalCodesSuperduperLoader;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
@@ -319,6 +320,10 @@ public class CourseController extends BaseFormController {
 		if(!StringUtils.isBlank(postalcode)){
 			if(postalcode.length() != 4 || !StringUtils.isNumeric(postalcode)){
 				saveErrorMessage(request, getText("welcome.postalcode.error", new String[] { postalcode }, locale));
+				return new ModelAndView("redirect:welcome.html");
+			}
+			else if(!PostalCodesSuperduperLoader.isValidPostalCode(postalcode)){
+				saveErrorMessage(request, getText("errors.postalCodeInvalid", new String[] { "(" + postalcode + ")" }, locale));
 				return new ModelAndView("redirect:welcome.html");
 			}
 		}

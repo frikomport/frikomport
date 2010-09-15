@@ -76,6 +76,13 @@ public interface CourseDAO extends DAO {
     
     public List<Course> getCoursesWhereRegisterByExpired(long millis);
 	
+    /**
+     * Searches for published courses on given locations
+     * Handles each locationId separately and in given order until list reaches numberOfHits
+     * @param locationIds list of locationIds
+     * @param numberOfHits max number of courses returned
+     * @return list of courses limited by numberOfHits
+     */
 	public List<Course> findByLocationIds(List<Long> locationIds, Integer numberOfHits);
 	
 }
