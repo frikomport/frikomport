@@ -32,7 +32,6 @@ import net.sf.ehcache.Element;
 import no.unified.soak.Constants;
 import no.unified.soak.dao.ExtUserDAO;
 import no.unified.soak.ez.ExtUser;
-import no.unified.soak.model.Configuration;
 import no.unified.soak.model.RoleEnum;
 import no.unified.soak.model.User;
 import no.unified.soak.service.ConfigurationManager;
