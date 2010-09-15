@@ -6,11 +6,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
- * Class for holding the distance between two postalCodes.
- * 
- * <p>
- * <a href="PostalCodeDistance.java.html"><i>View Source</i></a>
- * </p>
+ * Class for holding the distance to a location identified by locationid.
  * 
  * @author extkla
  */
@@ -80,7 +76,7 @@ public class LocationDistance implements Comparable<Object> {
 		if (obj == null) {
 			return 1;
 		}
-		LocationDistance postalCodeDistance = (LocationDistance) obj;
-		return new CompareToBuilder().append(getDistance(), postalCodeDistance.getDistance()).toComparison();
+		LocationDistance locationDistance = (LocationDistance) obj;
+		return new CompareToBuilder().append(getDistance(), locationDistance.getDistance()).toComparison();
 	}
 }

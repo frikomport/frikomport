@@ -96,10 +96,4 @@ public interface LocationManager extends Manager {
 	 * 
 	 * @param pcCoordinates
 	 */
-//	public void createPostalCodeDistancesInDatabase(List<PostalCodeCoordinate> pcCoordinates);
-//
-//	public void createPostalCodeLocationDistancesInDatabase(List<PostalCodeCoordinate> pcCoordinates);
-//
-//	public void removePostalCodeLocationDistancesForLocation(Location location);
-
 }

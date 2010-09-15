@@ -13,17 +13,12 @@ package no.unified.soak.service.impl;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import no.unified.soak.dao.CourseDAO;
-import no.unified.soak.dao.PostalCodeDistanceDAO;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Person;
-import no.unified.soak.model.PostalCodeCoordinate;
-import no.unified.soak.model.PostalCodeDistance;
 import no.unified.soak.service.CourseManager;
-import no.unified.soak.util.GeoMathUtil;
 
 import org.apache.commons.lang.StringUtils;
 

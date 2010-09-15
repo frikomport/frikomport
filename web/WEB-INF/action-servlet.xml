@@ -300,9 +300,6 @@
         <property name="statisticsManager" ref="statisticsManager"/>
     </bean>
 
-    <bean id="postalCodeDistancesController" class="no.unified.soak.webapp.action.PostalCodeDistancesController" autowire="byName">
-    </bean>
-
     <bean id="welcomeController" class="no.unified.soak.webapp.action.WelcomeController" autowire="byName">
     </bean>
 
@@ -482,7 +479,6 @@
                 <prop key="/admin/detailsCategory.html">categoryDetailsController</prop>
                 <prop key="/admin/editCategory.html">categoryFormController</prop>
                 <prop key="/admin/statistics.html">statisticsController</prop>
-                <prop key="/admin/postalCodeDistances.html">postalCodeDistancesController</prop>
             </props>
         </property>
     </bean>

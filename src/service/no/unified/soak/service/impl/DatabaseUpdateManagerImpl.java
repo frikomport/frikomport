@@ -46,10 +46,6 @@ import org.springframework.orm.ObjectRetrievalFailureException;
  * User: gv Date: 05.jun.2008 Time: 10:26:23
  */
 public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUpdateManager {
-
-	public final static String POSTALCODE_DISTANCE_TABLE = "PostalCodeDistance";
-	public final static String POSTALCODE_LOCATION_DISTANCE_TABLE = "PostalCodeLocationDistance";
-
 	private JdbcTemplate jt = new JdbcTemplate();
 	private CourseManager courseManager = null;
 	private RegistrationManager registrationManager = null;
@@ -145,33 +141,9 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
 		// update configuration content
 		updateConfigurations();
-
-//		updatePostalCodetables();
 	}
 
-//	private void updatePostalCodetables() {
-//		createPostalCodeTables();
-//		doPostalCodeDistancesIfneeded();
-//	}
-//
-//	private void doPostalCodeDistancesIfneeded() {
-//		PostalCodesSuperduperLoader.loadPostalCodes();
-//		
-//	}
-//	private void doPostalCodeDistancesIfneededOld() {
-//		boolean emptyTablePostalCodeDistance = isEmptyTable(POSTALCODE_DISTANCE_TABLE);
-//
-//		List<PostalCodeCoordinate> coordinates = null;
-//		if (emptyTablePostalCodeDistance) {
-//			deleteTable(POSTALCODE_LOCATION_DISTANCE_TABLE);
-//			try {
-//				locationManager.createPostalCodeDistancesInDatabase(coordinates);
-//				locationManager.createPostalCodeLocationDistancesInDatabase(coordinates);
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}
+
 
 	private void deleteTable(String tablename) {
 		String sql = "delete from " + tablename;
@@ -193,22 +165,6 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			log.error("Error closing database connection in DatabaseUpdateManagerImpl." + MethodnameOrCodeIdentifier, e);
 		}
 	}
-
-//	private void createPostalCodeTables() {
-//		if (getTableInfo(POSTALCODE_DISTANCE_TABLE) == null) {
-//			String sql = "CREATE TABLE " + POSTALCODE_DISTANCE_TABLE + " ( "
-//					+ "postalCode1	VARCHAR2(4) NULL, postalCode2 VARCHAR2(4) NULL, distance NUMBER(10,0) NOT NULL, "
-//					+ "PRIMARY KEY(postalCode1, postalCode2))";
-//			jt.execute(sql);
-//		}
-//
-//		if (getTableInfo(POSTALCODE_LOCATION_DISTANCE_TABLE) == null) {
-//			String sql = "CREATE TABLE " + POSTALCODE_LOCATION_DISTANCE_TABLE + " ( "
-//					+ "postalCode   VARCHAR2(4) NOT NULL, locationId NUMBER(19,0) NOT NULL, distance NUMBER(10,0) NOT NULL, "
-//					+ "PRIMARY KEY(postalCode, locationId))";
-//			jt.execute(sql);
-//		}
-//	}
 
 	/**
 	 * For upgrade from 1.7.X to SVV
@@ -469,6 +425,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		configurationsToInsert.add(new Configuration("access.registration.delete", false, null));
 		configurationsToInsert.add(new Configuration("access.registration.userdefaults", false, null));
 		configurationsToInsert.add(new Configuration("access.registration.emailrepeat", false, null));
+		configurationsToInsert.add(new Configuration("access.registration.showComment", true, null));
 		configurationsToInsert.add(new Configuration("access.registration.showCancelled", false, null));
 		configurationsToInsert.add(new Configuration("sms.confirmedRegistrationChangedCourse", false, null));
 
@@ -493,7 +450,6 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			configurationsToInsert.add(new Configuration("access.registration.useBirthdate", true, null));
 			configurationsToInsert.add(new Configuration("access.registration.mobilePhone.digitsOnly.minLength8", true, null));
 			configurationsToInsert.add(new Configuration("access.registration.useWaitlists", false, null));
-			configurationsToInsert.add(new Configuration("access.registration.showComment", false, null));
 
 			// course
 			configurationsToInsert.add(new Configuration("access.course.usePayment", false, null));
@@ -528,7 +484,6 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			configurationsToInsert.add(new Configuration("access.registration.useBirthdate", false, null));
 			configurationsToInsert.add(new Configuration("access.registration.mobilePhone.digitsOnly.minLength8", false, null));
 			configurationsToInsert.add(new Configuration("access.registration.useWaitlists", true, null));
-			configurationsToInsert.add(new Configuration("access.registration.showComment", true, null));
 
 			// course
 			configurationsToInsert.add(new Configuration("access.course.usePayment", true, null));
