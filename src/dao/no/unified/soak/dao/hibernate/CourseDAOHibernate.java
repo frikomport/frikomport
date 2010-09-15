@@ -245,7 +245,6 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
         		DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
         		criteria.add(Restrictions.eq("locationid", locationid));
         		criteria.add(Restrictions.eq("status", CourseStatus.COURSE_PUBLISHED));
-        		criteria.createAlias("organization", "O");
     			criteria.addOrder(Order.asc("startTime"));
     			List coursesForLocation = getHibernateTemplate().findByCriteria(criteria);
     			if(!coursesForLocation.isEmpty()){
