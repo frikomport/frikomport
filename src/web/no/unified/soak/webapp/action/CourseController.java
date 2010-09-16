@@ -235,7 +235,7 @@ public class CourseController extends BaseFormController {
         	}
         	else{ 
         		// isReader / isEventResponsible / isEducationResponsible / isAdministrator
-        		status = new Integer[]{ CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED, CourseStatus.COURSE_CANCELLED };
+        			status = new Integer[]{ CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED };
         	}
         	courseList = courseManager.searchCourses(course, starttime, stoptime, status);
         	courseList = updateAvailableAttendants(courseList, request);
@@ -441,8 +441,7 @@ public class CourseController extends BaseFormController {
 			} else {
 				// isReader / isEventResponsible / isEducationResponsible /
 				// isAdministrator
-				status = new Integer[] { CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED,
-						CourseStatus.COURSE_CANCELLED };
+				status = new Integer[] { CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED };
 			}
 
 			if (StringUtils.isBlank(postalcode)) {
