@@ -11,14 +11,18 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.SimpleHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 public class DecorCacheManagerImpl extends BaseManager implements DecorCacheManager {
 
+	final static Log log = LogFactory.getLog(DecorCacheManagerImpl.class);
 	private static String[] minimumPageDecoration = new String[] {
-		"<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">\r\n<head>\r\n", "</head>\r\n<body>\r\n",
-	"</body>\r\n</html>\r\n" };
+			"<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">\r\n<head>\r\n", "</head>\r\n<body>\r\n",
+			"</body>\r\n</html>\r\n" };
+	private static String[] decorElements = minimumPageDecoration;
 
 	private String decorationUrlBackup = "http://localhost:7937/mengdetrening/public/placeholderWebpageEmulator.txthtml";
 	
@@ -31,14 +35,14 @@ public class DecorCacheManagerImpl extends BaseManager implements DecorCacheMana
 	public void setLocale(Locale locale) {}
 	public void setMessageSource(MessageSource messageSource) {}
 
-	private String[] decorElements = minimumPageDecoration;
 
-	public synchronized String[] getDecorElements(){
+	public String[] getDecorElements(){
 		return decorElements;
 	}
 	
-	private synchronized void setDecorElements(String[] de){
-		this.decorElements = de;
+	private static synchronized void setDecorElements(String[] de){
+		DecorCacheManagerImpl.decorElements = de;
+
 		log.info("PageDecoration updated!");
 	}
 
