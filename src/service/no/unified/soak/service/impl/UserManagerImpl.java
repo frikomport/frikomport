@@ -88,6 +88,13 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	}
 
 	/**
+	 * @see no.unified.soak.service.UserManager#getUser(java.lang.String)
+	 */
+	public User getUserSilent(String username) {
+		return dao.getUserSilent(username);
+	}
+
+	/**
 	 * @see no.unified.soak.service.UserManager#getUserByHash(java.lang.String)
 	 */
 	public User getUserByHash(String hash) {

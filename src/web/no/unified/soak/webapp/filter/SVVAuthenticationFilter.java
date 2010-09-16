@@ -16,8 +16,6 @@ import javax.servlet.http.HttpSession;
 import no.unified.soak.Constants;
 import no.unified.soak.dao.ExtUserDAO;
 import no.unified.soak.ez.ExtUser;
-import no.unified.soak.model.Role;
-import no.unified.soak.model.RoleEnum;
 import no.unified.soak.model.User;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.service.UserSynchronizeManager;
@@ -25,7 +23,6 @@ import no.unified.soak.util.ApplicationResourcesUtil;
 
 import org.acegisecurity.Authentication;
 import org.acegisecurity.context.SecurityContextHolder;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -89,17 +86,17 @@ public class SVVAuthenticationFilter implements Filter {
             User userTmp = (User)session.getAttribute(Constants.USER_KEY);
 			if (StringUtils.isEmpty(usernameFromSession) || !usernameFromSession.equals(usernameFromHTTPHeader) || userTmp == null
 					|| !StringUtils.equals(userTmp.getUsername(), usernameFromHTTPHeader)) {
+
 				extUser = extUserDAO.findUserByUsername(usernameFromHTTPHeader);
+
 				if (extUser == null || StringUtils.isEmpty(extUser.getUsername())) {
 					log.warn("No LDAP user found for username=[" + usernameFromHTTPHeader
 							+ "] Cannot grant any roles to the presumed logged in user.");
-				}
-				else if(extUser.getRolenames().isEmpty()){
-					// SVV-ansatt uten FKP-roller - skal ikke lagres i database
-				}
-				else {
+				} else if (extUser.getRolenames().isEmpty() && userManager.getUserSilent(usernameFromHTTPHeader) == null) {
+					// SVV-ansatt uten FKP-roller skal ikke opprettes i
+					// databasen
+				} else {
 					user = copyUserToLocalDBAndSession(extUser, session);
-					session.setAttribute(Constants.USERID_HTTPHEADERNAME, user.getUsername());
 				}
 			} else {
 				// Brukeren kan (kanskje) ha vært avlogget en kort stund og så
@@ -142,6 +139,7 @@ public class SVVAuthenticationFilter implements Filter {
 
     private User copyUserToLocalDBAndSession(ExtUser extUser, HttpSession session) {
         User user = userSynchronizeManager.processUser(extUser);
+		session.setAttribute(Constants.USERID_HTTPHEADERNAME, user.getUsername());
         session.setAttribute(Constants.USER_KEY, user);
         return user;
     }

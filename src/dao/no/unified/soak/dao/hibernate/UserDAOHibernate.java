@@ -50,6 +50,14 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
         return user;
     }
 
+    /**
+     * @see no.unified.soak.dao.UserDAO#getUserSilent(java.lang.String)
+     */
+    public User getUserSilent(String username) {
+    	User user = (User) getHibernateTemplate().get(User.class, username);
+    	return user;
+    }
+
     public User findUserByEmail(String email) {
         DetachedCriteria criteria = DetachedCriteria.forClass(User.class);
         criteria.add(Restrictions.eq("email",email));

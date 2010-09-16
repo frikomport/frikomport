@@ -30,6 +30,16 @@ public interface UserDAO extends DAO {
      */
     public User getUser(String username);
 
+	/**
+	 * Gets users information based on login name without giving exception when
+	 * not found.
+	 * 
+	 * @param username
+	 *            the current username
+	 * @return user populated user object
+	 */
+    public User getUserSilent(String username);
+
     /**
      * Gets users information based on email address.
      * @param email the current email

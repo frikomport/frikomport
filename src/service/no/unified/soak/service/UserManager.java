@@ -43,6 +43,14 @@ public interface UserManager {
 	 */
 	public User getUser(String username);
 
+	/**
+	 * Retrieves a user by username.
+	 *
+	 * @param username
+	 * @return User
+	 */
+	public User getUserSilent(String username);
+
     /**
 	 * Retrieves a user by email.  An exception is thrown if no user
 	 * is found.

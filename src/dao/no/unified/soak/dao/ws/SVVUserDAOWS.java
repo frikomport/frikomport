@@ -130,12 +130,10 @@ public class SVVUserDAOWS implements ExtUserDAO {
 				String eventResponsible = getStringForRole(RoleEnum.EVENTRESPONSIBLE_ROLE);
 				String readerRoles = getStringForRole(RoleEnum.READER_ROLE);
 
-				extUser.setRolenames(SVVUserDAOWS.getInnerTagValuesInTag(xmlString, "urn1:svvrole", "Key", 
-						adminRoles, editorRoles, eventResponsible, readerRoles ));
+				// Parsing av rollene etter endring hos SVV:
+				extUser.setRolenames(SVVUserDAOWS.getTagvaluesAfterSiblingTagInOuterTag(xmlString, "urn1:svvrole", "urn2:Key",
+						ROLEKEY_FROM_WEBSERVICE, "urn2:Value", adminRoles, editorRoles, eventResponsible, readerRoles));
 
-// Parsing av rollene etter endring hos SVV:
-//				extUser.setRolenames(SVVUserDAOWS.getTagvaluesAfterSiblingTagInOuterTag(xmlString, "urn1:svvrole", "urn2:Key", ROLEKEY_FROM_WEBSERVICE, 
-//						"urn2:Value", adminRoles, editorRoles, eventResponsible, readerRoles ));
 			}
 		} catch (Exception e) {
 			log.error("Feilet ved tolkning av data funnet ved oppslag på [" + username.toUpperCase() + "] fra webservice!", e);
