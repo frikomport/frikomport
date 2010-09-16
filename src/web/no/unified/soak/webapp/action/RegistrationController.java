@@ -175,7 +175,7 @@ public class RegistrationController extends BaseFormController {
         
         // Fetch all registrations that match the parameters
         List registrations = registrationManager.getSpecificRegistrations(registration.getCourseid(), registration
-                .getOrganizationid(), registration.getServiceAreaid(), statusCriteria, firstname, lastname, invoiced, attended, courseIds, null);
+                .getOrganizationid(), registration.getServiceAreaid(), statusCriteria, firstname, lastname, invoiced, attended, courseIds, new String[]{"lastName", "firstName"});
 
         if (registrations != null && registrations.size() > 0) {
             model.put("registrationList", registrations);
@@ -324,7 +324,7 @@ public class RegistrationController extends BaseFormController {
             registrationManager.getSpecificRegistrations(
                 registration.getCourseid(), registration.getOrganizationid(),
                 registration.getServiceAreaid(), statusCriteria, firstname, lastname, 
-                registration.getInvoiced(), registration.getAttended(), courseIds, null));
+                registration.getInvoiced(), registration.getAttended(), courseIds, new String[]{"lastName", "firstName"}));
 
         return new ModelAndView(getSuccessView(), model);
     }

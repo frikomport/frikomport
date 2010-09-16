@@ -137,14 +137,13 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
         </li>
 </c:if>
 
-
-        <li>
-            <label class="required"><fmt:message key="registration.firstName"/>:</label>
-            <input type="text" name="firstName" id="firstName" value="<c:out value="${registration.firstName}"/>" size="15"/>
-        </li>
         <li>
             <label class="required"><fmt:message key="registration.lastName"/>:</label>
             <input type="text" name="lastName" id="lastName" value="<c:out value="${registration.lastName}"/>" size="15"/>
+        </li>
+        <li>
+            <label class="required"><fmt:message key="registration.firstName"/>:</label>
+            <input type="text" name="firstName" id="firstName" value="<c:out value="${registration.firstName}"/>" size="15"/>
         </li>
 
 
@@ -233,11 +232,11 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 </c:otherwise>    
 </c:choose>
     
-    <display:column property="firstName" sortable="true" headerClass="sortable"
-         titleKey="registration.firstName" class="${tdClass}"/>
-         
     <display:column property="lastName" sortable="true" headerClass="sortable"
          titleKey="registration.lastName" class="${tdClass}"/>
+         
+    <display:column property="firstName" sortable="true" headerClass="sortable"
+         titleKey="registration.firstName" class="${tdClass}"/>
          
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="registration.email" class="${tdClass}">
          <a href="mailto:<c:out value="${registrationList.email}"/>"><c:out value="${registrationList.email}"/></a>
