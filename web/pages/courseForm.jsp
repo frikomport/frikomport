@@ -15,9 +15,13 @@ cal1.setTodayText("Idag");
 cal1.setReturnFunction("handleCalResult");
 
 function handleCalResult(y,m,d) {
-	document.course.startTimeDate.value = PadDigits(d, 2) + "." + PadDigits(m, 2) + "." + PadDigits(y, 4);
-	changeGUIBasedOnField("startTimeDate");
-	document.course.stopTimeDate.value = document.course.startTimeDate.value;
+	if (window.CP_targetInput == document.course.startTimeDate) {
+		document.course.startTimeDate.value = PadDigits(d, 2) + "." + PadDigits(m, 2) + "." + PadDigits(y, 4);
+		changeGUIBasedOnField("startTimeDate");
+		document.course.stopTimeDate.value = document.course.startTimeDate.value;
+	} else {
+		window.CP_targetInput.value = PadDigits(d, 2) + "." + PadDigits(m, 2) + "." + PadDigits(y, 4);
+	}
 }
 
 function PadDigits(n, totalDigits) { 
