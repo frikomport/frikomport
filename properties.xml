@@ -149,6 +149,7 @@
         <pathelement location="${commons-beanutils.jar}"/>
         <pathelement location="${commons-collections.jar}"/>
         <pathelement location="${commons-validator.jar}"/>
+        <pathelement location="${commons-httpclient.jar}"/>
 		<pathelement location="${dom4j.jar}"/>
         <fileset dir="${ical4j.dir}" includes="*.jar"/>
         <fileset dir="${spring.dir}" includes="*.jar"/>

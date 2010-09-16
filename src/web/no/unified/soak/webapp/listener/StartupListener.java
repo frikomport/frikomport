@@ -18,6 +18,7 @@ import javax.servlet.ServletContextListener;
 import no.unified.soak.Constants;
 import no.unified.soak.service.CourseStatusManager;
 import no.unified.soak.service.DatabaseUpdateManager;
+import no.unified.soak.service.DecorCacheManager;
 import no.unified.soak.service.LookupManager;
 import no.unified.soak.service.NotificationManager;
 import no.unified.soak.service.RegisterByDateManager;
@@ -101,6 +102,7 @@ public class StartupListener extends ContextLoaderListener implements
 		WaitingListManager waitingListManager = (WaitingListManager) ctx.getBean("waitingListManager");
         CourseStatusManager courseStatusManager = (CourseStatusManager) ctx.getBean("courseStatusManager");
         UserSynchronizeManager userSynchronizeManager = (UserSynchronizeManager) ctx.getBean("userSynchronizeManager");
+        DecorCacheManager decorCacheManager = (DecorCacheManager) ctx.getBean("decorCacheManager");
 
         // Tasks to be completed once
         ScheduledTasks once = new ScheduledTasks();
@@ -110,6 +112,7 @@ public class StartupListener extends ContextLoaderListener implements
 
         // Tasks to happen regularly
         ScheduledTasks recurring = new ScheduledTasks();
+        recurring.addTask(decorCacheManager);
         recurring.addTask(courseStatusManager);
         recurring.addTask(userSynchronizeManager);
         recurring.addTask(registerByDateManager);

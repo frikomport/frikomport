@@ -8,7 +8,6 @@
 package no.unified.soak.webapp.filter;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,27 +25,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
 import no.unified.soak.Constants;
 import no.unified.soak.dao.ExtUserDAO;
 import no.unified.soak.ez.ExtUser;
 import no.unified.soak.model.RoleEnum;
 import no.unified.soak.model.User;
 import no.unified.soak.service.ConfigurationManager;
+import no.unified.soak.service.DecorCacheManager;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.service.UserSynchronizeManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
-import no.unified.soak.util.StringUtil;
 import no.unified.soak.webapp.util.RequestUtil;
 import no.unified.soak.webapp.util.SslUtil;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.SimpleHttpConnectionManager;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -85,38 +76,13 @@ public class ActionFilter implements Filter {
 
 	private FilterConfig config = null;
 
-	private static CacheManager singletonCacheManager;
-
-	private static String[] minimumPageDecoration = new String[] {
-			"<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">\r\n<head>\r\n", "</head>\r\n<body>\r\n",
-			"</body>\r\n</html>\r\n" };
-
 	public void init(FilterConfig config) throws ServletException {
 		this.config = config;
 
 		/* This determines if the application uconn SSL or not */
 		secure = Boolean.valueOf(config.getInitParameter("isSecure"));
-
-		singletonCacheManager = CacheManager.create();
-
-		String tempdirPath = System.getProperty("java.io.tmpdir");
-		if (!(tempdirPath.endsWith("/") || tempdirPath.endsWith("\\"))) {
-			tempdirPath = tempdirPath + System.getProperty("file.separator");
-		}
-		tempdirPath += "non-lib-cache" + System.getProperty("file.separator");
-
-		if (!singletonCacheManager.cacheExists("pageDecoration")) {
-			int ttlSeconds = Math.round(Constants.TASK_RUN_INTERVAL_MILLISECOND / 1000);
-			Cache pageDecorationCache = new Cache("pageDecoration", 3, true, false, ttlSeconds, ttlSeconds,  true, ttlSeconds * 2);
-			pageDecorationCache.setDiskStorePath(tempdirPath);
-			singletonCacheManager.addCache(pageDecorationCache);
-		}
 	}
 	
-	public static CacheManager getSingletonCacheManager() {
-		return singletonCacheManager;
-	}
-
 	/**
 	 * Destroys the filter.
 	 */
@@ -206,30 +172,11 @@ public class ActionFilter implements Filter {
 	}
 	
 	private void ensurePageDecoration(ServletContext servletContext) {
-		Cache pageDecorationCache = singletonCacheManager.getCache("pageDecoration");
-		Element element1 = pageDecorationCache.get("pageDecorationBeforeHeadPleaceholder");
-		Element element2 = pageDecorationCache.get("pageDecorationBetweenHeadAndBodyPleaceholders");
-		Element element3 = pageDecorationCache.get("pageDecorationAfterBodyPleaceholder");
-		String decorationUrl = ApplicationResourcesUtil.getText("global.pageDecorator.url");
-
-		if (element1 == null || element2 == null || element3 == null) {
-			log.warn("Not getting page decoration from ehcache. Trying to get it from " + decorationUrl);
-		}
-
-		if (element1 == null || element2 == null || element3 == null || pageDecorationCache.isExpired(element1)
-				|| pageDecorationCache.isExpired(element2) || pageDecorationCache.isExpired(element3)) {
-
-			String[] pageDecoration = fetchPageDecoration(decorationUrl, "http://localhost:7937/mengdetrening/placeholderWebpageEmulator.txthtml");
-			if (ArrayUtils.getLength(pageDecoration) == 3 && StringUtils.isNotBlank(pageDecoration[0])
-					&& StringUtils.isNotBlank(pageDecoration[1]) && StringUtils.isNotBlank(pageDecoration[2])) {
-				pageDecorationCache.put(new Element("pageDecorationBeforeHeadPleaceholder", pageDecoration[0]));
-				pageDecorationCache.put(new Element("pageDecorationBetweenHeadAndBodyPleaceholders", pageDecoration[1]));
-				pageDecorationCache.put(new Element("pageDecorationAfterBodyPleaceholder", pageDecoration[2]));
-				servletContext.setAttribute("pageDecorationBeforeHeadPleaceholder", pageDecoration[0]);
-				servletContext.setAttribute("pageDecorationBetweenHeadAndBodyPleaceholders", pageDecoration[1]);
-				servletContext.setAttribute("pageDecorationAfterBodyPleaceholder", pageDecoration[2]);
-			}
-		}
+		DecorCacheManager decorCacheManager = (DecorCacheManager) getBean("decorCacheManager");
+		String [] decorElements = decorCacheManager.getDecorElements();
+		servletContext.setAttribute("pageDecorationBeforeHeadPleaceholder", decorElements[0]);
+		servletContext.setAttribute("pageDecorationBetweenHeadAndBodyPleaceholders", decorElements[1]);
+		servletContext.setAttribute("pageDecorationAfterBodyPleaceholder", decorElements[2]);
 	}
 
 	/**
@@ -248,110 +195,6 @@ public class ActionFilter implements Filter {
 	 * @return null if problem occured fetching string from decorationUrl.
 	 *         otherwise the fetched page decoration is returned.
 	 */
-	private String[] fetchPageDecoration(String decorationUrl, String backupDecorationUrl) {
-		String headPlaceholder = ApplicationResourcesUtil.getText("global.pageDecorator.headPlaceholder");
-		String bodyPlaceholder = ApplicationResourcesUtil.getText("global.pageDecorator.bodyPlaceholder");
-		StringBuffer pageDecorationBeforeHeadPleaceholder = new StringBuffer(1000);
-		StringBuffer pageDecorationBetweenHeadAndBodyPleaceholders = new StringBuffer(1000);
-		StringBuffer pageDecorationAfterBodyPleaceholder = new StringBuffer(1000);
-
-		HttpClient client = new HttpClient(new SimpleHttpConnectionManager());
-		client.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
-
-		String ctmpl = getStringFromUrl(decorationUrl, client);
-
-		if (StringUtils.isBlank(ctmpl)) {
-			log.warn("Failing getting page decoration from [" + decorationUrl+"]\nTrying url=["+backupDecorationUrl+"]");
-			ctmpl = getStringFromUrl(backupDecorationUrl, client);
-		}
-		if (StringUtils.isBlank(ctmpl)) {
-			log.warn("Failing getting page decoration from [" + backupDecorationUrl+"]\nUsing minimum page decoration.");
-			return minimumPageDecoration;
-		}
-
-		int baseStartPos = ctmpl.indexOf("<base ");
-		int baseEndPos = ctmpl.indexOf(">", baseStartPos + 1);
-		int headStartPos = ctmpl.indexOf(headPlaceholder);
-		int bodyStartPos = ctmpl.indexOf(bodyPlaceholder, headStartPos + 1);
-
-		if (headStartPos == -1) {
-			log.warn("Unable to find headPlaceholder [" + headPlaceholder + "] in received page decoration [" + ctmpl + "].");
-			return minimumPageDecoration;
-		}
-		if (bodyStartPos == -1) {
-			log.warn("Unable to find bodyPlaceholder [" + bodyPlaceholder + "] in received page decoration [" + ctmpl + "].");
-			return minimumPageDecoration;
-		}
-
-		if (baseStartPos > -1 && baseStartPos < headStartPos) {
-			// Avoid base tag and fetch everything from start to head
-			// placeholder.
-			pageDecorationBeforeHeadPleaceholder.append(ctmpl.substring(0, baseStartPos));
-			pageDecorationBeforeHeadPleaceholder.append(ctmpl.substring(baseEndPos + 1, headStartPos));
-		} else {
-			// Base tag is void, do fetch everything from start to head
-			// placeholder.
-			pageDecorationBeforeHeadPleaceholder.append(ctmpl.substring(0, headStartPos));
-		}
-
-		if (baseStartPos > headStartPos) {
-			pageDecorationBetweenHeadAndBodyPleaceholders.append(ctmpl.substring(headStartPos + headPlaceholder.length(),
-					baseStartPos));
-			pageDecorationBetweenHeadAndBodyPleaceholders.append(ctmpl.substring(baseEndPos + 1, bodyStartPos));
-		} else {
-			pageDecorationBetweenHeadAndBodyPleaceholders.append(ctmpl.substring(headStartPos + headPlaceholder.length(),
-					bodyStartPos));
-		}
-
-		pageDecorationAfterBodyPleaceholder.append(ctmpl.substring(bodyStartPos + bodyPlaceholder.length()));
-
-		return new String[] { pageDecorationBeforeHeadPleaceholder.toString(),
-				pageDecorationBetweenHeadAndBodyPleaceholders.toString(), pageDecorationAfterBodyPleaceholder.toString() };
-	}
-
-	private String getStringFromUrl(String decorationUrl, HttpClient client) {
-		if (StringUtils.isEmpty(decorationUrl)) {
-			log.warn("Page decoration Url is blank [" + decorationUrl + "] so no page decoration can be fetched.");
-			return null;
-		}
-		GetMethod getMethod = new GetMethod(decorationUrl);
-		getMethod.setFollowRedirects(true);
-		int resultCode;
-		boolean failureFetching = true;
-		String ctmpl = null;
-		try {
-			resultCode = client.executeMethod(getMethod);
-			InputStream ctmplStream = getMethod.getResponseBodyAsStream();
-			ctmpl = StringUtil.convertStreamToString(ctmplStream, "UTF8");
-			if (StringUtils.isBlank(ctmpl) || resultCode != 200) {
-				log.warn("Page decoration is blank [" + ctmpl + "] or have bad resultcode (" + resultCode
-						+ ").\nUnable to fetch page decoration from url " + decorationUrl);
-				failureFetching = true;
-			}
-			else if(!StringUtils.isBlank(ctmpl) && resultCode == 200 
-					&& (ctmpl.indexOf(ApplicationResourcesUtil.getText("global.pageDecorator.headPlaceholder")) == -1 
-							|| ctmpl.indexOf(ApplicationResourcesUtil.getText("global.pageDecorator.bodyPlaceholder")) == -1)){
-				log.error(" -*-*-*-*-*-*-*-*-*- HTTP:200, men ikke placeHolder(s) fra " + decorationUrl + " -*-*-*-*-*-*-*-*-*-");
-				log.error(ctmpl);
-				log.error(" -*-*-*-*-*-*--*-*-*-*-*-*--*-*-*-*-*-*--*-*-*-*-*-*--*-*-*-*-*-*-");
-				failureFetching = true;
-			}
-			else {
-				log.info("Got resultcode=["+resultCode+"] and this page decoration:\n"+ctmpl);
-				failureFetching = false;
-			}
-		} catch (HttpException e) {
-			log.warn(e);
-		} catch (IOException e) {
-			log.warn("Error connecting to [" + decorationUrl + "]: " + e);
-		} finally {
-			getMethod.releaseConnection();
-		}
-		if (!failureFetching) {
-			return ctmpl;
-		}
-		return null;
-	}
 
 	private void doConfiguration(HttpServletRequest request, HttpSession session) {
 		ConfigurationManager configurationManager = (ConfigurationManager) getBean("configurationManager");
