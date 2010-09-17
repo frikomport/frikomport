@@ -76,7 +76,7 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
     /**
      * @see no.unified.soak.dao.CourseDAO#searchCourses(no.unified.soak.model.Course, Date, Date, Integer[])
      */
-    public List<Course> searchCourses(Course course, Date startDate, Date stopDate, Integer[] status) {
+    public List<Course> searchCourses(Course course, Date startDate, Date stopDate, Integer[] status, boolean showUntilFinished) {
         // Default search is "find all"
         DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
 
@@ -145,16 +145,17 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
             	// alle statuser..
             }
         }
-
-        if (startDate != null) {
-            criteria.add(Restrictions.gt("stopTime", startDate));
+        
+        if(showUntilFinished){
+	        if (startDate != null) criteria.add(Restrictions.gt("stopTime", startDate));
+	        if (stopDate != null)  criteria.add(Restrictions.lt("startTime", stopDate));
+        }
+        else {
+	        if (startDate != null) criteria.add(Restrictions.gt("startTime", startDate));
+	        if (stopDate != null)  criteria.add(Restrictions.lt("startTime", stopDate));
         }
 
-        if (stopDate != null) {
-            criteria.add(Restrictions.lt("startTime", stopDate));
-        }
-
-		String sortorderCSVString = ApplicationResourcesUtil.getText("courseList.order");
+        String sortorderCSVString = ApplicationResourcesUtil.getText("courseList.order");
 		String[] sortorderArray = StringUtils.split(sortorderCSVString, ",");
 		criteria.createAlias("organization", "O");
 		for (String fieldName : sortorderArray) {

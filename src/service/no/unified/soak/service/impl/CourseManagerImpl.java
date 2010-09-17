@@ -18,6 +18,7 @@ import java.util.List;
 import no.unified.soak.dao.CourseDAO;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Person;
+import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
 
 import org.apache.commons.lang.StringUtils;
@@ -31,6 +32,12 @@ import org.apache.commons.lang.StringUtils;
 public class CourseManagerImpl extends BaseManager implements CourseManager {
     private CourseDAO courseDAO;
 
+    private ConfigurationManager configurationManager = null;
+
+    public void setConfigurationManager(ConfigurationManager configurationManager) {
+        this.configurationManager = configurationManager;
+    }
+    
 	/**
      * Set the DAO for communication with the data layer.
      * @param dao
@@ -80,7 +87,8 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
      * @see no.unified.soak.service.CourseManager#searchCourses(no.unified.soak.model.Course, Date, Date)
      */
     public List<Course> searchCourses(Course course, Date startDate, Date stopDate, Integer[] status) {
-        return courseDAO.searchCourses(course, startDate, stopDate, status);
+    	boolean showUntilFinished = configurationManager.isActive("access.course.showCourseUntilFinished", true);
+    	return courseDAO.searchCourses(course, startDate, stopDate, status, showUntilFinished);
     }
 
     /**

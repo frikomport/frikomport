@@ -464,7 +464,8 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			configurationsToInsert.add(new Configuration("access.course.useOrganization2", true, null));
 			configurationsToInsert.add(new Configuration("access.course.showAttendantDetails", false, null));
 			configurationsToInsert.add(new Configuration("access.course.showDescriptionToPublic", false, null));
-
+			configurationsToInsert.add(new Configuration("access.course.showCourseUntilFinished", false, null));
+			
 			// User
 			configurationsToInsert.add(new Configuration("access.user.useBirthdate", false, null));
 			configurationsToInsert.add(new Configuration("access.user.useWebsite", false, null));
@@ -495,6 +496,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			configurationsToInsert.add(new Configuration("access.course.useAttendants", false, null));
 			configurationsToInsert.add(new Configuration("access.course.useRegisterBy", true, null));
 			configurationsToInsert.add(new Configuration("access.course.showDescriptionToPublic", true, null));
+			configurationsToInsert.add(new Configuration("access.course.showCourseUntilFinished", true, null));
 
 			// User
 			configurationsToInsert.add(new Configuration("access.user.useBirthdate", true, null));
@@ -532,6 +534,15 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			}
 		}
 
+		// viser alle konfigurasjoner ved oppstart av applikasjon
+		List<Configuration> configurationsActive = configurationManager.getConfigurations();
+		Iterator<Configuration> it = configurationsActive.iterator();
+		while(it.hasNext()){
+			Configuration c = it.next();
+			log.info(c.getName() + ": " + c.getActive());
+		}
+		// ------------------------------------------------------
+		
 		if (ApplicationResourcesUtil.isSVV()) {
 
 			List<Organization> organizationsInDB = organizationManager.getAll();
