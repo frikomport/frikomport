@@ -24,25 +24,43 @@ cal1.setTodayText("Idag");
 <script type="text/javascript">
 // Code to change the select list for service aera based on organization id.
 function fillSelect(obj){
+	var orgid=obj.options[obj.selectedIndex].value;
 	<c:if test="${useServiceArea}">
- var orgid=obj.options[obj.selectedIndex].value;
- var serviceArea= document.courseList.serviceAreaid;
-
-    while(serviceArea.firstChild){
-        serviceArea.removeChild(serviceArea.firstChild);
-    }
-
-    var j = 0;
-	<c:forEach var="servicearea" items="${serviceareas}">
-	    if ("<c:out value="${servicearea.id}"/>" == ""){
-	        serviceArea.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>", true);
-	        j++;
+		var serviceArea= document.courseList.serviceAreaid;
+	    while(serviceArea.firstChild){
+	        serviceArea.removeChild(serviceArea.firstChild);
 	    }
-	    else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
-	        serviceArea.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>");
-	        j++ ;
+	
+	    var j = 0;
+		<c:forEach var="servicearea" items="${serviceareas}">
+		    if ("<c:out value="${servicearea.id}"/>" == ""){
+		        serviceArea.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>", true);
+		        j++;
+		    }
+		    else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
+		        serviceArea.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>");
+		        j++ ;
+		    }
+		</c:forEach>
+	</c:if>
+
+	<c:if test="${filterlocation || isSVV}">
+	    var location = document.courseList.locationid;
+	    while(location.firstChild){
+	        location.removeChild(location.firstChild);
 	    }
-	</c:forEach>
+	    var k = 0;
+		<c:forEach var="location" items="${locations}">
+	    if ("<c:out value="${location.organizationid}"/>" == orgid || "<c:out value="${location.id}"/>" == "") {
+		    if ("<c:out value="${location.id}"/>" == "<c:out value="${course.locationid}"/>") {
+		        select = true;
+		    } else {
+		        select = false;
+		    } 
+	        location.options[k]=new Option("<c:out value="${location.name}"/>", "<c:out value="${location.id}"/>", select);
+	        k++ ;
+	    }
+		</c:forEach>
 	</c:if>
 }
 </script>

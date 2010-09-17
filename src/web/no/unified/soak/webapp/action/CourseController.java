@@ -97,7 +97,7 @@ public class CourseController extends BaseFormController {
         
         User user = (User) session.getAttribute(Constants.USER_KEY);
         String queryString = request.getQueryString();
-        
+
 		/**
 		 * queryString er forskjellig fra null dersom referenceData er kalt fra
 		 * displayTag-rammeverket, geografidata skal da IKKE overskrives
@@ -237,8 +237,19 @@ public class CourseController extends BaseFormController {
         		// isReader / isEventResponsible / isEducationResponsible / isAdministrator
         			status = new Integer[]{ CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED };
         	}
-        	courseList = courseManager.searchCourses(course, starttime, stoptime, status);
-        	courseList = updateAvailableAttendants(courseList, request);
+        	
+    		String postalcode = request.getParameter("postalcode");
+			if (StringUtils.isBlank(postalcode)) {
+				courseList = courseManager.searchCourses(course, starttime, stoptime, status);
+				courseList = updateAvailableAttendants(courseList, request);
+	        } else {
+	        	List<Long> locationIds = locationManager.getLocationIds(postalcode);
+	        	int numberOfHits = 15; // default
+	        	String numberOfHitsStr = getText("courseList.numberOfHits", locale);
+	        	if(StringUtils.isNumeric(numberOfHitsStr)) numberOfHits = Integer.parseInt(numberOfHitsStr);
+				courseList = courseManager.findByLocationIds(locationIds, numberOfHits);
+				courseList = updateAvailableAttendants(courseList, request);
+	        }
         }
         else {
 	        List courses = courseManager.searchCourses(course, starttime, stoptime, null);
@@ -429,18 +440,14 @@ public class CourseController extends BaseFormController {
 			return new ModelAndView(getSuccessView(), model);
 		}
 
-		if (ApplicationResourcesUtil.isSVV()) { // alle LDAP-brukere ser
-			// alle møter (kurs), men
-			// endringstilgang styres av
-			// JSP.
+		if (ApplicationResourcesUtil.isSVV()) { // alle LDAP-brukere ser alle møter (kurs), men endringstilgang styres av JSP.
 			Integer[] status = null;
 
 			if (roles.contains(Constants.ANONYMOUS_ROLE) && roles.size() == 1) {
 				// publikumsbruker
 				status = new Integer[] { CourseStatus.COURSE_PUBLISHED };
 			} else {
-				// isReader / isEventResponsible / isEducationResponsible /
-				// isAdministrator
+				// isReader / isEventResponsible / isEducationResponsible / isAdministrator
 				status = new Integer[] { CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED };
 			}
 
