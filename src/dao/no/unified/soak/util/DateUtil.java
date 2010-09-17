@@ -83,7 +83,7 @@ public class DateUtil {
 			return null;
 		}
 		SimpleDateFormat df = new SimpleDateFormat(aMask);
-		df.setLenient(false); // test!! SA
+		df.setLenient(false); // reject dates like 37.10.2010 
 
 		if (log.isDebugEnabled()) {
 			log.debug("converting '" + strDate + "' to date with mask '" + aMask + "'");
