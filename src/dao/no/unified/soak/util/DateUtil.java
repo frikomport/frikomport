@@ -173,7 +173,7 @@ public class DateUtil {
             if (log.isDebugEnabled()) {
                 log.debug("converting date with pattern: " + getDatePattern());
             }
-
+			if(!StringUtils.containsOnly(strDate.trim(), "0123456789.-")) throw new ParseException("Format error",0);
             aDate = convertStringToDate(strDate, getDatePattern());
         } catch (ParseException pe) {
             log.error("Could not convert '" + strDate +
