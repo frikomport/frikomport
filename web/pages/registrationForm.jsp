@@ -408,7 +408,7 @@
 			<tr>
 				<th>
 					<c:choose>
-						<c:when test="registration.course.status != 3">
+						<c:when test="${registration.course.status != 3}">
 							<soak:label key="registration.changeCourse" />
 						</c:when>
 						<c:otherwise>

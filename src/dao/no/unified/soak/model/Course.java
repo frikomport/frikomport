@@ -704,6 +704,7 @@ public class Course extends BaseObject implements Serializable {
                                         .append("instructor", instructor)
                                         .append("name", name)
                                         .append("type", type)
+                                        .append("status", status)
                                         .append("startTime", startTime)
                                         .toString();
     }

@@ -52,7 +52,6 @@ public class StatisticsController implements Controller {
 		Date beginDate = null;
 		if (!StringUtils.isEmpty(beginDateStr)) {
 			try {
-				if(!StringUtils.containsOnly(beginDateStr.trim(), "0123456789.")) throw new ParseException("Format error",0);
 				beginDate = DateUtil.convertStringToDate(beginDateStr);
 			}catch(ParseException e){
 				ApplicationResourcesUtil.saveMessage(request, ApplicationResourcesUtil.getText("statistics.message.dateBeginInclusive.formaterror"));
@@ -66,7 +65,6 @@ public class StatisticsController implements Controller {
 		Date endDate = null;
 		if (!StringUtils.isEmpty(endDateStr)) {
 			try {
-				if(!StringUtils.containsOnly(endDateStr.trim(), "0123456789.")) throw new ParseException("Format error",0);
 				endDate = DateUtil.convertStringToDate(endDateStr);
 			}catch(ParseException e){
 				ApplicationResourcesUtil.saveMessage(request, ApplicationResourcesUtil.getText("statistics.message.dateEndInclusive.formaterror"));
