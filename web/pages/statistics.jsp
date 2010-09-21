@@ -104,7 +104,7 @@ cal1.setTodayText("Idag");
 <p/><br/>
 
 <c:if test="${!empty courseList}">
-<h2>Informasjonsmøter både er uten påmeldinger og etterregistering av fremmøtte deltakere</h2>
+<h2>Informasjonsmøter som både er uten påmeldinger og etterregistering av fremmøtte deltakere</h2>
 
 <fmt:message key="courseList.item" var="item"/>
 <fmt:message key="courseList.items" var="items"/>
