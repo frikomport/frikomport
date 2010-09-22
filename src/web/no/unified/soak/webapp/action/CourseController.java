@@ -325,7 +325,8 @@ public class CourseController extends BaseFormController {
 		Map model = new HashMap();
 		HttpSession session = request.getSession();
 		Locale locale = request.getLocale();
-
+		String postalCodeApprox = null;
+		
 		// validering av postnummer fra welcome.html
 		String postalcode = request.getParameter("postalcode");
 		if(!StringUtils.isBlank(postalcode)){
@@ -333,9 +334,31 @@ public class CourseController extends BaseFormController {
 				saveErrorMessage(request, getText("welcome.postalcode.error", new String[] { postalcode }, locale));
 				return new ModelAndView("redirect:welcome.html");
 			}
-			else if(!PostalCodesSuperduperLoader.isValidPostalCode(postalcode)){
-				saveErrorMessage(request, getText("errors.postalCodeInvalid", new String[] { "(" + postalcode + ")" }, locale));
-				return new ModelAndView("redirect:welcome.html");
+			else {
+				boolean approx = !PostalCodesSuperduperLoader.isValidPostalCode(postalcode);
+				int numberOfTries = 0;
+				int MAX_TRIES = 25;
+				int pc = Integer.parseInt(postalcode);
+				while(approx){
+					// oppgitt postnummer finnes ikke - vi søker i omkringliggende nr-serier
+					numberOfTries++;
+					int pcUp = pc + numberOfTries;
+					int pcDown = pc - numberOfTries;
+					
+					if(numberOfTries > MAX_TRIES){
+						saveErrorMessage(request, getText("errors.postalCodeInvalid", new String[] { "(" + postalcode + ")" }, locale));
+						return new ModelAndView("redirect:welcome.html");
+					}
+
+					if(pcUp <= 9999 && PostalCodesSuperduperLoader.isValidPostalCode(StringUtils.leftPad(""+pcUp, 4, '0'))){
+						postalCodeApprox = StringUtils.leftPad(""+pcUp, 4, '0');
+						break;
+					}
+					if(pcDown >= 0001 && PostalCodesSuperduperLoader.isValidPostalCode(StringUtils.leftPad(""+pcDown, 4, '0'))){
+						postalCodeApprox = StringUtils.leftPad(""+pcDown, 4, '0');
+						break;
+					}
+				}
 			}
 		}
 
@@ -455,7 +478,7 @@ public class CourseController extends BaseFormController {
 				courseList = courseManager.searchCourses(course, starttime, stoptime, status);
 				courseList = updateAvailableAttendants(courseList, request);
 	        } else {
-				List<Long> locationIds = locationManager.getLocationIds(postalcode);
+				List<Long> locationIds = locationManager.getLocationIds((postalCodeApprox!=null?postalCodeApprox:postalcode));
 	        	int numberOfHits = 15; // default
 	        	String numberOfHitsStr = getText("courseList.numberOfHits", locale);
 	        	if(StringUtils.isNumeric(numberOfHitsStr)) numberOfHits = Integer.parseInt(numberOfHitsStr);
@@ -463,7 +486,11 @@ public class CourseController extends BaseFormController {
 				courseList = updateAvailableAttendants(courseList, request);
 
 				// melding til bruker som forklarer postnr-søk
-				saveMessage(request, getText("courseList.postalCodeInfo", new String[] { postalcode }, locale));
+				if(postalCodeApprox != null){
+					saveMessage(request, getText("courseList.postalCodeInfoApprox", new String[] { postalcode, postalCodeApprox }, locale));
+				}else {
+					saveMessage(request, getText("courseList.postalCodeInfo", new String[] { postalcode }, locale));
+				}
 				
 	        }
 		} else {

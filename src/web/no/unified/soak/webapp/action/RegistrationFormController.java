@@ -139,6 +139,11 @@ public class RegistrationFormController extends BaseFormController {
                 model.put("courseList", filtered);
             }
         }
+        else {
+        	// tilleggsinformasjon vises ved førstegangsvisning av påmeldingsskjema dersom propery er definert
+        	String additionalInfo = getText("registration.additionalInfo", locale);
+        	if(StringUtils.isNotBlank(additionalInfo)) saveMessage(request, additionalInfo);
+        }
 
         // Retrieve all serviceareas into an array
         List<ServiceArea> serviceAreas = serviceAreaManager.getAllIncludingDummy(getText("misc.none", locale));
