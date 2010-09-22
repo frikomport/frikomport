@@ -317,8 +317,11 @@ public class PdfUtil {
 				
 				row.add(r.getPhone());
 				row.add(r.getMobilePhone());
-				row.add(r.getComment());
 
+				if(!ApplicationResourcesUtil.isSVV()){
+					row.add(r.getComment());
+				}
+				
 				if(ApplicationResourcesUtil.isSVV()){
 					row.add(""+r.getParticipants());
 				}
@@ -340,9 +343,12 @@ public class PdfUtil {
 			}
 
 			if(rCount > 0 || wCount > 0) {
-				this.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationList.attendants")) + ": " + rCount + "  /  " 
-						+ StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.waitlist")) + ": " + wCount 
-						+ "  (" + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationsSent.updated")) + " " + formatter.format(new Date()) + ")", 9, PdfUtil.ALIGN_LEFT);
+				String tmp = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationList.attendants")) + ": " + rCount;
+				if(!ApplicationResourcesUtil.isSVV()){
+					tmp += "  /  " + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.waitlist")) + ": " + wCount; 
+				}
+				tmp += "  (" + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationsSent.updated")) + " " + formatter.format(new Date()) + ")"; 
+				this.addText(tmp, 9, PdfUtil.ALIGN_LEFT);
 				this.emptyLine(10);
 			}
 			if(rCount > 0) {

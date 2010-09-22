@@ -32,6 +32,8 @@ public interface RegisterByDateManager extends Task {
      */
      public void setRegistrationManager(RegistrationManager registrationManager);
 
+     public void setConfigurationManager(ConfigurationManager configurationManager);
+
     /**
      * Perform actions if a Course' registerBy date is due
      */

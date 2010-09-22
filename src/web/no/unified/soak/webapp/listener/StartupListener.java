@@ -24,6 +24,7 @@ import no.unified.soak.service.NotificationManager;
 import no.unified.soak.service.RegisterByDateManager;
 import no.unified.soak.service.UserSynchronizeManager;
 import no.unified.soak.service.WaitingListManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.webapp.action.ScheduledTasks;
 
 import org.apache.commons.logging.Log;
@@ -97,7 +98,7 @@ public class StartupListener extends ContextLoaderListener implements
         DatabaseUpdateManager databaseUpdateManager = (DatabaseUpdateManager) ctx.getBean("databaseUpdateManager");
 
         // Recurring tasks
-		RegisterByDateManager registerByDateManager = (RegisterByDateManager) ctx.getBean("registerByDateManager");
+    	RegisterByDateManager registerByDateManager = (RegisterByDateManager) ctx.getBean("registerByDateManager");
 		NotificationManager notificationManager = (NotificationManager) ctx.getBean("notificationManager");
 		WaitingListManager waitingListManager = (WaitingListManager) ctx.getBean("waitingListManager");
         CourseStatusManager courseStatusManager = (CourseStatusManager) ctx.getBean("courseStatusManager");
@@ -115,7 +116,7 @@ public class StartupListener extends ContextLoaderListener implements
         recurring.addTask(decorCacheManager);
         recurring.addTask(courseStatusManager);
         recurring.addTask(userSynchronizeManager);
-        recurring.addTask(registerByDateManager);
+        if(!ApplicationResourcesUtil.isSVV()) recurring.addTask(registerByDateManager);
         recurring.addTask(notificationManager);
     	recurring.addTask(waitingListManager);
 

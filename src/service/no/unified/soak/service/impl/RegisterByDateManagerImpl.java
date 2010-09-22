@@ -54,30 +54,18 @@ public class RegisterByDateManagerImpl extends BaseManager implements RegisterBy
 
     public void setMessageSource(MessageSource messageSource) {}
 
-    /**
-     * @see no.unified.soak.service.WaitingListManager#setCourseManager(no.unified.soak.service.CourseManager)
-     */
     public void setCourseManager(CourseManager courseManager) {
         this.courseManager = courseManager;
     }
 
-    /**
-     * @see no.unified.soak.service.WaitingListManager#setRegistrationManager(no.unified.soak.service.RegistrationManager)
-     */
     public void setRegistrationManager(RegistrationManager registrationManager) {
         this.registrationManager = registrationManager;
     }
 
-    /**
-     * @see no.unified.soak.service.WaitingListManager#setRegistrationManager(no.unified.soak.service.RegistrationManager)
-     */
-    public void setConfigurationRegistrationManager(ConfigurationManager configurationManager) {
+    public void setConfigurationManager(ConfigurationManager configurationManager) {
     	this.configurationManager = configurationManager;
     }
     
-    /**
-     * @see no.unified.soak.service.WaitingListManager#setMailEngine(no.unified.soak.service.MailEngine)
-     */
     public void setMailEngine(MailEngine mailEngine) {
         this.mailEngine = mailEngine;
     }
