@@ -80,7 +80,7 @@ function fillSelect(obj){
     var j = 0;
 	<c:forEach var="servicearea" items="${serviceareas}">
 	    if ("<c:out value="${servicearea.id}"/>" == ""){
-	        serviceArea.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>", true);
+	        serviceArea.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>", true, true);
 	        j++;
 	    }
 		else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
@@ -103,7 +103,7 @@ function fillSelect(obj){
 	    } else {
 	        select = false;
 	    } 
-        location.options[k]=new Option("<c:out value="${location.name}"/>", "<c:out value="${location.id}"/>", select);
+        location.options[k]=new Option("<c:out value="${location.name}"/>", "<c:out value="${location.id}"/>", select, select);
         k++ ;
     }
 </c:forEach>
