@@ -60,7 +60,7 @@ public class UserManagerTest extends BaseManagerTestCase {
                .will(returnValue(testData));
 
         user = userManager.getUser("tomcat");
-        user.setPhoneNumber("303-555-1212");
+        user.setPhoneNumber("30355512");
         userDAO.verify();
 
         // reset expectations
@@ -68,7 +68,7 @@ public class UserManagerTest extends BaseManagerTestCase {
         userDAO.expects(once()).method("saveUser").with(same(user));
 
         userManager.saveUser(user);
-        assertTrue(user.getPhoneNumber().equals("303-555-1212"));
+        assertTrue(user.getPhoneNumber().equals("30355512"));
         assertTrue(user.getRoles().size() == 1);
         userDAO.verify();
     }

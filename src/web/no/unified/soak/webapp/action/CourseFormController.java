@@ -651,15 +651,25 @@ public class CourseFormController extends BaseFormController {
 		}
 
 		try {
-			Date time = parseDateAndTime(request, "registerBy", format);
-
-			if (time == null && !configurationManager.isActive("access.course.useRegisterBy", true)) {
-				time = course.getStartTime();
+			Date registerBy = parseDateAndTime(request, "registerBy", format);
+			Date startTime = course.getStartTime();
+			boolean useRegisterBy = configurationManager.isActive("access.course.useRegisterBy", true);
+			
+			if (registerBy != null && useRegisterBy) {
+				// alt ok, registerBy settes eksplisitt fra form
+				course.setRegisterBy(registerBy);
 			}
-			if (time != null) {
-				course.setRegisterBy(time);
-			} else {
+			else if(registerBy == null && useRegisterBy){
+				// feil, registerBy skal settes fra form, men er ikke tilstede
 				throw new BindException(course, "registerBy");
+			}
+			else if(registerBy == null && startTime != null && !useRegisterBy){
+				// registerBy settes ikke fra form, men settes fra startTime for kurs/møte
+				course.setRegisterBy(startTime);
+			}
+			else {
+				// registerBy settes ikke fra form, validering av startTime har feilet
+				// -- feilmelding skal ikke kastes, da denne vil bli kastet for startTime-feltet
 			}
 		} catch (Exception e) {
 			args = new Object[] { getText("course.registerBy", request.getLocale()),

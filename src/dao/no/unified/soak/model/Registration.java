@@ -430,6 +430,8 @@ public class Registration extends BaseObject implements Serializable {
 	 * @param phone
 	 *            The phone to set.
 	 */
+	@DigitsOnly
+	@MinLength("8")
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}

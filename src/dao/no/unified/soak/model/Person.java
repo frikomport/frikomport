@@ -10,7 +10,9 @@
  */
 package no.unified.soak.model;
 
+import no.unified.soak.validation.DigitsOnly;
 import no.unified.soak.validation.Email;
+import no.unified.soak.validation.MinLength;
 import no.unified.soak.validation.Required;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -154,6 +156,8 @@ public class Person extends BaseObject implements Serializable {
     /**
      * @param phone The phone to set.
      */
+	@DigitsOnly
+	@MinLength("8")
     public void setPhone(String phone) {
         this.phone = phone;
     }
@@ -170,6 +174,8 @@ public class Person extends BaseObject implements Serializable {
     /**
      * @param mobilePhone The mobilePhone to set.
      */
+	@DigitsOnly
+	@MinLength("8")
     public void setMobilePhone(String mobilePhone) {
         this.mobilePhone = mobilePhone;
     }

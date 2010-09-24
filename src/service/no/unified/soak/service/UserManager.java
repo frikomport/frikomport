@@ -25,7 +25,7 @@ import org.springframework.context.MessageSource;
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
  *  Modified by <a href="mailto:dan@getrolling.com">Dan Kibler </a>
  */
-public interface UserManager {
+public interface UserManager extends Manager {
 	public void setUserDAO(UserDAO dao);
 
 	public void setExtUserDAO(ExtUserDAO userEzDAO);
@@ -85,6 +85,8 @@ public interface UserManager {
 	 */
 	public void saveUser(User user) throws UserExistsException;
 
+	
+	
     /**
      * Updates a user's information
      * @param user the user to be updated

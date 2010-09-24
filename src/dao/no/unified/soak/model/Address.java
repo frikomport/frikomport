@@ -129,8 +129,8 @@ public class Address extends BaseObject implements Serializable {
      * @param postalCode The postalCode to set
      *
      */
-    @MinLength("4")
     @DigitsOnly
+    @MinLength("4")
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }

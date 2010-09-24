@@ -16,7 +16,6 @@ import java.util.List;
 import no.unified.soak.dao.CourseDAO;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Person;
-import no.unified.soak.model.PostalCodeCoordinate;
 
 
 /**

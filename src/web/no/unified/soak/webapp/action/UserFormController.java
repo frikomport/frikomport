@@ -142,6 +142,20 @@ public class UserFormController extends BaseFormController {
             }
 
             try {
+            	if(!configurationManager.isActive("access.profile.showInvoiceaddress", true)){
+					// hvis ikke feiler validering av invoiceAddress.setPostalCode() for installasjoner som
+					// ikke benytter fakturaadresse pga annotations i Address.java
+            		user.setInvoiceAddress(null);
+            	}
+            	if(StringUtils.isBlank(user.getAddress().getPostalCode())){
+					// hvis ikke feiler validering av address.setPostalCode() pga annotations i Address.java
+            		user.setAddress(null);
+            	}
+            	
+            	if (validateAnnotations(user, errors, null) > 0) {
+    				this.getUserManager().evict(user);
+    				return showForm2(request, response, errors);
+    			}
                 this.getUserManager().saveUser(user);
                 session.setAttribute("username", user.getUsername());
             } catch (UserExistsException e) {

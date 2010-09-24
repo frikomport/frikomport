@@ -506,4 +506,20 @@ public class UserManagerImpl extends BaseManager implements UserManager {
             log.error("UserExistsException: " + e);
         }
     }
+    
+    @Override
+    public void evict(Object entity) {
+    	dao.evict(entity);
+    }
+    
+    @Override
+    public void flush() {
+    	dao.flush();
+    }
+    
+    @Override 
+    public boolean contains(Object entity) {
+    	return dao.contains(entity);
+    }
+
 }

@@ -16,6 +16,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import no.unified.soak.validation.DigitsOnly;
+import no.unified.soak.validation.MinLength;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -312,6 +315,8 @@ public class User extends BaseObject implements Serializable {
      */
     // @spring.validator type="mask" msgkey="errors.phone"
     // @spring.validator-var name="mask" value="${phone}"
+	@DigitsOnly
+	@MinLength("8")
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
@@ -535,6 +540,8 @@ public class User extends BaseObject implements Serializable {
 	 * @param mobilePhone
 	 *            The mobilePhone to set.
 	 */
+	@DigitsOnly
+	@MinLength("8")
 	public void setMobilePhone(String mobilePhone) {
 		this.mobilePhone = mobilePhone;
 	}
