@@ -397,7 +397,7 @@ public class RegistrationFormController extends BaseFormController {
             }
             // sjekk om det er nok plasser til alle deltakere
             Integer availability = registrationManager.getAvailability(localAttendant, course);
-        	if(configurationManager.isActive("access.registration.useWaitlists", true)){
+        	if(!configurationManager.isActive("access.registration.useWaitlists", true)){
             	if (availability.intValue() < registration.getParticipants()) {
             		// det er ikke plass til alle deltakere i registreringen
             		args = new Object[] {availability, getText("courseList.theitem", request.getLocale()).toLowerCase(), ""};
