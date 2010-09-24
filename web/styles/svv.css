@@ -9,7 +9,7 @@ body#login div#menu a:visited {
 	text-decoration: none;
 }
 
-div#PageContainer div#ContentContainer div#content form input[class~="large"],
+div#PageContainer div#ContentContainer div#fkp-content form input[class~="large"],
 div#MainContentContainer button[class~="large"]
 {
 	background-image:url("../images/SVV/buttonLarge.gif");
