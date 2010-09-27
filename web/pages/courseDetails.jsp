@@ -135,7 +135,7 @@
 </form>
 </c:if>
 
-<v:javascript formName="course" cdata="false"
+<!-- v:javascript formName="course" cdata="false"
     dynamicJavascript="true" staticJavascript="false"/>
 <script type="text/javascript"
-    src="<c:url context="${urlContext}" value="/scripts/validator.jsp"/>"></script>
+    src="<c:url context="${urlContext}" value="/scripts/validator.jsp"/>"></script -->
