@@ -16,6 +16,7 @@ import java.util.Date;
 import no.unified.soak.validation.DigitsOnly;
 import no.unified.soak.validation.Email;
 import no.unified.soak.validation.MinLength;
+import no.unified.soak.validation.MinValue;
 import no.unified.soak.validation.Required;
 import no.unified.soak.validation.ValidateOnlyIfConfigurationIsTrue;
 
@@ -151,6 +152,7 @@ public class Registration extends BaseObject implements Serializable {
 	 *            the number of participants to set
 	 */
 	@Required
+	@MinValue("1")
 	public void setParticipants(Integer participants) {
 		this.participants = participants;
 	}

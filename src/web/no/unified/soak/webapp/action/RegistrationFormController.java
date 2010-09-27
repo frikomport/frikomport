@@ -383,7 +383,7 @@ public class RegistrationFormController extends BaseFormController {
 			}
 
 			String participants = request.getParameter("participants");
-			if(!StringUtils.isNumeric(participants) && Integer.parseInt(participants) < 1){
+			if(!StringUtils.isNumeric(participants)){
 				args = new Object[] { getText("registration.participants", request.getLocale()), "", ""};
 				errors.rejectValue("participants", "errors.positivNumber", args, "");
 			}
