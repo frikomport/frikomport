@@ -62,9 +62,12 @@
     </display:column>
     </c:if>
     <%-- Table columns --%>
-    <display:column property="username" sortable="true"
-        headerClass="sortable" url="/detailsUser.html?from=list"
-        paramId="username" paramProperty="username" titleKey="user.username" />
+    <display:column media="html" sortable="true" headerClass="sortable" titleKey="user.username" sortProperty="username">
+         <a href="<c:url context="${urlContext}" value="/detailsUser.html?from=list"><c:param name="username" value="${userList.username}"/></c:url>">
+         <c:out value="${userList.username}"/></a>
+    </display:column>
+    <display:column media="csv excel xml pdf" property="username" sortable="true" headerClass="sortable" titleKey="user.username"/>
+    
     <display:column property="firstName" sortable="true"
         headerClass="sortable" titleKey="user.firstName" />
     <display:column property="lastName" sortable="true"
