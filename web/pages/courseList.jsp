@@ -276,7 +276,7 @@ function fillSelect(obj){
 </c:choose>
 
 
-    <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.stopTime" sortProperty="stopTime">
+    <display:column media="csv excel" sortable="true" headerClass="sortable" titleKey="course.stopTime" sortProperty="stopTime">
          <fmt:formatDate value="${courseList.stopTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
     
