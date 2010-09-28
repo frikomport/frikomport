@@ -124,8 +124,15 @@ public class RegistrationFormController extends BaseFormController {
 
         String registrationId = request.getParameter("id");
         if ((registrationId != null) && StringUtils.isNumeric(registrationId) && StringUtils.isNotEmpty(registrationId)) {
-            model.put("registration", registrationManager.getRegistration(registrationId));
+        	Registration registration = registrationManager.getRegistration(registrationId);
+            model.put("registration", registration);
 
+            if(!courseId.equals(registration.getCourseid().toString())){
+            	// Dersom bruker har byttet møte/kurs og klikker på link i første påmeldingsepost.
+            	courseId = registration.getCourseid().toString();
+            	saveMessage(request, getText("registration.email.linkExpired", locale));
+            }
+            
             // This is an existing registration, so get courses in case the user want to switch course.
             // Retrieve the all published courses
             // and add them to the list
