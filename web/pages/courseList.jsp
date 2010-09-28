@@ -276,9 +276,11 @@ function fillSelect(obj){
 </c:choose>
 
 
+<c:if test="${!isSVV}">
     <display:column media="csv excel" sortable="true" headerClass="sortable" titleKey="course.stopTime" sortProperty="stopTime">
          <fmt:formatDate value="${courseList.stopTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
+</c:if>
     
     <display:column property="availableAttendants" sortable="true" headerClass="sortable" titleKey="course.availableAttendants" total="true"/>
     <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
@@ -354,13 +356,15 @@ function fillSelect(obj){
 
     <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
     
+<c:if test="${!isSVV || (isSVV && (isAdmin || isEducationResponsible || isEventResponsible || isReader))}">
     <display:column media="csv excel xml pdf" property="responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible"/>
+</c:if>
 
 <c:if test="${!isSVV}">
     <display:column media="excel" property="instructor.name" sortable="true" headerClass="sortable" titleKey="course.instructor.export"/>
 </c:if>
 
-<c:if test="${!showAttendantDetails}">
+<c:if test="${!showAttendantDetails && !isSVV}">
     <display:column media="csv excel pdf" property="maxAttendants" sortable="true" headerClass="sortable" titleKey="course.maxAttendants.export"/>
 </c:if>
 
