@@ -210,7 +210,15 @@ public class CourseController extends BaseFormController {
 		if (!StringUtils.isBlank(stopTimeString)) {
 			try {
 				stoptime = DateUtil.convertStringToDate(stopTimeString);
-				model.put("stopTime", stoptime);
+				
+				// legger på 24timer for å sikre til-og-med sluttdato
+				Calendar stop = new GregorianCalendar();
+				stop.setTime(stoptime);
+				stop.add(Calendar.HOUR, 24);
+				stoptime = stop.getTime();
+				// --
+				
+				model.put("stopTime", DateUtil.convertStringToDate(stopTimeString));
 			} catch (ParseException e) {
 				String[] msgArgs = new String[] { stopTimeString,
 						getText("date.format", ApplicationResourcesUtil.getNewLocaleWithDefaultCountryAndVariant(null)), "" };
