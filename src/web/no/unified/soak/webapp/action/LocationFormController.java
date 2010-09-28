@@ -166,7 +166,7 @@ public class LocationFormController extends BaseFormController {
         	
         	Object[] args = null;
         	String postalcode = location.getPostalCode();
-        	if(StringUtils.isNumeric(postalcode) && postalcode.length() == 4){
+        	if(StringUtils.isNumeric(postalcode) && postalcode.length() >= 4){
         		if(!PostalCodesSuperduperLoader.isValidPostalCode(postalcode)){
         			args = new Object[]{postalcode};
         			errors.rejectValue("postalCode", "errors.postalCodeInvalid", args, "");
