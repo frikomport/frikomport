@@ -33,7 +33,8 @@ public class StatisticsDAOHibernate extends BaseDAOHibernate implements Statisti
 	public List<StatisticsTableRow> findByDates(Date beginPeriod, Date endPeriod) {
 		String sql;
 		if (DefaultQuotedNamingStrategy.usesOracle()) {
-			sql = "select OP.\"name\" as Region, O.\"name\" as område, \r\n" + "count(C.\"id\") as numCourses, \r\n"
+			sql = "select OP.\"name\" as Region, O.\"name\" as område, \r\n" 
+					+ "count(distinct C.\"id\") as numCourses, \r\n"
 					+ "count(R.\"id\") as numRegistrations, \r\n"
 					+ "sum(R.\"participants\") as numRegistered, \r\n"
 					+ "sum(C.\"attendants\") as numAttendants " + "from ORGANIZATION O \r\n"
@@ -43,12 +44,13 @@ public class StatisticsDAOHibernate extends BaseDAOHibernate implements Statisti
 					+ "left outer join ORGANIZATION OP on OP.\"id\" = O.\"parentid\" \r\n"
 
 					+ "where C.\"starttime\" >= :beginPeriod and \r\n" + "C.\"starttime\" <= :endPeriod \r\n"
-					+ "and C.\"attendants\" > 0 and O.\"type\" = 3 \r\n"
+					+ "and C.\"attendants\" > 0 and O.\"type\" = 3 and C.\"status\" != 3 \r\n"
 					+ "group by rollup (OP.\"name\", O.\"name\") \r\n" 
 					
 					+ "union \r\n"
 
-					+ "select OP.\"name\" as Region, O.\"name\" as område, \r\n" + "count(C.\"id\") as numCourses, \r\n"
+					+ "select OP.\"name\" as Region, O.\"name\" as område, \r\n" 
+					+ "count(distinct C.\"id\") as numCourses, \r\n"
 					+ "count(R.\"id\") as numRegistrations, \r\n"
 					+ "sum(R.\"participants\") as numRegistered, \r\n"
 					+ "sum(R.\"participants\") as numAttendants from ORGANIZATION O \r\n"
@@ -59,7 +61,9 @@ public class StatisticsDAOHibernate extends BaseDAOHibernate implements Statisti
 
 					+ "where C.\"starttime\" >= :beginPeriod and \r\n" + "C.\"starttime\" <= :endPeriod \r\n"
 					+ "and (C.\"attendants\" is null or C.\"attendants\" = 0) \r\n"
-					+ "and R.\"status\" = 2 and O.\"type\" = 3 \r\n" + "group by rollup (OP.\"name\", O.\"name\") \r\n"
+					+ "and R.\"status\" = 2 and O.\"type\" = 3 and C.\"status\" != 3 \r\n" 
+					+ "group by rollup (OP.\"name\", O.\"name\") \r\n"
+					
 					+ "order by 1 asc, 2 desc";
 		} else {
 			sql = "";
