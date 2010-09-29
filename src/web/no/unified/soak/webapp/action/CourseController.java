@@ -347,6 +347,12 @@ public class CourseController extends BaseFormController {
 				int numberOfTries = 0;
 				int MAX_TRIES = 25;
 				int pc = Integer.parseInt(postalcode);
+
+				// håndterer kun grenseverdier slik at søk mot ikke-eksisterende x000 kun gir søk oppover
+				// tilsvarende for ikke eksisterene x999 som kun vil gi søk nedover
+				boolean doNotGoUp = pc % 1000 == 999;
+				boolean doNotGoDown = pc % 1000 == 0;
+				
 				while(approx){
 					// oppgitt postnummer finnes ikke - vi søker i omkringliggende nr-serier
 					numberOfTries++;
@@ -358,11 +364,11 @@ public class CourseController extends BaseFormController {
 						return new ModelAndView("redirect:welcome.html");
 					}
 
-					if(pcUp <= 9999 && PostalCodesSuperduperLoader.isValidPostalCode(StringUtils.leftPad(""+pcUp, 4, '0'))){
+					if(!doNotGoUp && pcUp <= 9999 && PostalCodesSuperduperLoader.isValidPostalCode(StringUtils.leftPad(""+pcUp, 4, '0'))){
 						postalCodeApprox = StringUtils.leftPad(""+pcUp, 4, '0');
 						break;
 					}
-					if(pcDown >= 0001 && PostalCodesSuperduperLoader.isValidPostalCode(StringUtils.leftPad(""+pcDown, 4, '0'))){
+					if(!doNotGoDown && pcDown >= 0001 && PostalCodesSuperduperLoader.isValidPostalCode(StringUtils.leftPad(""+pcDown, 4, '0'))){
 						postalCodeApprox = StringUtils.leftPad(""+pcDown, 4, '0');
 						break;
 					}
