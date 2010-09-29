@@ -98,8 +98,8 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
         return courseDAO.getWaitingListCourses();
     }
 
-    public List<Course> findByInstructor(Person person) {
-        return courseDAO.findByInstructor(person);
+    public List<Course> findByInstructor(Person person, Integer[] coursestatus) {
+        return courseDAO.findByInstructor(person, coursestatus);
     }
 
     public List<Course> findByLocationIds(List<Long> locationIds, Integer numberOfHits){

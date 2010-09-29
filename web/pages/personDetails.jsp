@@ -128,9 +128,8 @@
 
 <c:if test="${courseList != null}">
 <h1><fmt:message key="course.related"/></h1>
-<display:table name="${courseList}" cellspacing="0" cellpadding="0"
-    id="courseList" pagesize="${itemCount}" class="list"
-    export="true" requestURI="detailsLocation.html">
+<display:table name="${courseList}" cellspacing="0" cellpadding="0" id="courseList" 
+	pagesize="${itemCount}" class="list" export="true" requestURI="detailsLocation.html">
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="name">
         <c:if test="${courseList.status == 3}"><img src="<c:url context="${urlContext}" value="/images/cancel.png"/>"

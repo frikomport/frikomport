@@ -13,6 +13,8 @@ package no.unified.soak.webapp.action;
 import no.unified.soak.model.Person;
 import no.unified.soak.service.PersonManager;
 import no.unified.soak.service.CourseManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
+import no.unified.soak.util.CourseStatus;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -70,7 +72,11 @@ public class PersonFormController extends BaseFormController {
     protected Map referenceData(HttpServletRequest request) throws Exception {
         Map<String, List> parameters = new HashMap<String, List>();
 
-        List courses = courseManager.findByInstructor((Person)formBackingObject(request));
+        Integer[] coursestatus = null;
+        if(ApplicationResourcesUtil.isSVV()){
+        	coursestatus = new Integer[]{CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED};
+        }
+        List courses = courseManager.findByInstructor((Person)formBackingObject(request), coursestatus);
         if(courses != null){
             parameters.put("courseList",courses);
         }

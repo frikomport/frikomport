@@ -76,7 +76,7 @@ public interface CourseManager extends Manager {
      */
     public List<Course> getWaitingListCourses();
 
-    public List<Course> findByInstructor(Person person);
+    public List<Course> findByInstructor(Person person, Integer[] coursestatus);
 
 	public List<Course> findByLocationIds(List<Long> locationIds, Integer numberOfHits);
 	
