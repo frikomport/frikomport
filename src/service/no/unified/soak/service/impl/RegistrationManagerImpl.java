@@ -180,6 +180,11 @@ public class RegistrationManagerImpl extends BaseManager implements
 		}
 	}
 
+	public Integer getNumberOfRegistrations(Long courseId){
+		return dao.getNumberOfRegistrations(courseId);
+	}
+
+	
 	/**
 	 * Evict entity for hibernate sessions. This avoids automatic saving
 	 * (flush) of the entity.

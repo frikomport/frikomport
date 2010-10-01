@@ -215,6 +215,10 @@ public interface RegistrationManager extends Manager {
 	public List<Registration> getUserRegistrationsForCourse(String username,
 			Long courseId);
 
+	
+	public Integer getNumberOfRegistrations(Long courseId);
+	
+	
 	/**
 	 * Moves registrations from old user to new user
 	 * 

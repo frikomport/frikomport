@@ -33,6 +33,7 @@
 
         <!-- ====================   FriKom for SVV  =========================== -->
         <Menu name="FriKomMenu_SVV" title="menu.main" page="/admin/listCourses.html">
+            <Item name="WelcomeMenu" title="welcome.start" page="/admin/welcome.html"/>
             <Item name="CourseMenu" title="courseList.heading" page="/admin/listCourses.html"/>
             <Item name="LocationMenu" title="locationList.heading" page="/admin/listLocations.html"/>
             <Item name="RegistrationMenu" title="registrationList.heading" page="/admin/listRegistrations.html" roles="editor,admin,eventresponsible,reader"/>
@@ -43,6 +44,7 @@
             <Item name="StatisticsMenu" title="statistics.name" page="/admin/statistics.html" roles="editor,admin,eventresponsible,reader"/>
         </Menu>
         <Menu name="FriKomMenu_SVV_public" title="menu.main" page="/public/listCourses.html">
+            <Item name="WelcomeMenu" title="welcome.start" page="/public/welcome.html"/>
             <Item name="CourseMenu" title="courseList.heading" page="/public/listCourses.html"/>
             <Item name="LocationMenu" title="locationList.heading" page="/public/listLocations.html"/>
         </Menu>

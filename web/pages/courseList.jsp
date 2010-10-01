@@ -286,21 +286,15 @@ function fillSelect(obj){
     <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
     <c:set var="nCellsSumCell1"><c:out value="${nCells}"/></c:set>
 
-<c:if test="${showAttendantDetails}">
-	<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
-    <display:column sortable="true" headerClass="sortable" titleKey="course.registered"><c:out value="${(courseList.maxAttendants - courseList.availableAttendants)}"/></display:column>
+<c:if test="${showAttendantDetails && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
+    <display:column media="html csv excel pdf" property="numberOfRegistrations" sortable="true" headerClass="sortable" titleKey="statistics.numRegistrations" />
     <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
-	</c:if>
+    
+    <display:column media="html csv excel pdf" property="numberOfParticipants" sortable="true" headerClass="sortable" titleKey="statistics.numRegistered" />
+    <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
 
-	<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
-    <display:column property="attendants" sortable="true" headerClass="sortable" titleKey="course.attendants"/>
+    <display:column media="html csv excel pdf" property="attendants" sortable="true" headerClass="sortable" titleKey="statistics.numAttended" />
     <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
-	</c:if>
-
-	<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
-    <display:column property="maxAttendants" sortable="true" headerClass="sortable" titleKey="course.maxAttendants"/>
-    <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
-	</c:if>
 </c:if>
 
 <c:if test="${useRegisterBy}">
@@ -443,7 +437,7 @@ pageContext.setAttribute("sumToShow", sumObj);
 
 <tr><td class="sum" colspan="<c:out value="${colspan1}"/>"><fmt:message key="courseList.totalSum"/></td> 
 <td class="sum">
-<fmt:formatNumber value="${sumTotal}" />
+<fmt:formatNumber value="${availableSum}" />
 </td>
 <td colspan="<%=(nCellsI - nCellsToSumColI)%>" class="sum"></td>
 </tr>

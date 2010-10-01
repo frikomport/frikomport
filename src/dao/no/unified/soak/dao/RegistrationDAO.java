@@ -207,4 +207,6 @@ public interface RegistrationDAO extends DAO {
 	 */
 	public List<Registration> getUserRegistationsForCourse(String username, Long courseId);
 	
+	public Integer getNumberOfRegistrations(Long courseId);
+	
 }

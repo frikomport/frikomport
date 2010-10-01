@@ -322,8 +322,7 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 			Long courseId) {
 		List<Registration> result = new ArrayList<Registration>();
 
-		DetachedCriteria criteria = DetachedCriteria
-				.forClass(Registration.class);
+		DetachedCriteria criteria = DetachedCriteria.forClass(Registration.class);
 		criteria.add(Restrictions.eq("username", username));
 		criteria.add(Restrictions.eq("courseid", courseId));
 		criteria.add(Restrictions.ne("status", Registration.Status.CANCELED.getDBValue()));
@@ -331,6 +330,21 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 		result = getHibernateTemplate().findByCriteria(criteria);
 
 		return result;
+	}
+	
+	public Integer getNumberOfRegistrations(Long courseId){
+		DetachedCriteria criteria = DetachedCriteria.forClass(Registration.class);
+		criteria.add(Restrictions.eq("courseid", courseId));
+		criteria.add(Restrictions.eq("status", Registration.Status.RESERVED.getDBValue())); 
+		criteria.setProjection(Projections.rowCount());
+
+		List queryResult = getHibernateTemplate().findByCriteria(criteria);
+		Integer numberOfRegistration = (Integer) queryResult.get(0);
+
+		if(numberOfRegistration == null){
+			numberOfRegistration = new Integer(0);
+		}
+		return numberOfRegistration;
 	}
 	
 }

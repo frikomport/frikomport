@@ -309,18 +309,35 @@ public class CourseController extends BaseFormController {
 	private List<Course> updateAvailableAttendants(List courses, HttpServletRequest request) {
 		List<Course> updated = new ArrayList<Course>();
 		Integer availableSum = NumberUtils.INTEGER_ZERO;
+		Integer registrationsSum = NumberUtils.INTEGER_ZERO;
+		Integer participantsSum = NumberUtils.INTEGER_ZERO;
+		Integer attendedSum = NumberUtils.INTEGER_ZERO;
+
 		for (Iterator iterator = courses.iterator(); iterator.hasNext();) {
 			Course course = (Course) iterator.next();
-			course.setAvailableAttendants(NumberUtils.INTEGER_ZERO);
-//			if (course.getStopTime().after(new Date())) {
-				Integer available = registrationManager.getAvailability(true, course);
-				course.setAvailableAttendants(available);
-				availableSum += available;
-//			}
+			
+			Integer available = registrationManager.getAvailability(true, course);
+			course.setAvailableAttendants(available);
+			
+			Integer registrations = registrationManager.getNumberOfRegistrations(course.getId());
+			course.setNumberOfRegistrations(registrations);
+			
+			Integer participants = registrationManager.getNumberOfOccupiedSeats(course, false);
+			course.setNumberOfParticipants(participants);
+
+			availableSum += available;
+			registrationsSum += registrations;
+			participantsSum += participants;
+			attendedSum += course.getAttendants() != null ? course.getAttendants() : 0;
+			
 			updated.add(course);
 		}
 
-		request.setAttribute("sumTotal", availableSum);
+		request.setAttribute("availableSum", availableSum);
+		request.setAttribute("registrationsSum", registrationsSum);
+		request.setAttribute("participantsSum", participantsSum);
+		request.setAttribute("attendedSum", attendedSum);
+
 		return updated;
 	}
     

@@ -75,9 +75,27 @@ public class Course extends BaseObject implements Serializable {
     private Boolean restricted = false;
     private Boolean chargeoverdue = false;
     private Integer attendants;
-    private Set<Registration> registrations; 
+    private Set<Registration> registrations;
+    private Integer numberOfRegistrations;
+    private Integer numberOfParticipants;
     
-    /**
+    public void setNumberOfParticipants(Integer numberOfParticipants) {
+		this.numberOfParticipants = numberOfParticipants;
+	}
+
+	public Integer getNumberOfParticipants() {
+		return numberOfParticipants;
+	}
+
+	public Integer getNumberOfRegistrations() {
+		return numberOfRegistrations;
+	}
+
+	public void setNumberOfRegistrations(Integer numberOfRegistrations) {
+		this.numberOfRegistrations = numberOfRegistrations;
+	}
+
+	/**
      * @return the registrations
      * @hibernate.set
      *  inverse="true"
