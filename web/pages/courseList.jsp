@@ -196,6 +196,7 @@ function fillSelect(obj){
 
 boolean isFirstRow=true;
 SumBuild sums = new SumBuild();
+SumBuild sumsTotal = new SumBuild();
 
 %>
 <c:out value="${buttons}" escapeXml="false"/>
@@ -278,6 +279,7 @@ SumBuild sums = new SumBuild();
          title="<c:out value="${courseDescription}"/>"><fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/></a>
     <% sums.addToNextSum(null, null); %>
     </display:column>
+    <% sumsTotal.addToNextSum(null, null); %>
     <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
 		<fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
@@ -292,31 +294,32 @@ SumBuild sums = new SumBuild();
     </display:column>
 </c:if>
     
-    <display:column property="availableAttendants" sortable="true" headerClass="sortable" titleKey="course.availableAttendants" total="true"/>
-    <% 
-    sums.addToNextSum("availableSum", ((Course)pageContext.getAttribute("courseList")).getAvailableAttendants()); 
-    %>
+    <display:column property="availableAttendants" sortable="true" headerClass="sortable" titleKey="course.availableAttendants" total="true">
+    <%sums.addToNextSum("availableSum", ((Course)pageContext.getAttribute("courseList")).getAvailableAttendants());%>
+    </display:column>
+    <%sumsTotal.addToNextSum("availableSum", ((Course)pageContext.getAttribute("courseList")).getAvailableAttendants());%>
+    
     <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
     <c:set var="nCellsSumCell1"><c:out value="${nCells}"/></c:set>
 
 <c:if test="${showAttendantDetails && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
-    <display:column media="html csv excel pdf" property="numberOfRegistrations" sortable="true" headerClass="sortable" titleKey="statistics.numRegistrations" />
+    <display:column media="html csv excel pdf" property="numberOfRegistrations" sortable="true" headerClass="sortable" titleKey="statistics.numRegistrations">
+    <%sums.addToNextSum("registrationsSum", ((Course)pageContext.getAttribute("courseList")).getNumberOfRegistrations());%>
+    </display:column>
+    <%sumsTotal.addToNextSum("registrationsSum", ((Course)pageContext.getAttribute("courseList")).getNumberOfRegistrations());%>
     <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
-    <% 
-    sums.addToNextSum("registrationsSum", ((Course)pageContext.getAttribute("courseList")).getNumberOfRegistrations()); 
-    %>
     
-    <display:column media="html csv excel pdf" property="numberOfParticipants" sortable="true" headerClass="sortable" titleKey="statistics.numRegistered" />
+    <display:column media="html csv excel pdf" property="numberOfParticipants" sortable="true" headerClass="sortable" titleKey="statistics.numRegistered">
+    <%sums.addToNextSum("participantsSum", ((Course)pageContext.getAttribute("courseList")).getNumberOfParticipants());%>
+    </display:column>
+    <%sumsTotal.addToNextSum("participantsSum", ((Course)pageContext.getAttribute("courseList")).getNumberOfParticipants());%>
     <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
-    <% 
-    sums.addToNextSum("participantsSum", ((Course)pageContext.getAttribute("courseList")).getNumberOfParticipants()); 
-    %>
 
-    <display:column media="html csv excel pdf" property="attendants" sortable="true" headerClass="sortable" titleKey="statistics.numAttended" />
+    <display:column media="html csv excel pdf" property="attendants" sortable="true" headerClass="sortable" titleKey="statistics.numAttended">
+    <%sums.addToNextSum("attendedSum", ((Course)pageContext.getAttribute("courseList")).getAttendants());%>
+    </display:column>
+    <%sumsTotal.addToNextSum("attendedSum", ((Course)pageContext.getAttribute("courseList")).getAttendants());%>
     <c:set var="nCells"><c:out value="${nCells + 1}"/></c:set>
-    <% 
-    sums.addToNextSum("attendedSum", ((Course)pageContext.getAttribute("courseList")).getAttendants()); 
-    %>
 </c:if>
 
 <c:if test="${useRegisterBy}">
@@ -430,6 +433,7 @@ SumBuild sums = new SumBuild();
 </c:if>
 <%
 sums.toFirstSum();
+sumsTotal.toFirstSum();
 
 String nCells = (String) pageContext.getAttribute("nCells");
 String nRows = (String) pageContext.getAttribute("nRows");
@@ -439,9 +443,6 @@ Integer nCellsI = Integer.valueOf(nCells);
 Integer nRowsI = Integer.valueOf(nRows);
 Integer nColsI = nCellsI/nRowsI;
 Integer nCellsToSumColI = Integer.valueOf(nCellsToSumCol);
-
-Integer colspan1 = (nCellsToSumColI % nColsI) - 1;
-pageContext.setAttribute("colspan1", colspan1);
 
 %>
 <c:if test="${isSVV && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
@@ -456,21 +457,14 @@ for(int i=0; i<sums.size(); i++) {
 %>
 </tr>
 
-<tr><td class="sum" colspan="<c:out value="${colspan1}"/>"><fmt:message key="courseList.totalSum"/></td> 
-<td class="sum">
-<fmt:formatNumber value="${availableSum}" />
-</td>
-<td class="sum">
-<fmt:formatNumber value="${registrationsSum}" />
-</td>
-<td class="sum">
-<fmt:formatNumber value="${participantsSum}" />
-</td>
-<td class="sum">
-<fmt:formatNumber value="${attendedSum}" />
-</td>
-
-<td colspan="<%=(nCellsI - nCellsToSumColI - 3)%>" class="sum"></td>
+<tr><td class="sum" colspan="3"><fmt:message key="courseList.totalSum"/></td> 
+<%
+for(int i=0; i<sumsTotal.size(); i++) {
+%>
+<td class="sum"><%=sumsTotal.get(i)%></td>
+<%
+}
+%>
 </tr>
 </display:footer>
 </c:if>
