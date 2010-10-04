@@ -487,7 +487,7 @@ for(int i=0; i<sumsTotal.size(); i++) {
 </display:footer>
 
 <display:footer media="excel csv pdf">
-<tr><td class="sum" colspan="3"><fmt:message key="courseList.totalSum"/></td> 
+<tr><td class="sum"><fmt:message key="courseList.totalSum"/></td> 
 <%
 for(int i=0; i<sumsExport.size(); i++) {
 %>
