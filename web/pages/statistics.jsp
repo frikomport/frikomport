@@ -142,6 +142,12 @@ cal1.setTodayText("Idag");
         <c:if test="${courseList.status == 2}"><img src="<c:url context="${urlContext}" value="/images/accept.png"/>" alt="<fmt:message key="course.status.published"/>" title="<fmt:message key="course.status.published"/>" class="icon"/></c:if>
         <c:if test="${courseList.status == 3}"><img src="<c:url context="${urlContext}" value="/images/cancel.png"/>" alt="<fmt:message key="course.status.cancelled"/>" title="<fmt:message key="course.status.cancelled"/>" class="icon"/></c:if>
     </display:column>
+    <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="course.status">
+        <c:if test="${courseList.status == 0}"><fmt:message key="course.status.created"/></c:if>
+        <c:if test="${courseList.status == 1}"><fmt:message key="course.status.finished"/></c:if>
+        <c:if test="${courseList.status == 2}"><fmt:message key="course.status.published"/></c:if>
+        <c:if test="${courseList.status == 3}"><fmt:message key="course.status.cancelled"/></c:if>
+    </display:column>
 </c:if>
 
 <c:choose>

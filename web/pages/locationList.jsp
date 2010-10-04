@@ -58,9 +58,18 @@
 
 <c:out value="${buttons}" escapeXml="false"/>
 
-<display:table name="${locationList}" cellspacing="0" cellpadding="0"
+<c:choose>
+<c:when test="${isSVV}">
+<c:set var="doExport">false</c:set>
+</c:when>
+<c:otherwise>
+<c:set var="doExport">true</c:set>
+</c:otherwise>
+</c:choose>
+
+    <display:table name="${locationList}" cellspacing="0" cellpadding="0"
     id="locationList" pagesize="${itemCount}" class="list" 
-    export="true" requestURI="">
+    export="${doExport}" requestURI="">
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
         <a href='<c:url context="${urlContext}" value="/editLocation.html"><c:param name="id" value="${locationList.id}"/><c:param name="from" value="list"/></c:url>'>
@@ -112,9 +121,3 @@
 </display:table>
 
 <c:out value="${buttons}" escapeXml="false"/>
-
-<%--
-<script type="text/javascript">
-highlightTableRows("locationList");
-</script>
---%>
