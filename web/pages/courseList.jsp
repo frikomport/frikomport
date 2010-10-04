@@ -202,7 +202,7 @@ SumBuild sumsExport = new SumBuild();
     id="courseList" pagesize="${itemCount}" class="list" 
     export="true" requestURI="listCourses.html" varTotals="totals">
     <c:set var="colIdx" value="0"/>
-
+<%Course theCourse = (Course)pageContext.getAttribute("courseList");%>
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible && username == courseList.responsible.username || (isSVV && courseList.organization2id == currentUserForm.organization2id)}">
@@ -288,29 +288,29 @@ SumBuild sumsExport = new SumBuild();
 </c:if>
     
     <display:column property="availableAttendants" sortable="true" headerClass="sortable" titleKey="course.availableAttendants" total="true">
-    <%sums.addToNextSum("availableSum", ((Course)pageContext.getAttribute("courseList")).getAvailableAttendants());%>
-    <%sumsExport.addToNextSum("availableSum", ((Course)pageContext.getAttribute("courseList")).getAvailableAttendants());%>
+    <%sums.addToNextSum("availableSum", theCourse, "getAvailableAttendants");%>
+    <%sumsExport.addToNextSum("availableSum", theCourse, "getAvailableAttendants");%>
     </display:column>
-    <%sumsTotal.addToNextSum("availableSum", ((Course)pageContext.getAttribute("courseList")).getAvailableAttendants());%>
+    <%sumsTotal.addToNextSum("availableSum", theCourse, "getAvailableAttendants");%>
     
 <c:if test="${showAttendantDetails && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
     <display:column media="html csv excel pdf" property="numberOfRegistrations" sortable="true" headerClass="sortable" titleKey="statistics.numRegistrations">
-    <%sums.addToNextSum("registrationsSum", ((Course)pageContext.getAttribute("courseList")).getNumberOfRegistrations());%>
-    <%sumsExport.addToNextSum("registrationsSum", ((Course)pageContext.getAttribute("courseList")).getNumberOfRegistrations());%>
+    <%sums.addToNextSum("registrationsSum", theCourse, "getNumberOfRegistrations");%>
+    <%sumsExport.addToNextSum("registrationsSum", theCourse, "getNumberOfRegistrations");%>
     </display:column>
-    <%sumsTotal.addToNextSum("registrationsSum", ((Course)pageContext.getAttribute("courseList")).getNumberOfRegistrations());%>
+    <%sumsTotal.addToNextSum("registrationsSum", theCourse, "getNumberOfRegistrations");%>
     
     <display:column media="html csv excel pdf" property="numberOfParticipants" sortable="true" headerClass="sortable" titleKey="statistics.numRegistered">
-    <%sums.addToNextSum("participantsSum", ((Course)pageContext.getAttribute("courseList")).getNumberOfParticipants());%>
-    <%sumsExport.addToNextSum("participantsSum", ((Course)pageContext.getAttribute("courseList")).getNumberOfParticipants());%>
+    <%sums.addToNextSum("participantsSum", theCourse, "getNumberOfParticipants");%>
+    <%sumsExport.addToNextSum("participantsSum", theCourse, "getNumberOfParticipants");%>
     </display:column>
-    <%sumsTotal.addToNextSum("participantsSum", ((Course)pageContext.getAttribute("courseList")).getNumberOfParticipants());%>
+    <%sumsTotal.addToNextSum("participantsSum", theCourse, "getNumberOfParticipants");%>
 
     <display:column media="html csv excel pdf" property="attendants" sortable="true" headerClass="sortable" titleKey="statistics.numAttended">
-    <%sums.addToNextSum("attendedSum", ((Course)pageContext.getAttribute("courseList")).getAttendants());%>
-    <%sumsExport.addToNextSum("attendedSum", ((Course)pageContext.getAttribute("courseList")).getAttendants());%>
+    <%sums.addToNextSum("attendedSum", theCourse, "getAttendants");%>
+    <%sumsExport.addToNextSum("attendedSum", theCourse, "getAttendants");%>
     </display:column>
-    <%sumsTotal.addToNextSum("attendedSum", ((Course)pageContext.getAttribute("courseList")).getAttendants());%>
+    <%sumsTotal.addToNextSum("attendedSum", theCourse, "getAttendants");%>
 </c:if>
 
 <c:if test="${useRegisterBy}">

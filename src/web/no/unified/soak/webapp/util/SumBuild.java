@@ -3,8 +3,12 @@
  */
 package no.unified.soak.webapp.util;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+
+import no.unified.soak.model.Course;
 
 /**
  * @author extkla
@@ -22,7 +26,12 @@ public class SumBuild {
 	public int size() {
 		return sumList.size();
 	}
-	
+
+	public void addToNextSum(String sumName, Object courseObj, String getter) throws SecurityException, IllegalArgumentException,
+			NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+		addToNextSum(sumName, invokeGetterNullsafe(courseObj, getter));
+	}
+
 	public void addToNextSum(String sumName, Integer valueToAdd) {
 		if (sumList.size() <= idxPtr) {
 			sumList.add(new Object[] { sumName, null });
@@ -37,9 +46,9 @@ public class SumBuild {
 		if (objArr[1] == null) {
 			objArr[1] = valueToAdd;
 		} else {
-			objArr[1] = (Integer)objArr[1] + valueToAdd;
+			objArr[1] = (Integer) objArr[1] + valueToAdd;
 		}
-		
+
 		idxPtr++;
 	}
 
@@ -60,4 +69,15 @@ public class SumBuild {
 		return "";
 	}
 
+	public static Integer invokeGetterNullsafe(Object courseObj, String getter) throws SecurityException, NoSuchMethodException,
+			IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+		if (courseObj == null || !(courseObj instanceof Course)) {
+			return null;
+		}
+		Course course = (Course) courseObj;
+		Method getterMethod = course.getClass().getMethod(getter);
+		Object got = getterMethod.invoke(course);
+
+		return (got == null ? null : Integer.getInteger(got.toString()));
+	}
 }
