@@ -228,6 +228,7 @@ SumBuild sumsExport = new SumBuild();
     <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="course.name"/>
 </c:when>
 <c:otherwise>
+   <c:if test="${containsUnfinished}">
    <display:column media="html" sortable="false" class="mediumButtonWidth" titleKey="button.signup">
 		<c:if test="${courseList.status == 2 && (courseList.availableAttendants > 0 || useWaitlists)}">
 		    <button type="button"
@@ -236,6 +237,7 @@ SumBuild sumsExport = new SumBuild();
 		    </button>
 		</c:if>
     </display:column>
+	</c:if>
 </c:otherwise>
 </c:choose>
 
@@ -287,30 +289,39 @@ SumBuild sumsExport = new SumBuild();
     </display:column>
 </c:if>
     
+    
+<c:if test="${containsUnfinished}">
     <display:column property="availableAttendants" sortable="true" headerClass="sortable" titleKey="course.availableAttendants" total="true">
     <%sums.addToNextSum("availableSum", theCourse, "getAvailableAttendants");%>
     <%sumsExport.addToNextSum("availableSum", theCourse, "getAvailableAttendants");%>
     </display:column>
     <%sumsTotal.addToNextSum("availableSum", theCourse, "getAvailableAttendants");%>
+</c:if>
     
 <c:if test="${showAttendantDetails && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
+
+	<c:if test="${containsFinished}">
     <display:column media="html csv excel pdf" property="numberOfRegistrations" sortable="true" headerClass="sortable" titleKey="statistics.numRegistrations">
     <%sums.addToNextSum("registrationsSum", theCourse, "getNumberOfRegistrations");%>
     <%sumsExport.addToNextSum("registrationsSum", theCourse, "getNumberOfRegistrations");%>
     </display:column>
     <%sumsTotal.addToNextSum("registrationsSum", theCourse, "getNumberOfRegistrations");%>
-    
+	</c:if>    
+
     <display:column media="html csv excel pdf" property="numberOfParticipants" sortable="true" headerClass="sortable" titleKey="statistics.numRegistered">
     <%sums.addToNextSum("participantsSum", theCourse, "getNumberOfParticipants");%>
     <%sumsExport.addToNextSum("participantsSum", theCourse, "getNumberOfParticipants");%>
     </display:column>
     <%sumsTotal.addToNextSum("participantsSum", theCourse, "getNumberOfParticipants");%>
 
+	<c:if test="${containsFinished}">
     <display:column media="html csv excel pdf" property="attendants" sortable="true" headerClass="sortable" titleKey="statistics.numAttended">
     <%sums.addToNextSum("attendedSum", theCourse, "getAttendants");%>
     <%sumsExport.addToNextSum("attendedSum", theCourse, "getAttendants");%>
     </display:column>
     <%sumsTotal.addToNextSum("attendedSum", theCourse, "getAttendants");%>
+	</c:if>
+
 </c:if>
 
 <c:if test="${useRegisterBy}">

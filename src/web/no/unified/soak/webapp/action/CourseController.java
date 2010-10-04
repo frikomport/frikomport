@@ -250,6 +250,7 @@ public class CourseController extends BaseFormController {
 			if (StringUtils.isBlank(postalcode)) {
 				courseList = courseManager.searchCourses(course, starttime, stoptime, status);
 				courseList = updateAvailableAttendants(courseList, request);
+				configureColumnView(status, courseList, model);
 	        } else {
 	        	List<Long> locationIds = locationManager.getLocationIds(postalcode);
 	        	int numberOfHits = 15; // default
@@ -257,6 +258,9 @@ public class CourseController extends BaseFormController {
 	        	if(StringUtils.isNumeric(numberOfHitsStr)) numberOfHits = Integer.parseInt(numberOfHitsStr);
 				courseList = courseManager.findByLocationIds(locationIds, numberOfHits);
 				courseList = updateAvailableAttendants(courseList, request);
+
+				model.put("containsUnfinished", new Boolean(true));
+				model.put("containsFinished", new Boolean(false));
 	        }
         }
         else {
@@ -277,6 +281,44 @@ public class CourseController extends BaseFormController {
 
         return model;
     }
+
+    /**
+     * Metode for å sette parametre i modell som benyttes av jsp for å vise/skjule kolonner
+     * @param status
+     * @param courseList
+     * @param model
+     */
+	private void configureColumnView(Integer[] status, List<Course> courseList, Map model) {
+		if(status.length == 1){
+			// publikum
+			model.put("containsUnfinished", new Boolean(true));
+			model.put("containsFinished", new Boolean(false));
+		}
+		else{
+			// default
+			model.put("containsUnfinished", new Boolean(false));
+			model.put("containsFinished", new Boolean(false));
+			
+			boolean after = false;
+			boolean before = false;
+			
+			if(!courseList.isEmpty()){
+				Iterator<Course> iterator = courseList.iterator(); 
+				while(iterator.hasNext()){
+					Course c = iterator.next();
+					if(c.getStatus().equals(CourseStatus.COURSE_FINISHED)){
+						model.put("containsFinished", new Boolean(true));
+						before = true;
+					}
+					if(c.getStatus().equals(CourseStatus.COURSE_PUBLISHED) || c.getStatus().equals(CourseStatus.COURSE_CREATED)){
+						model.put("containsUnfinished", new Boolean(true));
+						after = true;
+					}
+					if(before && after) break; // trenger ikke sjekke flere 
+				}
+			}
+		}
+	}
 
 	private boolean isAdmin(List<String> roles) {
         if (roles.contains(Constants.EVENTRESPONSIBLE_ROLE) || roles.contains(Constants.EDITOR_ROLE)
@@ -508,6 +550,7 @@ public class CourseController extends BaseFormController {
 			if (StringUtils.isBlank(postalcode)) {
 				courseList = courseManager.searchCourses(course, starttime, stoptime, status);
 				courseList = updateAvailableAttendants(courseList, request);
+				configureColumnView(status, courseList, model);
 	        } else {
 				List<Long> locationIds = locationManager.getLocationIds((postalCodeApprox!=null?postalCodeApprox:postalcode));
 	        	int numberOfHits = 15; // default
@@ -516,6 +559,9 @@ public class CourseController extends BaseFormController {
 				courseList = courseManager.findByLocationIds(locationIds, numberOfHits);
 				courseList = updateAvailableAttendants(courseList, request);
 
+				model.put("containsUnfinished", new Boolean(true));
+				model.put("containsFinished", new Boolean(false));
+				
 				// melding til bruker som forklarer postnr-søk
 				if(postalCodeApprox != null){
 					saveMessage(request, getText("courseList.postalCodeInfoApprox", new String[] { postalcode, postalCodeApprox }, locale));
