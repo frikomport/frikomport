@@ -78,6 +78,10 @@ public class SumBuild {
 		Method getterMethod = course.getClass().getMethod(getter);
 		Object got = getterMethod.invoke(course);
 
-		return (got == null ? null : Integer.getInteger(got.toString()));
+		if (got == null || !(got instanceof Integer)) {
+			return null;
+		} else {
+			return (Integer)got;
+		}
 	}
 }
