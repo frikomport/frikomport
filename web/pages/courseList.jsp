@@ -195,7 +195,7 @@ boolean isFirstRow=true;
 SumBuild sums = new SumBuild();
 SumBuild sumsTotal = new SumBuild();
 SumBuild sumsExport = new SumBuild();
-
+Integer preSumColspan = 2;
 %>
 <c:out value="${buttons}" escapeXml="false"/>
 <display:table name="${courseList}" cellspacing="0" cellpadding="0"
@@ -235,6 +235,10 @@ SumBuild sumsExport = new SumBuild();
 		        onclick="location.href='<c:url context="${urlContext}" value="/performRegistration.html"><c:param name="courseId" value="${courseList.id}" /></c:url>'">
 		        <fmt:message key="button.signup"/>
 		    </button>
+		    <%if (isFirstRow) {
+		    	preSumColspan++;
+		    } 
+		    %>
 		</c:if>
     </display:column>
 	</c:if>
@@ -473,10 +477,11 @@ SumBuild sumsExport = new SumBuild();
 sums.toFirstSum();
 sumsTotal.toFirstSum();
 sumsExport.toFirstSum();
+isFirstRow = false;
 %>
 <c:if test="${isSVV && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
 <display:footer media="html">
-<tr><td class="sum" colspan="3"><fmt:message key="courseList.pageSum"/></td> 
+<tr><td class="sum" colspan="<%=preSumColspan%>"><fmt:message key="courseList.pageSum"/></td> 
 <%
 for(int i=0; i<sums.size(); i++) {
 %>
@@ -486,7 +491,7 @@ for(int i=0; i<sums.size(); i++) {
 %>
 </tr>
 
-<tr><td class="sum" colspan="3"><fmt:message key="courseList.totalSum"/></td> 
+<tr><td class="sum" colspan="<%=preSumColspan%>"><fmt:message key="courseList.totalSum"/></td> 
 <%
 for(int i=0; i<sumsTotal.size(); i++) {
 %>
