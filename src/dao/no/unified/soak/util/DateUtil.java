@@ -165,10 +165,8 @@ public class DateUtil {
      *
      * @throws ParseException
      */
-    public static Date convertStringToDate(String strDate)
-        throws ParseException {
+    public static Date convertStringToDate(String strDate) throws ParseException {
         Date aDate = null;
-
         try {
             if (log.isDebugEnabled()) {
                 log.debug("converting date with pattern: " + getDatePattern());
@@ -176,12 +174,10 @@ public class DateUtil {
 			if(!StringUtils.containsOnly(strDate.trim(), "0123456789.-")) throw new ParseException("Format error",0);
             aDate = convertStringToDate(strDate, getDatePattern());
         } catch (ParseException pe) {
-            log.error("Could not convert '" + strDate +
+            log.warn("Could not convert '" + strDate +
                 "' to a date, throwing exception");
-            pe.printStackTrace();
             throw new ParseException(pe.getMessage(), pe.getErrorOffset());
         }
-
         return aDate;
     }
 
