@@ -422,6 +422,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		// CONFIGURATIONS
 		Vector<Configuration> configurationsToInsert = new Vector<Configuration>();
 		// common configurations
+		configurationsToInsert.add(new Configuration("access.course.singleprice", false, null));
 		configurationsToInsert.add(new Configuration("access.registration.delete", false, null));
 		configurationsToInsert.add(new Configuration("access.registration.userdefaults", false, null));
 		configurationsToInsert.add(new Configuration("access.registration.emailrepeat", false, null));
@@ -462,7 +463,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			configurationsToInsert.add(new Configuration("access.course.useAttendants", true, null));
 			configurationsToInsert.add(new Configuration("access.course.useRegisterBy", false, null));
 			configurationsToInsert.add(new Configuration("access.course.useOrganization2", true, null));
-			configurationsToInsert.add(new Configuration("access.course.showAttendantDetails", false, null));
+			configurationsToInsert.add(new Configuration("access.course.showAttendantDetails", true, null));
 			configurationsToInsert.add(new Configuration("access.course.showDescriptionToPublic", false, null));
 			configurationsToInsert.add(new Configuration("access.course.showCourseUntilFinished", false, null));
 			
@@ -497,7 +498,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			configurationsToInsert.add(new Configuration("access.course.useAttendants", false, null));
 			configurationsToInsert.add(new Configuration("access.course.useRegisterBy", true, null));
 			configurationsToInsert.add(new Configuration("access.course.useOrganization2", false, null));
-			configurationsToInsert.add(new Configuration("access.course.showAttendantDetails", true, null));
+			configurationsToInsert.add(new Configuration("access.course.showAttendantDetails", false, null));
 			configurationsToInsert.add(new Configuration("access.course.showDescriptionToPublic", true, null));
 			configurationsToInsert.add(new Configuration("access.course.showCourseUntilFinished", true, null));
 
