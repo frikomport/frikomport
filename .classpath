@@ -42,6 +42,7 @@
 			<attribute name="javadoc_location" value="http://commons.apache.org/collections/apidocs-COLLECTIONS_3_1/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/jakarta-commons/commons-dbcp.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-commons/commons-digester.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-commons/commons-fileupload.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-commons/commons-io.jar"/>
@@ -52,7 +53,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/jakarta-commons/commons-logging-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-commons/commons-pool.jar"/>
-	<classpathentry kind="lib" path="lib/commons-validator-1.1.4/commons-validator-1.1.4.jar" sourcepath="C:/FriKomPort_SVV/SVV/lib/commons-validator-1.1.4/docs"/>
+	<classpathentry kind="lib" path="lib/jakarta-commons/commons-validator.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-commons/jakarta-oro.jar"/>
 	<classpathentry kind="lib" path="lib/javamail-1.3.1/activation.jar"/>
 	<classpathentry kind="lib" path="lib/javamail-1.3.1/mail.jar"/>
@@ -72,6 +73,7 @@
 	<classpathentry kind="lib" path="lib/cargo-0.8/cargo-core-uberjar-0.8.jar"/>
 	<classpathentry kind="lib" path="lib/checkstyle-3.1/checkstyle-all-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/dbunit-2.1/dbunit-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/displaytag-1.1/displaytag-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/displaytag-1.1/itext-2.0.4.jar"/>
 	<classpathentry kind="lib" path="lib/dumbster-1.5/dumbster-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-log4j-1.2.9/dist/lib/log4j-1.2.9.jar"/>
@@ -105,12 +107,5 @@
 	<classpathentry kind="lib" path="lib/poi-3.0.1-FINAL/poi-3.0.1-FINAL-20070705.jar"/>
 	<classpathentry kind="lib" path="lib/axis-1.4/jaxrpc.jar"/>
 	<classpathentry kind="lib" path="lib/axis-1.4/axis.jar"/>
-	<classpathentry kind="lib" path="lib/jakarta-commons/commons-dbcp-1.2.2.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="http://commons.apache.org/dbcp/api-1.2.2/index.html"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/displaytag-1.1/displaytag-1.1.jar" sourcepath="C:\Documents and Settings\extsam\Mine dokumenter\Downloads\displaytag-1.1-src.zip"/>
-	<classpathentry kind="lib" path="lib/displaytag-1.1/displaytag-export-poi-1.1.jar" sourcepath="C:\Documents and Settings\extsam\Mine dokumenter\Downloads\displaytag-1.1-src.zip"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
