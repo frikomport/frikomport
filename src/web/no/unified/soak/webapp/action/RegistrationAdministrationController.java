@@ -235,21 +235,21 @@ public class RegistrationAdministrationController extends BaseFormController {
 			// We are deleting a registration
 			cancelRegistration(request, locale);
 
-			// Ready the WaitingListManagerImpl
-			waitingListManager.processIfNeeded(new Long(courseId), locale);
-
-			String key = "waitinglist.updated";
-			saveMessage(request, getText(key, locale));
+			if(configurationManager.isActive("access.registration.useWaitlists", true)){
+				// Ready the WaitingListManagerImpl
+				waitingListManager.processIfNeeded(new Long(courseId), locale);
+				saveMessage(request, getText("waitinglist.updated", locale));
+			}
 		}
 		else if (request.getParameter("delete.x") != null) {
             // We are deleting a registration
             deleteRegistration(request, locale);
 
-            // Ready the WaitingListManagerImpl
-            waitingListManager.processIfNeeded(new Long(courseId), locale);
-
-            String key = "waitinglist.updated";
-            saveMessage(request, getText(key, locale));
+			if(configurationManager.isActive("access.registration.useWaitlists", true)){
+				// Ready the WaitingListManagerImpl
+				waitingListManager.processIfNeeded(new Long(courseId), locale);
+				saveMessage(request, getText("waitinglist.updated", locale));
+			}
         } else {
 			// We are saving all changes made to the list
 
@@ -258,10 +258,11 @@ public class RegistrationAdministrationController extends BaseFormController {
 			if (registrationsBackingObject != null) {
 				if (persistChanges(request, registrationsBackingObject)) {
 					// Run the waiting list process
-					waitingListManager.processIfNeeded(new Long(courseId), locale);
-
-					String key = "waitinglist.updated";
-					saveMessage(request, getText(key, locale));
+					if(configurationManager.isActive("access.registration.useWaitlists", true)){
+						// Ready the WaitingListManagerImpl
+						waitingListManager.processIfNeeded(new Long(courseId), locale);
+						saveMessage(request, getText("waitinglist.updated", locale));
+					}
 				}
 
 				String key = "registrationList.updated";
