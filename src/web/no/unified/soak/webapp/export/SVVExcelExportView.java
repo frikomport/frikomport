@@ -294,7 +294,7 @@ public class SVVExcelExportView  implements BinaryExportView
     {
         HSSFCellStyle headerStyle = getNewCellStyle();
 
-        headerStyle.setFillPattern(HSSFCellStyle.FINE_DOTS);
+        headerStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND); // std FINE_DOTS
         headerStyle.setFillBackgroundColor(HSSFColor.BLUE_GREY.index);
         HSSFFont bold = wb.createFont();
         bold.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
