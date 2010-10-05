@@ -198,9 +198,8 @@ SumBuild sumsExport = new SumBuild();
 Integer preSumColspan = 2;
 %>
 <c:out value="${buttons}" escapeXml="false"/>
-<display:table name="${courseList}" cellspacing="0" cellpadding="0"
-    id="courseList" pagesize="${itemCount}" class="list" 
-    export="true" requestURI="listCourses.html" varTotals="totals">
+<display:table name="${courseList}" cellspacing="0" cellpadding="0" id="courseList" pagesize="${itemCount}" 
+	class="list" export="${enableExport}" requestURI="listCourses.html" varTotals="totals">
     <c:set var="colIdx" value="0"/>
 <%Course theCourse = (Course)pageContext.getAttribute("courseList");%>
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">

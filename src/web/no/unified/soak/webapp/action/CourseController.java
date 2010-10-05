@@ -89,6 +89,8 @@ public class CourseController extends BaseFormController {
         Locale locale = request.getLocale();
         Map model = new HashMap();
 
+        model.put("enableExport", new Boolean(true));
+        
         Course course = (Course) command;
         Course unpublished = new Course();
         
@@ -390,6 +392,9 @@ public class CourseController extends BaseFormController {
     public ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object command, BindException errors)
 			throws Exception {
 		Map model = new HashMap();
+		
+        model.put("enableExport", new Boolean(true));
+
 		HttpSession session = request.getSession();
 		Locale locale = request.getLocale();
 		String postalCodeApprox = null;
@@ -561,6 +566,7 @@ public class CourseController extends BaseFormController {
 
 				model.put("containsUnfinished", new Boolean(true));
 				model.put("containsFinished", new Boolean(false));
+		        model.put("enableExport", new Boolean(false)); // deaktivering av fileksport for postnummersøkeresultat
 				
 				// melding til bruker som forklarer postnr-søk
 				if(postalCodeApprox != null){
