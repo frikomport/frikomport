@@ -42,7 +42,6 @@
 			<attribute name="javadoc_location" value="http://commons.apache.org/collections/apidocs-COLLECTIONS_3_1/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/jakarta-commons/commons-dbcp.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-commons/commons-digester.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-commons/commons-fileupload.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-commons/commons-io.jar"/>
@@ -107,5 +106,10 @@
 	<classpathentry kind="lib" path="lib/poi-3.0.1-FINAL/poi-3.0.1-FINAL-20070705.jar"/>
 	<classpathentry kind="lib" path="lib/axis-1.4/jaxrpc.jar"/>
 	<classpathentry kind="lib" path="lib/axis-1.4/axis.jar"/>
+	<classpathentry kind="lib" path="lib/jakarta-commons/commons-dbcp-1.2.2.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://commons.apache.org/dbcp/api-1.2.2/index.html"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
