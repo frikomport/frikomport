@@ -405,7 +405,7 @@ public class RegistrationFormController extends BaseFormController {
             // sjekk om det er nok plasser til alle deltakere
             Integer availability = registrationManager.getAvailability(localAttendant, course);
         	if(!configurationManager.isActive("access.registration.useWaitlists", true)){
-            	if (availability.intValue() < registration.getParticipants()) {
+            	if (registration.getParticipants() != null && availability.intValue() < registration.getParticipants()) {
             		// det er ikke plass til alle deltakere i registreringen
             		args = new Object[] {availability, getText("courseList.theitem", request.getLocale()).toLowerCase(), ""};
     				errors.rejectValue("participants", "errors.limitedNumberOfSeats", args, "");
@@ -476,9 +476,13 @@ public class RegistrationFormController extends BaseFormController {
                 	key = "registrationComplete.updated";
                 	saveMessage(request, getText(key, locale));
                 }else{
-                	key = "registrationComplete.completed";
-                	saveMessage(request, getText(key, locale));
-                	sendMail(locale, course, registration, Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED);
+                	try {
+						sendMail(locale, course, registration, Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED);
+						saveMessage(request, getText("registrationComplete.completed", locale));
+					} catch (Exception e) {
+						saveMessage(request, getText("registrationComplete.completed.saved", locale));
+						saveErrorMessage(request, getText("registrationComplete.completed.mailsending.failed", locale));
+					}
                 	if(configurationManager.isActive("sms.confirmedRegistrationChangedCourse", false)){
                 		SMSUtil.sendRegistrationConfirmedMessage(registration, course);
                 	}
@@ -514,8 +518,9 @@ public class RegistrationFormController extends BaseFormController {
      *            The course the applicant has registered for
      * @param registration
      * @param event
+     * @throws Exception 
      */
-    private void sendMail(Locale locale, Course course, Registration registration, int event) {
+    private void sendMail(Locale locale, Course course, Registration registration, int event) throws Exception {
     	StringBuffer msg = null;
     	switch(event) {
 	    	case Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED:
@@ -536,7 +541,12 @@ public class RegistrationFormController extends BaseFormController {
     	}
     	boolean ccToResponsible = configurationManager.isActive("mail.registration.notifyResponsible", false);
         ArrayList<MimeMessage> theEmails = MailUtil.getMailMessages(registration, event, course, msg, mailSender, ccToResponsible);
-        MailUtil.sendMimeMails(theEmails, mailEngine);
+        
+        if (event == Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED) {
+        	mailEngine.sendAndExceptionOnFail(theEmails.get(0));
+        } else {
+        	MailUtil.sendMimeMails(theEmails, mailEngine);
+        }
     }
 
     /**

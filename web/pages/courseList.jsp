@@ -235,11 +235,11 @@ Integer preSumColspan = 2;
 		        onclick="location.href='<c:url context="${urlContext}" value="/performRegistration.html"><c:param name="courseId" value="${courseList.id}" /></c:url>'">
 		        <fmt:message key="button.signup"/>
 		    </button>
-		    <%if (isFirstRow) {
-		    	preSumColspan++;
-		    } 
-		    %>
 		</c:if>
+	    <%if (isFirstRow) {
+	    	preSumColspan++;
+	    } 
+	    %>
     </display:column>
 	</c:if>
 </c:otherwise>
