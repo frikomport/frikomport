@@ -293,7 +293,7 @@
 			<input type="submit" class="button" name="return" onclick="bCancel=true" value="<fmt:message key="button.course.list"/>" />
 </c:if>
 
-			<c:if test="userdefaults == true">
+			<c:if test="${userdefaults == true}">
 				<button type="button"
 					onclick="location.href='<c:url context="${urlContext}" value="/performRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 					<fmt:message key="button.onemore" />

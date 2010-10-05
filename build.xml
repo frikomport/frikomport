@@ -508,7 +508,10 @@
     	</ear>
 
     	<!-- Copy ear-file for Oracle App.server (OC4J)-->
-    	<copy todir="c:/Programfiler/OCJ4/j2ee/home/applications" file="${webapp.dist}/${webapp.name}.ear"/>
+    	<!-- copy todir="c:/Programfiler/OCJ4/j2ee/home/applications" file="${webapp.dist}/${webapp.name}.ear"/ -->
+
+		<!-- Ekstra kopiering direkte til OC4J-mappe -->
+        <copy todir="C:/oc4j_extended_101340/j2ee/home/applications" file="${webapp.dist}/${webapp.name}.ear"/>
 
     	<!-- visning av tidspunkt for ferdig bygg -->
 		<tstamp><format property="finished" pattern="yyyy-MM-dd HH:mm:ss"/></tstamp>
