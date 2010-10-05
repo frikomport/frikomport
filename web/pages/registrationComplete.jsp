@@ -288,8 +288,11 @@
 				<input type="hidden" name="<c:out value="${status.expression}"/>"
 					value="<c:out value="${status.value}"/>" />
 			</spring:bind>
-			<input type="submit" class="button" name="return"
-				onclick="bCancel=true" value="<fmt:message key="button.return"/>" />
+
+<c:if test="${!isSVV}">
+			<input type="submit" class="button" name="return" onclick="bCancel=true" value="<fmt:message key="button.course.list"/>" />
+</c:if>
+
 			<c:if test="userdefaults == true">
 				<button type="button"
 					onclick="location.href='<c:url context="${urlContext}" value="/performRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
