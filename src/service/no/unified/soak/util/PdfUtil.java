@@ -253,7 +253,7 @@ public class PdfUtil {
 			String stop = formatter.format(course.getStopTime());
 			String date = start.equals(stop)? start : start + " - " + stop;
 			
-			if(course.getDuration().equalsIgnoreCase("n/a")){
+			if("n/a".equalsIgnoreCase(course.getDuration())){
 				// pga. SVV's mulighet for å ikke oppgi varighet
 				course.setDuration(null);
 			}
@@ -282,7 +282,10 @@ public class PdfUtil {
 			
 			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.phoneNumber.short")), 10);
 			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.mobilePhone.short")), 10);
-			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registration.comment")), 20);
+
+			if(!ApplicationResourcesUtil.isSVV()){
+				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registration.comment")), 20);
+			}
 
 			if(ApplicationResourcesUtil.isSVV()){
 				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registration.participants")), 8);
@@ -334,11 +337,11 @@ public class PdfUtil {
 
 				if(r.getReserved()) {
 					this.addTableRow(row, reserved);
-					rCount++;
+					rCount += r.getParticipants();
 				}
 				else {
 					this.addTableRow(row, waiting);
-					wCount++;
+					wCount += r.getParticipants();
 				}
 			}
 

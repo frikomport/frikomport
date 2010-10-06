@@ -201,11 +201,13 @@ public class RegistrationListExcelExportView implements BinaryExportView
 	            	String start = f.format(course.getStartTime());
 	            	String stop = f.format(course.getStopTime());
 	            	String date = start.equals(stop)? start : start + " - " + stop;
-	            	String duration = course.getDuration()!=null ? course.getDuration() : "";
-	            	if(ApplicationResourcesUtil.isSVV()){
-	            		duration = "";
-	            	}
-	            	
+
+	    			if("n/a".equalsIgnoreCase(course.getDuration())){
+	    				// pga. SVV's mulighet for å ikke oppgi varighet
+	    				course.setDuration(null);
+	    			}
+	    			String duration = course.getDuration()!=null ? (" (" + course.getDuration() + ")") : "";
+	    			
 	            	short colNum = 0;
 	            	// adds coursename, date, duration
 	            	HSSFRow r = sheet.createRow(rowNum++);
@@ -232,10 +234,10 @@ public class RegistrationListExcelExportView implements BinaryExportView
 	                firstRegistration = false;
             	}
 				if(registration.getReserved()) {
-					rCount++;
+					rCount += registration.getParticipants();
 				}
 				else {
-					wCount++;
+					wCount += registration.getParticipants();
 				}
             }
         }
@@ -244,7 +246,9 @@ public class RegistrationListExcelExportView implements BinaryExportView
             // adds attendant counts and time of update
 			HSSFRow r = sheet.createRow(rowNum++);
             writeCell(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationList.attendants")) + ": " + rCount, r.createCell(colNum++));
-            writeCell(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.waitlist")) + ": " + wCount, r.createCell(colNum++));
+            if(!ApplicationResourcesUtil.isSVV()){
+				writeCell(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.waitlist")) + ": " + wCount, r.createCell(colNum++));
+			}
             writeCell(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationsSent.updated")) + " " + f.format(new Date()), r.createCell(colNum++));
 
             // empty row
@@ -380,7 +384,7 @@ public class RegistrationListExcelExportView implements BinaryExportView
     {
         HSSFCellStyle headerStyle = getNewCellStyle();
 
-        headerStyle.setFillPattern(HSSFCellStyle.FINE_DOTS);
+        headerStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
         headerStyle.setFillBackgroundColor(HSSFColor.BLUE_GREY.index);
         HSSFFont bold = wb.createFont();
         bold.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);

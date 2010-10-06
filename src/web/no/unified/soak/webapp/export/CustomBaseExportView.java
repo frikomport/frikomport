@@ -319,9 +319,9 @@ public abstract class CustomBaseExportView implements TextExportView
 
 				}
 				if (registration.getReserved()) {
-					rCount++;
+					rCount += registration.getParticipants();
 				} else {
-					wCount++;
+					wCount += registration.getParticipants();
 				}
 			}
 		}
@@ -335,11 +335,13 @@ public abstract class CustomBaseExportView implements TextExportView
 						+ ": " + rCount));
 				write(out, CELL_END);
 
-				write(out, CELL_START);
-				write(out, escapeColumnValue(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.waitlist"))
-						+ ": " + wCount));
-				write(out, CELL_END);
-
+	            if(!ApplicationResourcesUtil.isSVV()){
+					write(out, CELL_START);
+					write(out, escapeColumnValue(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.waitlist"))
+							+ ": " + wCount));
+					write(out, CELL_END);
+	            }
+	            
 				write(out, CELL_START);
 				write(out, escapeColumnValue(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil
 						.getText("registrationsSent.updated"))
@@ -370,7 +372,12 @@ public abstract class CustomBaseExportView implements TextExportView
 		String start = f.format(course.getStartTime());
 		String stop = f.format(course.getStopTime());
 		String date = start.equals(stop) ? start : start + " - " + stop;
-		String duration = course.getDuration() != null ? StringEscapeUtils.unescapeHtml(course.getDuration()) : "";
+
+		if("n/a".equalsIgnoreCase(course.getDuration())){
+			// pga. SVV's mulighet for å ikke oppgi varighet
+			course.setDuration(null);
+		}
+		String duration = course.getDuration()!=null ? (" (" + course.getDuration() + ")") : "";
 
 		// adds coursename, date, duration
 		write(out , ROW_START);
