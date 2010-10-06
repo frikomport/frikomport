@@ -15,4 +15,6 @@ public interface ConfigurationDAO extends DAO {
     public List<Configuration> getConfigurations();
     
     public void saveConfiguration(Configuration configuration);
+    
+    public Long nextId();
 }

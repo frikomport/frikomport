@@ -42,4 +42,17 @@ public interface ConfigurationManager extends Manager{
 	 * @param configuration
 	 */
 	public void saveConfiguration(Configuration configuration);
+	
+	/**
+	 * Checks if configuration exists
+	 * @param key Key to check
+	 * @return true if configuration exists
+	 */
+	public boolean exists(String key);
+	
+	/**
+	 * Gets the next free id
+	 * @return
+	 */
+	public Long nextId();
 }

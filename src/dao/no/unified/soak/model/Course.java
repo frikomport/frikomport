@@ -67,6 +67,7 @@ public class Course extends BaseObject implements Serializable {
     private Integer status = 0;
     private Boolean restricted = false;
     private Boolean chargeoverdue = false;
+    private String additionalInfo;
 
     /**
      * @return
@@ -598,6 +599,18 @@ public class Course extends BaseObject implements Serializable {
     public void setStatus(Integer status) {
         this.status = status;
     }
+    
+    /**
+    * Additional info for the course
+    * @return
+    * @hibernate.property column="additionalinfo" length="1000" not-null="false"
+    */
+    public String getAdditionalInfo() {
+        return additionalInfo;
+    }
+    public void setAdditionalInfo(String additionalInfo) {
+        this.additionalInfo = additionalInfo;
+    }
 
     /**
      * @see java.lang.Object#toString()
@@ -669,6 +682,7 @@ public class Course extends BaseObject implements Serializable {
     	this.setRole(original.getRole());
     	this.setRestricted(original.getRestricted());
         this.setChargeoverdue(original.getChargeoverdue());
+        this.setAdditionalInfo(original.getAdditionalInfo());
     }
 
     /**

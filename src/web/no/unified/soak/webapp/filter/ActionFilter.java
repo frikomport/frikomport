@@ -153,6 +153,7 @@ public class ActionFilter implements Filter {
         session.setAttribute("showServiceArea", configurationManager.isActive("access.registration.showServiceArea",true));
         session.setAttribute("showComment", configurationManager.isActive("access.registration.showComment",true));
         session.setAttribute("itemCount", configurationManager.getValue("list.itemCount", "25"));
+        session.setAttribute("showAdditionalInfo", configurationManager.isActive("access.course.showAdditionalInfo",false));
     }
 
 	private void doEZAccessing(HttpServletRequest request, HttpSession session) {

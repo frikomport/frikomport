@@ -222,6 +222,10 @@ function fillSelect(obj){
 
     <display:column media="excel" property="description" sortable="true" headerClass="sortable" titleKey="course.description.export"/>
 
+<c:if test="${showAdditionalInfo}">
+    <display:column media="excel" property="additionalInfo" sortable="true" headerClass="sortable" titleKey="course.additionalInfo"/>
+</c:if>
+
     <display:column media="excel" property="detailURL" sortable="true" headerClass="sortable" titleKey="course.detailURL.export"/>
 
     <display:setProperty name="paging.banner.item_name" value="${item}"/>

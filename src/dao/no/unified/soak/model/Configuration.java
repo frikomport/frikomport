@@ -16,6 +16,16 @@ public class Configuration extends BaseObject implements Serializable {
     private String name;
     private Boolean active;
     private String value;
+    
+    public Configuration() {
+        // Empty default constructor
+    };
+    
+    public Configuration(Long id, String name, Boolean active) {
+        this.id = id;
+        this.name = name;
+        this.active = active;
+    }
 
     /**
      * @hibernate.id column="id" not-null="true" generator-class="assigned"

@@ -52,4 +52,20 @@ public class ConfigurationManagerImpl extends BaseManager implements
 		dao.saveConfiguration(configuration);
 	}
 	
+    /**
+     * @see ConfigurationManager#exists(String)
+     */
+	public boolean exists(String key) {
+	    Configuration configuration = dao.getConfiguration(key);
+	    if (configuration == null) {
+            return false;
+        }
+	    return true;
+	}
+	
+	@Override
+	public Long nextId() {
+	    return dao.nextId();
+	}
+	
 }

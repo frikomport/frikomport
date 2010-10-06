@@ -537,6 +537,19 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 					path="detailURL" />
 			</td>
 		</tr>
+        
+        <c:if test="${showAdditionalInfo}">
+        <tr>
+            <th>
+                <soak:label key="course.additionalInfo" />
+            </th>
+            <td>
+                <form:textarea cols="50" rows="3" path="additionalInfo"/>
+                <form:errors cssClass="fieldError" htmlEscape="false"
+                    path="additionalInfo" />
+            </td>
+        </tr>
+        </c:if>
 
 		<tr>
 			<td></td>

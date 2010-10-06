@@ -90,8 +90,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     }
     
     public void updateDatabase() {
-        // Schmema updates preactions
-//        updateDatabaseSchemaBefore();
+        updateCategories();
         // ServiceArea updates
         updateServiceAreas();
         // User updates
@@ -102,57 +101,25 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
         updateCourses();
         // Registration updates
         updateRegistrations();
-        // Schema updates postactions
-        updateDatabaseSchemaAfter();
-        
         //update configuration content
         updateConfigurations();
     }
 
-    /**
-     * Updates databaseschema
-     * @since 1.6
-     */
-    private void updateDatabaseSchemaBefore(){
-        updateCategorySchema();
-        updateCourseSchema();
-    }
-
-    private void updateCategorySchema() {
+    private void updateCategories() {
         String sql = "";
         try{
             sql = "select * from category";
             SqlRowSet rowSet = jt.queryForRowSet(sql);
             if(rowSet.next()){
                 log.debug(rowSet.toString());
-            }
-        }
-        catch(Exception e){
-            log.debug("Create table category");
-            sql = "create table category (id integer not null default 0, name varchar(100) not null, selectable tinyint(1) default 1)";
-            jt.execute(sql);
-            sql = "insert into category values (1,'Kurs',true)";
-            jt.execute(sql);
-        }
-    }
-
-    private void updateCourseSchema(){
-        String sql = "";
-        sql = "select * from course";
-        SqlRowSet rowSet =  jt.queryForRowSet(sql);
-        if(rowSet.next()){
-            int categoryid = 0;
-            try{
-                categoryid = rowSet.getInt("categoryid");
-            }
-            catch(Exception e){
-                sql = "ALTER TABLE course ADD COLUMN categoryid BIGINT(20)";
+            } else {
+                sql = "insert into category values (1,'Kurs',true)";
                 jt.execute(sql);
             }
         }
-    }
-
-    private void updateDatabaseSchemaAfter(){
+        catch(Exception e){
+            log.info("Could not insert category");
+        }
     }
 
     /**
@@ -446,6 +413,46 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
     			if(updated) configurationManager.saveConfiguration(configuration);
     		}
     	}
+    	// Create new configurations
+    	if(!configurationManager.exists("access.course.showAdditionalInfo")) {
+    	    configurationManager.saveConfiguration(new Configuration(configurationManager.nextId(),"access.course.showAdditionalInfo", false));
+    	}
+    	if(!configurationManager.exists("access.course.singleprice")) {
+    	    configurationManager.saveConfiguration(new Configuration(configurationManager.nextId(),"access.course.singleprice", false));
+    	}
+    	if(!configurationManager.exists("access.course.filterlocation")) {
+    	    configurationManager.saveConfiguration(new Configuration(configurationManager.nextId(),"access.course.filterlocation", false));
+    	}
+        if(!configurationManager.exists("access.registration.delete")) {
+            configurationManager.saveConfiguration(new Configuration(configurationManager.nextId(),"access.registration.delete", false));
+        }
+        if(!configurationManager.exists("access.registration.anonymous")) {
+            configurationManager.saveConfiguration(new Configuration(configurationManager.nextId(),"access.registration.anonymous", false));
+        }
+        if(!configurationManager.exists("access.registration.userdefaults")) {
+            configurationManager.saveConfiguration(new Configuration(configurationManager.nextId(),"access.registration.userdefaults", false));
+        }
+        if(!configurationManager.exists("access.registration.emailrepeat")) {
+            configurationManager.saveConfiguration(new Configuration(configurationManager.nextId(),"access.registration.emailrepeat", false));
+        }
+        if(!configurationManager.exists("access.registration.showEmployeeFields")) {
+            configurationManager.saveConfiguration(new Configuration(configurationManager.nextId(),"access.registration.showEmployeeFields", true));
+        }
+        if(!configurationManager.exists("access.registration.showServiceArea")) {
+            configurationManager.saveConfiguration(new Configuration(configurationManager.nextId(),"access.registration.showServiceArea", true));
+        }
+        if(!configurationManager.exists("access.registration.showComment")) {
+            configurationManager.saveConfiguration(new Configuration(configurationManager.nextId(),"access.registration.showComment", true));
+        }
+        if(!configurationManager.exists("mail.registration.notifyResponsible")) {
+            configurationManager.saveConfiguration(new Configuration(configurationManager.nextId(),"mail.registration.notifyResponsible", false));
+        }
+        if(!configurationManager.exists("mail.course.sendSummary")) {
+            configurationManager.saveConfiguration(new Configuration(configurationManager.nextId(),"mail.course.sendSummary", true));
+        }
+        if(!configurationManager.exists("show.menu")) {
+            configurationManager.saveConfiguration(new Configuration(configurationManager.nextId(),"show.menu", false));
+        }
     }
     
     public void executeTask() {

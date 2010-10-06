@@ -7,6 +7,8 @@ import no.unified.soak.model.Configuration;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 public class ConfigurationDAOHibernate extends BaseDAOHibernate implements ConfigurationDAO {
@@ -38,4 +40,16 @@ public class ConfigurationDAOHibernate extends BaseDAOHibernate implements Confi
         getHibernateTemplate().flush();
     }
     
+    @Override
+    public Long nextId() {
+        DetachedCriteria criteria = DetachedCriteria.forClass(Configuration.class);
+        criteria.setProjection(Projections.max("id"));
+        Long id = 0L;
+        List<Long> result = getHibernateTemplate().findByCriteria(criteria);
+        if (result == null) {
+            id = 1L;
+        }
+        id = result.get(0) + 1;
+        return id;
+    }
 }
