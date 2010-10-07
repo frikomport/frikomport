@@ -320,6 +320,9 @@ public class BaseFormController extends SimpleFormController {
 		if (referencingObjectFieldnamePrefix == null) {
 			referencingObjectFieldnamePrefix = "";
 		}
+		
+		if(obj == null) return 0;
+		
 		for (Method method : obj.getClass().getMethods()) {
 			String methodName = method.getName();
 			if (!methodName.substring(0, 3).equals("set")) {
@@ -335,7 +338,7 @@ public class BaseFormController extends SimpleFormController {
 					String fieldName = lowercaseFirstLetter(fieldNameCamelCase);
 					i += validateAnnotations(objUsed, errors, fieldName+".");
 				} catch (Exception e) {
-					log.warn("Validation error connected to obj=[]" + obj + " and method=[" + method + "].");
+					log.warn("Validation error connected to obj=[]" + obj + " and method=[" + method + "].", e);
 				}
 			}
 
