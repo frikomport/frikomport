@@ -199,7 +199,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
     
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-		<c:if test="${(isAdmin || isEducationResponsible || (!isSVV && isEventResponsible && registrationList.course.responsible.username == username) || (isSVV && isEventResponsible && registrationList.course.organization2id == user.organization2id)) && !registrationList.canceled}">
+		<c:if test="${(isAdmin || isEducationResponsible || (!isSVV && isEventResponsible && registrationList.course.responsible.username == currentUserForm.username) || (isSVV && isEventResponsible && (registrationList.course.organization2id == currentUserForm.organization2id || registrationList.course.responsible.username == currentUserForm.username))) && !registrationList.canceled}">
         <a href='<c:url context="${urlContext}" value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseId" value="${registrationList.courseid}"/></c:url>'>
             <img src="<c:url context="${urlContext}" value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>

@@ -1,7 +1,7 @@
 <%@ include file="/common/taglibs.jsp"%>
 
 <c:set var="admin" value="${false}"/>
-<c:if test="${isAdmin || isEducationResponsible || (isEventResponsible && course.responsible.username == username)}">
+<c:if test="${isAdmin || isEducationResponsible || (isEventResponsible && ((isSVV && course.organization2id == currentUserForm.organization2id) || course.responsible.username == currentUserForm.username))}">
 	<c:set var="admin" value="${true}"/>
 </c:if>
 
@@ -31,7 +31,6 @@
 <fmt:message key="registrationList.items" var="items"/>
 
 <table class="detail">
-	
 	<jsp:include page="course.jsp">
 		<jsp:param name="course" value="${course}"/>
 	</jsp:include>
