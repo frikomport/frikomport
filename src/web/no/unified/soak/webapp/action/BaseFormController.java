@@ -34,6 +34,7 @@ import no.unified.soak.util.DateUtil;
 import no.unified.soak.validation.DigitsOnly;
 import no.unified.soak.validation.Email;
 import no.unified.soak.validation.LessThanField;
+import no.unified.soak.validation.MaxLength;
 import no.unified.soak.validation.MinLength;
 import no.unified.soak.validation.MinValue;
 import no.unified.soak.validation.Required;
@@ -343,6 +344,7 @@ public class BaseFormController extends SimpleFormController {
 			i += validateEmail(obj, errors, method, referencingObjectFieldnamePrefix);
 			i += validateDigitsOnly(obj, errors, method, referencingObjectFieldnamePrefix);
 			i += validateMinLength(obj, errors, method, referencingObjectFieldnamePrefix);
+			i += validateMaxLength(obj, errors, method, referencingObjectFieldnamePrefix);
 			i += validateLessThanField(obj, errors, method, referencingObjectFieldnamePrefix);
 		}
 		return i;
@@ -456,6 +458,40 @@ public class BaseFormController extends SimpleFormController {
 		return nErrors;
 	}
 
+	private int validateMaxLength(Object obj, BindException errors, Method method, String referencingObjectFieldnamePrefix) {
+		int nErrors=0;
+		MaxLength maxLengthAnnotation = method.getAnnotation(MaxLength.class);
+		if (maxLengthAnnotation != null) {
+			String fieldNameCamelCase = method.getName().substring(3);
+			String fieldName = lowercaseFirstLetter(fieldNameCamelCase);
+			Class<? extends Object> objClass = obj.getClass();
+			
+			if (isDisabledByAnnotatedConfiguration(method)) {
+				return nErrors;
+			}
+
+			try {
+				Method getMethod = objClass.getMethod("get" + fieldNameCamelCase);
+				Object methodResult = getMethod.invoke(obj);
+				int maxLength = Integer.parseInt(maxLengthAnnotation.value());
+
+				if (methodResult != null && methodResult instanceof String && StringUtils.isNotBlank((String) methodResult) && ((String) methodResult).length() > maxLength) {
+					String fieldText = getFieldDisplayName(obj, referencingObjectFieldnamePrefix+fieldName);
+					Object[] args = new Object[] { fieldText, maxLength };
+					nErrors = 1;
+					errors.rejectValue(referencingObjectFieldnamePrefix+fieldName, "errors.maxlength", args, fieldName + " must have at most "+maxLength+" charcters.");
+				} else if (methodResult != null && !(methodResult instanceof String)) {
+					Object[] args = new String[] { "Tried to validate the length of a non-string field \"" + fieldName
+							+ "\". Cannot validate." };
+					errors.rejectValue(referencingObjectFieldnamePrefix+fieldName, "errors.detail", args, "Illegal internal state tied to the value of "
+							+ fieldName + ".");
+				}
+			} catch (Exception e) {
+				log.warn("Feil under validering av " + fieldName + ": " + e);
+			}
+		}
+		return nErrors;
+	}
 	private int validateDigitsOnly(Object obj, BindException errors, Method method, String referencingObjectFieldnamePrefix) {
 		int nErrors=0;
 		DigitsOnly digitsOnlyAnnotation = method.getAnnotation(DigitsOnly.class);

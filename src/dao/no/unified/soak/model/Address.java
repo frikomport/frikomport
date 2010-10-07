@@ -7,15 +7,16 @@
 */
 package no.unified.soak.model;
 
+import java.io.Serializable;
+
 import no.unified.soak.validation.DigitsOnly;
+import no.unified.soak.validation.MaxLength;
 import no.unified.soak.validation.MinLength;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-
-import java.io.Serializable;
 
 
 /**
@@ -131,6 +132,7 @@ public class Address extends BaseObject implements Serializable {
      */
     @DigitsOnly
     @MinLength("4")
+    @MaxLength("4")
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
