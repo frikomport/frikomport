@@ -41,12 +41,8 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
      */
     public User getUser(String username) {
         User user = (User) getHibernateTemplate().get(User.class, username);
-
-        if (user == null) {
-//            log.warn("User '" + username + "' not found.");
-            throw new ObjectRetrievalFailureException(User.class, username);
-        }
-
+        if (user == null) throw new ObjectRetrievalFailureException(User.class, username);
+        evict(user); // to avoid StaleObjectException / OptimisticLockingFailed
         return user;
     }
 
@@ -55,6 +51,7 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
      */
     public User getUserSilent(String username) {
     	User user = (User) getHibernateTemplate().get(User.class, username);
+        if (user != null) evict(user); // to avoid StaleObjectException / OptimisticLockingFailed
     	return user;
     }
 
@@ -65,7 +62,9 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
         if(result == null || result.size() != 1){
             return null;
         }
-        return result.get(0);
+    	User user = result.get(0);
+        if (user != null) evict(user); // to avoid StaleObjectException / OptimisticLockingFailed
+        return user;
     }
 
     /**
@@ -94,7 +93,13 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
         }
         
         criteria.addOrder(Order.asc("username"));
-        return getHibernateTemplate().findByCriteria(criteria);
+        
+        List<User> result = getHibernateTemplate().findByCriteria(criteria);
+        Iterator<User> it = result.iterator();
+        while(it.hasNext()){
+        	evict(it.next()); // to avoid StaleObjectException / OptimisticLockingFailed
+        }
+        return result;
     }
 
     
@@ -111,6 +116,7 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
 			Iterator i = users.iterator();
 			while(i.hasNext()) {
 				User u = (User)i.next();
+		        evict(u); // to avoid StaleObjectException / OptimisticLockingFailed
 				List tmpRoles = u.getRoleNameList();
 				if (log.isDebugEnabled()) log.debug("Found: " + u.getFullName() + "("+u.getEmail()+")"+", " + tmpRoles.toString());
 			}
@@ -131,6 +137,7 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
     		Iterator u = tmp.iterator();
     		while(u.hasNext()) {
     			User user = (User)u.next();
+    	        evict(user); // to avoid StaleObjectException / OptimisticLockingFailed
     			// prevents duplicates
     			users.put(user.getUsername(), user);
     		}
