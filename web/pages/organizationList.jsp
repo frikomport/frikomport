@@ -10,7 +10,7 @@
 <c:when test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 
 <c:set var="buttons">
-<c:if test="${isAdmin}">
+<c:if test="${isAdmin && !isSVV}">
     <button type="button" style="margin-right: 5px"
         onclick="location.href='<c:url context="${urlContext}" value="/editOrganization.html"/>'">
         <fmt:message key="button.add"/>

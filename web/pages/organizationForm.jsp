@@ -19,8 +19,7 @@
 	</c:if>
 </spring:bind>
 
-<form:form commandName="organization"
-	onsubmit="return validateOrganization(this)">
+<form:form commandName="organization" onsubmit="return validateOrganization(this)">
 	<table class="detail">
 
 		<form:hidden path="id" />
@@ -30,11 +29,12 @@
 				<soak:label key="organization.name" />
 			</th>
 			<td>
-				<form:input path="name" />
+				<form:input path="name" size="50" />
 				<form:errors cssClass="fieldError" path="name" />
 			</td>
 		</tr>
 
+<c:if test="${!isSVV}">
 		<tr>
 			<th>
 				<soak:label key="organization.number" />
@@ -44,15 +44,22 @@
 				<form:errors cssClass="fieldError" path="number" />
 			</td>
 		</tr>
+</c:if>
 
 		<tr>
 			<th>
 				<soak:label key="organization.type" />
 			</th>
 			<td>
-				<form:select path="type" items="${types}" itemLabel="displayName" itemValue="typeDBValue"/>
+			<c:if test="${!isSVV}">
+				<form:select path="type" items="${types}" itemLabel="displayName" itemValue="typeDBValue" />
 				<form:errors cssClass="fieldError" path="type" />
+			</c:if>
+			<c:if test="${isSVV}">
+				<c:out value="${organization.typeAsEnum.displayName}" />
+			</c:if>
 			</td>
+			
 		</tr>
 
 		<tr>
@@ -64,7 +71,8 @@
 				<form:errors cssClass="fieldError" path="selectable" />
 			</td>
 		</tr>
-		
+
+<c:if test="${!isSVV}">
 		<tr>
 			<th>
 				<soak:label key="organization.invoiceAddress" />
@@ -108,33 +116,20 @@
 				<form:errors cssClass="fieldError" path="invoiceAddress.postalCode" />
 			</td>
 		</tr>
+</c:if>
+			
 		<tr>
-
 			<td></td>
 			<td class="buttonBar">
 				<c:if test="${isAdmin}">
-					<input type="submit" class="button" name="save"
-						onclick="bCancel=false" value="<fmt:message key="button.save"/>" />
-					<c:if test="${!empty organization.id}">
-						<input type="submit" class="button" name="delete"
-							onclick="bCancel=true;return confirmDelete('<fmt:message key="organizationList.theitem"/>')"
+					<input type="submit" class="button" name="save" onclick="bCancel=false" value="<fmt:message key="button.save"/>" />
+					<c:if test="${!empty organization.id && !isSVV}">
+						<input type="submit" class="button" name="delete" onclick="bCancel=true;return confirmDelete('<fmt:message key="organizationList.theitem"/>')"
 							value="<fmt:message key="button.delete"/>" />
 					</c:if>
 				</c:if>
-				<input type="submit" class="button" name="cancel"
-					onclick="bCancel=true" value="<fmt:message key="button.cancel"/>" />
+				<input type="submit" class="button" name="cancel" onclick="bCancel=true" value="<fmt:message key="button.cancel"/>" />
 			</td>
 		</tr>
 	</table>
 </form:form>
-
-<v:javascript formName="organization" cdata="false"
-	dynamicJavascript="true" staticJavascript="false" />
-<script type="text/javascript"
-	src="<c:url context="${urlContext}" value="/scripts/validator.jsp"/>"></script>
-
-
-<html:javascript formName="organization" cdata="false"
-	dynamicJavascript="true" staticJavascript="false" />
-<script type="text/javascript"
-	src="<c:url context="${urlContext}" value="/script/validators.jsp"/>"></script>
