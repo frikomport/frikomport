@@ -191,11 +191,9 @@ function fillSelect(obj){
 </c:set>
 <%
 
-boolean isFirstRow=true;
 SumBuild sums = new SumBuild();
 SumBuild sumsTotal = new SumBuild();
 SumBuild sumsExport = new SumBuild();
-Integer preSumColspan = 2;
 %>
 <c:out value="${buttons}" escapeXml="false"/>
 <display:table name="${courseList}" cellspacing="0" cellpadding="0" id="courseList" pagesize="${itemCount}" 
@@ -209,7 +207,9 @@ Integer preSumColspan = 2;
             <img src="<c:url context="${urlContext}" value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
 </c:if>
+        <% sums.addToNextSum("sum-pencil.png", null); %>
     </display:column>
+        <% sumsTotal.addToNextSum("tot-pencil.png", null); %>
 </c:if>
 
 <c:choose>
@@ -223,7 +223,9 @@ Integer preSumColspan = 2;
                		alt="<fmt:message key="icon.warning"/>" class="icon" /><fmt:message key="course.cancelled.alert"/><br/></c:if>
          <a href="<c:url context="${urlContext}" value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>" 
          title="<c:out value="${courseDescription}"/>"><c:out value="${courseList.name}"/></a>
+        <% sums.addToNextSum(null, null); %>
     </display:column>
+    <% sumsTotal.addToNextSum(null, null); %>
     <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="course.name"/>
 </c:when>
 <c:otherwise>
@@ -235,11 +237,9 @@ Integer preSumColspan = 2;
 		        <fmt:message key="button.signup"/>
 		    </button>
 		</c:if>
-	    <%if (isFirstRow) {
-	    	preSumColspan++;
-	    } 
-	    %>
+        <% sums.addToNextSum("sum-button.signup", null); %>
     </display:column>
+    <% sumsTotal.addToNextSum("tot-button.signup", null); %>
 	</c:if>
 </c:otherwise>
 </c:choose>
@@ -250,7 +250,9 @@ Integer preSumColspan = 2;
         <c:if test="${courseList.status == 1}"><img src="<c:url context="${urlContext}" value="/images/stop.png"/>" alt="<fmt:message key="course.status.finished"/>" title="<fmt:message key="course.status.finished"/>" class="icon"/></c:if>
         <c:if test="${courseList.status == 2}"><img src="<c:url context="${urlContext}" value="/images/accept.png"/>" alt="<fmt:message key="course.status.published"/>" title="<fmt:message key="course.status.published"/>" class="icon"/></c:if>
         <c:if test="${courseList.status == 3}"><img src="<c:url context="${urlContext}" value="/images/cancel.png"/>" alt="<fmt:message key="course.status.cancelled"/>" title="<fmt:message key="course.status.cancelled"/>" class="icon"/></c:if>
+        <% sums.addToNextSum("sum-status", null); %>
     </display:column>
+    <% sumsTotal.addToNextSum("tot-status", null); %>
     <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="course.status">
         <c:if test="${courseList.status == 0}"><fmt:message key="course.status.created"/></c:if>
         <c:if test="${courseList.status == 1}"><fmt:message key="course.status.finished"/></c:if>
@@ -263,7 +265,9 @@ Integer preSumColspan = 2;
 <c:when test="${showCourseName}">
     <display:column sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
 		<fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
+    <% sums.addToNextSum(null, null); %>
     </display:column>
+    <% sumsTotal.addToNextSum(null, null); %>
 </c:when>
 <c:otherwise>
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
@@ -274,9 +278,9 @@ Integer preSumColspan = 2;
 
          <a href="<c:url context="${urlContext}" value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>" 
          title="<c:out value="${courseDescription}"/>"><fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/></a>
-    <% sums.addToNextSum(null, null); %>
+    <% sums.addToNextSum("sum-startTime", null); %>
     </display:column>
-    <% sumsTotal.addToNextSum(null, null); %>
+    <% sumsTotal.addToNextSum("tot-startTime", null); %>
     <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
 		<fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
         <% sumsExport.addToNextSum(null, null); %>
@@ -476,13 +480,18 @@ Integer preSumColspan = 2;
 sums.toFirstSum();
 sumsTotal.toFirstSum();
 sumsExport.toFirstSum();
-isFirstRow = false;
 %>
 <c:if test="${isSVV && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
 <display:footer media="html">
+<%
+int preSumColspan=0;
+for(int i=0; "".equals(sums.get(i)) && i<sums.size(); i++)  {
+preSumColspan++;
+}
+%>
 <tr><td class="sum" colspan="<%=preSumColspan%>"><fmt:message key="courseList.pageSum"/></td> 
 <%
-for(int i=0; i<sums.size(); i++) {
+for(int i=preSumColspan; i<sums.size(); i++) {
 %>
 <td class="sum"><%=sums.get(i)%></td>
 <%
@@ -492,7 +501,7 @@ for(int i=0; i<sums.size(); i++) {
 
 <tr><td class="sum" colspan="<%=preSumColspan%>"><fmt:message key="courseList.totalSum"/></td> 
 <%
-for(int i=0; i<sumsTotal.size(); i++) {
+for(int i=preSumColspan; i<sumsTotal.size(); i++) {
 %>
 <td class="sum"><%=sumsTotal.get(i)%></td>
 <%
