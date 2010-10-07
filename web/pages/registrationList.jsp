@@ -243,8 +243,10 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
     </display:column>
     <display:column media="csv excel xml pdf" property="email" sortable="true" headerClass="sortable" titleKey="registration.email"/>
     
+	<c:if test="${!isSVV}">
     <display:column property="phone" sortable="true" headerClass="sortable"
          titleKey="registration.phone" class="${tdClass}"/>
+	</c:if>
          
     <display:column property="mobilePhone" sortable="true" headerClass="sortable"
          titleKey="registration.mobilePhone" class="${tdClass}"/>
@@ -259,9 +261,6 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
     	<c:out value="${registrationList.invoiceAddress.postalCode}"/>
     </display:column>
 	</c:if>
-
-    <!-- display:column property="course.organization2.name" sortable="true" headerClass="sortable"
-         titleKey="course.organization2" class="${tdClass}"/ -->
 	
 <c:if test="${useServiceArea}">
 	<display:column property="serviceArea.name" sortable="true" headerClass="sortable" 
