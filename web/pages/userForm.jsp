@@ -36,12 +36,10 @@
 			<tr>
 				<td></td>
 				<td class="buttonBar">
-					<input type="submit" class="button" name="save"
-						onclick="bCancel=false" value="<fmt:message key="button.save"/>" />
-					<input type="button" class="button" name="cancel"
-						onclick="javascript:history.go(-1)"
-						value="<fmt:message key="button.cancel"/>" />
-
+					<c:if test="${!isSVV || (isSVV && (isAdmin || isEducationResponsible || isEventResponsible))}">
+						<input type="submit" class="button" name="save"	onclick="bCancel=false" value="<fmt:message key="button.save"/>" />
+					</c:if>
+					<input type="button" class="button" name="cancel" onclick="javascript:history.go(-1)" value="<fmt:message key="button.cancel"/>" />
 				</td>
 			</tr>
 		</c:set>
@@ -464,9 +462,3 @@ function fillSelect(obj){
 
 
 </script>
-
-<v:javascript formName="user" staticJavascript="false" />
-<script type="text/javascript"
-	src="<c:url context="${urlContext}" value="/scripts/validator.jsp"/>"></script>
-
-

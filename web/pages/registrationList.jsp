@@ -197,7 +197,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 		</c:otherwise>
 	</c:choose>
     
-<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
 		<c:if test="${(isAdmin || isEducationResponsible || (!isSVV && isEventResponsible && registrationList.course.responsible.username == currentUserForm.username) || (isSVV && isEventResponsible && (registrationList.course.organization2id == currentUserForm.organization2id || registrationList.course.responsible.username == currentUserForm.username))) && !registrationList.canceled}">
         <a href='<c:url context="${urlContext}" value="/performRegistration.html"><c:param name="id" value="${registrationList.id}"/><c:param name="courseId" value="${registrationList.courseid}"/></c:url>'>
@@ -237,6 +237,10 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
          
     <display:column property="firstName" sortable="true" headerClass="sortable"
          titleKey="registration.firstName" class="${tdClass}"/>
+
+    <display:column sortable="true" headerClass="sortable" titleKey="registration.birthdate" sortProperty="birthdate" class="${tdClass}">
+         <fmt:formatDate value="${registrationList.birthdate}" type="date" pattern="${dateformat}"/>
+    </display:column>
          
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="registration.email" class="${tdClass}">
          <a href="mailto:<c:out value="${registrationList.email}"/>"><c:out value="${registrationList.email}"/></a>
