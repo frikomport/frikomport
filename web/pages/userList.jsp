@@ -68,12 +68,14 @@
     </display:column>
     <display:column media="csv excel xml pdf" property="username" sortable="true" headerClass="sortable" titleKey="user.username"/>
     
-    <display:column property="firstName" sortable="true"
-        headerClass="sortable" titleKey="user.firstName" />
-    <display:column property="lastName" sortable="true"
-        headerClass="sortable" titleKey="user.lastName" />
-    <display:column property="email" sortable="true" headerClass="sortable"
-        autolink="true" titleKey="user.email" />
+    <display:column property="firstName" sortable="true" headerClass="sortable" titleKey="user.firstName" />
+    <display:column property="lastName" sortable="true" headerClass="sortable" titleKey="user.lastName" />
+    <display:column property="email" sortable="true" headerClass="sortable" autolink="true" titleKey="user.email" />
+
+    <display:column sortable="true" headerClass="sortable" titleKey="user.enabled">
+		<c:if test="${userList.enabled == true}"><fmt:message key="checkbox.checked"/></c:if>
+		<c:if test="${userList.enabled == false}"><fmt:message key="checkbox.unchecked"/></c:if>
+	</display:column>
 
     <fmt:message var="user" key="userList.user" />
     <fmt:message var="users" key="userList.users" />
