@@ -87,11 +87,11 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 					local.setEnabled(false);
 					userDAO.updateUser(local);
 					if (log.isDebugEnabled())
-						log.debug("Deaktivert: " + local.getFullName() + " (" + local.getEmail() + ")");
+						log.debug("Deaktivert: " + local.getFullName() + " [" + local.getUsername() + "] " + local.getEmail());
 				} else {
 					processUser(ldapUser);
 					if (log.isDebugEnabled())
-						log.debug("LDAP: " + local.getFullName() + " (" + local.getEmail() + ")");
+						log.debug("LDAP: " + local.getFullName() + " [" + local.getUsername() + "] " + local.getEmail());
 				}
 			}
 			log.info("Synkronisering av " + antall + " brukere ferdig!");
