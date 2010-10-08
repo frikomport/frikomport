@@ -128,7 +128,7 @@ public interface UserManager extends Manager {
 	 * Retrieves all responsibles from eZ publish.
 	 * @return
 	 */
-	public List getResponsibles();
+	public List getResponsibles(boolean includeDisabled);
 
 	/**
 	 * Retrieves all roles.

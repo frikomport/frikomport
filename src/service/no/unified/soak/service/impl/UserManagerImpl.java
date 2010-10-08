@@ -210,13 +210,16 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		return roles;
 	}
 
-	public List getResponsibles() {
+	public List getResponsibles(boolean includeDisabled) {
 		List extUsers = getExtResponsibles();
 		List users = new ArrayList();
 		for (Iterator iter = extUsers.iterator(); iter.hasNext();) {
 			ExtUser extUser = (ExtUser) iter.next();
 			try {
-				users.add(dao.getUser(extUser.getUsername()));
+				final User foundUser = dao.getUser(extUser.getUsername());
+				if (includeDisabled || foundUser.getEnabled()) {
+					users.add(foundUser);
+				}
 			} catch (ObjectRetrievalFailureException objectRetrievalFailureException) {
 				User user = addUser(extUser.getUsername(), extUser.getFirst_name(), extUser.getLast_name(), extUser
 						.getEmail(), extUser.getId(), extUser.getRolenames(), extUser.getKommune(), null, null);

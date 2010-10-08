@@ -186,7 +186,7 @@ public class CourseFormController extends BaseFormController {
             model.put("instructors", people);
         }
 
-        List responsibles = userManager.getResponsibles();
+        List responsibles = userManager.getResponsibles(false);
         if (responsibles != null) {
             model.put("responsible", responsibles);
         }

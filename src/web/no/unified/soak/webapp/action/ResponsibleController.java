@@ -47,7 +47,7 @@ public class ResponsibleController implements Controller {
             log.debug("entering 'handleRequest' method...");
         }
 
-        List responsibles = userManager.getResponsibles();
+        List responsibles = userManager.getResponsibles(true);
         
         return new ModelAndView("responsibleList", Constants.RESPONSIBLE_LIST, responsibles);
     }
