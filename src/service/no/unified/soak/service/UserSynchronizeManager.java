@@ -24,5 +24,5 @@ public interface UserSynchronizeManager extends Task{
     /**
      * Processes one singe user
      */
-    public User processUser(ExtUser user);
+    public User processUser(ExtUser user, String disableThisUser);
 }

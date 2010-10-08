@@ -138,7 +138,7 @@ public class SVVAuthenticationFilter implements Filter {
 	}
 
     private User copyUserToLocalDBAndSession(ExtUser extUser, HttpSession session) {
-        User user = userSynchronizeManager.processUser(extUser);
+        User user = userSynchronizeManager.processUser(extUser, null);
 		session.setAttribute(Constants.USERID_HTTPHEADERNAME, user.getUsername());
         session.setAttribute(Constants.USER_KEY, user);
         return user;

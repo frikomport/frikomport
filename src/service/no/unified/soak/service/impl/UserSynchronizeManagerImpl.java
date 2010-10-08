@@ -82,16 +82,14 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 				ExtUser ldapUser = extUserDAO.findUserByUsername(local.getUsername());
 				antall++;
 				if (ldapUser == null) {
-					// brukeren finnes ikke lenger i eksternt system, settes
-					// som inaktiv bruker
-					local.setEnabled(false);
-					userDAO.updateUser(local);
+					// brukeren finnes ikke lenger i eksternt system, settes som inaktiv bruker
+					processUser(null, local.getUsername());
 					log.info("Deaktivert: " + local.getFullName() + " [" + local.getUsername() + "] " + local.getEmail());
 					log.debug("Deaktivert: " + local.getFullName() + " [" + local.getUsername() + "] " + local.getEmail());
 				} else {
-					processUser(ldapUser);
-					log.info("LDAP: " + local.getFullName() + " [" + local.getUsername() + "] " + local.getEmail());
-					log.debug("LDAP: " + local.getFullName() + " [" + local.getUsername() + "] " + local.getEmail());
+					processUser(ldapUser, null);
+					log.info("LDAP: " + ldapUser.getName() + " [" + ldapUser.getUsername() + "] " + ldapUser.getEmail());
+					log.debug("LDAP: " + ldapUser.getName() + " [" + ldapUser.getUsername() + "] " + ldapUser.getEmail());
 				}
 			}
 			log.info("Synkronisering av " + antall + " brukere ferdig!");
@@ -102,17 +100,27 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 				Iterator<ExtUser> it = ezUsers.iterator();
 				while (it.hasNext()) {
 					ExtUser current = it.next();
-					processUser(current);
+					processUser(current, null);
 				}
 			}
 			log.debug("Synchronized users");
 		}
 	}
 
-    public User processUser(ExtUser current) {
+    public User processUser(ExtUser current, String disableThisUser) {
 
-        User emailuser = null;
-        User user = null;
+    	User user = null;
+		if(disableThisUser != null){
+			try {
+				user = userManager.getUser(disableThisUser);
+				userManager.disableUser(user);
+	        } catch (ObjectRetrievalFailureException e) {
+	        	log.warn("Cannot find user [" + disableThisUser + "] to disable.");
+	        } 
+			return user;
+		}
+    	
+    	User emailuser = null;
         // Sjekker om epostadressa er brukt som username i FriKomPort-databasen.
         try {
             emailuser = userManager.getUser(current.getEmail().toLowerCase());
@@ -128,16 +136,16 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
             byttNavnOgDisable(emailuser);
         }
 
-		try {
+        try {
 			user = userManager.getUser(current.getUsername());
 			userManager.updateUser(user, current.getFirst_name(), current.getLast_name(), current.getEmail().toLowerCase(), current
 					.getId(), current.getRolenames(), current.getKommune(), current.getMobilePhone(), current.getPhoneNumber());
-		} catch (ObjectRetrievalFailureException e) {
-			// extUser finnes ikkje og må opprettes
-			user = userManager.addUser(current.getUsername(), current.getFirst_name(), current.getLast_name(), current.getEmail()
-					.toLowerCase(), current.getId(), current.getRolenames(), current.getKommune(), current.getMobilePhone(),
-					current.getPhoneNumber());
-		} 
+        } catch (ObjectRetrievalFailureException e) {
+        	// extUser finnes ikkje og må opprettes
+        	user = userManager.addUser(current.getUsername(), current.getFirst_name(), current.getLast_name(), current.getEmail()
+        			.toLowerCase(), current.getId(), current.getRolenames(), current.getKommune(), current.getMobilePhone(),
+        			current.getPhoneNumber());
+        } 
 
         // Flytt registreringer
         if (emailuser != null) {

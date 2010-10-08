@@ -347,7 +347,7 @@ public class ActionFilter implements Filter {
 
 	private User copyUserToLocalDBAndSession(ExtUser extUser, HttpSession session) {
 		UserSynchronizeManager userSynchronizeManager = (UserSynchronizeManager) getBean("userSynchronizeManager");
-		User user = userSynchronizeManager.processUser(extUser);
+		User user = userSynchronizeManager.processUser(extUser, null);
 		session.setAttribute(Constants.USER_KEY, user);
 		return user;
 	}
