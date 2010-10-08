@@ -7,7 +7,9 @@
 */
 package no.unified.soak.webapp.action;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -64,6 +66,16 @@ public class UserController extends BaseFormController {
         	// SVV ønsker IKKE visning av annet enn interne brukere under "Brukerliste"
         	user.setHashuser(false);
         	users = userManager.getUsers(user, true);
+        	List<User> usersWithRoles = new ArrayList<User>();
+        	Iterator<User> us = users.iterator();
+    		while(us.hasNext()){
+    			User u = us.next();
+    			if(!u.getRoleNameList().isEmpty()){
+    				// SVV brukere som pt. ikke har FKP-roller taes bort fra "Brukerliste".
+    				usersWithRoles.add(u);
+    			}
+    		}
+    		users = usersWithRoles;
         }
         else {
         	users = userManager.getUsers(user, false);
@@ -92,6 +104,16 @@ public class UserController extends BaseFormController {
         	// SVV ønsker IKKE visning av annet enn interne brukere under "Brukerliste"
         	user.setHashuser(false);
         	users = userManager.getUsers(user, true);
+        	List<User> usersWithRoles = new ArrayList<User>();
+        	Iterator<User> us = users.iterator();
+    		while(us.hasNext()){
+    			User u = us.next();
+    			if(!u.getRoleNameList().isEmpty()){
+    				// SVV brukere som pt. ikke har FKP-roller taes bort fra "Brukerliste".
+    				usersWithRoles.add(u);
+    			}
+    		}
+    		users = usersWithRoles;
         }
         else {
         	users = userManager.getUsers(user, false);

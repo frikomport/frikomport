@@ -54,31 +54,15 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 
 	public void synchronizeUsers() {
 		if (ApplicationResourcesUtil.isSVV()) {
-			// TODO SVV-synking mot LDAP av alle påloggingsbrukere trengs i
-			// fall en brukerrolle fjernes i LDAP.
-			Hashtable<String, User> users = new Hashtable<String, User>();
-
-			List roles = roleManager.getRoles(null);
-			Iterator r = roles.iterator();
-			while (r.hasNext()) {
-				Role role = (Role) r.next();
-				// Brukere med rolle annonym eller ansatt skal utelates fra
-				// synkronisering mot LDAP
-				if (!role.getName().equals(Constants.ANONYMOUS_ROLE) && !role.getName().equals(Constants.EMPLOYEE_ROLE)) {
-					List tmp = userDAO.getUsersByRole(role.getName());
-					Iterator u = tmp.iterator();
-					while (u.hasNext()) {
-						User user = (User) u.next();
-						users.put(user.getUsername(), user);
-					}
-				}
-			}
-			// brukere som skal synkroniseres
-			Enumeration e = users.elements();
+			// SVV-synking mot LDAP av alle påloggingsbrukere trengs i fall en brukerrolle fjernes i LDAP.
 			log.info("Synkronisering av brukere starter...");
+			User filter = new User();
+			filter.setHashuser(false);
+			List users = userManager.getUsers(filter, true);
+			Iterator<User> it = users.iterator();
 			int antall = 0;
-			while (e.hasMoreElements()) {
-				User local = (User) e.nextElement();
+			while (it.hasNext()) {
+				User local = it.next();
 				ExtUser ldapUser = extUserDAO.findUserByUsername(local.getUsername());
 				antall++;
 				if (ldapUser == null) {
