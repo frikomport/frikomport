@@ -306,6 +306,11 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
     <display:setProperty name="export.ics" value="true"/>
 </c:if>
 
+<c:if test="${isSVV}">
+    <display:setProperty name="export.xml" value="false"/>
+</c:if>
+
+
 </display:table>
 </c:if>
 

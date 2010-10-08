@@ -53,7 +53,7 @@
 
 <display:table name="${userList}" cellspacing="0" cellpadding="0"
     requestURI="listUsers.html" defaultsort="1" id="userList" pagesize="${itemCount}"
-    class="list userList" export="true">
+    class="list userList" export="${!isSVV}">
     <c:if test="${isAdmin || isEducationResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
         <a href='<c:url context="${urlContext}" value="/editUser.html"><c:param name="username" value="${userList.username}"/><c:param name="from" value="list"/></c:url>'>

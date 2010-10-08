@@ -19,7 +19,7 @@
 
 <display:table name="${personList}" cellspacing="0" cellpadding="0"
     id="personList" pagesize="${itemCount}" class="list" 
-    export="true" requestURI="">
+    export="${!isSVV}" requestURI="">
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
         <a href='<c:url context="${urlContext}" value="/editPerson.html"><c:param name="id" value="${personList.id}"/><c:param name="from" value="list"/></c:url>'>

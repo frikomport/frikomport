@@ -8,7 +8,7 @@
 
 <display:table name="${responsibleList}" cellspacing="0" cellpadding="0"
     id="responsibleList" pagesize="${itemCount}" class="list" 
-    export="true" requestURI="">
+    export="${!isSVV}" requestURI="">
 
 	<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">

@@ -22,27 +22,29 @@
 
 <display:table name="${organizationList}" cellspacing="0" cellpadding="0"
     id="organizationList" pagesize="${itemCount}" class="list" 
-    export="true" requestURI="">
-<c:if test="${isAdmin}">
+    export="${!isSVV}" requestURI="">
+
+	<c:if test="${isAdmin}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
 		<a href='<c:url context="${urlContext}" value="/editOrganization.html"><c:param name="id" value="${organizationList.id}"/><c:param name="from" value="list"/></c:url>'>
             <img src="<c:url context="${urlContext}" value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
     </display:column>
-</c:if>
-    <display:column property="name" sortable="true" headerClass="sortable"
-         titleKey="organization.name"/>
+	</c:if>
+    
+    <display:column property="name" sortable="true" headerClass="sortable" titleKey="organization.name"/>
          
-    <display:column sortable="true" headerClass="sortable"
-         titleKey="organization.number">
+	<c:if test="${!isSVV}">
+    <display:column sortable="true" headerClass="sortable" titleKey="organization.number">
          <fmt:formatNumber value="${organizationList.number}" minFractionDigits="0"/>
     </display:column>
-    
+	</c:if>
+	    
     <display:column property="typeAsEnum.displayName" sortable="true" headerClass="sortable"
          titleKey="organization.type">
     </display:column>
     
-<c:if test="${(isAdmin || isEducationResponsible || isEventResponsible || isReader) && usePayment}">
+<c:if test="${(isAdmin || isEducationResponsible || isEventResponsible || isReader) && usePayment && !isSVV}">
     <display:column property="invoiceName" sortable="true" headerClass="sortable"
          titleKey="organizationList.invoiceAddress.name"/>
     <display:column property="invoiceAddress.address" sortable="true" headerClass="sortable"
