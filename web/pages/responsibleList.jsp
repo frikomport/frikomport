@@ -43,7 +43,11 @@
 
     <display:column property="organization2.name" sortable="true" headerClass="sortable"
          titleKey="user.organization2"/>
-    
+
+    <display:column sortable="true" headerClass="sortable" titleKey="user.enabled">
+		<c:if test="${responsibleList.enabled == true}"><fmt:message key="checkbox.checked"/></c:if>
+		<c:if test="${responsibleList.enabled == false}"><fmt:message key="checkbox.unchecked"/></c:if>
+	</display:column>
 </c:if>
 
     <display:setProperty name="paging.banner.item_name" value="${item}"/>
