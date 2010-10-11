@@ -554,6 +554,10 @@ public class MailUtil {
                 + course.getInstructor().getName() + ", mailto:" + course.getInstructor().getEmail() + "\n");
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.description")) + ": "
                 + course.getDescription() + "\n");
+        if(course.getAdditionalInfo() != null && !course.getAdditionalInfo().equals("")) {
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.additionalInfo")) + ": "
+                    + course.getAdditionalInfo() + "\n");            
+        }
 	}
 
     /**
