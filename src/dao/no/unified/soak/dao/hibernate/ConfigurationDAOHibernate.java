@@ -40,7 +40,6 @@ public class ConfigurationDAOHibernate extends BaseDAOHibernate implements Confi
         getHibernateTemplate().flush();
     }
     
-    @Override
     public Long nextId() {
         DetachedCriteria criteria = DetachedCriteria.forClass(Configuration.class);
         criteria.setProjection(Projections.max("id"));

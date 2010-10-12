@@ -61,6 +61,7 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
         
         try {
             ezUser = userManager.getUser(current.getUsername());
+            // Burde sjekke om brukerene er ulike før oppdatering
             userManager.updateUser(ezUser,current.getFirst_name(),current.getLast_name(),current.getEmail().toLowerCase(),current.getId(),current.getRolenames(),current.getKommune());
         } catch (Exception e) {
             // ezUser finnes ikkje og må opprettes

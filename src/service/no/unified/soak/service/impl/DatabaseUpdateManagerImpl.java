@@ -179,6 +179,11 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                         }
                     }
                 }
+                //sanitycheck for email
+                if("".equals(user.getEmail()) && user.getUsername().contains("@")){
+                    user.setEmail(user.getUsername());
+                    save = true;
+                }
                 if(save){
                     userManager.updateUser(user);
                 }
@@ -243,7 +248,11 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                     }
                 }
                 if(save){
-                    registrationManager.saveRegistration(registration);
+                    try {
+                        registrationManager.saveRegistration(registration);
+                    } catch (Exception e) {
+                        log.error("Could not update registration" + e.getMessage());
+                    }
                 }
             }
         }
@@ -321,7 +330,11 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
                     save = true;
                 }
                 if(save){
-                    courseManager.saveCourse(course);
+                    try {
+                        courseManager.saveCourse(course);
+                    } catch (Exception e) {
+                        log.error("Could not save course." + e.getMessage());
+                    }
                 }
             }
         }

@@ -63,7 +63,6 @@ public class ConfigurationManagerImpl extends BaseManager implements
 	    return true;
 	}
 	
-	@Override
 	public Long nextId() {
 	    return dao.nextId();
 	}
