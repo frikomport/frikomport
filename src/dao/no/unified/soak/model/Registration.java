@@ -177,8 +177,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the user.
-	 * @hibernate.many-to-one not-null="false" column="username" insert="false"
-	 *                        update="false" cascade="none"
+	 * @hibernate.many-to-one not-null="false" column="username" insert="false" update="false" cascade="none" optimistic-lock="false"
 	 */
 	public User getUser() {
 		return user;

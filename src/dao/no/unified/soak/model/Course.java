@@ -670,7 +670,7 @@ public class Course extends BaseObject implements Serializable {
 
      /**
      * @return Returns the responsible.
-     * @hibernate.many-to-one not-null="true" column="responsibleusername" insert="false" update="false" cascade="none"
+     * @hibernate.many-to-one not-null="true" column="responsibleusername" insert="false" update="false" cascade="none" optimistic-lock="false"
      */
      public User getResponsible() {
      return responsible;
