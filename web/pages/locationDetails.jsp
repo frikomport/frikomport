@@ -189,8 +189,11 @@
 
     <tr>
         <td class="buttonBar" colspan="2">
-            <input type="submit" class="button large" name="return" onclick="bCancel=true"
-                value="<fmt:message key="button.location.list"/>" />
+
+<c:if test="${!isSVV}">
+            <input type="submit" class="button large" name="return" onclick="bCancel=true" value="<fmt:message key="button.location.list"/>" />
+</c:if>            
+            
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
 		    <button type="button" onclick="location.href='<c:url context="${urlContext}" value="/editLocation.html"><c:param name="id" value="${location.id}"/></c:url>'">
 	    	    <fmt:message key="button.edit"/>
