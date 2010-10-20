@@ -69,7 +69,8 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
         }
         
         // Flytt registreringer
-        if (emailuser != null) {
+        // Dersom emailuser er samme som ezUser trengs ikkje dette gjøres!
+        if (emailuser != null && !emailuser.getUsername().equals(ezUser.getUsername())) {
             ezUser.setHash(emailuser.getHash());
             userManager.updateUser(ezUser);
             registrationManager.moveRegistrations(emailuser, ezUser);
