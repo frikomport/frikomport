@@ -7,7 +7,6 @@ import no.unified.soak.model.Configuration;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
