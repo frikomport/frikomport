@@ -321,6 +321,7 @@
                 <prop key="/public/listCourses.html">courseController</prop>
                 <prop key="/public">courseController</prop>
                 <prop key="/public/">courseController</prop>
+                <prop key="/public/editCourse.html">courseFormController</prop>
                 <prop key="/public/detailsCourse.html">courseDetailsController</prop>
                 <!--Course-URL-END-->
                                 

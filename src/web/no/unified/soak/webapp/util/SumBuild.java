@@ -53,6 +53,9 @@ public class SumBuild {
 	}
 
 	public String get(int idx) {
+		if(sumList.isEmpty() || (idx+1) > sumList.size()){ 
+			return "";
+		}
 		final Integer elem = (Integer) sumList.get(idx)[1];
 		if (elem != null && elem instanceof Integer) {
 			return elem.toString();
