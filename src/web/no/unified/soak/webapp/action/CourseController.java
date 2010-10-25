@@ -242,6 +242,7 @@ public class CourseController extends BaseFormController {
         	if(roles.contains(Constants.ANONYMOUS_ROLE) && roles.size() == 1){ 
         		// publikumsbruker
         		status = new Integer[]{ CourseStatus.COURSE_PUBLISHED };
+                model.put("enableExport", new Boolean(false));
         	}
         	else{ 
         		// isReader / isEventResponsible / isEducationResponsible / isAdministrator
@@ -402,7 +403,7 @@ public class CourseController extends BaseFormController {
 		// validering av postnummer fra welcome.html
 		String postalcode = request.getParameter("postalcode");
 		if(!StringUtils.isBlank(postalcode)){
-			if(postalcode.length() != 4 || !StringUtils.isNumeric(postalcode)){
+			if(postalcode.length() != 4 || lessThanZeroOrNAN(postalcode)){
 				saveErrorMessage(request, getText("welcome.postalcode.error", new String[] { postalcode }, locale));
 				return new ModelAndView("redirect:welcome.html");
 			}
@@ -547,6 +548,7 @@ public class CourseController extends BaseFormController {
 			if (roles.contains(Constants.ANONYMOUS_ROLE) && roles.size() == 1) {
 				// publikumsbruker
 				status = new Integer[] { CourseStatus.COURSE_PUBLISHED };
+                model.put("enableExport", new Boolean(false));
 			} else {
 				// isReader / isEventResponsible / isEducationResponsible / isAdministrator
 				status = new Integer[] { CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED };
@@ -732,4 +734,15 @@ public class CourseController extends BaseFormController {
 
         return model;
     }
+    
+    private boolean lessThanZeroOrNAN(String postalcode){
+    	if(StringUtils.isNumeric(postalcode)){
+    		return Integer.parseInt(postalcode) < 0; // postalcode < 0 return true / postalcode >= 0 return false 
+    	}
+    	else {
+    		// negativt tall / ikke et tall
+    		return true;
+    	}
+    }
+    
 }
