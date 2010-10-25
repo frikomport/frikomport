@@ -141,7 +141,8 @@ public class RegistrationFormController extends BaseFormController {
             List<Course> courses = courseManager.searchCourses(courseForSearch, null, null, null);
             courses = updateAvailableAttendants(courses, request);
             List<Course> filtered = filterByRole(isAdmin, roles, courses);
-
+            filtered = removeCoursesWithNoAvailableSeats(courses);
+            
             if (courses != null) {
                 model.put("courseList", filtered);
             }
@@ -618,4 +619,16 @@ public class RegistrationFormController extends BaseFormController {
 		request.setAttribute("sumTotal", availableSum);
 		return updated;
 	}
+	
+	private List<Course> removeCoursesWithNoAvailableSeats(List courses){
+		List<Course> notFull = new ArrayList<Course>();
+		for (Iterator iterator = courses.iterator(); iterator.hasNext();) {
+			Course course = (Course) iterator.next();
+			if(course.getAvailableAttendants() > 0){
+				notFull.add(course);
+			}
+		}
+		return notFull;
+	}
+	
 }
