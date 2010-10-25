@@ -517,7 +517,7 @@ public class BaseFormController extends SimpleFormController {
 						return nErrors;
 					}
 					
-					Integer methodResultInt = Integer.parseInt(methodResultStr);
+					Long methodResultInt = Long.parseLong(methodResultStr);
 					if (methodResultInt < 0) {
 						String fieldText = getFieldDisplayName(obj, referencingObjectFieldnamePrefix+fieldName);
 						Object[] args = new Object[] { fieldText };
