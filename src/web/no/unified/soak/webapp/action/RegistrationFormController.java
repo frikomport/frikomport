@@ -127,7 +127,7 @@ public class RegistrationFormController extends BaseFormController {
         String registrationId = request.getParameter("id");
         if ((registrationId != null) && StringUtils.isNumeric(registrationId) && StringUtils.isNotEmpty(registrationId)) {
         	Registration registration = registrationManager.getRegistration(registrationId);
-            model.put("registration", registration);
+        	model.put("registration", registration);
 
             if(!courseId.equals(registration.getCourseid().toString())){
 				/**
@@ -312,6 +312,8 @@ public class RegistrationFormController extends BaseFormController {
 
         // Fetch the object from the form
         Registration registration = (Registration) command;
+        registrationManager.evict(registration); // for å hindre "sammenblanding" av registration fra "command" og originalRegistration  
+        
         Course course = courseManager.getCourse(registration.getCourseid().toString());
         Course originalCourse = null;
         Registration originalRegistration = null;
@@ -320,11 +322,12 @@ public class RegistrationFormController extends BaseFormController {
         if (!courseId.equals(course.getId().toString())){
             changedCourse=true;
             originalCourse = courseManager.getCourse(courseId);
-            if ((registration.getId() != null) && (registration.getId().longValue() != 0)){
-                originalRegistration = registrationManager.getRegistration(registration.getId().toString());
-            }
         }
-
+        if ((registration.getId() != null) && (registration.getId().longValue() != 0)){
+        	originalRegistration = registrationManager.getRegistration(registration.getId().toString());
+            registrationManager.evict(originalRegistration); // for å hindre "sammenblanding" av registration fra "command" og originalRegistration  
+        }
+        
         // Fetch the locale for resource message
         Locale locale = request.getLocale();
         registration.setLocale(locale.getLanguage());
@@ -417,6 +420,15 @@ public class RegistrationFormController extends BaseFormController {
 
             // sjekk om det er nok plasser til alle deltakere
             Integer availability = registrationManager.getAvailability(localAttendant, course);
+
+            if(!changedCourse && originalRegistration != null){
+				/*
+				 * Siden dette kun er en oppdatering av en registrering må registeringens 
+				 * orginalt besatte plasser frigjøres i forb. med beregning av tilgjengelighet
+				 */
+            	availability += originalRegistration.getParticipants();
+            }
+            
         	if(!configurationManager.isActive("access.registration.useWaitlists", true)){
             	if (registration.getParticipants() != null && availability.intValue() < registration.getParticipants()) {
             		// det er ikke plass til alle deltakere i registreringen
@@ -480,6 +492,16 @@ public class RegistrationFormController extends BaseFormController {
             if (availability.intValue() >= registration.getParticipants()) {
                 // There's room - save the registration
                 registration.setStatus(Registration.Status.RESERVED);
+                
+                // for å hindre "sammenblanding" av registration fra "command" og originalRegistration
+                if(registration.getId() != null){
+	                Registration cleanUpObj = registrationManager.getRegistration(registration.getId().toString());
+	                if(cleanUpObj != null){
+	                	registrationManager.evict(cleanUpObj);
+	                }
+                }
+                // -----------------------------------------------------------------------------------
+                
                 registrationManager.saveRegistration(registration);
                 Notification notification = new Notification();
                 notification.setRegistrationid(registration.getId());
