@@ -78,7 +78,7 @@ function fillSelect(obj){
 </c:if>
 
             <li>
-                <form:select  path="organizationid" onchange="fillSelect(this);">
+                <form:select  path="organizationid" onchange="fillSelect(this);" id="organizationidElement">
                     <form:options items="${organizations}" itemValue="id" itemLabel="name" />
                 </form:select>
                 <form:errors cssClass="fieldError" htmlEscape="false" path="organizationid" />
@@ -543,8 +543,6 @@ for(int i=0; i<sumsExport.size(); i++) {
 </c:if>
 
 </c:if>
-<%--
 <script type="text/javascript">
-highlightTableRows("courseList");
+fillSelect($p("organizationidElement"));
 </script>
---%>
