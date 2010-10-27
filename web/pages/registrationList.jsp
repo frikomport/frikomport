@@ -177,7 +177,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 <display:table name="${registrationList}" cellspacing="0" cellpadding="0"
     id="registrationList" pagesize="${itemCount}" class="list" 
-    export="true" requestURI="">
+    export="true" requestURI="listRegistrations.html">
 
 	<c:choose> 
 		<c:when test="${!empty registrationList && registrationList.canceled}">
