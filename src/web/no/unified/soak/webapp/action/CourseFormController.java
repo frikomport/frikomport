@@ -288,7 +288,7 @@ public class CourseFormController extends BaseFormController {
                     	}
                     }
                     
-                    Integer registrations = registrationManager.getNumberOfAttendants(false, course);
+                    Integer registrations = registrationManager.getNumberOfAttendants(false, course, true);
                     Integer attachments = attachmentManager.getCourseAttachments(course.getId()).size();
                     // Course with registrations cannot be deleted.
                     model.put("canDelete", Boolean.valueOf(registrations.intValue() == 0 && attachments.intValue() == 0));
