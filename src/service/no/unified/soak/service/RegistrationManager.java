@@ -93,6 +93,8 @@ public interface RegistrationManager extends Manager {
 	 * @return the number of attendants that fulfil the critera
 	 */
 	public Integer getNumberOfAttendants(Boolean localOnly, Course course);
+
+	public Integer getNumberOfAttendants(Boolean localOnly, Course course, Boolean reservedOnly);
 	
 	/**
 	 * Returns a list of registration based on serveral given vital attributes.
