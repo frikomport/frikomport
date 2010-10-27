@@ -115,7 +115,7 @@ public class CancelRegistrationController implements Controller {
 	        	boolean ccToResponsible = configurationManager.isActive("mail.registration.notifyResponsible", false);
 	        	
 	        	StringBuffer msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_CANCELLED_body(course, registration, chargeOverdue, configurationManager.getConfigurationsMap());
-	    		ArrayList<MimeMessage> email = MailUtil.getMailMessages(registration, Constants.EMAIL_EVENT_REGISTRATION_DELETED, course, msg, mailSender, ccToResponsible);
+	    		ArrayList<MimeMessage> email = MailUtil.getMailMessages(registration, Constants.EMAIL_EVENT_REGISTRATION_CANCELLED, course, msg, mailSender, ccToResponsible);
 	    		MailUtil.sendMimeMails(email, mailEngine);
 
 	    		// notify/upgrade no.1 on waitinglist

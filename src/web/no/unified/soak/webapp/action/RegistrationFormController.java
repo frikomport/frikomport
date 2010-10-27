@@ -106,6 +106,8 @@ public class RegistrationFormController extends BaseFormController {
         Map<String,Object> model = new HashMap<String,Object>();
         Locale locale = request.getLocale();
 
+    	model.put("linkExpired", new Boolean(false));
+        
         String courseId = request.getParameter("courseId");
         if ((courseId == null) || !StringUtils.isNumeric(courseId)) {
             // Redirect to error page - should never happen
@@ -128,14 +130,17 @@ public class RegistrationFormController extends BaseFormController {
             model.put("registration", registration);
 
             if(!courseId.equals(registration.getCourseid().toString())){
-            	// Dersom bruker har byttet møte/kurs og klikker på link i første påmeldingsepost.
-            	courseId = registration.getCourseid().toString();
+				/**
+				 * Dersom bruker har byttet møte/kurs og klikker på link i en
+				 * påmeldingsepost hvor det senere har blitt foretatt et møtebytte
+				 */
             	saveMessage(request, getText("registration.email.linkExpired", locale));
+            	model.put("linkExpired", new Boolean(true));
+            	return model;
             }
             
             // This is an existing registration, so get courses in case the user want to switch course.
-            // Retrieve the all published courses
-            // and add them to the list
+            // Retrieve the all published courses and add them to the list
             Course courseForSearch = new Course();
             courseForSearch.setStatus(CourseStatus.COURSE_PUBLISHED);
             List<Course> courses = courseManager.searchCourses(courseForSearch, null, null, null);
@@ -250,7 +255,7 @@ public class RegistrationFormController extends BaseFormController {
             User regUser = null;
             if (configurationManager.isActive("access.registration.userdefaults",false)) {
                 regUser = user;
-                if (user != null && user.getUsername().equals(Constants.ANONYMOUS_ROLE)) {
+                if (user != null && user.getUsername().equals(Constants.ANONYMOUS_ROLE)) { // SA: dette ser ut som en skrivefeil, men jeg kan ikke se på det nå.. :-)
                     regUser = (User) session.getAttribute(Constants.ALT_USER_KEY);
                 }
             } else {
@@ -335,7 +340,7 @@ public class RegistrationFormController extends BaseFormController {
         else if (request.getParameter("unregister") != null) {
             registrationManager.cancelRegistration(registration.getId().toString());
             saveMessage(request, getText("registration.canceled", locale));
-            sendMail(locale, course, registration, Constants.EMAIL_EVENT_REGISTRATION_DELETED);
+            sendMail(locale, course, registration, Constants.EMAIL_EVENT_REGISTRATION_CANCELLED);
             return new ModelAndView(getCancelView(), "courseid", registration.getCourseid());
         } else if (request.getParameter("delete") != null) {
             registrationManager.removeRegistration(registration.getId().toString());
@@ -398,11 +403,18 @@ public class RegistrationFormController extends BaseFormController {
 			
             // Lets find out if the course has room for this one
             Boolean localAttendant = new Boolean(false);
-            if (registration.getOrganizationid() != null) {
-                if (registration.getOrganizationid().longValue() == course.getOrganizationid().longValue()) {
-                    localAttendant = new Boolean(true);
-                }
+
+            if(ApplicationResourcesUtil.isSVV()){
+            	localAttendant = new Boolean(true);
             }
+            else{
+            	if(registration.getOrganizationid() != null) {
+            		if (registration.getOrganizationid().longValue() == course.getOrganizationid().longValue()) {
+            			localAttendant = new Boolean(true);
+            		}
+            	}
+            }
+
             // sjekk om det er nok plasser til alle deltakere
             Integer availability = registrationManager.getAvailability(localAttendant, course);
         	if(!configurationManager.isActive("access.registration.useWaitlists", true)){
@@ -446,7 +458,7 @@ public class RegistrationFormController extends BaseFormController {
 
             //If course has been changed, send deleted mail for original course.  
             if (changedCourse && (originalCourse != null) && (originalRegistration != null)){
-                sendMail(locale, originalCourse, originalRegistration, Constants.EMAIL_EVENT_REGISTRATION_DELETED);
+                sendMail(locale, originalCourse, originalRegistration, Constants.EMAIL_EVENT_REGISTRATION_CANCELLED);
             }
 
             // Set user object for registration
@@ -530,7 +542,7 @@ public class RegistrationFormController extends BaseFormController {
 	    	case Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION:
 	    		msg = MailUtil.create_EMAIL_EVENT_WAITINGLIST_NOTIFICATION_body(course, registration, null, false, configurationManager.getConfigurationsMap());
 	    		break;
-			case Constants.EMAIL_EVENT_REGISTRATION_DELETED:
+			case Constants.EMAIL_EVENT_REGISTRATION_CANCELLED:
 				boolean chargeOverdue = false;
 	        	if(new Date().after(course.getRegisterBy())) {
 	        		if(course.getChargeoverdue()) {

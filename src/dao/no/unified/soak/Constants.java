@@ -277,7 +277,7 @@ public class Constants {
 
     public static final int EMAIL_EVENT_WAITINGLIST_NOTIFICATION = 4;
 
-    public static final int EMAIL_EVENT_REGISTRATION_DELETED = 5;
+    public static final int EMAIL_EVENT_REGISTRATION_CANCELLED = 5;
 
     public static final int EMAIL_EVENT_REGISTRATION_CONFIRMED = 6;
 

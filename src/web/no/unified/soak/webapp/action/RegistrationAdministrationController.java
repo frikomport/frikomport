@@ -358,7 +358,7 @@ public class RegistrationAdministrationController extends BaseFormController {
 		// Send mail to the person in question
 		Registration registration = registrationManager.getRegistration(regid);
 		Course course = registration.getCourse();
-		sendMail(locale, course, Constants.EMAIL_EVENT_REGISTRATION_DELETED, registration);
+		sendMail(locale, course, Constants.EMAIL_EVENT_REGISTRATION_CANCELLED, registration);
 		registrationManager.cancelRegistration(regid);
 
 		String key = "registration.canceled";
@@ -417,7 +417,7 @@ public class RegistrationAdministrationController extends BaseFormController {
 			case Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED:
 				msg = MailUtil.create_EMAIL_EVENT_REGISTRATION_CONFIRMED_body(course, registration, null, configurationManager.getConfigurationsMap());
 				break;
-			case Constants.EMAIL_EVENT_REGISTRATION_DELETED:
+			case Constants.EMAIL_EVENT_REGISTRATION_CANCELLED:
 				boolean chargeOverdue = false;
 	        	if(new Date().after(course.getRegisterBy())) {
 	        		if(course.getChargeoverdue()) {

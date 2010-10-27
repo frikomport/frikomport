@@ -1119,7 +1119,7 @@ public class MailUtil {
                 subject = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationToWaitinglist.mail.subject", coursename));
             }
             break;
-        case Constants.EMAIL_EVENT_REGISTRATION_DELETED:
+        case Constants.EMAIL_EVENT_REGISTRATION_CANCELLED:
             subject = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationDeleted.mail.subject", coursename));
             break;
         case Constants.EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST:

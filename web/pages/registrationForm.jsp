@@ -78,7 +78,7 @@
 
 
 
-<c:if test="${!illegalRegistration}">
+<c:if test="${!illegalRegistration && !linkExpired}">
 	
 	<c:if test="${!isSVV}">
 	<div class="message" style="font-size: 12px">
