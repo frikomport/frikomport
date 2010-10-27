@@ -94,6 +94,15 @@ public interface RegistrationManager extends Manager {
 	 */
 	public Integer getNumberOfAttendants(Boolean localOnly, Course course);
 
+	/**
+	 * @see RegistrationManager#getNumberOfAttendants(Boolean, Course)
+	 * @param localOnly
+	 * @param course
+	 * @param reservedOnly
+	 *            If true, returns only registrations with status reserved.<br/>
+	 *            If false, returns only registrations with status waitinglist.
+	 * @return
+	 */
 	public Integer getNumberOfAttendants(Boolean localOnly, Course course, Boolean reservedOnly);
 	
 	/**
