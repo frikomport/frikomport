@@ -671,7 +671,7 @@ function fillSelect(obj){
 					<input type="submit" class="button" name="save"
 						onclick="bCancel=false"
 						value="<fmt:message key="button.course.save"/>" />
-					<c:if test="${!isPublished || isCancelled}">
+					<c:if test="${(!isPublished && !isSVV) || (!isPublished && !isCancelled && isSVV)}">
 						<input type="submit" class="button large" name="publish"
 							onclick="bCancel=false" id="publishButton"
 							value="<fmt:message key="button.course.publish"/>" />

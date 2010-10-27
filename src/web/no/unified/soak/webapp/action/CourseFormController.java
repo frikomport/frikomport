@@ -298,7 +298,7 @@ public class CourseFormController extends BaseFormController {
 
                 //Check if course is published
                 model.put("isPublished", CourseStatus.COURSE_PUBLISHED.equals(course.getStatus()));
-                model.put("isCancelled", Boolean.valueOf(course.getStatus().equals(CourseStatus.COURSE_CANCELLED)));
+                model.put("isCancelled", CourseStatus.COURSE_CANCELLED.equals(course.getStatus()));
             }
             
             String altUsername = (String) request.getAttribute("altusername");
