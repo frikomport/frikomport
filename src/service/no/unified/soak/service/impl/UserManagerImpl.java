@@ -14,6 +14,7 @@ import java.util.List;
 import no.unified.soak.Constants;
 import no.unified.soak.dao.ExtUserDAO;
 import no.unified.soak.dao.UserDAO;
+import no.unified.soak.dao.ws.SVVUserDAOWS;
 import no.unified.soak.ez.ExtUser;
 import no.unified.soak.model.Address;
 import no.unified.soak.model.Organization;
@@ -25,6 +26,7 @@ import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RoleManager;
 import no.unified.soak.service.UserExistsException;
 import no.unified.soak.service.UserManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.RandomGUID;
 import no.unified.soak.util.StringUtil;
 
@@ -332,21 +334,28 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	public void updateUser(User user, String firstName, String lastName, String email, Integer id,
 			List<String> rolenames, Integer kommune, String mobilePhone, String phoneNumber) {
 		Boolean save = false;
+
+		String updated = "";
+		
 		if (!firstName.equals(user.getFirstName())) {
 			user.setFirstName(firstName);
+			updated += "firstName ";
 			save = true;
 		}
 		if (!lastName.equals(user.getLastName())) {
 			user.setLastName(lastName);
+			updated += "lastName ";
 			save = true;
 		}
 		if (!email.equals(user.getEmail())) {
 			user.setEmail(email);
+			updated += "email ";
 			save = true;
 		}
 
 		if (kommune != null && kommune != 0) {
 			if (updateKommune(kommune, user)) {
+				updated += "kommune ";
 				save = true;
 			}
 		}
@@ -355,23 +364,28 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		// does, only update phone numbers when one is presented.
 		if (mobilePhone != null && !mobilePhone.equals(user.getMobilePhone())) {
 			user.setMobilePhone(mobilePhone);
+			updated += "mobilePhone ";
 			save = true;
 		}
 		if (phoneNumber != null && !phoneNumber.equals(user.getPhoneNumber())) {
 			user.setPhoneNumber(phoneNumber);
+			updated += "phoneNumber ";
 			save = true;
 		}
 
 		if(setRoles(rolenames, user)){
+			updated += "rolenames ";
 			save = true;
 		}
 		
 		if (user.getHash() == null || user.getHash().length() == 0) {
 			user.setHash(StringUtil.encodeString(user.getUsername()));
+			updated += "hash ";
 			save = true;
 		}
 
 		if (updateInvoiceAddressFromOrganization(user)) {
+			updated += "invoiceAddress ";
 			save = true;
 		}
 
@@ -379,6 +393,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 			user.setEnabled(true);
 			try {
 				saveUser(user);
+				log.info("Lagret/oppdatert " + updated + "for : " + user.getUsername());
 			} catch (UserExistsException e) {
 				log.error("UserExistsException: " + e);
 			}
@@ -436,11 +451,19 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		}
 
 		for (String rolename : rolenames) {
+			
+			if(ApplicationResourcesUtil.isSVV()){
+				/*
+				 * konvertering fra SVV- til FKP navngiving av roller for at
+				 * sammenlikning ikke alltid skal feile..! Burde vært løst annerledes :-)
+				 */
+				rolename = SVVUserDAOWS.convertRole(rolename);
+			}
+
 			if (!user.getRoleNameList().contains(rolename)) {
 				return false;
 			}
 		}
-
 		return true;
 	}
 
@@ -524,5 +547,5 @@ public class UserManagerImpl extends BaseManager implements UserManager {
     public boolean contains(Object entity) {
     	return dao.contains(entity);
     }
-
+    
 }

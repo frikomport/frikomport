@@ -40,10 +40,10 @@ import org.apache.commons.logging.LogFactory;
  * 
  */
 public class SVVUserDAOWS implements ExtUserDAO {
-	final String ROLE_ADMINISTRATOR = "FKPAdministrator";
-	final String ROLE_REGIONSADMINISTRATOR = "FKPRegionsadministrator";
-	final String ROLE_MOTEADMINISTRATOR = "FKPMoteadministrator";
-	final String ROLE_LESEBRUKER = "FKPLesebruker";
+	public static final String ROLE_ADMINISTRATOR = "FKPAdministrator";
+	public static final String ROLE_REGIONSADMINISTRATOR = "FKPRegionsadministrator";
+	public static final String ROLE_MOTEADMINISTRATOR = "FKPMoteadministrator";
+	public static final String ROLE_LESEBRUKER = "FKPLesebruker";
 	final String ROLEKEY_FROM_WEBSERVICE = "FKPM";
 
 	UserDAO userDAO;
@@ -338,4 +338,24 @@ public class SVVUserDAOWS implements ExtUserDAO {
 		}
 		return false;
 	}
+	
+	public static String convertRole(String rolename){
+		// FKP til SVV
+		if(RoleEnum.ADMIN_ROLE.getJavaDBRolename().equalsIgnoreCase(rolename)) return ROLE_ADMINISTRATOR;
+		else if(RoleEnum.EDITOR_ROLE.getJavaDBRolename().equalsIgnoreCase(rolename)) return ROLE_REGIONSADMINISTRATOR;
+		else if(RoleEnum.EVENTRESPONSIBLE_ROLE.getJavaDBRolename().equalsIgnoreCase(rolename)) return ROLE_MOTEADMINISTRATOR;
+		else if(RoleEnum.READER_ROLE.getJavaDBRolename().equalsIgnoreCase(rolename)) return ROLE_LESEBRUKER;
+		else if(RoleEnum.EMPLOYEE.getJavaDBRolename().equalsIgnoreCase(rolename)) return "Ansatt";
+		else if(RoleEnum.ANONYMOUS.getJavaDBRolename().equalsIgnoreCase(rolename)) return "Anonymous";
+		
+		// SVV til FKP
+		else if(ROLE_ADMINISTRATOR.equalsIgnoreCase(rolename)) return RoleEnum.ADMIN_ROLE.getJavaDBRolename();
+		else if(ROLE_REGIONSADMINISTRATOR.equalsIgnoreCase(rolename)) return RoleEnum.EDITOR_ROLE.getJavaDBRolename();
+		else if(ROLE_MOTEADMINISTRATOR.equalsIgnoreCase(rolename)) return RoleEnum.EVENTRESPONSIBLE_ROLE.getJavaDBRolename();
+		else if(ROLE_LESEBRUKER.equalsIgnoreCase(rolename)) return RoleEnum.READER_ROLE.getJavaDBRolename();
+		else if("Ansatt".equalsIgnoreCase(rolename)) return RoleEnum.EMPLOYEE.getJavaDBRolename();
+		else if("Anonymous".equalsIgnoreCase(rolename)) return RoleEnum.ANONYMOUS.getJavaDBRolename();
+		else return null;
+	}
+	
 }
