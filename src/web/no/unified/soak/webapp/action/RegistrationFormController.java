@@ -71,6 +71,8 @@ public class RegistrationFormController extends BaseFormController {
     protected MailEngine mailEngine = null;
     protected MailSender mailSender = null;
 
+    private static boolean ongoingBooking = false;
+    
     public void setNotificationManager(NotificationManager notificationManager) {
         this.notificationManager = notificationManager;
     }
@@ -312,7 +314,11 @@ public class RegistrationFormController extends BaseFormController {
 
         // Fetch the object from the form
         Registration registration = (Registration) command;
-        registrationManager.evict(registration); // for å hindre "sammenblanding" av registration fra "command" og originalRegistration  
+
+        if(registration.getId() != null){
+        	// for å hindre "sammenblanding" av registration fra "command" og originalRegistration
+        	registrationManager.evict(registration);  
+        }
         
         Course course = courseManager.getCourse(registration.getCourseid().toString());
         Course originalCourse = null;
@@ -348,13 +354,15 @@ public class RegistrationFormController extends BaseFormController {
         } else if (request.getParameter("delete") != null) {
             registrationManager.removeRegistration(registration.getId().toString());
             saveMessage(request, getText("registration.deleted", locale));
-
-            return new ModelAndView(getCancelView(), "courseid", registration.getCourseid());
+            return new ModelAndView("redirect:listRegistrations.html");
         } else {
             // Perform a new registration / update personal information
 
-            // Check email
-            if(configurationManager.isActive("access.registration.emailrepeat",false) &&  !registration.getEmail().equals(registration.getEmailRepeat())){
+        	//force to loverCase because of bug in displaytag's sort-functionality
+        	if(registration.getEmail() != null){ registration.setEmail(registration.getEmail().toLowerCase()); }
+        	
+        	// Check email
+        	if(configurationManager.isActive("access.registration.emailrepeat",false) &&  !registration.getEmail().equalsIgnoreCase(registration.getEmailRepeat())){
                 //                String error = "errors.email.notSame";
                 errors.rejectValue("email", "errors.email.notSame",  new Object[] { registration.getEmail(), registration.getEmailRepeat() }, "Email addresses not equal.");
 				registrationManager.evict(registration);
@@ -418,9 +426,39 @@ public class RegistrationFormController extends BaseFormController {
             	}
             }
 
+            boolean useWaitLists = configurationManager.isActive("access.registration.useWaitlists", true);
+            
+            if (validateAnnotations(registration, errors, null) > 0) {
+            	args = new Object[] {};
+            }
+            
+            model.put("course", course);
+            registration.setCourse(course);
+            
+            // Get registrations on this course for this user
+            List<Registration> userRegistraionsForCourse = registrationManager.getUserRegistrationsForCourse(
+            		registration.getEmail(), registration.getFirstName(), registration.getLastName(), registration
+            		.getCourseid());
+            
+            // Is this a valid date to register? Or has this user already been registered to this course?
+            // (It is always allowed to edit the data)
+            if ((registration.getId() == null) || (registration.getId().longValue() == 0)) {
+            	if (!legalRegistrationDate(request, locale, course)) {
+            		return new ModelAndView(getCancelView(), "courseId", registration.getCourseid());
+            	}
+            	if (userRegistraionsForCourse.size() > 0) {
+            		String start = DateUtil.convertDateToString(course.getStartTime());
+            		saveMessage(request, getText("courseList.alreadyRegistered", new Object[]{course.getName(), start, course.getLocation().getName()}, locale) + "");
+            		return new ModelAndView(getCancelView(), model);
+            	}
+            }
+            
             // sjekk om det er nok plasser til alle deltakere
+        	ENTER__Critical__Section(registration.getEmail());
+        	// *****************************************************************************************************************************
+        	
             Integer availability = registrationManager.getAvailability(localAttendant, course);
-
+//            log.info("Sjekket tilgjengelighet for " + registration.getFirstName() + " " + registration.getLastName() + " - " + new Date().getTime() + " : " + availability);
             if(!changedCourse && originalRegistration != null){
 				/*
 				 * Siden dette kun er en oppdatering av en registrering må registeringens 
@@ -429,7 +467,7 @@ public class RegistrationFormController extends BaseFormController {
             	availability += originalRegistration.getParticipants();
             }
             
-        	if(!configurationManager.isActive("access.registration.useWaitlists", true)){
+        	if(!useWaitLists){
             	if (registration.getParticipants() != null && availability.intValue() < registration.getParticipants()) {
             		// det er ikke plass til alle deltakere i registreringen
             		args = new Object[] {availability, getText("courseList.theitem", request.getLocale()).toLowerCase(), ""};
@@ -437,37 +475,16 @@ public class RegistrationFormController extends BaseFormController {
             	}
             }
             
-			if (validateAnnotations(registration, errors, null) > 0) {
-				args = new Object[] {};
-			}
-
 			if (args != null) {
 				registrationManager.evict(registration);
+
+            	// skummel kode - veldig viktig å låse opp sekvens også ved feil!
+            	LEAVE__Critical__Section();
+            	// *****************************************************************************************************************************
+
 				return showForm(request, response, errors);
 			}
-			// ---------- 
 			
-            model.put("course", course);
-            registration.setCourse(course);
-
-            // Get registrations on this course for this user
-            List<Registration> userRegistraionsForCourse = registrationManager.getUserRegistrationsForCourse(
-                    registration.getEmail(), registration.getFirstName(), registration.getLastName(), registration
-                    .getCourseid());
-
-            // Is this a valid date to register? Or has this user already been registered to this course?
-            // (It is always allowed to edit the data)
-            if ((registration.getId() == null) || (registration.getId().longValue() == 0)) {
-                if (!legalRegistrationDate(request, locale, course)) {
-                    return new ModelAndView(getCancelView(), "courseId", registration.getCourseid());
-                }
-                if (userRegistraionsForCourse.size() > 0) {
-            		String start = DateUtil.convertDateToString(course.getStartTime());
-                    saveMessage(request, getText("courseList.alreadyRegistered", new Object[]{course.getName(), start, course.getLocation().getName()}, locale) + "");
-                    return new ModelAndView(getCancelView(), model);
-                }
-            }
-
             //If course has been changed, send deleted mail for original course.  
             if (changedCourse && (originalCourse != null) && (originalRegistration != null)){
                 sendMail(locale, originalCourse, originalRegistration, Constants.EMAIL_EVENT_REGISTRATION_CANCELLED);
@@ -492,17 +509,26 @@ public class RegistrationFormController extends BaseFormController {
             if (availability.intValue() >= registration.getParticipants()) {
                 // There's room - save the registration
                 registration.setStatus(Registration.Status.RESERVED);
-                
-                // for å hindre "sammenblanding" av registration fra "command" og originalRegistration
-                if(registration.getId() != null){
-	                Registration cleanUpObj = registrationManager.getRegistration(registration.getId().toString());
-	                if(cleanUpObj != null){
-	                	registrationManager.evict(cleanUpObj);
+
+                try {
+	                // for å hindre "sammenblanding" av registration fra "command" og originalRegistration
+	                if(registration.getId() != null){
+		                Registration cleanUpObj = registrationManager.getRegistration(registration.getId().toString());
+		                if(cleanUpObj != null){
+		                	registrationManager.evict(cleanUpObj);
+		                }
 	                }
+	                // -----------------------------------------------------------------------------------
+	                
+	                registrationManager.saveRegistration(registration);
+//	                log.info("Lagret registrering for " + registration.getFirstName() + " " + registration.getLastName() + " - " + new Date().getTime());
                 }
-                // -----------------------------------------------------------------------------------
+                finally {
+                	// skummel kode - veldig viktig å låse opp sekvens også ved feil!
+                	LEAVE__Critical__Section();
+                	// *****************************************************************************************************************************
+                }
                 
-                registrationManager.saveRegistration(registration);
                 Notification notification = new Notification();
                 notification.setRegistrationid(registration.getId());
                 notification.setReminderSent(false);
@@ -526,7 +552,25 @@ public class RegistrationFormController extends BaseFormController {
             } else {
                 // The course is fully booked, put the applicant on the waiting list
                 registration.setStatus(Registration.Status.WAITING);
-                registrationManager.saveRegistration(registration);
+
+                try {
+	                // for å hindre "sammenblanding" av registration fra "command" og originalRegistration
+	                if(registration.getId() != null){
+		                Registration cleanUpObj = registrationManager.getRegistration(registration.getId().toString());
+		                if(cleanUpObj != null){
+		                	registrationManager.evict(cleanUpObj);
+		                }
+	                }
+	                // -----------------------------------------------------------------------------------
+	                
+	                registrationManager.saveRegistration(registration);
+                }
+                finally {
+                	// skummel kode - veldig viktig å låse opp sekvens også ved feil!
+                	LEAVE__Critical__Section();
+                	// *****************************************************************************************************************************
+                }
+
                 Notification notification = new Notification();
                 notification.setRegistrationid(registration.getId());
                 notification.setReminderSent(false);
@@ -665,4 +709,39 @@ public class RegistrationFormController extends BaseFormController {
 		return notFull;
 	}
 	
+	/**
+	 * Innført pga dobbeltbooking problem hos SVV (som ikke benytter ventelister)
+	 * @param email som identifikator i loggmeldinger
+	 */
+	private void ENTER__Critical__Section(String email){
+		int venteTid = 0;
+		final int MAX_VENTETID = 500; // ms
+		
+		if(!ongoingBooking){
+			// Starter sekvens for sjekk av tilgjengelighet og evnt. lagring 
+			ongoingBooking = true;
+			return;
+		}
+
+		while(true){
+			// Sekvens for å vente på en egen tidsluke
+			if(!ongoingBooking && venteTid > 0) {
+				log.info(email + " ventet " + venteTid + "ms i registreringssekvens");
+				return;
+			}
+			if(venteTid == MAX_VENTETID){
+				log.warn("Registreringssekvens TIMEOUT for " + email);
+				return;
+			}
+
+			try {
+				Thread.sleep(20);
+				venteTid += 20;
+			}catch(Exception e){ /* do nothing */ }
+		}
+	}
+	
+	private void LEAVE__Critical__Section(){
+		ongoingBooking = false;
+	}
 }
