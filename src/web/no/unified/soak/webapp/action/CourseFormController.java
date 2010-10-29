@@ -478,6 +478,18 @@ public class CourseFormController extends BaseFormController {
 			args = setDatesToCourseAndMakeErrorMessages(request, errors, course, args);
 
 			setCourseStatus(request, course, isNew);
+			
+			if(course.getStatus() == CourseStatus.COURSE_CANCELLED){
+				/*
+				 * Dersom et kurs/møte skal avlyses velger vi å se bort i fra de faktiske innholdet i 
+				 * course-objektet mottatt fra form, og velger derfor å hente orginalen på nytt og sette 
+				 * status på nytt. 
+				 * - Dette gjøres for å unngå evnt. valideringsproblemer nå eneste ønske er å avlyse.
+				 */
+				courseManager.evict(course); // for å evnt. valideringsfeil pga. deaktivert lokale e.l.
+				course = courseManager.getCourse(course.getId().toString());
+				course.setStatus(CourseStatus.COURSE_CANCELLED);
+			}
 
 			if (!configurationManager.isActive("access.course.usePayment", true)) {
 				enrichWithDefaultvaluesToAvoidErrors(course);
