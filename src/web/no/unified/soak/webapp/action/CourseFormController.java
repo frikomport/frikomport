@@ -747,6 +747,7 @@ public class CourseFormController extends BaseFormController {
 		if(ApplicationResourcesUtil.isSVV()){
 			// påmeldinger er ikke offentlig tilgjengelig via courseDetails.jsp
 			course.setRestricted(true);
+			course.setRegisterStart(new Date());
 		}
 	}
 

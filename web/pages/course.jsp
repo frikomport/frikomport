@@ -230,7 +230,7 @@
 	</tr>
 </c:if>
 
-<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+<c:if test="${!isSVV && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
 <tr>
 	<th>
 		<fmt:message key="course.registerStart" />

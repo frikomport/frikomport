@@ -541,6 +541,8 @@ function fillSelect(obj){
 			</c:otherwise>
 		</c:choose>
 
+
+	<c:if test="${!isSVV}">
 		<tr>
 			<th>
 				<soak:label key="course.registerStart" />
@@ -571,6 +573,7 @@ function fillSelect(obj){
 				</spring:bind>
 			</td>
 		</tr>
+	</c:if>
 
 		<tr>
 			<th>
