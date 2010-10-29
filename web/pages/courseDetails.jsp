@@ -48,17 +48,6 @@
 		    	    <fmt:message key="button.signup"/>
 			    </button>
 			</c:if>
-            <c:if test="${altusername ne null && isRegistered && !(isAdmin || isEducationResponsible || isEventResponsible)}">
-                <button type="button" 
-                onclick="bCancel=true; return confirmUnregistration('<c:url context="${urlContext}" value="/cancelRegistration.html?rid=${registrationid}&hash=${hash}&confirm=true"></c:url>');"> 
-
-
-                <!-- &returnUrl=%2fdetailsCourse%3fid%3d${course.id}%26registrationCanceled%3dyes -->
-                
-                
-                    <fmt:message key="button.signoff"/>
-                </button>
-            </c:if>
 </c:if>
 
 <c:if test="${admin == true}">
