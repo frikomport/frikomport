@@ -148,6 +148,13 @@ public class ActionFilter implements Filter {
 		}
 
 		setJspLinkPathPrefix(request, session);
+		
+		// For å unngå at eventuelle proxyservere legger på headerinfo som medfører uønsket caching
+		response.setHeader("Cache-Control", "no-cache,no-store");
+		response.setHeader("Pragma", "no-cache");
+		response.setHeader("Expires", "0");
+		// -----------------------------------------------------------------------
+		
 		chain.doFilter(request, response);
 	}
 

@@ -230,8 +230,6 @@ public class CourseController extends BaseFormController {
 			}
 		}
 
-		model.put("JSESSIONID", session.getId());
-
 		if (avoidSearch) {
 			return model;
 		}
