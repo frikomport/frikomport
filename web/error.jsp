@@ -14,7 +14,7 @@
 
 <body>
 <div id="screen">
-    <div id="content">
+    <div id="fkp-content">
     <h1><fmt:message key="errorPage.heading"/></h1>
     <%@ include file="/common/messages.jsp" %>
  <% if (exception != null) { %>
