@@ -225,8 +225,11 @@ public class RegistrationFormController extends BaseFormController {
         		saveMessage(request, getText("errors.courseFull.waitlistwarning", locale));
         	}
         	else {
-        		model.put("isCourseFull", new Boolean(true));
-        		saveMessage(request, getText("errors.courseFull.warning", locale));
+        		if(StringUtils.isBlank(registrationId)){
+        			// meldingen skal kun gis dersom bruker ikke allerede er påmeldt dette møtet
+        			model.put("isCourseFull", new Boolean(true));
+	        		saveMessage(request, getText("errors.courseFull.warning", locale));
+        		}
         	}
         }
 
