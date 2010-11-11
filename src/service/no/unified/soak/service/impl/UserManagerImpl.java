@@ -32,6 +32,7 @@ import no.unified.soak.util.StringUtil;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.StaleObjectStateException;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectRetrievalFailureException;
@@ -107,7 +108,15 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	 * @see no.unified.soak.service.UserManager#getUsers(no.unified.soak.model.User)
 	 */
 	public List getUsers(User user, boolean hashuserFilter) {
-		return dao.getUsers(user, hashuserFilter);
+    	try {
+    		return dao.getUsers(user, hashuserFilter);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, this)){
+    			return dao.getUsers(user, hashuserFilter);
+    		}
+    		throw e;
+    	}
 	}
 
 	public User findUserByEmail(String email) {

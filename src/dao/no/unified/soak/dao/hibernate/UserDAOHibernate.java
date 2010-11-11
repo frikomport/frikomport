@@ -18,6 +18,7 @@ import no.unified.soak.model.User;
 import no.unified.soak.model.UserCookie;
 
 import org.hibernate.Query;
+import org.hibernate.StaleObjectStateException;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -94,7 +95,7 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
         
         criteria.addOrder(Order.asc("username"));
         
-        List<User> result = getHibernateTemplate().findByCriteria(criteria);
+	    List<User> result = getHibernateTemplate().findByCriteria(criteria);
 //        Iterator<User> it = result.iterator();
 //        while(it.hasNext()){
 //        	evict(it.next()); // to avoid StaleObjectException / OptimisticLockingFailed
@@ -184,17 +185,44 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
         if (log.isDebugEnabled()) {
 //            log.debug("user's id: " + user.getUsername());
         }
-        getHibernateTemplate().saveOrUpdate(user);
-        // necessary to throw a DataIntegrityViolation and catch it in UserManager
-        getHibernateTemplate().flush();
+        int retryCount = 0;
+        while(retryCount < 3){
+	        try {
+	        	getHibernateTemplate().saveOrUpdate(user);
+	        	getHibernateTemplate().flush();
+	        	break; // lagring ok
+	        }catch(StaleObjectStateException e){
+	        	retryCount++;
+	        	if(retryCount == 3){
+	        		log.warn("StaleObjectStateException - saveUser gir opp etter 3 forsøk med samme feilresultat for [" + user.getUsername() + "]");
+	        		break; // give up
+	        	}
+	        	try { Thread.sleep(125); } catch(InterruptedException ie){ /* do nothing */ }
+	        	log.info("Gjentakelse nr: " + retryCount + " for [" + user.getUsername() + "] i saveUser pga. StaleObjectStateException");
+	        }
+        }
     }
 
     public void updateUser(User user) {
     	if (log.isDebugEnabled()) {
 //            log.debug("user's id: " + user.getUsername());
         }
-        getHibernateTemplate().update(user);
-        getHibernateTemplate().flush();
+        int retryCount = 0;
+        while(retryCount < 3){
+	        try {
+	            getHibernateTemplate().update(user);
+	            getHibernateTemplate().flush();
+	        	break; // oppdatering ok
+	        }catch(StaleObjectStateException e){
+	        	retryCount++;
+	        	if(retryCount == 3){
+	        		log.warn("StaleObjectStateException - updateUser gir opp etter 3 forsøk med samme feilresultat for [" + user.getUsername() + "]");
+	        		break; // give up
+	        	}
+	        	try { Thread.sleep(125); } catch(InterruptedException ie){ /* do nothing */ }
+	        	log.info("Gjentakelse nr: " + retryCount + " for [" + user.getUsername() + "] i updateUser pga. StaleObjectStateException");
+	        }
+        }
     }
 
     /**

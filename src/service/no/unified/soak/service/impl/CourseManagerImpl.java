@@ -20,8 +20,10 @@ import no.unified.soak.model.Course;
 import no.unified.soak.model.Person;
 import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
+import no.unified.soak.service.UserManager;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.StaleObjectStateException;
 
 
 /**
@@ -33,11 +35,16 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
     private CourseDAO courseDAO;
 
     private ConfigurationManager configurationManager = null;
+    private UserManager userManager = null;
 
     public void setConfigurationManager(ConfigurationManager configurationManager) {
         this.configurationManager = configurationManager;
     }
-    
+
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
+    }
+
 	/**
      * Set the DAO for communication with the data layer.
      * @param dao
@@ -50,7 +57,15 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
      * @see no.unified.soak.service.CourseManager#getAllCourses()
      */
     public List getAllCourses() {
-        return courseDAO.getAllCourses();
+    	try {
+        	return courseDAO.getAllCourses();
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    	    	return courseDAO.getAllCourses();
+    		}
+    		throw e;
+    	}
     }
 
     /**
@@ -58,10 +73,21 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
      */
     public Course getCourse(final String id) {
     	Course result = null;
-    	if (!StringUtils.isEmpty(id))
-        	result = courseDAO.getCourse(new Long(id));
-    	else
-    		log.error("Call to CourseManagerImpl.getCourse with empty or null id (" + id + ")");
+    	try {
+        	if (!StringUtils.isEmpty(id))
+            	result = courseDAO.getCourse(new Long(id));
+        	else
+        		log.error("Call to CourseManagerImpl.getCourse with empty or null id (" + id + ")");
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    	    	if (!StringUtils.isEmpty(id))
+    	        	result = courseDAO.getCourse(new Long(id));
+    	    	else
+    	    		log.error("Call to CourseManagerImpl.getCourse with empty or null id (" + id + ")");
+    		}
+    		throw e;
+    	}
     	return result;
     }
 
@@ -88,29 +114,69 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
      */
     public List<Course> searchCourses(Course course, Date startDate, Date stopDate, Integer[] status) {
     	boolean showUntilFinished = configurationManager.isActive("access.course.showCourseUntilFinished", true);
-    	return courseDAO.searchCourses(course, startDate, stopDate, status, showUntilFinished);
+    	try {
+    		return courseDAO.searchCourses(course, startDate, stopDate, status, showUntilFinished);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    			return courseDAO.searchCourses(course, startDate, stopDate, status, showUntilFinished);
+    		}
+    		throw e;
+    	}
     }
 
     /**
      * @see no.unified.soak.service.CourseManager#getWaitingListCourses()
      */
     public List<Course> getWaitingListCourses() {
-        return courseDAO.getWaitingListCourses();
+    	try {
+            return courseDAO.getWaitingListCourses();
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    	        return courseDAO.getWaitingListCourses();
+    		}
+    		throw e;
+    	}
     }
 
     public List<Course> findByInstructor(Person person, Integer[] coursestatus) {
-        return courseDAO.findByInstructor(person, coursestatus);
+    	try {
+            return courseDAO.findByInstructor(person, coursestatus);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    	        return courseDAO.findByInstructor(person, coursestatus);
+    		}
+    		throw e;
+    	}
     }
 
     public List<Course> findByLocationIds(List<Long> locationIds, Integer numberOfHits){
-    	return courseDAO.findByLocationIds(locationIds, numberOfHits);
+    	try {
+        	return courseDAO.findByLocationIds(locationIds, numberOfHits);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    	    	return courseDAO.findByLocationIds(locationIds, numberOfHits);
+    		}
+    		throw e;
+    	}
     }
     
     /**
      * @see no.unified.soak.service.CourseManager#getUnpublished()
      */
     public List<Course> getUnpublished(Course course) {
-        return courseDAO.getUnpublished(course);
+    	try {
+            return courseDAO.getUnpublished(course);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    	        return courseDAO.getUnpublished(course);
+    		}
+    		throw e;
+    	}
     }
 
     /**

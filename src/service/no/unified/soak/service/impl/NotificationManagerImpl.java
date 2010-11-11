@@ -22,11 +22,13 @@ import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.NotificationManager;
 import no.unified.soak.service.RegistrationManager;
+import no.unified.soak.service.UserManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.MailUtil;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.hibernate.StaleObjectStateException;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.mail.MailSender;
@@ -38,6 +40,7 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 
 	private RegistrationManager registrationManager = null;
 	private ConfigurationManager configurationManager = null;
+	private UserManager userManager = null;
 	
     private MailSender mailSender = null;
 
@@ -74,7 +77,14 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 	public void setConfigurationManager(ConfigurationManager configurationManager) {
 		this.configurationManager = configurationManager;
 	}
-	
+
+	/**
+	 * @param userManager the userManager to set
+	 */
+	public void setUserManager(UserManager userManager) {
+		this.userManager = userManager;
+	}
+
 	/**
 	 * Set the Dao for communication with the data layer.
 	 * 
@@ -88,7 +98,15 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 	 * @see no.unified.soak.service.NotificationManager#getNotifications(no.unified.soak.model.Notification)
 	 */
 	public List getNotifications(final Notification notification) {
-		return dao.getNotifications(notification);
+    	try {
+    		return dao.getNotifications(notification);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    			return dao.getNotifications(notification);
+    		}
+    		throw e;
+    	}
 	}
 
 	/**
@@ -96,7 +114,15 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 	 *      id)
 	 */
 	public Notification getNotification(final String id) {
-		return dao.getNotification(new Long(id));
+    	try {
+    		return dao.getNotification(new Long(id));
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    			return dao.getNotification(new Long(id));
+    		}
+    		throw e;
+    	}
 	}
 
 	/**
@@ -122,7 +148,15 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 	 *         sent, but that are due for sending
 	 */
 	public List<Notification> getUnsentNotifications() {
-		return dao.getUnsentNotifications();
+    	try {
+    		return dao.getUnsentNotifications();
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    			return dao.getUnsentNotifications();
+    		}
+    		throw e;
+    	}
 	}
 
 	/**

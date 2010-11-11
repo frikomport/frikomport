@@ -40,7 +40,7 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
     /**
      * @see no.unified.soak.dao.CourseDAO#getAllCourses()
      */
-    public List getAllCourses() {
+    public List<Course> getAllCourses() {
         DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
         criteria.addOrder(Order.asc("startTime"));
         return getHibernateTemplate().findByCriteria(criteria);
@@ -51,11 +51,10 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
      */
     public Course getCourse(final Long id) {
         Course course = (Course) getHibernateTemplate().get(Course.class, id);
-        if (course == null) {
+    	if (course == null) {
             log.warn("Course with id '" + id + "' not found.");
             throw new ObjectRetrievalFailureException(Course.class, id);
         }
-//        getHibernateTemplate().initialize(course);
         return course;
     }
 
@@ -161,7 +160,7 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
 		for (String fieldName : sortorderArray) {
 			criteria.addOrder(Order.asc(fieldName));
 		}
-
+		
         return getHibernateTemplate().findByCriteria(criteria);
     }
 

@@ -7,15 +7,19 @@
 */
 package no.unified.soak.service.impl;
 
+import java.io.PrintWriter;
+import java.io.Serializable;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.List;
+
 import no.unified.soak.dao.DAO;
+import no.unified.soak.model.User;
 import no.unified.soak.service.Manager;
+import no.unified.soak.service.UserManager;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import java.io.Serializable;
-
-import java.util.List;
 
 
 /**
@@ -76,4 +80,34 @@ public class BaseManager implements Manager {
 	public boolean contains(Object entity) {
 		return dao.contains(entity);
 	}
+	
+	public boolean handleStaleObjectStateExceptionForUserObject(Exception e, UserManager userManager){
+		// finne username for User-objektet problemet oppstod for, og deretter hente og kaste det ut av hibernate-sesjonen
+		String username = null;
+		try {
+			Writer writer = new StringWriter();
+		    PrintWriter printWriter = new PrintWriter(writer);
+		    e.printStackTrace(printWriter);
+		    String msg = writer.toString();
+//		    String msg = e.getMessage();
+		    if(msg.indexOf(".User#") != -1){
+		    	int start = msg.indexOf(".User#");
+		    	msg = msg.substring(start);
+		    	username = msg.substring(start + ".User#".length(), msg.indexOf("]"));
+		    	if(username != null){
+			    	User problem = userManager.getUser(username);
+			    	if(problem != null){
+				    	userManager.evict(problem);
+			    		log.warn("User#" + username + " evicted from session!");
+				    	return true; // try previous getter again
+			    	}
+		    	}
+		    }
+		}catch(Exception e2){ 
+			/* problem not solved */ 
+		}
+		log.warn("User#" + username + " not evicted from session..!");
+		return false;
+	}
+	
 }

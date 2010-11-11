@@ -17,6 +17,9 @@ import no.unified.soak.dao.StatisticsDAO;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.StatisticsTableRow;
 import no.unified.soak.service.StatisticsManager;
+import no.unified.soak.service.UserManager;
+
+import org.hibernate.StaleObjectStateException;
 
 
 /**
@@ -25,7 +28,9 @@ import no.unified.soak.service.StatisticsManager;
  */
 public class StatisticsManagerImpl extends BaseManager implements StatisticsManager {
     private StatisticsDAO dao;
-
+    private UserManager userManager = null;
+    
+    
     /**
      * Set the DAO for communication with the data layer.
      * @param dao
@@ -34,12 +39,33 @@ public class StatisticsManagerImpl extends BaseManager implements StatisticsMana
         this.dao = dao;
     }
 
+    public void setUserManager(UserManager userManager){
+    	this.userManager = userManager;
+    }
+    
+    
 	public List<StatisticsTableRow> findByDates(Date beginPeriod, Date endPeriod) {
-		return dao.findByDates(beginPeriod, endPeriod);
+    	try {
+    		return dao.findByDates(beginPeriod, endPeriod);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    			return dao.findByDates(beginPeriod, endPeriod);
+    		}
+    		throw e;
+    	}
 	}
 	
 	
 	public List<Course> findEmptyCoursesByDates(Date beginPeriod, Date endPeriod){
-		return dao.findEmptyCoursesByDates(beginPeriod, endPeriod);
+    	try {
+    		return dao.findEmptyCoursesByDates(beginPeriod, endPeriod);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    			return dao.findEmptyCoursesByDates(beginPeriod, endPeriod);
+    		}
+    		throw e;
+    	}
 	}
 }
