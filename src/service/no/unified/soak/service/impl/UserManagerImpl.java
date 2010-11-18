@@ -87,21 +87,45 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	 * @see no.unified.soak.service.UserManager#getUser(java.lang.String)
 	 */
 	public User getUser(String username) {
-		return dao.getUser(username);
+    	try {
+    		return dao.getUser(username);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, this)){
+    			return dao.getUser(username);
+    		}
+    		throw e;
+    	}
 	}
 
 	/**
 	 * @see no.unified.soak.service.UserManager#getUser(java.lang.String)
 	 */
 	public User getUserSilent(String username) {
-		return dao.getUserSilent(username);
+    	try {
+    		return dao.getUserSilent(username);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, this)){
+    			return dao.getUserSilent(username);
+    		}
+    		throw e;
+    	}
 	}
 
 	/**
 	 * @see no.unified.soak.service.UserManager#getUserByHash(java.lang.String)
 	 */
 	public User getUserByHash(String hash) {
-		return dao.getUserByHash(hash);
+    	try {
+    		return dao.getUserByHash(hash);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, this)){
+    			return dao.getUserByHash(hash);
+    		}
+    		throw e;
+    	}
 	}
 
 	/**
@@ -120,7 +144,15 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	}
 
 	public User findUserByEmail(String email) {
-		return dao.findUserByEmail(email);
+    	try {
+    		return dao.findUserByEmail(email);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, this)){
+    			return dao.findUserByEmail(email);
+    		}
+    		throw e;
+    	}
 	}
 
 	/**
