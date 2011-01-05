@@ -33,6 +33,7 @@ public class RetryMechanism {
 						try {
 							Thread.sleep(100); //Short sleep in order to give time between retries.
 							result = operation.operate(parameter);
+							log.info("Retry succeeded!");
 							break outer;
 						} catch (Exception e) {
 							log.warn("Got exception during attempt "
