@@ -40,6 +40,15 @@
             
             <prop key="hibernate.connection.release_mode">after_transaction</prop> 
             <!-- Mulige verdier: auto (default) | on_close | after_transaction | after_statement -->
+            
+            <!-- Start: Anbefalinger fra vegloggen-prosjektet for lastbalansering -->
+            <prop key="hibernate.cache.use_query_cache">false</prop>
+           	<prop key="hibernate.generate_statistics">false</prop>
+            <prop key="hibernate.SecondLevelCacheEnabled">false</prop>
+            <prop key="hibernate.QueryCacheEnabled">false</prop>
+            <prop key="hibernate.cache.use_second_level_cache">false</prop>    
+            <!-- Slutt: Anbefalinger fra vegloggen-prosjektet -->
+            
         </props>
         </property>
         <property name="namingStrategy" ref="namingStrategy"/>
