@@ -58,17 +58,21 @@ public class PostalCodesSuperduperLoader {
 	/**
 	 * @param postalCode
 	 * @param locations
-	 * @return list of locationid in order of distance from postalCode.
+	 * @param maxResultCount
+	 *            Maximum number of locations to calculate distances to. This
+	 *            limits how many locations that can be returned.
+	 * @return list of locationid in order of distance from postalCode, limited
+	 *         to maxResultCount number of locationids.
 	 */
 	public static List<Long> calculateDistance(String postalCode, List<Location> locations, Integer maxResultCount) {
 		final Log log = LogFactory.getLog(PostalCodesSuperduperLoader.class);
 		List<LocationDistance> locationDistances = new ArrayList<LocationDistance>();
-		
+
 		final PostalCodeCoordinate postalCodeCoordinate = getPostalCodeCoordinate(postalCode);
 		for (Location location : locations) {
 			final PostalCodeCoordinate locationCoordinate = getPostalCodeCoordinate(location.getPostalCode());
 			if (locationCoordinate == null) {
-				log.warn("Coordinates not found for location "+location+". Maybe due to postalCode==null.");
+				log.warn("Coordinates not found for location " + location + ". Maybe due to postalCode==null.");
 				continue;
 			}
 			Integer distance = new Double(1000 * GeoMathUtil.distanceDEG(postalCodeCoordinate.getLatitude(), postalCodeCoordinate
@@ -4711,6 +4715,7 @@ public class PostalCodesSuperduperLoader {
 		return list;
 	}
 
+	@SuppressWarnings("unused")
 	private void loadAndWriteJavaCode() {
 		try {
 			InputStream is = new FileInputStream("C:\\FriKomPort_SVV\\postnummer-koordinater\\postnummer.kml");

@@ -76,7 +76,7 @@ public class LocationManagerImpl extends BaseManager implements LocationManager 
 	 */
     public List getLocationIds(String postalcode){
     	List<Location> locations = dao.getLocations(null, false);
-    	final Integer MAX_NUMBER_OF_LOCATIONIDS = 15;
+    	final Integer MAX_NUMBER_OF_LOCATIONIDS = 999;
     	return PostalCodesSuperduperLoader.calculateDistance(postalcode, locations, MAX_NUMBER_OF_LOCATIONIDS);
     }
 
