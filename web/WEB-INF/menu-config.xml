@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MenuConfig>
+    <Displayers>
+        <Displayer name="ListMenu" type="net.sf.navigator.displayer.ListMenuDisplayer"/>
+    </Displayers>
+    <Menus>
+        <!-- ====================   Administrator Menu   =========================== -->
+        <Menu name="AdminMenu" title="menu.admin" description="Admin Menu" roles="admin,ROLE_ANONYMOUS">
+            <Item name="am.viewUsers" title="menu.admin.users" page="/users.html"/>
+            <Item name="ReloadContext" title="menu.admin.reload" page="/reload.html"/>
+        </Menu>
+         <!-- ====================   User Menu   =========================== -->
+        <Menu name="UserMenu" title="menu.user" description="User Menu" page="/editProfile.html" roles="ROLE_ANONYMOUS"/>
+        <!-- ====================   Upload File Menu   =========================== -->
+        <Menu name="FileUpload" title="menu.selectFile" description="File Upload" page="/selectFile.html" roles="ROLE_ANONYMOUS"/>
+        <!-- ====================   Flush Cache   =========================== -->
+        <Menu name="FlushCache" title="menu.flushCache" page="/flushCache.html" roles="admin"/>
+        <!-- ====================   Clickstream   =========================== -->
+        <Menu name="Clickstream" title="menu.clickstream" page="/clickstreams.jsp" roles="admin"/>
+
+        <!-- ====================   FriKom   =========================== -->
+        <Menu name="FriKomMenu" title="menu.main" page="/listCourses.html">
+            <Item name="CourseMenu" title="courseList.heading" page="/listCourses.html"/>
+            <Item name="PastCourseMenu" title="pastCourseList.heading" page="/listCourses.html?past=1" roles="instructor,editor,admin"/>
+            <Item name="ProfileMenu" title="userProfile.heading" page="/profileUser.html"/>
+            <Item name="OrganizationMenu" title="organizationList.heading" page="/listOrganizations.html" roles="admin"/>
+            <Item name="LocationMenu" title="locationList.heading" page="/listLocations.html" roles="instructor,editor,admin"/>
+            <Item name="PersonMenu" title="personList.heading" page="/listPeople.html" roles="instructor,editor,admin"/>
+            <Item name="ResponsibleMenu" title="responsibleList.heading" page="/listResponsibles.html" roles="instructor,editor,admin"/>
+            <Item name="ServiceAreaMenu" title="serviceAreaList.heading" page="/listServiceAreas.html" roles="admin"/>
+            <Item name="RegistrationMenu" title="registrationList.heading" page="/listRegistrations.html" roles="instructor,editor,admin"/>
+        </Menu>
+
+        <!-- ====================   FriKom for SVV  =========================== -->
+        <Menu name="FriKomMenu_SVV" title="menu.main" page="/admin/listCourses.html">
+            <Item name="WelcomeMenu" title="welcome.start" page="/admin/welcome.html"/>
+            <Item name="CourseMenu" title="courseList.heading" page="/admin/listCourses.html"/>
+            <Item name="LocationMenu" title="locationList.heading" page="/admin/listLocations.html"/>
+            <Item name="RegistrationMenu" title="registrationList.heading" page="/admin/listRegistrations.html" roles="editor,admin,eventresponsible,reader"/>
+            <Item name="UsersMenu" title="userList.heading" page="/admin/listUsers.html" roles="editor,admin,eventresponsible,reader"/>
+            <Item name="PersonMenu" title="personList.heading" page="/admin/listPeople.html" roles="editor,admin,eventresponsible,reader"/>
+            <Item name="ResponsibleMenu" title="responsibleList.heading" page="/admin/listResponsibles.html" roles="admin,editor,reader"/>
+            <Item name="OrganizationMenu" title="organizationList.heading" page="/admin/listOrganizations.html" roles="admin,reader"/>
+            <Item name="StatisticsMenu" title="statistics.name" page="/admin/statistics.html" roles="editor,admin,eventresponsible,reader"/>
+        </Menu>
+        <Menu name="FriKomMenu_SVV_public" title="menu.main" page="/public/listCourses.html">
+            <Item name="WelcomeMenu" title="welcome.start" page="/public/welcome.html"/>
+            <Item name="CourseMenu" title="courseList.heading" page="/public/listCourses.html"/>
+            <Item name="LocationMenu" title="locationList.heading" page="/public/listLocations.html"/>
+        </Menu>
+
+        <!--Registration-END-->
+    </Menus>
+</MenuConfig>

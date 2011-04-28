@@ -1,0 +1,69 @@
+@CHARSET "ISO-8859-1";
+
+div div#menuDiv {
+	right: auto;
+	position: static;
+	width:990px;
+	border: 0px none #000;
+	padding: 3px 0px 3px 5px;
+}
+
+div#menuDiv ul.menuList {
+	margin:0;
+	padding:0;
+}
+	
+div#menuDiv ul.menuList li.menubar { 
+	list-style-image:none;
+	list-style-position:inside;
+	list-style-type:none;
+	line-height: 1.9;
+	display: inline;
+}
+
+div#menuDiv ul.menuList li.menubar > a { 
+	display:none;
+}
+
+div#menuDiv ul.menuList li.menubar > ul.menu {
+	margin:0;
+	padding:0;
+	display:block;
+}
+	
+div#menuDiv ul.menuList li.menubar > ul.menu > li { 
+	background-image:none;
+	list-style-image:none;
+	display: inline;
+	margin: 0px 0px 0px 0px;
+}
+
+div#menuDiv ul.menuList li.menubar > ul.menu > li > a:HOVER {
+	background-color: #FFE8CC; 
+	border-color: #DBDEDF;
+	background-image: none;
+	color: #F48600;
+}
+
+div#menuDiv ul.menuList li.menubar > ul.menu > li > a { 
+	border: 1px dotted #5f686E;
+	padding-left: 0;
+	color: #FFFFFF;
+	padding: 4px 5px 4px 5px;
+	margin: 0px -1px 0px -2px;
+    background-image: url("../images/GraGradient.png");
+    background-repeat: repeat-x;
+    background-position: bottom;
+    background-color: #37424A; 
+}
+
+div#menuDiv ul.menuList li.menubar > ul.menu > li > a.highlight {
+	background-color: #FFE8CC;
+	background-image: none; 
+	color: #F48600 !important;
+	font-weight: normal;
+}
+ 
+div#menuDiv ul.menuList li.menubar > ul > li > a:HOVER { 
+	text-decoration:none;
+}

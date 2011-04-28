@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+    <bean id="lookupManager" class="no.unified.soak.service.impl.LookupManagerImpl">
+        <property name="lookupDAO" ref="lookupDAO"/>
+    </bean>
+	
+    <!-- Transaction template for Managers, from:
+         http://blog.exis.com/colin/archives/2004/07/31/concise-transaction-definitions-spring-11/ -->
+    <bean id="txProxyTemplate" abstract="true"
+        class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager" ref="transactionManager"/>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="process*">PROPAGATION_REQUIRED</prop>
+                <prop key="execute*">PROPAGATION_REQUIRED</prop>
+                <prop key="reset*">PROPAGATION_REQUIRED</prop>
+                <prop key="save*">PROPAGATION_REQUIRED</prop>
+                <prop key="remove*">PROPAGATION_REQUIRED</prop>
+                <prop key="update*">PROPAGATION_REQUIRED</prop>
+                <prop key="add*">PROPAGATION_REQUIRED</prop>
+                <prop key="create*">PROPAGATION_REQUIRED</prop>
+                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- Generic manager that can be used to do basic CRUD operations on any objects -->
+    <bean id="manager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.BaseManager">
+                <property name="DAO" ref="dao"/>
+            </bean>
+        </property>
+    </bean>
+    
+    <!-- Transaction declarations for business services.  To apply a generic transaction proxy to
+         all managers, you might look into using the BeanNameAutoProxyCreator -->
+    <bean id="userManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.UserManagerImpl" >
+                <property name="userDAO" ref="userDAO"/>
+                <property name="extUserDAO" ref="extUserDAO"/>
+                <property name="roleManager" ref="roleManager"/>
+                <property name="messageSource" ref="messageSource"/>
+                <property name="organizationManager" ref="organizationManager"/>
+            </bean>
+        </property>
+        <!-- Override default transaction attributes b/c of LoginCookie methods -->
+        <property name="transactionAttributes">
+            <props>
+                <prop key="disableUser">PROPAGATION_REQUIRED</prop>
+                <prop key="enableUser">PROPAGATION_REQUIRED</prop>
+                <prop key="addUser">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
+                <prop key="saveUser">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
+            </props>
+        </property>
+        <!-- This property is overriden in applicationContext-security.xml to add
+             method-level role security -->
+        <property name="preInterceptors">
+            <list>
+                <ref bean="userSecurityInterceptor"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- This interceptor insures that that users can only update themselves, not other users -->
+    <bean id="userSecurityInterceptor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+        <property name="advice" ref="userSecurityAdvice"/>
+        <property name="patterns" value=".*saveUser"/>
+    </bean>
+
+    <bean id="userSecurityAdvice" class="no.unified.soak.service.UserSecurityAdvice">
+    </bean>
+
+    <bean id="roleManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.RoleManagerImpl">
+                <property name="roleDAO" ref="roleDAO"/>
+            </bean>
+        </property>
+    </bean>
+     
+    <bean id="mailEngine" class="no.unified.soak.service.MailEngine">
+        <property name="mailSender" ref="mailSender"/>
+        <property name="velocityEngine" ref="velocityEngine"/>
+    </bean>
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${mail.host}"/>
+        <property name="username" value="${mail.username}"/>
+        <property name="password" value="${mail.password}"/>
+        <property name="defaultEncoding" value="${mail.encoding}"/>
+    </bean>
+
+    <!-- Configure Velocity for sending e-mail -->
+    <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+        <property name="velocityProperties">
+            <props>
+                <prop key="resource.loader">class</prop>
+                <prop key="class.resource.loader.class">
+                    org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+                </prop>
+                <prop key="velocimacro.library"></prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="mailMessage" class="org.springframework.mail.SimpleMailMessage" scope="prototype">
+        <property name="from" value="${mail.default.from}"/>
+    </bean>
+
+    <!-- Load WEB-INF/classes/ApplicationResources.properties for i18n messages using JSTL's fmt tag -->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="cacheSeconds" value="10"/>
+        <property name="basenames">
+            <list>
+                <value>classpath:ApplicationResources</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="organizationManager" parent="txProxyTemplate">
+    	<property name="target">
+   	    	<bean class="no.unified.soak.service.impl.OrganizationManagerImpl" autowire="byName" />
+   	    </property>
+  	</bean>
+    <!-- Add new Managers here -->
+    <!--Location-START-->
+    <bean id="locationManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.LocationManagerImpl" autowire="byName"/>
+        </property>
+    </bean>
+    <!--Location-END-->
+    <!--Person-START-->
+    <bean id="personManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.PersonManagerImpl" autowire="byName"/>
+        </property>
+    </bean>
+    <!--Person-END-->
+    <!--ServiceArea-START-->
+    <bean id="serviceAreaManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.ServiceAreaManagerImpl" autowire="byName"/>
+        </property>
+    </bean>
+    <!--ServiceArea-END-->
+    
+    <!--Course-START-->
+    <bean id="courseManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.CourseManagerImpl" autowire="byName"/>
+        </property>
+    </bean>
+    <!--Course-END-->
+    
+    <!--Statistics-START-->
+    <bean id="statisticsManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.StatisticsManagerImpl" autowire="byName">
+            </bean>
+        </property>
+    </bean>
+    <!--Statistics-END-->
+    
+    <!--Registration-START-->
+    <bean id="registrationManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.RegistrationManagerImpl" autowire="byName"/>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="save*">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
+                <prop key="move*">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
+                <prop key="cancel*">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
+                <prop key="remove*">PROPAGATION_REQUIRED</prop>
+            </props>
+        </property>
+    </bean>
+    <!--Registration-END-->
+
+    <!--Attachment-START-->
+    <bean id="attachmentManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.AttachmentManagerImpl" autowire="byName"/>
+        </property>
+    </bean>
+    <!--Attachment-END-->
+
+    <!-- WaitingList-START-->    
+    <bean id="waitingListManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.WaitingListManagerImpl" autowire="byName"/>
+        </property>
+    </bean>
+    <!-- WaitingList-END-->
+
+    <!-- RegisterByDateManager-START-->    
+    <bean id="registerByDateManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.RegisterByDateManagerImpl" autowire="byName"/>
+        </property>
+    </bean>
+    <!-- RegisterByDateManager-END-->
+
+    <!--Notification-START-->    
+    <bean id="notificationManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.NotificationManagerImpl">
+                <property name="notificationDao" ref="notificationDao"/>
+                <property name="registrationManager" ref="registrationManager"/>
+                <property name="configurationManager" ref="configurationManager"/>
+                <property name="messageSource" ref="messageSource"/>
+			    <property name="mailEngine" ref="mailEngine"/>
+			    <property name="mailSender" ref="mailSender"/>
+            </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="send*">PROPAGATION_REQUIRED</prop>
+                <prop key="reset*">PROPAGATION_REQUIRED</prop>
+                <prop key="save*">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
+            </props>
+        </property>
+    </bean>
+    <!--Notification-END-->
+
+    <!-- CourseStatus-START-->
+    <bean id="courseStatusManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.CourseStatusManagerImpl" autowire="byName"/>
+        </property>
+    </bean>
+    <!-- CourseStatus-END-->
+
+    <!-- DecorCache-START-->
+    <bean id="decorCacheManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.DecorCacheManagerImpl" autowire="byName"/>
+        </property>
+    </bean>
+    <!-- DecorCache-END-->
+
+    <!-- UserSynchronize-START-->
+    <bean id="userSynchronizeManager" parent="txProxyTemplate">
+         <property name="target">
+            <bean class="no.unified.soak.service.impl.UserSynchronizeManagerImpl" autowire="byName"/>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="synchronizeUsers">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
+            </props>
+        </property>
+    </bean>
+    <!-- UserSynchronize-END-->
+
+    <!-- ActionFilter-START-->
+    <bean id="actionFilter" parent="txProxyTemplate">
+         <property name="target">
+            <bean class="no.unified.soak.webapp.filter.ActionFilter" autowire="byName"/>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="save*">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
+            </props>
+        </property>
+    </bean>
+    <!-- ActionFilter-END-->
+
+    <!-- DatabaseUpdate-START-->
+    <bean id="databaseUpdateManager" parent="txProxyTemplate">
+         <property name="target">
+            <bean class="no.unified.soak.service.impl.DatabaseUpdateManagerImpl" autowire="byName">
+                <property name="dataSource" ref="dataSource"/>
+            </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="save*">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
+            </props>
+        </property>
+    </bean>
+    <!-- DatabaseUpdate-END-->
+    
+    <!-- Configuration-START-->
+    <bean id="configurationManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.ConfigurationManagerImpl" autowire="byName"/>
+        </property>
+        <!-- Override default transaction attributes b/c of LoginCookie methods -->
+        <property name="transactionAttributes">
+            <props>
+                <prop key="isActive">PROPAGATION_NOT_SUPPORTED</prop>
+                <prop key="getValue">PROPAGATION_NOT_SUPPORTED</prop>
+                <prop key="save*">PROPAGATION_REQUIRED</prop>
+            </props>
+        </property>
+    </bean>
+    <!-- Configuration-END-->
+
+    <!-- Category-START-->
+    <bean id="categoryManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.CategoryManagerImpl" autowire="byName">
+                <property name="categoryDAO" ref="categoryDao"/>
+            </bean>
+        </property>
+    </bean>
+    <!-- Category-END-->
+</beans>
