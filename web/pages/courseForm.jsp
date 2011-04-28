@@ -228,7 +228,7 @@ function fillSelect(obj){
 			</th>
 			<td>
 				<form:select path="role" items="${roles}" itemValue="name"
-					itemLabel="role" />
+					itemLabel="description" />
 				<form:errors cssClass="fieldError" htmlEscape="false" path="role" />
 			</td>
 		</tr>
