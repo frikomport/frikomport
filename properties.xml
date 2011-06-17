@@ -59,7 +59,7 @@
     <property name="database.admin.username" value="mengdetrening"/>
     <property name="database.admin.password" value="mengdetrening"/>
     <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
-	<property name="hibernate.hbm2ddl.auto" value="update"/>
+	<!-- property name="hibernate.hbm2ddl.auto" value="update"/ -->
     <property name="database.driver_class" value="oracle.jdbc.OracleDriver"/>
     <property name="database.url" 
         value="jdbc:${database.type}:thin:@${database.host}:${database.port}:${database.name}"/>
