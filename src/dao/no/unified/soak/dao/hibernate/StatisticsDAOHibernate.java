@@ -33,64 +33,65 @@ public class StatisticsDAOHibernate extends BaseDAOHibernate implements Statisti
 	public List<StatisticsTableRow> findByDates(Date beginPeriod, Date endPeriod) {
 		String sql;
 		if (DefaultQuotedNamingStrategy.usesOracle()) {
-			sql = "select OP.\"name\" as Region, O.\"name\" as område, \r\n" 
-					+ "count(distinct C.\"id\") as numCourses, \r\n"
-					+ "count(R.\"id\") as numRegistrations, \r\n"
-					+ "sum(R.\"participants\") as numRegistered, \r\n"
-					+ "sum(C.\"attendants\") as numAttendants " + "from ORGANIZATION O \r\n"
-
+			sql = "select Region, Område, \r\n"
+				+ "sum(partNumCourses) as numCourses, \r\n"
+				+ "sum(partNumRegistrations) as numRegistrations, \r\n"
+				+ "sum(partNumRegistered) as numRegistered, \r\n"
+				+ "sum(partNumAttendants) as numAttendants \r\n"
+				+ "from ( \r\n"
+					+ "select C.\"id\" as cid, OP.\"name\" as Region, O.\"name\" as Område, \r\n"
+					+ "count(distinct C.\"id\") as partNumCourses, \r\n"
+					+ "count(R.\"id\") as partNumRegistrations, \r\n"
+					+ "sum(R.\"participants\") as partNumRegistered, \r\n"
+						+ "(select C2.\"attendants\" from COURSE C2 where C2.\"id\" = C.\"id\") as partNumAttendants \r\n"
+			
+					+ "from ORGANIZATION O \r\n"
 					+ "inner join COURSE C on O.\"id\" = C.\"organization2id\" \r\n"
 					+ "left outer join REGISTRATION R on (R.\"courseid\" = C.\"id\" and R.\"status\" = 2) \r\n"
 					+ "left outer join ORGANIZATION OP on OP.\"id\" = O.\"parentid\" \r\n"
-
-					+ "where C.\"starttime\" >= :beginPeriod and \r\n" + "C.\"starttime\" <= :endPeriod \r\n"
+			
+					+ "where \r\n"
+					// for testing i Aqua Data Studio el. benytt følgende for generering av timestamp: to_timestamp('2011-05-02 00:00:00','yyyy-mm-dd hh24:mi:ss')
+					+ "C.\"starttime\" >= :beginPeriod and C.\"starttime\" <= :endPeriod \r\n"
 					+ "and C.\"attendants\" > 0 and O.\"type\" = 3 and C.\"status\" != 3 \r\n"
-					+ "group by rollup (OP.\"name\", O.\"name\") \r\n" 
+							
+					+ "group by (C.\"id\", OP.\"name\", O.\"name\") \r\n"
+				+ ") "
+				+ "group by rollup (Region, Område) \r\n"
+										
+				+ "union \r\n"
+		
+				+ "select OP.\"name\" as Region, O.\"name\" as Område, \r\n" 
+				+ "count(distinct C.\"id\") as numCourses, \r\n"
+				+ "count(R.\"id\") as numRegistrations, \r\n"
+				+ "sum(R.\"participants\") as numRegistered, \r\n"
+				+ "sum(R.\"participants\") as numAttendants  \r\n"
 					
-					+ "union \r\n"
-
-					+ "select OP.\"name\" as Region, O.\"name\" as område, \r\n" 
-					+ "count(distinct C.\"id\") as numCourses, \r\n"
-					+ "count(R.\"id\") as numRegistrations, \r\n"
-					+ "sum(R.\"participants\") as numRegistered, \r\n"
-					+ "sum(R.\"participants\") as numAttendants from ORGANIZATION O \r\n"
-
-					+ "inner join COURSE C on O.\"id\" = C.\"organization2id\" \r\n"
-					+ "inner join REGISTRATION R on R.\"courseid\" = C.\"id\" \r\n"
-					+ "left outer join ORGANIZATION OP on OP.\"id\" = O.\"parentid\" \r\n"
-
-					+ "where C.\"starttime\" >= :beginPeriod and \r\n" + "C.\"starttime\" <= :endPeriod \r\n"
-					+ "and (C.\"attendants\" is null or C.\"attendants\" = 0) \r\n"
-					+ "and R.\"status\" = 2 and O.\"type\" = 3 and C.\"status\" != 3 \r\n" 
-					+ "group by rollup (OP.\"name\", O.\"name\") \r\n"
+				+ "from ORGANIZATION O \r\n"
+				+ "inner join COURSE C on O.\"id\" = C.\"organization2id\" \r\n"
+				+ "inner join REGISTRATION R on R.\"courseid\" = C.\"id\" \r\n"
+				+ "left outer join ORGANIZATION OP on OP.\"id\" = O.\"parentid\" \r\n"
 					
-					+ "order by 1 asc, 2 desc";
+				+ "where \r\n"
+				// for testing i Aqua Data Studio el. benytt følgende for generering av timestamp: to_timestamp('2011-05-02 00:00:00','yyyy-mm-dd hh24:mi:ss')
+				+ "C.\"starttime\" >= :beginPeriod and C.\"starttime\" <= :endPeriod \r\n"
+				+ "and (C.\"attendants\" is null or C.\"attendants\" = 0) \r\n"
+				+ "and R.\"status\" = 2 and O.\"type\" = 3 and C.\"status\" != 3 \r\n"
+				+ "group by rollup (OP.\"name\", O.\"name\") \r\n"
+					
+				+ "order by 1 asc, 2 desc";
 		} else {
 			sql = "";
 		}
 
-		// String hql =
-		// "select new no.unified.soak.model.StatisticsTableRow(OP.name, O.name, " +
-		// "count(distinct C) as numCourses, count(distinct R.id) as numRegistrations, " +
-		// "sum(R.participants) as numRegistered, sum(C.attendants) as numAttendants) "
-		// + "from Course C inner join C.organization2 O "
-		// + "inner join C.registrations R "
-		// + "left join O.parent OP "
-		// + "where C.startTime >= :beginPeriod and C.startTime <= :endPeriod "
-		// + "and C.attendants > 0 and R.status = 2 and OP.id != O.id "
-		// + "group by rollup (OP.name, O.name) "
-		// + "order by 1 asc, 2 desc";
 		SQLQuery query = getSession().createSQLQuery(sql);
-
-		// Query query = getSession().createQuery(hql);
 		query.setDate("beginPeriod", beginPeriod);
 		query.setDate("endPeriod", endPeriod);
 		List<Object[]> objRow = query.list();
 		List<StatisticsTableRow> statRows = new ArrayList<StatisticsTableRow>(60);
 		StatisticsTableRow prevRow = null;
 		for (Object[] objArr : objRow) {
-			StatisticsTableRow currentRow = new StatisticsTableRow((String) objArr[0], (String) objArr[1], toLong(objArr[2]),
-					toLong(objArr[3]), toLong(objArr[4]), toLong(objArr[5]));
+			StatisticsTableRow currentRow = new StatisticsTableRow((String) objArr[0], (String) objArr[1], toLong(objArr[2]), toLong(objArr[3]), toLong(objArr[4]), toLong(objArr[5]));
 			if (currentRow.getUnitParent() == null) {
 				currentRow.setUnit("Hele landet");
 				currentRow.setCssClass("sumfinal");
@@ -105,8 +106,7 @@ public class StatisticsDAOHibernate extends BaseDAOHibernate implements Statisti
 				statRows.add(currentRow);
 				continue;
 			}
-			if (StringUtils.equals(prevRow.getUnit(), currentRow.getUnit())
-					&& StringUtils.equals(prevRow.getUnitParent(), currentRow.getUnitParent())) {
+			if (StringUtils.equals(prevRow.getUnit(), currentRow.getUnit())	&& StringUtils.equals(prevRow.getUnitParent(), currentRow.getUnitParent())) {
 				prevRow.setNumAttendants(prevRow.getNumAttendants() + currentRow.getNumAttendants());
 				prevRow.setNumCourses(prevRow.getNumCourses() + currentRow.getNumCourses());
 				prevRow.setNumRegistered(prevRow.getNumRegistered() + currentRow.getNumRegistered());
