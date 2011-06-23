@@ -68,6 +68,8 @@ public interface UserManager extends Manager {
 	 */
 	public List getUsers(User user, boolean hashuserFilter);
 
+	public List getUsernames(boolean hashUser);
+
 	/**
 	 * Retrieves a user by hash.  An exception is thrown if no user
 	 * is found.

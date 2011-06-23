@@ -35,10 +35,10 @@
 
     <property name="database.jar" location="${mysql.jar}"/>
     <property name="database.type" value="mysql"/>
-    <property name="database.name" value="frikomtestdb"/>
     <property name="database.host" value="kinn"/>
-    <property name="database.username" value="root"/>
-    <property name="database.password" value="sysadm"/>
+    <property name="database.name" value="frikomtromsdb"/>
+    <property name="database.username" value="frikomtroms"/>
+    <property name="database.password" value="7R61X7DW"/>
 	<property name="database.admin.url" value="jdbc:${database.type}://${database.host}/mysql?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8"/>
     <property name="database.admin.username" value="root"/>
     <property name="database.admin.password" value="sysadm"/>
@@ -67,12 +67,12 @@
 
 	<!-- Defaults for eZ db integration -->
 	<property name="ez.database.type" value="mysql"/>
-    <property name="ez.database.name" value="frikom_ezdb"/>
-    <property name="ez.database.host" value="localhost"/>
+    <property name="ez.database.host" value="kinn"/>
+    <property name="ez.database.name" value="eztromsdb"/>
+    <property name="ez.database.username" value="eztroms"/>
+    <property name="ez.database.password" value="j6YsRRYe"/>
     <property name="ez.database.driver_class" value="com.mysql.jdbc.Driver"/>
     <property name="ez.database.url" value="jdbc:${ez.database.type}://${ez.database.host}/${ez.database.name}?autoReconnect=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8"/>
-    <property name="ez.database.username" value="frikom"/>
-    <property name="ez.database.password" value="frikom"/>
 	
     <!-- Build and deploy properties -->
     <property environment="env"/>

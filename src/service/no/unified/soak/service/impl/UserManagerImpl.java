@@ -143,6 +143,13 @@ public class UserManagerImpl extends BaseManager implements UserManager {
     	}
 	}
 
+	/**
+	 * @see no.unified.soak.service.UserManager#getUsernames(boolean hashuserFilter)
+	 */
+	public List getUsernames(boolean hashUser) {
+		return dao.getUsernames(hashUser);
+	}
+	
 	public User findUserByEmail(String email) {
     	try {
     		return dao.findUserByEmail(email);
@@ -549,8 +556,11 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 
 	private List getExtResponsibles() {
         List<String> roles = new ArrayList();
-//        roles.add(messageSource.getMessage("role.eventresponsible", null, locale));
-//        roles.add(messageSource.getMessage("role.editor", null, locale));
+
+        // hack pga. av manglende datagrunnlag
+        // roles.add("administrator");
+        // -----------------------------------
+        
         roles.add("eventresponsible");
         roles.add("editor");
         List users = extUserDAO.findUsers(roles);

@@ -566,10 +566,12 @@ public class MailUtil {
 		String baseurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.baseurl"));
 
 		msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.findurlhere")) + "\n");
-		String coursedetailurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.coursedetailurl", ""
-				+ course.getId()));
-		msg.append(baseurl + ApplicationResourcesUtil.getPublicUrlContextAppendix() + coursedetailurl
-				+ "\n");
+		String coursedetailurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.coursedetailurl", "" + course.getId()));
+		String publicContext = ApplicationResourcesUtil.getPublicUrlContextAppendix();
+		if(publicContext == null){
+			publicContext = "";
+		}
+		msg.append(baseurl + publicContext + coursedetailurl + "\n");
 	}
 
     /**
@@ -584,7 +586,11 @@ public class MailUtil {
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.cancelcourse")) + "\n");
         String coursecancelurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.coursecancelurl", ""+registration.getId()));
-        msg.append(baseurl + ApplicationResourcesUtil.getPublicUrlContextAppendix() + coursecancelurl + "\n");
+		String publicContext = ApplicationResourcesUtil.getPublicUrlContextAppendix();
+		if(publicContext == null){
+			publicContext = "";
+		}
+        msg.append(baseurl + publicContext + coursecancelurl + "\n");
         
         if(course.getChargeoverdue()) msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationConfirmed.mail.footer.overdue")) + "\n");
 	}
@@ -600,7 +606,11 @@ public class MailUtil {
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.editregistration")) + "\n");
         String editregistrationurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.editregistrationurl", new String[]{""+registration.getId(), ""+course.getId()}));
-        msg.append(baseurl + ApplicationResourcesUtil.getPublicUrlContextAppendix() + editregistrationurl + "\n");
+		String publicContext = ApplicationResourcesUtil.getPublicUrlContextAppendix();
+		if(publicContext == null){
+			publicContext = "";
+		}
+        msg.append(baseurl + publicContext + editregistrationurl + "\n");
         
         if(course.getChargeoverdue()) msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationConfirmed.mail.footer.overdue")) + "\n");
 	}
@@ -1069,53 +1079,53 @@ public class MailUtil {
         String coursename = course.getName();
         switch (event) {
         case Constants.EMAIL_EVENT_COURSECHANGED:
-            if (registration.getReserved()) {
+            if (registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.RESERVED) {
                 subject = StringEscapeUtils.unescapeHtml(
                 		ApplicationResourcesUtil.getText("courseChanged.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", registered).replaceAll("<coursename/>", coursename);
-            } else {
+            } else if(registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.WAITING){
                 subject = StringEscapeUtils.unescapeHtml(
                 		ApplicationResourcesUtil.getText("courseChanged.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", waiting).replaceAll("<coursename/>", coursename);
             }
             break;
         case Constants.EMAIL_EVENT_COURSECANCELLED:
-            if (registration.getReserved()) {
+            if (registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.RESERVED) {
                 subject = StringEscapeUtils.unescapeHtml(
                 		ApplicationResourcesUtil.getText("courseCancelled.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", registered).replaceAll("<coursename/>", coursename);
-            } else {
+            } else if(registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.WAITING){
                 subject = StringEscapeUtils.unescapeHtml(
                 		ApplicationResourcesUtil.getText("courseCancelled.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", waiting).replaceAll("<coursename/>", coursename);
             }
             break;
         case Constants.EMAIL_EVENT_COURSEDELETED:
-            if (registration.getReserved()) {
+            if (registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.RESERVED) {
                 subject = StringEscapeUtils.unescapeHtml(
                 		ApplicationResourcesUtil.getText("courseDeleted.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", registered).replaceAll("<coursename/>", coursename);
-            } else {
+            } else if(registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.WAITING){
                 subject = StringEscapeUtils.unescapeHtml(
                 		ApplicationResourcesUtil.getText("courseDeleted.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", waiting).replaceAll("<coursename/>", coursename);
             }
             break;
         case Constants.EMAIL_EVENT_NOTIFICATION:
-            if (registration.getReserved()) {
+            if (registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.RESERVED) {
                 subject = StringEscapeUtils.unescapeHtml(
                 		ApplicationResourcesUtil.getText("courseNotification.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", registered).replaceAll("<coursename/>", coursename);
-            } else {
+            } else if(registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.WAITING){
                 subject = StringEscapeUtils.unescapeHtml(
                 		ApplicationResourcesUtil.getText("courseNotification.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", waiting).replaceAll("<coursename/>", coursename);
             }
             break;
         case Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION:
-            if (registration.getReserved()) {
+            if (registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.RESERVED) {
                 subject = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationComplete.mail.subject", coursename));
-            } else {
+            } else if(registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.WAITING){
                 subject = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationToWaitinglist.mail.subject", coursename));
             }
             break;
@@ -1136,9 +1146,9 @@ public class MailUtil {
 
     public static String getBody(Registration registration, StringBuffer msg, String registeredMsg, String waitingMsg) {
         String custom = msg.toString();
-        if (registration.getReserved()) {
+        if (registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.RESERVED) {
             custom = custom.replaceAll("<registeredfor/>", registeredMsg);
-        } else {
+        } else if(registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.WAITING){
             custom = custom.replaceAll("<registeredfor/>", waitingMsg);
         }
         custom = custom.replaceAll("<coursename/>", registration.getCourse().getName()).replaceAll("<userhash/>",

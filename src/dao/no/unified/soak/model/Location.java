@@ -15,6 +15,7 @@ import no.unified.soak.validation.Email;
 import no.unified.soak.validation.MinLength;
 import no.unified.soak.validation.MinValue;
 import no.unified.soak.validation.Required;
+import no.unified.soak.validation.ValidateOnlyIfConfigurationIsTrue;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -365,6 +366,7 @@ public class Location extends BaseObject implements Serializable {
     @Required
     @MinLength("4")
     @DigitsOnly
+    @ValidateOnlyIfConfigurationIsTrue("access.location.usePostalCode")
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }

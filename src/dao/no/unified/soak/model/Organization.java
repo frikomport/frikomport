@@ -281,9 +281,9 @@ public class Organization extends BaseObject implements Serializable {
     }
 
     /**
-     * Gets the status of the registration.
+     * Gets the type of organization.
      * 
-     * @return The registration status
+     * @return The type of organization
      * @hibernate.property column="type" not-null="true" type="integer"
      */
     public Integer getType() {

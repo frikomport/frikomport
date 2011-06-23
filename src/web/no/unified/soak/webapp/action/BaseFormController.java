@@ -613,7 +613,7 @@ public class BaseFormController extends SimpleFormController {
 			String fieldNameCamelCase = method.getName().substring(3);
 			String fieldName = lowercaseFirstLetter(fieldNameCamelCase);
 			Class<? extends Object> objClass = obj.getClass();
-			boolean isInUse = configurationManager.isActive("access." + objClass.getSimpleName().toLowerCase() + ".use" + fieldNameCamelCase, true);
+			boolean isInUse = configurationManager.isActive("access." + objClass.getSimpleName().toLowerCase() + ".use" + fieldNameCamelCase, true); // TODO: her bør selve konfigurasjonen hentes slik at korrekt default verdi i stedet benyttes
 			if (isInUse) {
 				isInUse = configurationManager.isActive("access." + objClass.getSimpleName().toLowerCase() + ".use" + fieldName, true);
 			}

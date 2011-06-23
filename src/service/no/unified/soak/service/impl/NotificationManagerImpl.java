@@ -199,7 +199,7 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 					        && registration.getRegistered().before(course.getReminder())) {
 						// Store that it has been successfully sent - cleanup by
 						// cleanup manager
-						boolean isReserved = notification.getRegistration().getReserved();
+						boolean isReserved = notification.getRegistration().getStatusAsEnum() == Status.RESERVED;
                         StringBuffer msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_body(course, registration, null, isReserved, configurationManager.getConfigurationsMap());
 						ArrayList<Registration> registrations = new ArrayList<Registration>();
 						registrations.add(registration);
@@ -256,7 +256,7 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 			Course course = r.getCourse();
 			
 			String waitlist = "";
-			if(!r.getReserved()) waitlist = "(" + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.waitlist")) + ")";
+			if(r.getStatusAsEnum() == Status.WAITING) waitlist = "(" + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.waitlist")) + ")";
 			String name = r.getFirstName() + " " + r.getLastName() + "  <" + r.getEmail() + "> " + waitlist + "\n";
 			addToSummary(course, name);
 		}

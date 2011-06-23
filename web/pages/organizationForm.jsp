@@ -46,6 +46,8 @@
 		</tr>
 </c:if>
 
+
+<c:if test="${useOrganizationType}">
 		<tr>
 			<th>
 				<soak:label key="organization.type" />
@@ -59,8 +61,8 @@
 				<c:out value="${organization.typeAsEnum.displayName}" />
 			</c:if>
 			</td>
-			
 		</tr>
+</c:if>
 
 		<tr>
 			<th>

@@ -53,6 +53,8 @@ public interface UserDAO extends DAO {
      */
     public List getUsers(User user, boolean hashuserFilter);
 
+	public List getUsernames(boolean hashUser);
+
     /**
      * Gets users information based on hash.
      * @param hash the current hash

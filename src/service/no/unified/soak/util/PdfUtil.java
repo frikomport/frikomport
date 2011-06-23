@@ -19,6 +19,7 @@ import java.util.Vector;
 
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.Registration.Status;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
@@ -335,7 +336,7 @@ public class PdfUtil {
 					row.add(r.getAttended()?StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("checkbox.checked")):StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("checkbox.unchecked")));
 				}
 
-				if(r.getReserved()) {
+				if(r.getStatusAsEnum() == Status.RESERVED) {
 					this.addTableRow(row, reserved);
 					rCount += r.getParticipants();
 				}

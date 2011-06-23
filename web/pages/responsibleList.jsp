@@ -41,8 +41,10 @@
     <display:column property="organization.name" sortable="true" headerClass="sortable"
          titleKey="user.organization"/>
 
+<c:if test="${useOrganization2}">
     <display:column property="organization2.name" sortable="true" headerClass="sortable"
          titleKey="user.organization2"/>
+</c:if>
 
     <display:column sortable="true" headerClass="sortable" titleKey="user.enabled">
 		<c:if test="${responsibleList.enabled == true}"><fmt:message key="checkbox.checked"/></c:if>

@@ -696,9 +696,9 @@ public class CourseController extends BaseFormController {
         if (StringUtils.isNotBlank(typeDBvalue)) {
         	Integer value = Integer.valueOf(typeDBvalue);
         	Type type = Organization.Type.getTypeFromDBValue(value);
-            model.put("organizations", organizationManager.getByTypeIncludingDummy(type, getText("misc.all.organizations", locale)));
+            model.put("organizations", organizationManager.getByTypeIncludingDummy(type, getText(("misc.all.organizations" + value), locale)));
         } else {
-            model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
+            model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all.organizations", locale)));
         }
         return model;
     }

@@ -296,4 +296,7 @@ public class Constants {
      * The http header used to read user id (username) if it should be present. 
      */
     public static final String USERID_HTTPHEADERNAME = "USER-ID";
+    
+    public static final String FAKE_LOGIN = "fakeLogin";
+    
 }

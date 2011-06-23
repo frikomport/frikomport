@@ -12,6 +12,7 @@ package no.unified.soak.dao.jdbc;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,9 +21,14 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import no.unified.soak.Constants;
 import no.unified.soak.dao.ExtUserDAO;
+import no.unified.soak.dao.RoleDAO;
+import no.unified.soak.dao.UserDAO;
 import no.unified.soak.ez.ExtUser;
 import no.unified.soak.model.RoleEnum;
+import no.unified.soak.model.User;
+import no.unified.soak.util.ConvertDAO;
 import no.unified.soak.util.NumConvert;
 
 import org.springframework.dao.DataAccessException;
@@ -36,12 +42,23 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
  */
 public class EzUserDAOJdbc implements ExtUserDAO {
 	DataSource dataSource = null;
+	UserDAO userDAO;
+	RoleDAO roleDAO;
 	
 	public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
         jt.setDataSource(dataSource);
     }
 
+	public void setRoleDAO(RoleDAO roleDAO) {
+		this.roleDAO = roleDAO;
+	}
+
+	public void setUserDAO(UserDAO dao) {
+		this.userDAO = dao;
+	}
+
+	
 	JdbcTemplate jt = new JdbcTemplate();
 
 	public EzUserDAOJdbc() {
@@ -59,17 +76,23 @@ public class EzUserDAOJdbc implements ExtUserDAO {
      * @see no.unified.soak.dao.ExtUserDAO#findUserBySessionID(java.lang.String)
      */
 	public ExtUser findUserBySessionID(String sessionId) {
-		String sql = "select user_id, expiration_time from ezsession where session_key = \'"
-				+ sessionId + "\'";
+		boolean fakeLogin = false;
+		if(Constants.FAKE_LOGIN.equals(sessionId)){
+			// session_key for bruker som ønskes benyttet
+			sessionId = "a1uioe5jh652ql4jp4aluqgcv5";
+			fakeLogin = true; // ikke sjekk utløp for session
+		}
+		
+		String sql = "select user_id, expiration_time from ezsession where session_key = \'" + sessionId + "\'";
 		SqlRowSet rowSet = jt.queryForRowSet(sql);
 		ExtUser eZuser = null;
 		if (rowSet.next()) {
 			Integer uid = rowSet.getInt("user_id");
 			Long expTime = rowSet.getLong("expiration_time");
 			Long curTime = new Date().getTime() / 1000;
-//			System.out.println("UserEzDaoJdbc.findUserBySessionID(): expTime="
-//					+ expTime + ", curTime=" + curTime);
-			if (curTime < expTime) {
+//			System.out.println("UserEzDaoJdbc.findUserBySessionID(): expTime=" + expTime + ", curTime=" + curTime);
+
+			if ((curTime < expTime) || fakeLogin) {
 				eZuser = findUser(uid, null, true);
 			} else {
 				/*
@@ -77,8 +100,7 @@ public class EzUserDAOJdbc implements ExtUserDAO {
 				 * object.
 				 */
 				eZuser = new ExtUser();
-//				System.out
-//						.println("UserEzDaoJdbc.findUserBySessionID(): eZ user has timedout. Java module is therefore not accepting the user.");
+//				System.out.println("UserEzDaoJdbc.findUserBySessionID(): eZ user has timedout. Java module is therefore not accepting the user.");
 			}
 		}
 		return eZuser;
@@ -88,8 +110,57 @@ public class EzUserDAOJdbc implements ExtUserDAO {
      * @see no.unified.soak.dao.ExtUserDAO#findUserByUsername(java.lang.String)
      */
     public ExtUser findUserByUsername(String username) {
-        throw new UnsupportedOperationException(
-        "findUserByUsername(String username) is unsupported. Use findUserBySessionID(sessionId) instead.");
+		if (username == null) {
+			return null;
+		}
+		ExtUser user = new ExtUser();
+		try {
+			String sql = "select O.id, O.name, CA.identifier, A.data_int, A.data_text, U.email, U.login from ezcontentobject O \r\n"
+					+ "inner join ezcontentclass C on O.contentclass_id = C.id\r\n"
+					+ "inner join ezcontentobject_attribute A on A.contentobject_id = O.id\r\n"
+					+ "inner join ezcontentclass_attribute CA on CA.contentclass_id = C.id and CA.id = A.contentclassattribute_id\r\n"
+					+ "inner join ezuser U on U.contentobject_id = O.id\r\n"
+					+ "where C.identifier = \'user\' and O.current_version = A.version and CA.identifier in (\'first_name\',\'last_name\',\'kommune\')\r\n"
+					+ "and U.login = '" + username + "'\r\n" 
+					+ " and exists \r\n"
+					+ " (select null from ezcontentobject_tree OT, ezuser_role UR, ezrole R, ezcontentobject_tree OT2 \r\n"
+					+ " where OT.contentobject_id = UR.contentobject_id and OT.node_id = OT2.parent_node_id and OT2.contentobject_id = O.id and UR.role_id = R.id)\r\n" 
+					+ "order by O.id, CA.id";
+			SqlRowSet rowSet = jt.queryForRowSet(sql);
+			int curId = 0;
+
+			while (rowSet.next()) {
+				if (rowSet.getInt("id") != curId) {
+					curId = rowSet.getInt("id");
+					user.setId(curId);
+					user.setName(rowSet.getString("name"));
+					user.setEmail(rowSet.getString("email"));
+                    user.setUsername(rowSet.getString("login"));
+                }
+				String identifier = rowSet.getString("identifier");
+				if ("first_name".equals(identifier)) {
+					user.setFirst_name(rowSet.getString("data_text"));
+				} else if ("last_name".equals(identifier)) {
+					user.setLast_name(rowSet.getString("data_text"));
+				} else if ("kommune".equals(identifier)) {
+					user.setKommune(NumConvert.convertToIntegerTolerant(rowSet.getString("data_text")));
+                }
+			}
+
+			if(user.getId() == null && user.getEmail() == null && user.getUsername() == null){
+				//System.out.println("Tomt resultat for ExtUser: " + username);
+				// Ideelt sett burde new'ing av ExtUser-objektet ligget ett annet sted enn det gjør nå, men dette var raskeste vei rundt problemet :-)
+				return null;
+			}
+			
+			user.setRolenames(findRoles(user.getId()));
+		} catch (InvalidResultSetAccessException e) {
+			e.printStackTrace();
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+		}
+		
+		return user;
     }
 
 	/**
@@ -173,10 +244,30 @@ public class EzUserDAOJdbc implements ExtUserDAO {
 		return roles;
 	}
 
+	
+	
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see no.unified.soak.dao.ExtUserDAO#findUsers(java.util.List)
+	 */
+	public List<ExtUser> findUsers(List<String> roles) {
+		List users = userDAO.getUsersByRoles(roles); // from local database
+
+		List<ExtUser> extUsers = new ArrayList<ExtUser>(users.size());
+		for (Iterator iterator = users.iterator(); iterator.hasNext();) {
+			User user = (User) iterator.next();
+			extUsers.add(ConvertDAO.User2ExtUser(user));
+		}
+		return extUsers;
+	}
+	
+	
 	/* (non-Javadoc)
      * @see no.unified.soak.dao.ExtUserDAO#findKursansvarligeUser()
      */
-	public List findUsers(List<String> roles) {
+	public List findUsers_REPLACED(List<String> roles) {
 		
 		String roleNames = "''";
 		for (int i = 0; i < roles.size(); i++) {

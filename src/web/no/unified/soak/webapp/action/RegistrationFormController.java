@@ -351,9 +351,9 @@ public class RegistrationFormController extends BaseFormController {
         } // or to delete?
         else if (request.getParameter("unregister") != null) {
             registrationManager.cancelRegistration(registration.getId().toString());
-            saveMessage(request, getText("registration.canceled", locale));
+            saveMessage(request, getText("registration.canceled", locale) + " (" + registration.getFirstName() + " " + registration.getLastName() + " / " + registration.getCourse().getName() + " - " + DateUtil.getDateTime("dd.MM.yyyy", registration.getCourse().getStartTime()) + ")");
             sendMail(locale, course, registration, Constants.EMAIL_EVENT_REGISTRATION_CANCELLED);
-            return new ModelAndView(getCancelView(), "courseid", registration.getCourseid());
+            return new ModelAndView("redirect:listRegistrations.html");
         } else if (request.getParameter("delete") != null) {
             registrationManager.removeRegistration(registration.getId().toString());
             saveMessage(request, getText("registration.deleted", locale));
@@ -374,27 +374,28 @@ public class RegistrationFormController extends BaseFormController {
             
             
             // -- validering på server pga problemer på klient
-            // TODO: legge til konfigurasjonsstyring av felter / validering
-			String format = getText("date.format", request.getLocale());
 			Object[] args = null;
 
-			try {
-				String birthdate_str = request.getParameter("birthdate");
-				if(StringUtils.isNotEmpty(birthdate_str)){ 
-					// utfylt, men ukjent format
-					Date birthdate = DateUtil.convertStringToDate(birthdate_str, format);
-					if (birthdate != null) {
-						// utfylt riktig format
-						registration.setBirthdate(birthdate);
-					} else {
-						// utfylt feil format
-						throw new BindException(registration, "birthdate");
+			if(configurationManager.isActive("access.registration.useBirthdate",false)){
+				try {
+					String birthdate_str = request.getParameter("birthdate");
+					if(StringUtils.isNotEmpty(birthdate_str)){ 
+						// utfylt, men ukjent format
+						String format = getText("date.format", request.getLocale());
+						Date birthdate = DateUtil.convertStringToDate(birthdate_str, format);
+						if (birthdate != null) {
+							// utfylt riktig format
+							registration.setBirthdate(birthdate);
+						} else {
+							// utfylt feil format
+							throw new BindException(registration, "birthdate");
+						}
 					}
+				} catch (Exception e) {
+					args = new Object[] { getText("registration.birthdate", request.getLocale()),
+							getText("date.format.localized", request.getLocale()), ""};
+					errors.rejectValue("birthdate", "errors.dateformat", args, "Invalid date");
 				}
-			} catch (Exception e) {
-				args = new Object[] { getText("registration.birthdate", request.getLocale()),
-						getText("date.format.localized", request.getLocale()), ""};
-				errors.rejectValue("birthdate", "errors.dateformat", args, "Invalid date");
 			}
 			
 			String sted = request.getParameter("invoiceAddress.city");
@@ -409,10 +410,12 @@ public class RegistrationFormController extends BaseFormController {
 				errors.rejectValue("invoiceAddress.postalCode", "errors.required", args, "");
 			}
 
-			String participants = request.getParameter("participants");
-			if(!StringUtils.isNumeric(participants)){
-				args = new Object[] { getText("registration.participants", request.getLocale()), "", ""};
-				errors.rejectValue("participants", "errors.positivNumber", args, "");
+			if(configurationManager.isActive("access.course.useAttendants",false)){
+				String participants = request.getParameter("participants");
+				if(!StringUtils.isNumeric(participants)){
+					args = new Object[] { getText("registration.participants", request.getLocale()), "", ""};
+					errors.rejectValue("participants", "errors.positivNumber", args, "");
+				}
 			}
 			
             // Lets find out if the course has room for this one
@@ -467,6 +470,10 @@ public class RegistrationFormController extends BaseFormController {
 				 * Siden dette kun er en oppdatering av en registrering må registeringens 
 				 * orginalt besatte plasser frigjøres i forb. med beregning av tilgjengelighet
 				 */
+                if(!configurationManager.isActive("access.registration.useParticipants", false)){
+                	originalRegistration.setParticipants(1); // setter antall deltakere til 1 når feltet ikke er i bruk
+                }
+
             	availability += originalRegistration.getParticipants();
             }
             
@@ -507,6 +514,10 @@ public class RegistrationFormController extends BaseFormController {
             boolean update = false;
             if(!changedCourse && (registration.getId() != null && registration.getId().longValue() != 0)){
             	update = true; // no change of course / not a new registration -- no email needed
+            }
+            
+            if(!configurationManager.isActive("access.registration.useParticipants", false)){
+            	registration.setParticipants(1); // setter antall deltakere til 1 når feltet ikke er i bruk
             }
             
             if (availability.intValue() >= registration.getParticipants()) {

@@ -40,9 +40,10 @@
     </display:column>
 	</c:if>
 	    
-    <display:column property="typeAsEnum.displayName" sortable="true" headerClass="sortable"
-         titleKey="organization.type">
+	<c:if test="${useOrganizationType}">
+    <display:column property="typeAsEnum.displayName" sortable="true" headerClass="sortable" titleKey="organization.type">
     </display:column>
+	</c:if>
     
 <c:if test="${(isAdmin || isEducationResponsible || isEventResponsible || isReader) && usePayment && !isSVV}">
     <display:column property="invoiceName" sortable="true" headerClass="sortable"

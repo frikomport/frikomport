@@ -46,6 +46,10 @@
             <field property="registerBy" depends="required"/>
             <field property="startTime" depends="required"/>
             <field property="stopTime" depends="required"/>
+            <field property="reservedInternal" depends="required"/>
+            <field property="feeInternal" depends="required"/>
+            <field property="feeExternal" depends="required"/>
+            <field property="duration" depends="required"/>
        </form>
        <form name="registration">
             <field property="email" depends="required"/>

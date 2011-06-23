@@ -185,14 +185,22 @@ public class ApplicationResourcesUtil {
 
 	public static String getPublicUrlContextAppendix() {
 		if (publicUrlContextAppendix == null) {
-			publicUrlContextAppendix = StringUtils.strip(ApplicationResourcesUtil.getText("publicUrlprefix"), "/") + "/";
+//			publicUrlContextAppendix = StringUtils.strip(ApplicationResourcesUtil.getText("publicUrlprefix"), "/") + "/";
+			String prefix = StringUtils.strip(ApplicationResourcesUtil.getText("publicUrlprefix"), "/");
+			if(StringUtils.isNotBlank(prefix)){
+				publicUrlContextAppendix = prefix + "/";
+			}
 		}
 		return publicUrlContextAppendix;
 	}
 
 	public static String getLoggedinUrlContextAppendix() {
 		if (loggedinUrlContextAppendix == null) {
-			loggedinUrlContextAppendix = StringUtils.strip(ApplicationResourcesUtil.getText("loggedinUrlprefix"), "/") + "/";
+//			loggedinUrlContextAppendix = StringUtils.strip(ApplicationResourcesUtil.getText("loggedinUrlprefix"), "/") + "/";
+			String prefix = StringUtils.strip(ApplicationResourcesUtil.getText("loggedinUrlprefix"), "/");
+			if(StringUtils.isNotBlank(prefix)){
+				loggedinUrlContextAppendix = prefix + "/";
+			}
 		}
 		return loggedinUrlContextAppendix;
 	}

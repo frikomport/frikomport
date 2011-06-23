@@ -11,6 +11,7 @@ import javax.servlet.jsp.JspException;
 
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.Registration.Status;
 import no.unified.soak.util.ApplicationResourcesUtil;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -318,7 +319,7 @@ public abstract class CustomBaseExportView implements TextExportView
 					firstRegistration = false;
 
 				}
-				if (registration.getReserved()) {
+				if (registration.getStatusAsEnum() == Status.RESERVED) {
 					rCount += registration.getParticipants();
 				} else {
 					wCount += registration.getParticipants();

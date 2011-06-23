@@ -69,25 +69,59 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 					// brukeren finnes ikke lenger i eksternt system, settes som inaktiv bruker
 					processUser(null, local.getUsername());
 					log.info("Deaktivert: " + local.getFullName() + " [" + local.getUsername() + "] " + local.getEmail());
-					log.debug("Deaktivert: " + local.getFullName() + " [" + local.getUsername() + "] " + local.getEmail());
 				} else {
 					processUser(ldapUser, null);
 					log.info("LDAP: " + ldapUser.getName() + " [" + ldapUser.getUsername() + "] " + ldapUser.getEmail());
-					log.debug("LDAP: " + ldapUser.getName() + " [" + ldapUser.getUsername() + "] " + ldapUser.getEmail());
 				}
 			}
 			log.info("Synkronisering av " + antall + " brukere ferdig!");
 
 		} else {
-			List<ExtUser> ezUsers = extUserDAO.findAll();
-			if (ezUsers != null) {
-				Iterator<ExtUser> it = ezUsers.iterator();
-				while (it.hasNext()) {
-					ExtUser current = it.next();
-					processUser(current, null);
+//			int antall = 0;
+//			List<ExtUser> ezUsers = extUserDAO.findAll();
+//			if (ezUsers != null) {
+//				Iterator<ExtUser> it = ezUsers.iterator();
+//				while (it.hasNext()) {
+//					antall++;
+//					ExtUser current = it.next();
+//					processUser(current, null);
+//					log.info("" + current.getName() + " [" + current.getUsername() + "] " + current.getEmail());
+//				}
+//			}
+//			log.info("Synkronisering av " + antall + " brukere ferdig!");
+
+			/* Alternativ løsning for synkronisering av ezBrukere (med basis i "java"-database fremfor "eZ"-database
+			 * Brukere blir uansett lagt til i APP_USER-tabellen ved første innlogging, det bør derfor være ok å 
+			 * synkronisere med basis i user.hashuser==false 
+			 * */
+
+			log.info("Synkronisering av brukere starter...");
+			User filter = new User();
+			filter.setHashuser(false);
+			List usernames = userManager.getUsernames(false);
+			Iterator<String> it = usernames.iterator();
+			int antall = 0;
+			String local = null;
+			while (it.hasNext()) {
+				local = it.next();
+				ExtUser extUser = extUserDAO.findUserByUsername(local);
+				try {
+					if (extUser == null) {
+						// brukeren finnes ikke lenger i eksternt system, settes som inaktiv bruker
+						processUser(null, local);
+						log.info("Deaktivert: [" + local + "]");
+					} else {
+						processUser(extUser, null);
+						log.info("LDAP/eZ: " + extUser.getName() + " [" + extUser.getUsername() + "] " + extUser.getEmail());
+					}
+					antall++;
+				}
+				catch(Exception e){
+					log.error("Problem ved synkronisering av [" + local + "]", e);
 				}
 			}
-			log.debug("Synchronized users");
+			log.info("Synkronisering av " + antall + " brukere ferdig!");
+
 		}
 	}
 
@@ -105,21 +139,23 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 		}
     	
     	User emailuser = null;
-        // Sjekker om epostadressa er brukt som username i FriKomPort-databasen.
-        try {
-            emailuser = userManager.getUser(current.getEmail().toLowerCase());
-        } catch (ObjectRetrievalFailureException e) {
-        	// extUser finnes ikke. Forsøker med annen vri.
-            User tmpUser = userManager.findUserByEmail(current.getEmail().toLowerCase());
-            if ((tmpUser != null) && !tmpUser.getUsername().equals(current.getUsername())) {
-                emailuser = tmpUser;
-            }
-        }
 
-        if (emailuser != null) {
-            byttNavnOgDisable(emailuser);
-        }
-
+    	if(current.getEmail() != null){ // mulig dette egentlig er unødvendig, men oppstod pga. inkonsistens mellom frikomdb og ezdb i utviklingsmiljø
+	    	// Sjekker om epostadressa er brukt som username i FriKomPort-databasen.
+	    	try {
+	            emailuser = userManager.getUser(current.getEmail().toLowerCase());
+	        } catch (ObjectRetrievalFailureException e) {
+	        	// extUser finnes ikke. Forsøker med annen vri.
+	            User tmpUser = userManager.findUserByEmail(current.getEmail().toLowerCase());
+	            if ((tmpUser != null) && !tmpUser.getUsername().equals(current.getUsername())) {
+	                emailuser = tmpUser;
+	            }
+	        }
+	        if (emailuser != null) {
+	            byttNavnOgDisable(emailuser);
+	        }
+    	}
+        
         try {
 			user = userManager.getUser(current.getUsername());
 			userManager.updateUser(user, current.getFirst_name(), current.getLast_name(), current.getEmail().toLowerCase(), current

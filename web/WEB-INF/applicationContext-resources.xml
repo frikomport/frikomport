@@ -17,6 +17,8 @@
 	<!-- EzUserDAOJdbc: ExtUserDAO interface -->
 	<bean id="extUserDAO" class="no.unified.soak.dao.jdbc.EzUserDAOJdbc">
     	<property name="dataSource" ref="userEzDataSource"/>
+        <property name="roleDAO" ref="roleDAO"/>
+        <property name="userDAO" ref="userDAO"/>
     </bean>
 
 

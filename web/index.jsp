@@ -10,5 +10,5 @@ and spits up a Server Not Found error
     <soak:secure/>
 </c:if>
 
-<c:redirect url="/admin/welcome.html"/>
+<c:redirect url="/listCourses.html"/>
 

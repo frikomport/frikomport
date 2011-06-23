@@ -87,30 +87,12 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 
 <c:if test="${!isSVV}">
         <li>
-            <spring:bind path="registration.courseid">
-                  <select id="<c:out value="${status.expression}"/>" name="<c:out value="${status.expression}"/>">
-                    <c:forEach var="theCourse" items="${courses}">
-                      <option value="<c:out value="${theCourse.id}"/>"
-                          <c:if test="${theCourse.id == registration.courseid}"> selected="selected"</c:if>>
-                          <fmt:formatDate value="${theCourse.startTime}" type="both" pattern="${dateformat} - "/><c:out value="${theCourse.name}"/>
-                          <c:if test="${theCourse.id != 0}">, <c:out value="${theCourse.organization.name}"/>, <c:out value="${theCourse.location.name}"/></c:if>
-                      </option>
-                    </c:forEach>
-                  </select>
-                <span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false"/></span>
-            </spring:bind>
-        </li>
-</c:if>
-
-<c:if test="${!isSVV}">
-    </ul>
-    <ul>
-        <li>
-            <soak:label key="registration.reserved" styleClass="required"/>
-            <select id="reservedField" name="reservedField">
-                <option value="2" <c:if test="${reservedValue == 2}"> selected </c:if> /> <c:out value='${reserved["null"]}'/></option>
-                <option value="1" <c:if test="${reservedValue == 1}"> selected </c:if> /> <c:out value='${reserved["true"]}'/></option>
-                <option value="0" <c:if test="${reservedValue == 0}"> selected </c:if> /> <c:out value='${reserved["false"]}'/></option>
+            <soak:label key="registration.status" styleClass="required"/>
+            <select id="statusField" name="statusField">
+                <option value="2" <c:if test="${statusValue == 2}"> selected </c:if> /> <c:out value='${status["2"]}'/></option>
+                <option value="1" <c:if test="${statusValue == 1}"> selected </c:if> /> <c:out value='${status["1"]}'/></option>
+                <option value="3" <c:if test="${statusValue == 3}"> selected </c:if> /> <c:out value='${status["3"]}'/></option>
+                <option value="0" <c:if test="${statusValue == 0}"> selected </c:if> /> <c:out value='${status["null"]}'/></option>
             </select>
         </li>
 </c:if>    
@@ -153,6 +135,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 		    <INPUT type="checkbox" id="historic" name="historic" value="1"
 		    <c:if test="${historic == true}"> checked </c:if> />
         </li>
+        
         <li>
             <button type="submit" name="search" onclick="bCancel=false" style="margin-right: 5px">
 				<fmt:message key="button.search"/>
@@ -238,9 +221,11 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
     <display:column property="firstName" sortable="true" headerClass="sortable"
          titleKey="registration.firstName" class="${tdClass}"/>
 
+<c:if test="${useBirthdateForRegistration}">
     <display:column sortable="true" headerClass="sortable" titleKey="registration.birthdate" sortProperty="birthdate" class="${tdClass}">
          <fmt:formatDate value="${registrationList.birthdate}" type="date" pattern="${dateformat}"/>
     </display:column>
+</c:if>         
          
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="registration.email" class="${tdClass}">
          <a href="mailto:<c:out value="${registrationList.email}"/>"><c:out value="${registrationList.email}"/></a>
@@ -270,6 +255,12 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 	<display:column property="serviceArea.name" sortable="true" headerClass="sortable" 
 		titleKey="registration.serviceArea" class="${tdClass}"/>
 </c:if>
+
+    <display:column sortable="true" headerClass="sortable" titleKey="registration.status">
+		<c:if test="${registrationList.status == 1}"><fmt:message key="registrationList.status.1"/></c:if>
+		<c:if test="${registrationList.status == 2}"><fmt:message key="registrationList.status.2"/></c:if>
+		<c:if test="${registrationList.status == 3}"><fmt:message key="registrationList.status.3"/></c:if>
+    </display:column>
          
 <c:if test="${usePayment}">
     <display:column sortable="true" headerClass="sortable"

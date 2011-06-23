@@ -203,7 +203,8 @@
         <!--  property name="validator" ref="beanValidator"/ -->
         <property name="formView" value="registrationForm"/>
         <property name="successView" value="redirect:registrationComplete.html"/>
-        <property name="cancelView" value="redirect:welcome.html"/>
+        <property name="cancelView" value="registrationList"/>
+        <!-- property name="cancelView" value="redirect:welcome.html"/ -->
     </bean>
 
     <bean id="registrationAdministrationController" class="no.unified.soak.webapp.action.RegistrationAdministrationController" autowire="byName">
@@ -498,6 +499,8 @@
         
     <bean id="extUserDAO" class="no.unified.soak.dao.jdbc.EzUserDAOJdbc">
     	<property name="dataSource" ref="userEzDataSource"/>
+        <property name="roleDAO" ref="roleDAO"/>
+        <property name="userDAO" ref="userDAO"/>
     </bean>
 <!--     
     <bean id="extUserDAO" class="no.unified.soak.dao.ws.SVVUserDAOWS" autowire="default">

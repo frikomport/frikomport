@@ -173,7 +173,8 @@
 		<c:if test="${admin == true}">
 			<input type="hidden" name="_reserved<c:out value="${registrationList.id}"/>" value="visible"/>
 			<input type="checkbox" name="reserved_<c:out value="${registrationList.id}"/>"
-			<c:if test="${registrationList.reserved == true}"> checked="checked" </c:if> />
+			<c:if test="${registrationList.reserved == true}"> checked="checked" </c:if>
+			<c:if test="${registrationList.status == 3}"> disabled </c:if> />
 		</c:if>
 		<c:if test="${admin == false}">
 			<input type="hidden" name="_reserved<c:out value="${registrationList.id}"/>" value="visible"/>
@@ -190,7 +191,8 @@
 		<c:if test="${admin == true}">
 			<input type="hidden" name="_attended<c:out value="${registrationList.id}"/>" value="visible"/>
 			<input type="checkbox" name="attended_<c:out value="${registrationList.id}"/>"
-			<c:if test="${registrationList.attended == true}"> checked="checked" </c:if> />
+			<c:if test="${registrationList.attended == true}"> checked="checked" </c:if> 
+			<c:if test="${registrationList.status == 3}"> disabled </c:if> />
 		</c:if>
 		<c:if test="${admin == false}">
 			<input type="hidden" name="_attended<c:out value="${registrationList.id}"/>" value="visible"/>

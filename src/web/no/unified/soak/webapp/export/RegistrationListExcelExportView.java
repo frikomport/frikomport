@@ -12,6 +12,7 @@ import javax.servlet.jsp.JspException;
 
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.Registration.Status;
 import no.unified.soak.util.ApplicationResourcesUtil;
 
 import org.apache.commons.lang.ObjectUtils;
@@ -233,7 +234,7 @@ public class RegistrationListExcelExportView implements BinaryExportView
 	                
 	                firstRegistration = false;
             	}
-				if(registration.getReserved()) {
+				if(registration.getStatusAsEnum() == Status.RESERVED) {
 					rCount += registration.getParticipants();
 				}
 				else {

@@ -3,13 +3,15 @@
 <div id="menuDiv">
 <authz:authorize ifAnyGranted="admin,eventresponsible,editor,reader">
 <menu:useMenuDisplayer name="ListMenu" permissions="rolesAdapter">
-    <menu:displayMenu name="FriKomMenu_SVV"/>
+    <menu:displayMenu name="FriKomMenu"/>
+    <!-- menu:displayMenu name="FriKomMenu_SVV"/ -->
 </menu:useMenuDisplayer>
 </authz:authorize>
 
 <authz:authorize ifNotGranted="admin,eventresponsible,editor,reader">
 <menu:useMenuDisplayer name="ListMenu" permissions="rolesAdapter">
-    <menu:displayMenu name="FriKomMenu_SVV_public"/>
+    <menu:displayMenu name="FriKomMenu"/>
+    <!-- menu:displayMenu name="FriKomMenu_SVV_public"/ -->
 </menu:useMenuDisplayer>
 </authz:authorize>
 </div>

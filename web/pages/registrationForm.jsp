@@ -188,7 +188,7 @@
 			</tr>
 			</c:if>
 			
-			<c:if test="${useAttendants}">
+			<c:if test="${useParticipants}">
 			<tr>
 				<th>
 					<soak:label key="registration.participants" />

@@ -18,6 +18,7 @@ import no.unified.soak.model.User;
 import no.unified.soak.model.UserCookie;
 
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.StaleObjectStateException;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -127,6 +128,14 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
 		// OptimisticLockingFailed
 		// }
 		return result;
+	}
+
+	public List getUsernames(boolean hashUser) {
+		String sql = "select username from app_user where hashuser = " + hashUser + " order by username";
+		SQLQuery query = getSession().createSQLQuery(sql);
+
+		List<String> usernames = query.list();
+		return usernames;
 	}
 
 	/**

@@ -153,6 +153,7 @@ public class Registration extends BaseObject implements Serializable {
 	 */
 	@Required
 	@MinValue("1")
+	@ValidateOnlyIfConfigurationIsTrue("access.registration.useParticipants")
 	public void setParticipants(Integer participants) {
 		this.participants = participants;
 	}

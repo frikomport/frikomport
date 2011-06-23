@@ -153,26 +153,6 @@ function fillSelect(obj){
 					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url context="${urlContext}" value="/images/calendar.png"/>"></a>
 			</li>
 
-<c:if test="${!isSVV}">
-        <input type="hidden" id="past" name="past" 
-        <c:if test="${past == true}"> value="1" </c:if>
-        <c:if test="${past == false}"> value="0" </c:if> />
-		<c:if test="${past == true}">
-	    	<input type="hidden" id="historic" name="historic"
-	    	<c:if test="${historic == true}"> value="1" </c:if>
-	    	<c:if test="${historic == false}"> value="0" </c:if>
-	    	/>
-		</c:if>
-		<c:if test="${past == false}">
-            <li>
-                <label class="required"><fmt:message key="course.includeHistoric"/>:</label>
-                <input type="hidden" name="_historic" value="0"/>
-		    	<input type="checkbox" id="historic" name="historic" value="1"
-		    	<c:if test="${historic == true}"> checked </c:if> />
-            </li>
-		</c:if>
-</c:if>
-
             <li>
                 <button type="submit" name="search" onclick="bCancel=false" style="margin-right: 5px">
 					<fmt:message key="button.search"/>

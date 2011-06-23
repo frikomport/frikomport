@@ -116,6 +116,9 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
 	public void updateDatabase() {
 		alterUserAndRoleAndCoursebySQL();
+		
+		alterUserbySQL(); // i forb. med overgang til brukersykronisering på basis av APP_USER istedet for henting av alle brukere fra eZ / svvtrunkmerge
+		
 		changeRolesBySQL();
 
 		insertDefaultValues();
@@ -219,6 +222,37 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	}
 
 	/**
+	 * For upgrade from 1.7.x to svvtrunkmerge (1.8 ?)
+	 */
+	private void alterUserbySQL() {
+
+		if(!ApplicationResourcesUtil.isSVV()){
+			String sql = "update app_user set hashuser = false where username not like '%@%'";
+			if (DefaultQuotedNamingStrategy.usesOracle()) {
+				sql = "update app_user set \"hashuser\" = false where \"username\" not like '%@%'";
+			}
+			try {
+				jt.execute(sql);
+				log.info("Satt COURSE.hashuser = false for brukere hvor 'username' ikke er en epostadresse!");
+			} catch (Exception e) {
+				log.error("SQL feilet: " + sql, e);
+			}
+
+			sql = "update app_user set hashuser = true where username like '%@%'";
+			if (DefaultQuotedNamingStrategy.usesOracle()) {
+				sql = "update app_user set \"hashuser\" = false where \"username\" like '%@%'";
+			}
+			try {
+				jt.execute(sql);
+				log.info("Satt COURSE.hashuser = true for brukere hvor 'username' er en epostadresse!");
+			} catch (Exception e) {
+				log.error("SQL feilet: " + sql, e);
+			}
+		}
+	}
+	
+	
+	/**
 	 * For upgrade from 1.7.X to SVV
 	 */
 	private void alterUserAndRoleAndCoursebySQL() {
@@ -227,9 +261,9 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		ColumnInfo id = getColumnInfo("app_user", "id");
 		if (id != null) {
 			log.info("Column APP_USER.ID exists.");
-			String sql = "update table app_user set hashuser = true where id=0";
+			String sql = "update app_user set hashuser = true where id=0";
 			if (DefaultQuotedNamingStrategy.usesOracle()) {
-				sql = "update table app_user set \"hashuser\" = 1 where \"id\"=0";
+				sql = "update app_user set \"hashuser\" = 1 where \"id\"=0";
 			}
 			try {
 				jt.execute(sql);
@@ -426,7 +460,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		configurationsToInsert.add(new Configuration("access.registration.delete", false, null));
 		configurationsToInsert.add(new Configuration("access.registration.userdefaults", false, null));
 		configurationsToInsert.add(new Configuration("access.registration.emailrepeat", false, null));
-		configurationsToInsert.add(new Configuration("access.registration.showCancelled", false, null));
+		configurationsToInsert.add(new Configuration("access.registration.showCancelled", true, null));
 		configurationsToInsert.add(new Configuration("sms.confirmedRegistrationChangedCourse", false, null));
 
 		configurationsToInsert.add(new Configuration("mail.course.sendSummary", true, null));
@@ -451,6 +485,8 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			configurationsToInsert.add(new Configuration("access.registration.mobilePhone.digitsOnly.minLength8", true, null));
 			configurationsToInsert.add(new Configuration("access.registration.useWaitlists", false, null));
 			configurationsToInsert.add(new Configuration("access.registration.showComment", false, null));
+			configurationsToInsert.add(new Configuration("access.registration.useParticipants", true, null));
+
 
 			// course
 			configurationsToInsert.add(new Configuration("access.course.usePayment", false, null));
@@ -466,6 +502,10 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			configurationsToInsert.add(new Configuration("access.course.showAttendantDetails", true, null));
 			configurationsToInsert.add(new Configuration("access.course.showDescriptionToPublic", false, null));
 			configurationsToInsert.add(new Configuration("access.course.showCourseUntilFinished", false, null));
+			
+			// Organization
+			configurationsToInsert.add(new Configuration("access.organization.useType", true, null)); // NB! useType for organization + organization2 må konfigureres likt!!
+			configurationsToInsert.add(new Configuration("access.organization2.useType", true, null)); // NB! useType for organization + organization2 må konfigureres likt!!
 			
 			// User
 			configurationsToInsert.add(new Configuration("access.user.useBirthdate", false, null));
@@ -487,6 +527,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			configurationsToInsert.add(new Configuration("access.registration.mobilePhone.digitsOnly.minLength8", false, null));
 			configurationsToInsert.add(new Configuration("access.registration.useWaitlists", true, null));
 			configurationsToInsert.add(new Configuration("access.registration.showComment", true, null));
+			configurationsToInsert.add(new Configuration("access.registration.useParticipants", false, null));
 
 			// course
 			configurationsToInsert.add(new Configuration("access.course.usePayment", true, null));
@@ -502,6 +543,10 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			configurationsToInsert.add(new Configuration("access.course.showAttendantDetails", false, null));
 			configurationsToInsert.add(new Configuration("access.course.showDescriptionToPublic", true, null));
 			configurationsToInsert.add(new Configuration("access.course.showCourseUntilFinished", true, null));
+
+			// Organization
+			configurationsToInsert.add(new Configuration("access.organization.useType", false, null)); // NB! useType for organization + organization2 må konfigureres likt!!
+			configurationsToInsert.add(new Configuration("access.organization2.useType", false, null)); // NB! useType for organization + organization2 må konfigureres likt!!
 
 			// User
 			configurationsToInsert.add(new Configuration("access.user.useBirthdate", true, null));
@@ -775,7 +820,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	}
 
 	/**
-	 * For upgrade from 1.7.X to SVV
+	 * For upgrade from 1.7.X to SVV and to SVVTrunkMerge (1.8?)
 	 */
 	private void updateRegistrationbySQLStatement() {
 
@@ -791,9 +836,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		if (nRowsAffected > 0) {
 			log.info(nRowsAffected + " rows affected by convertion from reserved to status field in database.");
 		} else {
-			log
-					.info(nRowsAffected
-							+ " rows affected by convertion from reserved to status field in database. The field \"reserved\" in table \"registration\" can be dropped.");
+			log.info(nRowsAffected + " rows affected by convertion from reserved to status field in database. The field \"reserved\" in table \"registration\" should be dropped.");
 		}
 	}
 

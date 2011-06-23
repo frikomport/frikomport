@@ -91,7 +91,7 @@
 	</tr>
 </c:if>
 
-<c:if test="${useAttendants}">
+<c:if test="${useParticipants}">
 	<tr>
 		<th>
 			<fmt:message key="registration.participants" />

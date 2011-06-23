@@ -86,8 +86,7 @@ public class StartupListener extends ContextLoaderListener implements
 	}
 
 	public static void setupContext(ServletContext context) {
-		ApplicationContext ctx = WebApplicationContextUtils
-				.getRequiredWebApplicationContext(context);
+		ApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(context);
 
 		LookupManager mgr = (LookupManager) ctx.getBean("lookupManager");
 
@@ -103,17 +102,16 @@ public class StartupListener extends ContextLoaderListener implements
 		WaitingListManager waitingListManager = (WaitingListManager) ctx.getBean("waitingListManager");
         CourseStatusManager courseStatusManager = (CourseStatusManager) ctx.getBean("courseStatusManager");
         UserSynchronizeManager userSynchronizeManager = (UserSynchronizeManager) ctx.getBean("userSynchronizeManager");
-        DecorCacheManager decorCacheManager = (DecorCacheManager) ctx.getBean("decorCacheManager");
+        //DecorCacheManager decorCacheManager = (DecorCacheManager) ctx.getBean("decorCacheManager");
 
         // Tasks to be completed once
         ScheduledTasks once = new ScheduledTasks();
-//        once.addTask(userSynchronizeManager); // kommentert ut fordi den tilsynelatende uansett kjøres umiddelbart etter oppstart
         once.addTask(databaseUpdateManager);
         timer.schedule(once, Constants.TASK_IMMEDIATE);
 
         // Tasks to happen regularly
         ScheduledTasks recurring = new ScheduledTasks();
-        recurring.addTask(decorCacheManager);
+        //recurring.addTask(decorCacheManager);
         recurring.addTask(courseStatusManager);
         recurring.addTask(userSynchronizeManager);
         if(!ApplicationResourcesUtil.isSVV()) recurring.addTask(registerByDateManager);

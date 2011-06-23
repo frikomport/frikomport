@@ -213,8 +213,7 @@ public class ActionFilter implements Filter {
 		session.setAttribute("usePayment", configurationManager.isActive("access.course.usePayment", true));
 		session.setAttribute("showDuration", configurationManager.isActive("access.course.showDuration", true));
 		session.setAttribute("showDescription", configurationManager.isActive("access.course.showDescription", true));
-		session.setAttribute("showDescriptionToPublic", configurationManager
-				.isActive("access.course.showDescriptionToPublic", true));
+		session.setAttribute("showDescriptionToPublic", configurationManager.isActive("access.course.showDescriptionToPublic", true));
 		session.setAttribute("showRole", configurationManager.isActive("access.course.showRole", true));
 		session.setAttribute("showType", configurationManager.isActive("access.course.showType", true));
 		session.setAttribute("showRestricted", configurationManager.isActive("access.course.showRestricted", true));
@@ -224,7 +223,8 @@ public class ActionFilter implements Filter {
 		session.setAttribute("useRegisterBy", configurationManager.isActive("access.course.useRegisterBy", true));
 		session.setAttribute("useOrganization2", configurationManager.isActive("access.course.useOrganization2", false));
 		session.setAttribute("showAttendantDetails", configurationManager.isActive("access.course.showAttendantDetails", false));
-
+		session.setAttribute("useParticipants", configurationManager.isActive("access.registration.useParticipants", false));
+		
 		// registration
 		session.setAttribute("canDelete", configurationManager.isActive("access.registration.delete", false));
 		session.setAttribute("userdefaults", configurationManager.isActive("access.registration.userdefaults", false));
@@ -236,6 +236,9 @@ public class ActionFilter implements Filter {
 		session.setAttribute("showComment", configurationManager.isActive("access.registration.showComment", true));
 		session.setAttribute("useBirthdateForRegistration", configurationManager.isActive("access.registration.useBirthdate", false));
 		session.setAttribute("useWaitlists", configurationManager.isActive("access.registration.useWaitlists", true));
+		
+		// organization
+		session.setAttribute("useOrganizationType", configurationManager.isActive("access.organization.useType", false));
 		
 		// user
 		session.setAttribute("useBirthdateForUser", configurationManager.isActive("access.user.useBirthdate", false));
@@ -267,9 +270,25 @@ public class ActionFilter implements Filter {
 		 */
 		Cookie cookie = RequestUtil.getCookie(request, "eZSESSID");
 		String eZSessionId = null;
-		if (cookie != null && cookie.getValue() != null && cookie.getValue().trim().length() > 0) {
-			eZSessionId = cookie.getValue();
+
+		/** hack for å være logget inn uten bruke eZ-Publish 
+		 *  Brukernavn må tilpasses manuelt, samt korrekt eZSessionId (i EzUserDaoJdbc.java)
+		 *  for at dette skal fungere -- det er da mulig å kjøre javaapp'en alene som innlogget  
+		 * */ 
+		String fakeLogin = ("sa".equals(System.getProperty("user.name")) ? Constants.FAKE_LOGIN : null);
+		
+		if ((cookie != null && cookie.getValue() != null && cookie.getValue().trim().length() > 0) || fakeLogin != null) {
 			ExtUserDAO extUserDAO = (ExtUserDAO) getBean("extUserDAO");
+
+			if(cookie != null){ 
+				// dersom fakeLogin benyttes vil stort sett cookie være null, 
+				// men vil at "reel bruker" skal benyttes om dette finnes!
+				eZSessionId = cookie.getValue();
+			}
+			else if(fakeLogin != null){
+				eZSessionId = fakeLogin;
+			}
+			
 			extUser = extUserDAO.findUserBySessionID(eZSessionId);
 			if (extUser != null && extUser.getUsername() != null) {
 				copyUserToLocalDBAndSession(extUser, session);
