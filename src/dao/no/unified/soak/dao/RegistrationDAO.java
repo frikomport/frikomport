@@ -82,8 +82,7 @@ public interface RegistrationDAO extends DAO {
 	 *            new Boolean(false) to count only those in status waiting.<br>
 	 * @return the number of attendants that fulfill the criteria. 
 	 */
-	public Integer getNumberOfAttendants(Boolean localOnly, Course course,
-			Boolean reserved);
+	public Integer getNumberOfParticipants(Boolean localOnly, Course course, Boolean reserved);
 	
 	/**
 	 * Returns a list of registration (also the canceled ones) based on several given vital attributes.

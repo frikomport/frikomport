@@ -137,9 +137,7 @@ public class RegistrationAdministrationController extends BaseFormController {
 			
             Date today = new Date();
             Boolean allowRegistration = new Boolean(false);
-            if (today.before(course.getRegisterBy())
-                    && (course.getRegisterStart() == null || today
-                            .after(course.getRegisterStart()))) {
+            if (today.before(course.getRegisterBy()) && (course.getRegisterStart() == null || today.after(course.getRegisterStart()))) {
                 allowRegistration = new Boolean(true);
             }
             if(course.getStatus().equals(CourseStatus.COURSE_CANCELLED)){
@@ -197,8 +195,7 @@ public class RegistrationAdministrationController extends BaseFormController {
             statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();
         }
 		
-		List registrations = registrationManager.getSpecificRegistrations(new Long(courseId), null, null, statusCriteria, null,
-				null, null, null, null, null);
+		List registrations = registrationManager.getSpecificRegistrations(new Long(courseId), null, null, statusCriteria, null, null, null, null, null, null);
 		registrationsBackingObject.setRegistrations(registrations);
 
 		return registrationsBackingObject;
@@ -315,11 +312,9 @@ public class RegistrationAdministrationController extends BaseFormController {
 
 				// Send mail about the status change of the reservation
 				if (reserved) {
-					sendMail(request.getLocale(), thisRegistration.getCourse(), Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED,
-							thisRegistration);
+					sendMail(request.getLocale(), thisRegistration.getCourse(), Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED, thisRegistration);
 				} else {
-					sendMail(request.getLocale(), thisRegistration.getCourse(), Constants.EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST,
-							thisRegistration);
+					sendMail(request.getLocale(), thisRegistration.getCourse(), Constants.EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST, thisRegistration);
 				}
 			}
 

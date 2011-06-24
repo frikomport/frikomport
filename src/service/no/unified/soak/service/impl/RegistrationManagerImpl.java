@@ -113,11 +113,10 @@ public class RegistrationManagerImpl extends BaseManager implements Registration
 	}
 
 	/**
-	 * @see no.unified.soak.service.RegistrationManager#getNumberOfAttendants(java.lang.Boolean,
-	 *      no.unified.soak.model.Course)
+	 * @see no.unified.soak.service.RegistrationManager#getNumberOfAttendants(java.lang.Boolean, no.unified.soak.model.Course)
 	 */
 	public Integer getNumberOfAttendants(Boolean localOnly, Course course) {
-		return dao.getNumberOfAttendants(localOnly, course, null);
+		return dao.getNumberOfParticipants(localOnly, course, null);
 	}
 
 	/**
@@ -125,7 +124,7 @@ public class RegistrationManagerImpl extends BaseManager implements Registration
 	 *      no.unified.soak.model.Course)
 	 */
 	public Integer getNumberOfAttendants(Boolean localOnly, Course course, Boolean reserved) {
-		return dao.getNumberOfAttendants(localOnly, course, reserved);
+		return dao.getNumberOfParticipants(localOnly, course, reserved);
 	}
 	
 	/**

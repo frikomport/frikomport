@@ -173,19 +173,20 @@
 		<c:if test="${admin == true}">
 			<input type="hidden" name="_reserved<c:out value="${registrationList.id}"/>" value="visible"/>
 			<input type="checkbox" name="reserved_<c:out value="${registrationList.id}"/>"
-			<c:if test="${registrationList.reserved == true}"> checked="checked" </c:if>
+			<c:if test="${registrationList.status == 2}"> checked="checked" </c:if>
 			<c:if test="${registrationList.status == 3}"> disabled </c:if> />
 		</c:if>
 		<c:if test="${admin == false}">
 			<input type="hidden" name="_reserved<c:out value="${registrationList.id}"/>" value="visible"/>
 			<input type="hidden" name="reserved_<c:out value="${registrationList.id}"/>" value="${registrationList.reserved}" />
-			<c:if test="${registrationList.reserved == true}"><fmt:message key="checkbox.checked"/></c:if>
-			<c:if test="${registrationList.reserved == false}"><fmt:message key="checkbox.unchecked"/></c:if>
+			<c:if test="${registrationList.status == 1}"><fmt:message key="registrationList.status.1"/></c:if>
+			<c:if test="${registrationList.status == 2}"><fmt:message key="checkbox.checked"/></c:if>
 		</c:if>
 		</display:column>
 		<display:column media="ccsv cexcel cxml cpdf" sortable="true" headerClass="sortable" titleKey="registration.reserved">
-			<c:if test="${registrationList.reserved == true}"><fmt:message key="checkbox.checked"/></c:if>
-			<c:if test="${registrationList.reserved == false}"><fmt:message key="checkbox.unchecked"/></c:if>
+			<c:if test="${registrationList.status == 1}"><fmt:message key="registrationList.status.1"/></c:if>
+			<c:if test="${registrationList.status == 2}"><fmt:message key="checkbox.checked"/></c:if>
+			<c:if test="${registrationList.status == 3}"><fmt:message key="registrationList.status.3"/></c:if>
 		</display:column>
 		<display:column media="html" sortable="true" headerClass="sortable" titleKey="registration.attended">
 		<c:if test="${admin == true}">

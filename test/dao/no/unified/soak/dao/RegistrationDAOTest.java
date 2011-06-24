@@ -236,7 +236,7 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 
 		Boolean local = new Boolean(true);
 
-		Integer result = dao.getNumberOfAttendants(local, course, null);
+		Integer result = dao.getNumberOfParticipants(local, course, null);
 
 		// Should never be null
 		assertNotNull(result);

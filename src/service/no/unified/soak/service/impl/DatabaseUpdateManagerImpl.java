@@ -115,9 +115,11 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	}
 
 	public void updateDatabase() {
-		alterUserAndRoleAndCoursebySQL();
+		alterUserAndRoleAndCourseBySQL();
 		
-		alterUserbySQL(); // i forb. med overgang til brukersykronisering på basis av APP_USER istedet for henting av alle brukere fra eZ / svvtrunkmerge
+		alterUserBySQL(); // i forb. med overgang til brukersykronisering på basis av APP_USER istedet for henting av alle brukere fra eZ / svvtrunkmerge
+		
+		updateParticipantsForRegistrationsWithoutBySQL();
 		
 		changeRolesBySQL();
 
@@ -224,7 +226,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	/**
 	 * For upgrade from 1.7.x to svvtrunkmerge (1.8 ?)
 	 */
-	private void alterUserbySQL() {
+	private void alterUserBySQL() {
 
 		if(!ApplicationResourcesUtil.isSVV()){
 			String sql = "update app_user set hashuser = false where username not like '%@%'";
@@ -253,9 +255,27 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	
 	
 	/**
+	 * For upgrade from 1.7.x to svvtrunkmerge (1.8 ?)
+	 */
+	private void updateParticipantsForRegistrationsWithoutBySQL(){
+		String sql = "update registration set participants = 1 where participants is null";
+		if (DefaultQuotedNamingStrategy.usesOracle()) {
+			sql = "update registration set \"participants\" = 1 where \"participants\" is null";
+		}
+		try {
+			int count = jt.update(sql);
+			if(count > 0)
+			log.info("Oppdatert " + count + " rader : " + sql);
+		} catch (Exception e) {
+			log.error("SQL feilet: " + sql, e);
+		}
+	}
+	
+	
+	/**
 	 * For upgrade from 1.7.X to SVV
 	 */
-	private void alterUserAndRoleAndCoursebySQL() {
+	private void alterUserAndRoleAndCourseBySQL() {
 
 		// removes ID from APP_USER -- column has no purpose..
 		ColumnInfo id = getColumnInfo("app_user", "id");

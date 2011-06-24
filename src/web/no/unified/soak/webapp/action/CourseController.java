@@ -138,11 +138,6 @@ public class CourseController extends BaseFormController {
         // Don't modify organization if in postback
         String postback = request.getParameter("ispostbackcourselist");
         if ((postback == null) || (postback.compareTo("1") != 0)) {
-            // Promote inter organization cooperation by not setting organization here
-            // Object omid = request.getAttribute(Constants.EZ_ORGANIZATION);
-            // if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
-            // course.setOrganizationid(new Long(omid.toString()));
-            // }
 
             // Check if a specific organization has been requested
             String mid = request.getParameter("mid");
@@ -250,7 +245,7 @@ public class CourseController extends BaseFormController {
     		String postalcode = request.getParameter("postalcode");
 			if (StringUtils.isBlank(postalcode)) {
 				courseList = courseManager.searchCourses(course, starttime, stoptime, status);
-				courseList = updateAvailableAttendants(courseList, request);
+				courseList = enrichCoursesWithExternalValues(courseList, request);
 				configureColumnView(status, courseList, model);
 	        } else {
 	        	List<Long> locationIds = locationManager.getLocationIds(postalcode);
@@ -258,24 +253,27 @@ public class CourseController extends BaseFormController {
 	        	String numberOfHitsStr = getText("courseList.numberOfHits", locale);
 	        	if(StringUtils.isNumeric(numberOfHitsStr)) numberOfHits = Integer.parseInt(numberOfHitsStr);
 				courseList = courseManager.findByLocationIds(locationIds, numberOfHits);
-				courseList = updateAvailableAttendants(courseList, request);
+				courseList = enrichCoursesWithExternalValues(courseList, request);
 
 				model.put("containsUnfinished", new Boolean(true));
 				model.put("containsFinished", new Boolean(false));
 	        }
         }
         else {
-	        List courses = courseManager.searchCourses(course, starttime, stoptime, null);
-	        courseList = filterByRole(isAdmin, roles, courses);
-	        User responsible = null;
-	        if (user != null && roles.contains(Constants.EVENTRESPONSIBLE_ROLE)) {
-	            responsible = user;
-	            unpublished.setResponsible(responsible);
-	        }
-	        List unpubCourses = courseManager.getUnpublished(unpublished);// Søke på samme måte som på kurs.
-	        if (!past && unpubCourses != null && !unpubCourses.isEmpty() && isAdmin(roles)) {
-	        	courseList.addAll(0, unpubCourses);
-	        }
+        	Integer[] status = null; 
+        	if(roles.contains(Constants.ANONYMOUS_ROLE) && roles.size() == 1){ 
+        		// publikumsbruker
+        		status = new Integer[]{ CourseStatus.COURSE_PUBLISHED };
+                model.put("enableExport", new Boolean(false));
+        	}
+        	else{ 
+        		// isReader / isEventResponsible / isEducationResponsible / isAdministrator
+        			status = new Integer[]{ CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED };
+        	}
+	        
+			courseList = courseManager.searchCourses(course, starttime, stoptime, status);
+			courseList = enrichCoursesWithExternalValues(courseList, request);
+			configureColumnView(status, courseList, model);
         }
 
         model.put("courseList", courseList);
@@ -349,7 +347,7 @@ public class CourseController extends BaseFormController {
         return filtered;
     }
 
-	private List<Course> updateAvailableAttendants(List courses, HttpServletRequest request) {
+	private List<Course> enrichCoursesWithExternalValues(List courses, HttpServletRequest request) {
 		List<Course> updated = new ArrayList<Course>();
 		Integer availableSum = NumberUtils.INTEGER_ZERO;
 		Integer registrationsSum = NumberUtils.INTEGER_ZERO;
@@ -498,7 +496,7 @@ public class CourseController extends BaseFormController {
 
 		// Check whether a specific search is requested
 		String name = request.getParameter("name");
-		if (name != null) {
+		if (StringUtils.isNotBlank(name)) {
 			course.setName(name);
 		}
 
@@ -554,7 +552,7 @@ public class CourseController extends BaseFormController {
 
 			if (StringUtils.isBlank(postalcode)) {
 				courseList = courseManager.searchCourses(course, starttime, stoptime, status);
-				courseList = updateAvailableAttendants(courseList, request);
+				courseList = enrichCoursesWithExternalValues(courseList, request);
 				configureColumnView(status, courseList, model);
 	        } else {
 				List<Long> locationIds = locationManager.getLocationIds((postalCodeApprox!=null?postalCodeApprox:postalcode));
@@ -562,7 +560,7 @@ public class CourseController extends BaseFormController {
 	        	String numberOfHitsStr = getText("courseList.numberOfHits", locale);
 	        	if(StringUtils.isNumeric(numberOfHitsStr)) numberOfHits = Integer.parseInt(numberOfHitsStr);
 				courseList = courseManager.findByLocationIds(locationIds, numberOfHits);
-				courseList = updateAvailableAttendants(courseList, request);
+				courseList = enrichCoursesWithExternalValues(courseList, request);
 
 				model.put("containsUnfinished", new Boolean(true));
 				model.put("containsFinished", new Boolean(false));
@@ -576,32 +574,21 @@ public class CourseController extends BaseFormController {
 				}
 				
 	        }
-		} else {
-			List courses = courseManager.searchCourses(course, starttime, stoptime, null);
-			courseList = filterByRole(isAdmin, roles, courses);
-
-			if (course.getOrganizationid() != null) {
-				unpublished.setOrganizationid(course.getOrganizationid());
+		} 
+		else {
+			Integer[] status = null;
+			if (roles.contains(Constants.ANONYMOUS_ROLE) && roles.size() == 1) {
+				// publikumsbruker
+				status = new Integer[] { CourseStatus.COURSE_PUBLISHED };
+                model.put("enableExport", new Boolean(false));
+			} else {
+				// isReader / isEventResponsible / isEducationResponsible / isAdministrator
+				status = new Integer[] { CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED };
 			}
 
-			if (course.getOrganization2id() != null) {
-				unpublished.setOrganization2id(course.getOrganization2id());
-			}
-
-			if (course.getLocationid() != null) {
-				unpublished.setLocationid(course.getLocationid());
-			}
-
-			User responsible = null;
-			if (user != null && roles.contains(Constants.EVENTRESPONSIBLE_ROLE)) {
-				responsible = user;
-				unpublished.setResponsible(responsible);
-			}
-			List unpubCourses = courseManager.getUnpublished(unpublished);
-			// Søke på samme måte som på kurs.
-			if (!past && unpubCourses != null && !unpubCourses.isEmpty() && isAdmin(roles)) {
-				courseList.addAll(0, unpubCourses);
-			}
+			courseList = courseManager.searchCourses(course, starttime, stoptime, status);
+			courseList = enrichCoursesWithExternalValues(courseList, request);
+			configureColumnView(status, courseList, model);
 		}
 
 		model.put("courseList", courseList);
