@@ -215,11 +215,9 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 </c:otherwise>    
 </c:choose>
     
-    <display:column property="lastName" sortable="true" headerClass="sortable"
-         titleKey="registration.lastName" class="${tdClass}"/>
+    <display:column property="lastName" sortable="true" headerClass="sortable" titleKey="registration.lastName" class="${tdClass}"/>
          
-    <display:column property="firstName" sortable="true" headerClass="sortable"
-         titleKey="registration.firstName" class="${tdClass}"/>
+    <display:column property="firstName" sortable="true" headerClass="sortable" titleKey="registration.firstName" class="${tdClass}"/>
 
 <c:if test="${useBirthdateForRegistration}">
     <display:column sortable="true" headerClass="sortable" titleKey="registration.birthdate" sortProperty="birthdate" class="${tdClass}">
@@ -233,16 +231,13 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
     <display:column media="csv excel xml pdf" property="email" sortable="true" headerClass="sortable" titleKey="registration.email"/>
     
 	<c:if test="${!isSVV}">
-    <display:column property="phone" sortable="true" headerClass="sortable"
-         titleKey="registration.phone" class="${tdClass}"/>
+    <display:column property="phone" sortable="true" headerClass="sortable" titleKey="registration.phone" class="${tdClass}"/>
 	</c:if>
          
-    <display:column property="mobilePhone" sortable="true" headerClass="sortable"
-         titleKey="registration.mobilePhone" class="${tdClass}"/>
+    <display:column property="mobilePhone" sortable="true" headerClass="sortable" titleKey="registration.mobilePhone" class="${tdClass}"/>
          
 	<c:if test="${!isSVV}">
-    <display:column property="organization.name" sortable="true" headerClass="sortable"
-         titleKey="registration.organization" class="${tdClass}"/>
+    <display:column property="organization.name" sortable="true" headerClass="sortable" titleKey="registration.organization" class="${tdClass}"/>
 	</c:if>
 
 	<c:if test="${isSVV}">
@@ -252,8 +247,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 	</c:if>
 	
 <c:if test="${useServiceArea}">
-	<display:column property="serviceArea.name" sortable="true" headerClass="sortable" 
-		titleKey="registration.serviceArea" class="${tdClass}"/>
+	<display:column property="serviceArea.name" sortable="true" headerClass="sortable" titleKey="registration.serviceArea.export" class="${tdClass}"/>
 </c:if>
 
     <display:column sortable="true" headerClass="sortable" titleKey="registration.status">
@@ -271,16 +265,14 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 </c:if>
     
 <c:if test="${!isSVV}">
-    <display:column sortable="true" headerClass="sortable"
-         titleKey="registration.attended">
+    <display:column sortable="true" headerClass="sortable" titleKey="registration.attended.export">
 		<c:if test="${registrationList.attended == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${registrationList.attended == false}"><fmt:message key="checkbox.unchecked"/></c:if>
     </display:column>
 </c:if>
 
-<c:if test="${isSVV}">
-	<display:column property="participants" sortable="true" headerClass="sortable" 
-		titleKey="registration.participants" class="${tdClass}"/>
+<c:if test="${useParticipants}">
+	<display:column property="participants" sortable="true" headerClass="sortable" titleKey="registration.participants" class="${tdClass}"/>
 </c:if>
     
 <c:if test="${usePayment}">

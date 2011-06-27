@@ -83,15 +83,13 @@
         </c:if>
     </display:column>
     </c:if>
-	<display:column property="firstName" sortable="true" headerClass="sortable" class="${tdClass}" 
-		titleKey="registration.firstName"/>
 
-	<display:column property="lastName" sortable="true" headerClass="sortable" class="${tdClass}" 
-		titleKey="registration.lastName"/>
+	<display:column property="firstName" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.firstName"/>
+
+	<display:column property="lastName" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.lastName"/>
 
     <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
-    <display:column media="ccsv cexcel cxml cpdf" property="email" sortable="true" headerClass="sortable" class="${tdClass}"
-        titleKey="registration.email"/>
+    <display:column media="ccsv cexcel cxml cpdf" property="email" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.email"/>
     </c:if>
 
 	 <c:if test="${useBirthdateForRegistration}">
@@ -100,50 +98,38 @@
     </display:column>
 	</c:if>
 
-	<display:column property="organization.name" sortable="true" headerClass="sortable" class="${tdClass}"
-		titleKey="registration.organization"/>
+	<display:column property="organization.name" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.organization"/>
 
 	<c:if test="${showJobTitle}">
-	<display:column property="jobTitle" sortable="true" headerClass="sortable" class="${tdClass}"
-		titleKey="registration.jobTitle"/>
+	<display:column property="jobTitle" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.jobTitle"/>
 	</c:if>
 
 	<c:if test="${showServiceArea}">		
-	<display:column property="serviceArea.name" sortable="true" headerClass="sortable" class="${tdClass}"
-		titleKey="registration.serviceArea"/>
+	<display:column property="serviceArea.name" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.serviceArea.export"/>
 	</c:if>
 
 	<c:if test="${showWorkplace}">
-	<display:column property="workplace" sortable="true" headerClass="sortable" class="${tdClass}"
-		titleKey="registration.workplace"/>
+	<display:column property="workplace" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.workplace"/>
 	</c:if>
 
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
-	<display:column property="phone" sortable="true" headerClass="sortable" class="${tdClass}"
-		titleKey="registration.phone"/>
+	<display:column property="phone" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.phone"/>
 
-	<display:column property="mobilePhone" sortable="true" headerClass="sortable" class="${tdClass}"
-		titleKey="registration.mobilePhone"/>
+	<display:column property="mobilePhone" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.mobilePhone"/>
 
 	<c:if test="${showWorkplace}">
-	<display:column property="comment" sortable="true" headerClass="sortable" class="${tdClass}"
-		titleKey="registration.comment"/>
+	<display:column property="comment" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.comment"/>
 	</c:if>
 
-	<c:if test="${useAttendants}">
-	<display:column property="participants" sortable="true" headerClass="sortable" 
-		titleKey="registration.participants" class="${tdClass}"/>
+	<c:if test="${useParticipants}">
+	<display:column property="participants" sortable="true" headerClass="sortable" titleKey="registration.participants" class="${tdClass}"/>
 	</c:if>
 
 	<c:if test="${(admin == true || isReader) && usePayment}">
-	<display:column media="ccsv cexcel cxml cpdf" property="invoiceName" sortable="true" headerClass="sortable"
-		titleKey="registration.invoiceAddress.name"/>
-	<display:column media="ccsv cexcel cxml cpdf" property="invoiceAddress.address" sortable="true" headerClass="sortable"
-		titleKey="registration.invoiceAddress.address"/>
-	<display:column media="ccsv cexcel cxml cpdf" property="invoiceAddress.postalCode" sortable="true" headerClass="sortable"
-		titleKey="registration.invoiceAddress.postalCode"/>		
-	<display:column media="ccsv cexcel cxml cpdf" property="invoiceAddress.city" sortable="true" headerClass="sortable"
-		titleKey="registration.invoiceAddress.city"/>
+	<display:column media="ccsv cexcel cxml cpdf" property="invoiceName" sortable="true" headerClass="sortable" titleKey="registration.invoiceAddress.name"/>
+	<display:column media="ccsv cexcel cxml cpdf" property="invoiceAddress.address" sortable="true" headerClass="sortable" titleKey="registration.invoiceAddress.address"/>
+	<display:column media="ccsv cexcel cxml cpdf" property="invoiceAddress.postalCode" sortable="true" headerClass="sortable" titleKey="registration.invoiceAddress.postalCode"/>		
+	<display:column media="ccsv cexcel cxml cpdf" property="invoiceAddress.city" sortable="true" headerClass="sortable" titleKey="registration.invoiceAddress.city"/>
 	</c:if>
 
 	<c:if test="${usePayment}">	

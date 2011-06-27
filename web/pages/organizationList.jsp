@@ -20,9 +20,7 @@
 
 <c:out value="${buttons}" escapeXml="false"/>
 
-<display:table name="${organizationList}" cellspacing="0" cellpadding="0"
-    id="organizationList" pagesize="${itemCount}" class="list" 
-    export="${!isSVV}" requestURI="">
+<display:table name="${organizationList}" cellspacing="0" cellpadding="0" id="organizationList" pagesize="${itemCount}" class="list" export="${!isSVV}" requestURI="">
 
 	<c:if test="${isAdmin}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
@@ -46,14 +44,10 @@
 	</c:if>
     
 <c:if test="${(isAdmin || isEducationResponsible || isEventResponsible || isReader) && usePayment && !isSVV}">
-    <display:column property="invoiceName" sortable="true" headerClass="sortable"
-         titleKey="organizationList.invoiceAddress.name"/>
-    <display:column property="invoiceAddress.address" sortable="true" headerClass="sortable"
-         titleKey="organizationList.invoiceAddress.address"/>
-    <display:column property="invoiceAddress.city" sortable="true" headerClass="sortable"
-         titleKey="organizationList.invoiceAddress.city"/>
-   <display:column property="invoiceAddress.postalCode" sortable="true" headerClass="sortable"
-         titleKey="organizationList.invoiceAddress.postalCode"/>
+    <display:column property="invoiceName" sortable="true" headerClass="sortable" titleKey="organizationList.invoiceAddress.name"/>
+    <display:column property="invoiceAddress.address" sortable="true" headerClass="sortable" titleKey="organizationList.invoiceAddress.address"/>
+    <display:column property="invoiceAddress.city" sortable="true" headerClass="sortable" titleKey="organizationList.invoiceAddress.city"/>
+    <display:column property="invoiceAddress.postalCode" sortable="true" headerClass="sortable" titleKey="organizationList.invoiceAddress.postalCode"/>
 </c:if>    
     
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">

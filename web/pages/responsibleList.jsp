@@ -6,9 +6,7 @@
 <fmt:message key="responsibleList.item" var="item"/>
 <fmt:message key="responsibleList.items" var="items"/>
 
-<display:table name="${responsibleList}" cellspacing="0" cellpadding="0"
-    id="responsibleList" pagesize="${itemCount}" class="list" 
-    export="${!isSVV}" requestURI="">
+<display:table name="${responsibleList}" cellspacing="0" cellpadding="0" id="responsibleList" pagesize="${itemCount}" class="list" export="${!isSVV}" requestURI="">
 
 	<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
@@ -32,18 +30,14 @@
     <display:column media="csv excel xml pdf" property="email" sortable="true" headerClass="sortable" titleKey="user.email"/>
 
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
-    <display:column property="phoneNumber" sortable="true" headerClass="sortable"
-         titleKey="user.phoneNumber"/>
+    <display:column property="phoneNumber" sortable="true" headerClass="sortable" titleKey="user.phoneNumber"/>
 
-    <display:column property="mobilePhone" sortable="true" headerClass="sortable"
-         titleKey="user.mobilePhone"/>
+    <display:column property="mobilePhone" sortable="true" headerClass="sortable" titleKey="user.mobilePhone"/>
          
-    <display:column property="organization.name" sortable="true" headerClass="sortable"
-         titleKey="user.organization"/>
+    <display:column property="organization.name" sortable="true" headerClass="sortable" titleKey="user.organization"/>
 
 <c:if test="${useOrganization2}">
-    <display:column property="organization2.name" sortable="true" headerClass="sortable"
-         titleKey="user.organization2"/>
+    <display:column property="organization2.name" sortable="true" headerClass="sortable" titleKey="user.organization2"/>
 </c:if>
 
     <display:column sortable="true" headerClass="sortable" titleKey="user.enabled">

@@ -10,7 +10,7 @@
 
 <authz:authorize ifNotGranted="admin,eventresponsible,editor,reader">
 <menu:useMenuDisplayer name="ListMenu" permissions="rolesAdapter">
-    <menu:displayMenu name="FriKomMenu"/>
+    <menu:displayMenu name="FriKomMenu_JAVA"/>
     <!-- menu:displayMenu name="FriKomMenu_SVV_public"/ -->
 </menu:useMenuDisplayer>
 </authz:authorize>

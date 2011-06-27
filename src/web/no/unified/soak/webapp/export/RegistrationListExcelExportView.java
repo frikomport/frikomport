@@ -237,7 +237,7 @@ public class RegistrationListExcelExportView implements BinaryExportView
 				if(registration.getStatusAsEnum() == Status.RESERVED) {
 					rCount += registration.getParticipants();
 				}
-				else {
+				else if(registration.getStatusAsEnum() == Status.WAITING){
 					wCount += registration.getParticipants();
 				}
             }

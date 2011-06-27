@@ -33,40 +33,108 @@ public class StatisticsDAOHibernate extends BaseDAOHibernate implements Statisti
 	public List<StatisticsTableRow> findByDates(Date beginPeriod, Date endPeriod) {
 		String sql;
 		if (DefaultQuotedNamingStrategy.usesOracle()) {
-			sql = "select OP.\"name\" as Region, O.\"name\" as område, \r\n" 
-					+ "count(distinct C.\"id\") as numCourses, \r\n"
-					+ "count(R.\"id\") as numRegistrations, \r\n"
-					+ "sum(R.\"participants\") as numRegistered, \r\n"
-					+ "sum(C.\"attendants\") as numAttendants " + "from ORGANIZATION O \r\n"
-
+			sql = "select Region, Område, \r\n"
+				+ "sum(partNumCourses) as numCourses, \r\n"
+				+ "sum(partNumRegistrations) as numRegistrations, \r\n"
+				+ "sum(partNumRegistered) as numRegistered, \r\n"
+				+ "sum(partNumAttendants) as numAttendants \r\n"
+				+ "from ( \r\n"
+					+ "select C.\"id\" as cid, OP.\"name\" as Region, O.\"name\" as Område, \r\n"
+					+ "count(distinct C.\"id\") as partNumCourses, \r\n"
+					+ "count(R.\"id\") as partNumRegistrations, \r\n"
+					+ "sum(R.\"participants\") as partNumRegistered, \r\n"
+						+ "(select C2.\"attendants\" from COURSE C2 where C2.\"id\" = C.\"id\") as partNumAttendants \r\n"
+			
+					+ "from ORGANIZATION O \r\n"
 					+ "inner join COURSE C on O.\"id\" = C.\"organization2id\" \r\n"
 					+ "left outer join REGISTRATION R on (R.\"courseid\" = C.\"id\" and R.\"status\" = 2) \r\n"
 					+ "left outer join ORGANIZATION OP on OP.\"id\" = O.\"parentid\" \r\n"
-
-					+ "where C.\"starttime\" >= :beginPeriod and \r\n" + "C.\"starttime\" <= :endPeriod \r\n"
+			
+					+ "where \r\n"
+					// for testing i Aqua Data Studio el. benytt følgende for generering av timestamp: to_timestamp('2011-05-02 00:00:00','yyyy-mm-dd hh24:mi:ss')
+					+ "C.\"starttime\" >= :beginPeriod and C.\"starttime\" <= :endPeriod \r\n"
 					+ "and C.\"attendants\" > 0 and O.\"type\" = 3 and C.\"status\" != 3 \r\n"
-					+ "group by rollup (OP.\"name\", O.\"name\") \r\n" 
+							
+					+ "group by (C.\"id\", OP.\"name\", O.\"name\") \r\n"
+				+ ") "
+				+ "group by rollup (Region, Område) \r\n"
+										
+				+ "union \r\n"
+		
+				+ "select OP.\"name\" as Region, O.\"name\" as Område, \r\n" 
+				+ "count(distinct C.\"id\") as numCourses, \r\n"
+				+ "count(R.\"id\") as numRegistrations, \r\n"
+				+ "sum(R.\"participants\") as numRegistered, \r\n"
+				+ "sum(R.\"participants\") as numAttendants  \r\n"
 					
-					+ "union \r\n"
-
-					+ "select OP.\"name\" as Region, O.\"name\" as område, \r\n" 
-					+ "count(distinct C.\"id\") as numCourses, \r\n"
-					+ "count(R.\"id\") as numRegistrations, \r\n"
-					+ "sum(R.\"participants\") as numRegistered, \r\n"
-					+ "sum(R.\"participants\") as numAttendants from ORGANIZATION O \r\n"
-
-					+ "inner join COURSE C on O.\"id\" = C.\"organization2id\" \r\n"
-					+ "inner join REGISTRATION R on R.\"courseid\" = C.\"id\" \r\n"
-					+ "left outer join ORGANIZATION OP on OP.\"id\" = O.\"parentid\" \r\n"
-
-					+ "where C.\"starttime\" >= :beginPeriod and \r\n" + "C.\"starttime\" <= :endPeriod \r\n"
-					+ "and (C.\"attendants\" is null or C.\"attendants\" = 0) \r\n"
-					+ "and R.\"status\" = 2 and O.\"type\" = 3 and C.\"status\" != 3 \r\n" 
-					+ "group by rollup (OP.\"name\", O.\"name\") \r\n"
+				+ "from ORGANIZATION O \r\n"
+				+ "inner join COURSE C on O.\"id\" = C.\"organization2id\" \r\n"
+				+ "inner join REGISTRATION R on R.\"courseid\" = C.\"id\" \r\n"
+				+ "left outer join ORGANIZATION OP on OP.\"id\" = O.\"parentid\" \r\n"
 					
-					+ "order by 1 asc, 2 desc";
+				+ "where \r\n"
+				// for testing i Aqua Data Studio el. benytt følgende for generering av timestamp: to_timestamp('2011-05-02 00:00:00','yyyy-mm-dd hh24:mi:ss')
+				+ "C.\"starttime\" >= :beginPeriod and C.\"starttime\" <= :endPeriod \r\n"
+				+ "and (C.\"attendants\" is null or C.\"attendants\" = 0) \r\n"
+				+ "and R.\"status\" = 2 and O.\"type\" = 3 and C.\"status\" != 3 \r\n"
+				+ "group by rollup (OP.\"name\", O.\"name\") \r\n"
+					
+				+ "order by 1 asc, 2 desc";
 		} else {
 			sql = "";
+			
+			/*
+			 * SQL må mysql-tilpasses for å fungere -- har gjort noen forsøk, men uten hell foreløpig!
+
+			 select Organisasjon, Tjenesteområde, 
+sum(partNumCourses) as numCourses,
+sum(partNumRegistrations) as numRegistrations,
+sum(partNumRegistered) as numRegistered,
+sum(partNumAttendants) as numAttendants
+from ( 
+    select C.id as cid, O.name as Organisasjon, S.name as Tjenesteområde, 
+    count(distinct C.id) as partNumCourses, 
+    count(R.id) as partNumRegistrations,
+    sum(R.participants) as partNumRegistered, 
+    (select C2.attendants from COURSE C2 where C2.id = C.id) as partNumAttendants 
+    from SERVICEAREA S 
+    inner join COURSE C on C.serviceareaid = S.id 
+    left outer join REGISTRATION R on (R.courseid = C.id and R.status = 2) 
+    left outer join ORGANIZATION O on O.id = S.organizationid
+    where
+    // for testing i Aqua Data Studio el. benytt følgende for generering av timestamp: to_timestamp('2011-05-02 00:00:00','yyyy-mm-dd hh24:mi:ss')
+    C.starttime >= '2010-08-01 00:00:00' and C.starttime <= '2011-06-24 00:00:00'
+    and C.attendants > 0 and C.status != 3 
+    group by (C.id, O.name, S.name) 
+    )
+    group by (Organisasjon, Tjenesteområde) with rollup 
+										
+union
+		
+    select O.name as Organisasjon, S.name as Tjenesteområde, 
+    count(distinct C.id) as numCourses, 
+    count(R.id) as numRegistrations, 
+    sum(R.participants) as numRegistered, 
+    sum(R.participants) as numAttendants  
+
+    from SERVICEAREA S
+    inner join COURSE C on C.serviceareaid = S.id
+    inner join REGISTRATION R on R.courseid = C.id 
+    left outer join ORGANIZATION O on O.id = S.organizationid 
+
+    where 
+    // for testing i Aqua Data Studio el. benytt følgende for generering av timestamp: to_timestamp('2011-05-02 00:00:00','yyyy-mm-dd hh24:mi:ss')
+    C.starttime >= '2010-08-01 00:00:00' and C.starttime <= '2011-06-24 00:00:00' 
+    and (C.attendants is null or C.attendants = 0) 
+    and R.status = 2 and C.status != 3 
+    group by (O.name, S.name) with rollup 
+					
+order by 1 asc, 2 desc;
+			 
+			 
+			 */
+			
+			
 		}
 
 		// String hql =

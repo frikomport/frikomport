@@ -340,7 +340,7 @@ public class PdfUtil {
 					this.addTableRow(row, reserved);
 					rCount += r.getParticipants();
 				}
-				else {
+				else if(r.getStatusAsEnum() == Status.WAITING){
 					this.addTableRow(row, waiting);
 					wCount += r.getParticipants();
 				}

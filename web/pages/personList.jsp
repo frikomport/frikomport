@@ -17,9 +17,7 @@
 
 <c:out value="${buttons}" escapeXml="false"/>
 
-<display:table name="${personList}" cellspacing="0" cellpadding="0"
-    id="personList" pagesize="${itemCount}" class="list" 
-    export="${!isSVV}" requestURI="">
+<display:table name="${personList}" cellspacing="0" cellpadding="0" id="personList" pagesize="${itemCount}" class="list" export="${!isSVV}" requestURI="">
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
         <a href='<c:url context="${urlContext}" value="/editPerson.html"><c:param name="id" value="${personList.id}"/><c:param name="from" value="list"/></c:url>'>
@@ -39,17 +37,13 @@
     <display:column media="csv excel xml pdf" property="email" sortable="true" headerClass="sortable" titleKey="person.email"/>
 
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
-    <display:column property="phone" sortable="true" headerClass="sortable"
-         titleKey="person.phone"/>
+    <display:column property="phone" sortable="true" headerClass="sortable" titleKey="person.phone"/>
 
-    <display:column property="mobilePhone" sortable="true" headerClass="sortable"
-         titleKey="person.mobilePhone"/>
+    <display:column property="mobilePhone" sortable="true" headerClass="sortable" titleKey="person.mobilePhone"/>
 
-    <display:column property="mailAddress" sortable="true" headerClass="sortable"
-         titleKey="person.mailAddress"/>
+    <display:column property="mailAddress" sortable="true" headerClass="sortable" titleKey="person.mailAddress"/>
 
-    <display:column sortable="true" headerClass="sortable"
-         titleKey="person.selectable">
+    <display:column sortable="true" headerClass="sortable" titleKey="person.selectable">
         <c:if test="${personList.selectable == true}"><fmt:message key="checkbox.checked"/></c:if>
         <c:if test="${personList.selectable == false}"><fmt:message key="checkbox.unchecked"/></c:if>
     </display:column>

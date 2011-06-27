@@ -333,23 +333,20 @@ SumBuild sumsExport = new SumBuild();
 </c:if>
 
 <c:if test="${showDuration}">
-    <display:column property="duration" sortable="true" headerClass="sortable"
-         titleKey="course.duration">
+    <display:column property="duration" sortable="true" headerClass="sortable" titleKey="course.duration">
     <%sums.addToNextSum(null, null);%>
     </display:column>
     <%sumsTotal.addToNextSum(null, null);%>
     <%sumsExport.addToNextSum(null, null);%>
 </c:if>
-    <display:column property="organization.name" sortable="true" headerClass="sortable"
-         titleKey="course.organization">
+    <display:column property="organization.name" sortable="true" headerClass="sortable" titleKey="course.organization">
     <%sums.addToNextSum(null, null);%>
     </display:column>
     <%sumsTotal.addToNextSum(null, null);%>
     <%sumsExport.addToNextSum(null, null);%>
 
 <c:if test="${useOrganization2 && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
-    <display:column property="organization2.name" sortable="true" headerClass="sortable"
-         titleKey="course.organization2">
+    <display:column property="organization2.name" sortable="true" headerClass="sortable" titleKey="course.organization2">
     <%sums.addToNextSum(null, null);%>
     </display:column>
     <%sumsTotal.addToNextSum(null, null);%>
@@ -357,8 +354,7 @@ SumBuild sumsExport = new SumBuild();
 </c:if>
 
 <c:if test="${useServiceArea}">
-    <display:column property="serviceArea.name" sortable="true" headerClass="sortable"
-         titleKey="course.serviceArea">
+    <display:column property="serviceArea.name" sortable="true" headerClass="sortable" titleKey="course.serviceArea">
     <%sums.addToNextSum(null, null);%>
     </display:column>
     <%sumsTotal.addToNextSum(null, null);%>

@@ -51,9 +51,7 @@
 </div>
 </form:form>
 
-<display:table name="${userList}" cellspacing="0" cellpadding="0"
-    requestURI="listUsers.html" defaultsort="1" id="userList" pagesize="${itemCount}"
-    class="list userList" export="${!isSVV}">
+<display:table name="${userList}" cellspacing="0" cellpadding="0" requestURI="listUsers.html" defaultsort="1" id="userList" pagesize="${itemCount}" class="list userList" export="${!isSVV}">
     <c:if test="${isAdmin || isEducationResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
         <a href='<c:url context="${urlContext}" value="/editUser.html"><c:param name="username" value="${userList.username}"/><c:param name="from" value="list"/></c:url>'>
@@ -72,7 +70,7 @@
     <display:column property="lastName" sortable="true" headerClass="sortable" titleKey="user.lastName" />
     <display:column property="email" sortable="true" headerClass="sortable" autolink="true" titleKey="user.email" />
 
-    <display:column sortable="true" headerClass="sortable" titleKey="user.enabled">
+    <display:column property="enabled" sortable="true" headerClass="sortable" titleKey="user.enabled">
 		<c:if test="${userList.enabled == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${userList.enabled == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 	</display:column>

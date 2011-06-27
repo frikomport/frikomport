@@ -30,6 +30,20 @@
             <Item name="RegistrationMenu" title="registrationList.heading" page="/listRegistrations.html" roles="instructor,editor,admin"/>
         </Menu>
 
+        <!-- ====================   FriKom Javautvikling  =========================== -->
+        <Menu name="FriKomMenu_JAVA" title="menu.main" page="/listCourses.html">
+            <Item name="CourseMenu" title="courseList.heading" page="/listCourses.html"/>
+            <Item name="ProfileMenu" title="userProfile.heading" page="/profileUser.html"/>
+            <Item name="OrganizationMenu" title="organizationList.heading" page="/listOrganizations.html"/>
+            <Item name="LocationMenu" title="locationList.heading" page="/listLocations.html"/>
+            <Item name="PersonMenu" title="personList.heading" page="/listPeople.html"/>
+            <Item name="ResponsibleMenu" title="responsibleList.heading" page="/listResponsibles.html"/>
+            <Item name="ServiceAreaMenu" title="serviceAreaList.heading" page="/listServiceAreas.html"/>
+            <Item name="RegistrationMenu" title="registrationList.heading" page="/listRegistrations.html"/>
+        </Menu>
+
+
+
         <!-- ====================   FriKom for SVV  =========================== -->
         <Menu name="FriKomMenu_SVV" title="menu.main" page="/admin/listCourses.html">
             <Item name="WelcomeMenu" title="welcome.start" page="/admin/welcome.html"/>

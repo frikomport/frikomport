@@ -321,28 +321,40 @@ public class UserManagerImpl extends BaseManager implements UserManager {
             }
             else{
                 if ("".equals(invoiceAddress.getAddress())) {
-                    invoiceAddress.setAddress(orgAddress.getAddress());
-                    save = true;
+                	if(StringUtils.isNotBlank(orgAddress.getAddress())){
+                		invoiceAddress.setAddress(orgAddress.getAddress());
+                		save = true;
+                	}
                 }
                 if ("".equals(invoiceAddress.getCity())) {
-                    invoiceAddress.setCity(orgAddress.getCity());
-                    save = true;
+                	if(StringUtils.isNotBlank(orgAddress.getCity())){
+	                    invoiceAddress.setCity(orgAddress.getCity());
+	                    save = true;
+                	}
                 }
                 if ("".equals(invoiceAddress.getCountry())) {
-                    invoiceAddress.setCountry(orgAddress.getCountry());
-                    save = true;
+                	if(StringUtils.isNotBlank(orgAddress.getCountry())){
+	                    invoiceAddress.setCountry(orgAddress.getCountry());
+	                    save = true;
+                	}
                 }
                 if ("".equals(invoiceAddress.getPostalCode())) {
-                    invoiceAddress.setPostalCode(orgAddress.getPostalCode());
-                    save = true;
+                	if(StringUtils.isNotBlank(orgAddress.getPostalCode())){
+	                    invoiceAddress.setPostalCode(orgAddress.getPostalCode());
+	                    save = true;
+                	}
                 }
                 if ("".equals(invoiceAddress.getProvince())) {
-                    invoiceAddress.setProvince(orgAddress.getProvince());
-                    save = true;
+                	if(StringUtils.isNotBlank(orgAddress.getProvince())){
+	                    invoiceAddress.setProvince(orgAddress.getProvince());
+	                    save = true;
+                	}
                 }
                 if ("".equals(user.getInvoiceName())) {
-                    user.setInvoiceName(user.getOrganization().getInvoiceName());
-                    save = true;
+                	if(StringUtils.isNotBlank(user.getOrganization().getInvoiceName())){
+	                    user.setInvoiceName(user.getOrganization().getInvoiceName());
+	                    save = true;
+                	}
                 }
             }
 		}
@@ -507,6 +519,9 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 				 */
 				rolename = SVVUserDAOWS.convertRole(rolename);
 			}
+			else {
+				rolename = getInternalFkpRole(rolename);
+			}
 
 			if (!user.getRoleNameList().contains(rolename)) {
 				return false;
@@ -598,5 +613,16 @@ public class UserManagerImpl extends BaseManager implements UserManager {
     public boolean contains(Object entity) {
     	return dao.contains(entity);
     }
+    
+    
+	public String getInternalFkpRole(String role) {
+		if("Administrator".equals(role)) 			return "admin";
+		else if("Opplaringsansvarlig".equals(role)) return "editor"; 
+		else if("Kursansvarlig".equals(role)) 		return "eventresponsible";
+		else if("Ansatt".equals(role)) 				return "employee"; 
+		else if("Anonymous".equals(role)) 			return "anonymous";
+		else if("FKPLesebruker".equals(role)) 		return "reader"; 
+		return null;
+	}
     
 }

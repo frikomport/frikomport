@@ -381,8 +381,7 @@ function fillSelect(obj){
 									</option>
 								</c:when>
 								<c:otherwise>
-									<c:if
-										test="${servicearea.organizationid == course.organizationid}">
+									<c:if test="${servicearea.organizationid == course.organizationid}">
 										<option value="<c:out value="${servicearea.id}"/>"
 											<c:if test="${servicearea.id == course.serviceAreaid}"> selected="selected"</c:if>>
 											<c:out value="${servicearea.name}" />
@@ -704,12 +703,11 @@ function fillSelect(obj){
 	</table>
 </form:form>
 
-<v:javascript formName="course" cdata="false" dynamicJavascript="true"
-	staticJavascript="false" />
-<script type="text/javascript"
-	src="<c:url context="${urlContext}" value="/scripts/validator.jsp"/>">
+<v:javascript formName="course" cdata="false" dynamicJavascript="true" staticJavascript="false" />
+<script type="text/javascript" src="<c:url context="${urlContext}" value="/scripts/validator.jsp"/>">
 </script>
+
 <script language="JavaScript">
-changeGUIBasedOnField('startTimeDate');
-fillSelect($p("organizationidElement"));
+	changeGUIBasedOnField('startTimeDate');
+	fillSelect($p("organizationidElement"));
 </script>
