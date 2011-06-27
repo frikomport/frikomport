@@ -55,7 +55,7 @@ function setStopDate() {
 }
 
 function setMaxAttendants(obj) {
-	var locid= obj.options[obj.selectedIndex].value;
+	var locid = obj.options[obj.selectedIndex].value;
  	
 	<c:forEach var="location" items="${locations}">
         <c:if test="${location.maxAttendants != null}">
@@ -79,13 +79,14 @@ function fillSelect(obj){
 
     var j = 0;
 	<c:forEach var="servicearea" items="${serviceareas}">
-	    if ("<c:out value="${servicearea.id}"/>" == ""){
-	        serviceArea.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>", true, true);
+	    if ("<c:out value="${servicearea.organizationid}"/>" == orgid || "<c:out value="${servicearea.id}"/>" == ""){
+		    if ("<c:out value="${servicearea.id}"/>" == "<c:out value="${course.serviceAreaid}"/>") {
+		        select = true;
+		    } else {
+		        select = false;
+		    } 
+	    	serviceArea.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>", select, select);
 	        j++;
-	    }
-		else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
-	        serviceArea.options[j]=new Option("<c:out value="${servicearea.name}"/>", "<c:out value="${servicearea.id}"/>");
-	        j++ ;
 	    }
 	</c:forEach>
  }
@@ -363,8 +364,8 @@ function fillSelect(obj){
 	</c:otherwise>
 </c:choose>
 
-
 <c:if test="${useServiceArea}">
+
 		<tr>
 			<th>
 				<soak:label key="course.serviceArea" />
@@ -377,14 +378,14 @@ function fillSelect(obj){
 								<c:when test="${empty servicearea.id}">
 									<option value="<c:out value="${servicearea.id}"/>"
 										<c:if test="${servicearea.id == course.serviceAreaid}"> selected="selected"</c:if>>
-										<c:out value="${servicearea.name}" />
+										<c:out value="${servicearea.name}" />(he1)
 									</option>
 								</c:when>
 								<c:otherwise>
 									<c:if test="${servicearea.organizationid == course.organizationid}">
 										<option value="<c:out value="${servicearea.id}"/>"
 											<c:if test="${servicearea.id == course.serviceAreaid}"> selected="selected"</c:if>>
-											<c:out value="${servicearea.name}" />
+											<c:out value="${servicearea.name}" />(he2)
 										</option>
 									</c:if>
 								</c:otherwise>
