@@ -113,7 +113,7 @@ public class StartupListener extends ContextLoaderListener implements
 
         // Tasks to happen regularly
         ScheduledTasks recurring1 = new ScheduledTasks();
-        recurring.addTask(decorCacheManager);
+        recurring1.addTask(decorCacheManager);
         recurring1.addTask(courseStatusManager);
         if(!ApplicationResourcesUtil.isSVV()) recurring1.addTask(registerByDateManager);
         recurring1.addTask(notificationManager);
