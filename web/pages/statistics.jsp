@@ -79,14 +79,18 @@ cal1.setTodayText("Idag");
 	    	<c:out value="${statisticsRows.numRegistrations}"/>
 	    </display:column>
 	
+		<c:if test="${useParticipants}">
 	    <display:column titleKey="statistics.numRegistered" class="${levelTd}">
 	    	<c:out value="${statisticsRows.numRegistered}"/>
 	    </display:column>
+		</c:if>
 	
+		<c:if test="${useAttendants}">
 	    <display:column titleKey="statistics.numAttended" class="${levelTd}">
 	    	<c:out value="${statisticsRows.numAttendants}"/>
 	    </display:column>
-
+		</c:if>
+		
 	    <display:setProperty name="paging.banner.item_name" value="${item}"/>
 	    <display:setProperty name="paging.banner.items_name" value="${items}"/>
 	    <display:setProperty name="export.xml" value="false"/>
@@ -95,16 +99,30 @@ cal1.setTodayText("Idag");
 
 <h2>Forklaring</h2>
 <ul class="bulletlist">
-	<li>"<b>Antall påmeldinger</b>": Antall påmeldinger (representerte førerkortkandidater) til møter innen området/regionen i statistikkperioden.</li>
+	<li>"<b>Antall påmeldinger</b>": Antall påmeldinger til kurs/arrangementer innen organisasjon/tjenesteområde i statistikkperioden.</li>
+
+	<c:if test="${useParticipants}">
 	<li>"<b>Antall påmeldte</b>": Summen av feltet "Antall deltakere" for påmeldingene til møter innen området/regionen i statistikkperioden.</li>
+	</c:if>
+
+	<c:if test="${useAttendants}">
 	<li>"<b>Antall fremmøtte</b>": Tas fra oppmøteregistreringen som er gjort for møtet. Dersom denne ikke er gjort, tas summen av "Antall påmeldte" for møtets påmeldinger. Tallet beregnes for møter innen området/regionen i statistikkperioden.</li>
-	<li>Upubliserte møter teller med på linje med publiserte møter.</li>
+	</c:if>
+	&nbsp;<br>
+	<li><b>Upubliserte møter teller med på linje med publiserte møter.</b></li>
 </ul>
 
 <p/><br/>
 
 <c:if test="${!empty courseList}">
-<h2>Informasjonsmøter som både er uten påmeldinger og etterregistering av fremmøtte deltakere</h2>
+
+<c:if test="${useAttendants}">
+<h2>Kurs/arrangementer uten påmeldinger og etterregistering av fremmøtte deltakere</h2>
+</c:if>
+<c:if test="${!useAttendants}">
+<h2>Kurs/arrangementer uten påmeldinger</h2>
+</c:if>
+
 
 <fmt:message key="courseList.item" var="item"/>
 <fmt:message key="courseList.items" var="items"/>
