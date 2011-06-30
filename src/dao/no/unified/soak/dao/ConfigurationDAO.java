@@ -15,4 +15,7 @@ public interface ConfigurationDAO extends DAO {
     public List<Configuration> getConfigurations();
     
     public void saveConfiguration(Configuration configuration);
+
+    public void deleteConfiguration(Configuration configuration);
+
 }

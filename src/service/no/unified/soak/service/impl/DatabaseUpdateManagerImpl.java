@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -17,11 +18,11 @@ import no.unified.soak.model.Category;
 import no.unified.soak.model.Configuration;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Organization;
+import no.unified.soak.model.Organization.Type;
 import no.unified.soak.model.Person;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.ServiceArea;
 import no.unified.soak.model.User;
-import no.unified.soak.model.Organization.Type;
 import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.DatabaseUpdateManager;
@@ -146,6 +147,9 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
 		// update configuration content
 		updateConfigurations();
+		
+		//delete deprecated configurations
+		deleteConfigurations();
 	}
 
 
@@ -338,64 +342,6 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	}
 
 	private void insertDefaultValues() {
-
-		// ROLES
-		// int addedRoles = 0;
-		// try {
-		// Role anonymous = roleManager.getRole("anonymous");
-		// if(anonymous == null){
-		// roleManager.saveRole(new Role("anonymous", "Anonymous"));
-		// addedRoles++;
-		// }
-		// }
-		// catch(Exception e){
-		// log.error("Feil i opprettelse av \"Role\"", e);
-		// }
-		//
-		// try {
-		// Role admin = roleManager.getRole("admin");
-		// if(admin == null){
-		// roleManager.saveRole(new Role("admin", "Administrator"));
-		// addedRoles++;
-		// }
-		// }
-		// catch(Exception e){
-		// log.error("Feil i opprettelse av \"Role\"", e);
-		// }
-		//
-		// try {
-		// Role employee = roleManager.getRole("employee");
-		// if(employee == null){
-		// roleManager.saveRole(new Role("employee", "Ansatt"));
-		// addedRoles++;
-		// }
-		// }
-		// catch(Exception e){
-		// log.error("Feil i opprettelse av \"Role\"", e);
-		// }
-		//
-		// try {
-		// Role eventResponsible = roleManager.getRole("eventresponsible");
-		// if(eventResponsible == null){
-		// roleManager.saveRole(new Role("eventresponsible", "Kursansvarlig"));
-		// addedRoles++;
-		// }
-		// }
-		// catch(Exception e){
-		// log.error("Feil i opprettelse av \"Role\"", e);
-		// }
-		//
-		// try {
-		// Role editor = roleManager.getRole("editor");
-		// if(editor == null){
-		// roleManager.saveRole(new Role("editor", "Opplaringsansvarlig"));
-		// addedRoles++;
-		// }
-		// }
-		// catch(Exception e){
-		// log.error("Feil i opprettelse av \"Role\"", e);
-		// }
-
 		try {
 			String[][] sqlSelectAndInsertRoleArray = {
 					// Role insert
@@ -415,13 +361,6 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		}
 
 		if (ApplicationResourcesUtil.isSVV()) {
-			// inserts new role for SVV
-			// try { roleManager.getRole("reader"); }
-			// catch(ObjectRetrievalFailureException e){
-			// roleManager.saveRole(new Role("reader", "Reader"));
-			// addedRoles++;
-			// }
-
 			try {
 				String[][] sqlSelectAndInsertRoleSVVArray = {
 				// Role insert
@@ -433,9 +372,6 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			}
 
 		}
-		// if (addedRoles != 0) {
-		// log.info("Antall nye roller lagt til i database: " + addedRoles);
-		// }
 
 		// CATEGORIES
 		try {
@@ -506,6 +442,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			configurationsToInsert.add(new Configuration("access.registration.useWaitlists", false, null));
 			configurationsToInsert.add(new Configuration("access.registration.showComment", false, null));
 			configurationsToInsert.add(new Configuration("access.registration.useParticipants", true, null));
+			configurationsToInsert.add(new Configuration("access.course.showAttendantDetails", true, null));
 
 
 			// course
@@ -519,7 +456,6 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			configurationsToInsert.add(new Configuration("access.course.useAttendants", true, null));
 			configurationsToInsert.add(new Configuration("access.course.useRegisterBy", false, null));
 			configurationsToInsert.add(new Configuration("access.course.useOrganization2", true, null));
-			configurationsToInsert.add(new Configuration("access.course.showAttendantDetails", true, null));
 			configurationsToInsert.add(new Configuration("access.course.showDescriptionToPublic", false, null));
 			configurationsToInsert.add(new Configuration("access.course.showCourseUntilFinished", false, null));
 			
@@ -560,7 +496,6 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			configurationsToInsert.add(new Configuration("access.course.useAttendants", false, null));
 			configurationsToInsert.add(new Configuration("access.course.useRegisterBy", true, null));
 			configurationsToInsert.add(new Configuration("access.course.useOrganization2", false, null));
-			configurationsToInsert.add(new Configuration("access.course.showAttendantDetails", false, null));
 			configurationsToInsert.add(new Configuration("access.course.showDescriptionToPublic", true, null));
 			configurationsToInsert.add(new Configuration("access.course.showCourseUntilFinished", true, null));
 
@@ -1222,6 +1157,29 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		}
 	}
 
+	/**
+	 * Metode for å slette utfasede konfigurasjoner
+	 * @since 1.8
+	 */
+	private void deleteConfigurations(){
+		List<String> delete = new ArrayList<String>();
+		delete.add("access.course.showAdditionalInfo");
+		// add configurations to delete here..!
+		
+		List<Configuration> configurations = configurationManager.getConfigurations();
+		if (configurations != null) {
+			Iterator<Configuration> iterator = configurations.iterator();
+			while (iterator.hasNext()) {
+				Configuration configuration = iterator.next();
+				String name = configuration.getName();
+				if(delete.contains(name)){
+					configurationManager.deleteConfiguration(configuration);
+					log.info("Configuration '" + name + "' deleted!");
+				}
+			}
+		}
+	}
+	
 	public class ColumnInfo {
 		String name;
 		String type;

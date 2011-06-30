@@ -80,6 +80,16 @@ public class ConfigurationManagerImpl extends BaseManager implements
 		configurationsCache.put(configuration.getName(), configuration);
 	}
 
+	/**
+	 * @see ConfigurationManager#deleteConfiguration(Configuration)
+	 */
+	public void deleteConfiguration(Configuration configuration) {
+		//Also update the cache.
+		configurationsCache.remove(configuration.getName());
+		dao.deleteConfiguration(configuration);
+	}
+
+	
 	public Map<String, Configuration> getConfigurationsMap() {
 		if (configurationsCache != null) {
 			return configurationsCache;

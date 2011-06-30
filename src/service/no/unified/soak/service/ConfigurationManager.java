@@ -49,4 +49,11 @@ public interface ConfigurationManager extends Manager{
 	 * @param configuration
 	 */
 	public void saveConfiguration(Configuration configuration);
+
+	/**
+	 * Delete configuration
+	 * @param configuration
+	 */
+	public void deleteConfiguration(Configuration configuration);
+
 }
