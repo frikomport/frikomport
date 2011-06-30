@@ -143,14 +143,14 @@ function fillSelect(obj){
 				<input id="startTime" name="startTime" value="<fmt:formatDate value="${startTime}" pattern="${dateformat}"/>" type="text" size="12" />
 				<a href="#" name="a1" id="Anch_startTime"
 					onClick="cal1.select(document.courseList.startTime,'Anch_startTime','<fmt:message key="date.format"/>'); return false;"
-					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url context="${urlContext}" value="/images/calendar.png"/>"></a>
+					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 			</li>
 			<li>
 				<label class="required">Til:</label>
 				<input id="stopTime" name="stopTime" value="<fmt:formatDate value="${stopTime}" pattern="${dateformat}"/>" type="text" size="12"/>
 				<a href="#" name="a1" id="Anch_stopTime"
 					onClick="cal1.select(document.courseList.stopTime,'Anch_stopTime','<fmt:message key="date.format"/>'); return false;"
-					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url context="${urlContext}" value="/images/calendar.png"/>"></a>
+					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 			</li>
 
             <li>
@@ -164,7 +164,7 @@ function fillSelect(obj){
 <c:set var="buttons">
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <button type="button" style="margin-right: 5px"
-        onclick="location.href='<c:url context="${urlContext}" value="/editCourse.html"/>'">
+        onclick="location.href='<c:url value="/editCourse.html"/>'">
         <fmt:message key="button.add"/>
     </button>
 </c:if>
@@ -183,8 +183,8 @@ SumBuild sumsExport = new SumBuild();
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible && username == courseList.responsible.username || (isSVV && courseList.organization2id == currentUserForm.organization2id)}">
-        <a href='<c:url context="${urlContext}" value="/editCourse.html"><c:param name="id" value="${courseList.id}"/><c:param name="from" value="list"/></c:url>'>
-            <img src="<c:url context="${urlContext}" value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
+        <a href='<c:url value="/editCourse.html"><c:param name="id" value="${courseList.id}"/><c:param name="from" value="list"/></c:url>'>
+            <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
 </c:if>
         <% sums.addToNextSum("sum-pencil.png", null); %>
@@ -199,9 +199,9 @@ SumBuild sumsExport = new SumBuild();
 		<c:if test="${showDescriptionToPublic || isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 			<c:set var="courseDescription"><c:out value="${courseList.description}"/></c:set>
 		</c:if>
-        <c:if test="${courseList.status == 3}"><img src="<c:url context="${urlContext}" value="/images/cancel.png"/>"
+        <c:if test="${courseList.status == 3}"><img src="<c:url value="/images/cancel.png"/>"
                		alt="<fmt:message key="icon.warning"/>" class="icon" /><fmt:message key="course.cancelled.alert"/><br/></c:if>
-         <a href="<c:url context="${urlContext}" value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>" 
+         <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>" 
          title="<c:out value="${courseDescription}"/>"><c:out value="${courseList.name}"/></a>
         <% sums.addToNextSum(null, null); %>
     </display:column>
@@ -213,7 +213,7 @@ SumBuild sumsExport = new SumBuild();
    <display:column media="html" sortable="false" class="mediumButtonWidth" titleKey="button.signup">
 		<c:if test="${courseList.status == 2 && (courseList.availableAttendants > 0 || useWaitlists)}">
 		    <button type="button"
-		        onclick="location.href='<c:url context="${urlContext}" value="/performRegistration.html"><c:param name="courseId" value="${courseList.id}" /></c:url>'">
+		        onclick="location.href='<c:url value="/performRegistration.html"><c:param name="courseId" value="${courseList.id}" /></c:url>'">
 		        <fmt:message key="button.signup"/>
 		    </button>
 		</c:if>
@@ -226,10 +226,10 @@ SumBuild sumsExport = new SumBuild();
 
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.status">
-        <c:if test="${courseList.status == 0}"><img src="<c:url context="${urlContext}" value="/images/add.png"/>" alt="<fmt:message key="course.status.created"/>" title="<fmt:message key="course.status.created"/>" class="icon"/></c:if>
-        <c:if test="${courseList.status == 1}"><img src="<c:url context="${urlContext}" value="/images/stop.png"/>" alt="<fmt:message key="course.status.finished"/>" title="<fmt:message key="course.status.finished"/>" class="icon"/></c:if>
-        <c:if test="${courseList.status == 2}"><img src="<c:url context="${urlContext}" value="/images/accept.png"/>" alt="<fmt:message key="course.status.published"/>" title="<fmt:message key="course.status.published"/>" class="icon"/></c:if>
-        <c:if test="${courseList.status == 3}"><img src="<c:url context="${urlContext}" value="/images/cancel.png"/>" alt="<fmt:message key="course.status.cancelled"/>" title="<fmt:message key="course.status.cancelled"/>" class="icon"/></c:if>
+        <c:if test="${courseList.status == 0}"><img src="<c:url value="/images/add.png"/>" alt="<fmt:message key="course.status.created"/>" title="<fmt:message key="course.status.created"/>" class="icon"/></c:if>
+        <c:if test="${courseList.status == 1}"><img src="<c:url value="/images/stop.png"/>" alt="<fmt:message key="course.status.finished"/>" title="<fmt:message key="course.status.finished"/>" class="icon"/></c:if>
+        <c:if test="${courseList.status == 2}"><img src="<c:url value="/images/accept.png"/>" alt="<fmt:message key="course.status.published"/>" title="<fmt:message key="course.status.published"/>" class="icon"/></c:if>
+        <c:if test="${courseList.status == 3}"><img src="<c:url value="/images/cancel.png"/>" alt="<fmt:message key="course.status.cancelled"/>" title="<fmt:message key="course.status.cancelled"/>" class="icon"/></c:if>
         <% sums.addToNextSum("sum-status", null); %>
     </display:column>
     <% sumsTotal.addToNextSum("tot-status", null); %>
@@ -256,7 +256,7 @@ SumBuild sumsExport = new SumBuild();
 			<c:set var="courseDescription"><c:out value="${courseList.description}"/></c:set>
 		</c:if>
 
-         <a href="<c:url context="${urlContext}" value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>" 
+         <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>" 
          title="<c:out value="${courseDescription}"/>"><fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/></a>
     <% sums.addToNextSum("sum-startTime", null); %>
     </display:column>
@@ -362,7 +362,7 @@ SumBuild sumsExport = new SumBuild();
 </c:if>
          
     <display:column media="html" property="location.name" sortable="true" headerClass="sortable" titleKey="course.location">
-         <a href="<c:url context="${urlContext}" value="/detailsLocation.html"><c:param name="id" value="${courseList.location.id}"/></c:url>" title="<c:out value="${courseList.location.description}"/>"><c:out value="${courseList.location.name}"/></a>
+         <a href="<c:url value="/detailsLocation.html"><c:param name="id" value="${courseList.location.id}"/></c:url>" title="<c:out value="${courseList.location.description}"/>"><c:out value="${courseList.location.name}"/></a>
     <%sums.addToNextSum(null, null);%>
     </display:column>
     <%sumsTotal.addToNextSum(null, null);%>
@@ -372,7 +372,7 @@ SumBuild sumsExport = new SumBuild();
 
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 	<display:column media="html" property="responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible">
-         <a href="<c:url context="${urlContext}" value="/detailsUser.html"><c:param name="username" value="${courseList.responsible.username}"/></c:url>"><c:out value="${courseList.responsible.fullName}"/></a>
+         <a href="<c:url value="/detailsUser.html"><c:param name="username" value="${courseList.responsible.username}"/></c:url>"><c:out value="${courseList.responsible.fullName}"/></a>
     <%sums.addToNextSum(null, null);%>
     </display:column>
     <%sumsTotal.addToNextSum(null, null);%>

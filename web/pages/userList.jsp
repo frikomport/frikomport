@@ -9,11 +9,11 @@
 <%-- 
 <c:set var="buttons">
     <button type="button" style="margin-right: 5px"
-        onclick="location.href='<c:url context="${urlContext}" value="/editUser.html"/>?method=Add&from=list'">
+        onclick="location.href='<c:url value="/editUser.html"/>?method=Add&from=list'">
         <fmt:message key="button.add"/>
     </button>
     
-    <button type="button" onclick="location.href='<c:url context="${urlContext}" value="/mainMenu.html" />'">
+    <button type="button" onclick="location.href='<c:url value="/mainMenu.html" />'">
         <fmt:message key="button.cancel"/>
     </button>
 </c:set>
@@ -54,14 +54,14 @@
 <display:table name="${userList}" cellspacing="0" cellpadding="0" requestURI="listUsers.html" defaultsort="1" id="userList" pagesize="${itemCount}" class="list userList" export="${!isSVV}">
     <c:if test="${isAdmin || isEducationResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-        <a href='<c:url context="${urlContext}" value="/editUser.html"><c:param name="username" value="${userList.username}"/><c:param name="from" value="list"/></c:url>'>
-            <img src="<c:url context="${urlContext}" value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
+        <a href='<c:url value="/editUser.html"><c:param name="username" value="${userList.username}"/><c:param name="from" value="list"/></c:url>'>
+            <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
     </display:column>
     </c:if>
     <%-- Table columns --%>
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="user.username" sortProperty="username">
-         <a href="<c:url context="${urlContext}" value="/detailsUser.html?from=list"><c:param name="username" value="${userList.username}"/></c:url>">
+         <a href="<c:url value="/detailsUser.html?from=list"><c:param name="username" value="${userList.username}"/></c:url>">
          <c:out value="${userList.username}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="username" sortable="true" headerClass="sortable" titleKey="user.username"/>

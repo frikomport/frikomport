@@ -10,7 +10,7 @@
 	<c:if test="${not empty status.errorMessages}">
 		<div class="error">
 			<c:forEach var="error" items="${status.errorMessages}">
-				<img src="<c:url context="${urlContext}" value="/images/iconWarning.gif"/>"
+				<img src="<c:url value="/images/iconWarning.gif"/>"
 					alt="<fmt:message key="icon.warning"/>" class="icon" />
 				<c:out value="${error}" escapeXml="false" />
 				<br />
@@ -182,7 +182,7 @@
 						title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
 					<a href="#" name="a1" id="Anch_birthdate"
 						onClick="cal1.select(document.registration.birthdate,'Anch_birthdate','<fmt:message key="date.format"/>',(document.registration.birthdate.value=='')?'<c:out value="${init}"/>':document.registration.birthdate.value,''); return false;"
-						title="<fmt:message key="course.calendar.title"/>"><img src="<c:url context="${urlContext}" value="/images/calendar.png"/>"></a>
+						title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 	                    <form:errors cssClass="fieldError" path="birthdate" />
 				</td>
 			</tr>
@@ -438,12 +438,12 @@
 								<c:set var="courseDescription"><c:out value="${courseList.description}"/></c:set>
 							</c:if>
 							<c:if test="${courseList.status == 3}">
-								<img src="<c:url context="${urlContext}" value="/images/cancel.png"/>"
+								<img src="<c:url value="/images/cancel.png"/>"
 									alt="<fmt:message key="icon.warning"/>" class="icon" />
 								<fmt:message key="course.cancelled.alert" />
 								<br />
 							</c:if>
-							<a href="<c:url context="${urlContext}" value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>"
+							<a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>"
 								title="<c:out value="${courseDescription}"/>"><c:out value="${courseList.name}" /> </a>
 						</display:column>
 						</c:if>
@@ -457,7 +457,7 @@
 								<c:if test="${showDescriptionToPublic || isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 									<c:set var="courseDescription"><c:out value="${courseList.description}"/></c:set>
 								</c:if>
-								<a href="<c:url context="${urlContext}" value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>"
+								<a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>"
 									title="<c:out value="${courseDescription}"/>">
 									<fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}" />
 								</a>
@@ -487,7 +487,7 @@
 						<display:column media="html" sortable="true"
 							headerClass="sortable" titleKey="course.location">
 							<a
-								href="<c:url context="${urlContext}" value="/detailsLocation.html"><c:param name="id" value="${courseList.location.id}"/></c:url>"
+								href="<c:url value="/detailsLocation.html"><c:param name="id" value="${courseList.location.id}"/></c:url>"
 								title="<c:out value="${courseList.location.description}"/>"><c:out
 									value="${courseList.location.name}" /> </a>
 						</display:column>
@@ -496,7 +496,7 @@
 						<display:column media="html" sortable="true"
 							headerClass="sortable" titleKey="course.responsible">
 							<a
-								href="<c:url context="${urlContext}" value="/detailsUser.html"><c:param name="username" value="${courseList.responsible.username}"/></c:url>"><c:out
+								href="<c:url value="/detailsUser.html"><c:param name="username" value="${courseList.responsible.username}"/></c:url>"><c:out
 									value="${courseList.responsible.fullName}" /> </a>
 						</display:column>
 </c:if>
@@ -549,4 +549,4 @@
 <v:javascript formName="registration" cdata="false"
 	dynamicJavascript="true" staticJavascript="false" />
 <script type="text/javascript"
-	src="<c:url context="${urlContext}" value="/scripts/validator.jsp"/>"></script>
+	src="<c:url value="/scripts/validator.jsp"/>"></script>

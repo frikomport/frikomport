@@ -12,7 +12,7 @@
     <c:if test="${not empty status.errorMessages}">
     <div class="error">
         <c:forEach var="error" items="${status.errorMessages}">
-            <img src="<c:url context="${urlContext}" value="/images/iconWarning.gif"/>"
+            <img src="<c:url value="/images/iconWarning.gif"/>"
                 alt="<fmt:message key="icon.warning"/>" class="icon" />
             <c:out value="${error}" escapeXml="false"/><br />
         </c:forEach>
@@ -20,7 +20,7 @@
     </c:if>
 </spring:bind>
 
-<form method="post" action="<c:url context="${urlContext}" value="/editPerson.html"/>" id="personForm" onsubmit="return validatePerson(this)">
+<form method="post" action="<c:url value="/editPerson.html"/>" id="personForm" onsubmit="return validatePerson(this)">
 <table class="detail">
 
     <spring:bind path="person.id">
@@ -117,7 +117,7 @@
             <input type="submit" class="button large" name="return" onclick="bCancel=true"
                 value="<fmt:message key="button.person.list"/>" />
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
-		    <button type="button" onclick="location.href='<c:url context="${urlContext}" value="/editPerson.html"><c:param name="id" value="${person.id}"/></c:url>'">
+		    <button type="button" onclick="location.href='<c:url value="/editPerson.html"><c:param name="id" value="${person.id}"/></c:url>'">
 	    	    <fmt:message key="button.edit"/>
 		    </button>
 </c:if>
@@ -132,9 +132,9 @@
 	pagesize="${itemCount}" class="list" export="true" requestURI="detailsLocation.html">
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="name">
-        <c:if test="${courseList.status == 3}"><img src="<c:url context="${urlContext}" value="/images/cancel.png"/>"
+        <c:if test="${courseList.status == 3}"><img src="<c:url value="/images/cancel.png"/>"
                		alt="<fmt:message key="icon.warning"/>" class="icon" /><fmt:message key="course.cancelled.alert"/><br/></c:if>
-         <a href="<c:url context="${urlContext}" value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>"
+         <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>"
          title="<c:out value="${courseList.description}"/>"><c:out value="${courseList.name}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="course.name"/>
@@ -169,11 +169,11 @@
 	</c:if>
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.location">
-         <a href="<c:url context="${urlContext}" value="/detailsLocation.html"><c:param name="id" value="${courseList.location.id}"/></c:url>" title="<c:out value="${courseList.location.description}"/>"><c:out value="${courseList.location.name}"/></a>
+         <a href="<c:url value="/detailsLocation.html"><c:param name="id" value="${courseList.location.id}"/></c:url>" title="<c:out value="${courseList.location.description}"/>"><c:out value="${courseList.location.name}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="location.name" sortable="true" headerClass="sortable" titleKey="course.location"/>
 	<display:column media="html" sortable="true" headerClass="sortable" titleKey="course.responsible">
-         <a href="<c:url context="${urlContext}" value="/detailsUser.html"><c:param name="username" value="${courseList.responsible.username}"/></c:url>"><c:out value="${courseList.responsible.fullName}"/></a>
+         <a href="<c:url value="/detailsUser.html"><c:param name="username" value="${courseList.responsible.username}"/></c:url>"><c:out value="${courseList.responsible.fullName}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible"/>
 
@@ -186,4 +186,4 @@
 <v:javascript formName="person" cdata="false"
     dynamicJavascript="true" staticJavascript="false"/>
 <script type="text/javascript" 
-    src="<c:url context="${urlContext}" value="/scripts/validator.jsp"/>"></script>
+    src="<c:url value="/scripts/validator.jsp"/>"></script>

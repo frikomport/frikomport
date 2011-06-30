@@ -142,7 +142,7 @@ function fillSelect(obj){
 	<c:if test="${not empty status.errorMessages}">
 		<div class="error">
 			<c:forEach var="error" items="${status.errorMessages}">
-				<img src="<c:url context="${urlContext}" value="/images/iconWarning.gif"/>"
+				<img src="<c:url value="/images/iconWarning.gif"/>"
 					alt="<fmt:message key="icon.warning"/>" class="icon" />
 				<c:out value="${error}" escapeXml="false" />
 				<br />
@@ -284,7 +284,7 @@ function fillSelect(obj){
 					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" onChange="changeGUIBasedOnField('startTimeDate');"/>
 				<a href="#" name="a1" id="Anch_startTimeDate"
 					onClick="cal1.select(document.course.startTimeDate,'Anch_startTimeDate','<fmt:message key="date.format"/>'); return false;"
-					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url context="${urlContext}" value="/images/calendar.png"/>"></a>
+					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="startTimeTime" id="startTimeTime" value="<c:out value="${startTimeTime}"/>"
 					title="<fmt:message key="time.format.title"/>: <fmt:message key="time.format.localized"/>" />
@@ -306,7 +306,7 @@ function fillSelect(obj){
 					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
 				<a href="#" name="a1" id="Anch_stopTimeDate"
 					onClick="cal1.select(document.course.stopTimeDate,'Anch_stopTimeDate','<fmt:message key="date.format"/>'); return false;"
-					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url context="${urlContext}" value="/images/calendar.png"/>"></a>
+					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="stopTimeTime" id="stopTimeTime" value="<c:out value="${stopTimeTime}"/>"
 					title="<fmt:message key="time.format.title"/>: <fmt:message key="time.format.localized"/>" />
@@ -558,7 +558,7 @@ function fillSelect(obj){
 					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
 				<a href="#" name="a1" id="Anch_registerStartDate"
 					onClick="cal1.select(document.course.registerStartDate,'Anch_registerStartDate','<fmt:message key="date.format"/>'); return false;"
-					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url context="${urlContext}" value="/images/calendar.png"/>"></a>
+					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="registerStartTime"
 					id="registerStartTime"
@@ -589,7 +589,7 @@ function fillSelect(obj){
 					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
 				<a href="#" name="a1" id="Anch_reminderDate"
 					onClick="cal1.select(document.course.reminderDate,'Anch_reminderDate','<fmt:message key="date.format"/>'); return false;"
-					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url context="${urlContext}" value="/images/calendar.png"/>"></a>
+					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="reminderTime" id="reminderTime"
 					value="<c:out value="${reminderTime}"/>"
@@ -620,7 +620,7 @@ function fillSelect(obj){
 					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
 				<a href="#" name="a1" id="Anch_registerByDate"
 					onClick="cal1.select(document.course.registerByDate,'Anch_registerByDate','<fmt:message key="date.format"/>'); return false;"
-					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url context="${urlContext}" value="/images/calendar.png"/>"></a>
+					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="registerByTime"
 					id="registerByTime" value="<c:out value="${registerByTime}"/>"
@@ -705,7 +705,7 @@ function fillSelect(obj){
 </form:form>
 
 <v:javascript formName="course" cdata="false" dynamicJavascript="true" staticJavascript="false" />
-<script type="text/javascript" src="<c:url context="${urlContext}" value="/scripts/validator.jsp"/>">
+<script type="text/javascript" src="<c:url value="/scripts/validator.jsp"/>">
 </script>
 
 <script language="JavaScript">

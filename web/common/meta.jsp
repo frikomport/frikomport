@@ -9,7 +9,7 @@
         <c:set var="ctxPath" value="${pageContext.request.contextPath}" scope="request"/>
         <c:if test="${!isSVV}">
 	        <meta name="author" content="FriKomPort (frikomport@gmail.com)"/>
-	        <link rel="icon" href="<c:url context="${urlContext}" value='/images/favicon.ico'/>"/>
+	        <link rel="icon" href="<c:url value='/images/favicon.ico'/>"/>
         </c:if>
-        <script type="text/javascript" src="<c:url context="${urlContext}" value='/scripts/calendar.js'/>"></script>
+        <script type="text/javascript" src="<c:url value='/scripts/calendar.js'/>"></script>
         

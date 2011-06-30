@@ -141,7 +141,7 @@
 	</th>
 	<td>
 		<a
-			href="<c:url context="${urlContext}" value="/detailsLocation.html"><c:param name="id" value="${course.location.id}"/></c:url>"
+			href="<c:url value="/detailsLocation.html"><c:param name="id" value="${course.location.id}"/></c:url>"
 			title="<c:out value="${course.location.description}"/>"><c:out
 				value="${course.location.name}" /></a>
 	</td>
@@ -154,7 +154,7 @@
 	</th>
 	<td>
 		<a
-			href="<c:url context="${urlContext}" value="/detailsUser.html"><c:param name="username" value="${course.responsible.username}"/></c:url>"><c:out
+			href="<c:url value="/detailsUser.html"><c:param name="username" value="${course.responsible.username}"/></c:url>"><c:out
 				value="${course.responsible.fullName}" /> </a>
 	</td>
 </tr>
@@ -167,7 +167,7 @@
 	</th>
 	<td>
 		<a
-			href="<c:url context="${urlContext}" value="/detailsPerson.html"><c:param name="id" value="${course.instructor.id}"/></c:url>"
+			href="<c:url value="/detailsPerson.html"><c:param name="id" value="${course.instructor.id}"/></c:url>"
 			title="<c:out value="${course.instructor.description}"/>"><c:out
 				value="${course.instructor.name}" /></a>
 	</td>

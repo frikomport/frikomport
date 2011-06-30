@@ -15,9 +15,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 public class ApplicationResourcesUtil {
 
     private static MessageSource messageSource = null;
-	private static String urlContextAppendix;
-	private static String publicUrlContextAppendix;
-	private static String loggedinUrlContextAppendix;
     private static final Log log = LogFactory.getLog(ApplicationResourcesUtil.class);
 
     private static final String localeVariant = System.getenv("FRIKOMPORT_VARIANT");
@@ -157,51 +154,4 @@ public class ApplicationResourcesUtil {
         request.getSession().setAttribute("listOfMessages", messages);
     }
 
-	/**
-	 * Sets the part of the url to use immediately after the application context
-	 * part but before the page identifier part or the url.
-	 * 
-	 * @param contextAppendix
-	 *            the context appendix should end with a slash (/) but a slash
-	 *            at the beginning should be avoided.
-	 */
-	public static void setUrlContextAppendix(String contextAppendix) {
-		urlContextAppendix = contextAppendix;
-	}
-
-	/**
-	 * Gets the part of the url to use immediately after the application context
-	 * part but before the page identifier part or the url. The returned value
-	 * should end with a slash (/) but a slash at the beginning should be
-	 * avoided. The function never returns null. If no contextAppendix is set,
-	 * an empty string ("") is returned.
-	 */
-	public static String getUrlContextAppendix() {
-		if (urlContextAppendix != null) {
-			return urlContextAppendix;
-		}
-		return "";
-	}
-
-	public static String getPublicUrlContextAppendix() {
-		if (publicUrlContextAppendix == null) {
-//			publicUrlContextAppendix = StringUtils.strip(ApplicationResourcesUtil.getText("publicUrlprefix"), "/") + "/";
-			String prefix = StringUtils.strip(ApplicationResourcesUtil.getText("publicUrlprefix"), "/");
-			if(StringUtils.isNotBlank(prefix)){
-				publicUrlContextAppendix = prefix + "/";
-			}
-		}
-		return publicUrlContextAppendix;
-	}
-
-	public static String getLoggedinUrlContextAppendix() {
-		if (loggedinUrlContextAppendix == null) {
-//			loggedinUrlContextAppendix = StringUtils.strip(ApplicationResourcesUtil.getText("loggedinUrlprefix"), "/") + "/";
-			String prefix = StringUtils.strip(ApplicationResourcesUtil.getText("loggedinUrlprefix"), "/");
-			if(StringUtils.isNotBlank(prefix)){
-				loggedinUrlContextAppendix = prefix + "/";
-			}
-		}
-		return loggedinUrlContextAppendix;
-	}
 }

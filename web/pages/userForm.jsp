@@ -6,7 +6,7 @@
 	<c:if test="${not empty status.errorMessages}">
 		<div class="error">
 			<c:forEach var="error" items="${status.errorMessages}">
-				<img src="<c:url context="${urlContext}" value="/images/iconWarning.gif"/>"
+				<img src="<c:url value="/images/iconWarning.gif"/>"
 					alt="<fmt:message key="icon.warning"/>" class="icon" />
 				<c:out value="${error}" escapeXml="false" />
 				<br />
@@ -175,7 +175,7 @@
 					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
 				<a href="#" name="a1" id="Anch_birthdate"
 					onClick="cal1.select(document.user.birthdate,'Anch_birthdate','<fmt:message key="date.format"/>',(document.user.birthdate.value=='')?null:document.user.birthdate.value,''); return false;"
-					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url context="${urlContext}" value="/images/calendar.png"/>"></a>
+					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
                     <form:errors cssClass="fieldError" path="birthdate" />
 			</td>
 		</tr>

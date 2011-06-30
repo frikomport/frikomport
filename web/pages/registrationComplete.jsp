@@ -7,7 +7,7 @@
 	<c:if test="${not empty status.errorMessages}">
 		<div class="error">
 			<c:forEach var="error" items="${status.errorMessages}">
-				<img src="<c:url context="${urlContext}" value="/images/iconWarning.gif"/>"
+				<img src="<c:url value="/images/iconWarning.gif"/>"
 					alt="<fmt:message key="icon.warning"/>" class="icon" />
 				<c:out value="${error}" escapeXml="false" />
 				<br />
@@ -281,7 +281,7 @@
 
 	<tr>
 		<td class="buttonBar">
-		<form method="post" action="<c:url context="${urlContext}" value="/listCourses.html"/>"
+		<form method="post" action="<c:url value="/listCourses.html"/>"
 			id="registrationCompleteForm">
 
 			<spring:bind path="registration.course.id">
@@ -295,7 +295,7 @@
 
 			<c:if test="${userdefaults == true}">
 				<button type="button"
-					onclick="location.href='<c:url context="${urlContext}" value="/performRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
+					onclick="location.href='<c:url value="/performRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 					<fmt:message key="button.onemore" />
 				</button>
 			</c:if>

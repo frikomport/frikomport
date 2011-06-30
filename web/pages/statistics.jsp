@@ -16,21 +16,21 @@ cal1.setTodayText("Idag");
 <c:choose>
 <c:when test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 
-<form method="post" action="<c:url context="${urlContext}" value="/statistics.html"/>" name="statisticsForm" id="statisticsForm">
+<form method="post" action="<c:url value="/statistics.html"/>" name="statisticsForm" id="statisticsForm">
 <div class="searchForm"><ul>
 <li>
 <label class="required" for="dateBeginInclusive">Fra dato:</label>
 <input id="dateBeginInclusive" name="dateBeginInclusive" value="<c:out value="${dateBeginInclusive}"/>" type="text"/>
 <a href="#" name="a1" id="Anch_dateBeginInclusive"
 	onClick="cal1.select(document.statisticsForm.dateBeginInclusive,'Anch_dateBeginInclusive','<fmt:message key="date.format"/>'); return false;"
-	title="<fmt:message key="course.calendar.title"/>"><img src="<c:url context="${urlContext}" value="/images/calendar.png"/>"></a>
+	title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 </li>
 <li>
 <label class="required" for="dateEndInclusive">Til dato:</label>
 <input id="dateEndInclusive" name="dateEndInclusive" value="<c:out value="${dateEndInclusive}"/>" type="text"/>
 <a href="#" name="a1" id="Anch_dateEndInclusive"
 	onClick="cal1.select(document.statisticsForm.dateEndInclusive,'Anch_dateEndInclusive','<fmt:message key="date.format"/>'); return false;"
-	title="<fmt:message key="course.calendar.title"/>"><img src="<c:url context="${urlContext}" value="/images/calendar.png"/>"></a>
+	title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
 </li>
 <li>
 <input type="submit" name="Vis_statistikk" value="Vis statistikk" class="button large"/>
@@ -136,8 +136,8 @@ cal1.setTodayText("Idag");
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible && username == courseList.responsible.username || (isSVV && courseList.organization2id == user.organization2id)}">
-        <a href='<c:url context="${urlContext}" value="/editCourse.html"><c:param name="id" value="${courseList.id}"/><c:param name="from" value="list"/></c:url>' target="_blank">
-            <img src="<c:url context="${urlContext}" value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
+        <a href='<c:url value="/editCourse.html"><c:param name="id" value="${courseList.id}"/><c:param name="from" value="list"/></c:url>' target="_blank">
+            <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
 </c:if>
     </display:column>
@@ -145,9 +145,9 @@ cal1.setTodayText("Idag");
 
 <c:if test="${showCourseName}">
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="name">
-        <c:if test="${courseList.status == 3}"><img src="<c:url context="${urlContext}" value="/images/cancel.png"/>"
+        <c:if test="${courseList.status == 3}"><img src="<c:url value="/images/cancel.png"/>"
                		alt="<fmt:message key="icon.warning"/>" class="icon" /><fmt:message key="course.cancelled.alert"/><br/></c:if>
-         <a href="<c:url context="${urlContext}" value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>" 
+         <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>" 
          title="<c:out value="${courseList.description}"/>"><c:out value="${courseList.name}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="course.name"/>
@@ -155,10 +155,10 @@ cal1.setTodayText("Idag");
 
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.status">
-        <c:if test="${courseList.status == 0}"><img src="<c:url context="${urlContext}" value="/images/add.png"/>" alt="<fmt:message key="course.status.created"/>" title="<fmt:message key="course.status.created"/>" class="icon"/></c:if>
-        <c:if test="${courseList.status == 1}"><img src="<c:url context="${urlContext}" value="/images/stop.png"/>" alt="<fmt:message key="course.status.finished"/>" title="<fmt:message key="course.status.finished"/>" class="icon"/></c:if>
-        <c:if test="${courseList.status == 2}"><img src="<c:url context="${urlContext}" value="/images/accept.png"/>" alt="<fmt:message key="course.status.published"/>" title="<fmt:message key="course.status.published"/>" class="icon"/></c:if>
-        <c:if test="${courseList.status == 3}"><img src="<c:url context="${urlContext}" value="/images/cancel.png"/>" alt="<fmt:message key="course.status.cancelled"/>" title="<fmt:message key="course.status.cancelled"/>" class="icon"/></c:if>
+        <c:if test="${courseList.status == 0}"><img src="<c:url value="/images/add.png"/>" alt="<fmt:message key="course.status.created"/>" title="<fmt:message key="course.status.created"/>" class="icon"/></c:if>
+        <c:if test="${courseList.status == 1}"><img src="<c:url value="/images/stop.png"/>" alt="<fmt:message key="course.status.finished"/>" title="<fmt:message key="course.status.finished"/>" class="icon"/></c:if>
+        <c:if test="${courseList.status == 2}"><img src="<c:url value="/images/accept.png"/>" alt="<fmt:message key="course.status.published"/>" title="<fmt:message key="course.status.published"/>" class="icon"/></c:if>
+        <c:if test="${courseList.status == 3}"><img src="<c:url value="/images/cancel.png"/>" alt="<fmt:message key="course.status.cancelled"/>" title="<fmt:message key="course.status.cancelled"/>" class="icon"/></c:if>
     </display:column>
     <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="course.status">
         <c:if test="${courseList.status == 0}"><fmt:message key="course.status.created"/></c:if>
@@ -176,7 +176,7 @@ cal1.setTodayText("Idag");
 </c:when>
 <c:otherwise>
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
-         <a href="<c:url context="${urlContext}" value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>" 
+         <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>" 
          title="<c:out value="${courseList.description}"/>"><fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
@@ -219,12 +219,12 @@ cal1.setTodayText("Idag");
 </c:if>
          
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.location">
-         <a href="<c:url context="${urlContext}" value="/detailsLocation.html"><c:param name="id" value="${courseList.location.id}"/></c:url>" title="<c:out value="${courseList.location.description}"/>"><c:out value="${courseList.location.name}"/></a>
+         <a href="<c:url value="/detailsLocation.html"><c:param name="id" value="${courseList.location.id}"/></c:url>" title="<c:out value="${courseList.location.description}"/>"><c:out value="${courseList.location.name}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="location.name" sortable="true" headerClass="sortable" titleKey="course.location"/>
 	
 	<display:column media="html" sortable="true" headerClass="sortable" titleKey="course.responsible">
-         <a href="<c:url context="${urlContext}" value="/detailsUser.html"><c:param name="username" value="${courseList.responsible.username}"/></c:url>"><c:out value="${courseList.responsible.fullName}"/></a>
+         <a href="<c:url value="/detailsUser.html"><c:param name="username" value="${courseList.responsible.username}"/></c:url>"><c:out value="${courseList.responsible.fullName}"/></a>
     </display:column>
     
     <display:column media="csv excel xml pdf" property="responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible"/>

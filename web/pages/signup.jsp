@@ -8,7 +8,7 @@
     <c:if test="${not empty status.errorMessages}">
     <div class="error">	
         <c:forEach var="error" items="${status.errorMessages}">
-            <img src="<c:url context="${urlContext}" value="/images/iconWarning.gif"/>"
+            <img src="<c:url value="/images/iconWarning.gif"/>"
                 alt="<fmt:message key="icon.warning"/>" class="icon" />
             <c:out value="${error}" escapeXml="false"/><br />
         </c:forEach>
@@ -20,7 +20,7 @@
 
 <div class="separator"></div>
 
-<form method="post" action="<c:url context="${urlContext}" value="/signup.html"/>" name="signupForm" onsubmit="return validateUser(this)">
+<form method="post" action="<c:url value="/signup.html"/>" name="signupForm" onsubmit="return validateUser(this)">
 <table class="detail">
     <tr>
         <th>
@@ -198,6 +198,6 @@ document.forms["signupForm"].username.focus();
 
 <v:javascript formName="user" staticJavascript="false"/>
 <script type="text/javascript"
-      src="<c:url context="${urlContext}" value="/scripts/validator.jsp"/>"></script>
+      src="<c:url value="/scripts/validator.jsp"/>"></script>
 
 

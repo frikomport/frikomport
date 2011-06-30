@@ -7,7 +7,7 @@
     <c:if test="${not empty status.errorMessages}">
     <div class="error">
         <c:forEach var="error" items="${status.errorMessages}">
-            <img src="<c:url context="${urlContext}" value="/images/iconWarning.gif"/>"
+            <img src="<c:url value="/images/iconWarning.gif"/>"
                 alt="<fmt:message key="icon.warning"/>" class="icon" />
             <c:out value="${error}" escapeXml="false"/><br />
         </c:forEach>
@@ -15,7 +15,7 @@
     </c:if>
 </spring:bind>
 
-<form method="post" action="<c:url context="${urlContext}" value="/emailCourse.html"/>" id="courseForm"
+<form method="post" action="<c:url value="/emailCourse.html"/>" id="courseForm"
     onsubmit="return validateCourse(this)">
     
 <fmt:message key="date.format" var="dateformat"/>
@@ -82,4 +82,4 @@
 <v:javascript formName="course" cdata="false"
     dynamicJavascript="true" staticJavascript="false"/>
 <script type="text/javascript" 
-    src="<c:url context="${urlContext}" value="/scripts/validator.jsp"/>"></script>
+    src="<c:url value="/scripts/validator.jsp"/>"></script>

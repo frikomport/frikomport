@@ -11,7 +11,7 @@
     <c:if test="${not empty status.errorMessages}">
     <div class="error">
         <c:forEach var="error" items="${status.errorMessages}">
-            <img src="<c:url context="${urlContext}" value="/images/iconWarning.gif"/>"
+            <img src="<c:url value="/images/iconWarning.gif"/>"
                 alt="<fmt:message key="icon.warning"/>" class="icon" />
             <c:out value="${error}" escapeXml="false"/><br />
         </c:forEach>
@@ -19,7 +19,7 @@
     </c:if>
 </spring:bind>
 
-<form method="post" action="<c:url context="${urlContext}" value="/editCourse.html"/>" id="courseForm" onsubmit="return validateCourse(this)">
+<form method="post" action="<c:url value="/editCourse.html"/>" id="courseForm" onsubmit="return validateCourse(this)">
 
 <fmt:message key="date.format" var="dateformat"/>
 <fmt:message key="time.format" var="timeformat"/>
@@ -44,33 +44,33 @@
 
 <c:if test="${isPublished}">
             <c:if test="${allowRegistration == true && isCourseFull == false}">
-			    <button type="button" onclick="location.href='<c:url context="${urlContext}" value="/performRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
+			    <button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 		    	    <fmt:message key="button.signup"/>
 			    </button>
 			</c:if>
 </c:if>
 
 <c:if test="${admin == true}">
-		    <button type="button" onclick="location.href='<c:url context="${urlContext}" value="/editCourse.html"><c:param name="id" value="${course.id}"/></c:url>'">
+		    <button type="button" onclick="location.href='<c:url value="/editCourse.html"><c:param name="id" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.edit"/>
 		    </button>
 </c:if>
 
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
-			<button type="button" onclick="location.href='<c:url context="${urlContext}" value="/editCourse.html"><c:param name="copyid" value="${course.id}"/></c:url>'">
+			<button type="button" onclick="location.href='<c:url value="/editCourse.html"><c:param name="copyid" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.copy"/>
 		    </button>
 </c:if>
 
 <c:choose>
 	<c:when test="${(admin == true || isReader) && isPublished}">
-		    <button type="button" class="large" onclick="location.href='<c:url context="${urlContext}" value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
+		    <button type="button" class="large" onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.administerRegistrations"/>
 		    </button>
 	</c:when>
 	<c:otherwise>
 		<c:if test="${!course.restricted}">
-		    <button type="button" class="large" onclick="location.href='<c:url context="${urlContext}" value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
+		    <button type="button" class="large" onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.displayRegistrations"/>
 		    </button>
 		</c:if>
@@ -78,12 +78,12 @@
 </c:choose>
 
 <c:if test="${admin == true && !isSVV}">
-		    <button type="button" class="large" onclick="location.href='<c:url context="${urlContext}" value="/editFileCourse.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
+		    <button type="button" class="large" onclick="location.href='<c:url value="/editFileCourse.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.administerFiles"/>
 		    </button>
 </c:if>
 <c:if test="${admin == true}">
-		    <button type="button" class="large" onclick="location.href='<c:url context="${urlContext}" value="/emailCourse.html"><c:param name="id" value="${course.id}"/><c:param name="enablemail" value="true"/></c:url>'">
+		    <button type="button" class="large" onclick="location.href='<c:url value="/emailCourse.html"><c:param name="id" value="${course.id}"/><c:param name="enablemail" value="true"/></c:url>'">
 	    	    <fmt:message key="button.mails"/>
 		    </button>
 </c:if>
@@ -95,7 +95,7 @@
 <c:if test="${attachments != null && attachments[0] != null}">
 <h4><fmt:message key="attachment.list"/></h4>
 
-<form method="post" id="courseFileListForm" name="courseFileListForm" action="<c:url context="${urlContext}" value="/editCourse.html"/>"
+<form method="post" id="courseFileListForm" name="courseFileListForm" action="<c:url value="/editCourse.html"/>"
     enctype="multipart/form-data" onsubmit="return validateFileUpload(this)">
 
 <display:table name="${attachments}" cellspacing="0" cellpadding="0"
@@ -128,4 +128,4 @@
 <!-- v:javascript formName="course" cdata="false"
     dynamicJavascript="true" staticJavascript="false"/>
 <script type="text/javascript"
-    src="<c:url context="${urlContext}" value="/scripts/validator.jsp"/>"></script -->
+    src="<c:url value="/scripts/validator.jsp"/>"></script -->

@@ -10,19 +10,19 @@
         <%-- Include common set of meta tags for each layout --%>
         <%@ include file="/common/meta.jsp" %>
         <title><fmt:message key="webapp.prefix"/><decorator:title/></title>
-        <link rel="stylesheet" type="text/css" media="all" href="<c:url context="${urlContext}" value='/styles/default.css'/>" /> 
-        <link rel="stylesheet" type="text/css" media="all" href="<c:url context="${urlContext}" value='/styles/helptip.css'/>" />
-        <link rel="stylesheet" type="text/css" media="print" href="<c:url context="${urlContext}" value='/styles/print.css'/>" />    
+        <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/styles/default.css'/>" /> 
+        <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/styles/helptip.css'/>" />
+        <link rel="stylesheet" type="text/css" media="print" href="<c:url value='/styles/print.css'/>" />    
 <c:if test="${isSVV}">
-        <link rel="stylesheet" type="text/css" media="all" href="<c:url context="${urlContext}" value='/styles/svv.css'/>" />    
+        <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/styles/svv.css'/>" />    
 </c:if>
-        <script type="text/javascript" src="<c:url context="${urlContext}" value='/scripts/prototype.js'/>"></script> 
-        <script type="text/javascript" src="<c:url context="${urlContext}" value='/scripts/effects.js'/>"></script>
-        <script type="text/javascript" src="<c:url context="${urlContext}" value='/scripts/helptip.js'/>"></script>
-        <script type="text/javascript" src="<c:url context="${urlContext}" value='/scripts/global.js'/>"></script>
+        <script type="text/javascript" src="<c:url value='/scripts/prototype.js'/>"></script> 
+        <script type="text/javascript" src="<c:url value='/scripts/effects.js'/>"></script>
+        <script type="text/javascript" src="<c:url value='/scripts/helptip.js'/>"></script>
+        <script type="text/javascript" src="<c:url value='/scripts/global.js'/>"></script>
 
-        <link rel="stylesheet" type="text/css" media="all" href="<c:url context="${urlContext}" value='/styles/menuExpandable.css'/>" /> 
-        <script type="text/javascript" src="<c:url context="${urlContext}" value='/scripts/menuExpandable.js'/>"></script>
+        <link rel="stylesheet" type="text/css" media="all" href="<c:url value='/styles/menuExpandable.css'/>" /> 
+        <script type="text/javascript" src="<c:url value='/scripts/menuExpandable.js'/>"></script>
         <decorator:head/>
         <style type="text/css" media="all">
             div.standardsNote {background: #FFFFCC; border: 1px solid blue; margin-bottom: 10px; padding: 5px}

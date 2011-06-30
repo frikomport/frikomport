@@ -123,7 +123,7 @@
     <tr>
         <td class="buttonBar">            
             <c:if test="${isAdmin || user.username == username || user.username == altusername}">
-            	<button type="button" onclick="location.href='<c:url context="${urlContext}" value="/editUser.html"><c:param name="username" value="${user.username}"/></c:url>'">
+            	<button type="button" onclick="location.href='<c:url value="/editUser.html"><c:param name="username" value="${user.username}"/></c:url>'">
     	            <fmt:message key="button.edit"/>
 	            </button>
             </c:if>
@@ -141,9 +141,9 @@
          titleKey="registration.lastName"/>
     
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="course.name">
-        <c:if test="${userRegistrations.course.status == 3}"><img src="<c:url context="${urlContext}" value="/images/cancel.png"/>"
+        <c:if test="${userRegistrations.course.status == 3}"><img src="<c:url value="/images/cancel.png"/>"
                		alt="<fmt:message key="icon.warning"/>" class="icon" /><fmt:message key="course.cancelled.alert"/><br/></c:if>
-         <a href="<c:url context="${urlContext}" value="/detailsCourse.html"><c:param name="id" value="${userRegistrations.course.id}"/></c:url>"
+         <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${userRegistrations.course.id}"/></c:url>"
          title="<c:out value="${userRegistrations.course.description}"/>"><c:out value="${userRegistrations.course.name}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="course.name"/>
@@ -155,11 +155,11 @@
     <display:column property="course.organization.name" sortable="true" headerClass="sortable" titleKey="course.organization"/>
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.location">
-         <a href="<c:url context="${urlContext}" value="/detailsLocation.html"><c:param name="id" value="${userRegistrations.course.location.id}"/></c:url>" title="<c:out value="${userRegistrations.course.location.description}"/>"><c:out value="${userRegistrations.course.location.name}"/></a>
+         <a href="<c:url value="/detailsLocation.html"><c:param name="id" value="${userRegistrations.course.location.id}"/></c:url>" title="<c:out value="${userRegistrations.course.location.description}"/>"><c:out value="${userRegistrations.course.location.name}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="location.name" sortable="true" headerClass="sortable" titleKey="course.location"/>
 	<display:column media="html" sortable="true" headerClass="sortable" titleKey="course.responsible">
-         <a href="<c:url context="${urlContext}" value="/detailsUser.html"><c:param name="username" value="${userRegistrations.course.responsible.username}"/></c:url>"><c:out value="${userRegistrations.course.responsible.fullName}"/></a>
+         <a href="<c:url value="/detailsUser.html"><c:param name="username" value="${userRegistrations.course.responsible.username}"/></c:url>"><c:out value="${userRegistrations.course.responsible.fullName}"/></a>
     </display:column>
     <display:column media="csv excel xml pdf" property="course.responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible"/>
 
@@ -183,7 +183,7 @@
 	</c:if>
 
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-        <button type="button" onclick="location.href='<c:url context="${urlContext}" value="/performRegistration.html"><c:param name="id" value="${userRegistrations.id}"/><c:param name="courseId" value="${userRegistrations.course.id}"/></c:url>'">
+        <button type="button" onclick="location.href='<c:url value="/performRegistration.html"><c:param name="id" value="${userRegistrations.id}"/><c:param name="courseId" value="${userRegistrations.course.id}"/></c:url>'">
             <fmt:message key="button.edit"/>
         </button>
     </display:column>

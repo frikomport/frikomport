@@ -9,7 +9,7 @@
 <head>
     <title><fmt:message key="errorPage.title"/></title>
     <link rel="stylesheet" type="text/css" media="all" 
-        href="<c:url context="${urlContext}" value="/styles/default.css"/>" /> 
+        href="<c:url value="/styles/default.css"/>" /> 
 </head>
 
 <body>

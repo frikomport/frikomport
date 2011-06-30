@@ -567,11 +567,7 @@ public class MailUtil {
 
 		msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.findurlhere")) + "\n");
 		String coursedetailurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.coursedetailurl", "" + course.getId()));
-		String publicContext = ApplicationResourcesUtil.getPublicUrlContextAppendix();
-		if(publicContext == null){
-			publicContext = "";
-		}
-		msg.append(baseurl + publicContext + coursedetailurl + "\n");
+		msg.append(baseurl + coursedetailurl + "\n");
 	}
 
     /**
@@ -586,11 +582,7 @@ public class MailUtil {
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.cancelcourse")) + "\n");
         String coursecancelurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.coursecancelurl", ""+registration.getId()));
-		String publicContext = ApplicationResourcesUtil.getPublicUrlContextAppendix();
-		if(publicContext == null){
-			publicContext = "";
-		}
-        msg.append(baseurl + publicContext + coursecancelurl + "\n");
+        msg.append(baseurl + coursecancelurl + "\n");
         
         if(course.getChargeoverdue()) msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationConfirmed.mail.footer.overdue")) + "\n");
 	}
@@ -606,11 +598,7 @@ public class MailUtil {
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.editregistration")) + "\n");
         String editregistrationurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.editregistrationurl", new String[]{""+registration.getId(), ""+course.getId()}));
-		String publicContext = ApplicationResourcesUtil.getPublicUrlContextAppendix();
-		if(publicContext == null){
-			publicContext = "";
-		}
-        msg.append(baseurl + publicContext + editregistrationurl + "\n");
+        msg.append(baseurl + editregistrationurl + "\n");
         
         if(course.getChargeoverdue()) msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationConfirmed.mail.footer.overdue")) + "\n");
 	}

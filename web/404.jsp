@@ -7,7 +7,7 @@
 
 <p>
     <fmt:message key="404.message">
-        <fmt:param><c:url context="${urlContext}" value="/listCourses.html"/></fmt:param>
+        <fmt:param><c:url value="/listCourses.html"/></fmt:param>
     </fmt:message>
 </p>
 </page:applyDecorator>

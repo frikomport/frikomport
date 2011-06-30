@@ -7,7 +7,7 @@
     <c:if test="${not empty status.errorMessages}">
     <div class="error">
         <c:forEach var="error" items="${status.errorMessages}">
-            <img src="<c:url context="${urlContext}" value="/images/iconWarning.gif"/>"
+            <img src="<c:url value="/images/iconWarning.gif"/>"
                 alt="<fmt:message key="icon.warning"/>" class="icon" />
             <c:out value="${error}" escapeXml="false"/><br />
         </c:forEach>
@@ -31,7 +31,7 @@
 	
 </table>
 
-<form method="post" id="courseFileForm" action="<c:url context="${urlContext}" value="/editFileCourse.html"/>"
+<form method="post" id="courseFileForm" action="<c:url value="/editFileCourse.html"/>"
     enctype="multipart/form-data" onsubmit="return validateFileUpload(this)">
 
 <table>
@@ -64,7 +64,7 @@
 
 <h4><fmt:message key="attachment.list"/></h4>
 
-<form method="post" id="courseFileListForm" name="courseFileListForm" action="<c:url context="${urlContext}" value="/editFileCourse.html"/>"
+<form method="post" id="courseFileListForm" name="courseFileListForm" action="<c:url value="/editFileCourse.html"/>"
     enctype="multipart/form-data" onsubmit="return validateFileUpload(this)">
     
 <display:table name="${attachmentsBackingObject.attachments}" cellspacing="0" cellpadding="0"

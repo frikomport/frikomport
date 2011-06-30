@@ -146,8 +146,6 @@ public class ActionFilter implements Filter {
 				RequestUtil.setCookie(response, Constants.LOGIN_COOKIE, loginCookie, request.getContextPath());
 			}
 		}
-
-		setJspLinkPathPrefix(request, session);
 		
 		// For å unngå at eventuelle proxyservere legger på headerinfo som medfører uønsket caching
 		response.setHeader("Cache-Control", "no-cache,no-store");
@@ -158,26 +156,6 @@ public class ActionFilter implements Filter {
 		chain.doFilter(request, response);
 	}
 
-	public void setJspLinkPathPrefix(HttpServletRequest request, HttpSession session) {
-		String publicPrefix = ApplicationResourcesUtil.getPublicUrlContextAppendix();
-		String loggedinPrefix = ApplicationResourcesUtil.getLoggedinUrlContextAppendix();
-		String publicUrlContextEnding = "/" + publicPrefix;
-		String loggedinUrlContextEnding = "/" + loggedinPrefix;
-		if (StringUtils.isNotBlank(publicPrefix) && request.getRequestURI().contains(publicUrlContextEnding)) {
-			session.setAttribute("urlContext", request.getContextPath() + StringUtils.stripEnd(publicUrlContextEnding, "/"));
-			session.setAttribute("urlContextAppendix", StringUtils.stripStart(publicUrlContextEnding, "/"));
-			ApplicationResourcesUtil.setUrlContextAppendix(publicPrefix + "/");
-		} else if (StringUtils.isNotBlank(loggedinPrefix) && request.getRequestURI().contains(loggedinUrlContextEnding)) {
-			session.setAttribute("urlContext", request.getContextPath() + StringUtils.stripEnd(loggedinUrlContextEnding, "/"));
-			session.setAttribute("urlContextAppendix", StringUtils.stripStart(loggedinUrlContextEnding, "/"));
-			ApplicationResourcesUtil.setUrlContextAppendix(loggedinPrefix + "/");
-		} else {
-			session.setAttribute("urlContext", request.getContextPath());
-			session.setAttribute("urlContextAppendix", "");
-			ApplicationResourcesUtil.setUrlContextAppendix("");
-		}
-	}
-	
 	private void ensurePageDecoration(ServletContext servletContext) {
 		DecorCacheManager decorCacheManager = (DecorCacheManager) getBean("decorCacheManager");
 		String [] decorElements = decorCacheManager.getDecorElements();
@@ -222,7 +200,7 @@ public class ActionFilter implements Filter {
 		session.setAttribute("useAttendants", configurationManager.isActive("access.course.useAttendants", false));
 		session.setAttribute("useRegisterBy", configurationManager.isActive("access.course.useRegisterBy", true));
 		session.setAttribute("useOrganization2", configurationManager.isActive("access.course.useOrganization2", false));
-		session.setAttribute("showAttendantDetails", configurationManager.isActive("access.course.showAttendantDetails", false));
+		session.setAttribute("showAttendantDetails", configurationManager.isActive("access.course.showAttendantDetails", true));
 		session.setAttribute("useParticipants", configurationManager.isActive("access.registration.useParticipants", false));
 		
 		// registration
@@ -275,7 +253,7 @@ public class ActionFilter implements Filter {
 		 *  Brukernavn må tilpasses manuelt, samt korrekt eZSessionId (i EzUserDaoJdbc.java)
 		 *  for at dette skal fungere -- det er da mulig å kjøre javaapp'en alene som innlogget  
 		 * */ 
-		String fakeLogin = ("sa".equals(System.getProperty("user.name")) ? Constants.FAKE_LOGIN : null);
+		String fakeLogin = null; // ("sa".equals(System.getProperty("user.name")) ? Constants.FAKE_LOGIN : null);
 		
 		if ((cookie != null && cookie.getValue() != null && cookie.getValue().trim().length() > 0) || fakeLogin != null) {
 			ExtUserDAO extUserDAO = (ExtUserDAO) getBean("extUserDAO");

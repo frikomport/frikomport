@@ -4,7 +4,7 @@
 <%-- If you don't want to encrypt passwords programmatically, or you don't
      care about using SSL for the login, you can change this form's action
      to "j_security_check" --%>
-<form method="post" id="loginForm" action="<c:url context="${urlContext}" value="/authorize"/>" 
+<form method="post" id="loginForm" action="<c:url value="/authorize"/>" 
     onsubmit="saveUsername(this);return validateForm(this)">
 <table width="100%">
     <tr>
@@ -12,7 +12,7 @@
             <c:if test="${param.error != null}">
             <div class="error fade-ffff00" id="loginError"
                 style="margin-right: 0; margin-bottom: 3px; margin-top: 3px">
-                    <img src="<c:url context="${urlContext}" value="/images/iconWarning.gif"/>"
+                    <img src="<c:url value="/images/iconWarning.gif"/>"
                         alt="<fmt:message key="icon.warning"/>" class="icon" />
                     <fmt:message key="errors.password.mismatch"/>
                     <%--c:out value="${sessionScope.ACEGI_SECURITY_LAST_EXCEPTION.message}"/--%>
@@ -63,7 +63,7 @@
 		<td></td>
 		<td><br />
             <fmt:message key="login.signup">
-                <fmt:param><c:url context="${urlContext}" value="/signup.html"/></fmt:param>
+                <fmt:param><c:url value="/signup.html"/></fmt:param>
             </fmt:message>
         </td>
 	</tr>
