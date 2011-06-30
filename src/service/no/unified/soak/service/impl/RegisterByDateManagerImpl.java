@@ -80,7 +80,7 @@ public class RegisterByDateManagerImpl extends BaseManager implements RegisterBy
      */
 	public void checkRegisterByDates() {
 		// find all courses where registerBy recently expired
-		List<Course> courses = courseManager.getCoursesWhereRegisterByExpired(Constants.TASK_RUN_INTERVAL_MILLISECOND);
+		List<Course> courses = courseManager.getCoursesWhereRegisterByExpired(Constants.TASK_RUN_INTERVAL_EVERY_HOUR);
 		
 		// send registration lists for courses where registerBy date expired less than "Constants.TASK_RUN_INTERVAL" ago
 		Iterator<Course> it = courses.iterator();

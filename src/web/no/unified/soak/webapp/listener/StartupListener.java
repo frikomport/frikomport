@@ -7,6 +7,8 @@
  */
 package no.unified.soak.webapp.listener;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -18,7 +20,6 @@ import javax.servlet.ServletContextListener;
 import no.unified.soak.Constants;
 import no.unified.soak.service.CourseStatusManager;
 import no.unified.soak.service.DatabaseUpdateManager;
-import no.unified.soak.service.DecorCacheManager;
 import no.unified.soak.service.LookupManager;
 import no.unified.soak.service.NotificationManager;
 import no.unified.soak.service.RegisterByDateManager;
@@ -110,17 +111,29 @@ public class StartupListener extends ContextLoaderListener implements
         timer.schedule(once, Constants.TASK_IMMEDIATE);
 
         // Tasks to happen regularly
-        ScheduledTasks recurring = new ScheduledTasks();
+        ScheduledTasks recurring1 = new ScheduledTasks();
         //recurring.addTask(decorCacheManager);
-        recurring.addTask(courseStatusManager);
-        recurring.addTask(userSynchronizeManager);
-        if(!ApplicationResourcesUtil.isSVV()) recurring.addTask(registerByDateManager);
-        recurring.addTask(notificationManager);
-    	recurring.addTask(waitingListManager);
+        recurring1.addTask(courseStatusManager);
+        if(!ApplicationResourcesUtil.isSVV()) recurring1.addTask(registerByDateManager);
+        recurring1.addTask(notificationManager);
+    	recurring1.addTask(waitingListManager);
 
-        // Here we set the intervals for how often
-		timer.schedule(recurring, Constants.TASK_INITIAL_DELAY, Constants.TASK_RUN_INTERVAL_MILLISECOND);
+    	// Here we set the intervals for how often
+    	timer.schedule(recurring1, Constants.TASK_INITIAL_DELAY, Constants.TASK_RUN_INTERVAL_EVERY_HOUR);
 
+    	
+        // synchronization every night at 01:00
+        Calendar scheduled = new GregorianCalendar();
+        scheduled.roll(Calendar.DAY_OF_YEAR, true);
+        scheduled.set(Calendar.HOUR_OF_DAY, 1);
+        scheduled.set(Calendar.MINUTE, 0);
+        scheduled.set(Calendar.SECOND, 0);
+        scheduled.set(Calendar.MILLISECOND, 0);
+        
+        ScheduledTasks recurring2 = new ScheduledTasks();
+        recurring2.addTask(userSynchronizeManager);
+    	timer.schedule(recurring2, scheduled.getTime(), Constants.TASK_RUN_INTERVAL_EVERY_DAY);
+		
 		if (log.isDebugEnabled()) {
 			log.debug("drop-down initialization complete [OK]");
 		}
