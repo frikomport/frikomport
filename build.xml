@@ -119,6 +119,7 @@
 			<fileset dir="web/WEB-INF/classes">
 				<exclude name="ApplicationResources_zh_CN.properties"/>
 				<exclude name="ApplicationResources_no.properties"/>
+				<exclude name="ApplicationResources_no_NO_FKPSVV.properties"/>
 				<include name="*.properties"/>
 				<include name="*.xml"/>
 				<include name="*.vm"/>

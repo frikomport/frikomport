@@ -413,6 +413,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		Vector<Configuration> configurationsToInsert = new Vector<Configuration>();
 		// common configurations
 		configurationsToInsert.add(new Configuration("access.course.singleprice", false, null));
+		configurationsToInsert.add(new Configuration("access.course.showAttendantDetails", true, null));
 		configurationsToInsert.add(new Configuration("access.registration.delete", false, null));
 		configurationsToInsert.add(new Configuration("access.registration.userdefaults", false, null));
 		configurationsToInsert.add(new Configuration("access.registration.emailrepeat", false, null));
@@ -442,7 +443,6 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			configurationsToInsert.add(new Configuration("access.registration.useWaitlists", false, null));
 			configurationsToInsert.add(new Configuration("access.registration.showComment", false, null));
 			configurationsToInsert.add(new Configuration("access.registration.useParticipants", true, null));
-			configurationsToInsert.add(new Configuration("access.course.showAttendantDetails", true, null));
 
 
 			// course
@@ -492,16 +492,12 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			configurationsToInsert.add(new Configuration("access.course.showType", true, null));
 			configurationsToInsert.add(new Configuration("access.course.showRestricted", true, null));
 			configurationsToInsert.add(new Configuration("access.course.useServiceArea", true, null));
-			configurationsToInsert.add(new Configuration("access.course.showCourseName", false, null));
+			configurationsToInsert.add(new Configuration("access.course.showCourseName", true, null));
 			configurationsToInsert.add(new Configuration("access.course.useAttendants", false, null));
 			configurationsToInsert.add(new Configuration("access.course.useRegisterBy", true, null));
 			configurationsToInsert.add(new Configuration("access.course.useOrganization2", false, null));
 			configurationsToInsert.add(new Configuration("access.course.showDescriptionToPublic", true, null));
 			configurationsToInsert.add(new Configuration("access.course.showCourseUntilFinished", true, null));
-
-			// Organization
-			configurationsToInsert.add(new Configuration("access.organization.useType", false, null)); // NB! useType for organization + organization2 må konfigureres likt!!
-			configurationsToInsert.add(new Configuration("access.organization2.useType", false, null)); // NB! useType for organization + organization2 må konfigureres likt!!
 
 			// User
 			configurationsToInsert.add(new Configuration("access.user.useBirthdate", true, null));
@@ -510,6 +506,9 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
 			// profile
 			configurationsToInsert.add(new Configuration("access.profile.showInvoiceaddress", true, null));
+
+			// listevisning
+			configurationsToInsert.add(new Configuration("list.itemCount", false, "25"));
 		}
 
 		List<Configuration> configurationsInDB = configurationManager.getConfigurations();
@@ -1165,6 +1164,11 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		List<String> delete = new ArrayList<String>();
 		delete.add("access.course.showAdditionalInfo");
 		// add configurations to delete here..!
+
+		if (!ApplicationResourcesUtil.isSVV()) {
+			delete.add("access.organization.useType");
+			delete.add("access.organization2.useType");
+		}
 		
 		List<Configuration> configurations = configurationManager.getConfigurations();
 		if (configurations != null) {

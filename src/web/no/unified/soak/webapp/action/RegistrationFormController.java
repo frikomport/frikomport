@@ -199,7 +199,7 @@ public class RegistrationFormController extends BaseFormController {
         Course course = courseManager.getCourse(courseId);
         if (course != null) {
             model.put("course", course);
-            if (course.getFeeExternal().equals(new Double("0"))) {
+            if (course.getFeeExternal().equals(new Double("0")) && (course.getFeeInternal() != null && course.getFeeInternal().equals(new Double("0")))) {
                 model.put("freeCourse", new Boolean(true));
             }
         }
@@ -397,20 +397,26 @@ public class RegistrationFormController extends BaseFormController {
 					errors.rejectValue("birthdate", "errors.dateformat", args, "Invalid date");
 				}
 			}
-			
-			String sted = request.getParameter("invoiceAddress.city");
-			if(!StringUtils.isNotEmpty(sted)){
-				args = new Object[] { getText("registration.invoiceAddress.city", request.getLocale()), "", ""};
-				errors.rejectValue("invoiceAddress.city", "errors.required", args, "");
+
+			boolean freeCourse = false;
+			if (course.getFeeExternal().equals(new Double("0")) && (course.getFeeInternal() != null && course.getFeeInternal().equals(new Double("0")))) {
+				freeCourse = true;
+            }
+			if(!freeCourse){
+				String sted = request.getParameter("invoiceAddress.city");
+				if(!StringUtils.isNotEmpty(sted)){
+					args = new Object[] { getText("registration.invoiceAddress.city", request.getLocale()), "", ""};
+					errors.rejectValue("invoiceAddress.city", "errors.required", args, "");
+				}
+	
+				String postnr = request.getParameter("invoiceAddress.postalCode");
+				if(!StringUtils.isNotEmpty(postnr)){
+					args = new Object[] { getText("registration.invoiceAddress.postalCode", request.getLocale()), "", ""};
+					errors.rejectValue("invoiceAddress.postalCode", "errors.required", args, "");
+				}
 			}
 
-			String postnr = request.getParameter("invoiceAddress.postalCode");
-			if(!StringUtils.isNotEmpty(postnr)){
-				args = new Object[] { getText("registration.invoiceAddress.postalCode", request.getLocale()), "", ""};
-				errors.rejectValue("invoiceAddress.postalCode", "errors.required", args, "");
-			}
-
-			if(configurationManager.isActive("access.course.useAttendants",false)){
+			if(configurationManager.isActive("access.course.useParticipants",false)){
 				String participants = request.getParameter("participants");
 				if(!StringUtils.isNumeric(participants)){
 					args = new Object[] { getText("registration.participants", request.getLocale()), "", ""};

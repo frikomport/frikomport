@@ -64,6 +64,6 @@
        </form>
 
        <form name="organization">
-            <field property="name" depends="required">
-            </field>
+            <field property="name" depends="required"/>
+            <field property="number" depends="required"/>
        </form>

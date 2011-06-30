@@ -82,4 +82,14 @@ public interface OrganizationManager {
     public List getOrganizationsByParent(Organization parent, Type type);
 
     
+	/**
+	 * Evict entity for hibernate sessions. This avoids automatic saving
+	 * (flush) of the entity.
+	 * 
+	 * @param entity
+	 */
+	public void evict(Object entity);
+
+
+    
 }

@@ -167,20 +167,18 @@
 	</tr>
 </c:if>
 
-	<c:if test="${!isSVV}">
-	<tr>
-		<th>
-			<fmt:message key="registration.organization" />
-		</th>
-		<td>
-			<c:if test="${registration.organization != null}">
-				<spring:bind path="registration.organization.name">
-					<c:out value="${status.value}" />
-				</spring:bind>
-			</c:if>
-		</td>
-	</tr>
-	</c:if>
+<tr>
+	<th>
+		<fmt:message key="registration.organization" />
+	</th>
+	<td>
+		<c:if test="${registration.organization != null}">
+			<spring:bind path="registration.organization.name">
+				<c:out value="${status.value}" />
+			</spring:bind>
+		</c:if>
+	</td>
+</tr>
 
 <c:if test="${showServiceArea}">
 	<tr>
@@ -196,6 +194,7 @@
 		</td>
 	</tr>
 </c:if>
+
 
 <c:if test="${showComment}">
 	<tr>
@@ -264,19 +263,6 @@
 	</c:if>
 
 </c:if>
-
-	<tr>
-		<th>
-			<fmt:message key="registration.organization" />
-		</th>
-		<td>
-			<c:if test="${registration.organization != null}">
-				<spring:bind path="registration.organization.name">
-					<c:out value="${status.value}" />
-				</spring:bind>
-			</c:if>
-		</td>
-	</tr>
 
 
 	<tr>
