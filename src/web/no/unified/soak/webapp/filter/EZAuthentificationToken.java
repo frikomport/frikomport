@@ -18,7 +18,6 @@ import no.unified.soak.ez.ExtUser;
 import org.acegisecurity.Authentication;
 import org.acegisecurity.GrantedAuthority;
 import org.acegisecurity.GrantedAuthorityImpl;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -70,29 +69,21 @@ public class EZAuthentificationToken implements Authentication {
     }
 
     public GrantedAuthority[] getAuthorities() {
-    	log.info("Granted authorities: " + grantedAuthorities);
-    	if (grantedAuthorities != null) {
-    		log.info("Granted Authorities - type: " + grantedAuthorities.getClass());
-    		log.info("Granted authorities - number of members: " + grantedAuthorities.size());
-    	}
     	GrantedAuthority[] gaarray;
-    	
     	if (grantedAuthorities.size() > 0) {
     		gaarray = new GrantedAuthority[grantedAuthorities.size()];
     		for (int i=0; i < grantedAuthorities.size(); i++) {
     			GrantedAuthority ga = grantedAuthorities.get(i);
     			gaarray[i] = ga;
-    			log.info("ga" + ga.getAuthority() + " of class: " + ga.getClass());
     		}
     	} else {
     		gaarray = new GrantedAuthority[0];
     	}
     	return gaarray;
-//        return (GrantedAuthority[]) grantedAuthorities.
     }
 
     private void addAuthority(String rolename) {
-        GrantedAuthority authority = new GrantedAuthorityImpl(rolename);
+        GrantedAuthority authority = new GrantedAuthorityImpl(getInternalFkpRole(rolename));
         grantedAuthorities.add(authority);
     }
 
@@ -116,4 +107,22 @@ public class EZAuthentificationToken implements Authentication {
     public String getName() {
         return ezUser.getName();
     }
+
+    /**
+     * Mapping fra eZ-roller til interne roller i javaapp
+     * @param eZRole
+     * @return role
+     */
+	public static String getInternalFkpRole(String eZRole) {
+		// 
+		if("Administrator".equals(eZRole)) 			return "admin";
+		else if("Opplaringsansvarlig".equals(eZRole)) return "editor"; 
+		else if("Kursansvarlig".equals(eZRole)) 		return "eventresponsible";
+		else if("Ansatt".equals(eZRole)) 				return "employee"; 
+		else if("Anonymous".equals(eZRole)) 			return "anonymous";
+		else if("FKPLesebruker".equals(eZRole)) 		return "reader"; 
+		return null;
+	}
+
+
 }

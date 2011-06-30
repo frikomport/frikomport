@@ -19,6 +19,7 @@ import no.unified.soak.ez.ExtUser;
 import no.unified.soak.model.User;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.service.UserSynchronizeManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.webapp.util.RequestUtil;
 
 import org.acegisecurity.Authentication;
@@ -61,9 +62,7 @@ public class EZAuthenticationFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) resp;
         HttpSession session = request.getSession(true);
         
-        // notify the LocaleContextHolder what locale is being used so
-        // service and data layer classes can get the locale
-        LocaleContextHolder.setLocale(request.getLocale());
+        LocaleContextHolder.setLocale(ApplicationResourcesUtil.getNewLocaleWithDefaultCountryAndVariant(request.getLocale()));
         
         ExtUser extUser = null;
         User user = null;
