@@ -24,7 +24,7 @@ public class DecorCacheManagerImpl extends BaseManager implements DecorCacheMana
 			"</body>\r\n</html>\r\n" };
 	private static String[] decorElements = minimumPageDecoration;
 
-	private String decorationUrlBackup = "http://localhost:7937/mengdetrening/public/placeholderWebpageEmulator.txthtml";
+	private String decorationUrlBackup = "http://localhost:8080/-context-/placeholderWebpageEmulator.txthtml"; // må tilpasses!!
 	
 	public void executeTask() {
 		log.info("running DecorCacheManager");

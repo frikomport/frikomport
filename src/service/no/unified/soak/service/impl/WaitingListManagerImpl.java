@@ -26,6 +26,7 @@ import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.WaitingListManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.MailUtil;
 
 import org.springframework.context.MessageSource;
@@ -52,6 +53,10 @@ public class WaitingListManagerImpl extends BaseManager implements WaitingListMa
     }
 
     public void setLocale(Locale locale) {
+    	log.debug("Locale: " + locale);
+    	if(locale == null) {
+    		locale = ApplicationResourcesUtil.getNewLocaleWithDefaultCountryAndVariant(null);
+    	}
         this.locale = locale;
     }
 

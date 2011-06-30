@@ -118,6 +118,7 @@
 		<copy todir="${build.dir}/web/classes" includeEmptyDirs="no">
 			<fileset dir="web/WEB-INF/classes">
 				<exclude name="ApplicationResources_zh_CN.properties"/>
+				<exclude name="ApplicationResources_no.properties"/>
 				<include name="*.properties"/>
 				<include name="*.xml"/>
 				<include name="*.vm"/>
@@ -171,46 +172,6 @@
 		<copy todir="${webapp.target}">
 			<fileset dir="${basedir}">
 				<include name="*.txt"/>
-			</fileset>
-		</copy>
-		<!-- Copy styles, images and scripts also to public folder for SVVs Policy Agent security mechanism. -->
-		<mkdir dir="${webapp.target}/public"/>
-		<copy todir="${webapp.target}/public">
-			<fileset dir="${basedir}/web/public/">
-				<include name="index.jsp"/>
-			</fileset>
-			<fileset dir="${basedir}/web/">
-				<include name="styles/**/*.css"/>
-			</fileset>
-			<fileset dir="${basedir}/web/">
-				<include name="scripts/**/*.js"/>
-				<include name="scripts/**/*.jsp"/>
-			</fileset>
-			<fileset dir="${basedir}/web/">
-				<include name="images/**/*.gif"/>
-				<include name="images/**/*.png"/>
-				<include name="images/**/*.jpg"/>
-				<include name="images/**/*.jpeg"/>
-				<include name="images/**/*.ico"/>
-			</fileset>
-		</copy>
-		<copy todir="${webapp.target}/admin">
-			<fileset dir="${basedir}/web/admin/">
-				<include name="index.jsp"/>
-			</fileset>
-			<fileset dir="${basedir}/web/">
-				<include name="styles/**/*.css"/>
-			</fileset>
-			<fileset dir="${basedir}/web/">
-				<include name="scripts/**/*.js"/>
-				<include name="scripts/**/*.jsp"/>
-			</fileset>
-			<fileset dir="${basedir}/web/">
-				<include name="images/**/*.gif"/>
-				<include name="images/**/*.png"/>
-				<include name="images/**/*.jpg"/>
-				<include name="images/**/*.jpeg"/>
-				<include name="images/**/*.ico"/>
 			</fileset>
 		</copy>
 	</target>
@@ -511,7 +472,7 @@
     	<!-- copy todir="c:/Programfiler/OCJ4/j2ee/home/applications" file="${webapp.dist}/${webapp.name}.ear"/ -->
 
 		<!-- Ekstra kopiering direkte til OC4J-mappe -->
-        <copy todir="C:/oc4j_extended_101340/j2ee/home/applications" file="${webapp.dist}/${webapp.name}.ear"/>
+        <!-- copy todir="C:/oc4j_extended_101340/j2ee/home/applications" file="${webapp.dist}/${webapp.name}.ear"/ -->
 
     	<!-- visning av tidspunkt for ferdig bygg -->
 		<tstamp><format property="finished" pattern="yyyy-MM-dd HH:mm:ss"/></tstamp>

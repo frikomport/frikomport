@@ -131,7 +131,7 @@ public class SVVAuthenticationFilter implements Filter {
     
     private boolean isAdminPath(HttpServletRequest request) {
     	String contextPath = request.getRequestURI();
-    	if (contextPath.contains(ApplicationResourcesUtil.getPublicUrlContextAppendix())) {
+    	if (contextPath.contains("public")) {
     		return false;
     	}
     	return true;

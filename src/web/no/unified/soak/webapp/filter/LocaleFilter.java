@@ -68,8 +68,7 @@ public class LocaleFilter extends OncePerRequestFilter {
                 Config.set(session, Config.FMT_LOCALE, preferredLocale);
             }
 
-            if ((preferredLocale != null) &&
-                    !(request instanceof LocaleRequestWrapper)) {
+            if ((preferredLocale != null) && !(request instanceof LocaleRequestWrapper)) {
                 request = new LocaleRequestWrapper(request, preferredLocale);
                 LocaleContextHolder.setLocale(preferredLocale);
             }
