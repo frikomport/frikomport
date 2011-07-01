@@ -3,6 +3,7 @@ package no.unified.soak.service.impl;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -116,6 +117,8 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	}
 
 	public void updateDatabase() {
+		dropConfigurationTableOnUpgradeToVersion18();
+		
 		alterUserAndRoleAndCourseBySQL();
 		
 		alterUserBySQL(); // i forb. med overgang til brukersykronisering på basis av APP_USER istedet for henting av alle brukere fra eZ / svvtrunkmerge
@@ -152,7 +155,39 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		deleteConfigurations();
 	}
 
+	private void dropConfigurationTableOnUpgradeToVersion18(){
+		ColumnInfo id = getColumnInfo("configuration", "id");
+		if(id != null){
+			String type = id.getType();
+			int size = id.getSize();
+			if("bigint".equalsIgnoreCase(type) && size == 20){
+				// pre v1.8 kolonne "id" - ny tabell opprettes av hibernate
+				try {
+					jt.execute("drop table configuration");
+					log.info("\"Configuration\"-tabell droppet pga. oppgradering!");
 
+					String create = "CREATE TABLE configuration (\r\n"
+						+ "id int(10) unsigned AUTO_INCREMENT NOT NULL,\r\n"
+						+ "name varchar(100) NOT NULL,\r\n"
+						+ "value     varchar(100) NULL,\r\n"
+						+ "active    tinyint(1) NULL DEFAULT '0',\r\n"
+						+ "PRIMARY KEY(id))";
+
+					if(DefaultQuotedNamingStrategy.usesOracle()){
+						log.warn("Oppretting av \"Configuration\"-tabell må foretaes manuelt for Oracle!!");
+						log.info("Følgende sql må tilpasses: " + create);
+					}
+					else {
+						jt.execute(create);
+						log.info("\"Configuration\"-tabell opprettet på nytt format!");
+					}
+					
+				}catch (Exception e) {
+					log.error("Feil oppstod ved 'drop/create table configuration'", e);
+				}
+			}
+		}
+	}
 
 	private void deleteTable(String tablename) {
 		String sql = "delete from " + tablename;
@@ -179,21 +214,30 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	 * For upgrade from 1.7.X to SVV
 	 */
 	private void changeRolesBySQL() {
-		String sql = "update role set name = 'eventresponsible' where name = 'instructor'";
-		if (DefaultQuotedNamingStrategy.usesOracle()) {
-			sql = "update role set \"name\" = 'eventresponsible' where \"name\" = 'instructor'";
-		}
-
 		try {
-			int nRowsAffected = jt.update(sql);
-			if (nRowsAffected > 0) {
-				log.info("Endret rolle 'instructor' til 'eventresponsible' i Role.");
+			String s1 = "select count(*) from role where name = 'instructor'";
+			String s2 = "select count(*) from role where name = 'eventresponsible'";
+			String s3 = "insert into role values ('eventresponsible', 'Kursansvarlig'";
+			String s4 = "update user_role set role_name = 'eventresponsible' where role_name = 'instructor'";
+			String s5 = "delete from role where name = 'instructor'";
+			if (DefaultQuotedNamingStrategy.usesOracle()) {
+				s1 = "select count(*) from role where \"name\" = 'instructor'";
+				s2 = "select count(*) from role where \"name\" = 'eventresponsible'";
+				// s3 - trenger ikke endres
+				s4 = "update user_role set \"role_name\" = 'eventresponsible' where \"role_name\" = 'instructor'";
+				s5 = "delete from role where \"name\" = 'instructor'";
+			}
+			if(jt.queryForInt(s1) == 1 && jt.queryForInt(s2) == 0){
+				// 'instructor' finnes  -- 'eventresponsible' finnes ikke..
+				jt.execute(s3);
+				log.info("Opprettet ny rolle 'eventresponsible' i ROLE");
+				int k = jt.update(s4);
+				log.info("Flyttet " + k + " brukere med rolle 'instructor' over til 'eventresponsible'");
+				jt.execute(s5);
+				log.info("Slettet utfaset rolle 'instructor' fra ROLE");
 			}
 		} catch (Exception e) {
-			log
-					.error(
-							"Feil ved dataendring i \"Role\". Dersom det finnes en rad i Role med name='instructor' må dette name endres til 'eventresponsible'.",
-							e);
+			log.error("Feil ved dataendring i \"ROLE\"-tabell", e);
 		}
 	}
 
@@ -326,9 +370,9 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
 		ColumnInfo serviceareaid = getColumnInfo("course", "serviceareaid");
 		if (serviceareaid != null && !serviceareaid.isNullable()) {
-			String sql = "ALTER TABLE course MODIFY serviceareaid bigint(19) null";
+			String sql = "alter table course modify serviceareaid bigint(19) null";
 			if (DefaultQuotedNamingStrategy.usesOracle()) {
-				sql = "ALTER TABLE course MODIFY \"serviceareaid\" number(19,0) null";
+				sql = "alter table course modify \"serviceareaid\" number(19,0) null";
 			}
 			log.debug(sql);
 			try {
@@ -375,22 +419,32 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
 		// CATEGORIES
 		try {
-			categoryManager.getCategory(Category.Name.HENDELSE.getDBValue());
-		} catch (ObjectRetrievalFailureException e) {
-			Category cat = new Category();
-			cat.setName(Category.Name.HENDELSE.getDBValue());
-			cat.setSelectable(true);
-			categoryManager.saveCategory(cat);
-			log.info("\"Category\" lagt til i DB: " + cat);
+			String kurs = "select count(*) from category where name = 'Kurs'";
+			String hendelse = "update category set name = '" + Category.Name.HENDELSE.getDBValue() + "' where name = 'Kurs'";
+			if(DefaultQuotedNamingStrategy.usesOracle()){
+				kurs = "select count(*) where \"name\" = 'Kurs'";
+				hendelse = "update category set \"name\" = '" + Category.Name.HENDELSE.getDBValue() + "' where \"name\" = 'Kurs'";
+			}
+			if(jt.queryForInt(kurs) == 1){
+				jt.update(hendelse);
+				log.info("\"Category\" endret fra 'Kurs' til '" + Category.Name.HENDELSE.getDBValue() + "'");
+			}
+			else {
+				try {
+					categoryManager.getCategory(Category.Name.HENDELSE.getDBValue());
+				} catch (ObjectRetrievalFailureException e) {
+					Category cat = new Category();
+					cat.setName(Category.Name.HENDELSE.getDBValue());
+					cat.setSelectable(true);
+					categoryManager.saveCategory(cat);
+					log.info("\"Category\" lagt til i DB: " + cat);
+				}
+			}
 		}
-
-		try {
-			String[][] sqlSelectAndInsertCategoryArray = { { "select count(*) from category",
-					"INSERT INTO category (name, selectable) VALUES ('Hendelse', true)" } };
-			insertIntoTableBySQLStatements("category", sqlSelectAndInsertCategoryArray);
-		} catch (Exception e) {
-			log.warn("Feil ved insert av kategori", e);
+		catch (Exception e) {
+			log.error("Problem ved opprettelse/endring av \"Category\"", e);
 		}
+		
 
 		// PERSONS
 		if (ApplicationResourcesUtil.isSVV()) {
@@ -418,6 +472,9 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		configurationsToInsert.add(new Configuration("access.registration.userdefaults", false, null));
 		configurationsToInsert.add(new Configuration("access.registration.emailrepeat", false, null));
 		configurationsToInsert.add(new Configuration("access.registration.showCancelled", true, null));
+
+		configurationsToInsert.add(new Configuration("access.location.usePostalCode", true, null));
+
 		configurationsToInsert.add(new Configuration("sms.confirmedRegistrationChangedCourse", false, null));
 
 		configurationsToInsert.add(new Configuration("mail.course.sendSummary", true, null));
@@ -458,7 +515,10 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			configurationsToInsert.add(new Configuration("access.course.useOrganization2", true, null));
 			configurationsToInsert.add(new Configuration("access.course.showDescriptionToPublic", false, null));
 			configurationsToInsert.add(new Configuration("access.course.showCourseUntilFinished", false, null));
-			
+
+			// location
+			configurationsToInsert.add(new Configuration("access.location.useOrganization2", true, null));
+
 			// Organization
 			configurationsToInsert.add(new Configuration("access.organization.useType", true, null)); // NB! useType for organization + organization2 må konfigureres likt!!
 			configurationsToInsert.add(new Configuration("access.organization2.useType", true, null)); // NB! useType for organization + organization2 må konfigureres likt!!
@@ -498,6 +558,9 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			configurationsToInsert.add(new Configuration("access.course.useOrganization2", false, null));
 			configurationsToInsert.add(new Configuration("access.course.showDescriptionToPublic", true, null));
 			configurationsToInsert.add(new Configuration("access.course.showCourseUntilFinished", true, null));
+
+			// location
+			configurationsToInsert.add(new Configuration("access.location.useOrganization2", false, null));
 
 			// User
 			configurationsToInsert.add(new Configuration("access.user.useBirthdate", true, null));
@@ -770,13 +833,14 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	}
 
 	private void updateBySQLStatements() {
-		updateRegistrationbySQLStatement();
+		updateRegistrationbySQLStatements();
+		updateOrganizationbySQLStatements();
 	}
 
 	/**
 	 * For upgrade from 1.7.X to SVV and to SVVTrunkMerge (1.8?)
 	 */
-	private void updateRegistrationbySQLStatement() {
+	private void updateRegistrationbySQLStatements() {
 
 		ColumnInfo reserved = getColumnInfo("registration", "reserved");
 		if (reserved == null) {
@@ -795,8 +859,33 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	}
 
 	/**
+	 * For upgrade from 1.7.X to SVV and to SVVTrunkMerge (1.8?)
+	 */
+	private void updateOrganizationbySQLStatements(){
+		String s1 = "select count(*) from organization where type is null";
+		String s2 = "update organization set type = 1 where type is null";
+
+		try {
+			if(DefaultQuotedNamingStrategy.usesOracle()){
+				s1 = "select count(*) from organization where \"type\" is null";
+				s2 = "update organization set \"type\" = 1 where \"type\" is null";
+			}
+			if(jt.queryForInt(s1) != 0){
+				int nRowsAffected = jt.update(s2);
+				if (nRowsAffected > 0) {
+					log.info(nRowsAffected + " organisasjoner oppdatert med type = 1 (tidligere null)");
+				}
+			}
+		}catch(Exception e){
+			log.error("Feil i oppdatering av \"organization.type\"", e);
+		}
+	}
+
+	
+	/**
 	 * Retrieves a description of the table.
-	 * 
+	 * NB!! -- Do not support mySQL -- but at least Oracle DB
+	 * NB!! Needs rewrite like getColumnInfo(...) below
 	 * @param table
 	 * @return
 	 */
@@ -831,16 +920,34 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		Connection connection = null;
 		try {
 			connection = jt.getDataSource().getConnection();
-			meta = connection.getMetaData();
-			rsColumns = meta.getColumns(null, null, table.toUpperCase(), column);
-			while (rsColumns.next()) {
-				String columnName = rsColumns.getString("COLUMN_NAME");
-				if (column.equalsIgnoreCase(columnName)) {
-					String type = rsColumns.getString("TYPE_NAME");
-					int size = rsColumns.getInt("COLUMN_SIZE");
-					int nullable = rsColumns.getInt("NULLABLE");
-					return new ColumnInfo(columnName, type, size, (nullable == DatabaseMetaData.columnNullable ? true : false),
-							table);
+
+			if(DefaultQuotedNamingStrategy.usesOracle()){
+				meta = connection.getMetaData();
+				rsColumns = meta.getColumns(null, null, table.toUpperCase(), column);
+				while (rsColumns.next()) {
+					String columnName = rsColumns.getString("COLUMN_NAME");
+					if (column.equalsIgnoreCase(columnName)) {
+						String type = rsColumns.getString("TYPE_NAME");
+						int size = rsColumns.getInt("COLUMN_SIZE");
+						int nullable = rsColumns.getInt("NULLABLE");
+						return new ColumnInfo(columnName, type, size, (nullable == DatabaseMetaData.columnNullable ? true : false), table);
+					}
+				}
+			}
+			else {
+				// mysql returnerer ikke metadata direkte, men som resultat av "select"
+				java.sql.Statement st = connection.createStatement();
+				ResultSet rs = st.executeQuery("select * from " + table + " limit 1");
+				ResultSetMetaData rsMetaData = rs.getMetaData();
+				int numColumns = rsMetaData.getColumnCount();
+				for(int c=1; c<=numColumns; c++){
+					String columnName = rsMetaData.getColumnName(c);
+					if(column.equalsIgnoreCase(columnName)){
+						String type = rsMetaData.getColumnTypeName(c);
+						int size = rsMetaData.getColumnDisplaySize(c);
+						int nullable = rsMetaData.isNullable(c);
+						return new ColumnInfo(columnName, type, size, (nullable == DatabaseMetaData.columnNullable ? true : false),	table);
+					}
 				}
 			}
 		} catch (SQLException e) {

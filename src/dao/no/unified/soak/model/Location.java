@@ -342,6 +342,7 @@ public class Location extends BaseObject implements Serializable {
      * @spring.validator type="required"
      */
     @Required
+    @ValidateOnlyIfConfigurationIsTrue("access.location.useOrganization2")
     public void setOrganization2id(Long organization2id) {
     	this.organization2id = organization2id;
     }

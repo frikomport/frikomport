@@ -93,11 +93,11 @@ public class StatisticsDAOHibernate extends BaseDAOHibernate implements Statisti
 				+ "count(distinct C.id) as partNumCourses, \r\n"
 				+ "count(R.id) as partNumRegistrations, \r\n"
 				+ "sum(R.participants) as partNumRegistered, \r\n"
-				+ "(select C2.attendants from COURSE C2 where C2.id = C.id) as partNumAttendants \r\n" 
-				+ "from SERVICEAREA S \r\n" 
-				+ "inner join COURSE C on C.serviceareaid = S.id \r\n" 
-				+ "left outer join REGISTRATION R on (R.courseid = C.id and R.status = 2) \r\n" 
-				+ "left outer join ORGANIZATION O on O.id = S.organizationid \r\n"
+				+ "(select C2.attendants from course C2 where C2.id = C.id) as partNumAttendants \r\n" 
+				+ "from servicearea S \r\n" 
+				+ "inner join course C on C.serviceareaid = S.id \r\n" 
+				+ "left outer join registration R on (R.courseid = C.id and R.status = 2) \r\n" 
+				+ "left outer join organization O on O.id = S.organizationid \r\n"
 				+ "where \r\n"
 				+ "C.starttime >= :beginPeriod  and C.starttime <= :endPeriod \r\n"
 				+ "and C.attendants > 0 and C.status != 3 \r\n" 
@@ -113,10 +113,10 @@ public class StatisticsDAOHibernate extends BaseDAOHibernate implements Statisti
 				+ "sum(R.participants) as numRegistered, \r\n" 
 				+ "sum(R.participants) as numAttendants \r\n"  
 				
-				+ "from SERVICEAREA S \r\n"
-				+ "inner join COURSE C on C.serviceareaid = S.id \r\n"
-				+ "inner join REGISTRATION R on R.courseid = C.id \r\n" 
-				+ "left outer join ORGANIZATION O on O.id = S.organizationid \r\n" 
+				+ "from servicearea S \r\n"
+				+ "inner join course C on C.serviceareaid = S.id \r\n"
+				+ "inner join registration R on R.courseid = C.id \r\n" 
+				+ "left outer join organization O on O.id = S.organizationid \r\n" 
 				
 				+ "where \r\n" 
 				    // for testing i Aqua Data Studio el. benytt følgende for generering av timestamp: to_timestamp('2011-05-02 00:00:00','yyyy-mm-dd hh24:mi:ss')
@@ -190,7 +190,7 @@ public class StatisticsDAOHibernate extends BaseDAOHibernate implements Statisti
 		}
 		else {
 			sql = "select id, organizationid from course where status = 1 and id not in \r\n"
-				+ "(select distinct courseid from REGISTRATION o, COURSE c \r\n" 
+				+ "(select distinct courseid from registration o, course c \r\n" 
 				+ "where o.courseid = c.id and c.starttime >= :beginPeriod and c.starttime <= :endPeriod) \r\n" 
 				+ "and (attendants is null or attendants = 0) \r\n" 
 				+ "and starttime >= :beginPeriod and starttime <= :endPeriod \r\n"

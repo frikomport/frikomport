@@ -68,6 +68,8 @@
         </td>
     </tr>
 
+
+<c:if test="${usePostalCode}">
     <tr>
         <th>
             <soak:label key="location.postalCode"/>
@@ -77,6 +79,7 @@
             <form:errors cssClass="fieldError" path="postalCode"/>
         </td>
     </tr>
+</c:if>
 
     <tr>
         <th>
@@ -162,15 +165,25 @@
         </td>
     </tr>
 
-    <tr>
-        <th>
-            <soak:label key="location.organization2id"/>
-        </th>
-        <td>
-            <form:select path="organization2id" items="${organizations2}" itemLabel="name" itemValue="id"/>
-            <form:errors cssClass="fieldError" path="organization2id"/>
-        </td>
-    </tr>
+
+<c:choose>
+	<c:when test="${useOrganization2}">
+		<tr>
+			<th>
+				<soak:label key="location.organization2id" />
+			</th>
+			<td>
+				<form:select path="organization2id">
+					<form:options items="${organizations2}" itemValue="id" itemLabel="name" />
+				</form:select>
+				<form:errors cssClass="fieldError" htmlEscape="false" path="organization2id" />
+			</td>
+		</tr>
+	</c:when>
+	<c:otherwise>
+		<form:hidden path="organization2id" />
+	</c:otherwise>
+</c:choose>
 
     <tr>
         <th>

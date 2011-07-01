@@ -218,6 +218,9 @@ public class ActionFilter implements Filter {
 		// organization
 		session.setAttribute("useOrganizationType", configurationManager.isActive("access.organization.useType", false));
 		
+		// location
+		session.setAttribute("usePostalCode", configurationManager.isActive("access.location.usePostalCode", true));
+		
 		// user
 		session.setAttribute("useBirthdateForUser", configurationManager.isActive("access.user.useBirthdate", false));
 		session.setAttribute("useWebsiteForUser", configurationManager.isActive("access.user.useWebsite", false));
