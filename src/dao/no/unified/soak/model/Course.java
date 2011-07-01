@@ -78,6 +78,7 @@ public class Course extends BaseObject implements Serializable {
     private Set<Registration> registrations;
     private Integer numberOfRegistrations;
     private Integer numberOfParticipants;
+    private String additionalinfo;
     
     public void setNumberOfParticipants(Integer numberOfParticipants) {
 		this.numberOfParticipants = numberOfParticipants;
@@ -546,6 +547,22 @@ public class Course extends BaseObject implements Serializable {
         this.description = description;
     }
 
+    /**
+     * @return Returns the additionalinfo.
+     * @hibernate.property column="additionalinfo" length="1000" not-null="false"
+     */
+    public String getAdditionalinfo() {
+        return additionalinfo;
+    }
+
+    /**
+     * @param additionalinfo
+     *            The additionalinfo to set.
+     */
+    public void setAdditionalinfo(String additionalinfo) {
+        this.additionalinfo = additionalinfo;
+    }
+    
     /**
      * @return Returns the instructor.
      * @hibernate.many-to-one not-null="true" column="instructorid"

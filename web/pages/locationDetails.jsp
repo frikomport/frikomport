@@ -163,6 +163,7 @@
         </td>
     </tr>
 
+<c:if test="${useOrganization2}">    
     <tr>
         <th>
             <fmt:message key="location.organization2"/>
@@ -173,6 +174,7 @@
             </spring:bind>
         </td>
     </tr>
+</c:if>
 
     <tr>
         <th>

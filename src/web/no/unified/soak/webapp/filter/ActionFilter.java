@@ -201,19 +201,21 @@ public class ActionFilter implements Filter {
 		session.setAttribute("useRegisterBy", configurationManager.isActive("access.course.useRegisterBy", true));
 		session.setAttribute("useOrganization2", configurationManager.isActive("access.course.useOrganization2", false));
 		session.setAttribute("showAttendantDetails", configurationManager.isActive("access.course.showAttendantDetails", true));
-		session.setAttribute("useParticipants", configurationManager.isActive("access.registration.useParticipants", false));
+		session.setAttribute("showAdditionalInfo", configurationManager.isActive("access.course.showAdditionalInfo", true));
+		session.setAttribute("filterlocation", configurationManager.isActive("access.course.filterlocation", false));
 		
 		// registration
 		session.setAttribute("canDelete", configurationManager.isActive("access.registration.delete", false));
 		session.setAttribute("userdefaults", configurationManager.isActive("access.registration.userdefaults", false));
 		session.setAttribute("emailrepeat", configurationManager.isActive("access.registration.emailrepeat", false));
 		session.setAttribute("showEmployeeFields", configurationManager.isActive("access.registration.showEmployeeFields", true));
-		session.setAttribute("showServiceArea", configurationManager.isActive("access.registration.showServiceArea", true));
+		session.setAttribute("showServiceArea", configurationManager.isActive("access.registration.showServiceArea", false));
 		session.setAttribute("showJobTitle", configurationManager.isActive("access.registration.showJobTitle", true));
 		session.setAttribute("showWorkplace", configurationManager.isActive("access.registration.showWorkplace", true));
 		session.setAttribute("showComment", configurationManager.isActive("access.registration.showComment", true));
 		session.setAttribute("useBirthdateForRegistration", configurationManager.isActive("access.registration.useBirthdate", false));
 		session.setAttribute("useWaitlists", configurationManager.isActive("access.registration.useWaitlists", true));
+		session.setAttribute("useParticipants", configurationManager.isActive("access.registration.useParticipants", false));
 		
 		// organization
 		session.setAttribute("useOrganizationType", configurationManager.isActive("access.organization.useType", false));

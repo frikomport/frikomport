@@ -468,10 +468,12 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		// common configurations
 		configurationsToInsert.add(new Configuration("access.course.singleprice", false, null));
 		configurationsToInsert.add(new Configuration("access.course.showAttendantDetails", true, null));
+
 		configurationsToInsert.add(new Configuration("access.registration.delete", false, null));
 		configurationsToInsert.add(new Configuration("access.registration.userdefaults", false, null));
 		configurationsToInsert.add(new Configuration("access.registration.emailrepeat", false, null));
 		configurationsToInsert.add(new Configuration("access.registration.showCancelled", true, null));
+		configurationsToInsert.add(new Configuration("access.registration.showServiceArea", false, null));
 
 		configurationsToInsert.add(new Configuration("access.location.usePostalCode", true, null));
 
@@ -482,13 +484,13 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
 		configurationsToInsert.add(new Configuration("mail.registration.notifyResponsible", false, null));
 
-		configurationsToInsert.add(new Configuration("show.menu", false, null));
 
 		// profile
 		configurationsToInsert.add(new Configuration("access.profile.showAddress", true, null));
 
 		if (ApplicationResourcesUtil.isSVV()) {
 			// configurations specific for FKPSVV enviroment.
+			configurationsToInsert.add(new Configuration("show.menu", false, null));
 
 			// registrationForm
 			configurationsToInsert.add(new Configuration("access.registration.showEmployeeFields", false, null));
@@ -508,13 +510,13 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			configurationsToInsert.add(new Configuration("access.course.showRole", false, null));
 			configurationsToInsert.add(new Configuration("access.course.showType", false, null));
 			configurationsToInsert.add(new Configuration("access.course.showRestricted", false, null));
-			configurationsToInsert.add(new Configuration("access.course.useServiceArea", false, null));
 			configurationsToInsert.add(new Configuration("access.course.showCourseName", false, null));
 			configurationsToInsert.add(new Configuration("access.course.useAttendants", true, null));
 			configurationsToInsert.add(new Configuration("access.course.useRegisterBy", false, null));
 			configurationsToInsert.add(new Configuration("access.course.useOrganization2", true, null));
 			configurationsToInsert.add(new Configuration("access.course.showDescriptionToPublic", false, null));
 			configurationsToInsert.add(new Configuration("access.course.showCourseUntilFinished", false, null));
+			configurationsToInsert.add(new Configuration("access.course.showAdditionalInfo", false, null));
 
 			// location
 			configurationsToInsert.add(new Configuration("access.location.useOrganization2", true, null));
@@ -533,10 +535,10 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
 		} else {
 			// configurations specific for non-FKPSVV enviroment.
+			configurationsToInsert.add(new Configuration("show.menu", true, null));
 
 			// registrationForm
 			configurationsToInsert.add(new Configuration("access.registration.showEmployeeFields", true, null));
-			configurationsToInsert.add(new Configuration("access.registration.showServiceArea", true, null));
 			configurationsToInsert.add(new Configuration("access.registration.showJobTitle", true, null));
 			configurationsToInsert.add(new Configuration("access.registration.showWorkplace", true, null));
 			configurationsToInsert.add(new Configuration("access.registration.useBirthdate", false, null));
@@ -544,20 +546,24 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			configurationsToInsert.add(new Configuration("access.registration.useWaitlists", true, null));
 			configurationsToInsert.add(new Configuration("access.registration.showComment", true, null));
 			configurationsToInsert.add(new Configuration("access.registration.useParticipants", false, null));
+			configurationsToInsert.add(new Configuration("access.registration.userdefaults", false, null));
 
 			// course
-			configurationsToInsert.add(new Configuration("access.course.usePayment", true, null));
+			configurationsToInsert.add(new Configuration("access.course.filterlocation", false, null));
+			configurationsToInsert.add(new Configuration("access.course.showCourseName", true, null));
 			configurationsToInsert.add(new Configuration("access.course.showDuration", true, null));
+			configurationsToInsert.add(new Configuration("access.course.showDescriptionToPublic", true, null));
+			configurationsToInsert.add(new Configuration("access.course.showCourseUntilFinished", true, null));
 			configurationsToInsert.add(new Configuration("access.course.showRole", true, null));
 			configurationsToInsert.add(new Configuration("access.course.showType", true, null));
 			configurationsToInsert.add(new Configuration("access.course.showRestricted", true, null));
+			configurationsToInsert.add(new Configuration("access.course.showAdditionalInfo", true, null));
+
+			configurationsToInsert.add(new Configuration("access.course.usePayment", true, null));
 			configurationsToInsert.add(new Configuration("access.course.useServiceArea", true, null));
-			configurationsToInsert.add(new Configuration("access.course.showCourseName", true, null));
 			configurationsToInsert.add(new Configuration("access.course.useAttendants", false, null));
 			configurationsToInsert.add(new Configuration("access.course.useRegisterBy", true, null));
 			configurationsToInsert.add(new Configuration("access.course.useOrganization2", false, null));
-			configurationsToInsert.add(new Configuration("access.course.showDescriptionToPublic", true, null));
-			configurationsToInsert.add(new Configuration("access.course.showCourseUntilFinished", true, null));
 
 			// location
 			configurationsToInsert.add(new Configuration("access.location.useOrganization2", false, null));
@@ -1269,7 +1275,6 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	 */
 	private void deleteConfigurations(){
 		List<String> delete = new ArrayList<String>();
-		delete.add("access.course.showAdditionalInfo");
 		// add configurations to delete here..!
 
 		if (!ApplicationResourcesUtil.isSVV()) {

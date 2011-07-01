@@ -278,6 +278,19 @@
 	</tr>
 </c:if>
 
+<c:if test="${showAdditionalInfo}">
+	<tr>
+		<th>
+			<fmt:message key="course.additionalinfo" />
+		</th>
+		<td>
+			<spring:bind path="course.additionalinfo">
+				<c:out value="${status.value}" />
+			</spring:bind>
+		</td>
+	</tr>
+</c:if>
+
 <c:if test="${!isSVV}">
 <tr>
 	<th>

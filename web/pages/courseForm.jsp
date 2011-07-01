@@ -4,7 +4,6 @@
 <fmt:message key="time.format" var="timeformat" />
 <fmt:message key="date.format.localized" var="datelocalized" />
 <fmt:message key="time.format.localized" var="timelocalized" />
-<fmt:message key="access.course.filterlocation" var="filterlocation" />
 
 <SCRIPT LANGUAGE="JavaScript" ID="js1">
 var cal1 = new CalendarPopup();
@@ -405,7 +404,7 @@ function fillSelect(obj){
 			</th>
 			<td>
                 <c:choose>
-                    <c:when test="${filterlocation == true}">
+                    <c:when test="${filterlocation}">
                 <spring:bind path="course.locationid">
 					<select name="<c:out value="${status.expression}"/>">
 						<c:forEach var="location" items="${locations}">
@@ -653,6 +652,19 @@ function fillSelect(obj){
 				<form:hidden path="chargeoverdue" />
 			</c:otherwise>
 		</c:choose>
+		
+		<c:if test="${showAdditionalInfo}">
+		<tr>
+			<th>
+				<soak:label key="course.additionalinfo" />
+			</th>
+
+			<td>
+				<form:textarea cols="50" rows="3" path="additionalinfo"/>
+				<form:errors cssClass="fieldError" htmlEscape="false" path="additionalinfo" />
+			</td>
+		</tr>
+		</c:if>
 		
 		<tr>
 			<th>
