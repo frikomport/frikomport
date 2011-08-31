@@ -406,7 +406,7 @@
 			</tr>
 			<c:if test="${!empty courseList && (isAdmin || isEducationResponsible || isEventResponsible || isReader || isSVV) && registration.status < 3}">
 			<tr>
-				<th>
+				<th align="left">
 					<c:choose>
 						<c:when test="${registration.course.status != 3}">
 							<soak:label key="registration.changeCourse" />

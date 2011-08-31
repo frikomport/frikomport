@@ -102,14 +102,14 @@ cal1.setTodayText("Idag");
 	<li>"<b>Antall påmeldinger</b>": Antall påmeldinger til kurs/arrangementer innen organisasjon/tjenesteområde i statistikkperioden.</li>
 
 	<c:if test="${useParticipants}">
-	<li>"<b>Antall påmeldte</b>": Summen av feltet "Antall deltakere" for påmeldingene til møter innen området/regionen i statistikkperioden.</li>
+	<li>"<b>Antall påmeldte</b>": Summen av feltet "Antall deltakere" for påmeldingene til kurs/arrangementer innen området/regionen i statistikkperioden.</li>
 	</c:if>
 
 	<c:if test="${useAttendants}">
-	<li>"<b>Antall fremmøtte</b>": Tas fra oppmøteregistreringen som er gjort for møtet. Dersom denne ikke er gjort, tas summen av "Antall påmeldte" for møtets påmeldinger. Tallet beregnes for møter innen området/regionen i statistikkperioden.</li>
+	<li>"<b>Antall fremmøtte</b>": Tas fra oppmøteregistreringen som er gjort for kurset/arrangementet. Dersom denne ikke er gjort, tas summen av "Antall påmeldte" for kursets/arrangementets påmeldinger. Tallet beregnes for kurs/arrangement innen organisasjon/område i statistikkperioden.</li>
 	</c:if>
 	&nbsp;<br>
-	<li><b>Upubliserte møter teller med på linje med publiserte møter.</b></li>
+	<li><b>Upubliserte kurs/arrangementer teller med på linje med publiserte kurs/arrangementer.</b></li>
 </ul>
 
 <p/><br/>

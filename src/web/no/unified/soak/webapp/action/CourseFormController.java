@@ -491,9 +491,7 @@ public class CourseFormController extends BaseFormController {
 				course.setStatus(CourseStatus.COURSE_CANCELLED);
 			}
 
-			if (!configurationManager.isActive("access.course.usePayment", true)) {
-				enrichWithDefaultvaluesToAvoidErrors(course);
-			}
+			enrichWithDefaultvaluesToAvoidErrors(course);
 
 			if (validateAnnotations(course, errors, null) > 0) {
 				args = new Object[] {};

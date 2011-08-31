@@ -33,146 +33,151 @@ import org.hibernate.SQLQuery;
 public class StatisticsDAOHibernate extends BaseDAOHibernate implements StatisticsDAO {
 
 	public List<StatisticsTableRow> findByDates(Date beginPeriod, Date endPeriod) {
-		String sql = "";
-		if (DefaultQuotedNamingStrategy.usesOracle()) {
-			sql = "select Region, Område, \r\n"
-				+ "sum(partNumCourses) as numCourses, \r\n"
-				+ "sum(partNumRegistrations) as numRegistrations, \r\n"
-				+ "sum(partNumRegistered) as numRegistered, \r\n"
-				+ "sum(partNumAttendants) as numAttendants \r\n"
-				+ "from ( \r\n"
-					+ "select C.\"id\" as cid, OP.\"name\" as Region, O.\"name\" as Område, \r\n"
-					+ "count(distinct C.\"id\") as partNumCourses, \r\n"
-					+ "count(R.\"id\") as partNumRegistrations, \r\n"
-					+ "sum(R.\"participants\") as partNumRegistered, \r\n"
-						+ "(select C2.\"attendants\" from COURSE C2 where C2.\"id\" = C.\"id\") as partNumAttendants \r\n"
+		try {
+			String sql = "";
+			if (DefaultQuotedNamingStrategy.usesOracle()) {
+				sql = "select Region, Område, \r\n"
+					+ "sum(partNumCourses) as numCourses, \r\n"
+					+ "sum(partNumRegistrations) as numRegistrations, \r\n"
+					+ "sum(partNumRegistered) as numRegistered, \r\n"
+					+ "sum(partNumAttendants) as numAttendants \r\n"
+					+ "from ( \r\n"
+						+ "select C.\"id\" as cid, OP.\"name\" as Region, O.\"name\" as Område, \r\n"
+						+ "count(distinct C.\"id\") as partNumCourses, \r\n"
+						+ "count(R.\"id\") as partNumRegistrations, \r\n"
+						+ "sum(R.\"participants\") as partNumRegistered, \r\n"
+							+ "(select C2.\"attendants\" from COURSE C2 where C2.\"id\" = C.\"id\") as partNumAttendants \r\n"
+				
+						+ "from ORGANIZATION O \r\n"
+						+ "inner join COURSE C on O.\"id\" = C.\"organization2id\" \r\n"
+						+ "left outer join REGISTRATION R on (R.\"courseid\" = C.\"id\" and R.\"status\" = 2) \r\n"
+						+ "left outer join ORGANIZATION OP on OP.\"id\" = O.\"parentid\" \r\n"
+				
+						+ "where \r\n"
+						// for testing i Aqua Data Studio el. benytt følgende for generering av timestamp: to_timestamp('2011-05-02 00:00:00','yyyy-mm-dd hh24:mi:ss')
+						+ "C.\"starttime\" >= :beginPeriod and C.\"starttime\" <= :endPeriod \r\n"
+						+ "and C.\"attendants\" > 0 and O.\"type\" = 3 and C.\"status\" != 3 \r\n"
+								
+						+ "group by (C.\"id\", OP.\"name\", O.\"name\") \r\n"
+					+ ") "
+					+ "group by rollup (Region, Område) \r\n"
+											
+					+ "union \r\n"
 			
+					+ "select OP.\"name\" as Region, O.\"name\" as Område, \r\n" 
+					+ "count(distinct C.\"id\") as numCourses, \r\n"
+					+ "count(R.\"id\") as numRegistrations, \r\n"
+					+ "sum(R.\"participants\") as numRegistered, \r\n"
+					+ "sum(R.\"participants\") as numAttendants  \r\n"
+						
 					+ "from ORGANIZATION O \r\n"
 					+ "inner join COURSE C on O.\"id\" = C.\"organization2id\" \r\n"
-					+ "left outer join REGISTRATION R on (R.\"courseid\" = C.\"id\" and R.\"status\" = 2) \r\n"
+					+ "inner join REGISTRATION R on R.\"courseid\" = C.\"id\" \r\n"
 					+ "left outer join ORGANIZATION OP on OP.\"id\" = O.\"parentid\" \r\n"
-			
+						
 					+ "where \r\n"
 					// for testing i Aqua Data Studio el. benytt følgende for generering av timestamp: to_timestamp('2011-05-02 00:00:00','yyyy-mm-dd hh24:mi:ss')
 					+ "C.\"starttime\" >= :beginPeriod and C.\"starttime\" <= :endPeriod \r\n"
-					+ "and C.\"attendants\" > 0 and O.\"type\" = 3 and C.\"status\" != 3 \r\n"
-							
-					+ "group by (C.\"id\", OP.\"name\", O.\"name\") \r\n"
-				+ ") "
-				+ "group by rollup (Region, Område) \r\n"
-										
-				+ "union \r\n"
-		
-				+ "select OP.\"name\" as Region, O.\"name\" as Område, \r\n" 
-				+ "count(distinct C.\"id\") as numCourses, \r\n"
-				+ "count(R.\"id\") as numRegistrations, \r\n"
-				+ "sum(R.\"participants\") as numRegistered, \r\n"
-				+ "sum(R.\"participants\") as numAttendants  \r\n"
-					
-				+ "from ORGANIZATION O \r\n"
-				+ "inner join COURSE C on O.\"id\" = C.\"organization2id\" \r\n"
-				+ "inner join REGISTRATION R on R.\"courseid\" = C.\"id\" \r\n"
-				+ "left outer join ORGANIZATION OP on OP.\"id\" = O.\"parentid\" \r\n"
-					
-				+ "where \r\n"
-				// for testing i Aqua Data Studio el. benytt følgende for generering av timestamp: to_timestamp('2011-05-02 00:00:00','yyyy-mm-dd hh24:mi:ss')
-				+ "C.\"starttime\" >= :beginPeriod and C.\"starttime\" <= :endPeriod \r\n"
-				+ "and (C.\"attendants\" is null or C.\"attendants\" = 0) \r\n"
-				+ "and R.\"status\" = 2 and O.\"type\" = 3 and C.\"status\" != 3 \r\n"
-				+ "group by rollup (OP.\"name\", O.\"name\") \r\n"
-					
-				+ "order by 1 asc, 2 desc";
-		} else {
-			sql = "select F.Organisasjon, F.Tjenesteomrade, \r\n" 
-				+ "sum(F.partNumCourses) as numCourses, \r\n"
-				+ "sum(F.partNumRegistrations) as numRegistrations, \r\n"
-				+ "sum(F.partNumRegistered) as numRegistered, \r\n"
-				+ "sum(F.partNumAttendants) as numAttendants \r\n"
-				+ "from ( \r\n"
-				+ "select C.id as cid, O.name as Organisasjon, S.name as Tjenesteomrade, \r\n"
-				+ "count(distinct C.id) as partNumCourses, \r\n"
-				+ "count(R.id) as partNumRegistrations, \r\n"
-				+ "sum(R.participants) as partNumRegistered, \r\n"
-				+ "(select C2.attendants from course C2 where C2.id = C.id) as partNumAttendants \r\n" 
-				+ "from servicearea S \r\n" 
-				+ "inner join course C on C.serviceareaid = S.id \r\n" 
-				+ "left outer join registration R on (R.courseid = C.id and R.status = 2) \r\n" 
-				+ "left outer join organization O on O.id = S.organizationid \r\n"
-				+ "where \r\n"
-				+ "C.starttime >= :beginPeriod  and C.starttime <= :endPeriod \r\n"
-				+ "and C.attendants > 0 and C.status != 3 \r\n" 
-				+ "group by C.id, O.name, S.name \r\n" 
-				+ ") as F \r\n"
-				+ "group by F.Organisasjon, F.Tjenesteomrade with rollup \r\n" 
-														
-				+ "union \r\n"
+					+ "and (C.\"attendants\" is null or C.\"attendants\" = 0) \r\n"
+					+ "and R.\"status\" = 2 and O.\"type\" = 3 and C.\"status\" != 3 \r\n"
+					+ "group by rollup (OP.\"name\", O.\"name\") \r\n"
 						
-				+ "select O.name as Organisasjon, S.name as Tjenesteomrade, \r\n" 
-				+ "count(distinct C.id) as numCourses, \r\n"
-				+ "count(R.id) as numRegistrations, \r\n"
-				+ "sum(R.participants) as numRegistered, \r\n" 
-				+ "sum(R.participants) as numAttendants \r\n"  
-				
-				+ "from servicearea S \r\n"
-				+ "inner join course C on C.serviceareaid = S.id \r\n"
-				+ "inner join registration R on R.courseid = C.id \r\n" 
-				+ "left outer join organization O on O.id = S.organizationid \r\n" 
-				
-				+ "where \r\n" 
-				    // for testing i Aqua Data Studio el. benytt følgende for generering av timestamp: to_timestamp('2011-05-02 00:00:00','yyyy-mm-dd hh24:mi:ss')
-				+ "C.starttime >= :beginPeriod  and C.starttime <= :endPeriod \r\n" 
-				+ "and (C.attendants is null or C.attendants = 0) \r\n" 
-				+ "and R.status = 2 and C.status != 3 \r\n"
-				+ "group by Organisasjon, Tjenesteomrade with rollup \r\n" 
-									
-				+ "order by 1 asc, 2 asc";
-		}
-
-		SQLQuery query = getSession().createSQLQuery(sql);
-
-		query.setDate("beginPeriod", beginPeriod);
-		query.setDate("endPeriod", endPeriod);
-		List<Object[]> objRow = query.list();
-		List<StatisticsTableRow> statRows = new ArrayList<StatisticsTableRow>(60);
-		StatisticsTableRow prevRow = null;
-		for (Object[] objArr : objRow) {
-			StatisticsTableRow currentRow = new StatisticsTableRow((String) objArr[0], (String) objArr[1], toLong(objArr[2]),
-					toLong(objArr[3]), toLong(objArr[4]), toLong(objArr[5]));
-			if (currentRow.getUnitParent() == null) {
-				if(ApplicationResourcesUtil.isSVV()){ currentRow.setUnit("Hele landet"); }
-				else { currentRow.setUnit("Alle organisasjoner"); }
-				currentRow.setCssClass("sumfinal");
+					+ "order by 1 asc, 2 desc";
+			} else {
+				sql = "select F.Organisasjon, F.Tjenesteomrade, \r\n" 
+					+ "sum(F.partNumCourses) as numCourses, \r\n"
+					+ "sum(F.partNumRegistrations) as numRegistrations, \r\n"
+					+ "sum(F.partNumRegistered) as numRegistered, \r\n"
+					+ "sum(F.partNumAttendants) as numAttendants \r\n"
+					+ "from ( \r\n"
+					+ "select C.id as cid, O.name as Organisasjon, S.name as Tjenesteomrade, \r\n"
+					+ "count(distinct C.id) as partNumCourses, \r\n"
+					+ "count(R.id) as partNumRegistrations, \r\n"
+					+ "sum(R.participants) as partNumRegistered, \r\n"
+					+ "(select C2.attendants from course C2 where C2.id = C.id) as partNumAttendants \r\n" 
+					+ "from servicearea S \r\n" 
+					+ "inner join course C on C.serviceareaid = S.id \r\n" 
+					+ "left outer join registration R on (R.courseid = C.id and R.status = 2) \r\n" 
+					+ "left outer join organization O on O.id = S.organizationid \r\n"
+					+ "where \r\n"
+					+ "C.starttime >= :beginPeriod  and C.starttime <= :endPeriod \r\n"
+					+ "and C.attendants > 0 and C.status != 3 \r\n" 
+					+ "group by C.id, O.name, S.name \r\n" 
+					+ ") as F \r\n"
+					+ "group by F.Organisasjon, F.Tjenesteomrade with rollup \r\n" 
+															
+					+ "union \r\n"
+							
+					+ "select O.name as Organisasjon, S.name as Tjenesteomrade, \r\n" 
+					+ "count(distinct C.id) as numCourses, \r\n"
+					+ "count(R.id) as numRegistrations, \r\n"
+					+ "sum(R.participants) as numRegistered, \r\n" 
+					+ "sum(R.participants) as numAttendants \r\n"  
+					
+					+ "from servicearea S \r\n"
+					+ "inner join course C on C.serviceareaid = S.id \r\n"
+					+ "inner join registration R on R.courseid = C.id \r\n" 
+					+ "left outer join organization O on O.id = S.organizationid \r\n" 
+					
+					+ "where \r\n" 
+					    // for testing i Aqua Data Studio el. benytt følgende for generering av timestamp: to_timestamp('2011-05-02 00:00:00','yyyy-mm-dd hh24:mi:ss')
+					+ "C.starttime >= :beginPeriod  and C.starttime <= :endPeriod \r\n" 
+					+ "and (C.attendants is null or C.attendants = 0) \r\n" 
+					+ "and R.status = 2 and C.status != 3 \r\n"
+					+ "group by Organisasjon, Tjenesteomrade with rollup"; 
 			}
-			else if (currentRow.getUnit() == null) {
-				currentRow.setUnit(currentRow.getUnitParent());
-				currentRow.setCssClass("sum1");
-			}
-			else {
-				currentRow.setUnit(currentRow.getUnit());
+	
+			SQLQuery query = getSession().createSQLQuery(sql);
+	
+			query.setDate("beginPeriod", beginPeriod);
+			query.setDate("endPeriod", endPeriod);
+			List<Object[]> objRow = query.list();
+			List<StatisticsTableRow> statRows = new ArrayList<StatisticsTableRow>(60);
+			StatisticsTableRow prevRow = null;
+			for (Object[] objArr : objRow) {
+				StatisticsTableRow currentRow = new StatisticsTableRow((String) objArr[0], (String) objArr[1], toLong(objArr[2]),
+						toLong(objArr[3]), toLong(objArr[4]), toLong(objArr[5]));
+				if (currentRow.getUnitParent() == null) {
+					if(ApplicationResourcesUtil.isSVV()){ currentRow.setUnit("Hele landet"); }
+					else { currentRow.setUnit("Alle organisasjoner"); }
+					currentRow.setCssClass("sumfinal");
+				}
+				else if (currentRow.getUnit() == null) {
+					currentRow.setUnit(currentRow.getUnitParent());
+					currentRow.setCssClass("sum1");
+				}
+				else {
+					currentRow.setUnit(currentRow.getUnit());
+				}
+				
+				if (prevRow == null) {
+					prevRow = currentRow;
+					statRows.add(currentRow);
+					continue;
+				}
+				
+				if (StringUtils.equals(prevRow.getUnit(), currentRow.getUnit())
+						&& StringUtils.equals(prevRow.getUnitParent(), currentRow.getUnitParent())) {
+					prevRow.setNumAttendants(prevRow.getNumAttendants() + currentRow.getNumAttendants());
+					prevRow.setNumCourses(prevRow.getNumCourses() + currentRow.getNumCourses());
+					prevRow.setNumRegistered(prevRow.getNumRegistered() + currentRow.getNumRegistered());
+					prevRow.setNumRegistrations(prevRow.getNumRegistrations() + currentRow.getNumRegistrations());
+				} 
+				else {
+					statRows.add(currentRow);
+					prevRow = currentRow;
+				}
 			}
 			
-			if (prevRow == null) {
-				prevRow = currentRow;
-				statRows.add(currentRow);
-				continue;
-			}
-			
-			if (StringUtils.equals(prevRow.getUnit(), currentRow.getUnit())
-					&& StringUtils.equals(prevRow.getUnitParent(), currentRow.getUnitParent())) {
-				prevRow.setNumAttendants(prevRow.getNumAttendants() + currentRow.getNumAttendants());
-				prevRow.setNumCourses(prevRow.getNumCourses() + currentRow.getNumCourses());
-				prevRow.setNumRegistered(prevRow.getNumRegistered() + currentRow.getNumRegistered());
-				prevRow.setNumRegistrations(prevRow.getNumRegistrations() + currentRow.getNumRegistrations());
-			} 
-			else {
-				statRows.add(currentRow);
-				prevRow = currentRow;
-			}
+			if(statRows.isEmpty()) statRows = null;
+	
+			return statRows;
+		
 		}
-		
-		if(statRows.isEmpty()) statRows = null;
-		
-		return statRows;
+		catch(Exception e){
+			logger.error("Feil ved uthenting av statistikkdata", e);
+			return null;
+		}
 	}
 
 	public List<Course> findEmptyCoursesByDates(Date beginPeriod, Date endPeriod){

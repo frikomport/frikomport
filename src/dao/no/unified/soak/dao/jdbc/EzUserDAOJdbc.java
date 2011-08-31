@@ -79,7 +79,7 @@ public class EzUserDAOJdbc implements ExtUserDAO {
 		boolean fakeLogin = false;
 		if(Constants.FAKE_LOGIN.equals(sessionId)){
 			// session_key for bruker som ønskes benyttet
-			sessionId = "a1uioe5jh652ql4jp4aluqgcv5";
+			sessionId = "qfb4q61lgduigesf41q7kq4kt5";
 			fakeLogin = true; // ikke sjekk utløp for session
 		}
 		

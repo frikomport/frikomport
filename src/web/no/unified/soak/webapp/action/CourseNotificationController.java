@@ -292,10 +292,13 @@ public class CourseNotificationController extends BaseFormController {
         senders.add(userfrom);
 
         User responsible = course.getResponsible();
-        if(!user.equals(responsible)){
-            String responsiblefrom = responsible.getFullName() + " <" + responsible.getEmail() + ">";
-            senders.add(responsiblefrom);
-        }
+        try {
+	        if(!user.equals(responsible)){
+	            String responsiblefrom = responsible.getFullName() + " <" + responsible.getEmail() + ">";
+	            senders.add(responsiblefrom);
+	        }
+        }catch(Exception e){/* do nothing -- added based on "onetime"-e*/ }
+
         return senders;
     }
     
