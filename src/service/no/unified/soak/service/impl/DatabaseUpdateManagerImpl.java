@@ -1136,24 +1136,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 					course.setRestricted(false);
 					save = true;
 				}
-				// service areas
-				if (configurationManager.isActive("access.course.useServiceArea", true)
-						&& !course.getServiceArea().getOrganizationid().equals(course.getOrganizationid())) {
-					// må hente servicearea som passer
-					ServiceArea search = new ServiceArea();
-					search.setOrganizationid(course.getOrganizationid());
-					List<ServiceArea> serviceAreas = serviceAreaManager.searchServiceAreas(search);
-					Iterator<ServiceArea> sit = serviceAreas.iterator();
-					while (sit.hasNext()) {
-						ServiceArea serviceArea = sit.next();
-						if (course.getServiceArea().getName().equals(serviceArea.getName())) {
-							course.setServiceArea(serviceArea);
-							course.setServiceAreaid(serviceArea.getId());
-							save = true;
-							break;
-						}
-					}
-				}
+
 				if (course.getCategory() == null || course.getCategoryid() == 0) {
 					Category category = categoryManager.getCategory(Category.Name.HENDELSE.getDBValue());
 					course.setCategory(category);
