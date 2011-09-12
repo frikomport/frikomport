@@ -13,8 +13,11 @@ package no.unified.soak.dao.hibernate;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Vector;
 
 import no.unified.soak.dao.StatisticsDAO;
 import no.unified.soak.model.Course;
@@ -24,6 +27,8 @@ import no.unified.soak.util.DefaultQuotedNamingStrategy;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.SQLQuery;
+
+import com.sun.org.apache.xalan.internal.xsltc.runtime.Hashtable;
 
 /**
  * Implementation of the CourseDAO
@@ -167,6 +172,60 @@ public class StatisticsDAOHibernate extends BaseDAOHibernate implements Statisti
 					statRows.add(currentRow);
 					prevRow = currentRow;
 				}
+			}
+
+
+			if (!DefaultQuotedNamingStrategy.usesOracle()) {
+				// Alternativ sortering av rader pga. manglende støtte for kombinasjon av rollup og order by for mysql-versjon(er) på fkp01/02.
+				// Alle rader har allerede korrekte summer og css-param, men trenger og resorteres ettersom rollup legger på ekstra rader.
+				
+//				System.out.println("Antall rader funnet: " + statRows.size());
+				Hashtable rowHolder = new Hashtable();
+				StatisticsTableRow lastRowWithSumTotal = null;
+				
+				// putter alle rader i en hash med unitparent + unit som nøkkel
+				Object[] rows = statRows.toArray();
+				for(int r=0; r<rows.length; r++){
+					StatisticsTableRow current = (StatisticsTableRow)rows[r];
+//					System.out.println("Prosesserer rad: " + current.getUnitParent() + " / " + current.getUnit());
+					if(current.getUnitParent() != null){
+						String elementKey = current.getUnitParent() + (current.getUnit().equals(current.getUnitParent()) ? "" : current.getUnit()); // organisasjoner har "seg selv både som parent og unit)
+						rowHolder.put(elementKey, current);
+//						System.out.println("... lagt til i rowHolder!");
+					}else{
+						// siste rad med totalsum
+						lastRowWithSumTotal = current;
+//						System.out.println("... lagt til i som siste!");
+					}
+				}
+				
+				// legger alle nøkler i en vektor
+				Enumeration keys = rowHolder.keys();
+				Vector tmp = new Vector();
+				while(keys.hasMoreElements()){
+					String key = (String)keys.nextElement();
+					tmp.add(key);
+				}
+//				System.out.println("Antall nøkler: " + tmp.size());
+				
+				// sorterer alle nøkler
+				Object[] keysSorted = tmp.toArray();
+				Arrays.sort(keysSorted);
+				
+				List<StatisticsTableRow> statRowsSorted = new ArrayList<StatisticsTableRow>(60);
+				// henter ut rader basert sortert nøkkelliste
+				for(int k=0; k<keysSorted.length; k++){
+					String key = (String)keysSorted[k];
+//					System.out.println("Henter ut rad basert på : \"" + key + "\"");
+					statRowsSorted.add((StatisticsTableRow)rowHolder.get(key));
+				}
+	
+				// legger til siste rad på slutten
+				statRowsSorted.add(lastRowWithSumTotal); 
+//				System.out.println("Antall rader re-sortert: " + statRowsSorted.size());
+				
+				statRows = statRowsSorted;
+				// slutt alternativ sorting -----------------------------------------------
 			}
 			
 			if(statRows.isEmpty()) statRows = null;
