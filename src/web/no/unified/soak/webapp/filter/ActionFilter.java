@@ -335,10 +335,22 @@ public class ActionFilter implements Filter {
 			ExtUserDAO extUserDAO = (ExtUserDAO) getBean("extUserDAO");
 			ArrayList<String> roleListTranslated = new ArrayList<String>();
 			for (String roleDBString : roleNameList) {
-				// There is no reason to show the confusing anonymous role to
-				// the user.
+				
+				// There is no reason to show the confusing anonymous role to the user.
 				if (!roleDBString.equals(RoleEnum.ANONYMOUS.getJavaDBRolename())) {
-					roleListTranslated.add(extUserDAO.getStringForRole(RoleEnum.getRoleEnumFromJavaDBRolename(roleDBString)));
+					
+					RoleEnum re = RoleEnum.getRoleEnumFromJavaDBRolename(roleDBString); // oversetter fra eks. "employee" til EMPLOYEE (RoleEnum)
+					if(re != null){
+						String roleString = extUserDAO.getStringForRole(re);
+						roleListTranslated.add(roleString);
+					}
+					else {
+						// håndtering av egendefinerte roller fra eZ
+						if(roleDBString.indexOf("role_") != -1){
+							roleDBString = roleDBString.substring("role_".length()-1);
+							roleListTranslated.add(roleDBString);
+						}
+					}
 				}
 			}
 			request.setAttribute("userRolesString", StringUtils.join(roleListTranslated.iterator(), ", "));

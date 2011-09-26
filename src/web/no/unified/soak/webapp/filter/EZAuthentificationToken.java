@@ -120,8 +120,8 @@ public class EZAuthentificationToken implements Authentication {
 		else if("Kursansvarlig".equals(eZRole)) 		return "eventresponsible";
 		else if("Ansatt".equals(eZRole)) 				return "employee"; 
 		else if("Anonymous".equals(eZRole)) 			return "anonymous";
-		else if("FKPLesebruker".equals(eZRole)) 		return "reader"; 
-		return null;
+		else if("FKPLesebruker".equals(eZRole)) 		return "reader";
+		else return "role_" + eZRole; // for egendefinerte roller fra eZ
 	}
 
 

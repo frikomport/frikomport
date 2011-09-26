@@ -376,20 +376,21 @@ public class CourseFormController extends BaseFormController {
 			// Check if a default organization should be applied
 			User user = (User) request.getSession().getAttribute(Constants.USER_KEY);
 
-			// default organizations
-			Object orgId = user.getOrganizationid();
-			if ((orgId != null) && StringUtils.isNumeric(orgId.toString())) {
-				course.setOrganizationid(new Long(orgId.toString()));
+			if(user != null){
+				// default organizations
+				Object orgId = user.getOrganizationid();
+				if ((orgId != null) && StringUtils.isNumeric(orgId.toString())) {
+					course.setOrganizationid(new Long(orgId.toString()));
+				}
+	
+				Object org2id = user.getOrganization2id();
+				if ((org2id != null) && StringUtils.isNumeric(org2id.toString())) {
+					course.setOrganization2id(new Long(org2id.toString()));
+				}
+	
+				// Default responsible
+				course.setResponsibleUsername(user.getUsername());
 			}
-
-			Object org2id = user.getOrganization2id();
-			if ((org2id != null) && StringUtils.isNumeric(org2id.toString())) {
-				course.setOrganization2id(new Long(org2id.toString()));
-			}
-
-			// Default responsible
-			course.setResponsibleUsername(user.getUsername());
-
 		}
         if (newCourse != null) {
             return newCourse;

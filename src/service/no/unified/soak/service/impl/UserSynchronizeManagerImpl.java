@@ -112,7 +112,9 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 						log.info("Deaktivert: [" + local + "]");
 					} else {
 						processUser(extUser, null);
-						log.info("LDAP/eZ: " + extUser.getName() + " [" + extUser.getUsername() + "] " + extUser.getEmail());
+						String roller = "";
+						try { roller = " [" + extUser.getRolenames().toString() + "]"; }catch(Exception e) { /* do noting */ }
+						log.info("LDAP/eZ: " + extUser.getName() + " [" + extUser.getUsername() + "] " + extUser.getEmail() + roller);
 					}
 					antall++;
 				}

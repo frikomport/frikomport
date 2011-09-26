@@ -211,7 +211,7 @@ public class RegistrationFormController extends BaseFormController {
         // sett startYear 16år tilbake fra i dag - benyttes til CalendarPopup
         Calendar start = new GregorianCalendar();
         start.setTime(new Date());
-        start.add(Calendar.YEAR, -16);
+//        start.add(Calendar.YEAR, -16); // 16år var tilpasset SVV. Denne verdien bør property-styres for FKP
         model.put("startYear", start.getTime());
 
         // evnt. deaktivering av ventelistefunksjonalitet

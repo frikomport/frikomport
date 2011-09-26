@@ -6,7 +6,7 @@
 <fmt:message key="locationList.item" var="item"/>
 <fmt:message key="locationList.items" var="items"/>
 
-<form method="post" action="<c:url context="/${urlContext}" value="/listLocations.html"/>" id="locationList">
+<form method="post" action="<c:url value="/listLocations.html"/>" id="locationList">
     <INPUT type="hidden" id="ispostbacklocationlist" name="ispostbacklocationlist" value="1"/> 
     <div class="searchForm">
 	<ul>

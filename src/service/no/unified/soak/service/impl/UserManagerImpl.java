@@ -622,7 +622,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		else if("Ansatt".equals(role)) 				return "employee"; 
 		else if("Anonymous".equals(role)) 			return "anonymous";
 		else if("FKPLesebruker".equals(role)) 		return "reader"; 
-		return null;
+		else return "role_" + role; // for egendefinerte roller fra eZ
 	}
     
 }
