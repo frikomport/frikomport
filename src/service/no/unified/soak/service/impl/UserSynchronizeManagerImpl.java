@@ -72,7 +72,7 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 				} else {
 					processUser(ldapUser, null);
 					String roller = "";
-					try { roller = " [" + ldapUser.getRolenames().toString() + "]"; }catch(Exception e) { /* do noting */ }
+					try { roller = " roller: " + ldapUser.getRolenames().toString(); }catch(Exception e) { /* do noting */ }
 					log.info("LDAP: " + ldapUser.getName() + " [" + ldapUser.getUsername() + "] " + ldapUser.getEmail() + roller);
 				}
 			}
