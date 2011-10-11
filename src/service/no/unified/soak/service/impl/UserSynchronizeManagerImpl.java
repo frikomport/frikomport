@@ -69,11 +69,11 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 					// brukeren finnes ikke lenger i eksternt system, settes som inaktiv bruker
 					processUser(null, local.getUsername());
 					log.info("Deaktivert: " + local.getFullName() + " [" + local.getUsername() + "] " + local.getEmail());
-					log.debug("Deaktivert: " + local.getFullName() + " [" + local.getUsername() + "] " + local.getEmail());
 				} else {
 					processUser(ldapUser, null);
-					log.info("LDAP: " + ldapUser.getName() + " [" + ldapUser.getUsername() + "] " + ldapUser.getEmail());
-					log.debug("LDAP: " + ldapUser.getName() + " [" + ldapUser.getUsername() + "] " + ldapUser.getEmail());
+					String roller = "";
+					try { roller = " [" + ldapUser.getRolenames().toString() + "]"; }catch(Exception e) { /* do noting */ }
+					log.info("LDAP: " + ldapUser.getName() + " [" + ldapUser.getUsername() + "] " + ldapUser.getEmail() + roller);
 				}
 			}
 			log.info("Synkronisering av " + antall + " brukere ferdig!");
