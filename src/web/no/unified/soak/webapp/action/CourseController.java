@@ -268,7 +268,7 @@ public class CourseController extends BaseFormController {
         	}
         	else{ 
         		// isReader / isEventResponsible / isEducationResponsible / isAdministrator
-        			status = new Integer[]{ CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED };
+        			status = new Integer[]{ CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED, CourseStatus.COURSE_CANCELLED };
         	}
 	        
 			courseList = courseManager.searchCourses(course, starttime, stoptime, status);
@@ -547,7 +547,7 @@ public class CourseController extends BaseFormController {
                 model.put("enableExport", new Boolean(false));
 			} else {
 				// isReader / isEventResponsible / isEducationResponsible / isAdministrator
-				status = new Integer[] { CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED };
+				status = new Integer[] { CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED, CourseStatus.COURSE_CANCELLED };
 			}
 
 			if (StringUtils.isBlank(postalcode)) {

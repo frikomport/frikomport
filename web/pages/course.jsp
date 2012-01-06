@@ -14,7 +14,7 @@
         <c:if test="${course.status == 0}"><fmt:message key="course.status.created"/></c:if>
         <c:if test="${course.status == 1}"><fmt:message key="course.status.finished"/></c:if>
         <c:if test="${course.status == 2}"><fmt:message key="course.status.published"/></c:if>
-        <c:if test="${course.status == 3}"><fmt:message key="course.status.cancelled"/></c:if>
+        <c:if test="${course.status == 3}"><b><font color="red"><fmt:message key="course.status.cancelled"/>!</font></b></c:if>
 	</td>
 </tr>
 </c:if>

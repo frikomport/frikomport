@@ -199,10 +199,13 @@ SumBuild sumsExport = new SumBuild();
 		<c:if test="${showDescriptionToPublic || isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 			<c:set var="courseDescription"><c:out value="${courseList.description}"/></c:set>
 		</c:if>
-        <c:if test="${courseList.status == 3}"><img src="<c:url value="/images/cancel.png"/>"
-               		alt="<fmt:message key="icon.warning"/>" class="icon" /><fmt:message key="course.cancelled.alert"/><br/></c:if>
-         <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>" 
-         title="<c:out value="${courseDescription}"/>"><c:out value="${courseList.name}"/></a>
+        <c:if test="${courseList.status == 3 && !(isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
+        	<img src="<c:url value="/images/cancel.png"/>" alt="<fmt:message key="icon.warning"/>" class="icon" />
+        	<fmt:message key="course.cancelled.alert"/><br/>
+        </c:if>
+        <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>" 
+        	title="<c:out value="${courseDescription}"/>"><c:out value="${courseList.name}"/>
+        </a>
         <% sums.addToNextSum(null, null); %>
     </display:column>
     <% sumsTotal.addToNextSum(null, null); %>
