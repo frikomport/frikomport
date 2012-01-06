@@ -89,7 +89,7 @@
 	<display:column property="lastName" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.lastName"/>
 
     <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
-    <display:column media="ccsv cexcel cxml cpdf" property="email" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.email"/>
+    <display:column media="html ccsv cexcel cxml cpdf" property="email" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.email"/>
     </c:if>
 
 	 <c:if test="${useBirthdateForRegistration}">

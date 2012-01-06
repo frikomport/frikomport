@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import no.unified.soak.Constants;
+import no.unified.soak.dao.hibernate.RegistrationStatusCriteria;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.User;
@@ -222,23 +223,26 @@ public class CourseNotificationController extends BaseFormController {
      */
 	private void sendMail(Locale locale, Course course, int event, String mailComment, String from, List <String> changedList) {
 		log.debug("Sending mail from CourseNotificationController");
-		List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, (Status)null, null, null, null, null, null, null);
+		List<Registration> registrations = new ArrayList<Registration>();
 		
 		StringBuffer msg = null;
 		switch(event) {
 			case Constants.EMAIL_EVENT_COURSECHANGED:
+				registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, new RegistrationStatusCriteria(Status.RESERVED, Status.WAITING), null, null, null, null, null, null);
 				msg = MailUtil.createChangedBody(course, locale, messageSource, mailComment, changedList); 
 				break;
 			case Constants.EMAIL_EVENT_COURSECANCELLED:
+				registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, new RegistrationStatusCriteria(Status.RESERVED, Status.WAITING), null, null, null, null, null, null);
 				msg = MailUtil.create_EMAIL_EVENT_COURSECANCELLED_body(course, mailComment, configurationManager.getConfigurationsMap());
 				break;
 			default:
 				if(log.isDebugEnabled()) log.debug("sendMail: Handling of event:" + event + " not implemented..!");
+				return;
 		}
 		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, from, mailSender, false);
 		MailUtil.sendMimeMails(emails, mailEngine);
 		
-		if(configurationManager.isActive("mail.course.sendSummary", true)) {
+		if(configurationManager.isActive("mail.course.sendSummary", true) && !registrations.isEmpty()) {
 			MailUtil.sendSummaryToResponsibleAndInstructor(course, from, registrations, msg, mailEngine, mailSender);
 		}
 	}

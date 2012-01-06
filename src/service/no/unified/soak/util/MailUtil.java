@@ -842,13 +842,31 @@ public class MailUtil {
         String registered = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.phrase.registered"));
         String waiting = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.phrase.waitinglist"));
 
+        if(course.getStatus() == CourseStatus.COURSE_CANCELLED.intValue()){
+        	// ettersom kurset er avlyst er det naturlig å korrigere 
+        	// "du er påmeldt" til "du var påmeldt"
+        	// og "du står på venteliste til" til "du stod på venteliste til"
+        	// 
+        	registered = registered.replaceAll(" er ", " var ");
+        	waiting = waiting.replaceAll(" står ", " stod ");
+        }
+        
         for (Registration registration : registrations) {
             MimeMessage message = ((JavaMailSenderImpl) sender).createMimeMessage();
             MimeMessageHelper helper = null;
             try {
                 helper = new MimeMessageHelper(message, true, (ApplicationResourcesUtil.getText("mail.encoding")));
-                helper.setSubject(getSubject(registration, event, registered, waiting, course));
-                helper.setText(getBody(registration, msg, registered, waiting));
+                String subject = getSubject(registration, event, registered, waiting, course);
+                if(subject != null){
+                	helper.setSubject(subject);
+                }
+                
+                String body = getBody(registration, msg, registered, waiting);
+                if(body == null){
+                	// det er ingen grunn til å sende ut en tom epost
+                	continue;
+                }
+                helper.setText(body);
 
                 if(!ApplicationResourcesUtil.isSVV()){
                 	addCalendar(helper,event,course, registration);
