@@ -253,20 +253,62 @@ public class RegistrationFormController extends BaseFormController {
             registration = new Registration();
             registration.setCourseid(new Long(courseId));
             User user = (User) session.getAttribute(Constants.USER_KEY);
+            
             if(user != null && user.getOrganization() != null){
                 registration.setOrganization(user.getOrganization());
                 registration.setOrganizationid(user.getOrganization().getId());
             }
-            User regUser = null;
-            if (configurationManager.isActive("access.registration.userdefaults",false)) {
-                regUser = user;
-                if (user != null && user.getUsername().equals(Constants.ANONYMOUS_ROLE)) { // SA: dette ser ut som en skrivefeil, men jeg kan ikke se på det nå.. :-)
-                    regUser = (User) session.getAttribute(Constants.ALT_USER_KEY);
-                }
-            } else {
-                regUser = (User) session.getAttribute(Constants.ALT_USER_KEY);
+            User regUser = (User) session.getAttribute(Constants.ALT_USER_KEY);
+            
+            boolean aktivBrukerErInnlogget = false;
+            if(user != null){
+            	aktivBrukerErInnlogget = !user.getUsername().equals(Constants.ANONYMOUS_ROLE);
+            	// true  = Innlogget via eZ
+            	// false = temporær hashbruker
+//            	System.out.println("aktivBrukerErInnlogget: " + aktivBrukerErInnlogget);
             }
-
+            
+            if (configurationManager.isActive("access.registration.userdefaults",false) 
+            		&& configurationManager.isActive("access.registration.anonymous",true)) {
+            	// potensiell sammenblanding av forhåndsutfylt data
+            	if(user != null && regUser != null && aktivBrukerErInnlogget && !user.getUsername().equalsIgnoreCase(regUser.getUsername())){
+            		// innlogget bruker melder på flere (og andre enn seg selv) -- ikke forhåndsutfylle basert på "regUser"
+            		regUser = null;
+//                	System.out.println("SINDRE - debug 1");
+            	}
+            	else if(user != null && regUser == null && aktivBrukerErInnlogget){
+            		// forhåndsutfylle med informasjon fra innlogget bruker
+            		regUser = user;
+//                	System.out.println("SINDRE - debug 2");
+            	}
+            	else if(user != null && regUser != null && !aktivBrukerErInnlogget){
+            		// forhåndsutfylle med informasjon fra temporær bruker som allerede ligger i regUser-objektet
+//                	System.out.println("SINDRE - debug 3");
+            	}
+            	else {
+            		// user == null - ingen informasjon om bruker(e)
+            		regUser = null;
+//                	System.out.println("SINDRE - debug 4");
+            	}
+            }
+            else if(configurationManager.isActive("access.registration.anonymous",true) && !aktivBrukerErInnlogget){
+            	// kun forhåndsutfylle data for temporære brukere 
+            	if(user != null && regUser != null){
+            		// forhåndsutfylle med informasjon fra temporær bruker som allerede ligger i regUser-objektet
+//                	System.out.println("SINDRE - debug 5");
+            	}
+            }
+            else if(configurationManager.isActive("access.registration.userdefaults",false) && aktivBrukerErInnlogget){
+            	// forhåndsutfylle data for innloggede "ordentlige" brukere 
+        		regUser = user;
+//            	System.out.println("SINDRE - debug 6");
+            }
+            else{
+            	// ikke forhåndsutfylle data i skjema
+            	regUser = null;
+//            	System.out.println("SINDRE - debug 7");
+            }
+            
             if (regUser != null && !ApplicationResourcesUtil.isSVV()) {
                 registration.setFirstName(regUser.getFirstName());
                 registration.setLastName(regUser.getLastName());
@@ -511,8 +553,20 @@ public class RegistrationFormController extends BaseFormController {
             if(user == null){
                 user = userManager.addUser(registration);
             }
-            session.setAttribute(Constants.ALT_USER_KEY, user);
 
+			// For å unngå sammenblanding av innlogget bruker og temporære brukere (som følge av påmelding),
+            // legges ikke brukeren fra påmeldingen inn i sesjonen når den utføres av innlogget bruker (men kun for "Anonymous User")
+            User innloggetBruker = (User) session.getAttribute(Constants.USER_KEY);
+            if(innloggetBruker != null && !innloggetBruker.getUsername().equals(Constants.ANONYMOUS_ROLE)){
+            	// fjerner innhold i ALT_USER_KEY
+            	session.setAttribute(Constants.ALT_USER_KEY, null);
+            }
+            else {
+            	// legger bruker fra påmelding inn i ALT_USER_KEY
+            	session.setAttribute(Constants.ALT_USER_KEY, user);
+            }
+            // ----------------------------------------------------------------------------------------------------------------------
+            
             registration.setUser(user);
             registration.setUsername(user.getUsername());
 

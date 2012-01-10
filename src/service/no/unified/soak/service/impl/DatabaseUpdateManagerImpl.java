@@ -547,6 +547,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			configurationsToInsert.add(new Configuration("access.registration.showComment", true, null));
 			configurationsToInsert.add(new Configuration("access.registration.useParticipants", false, null));
 			configurationsToInsert.add(new Configuration("access.registration.userdefaults", false, null));
+			configurationsToInsert.add(new Configuration("access.registration.anonymous", true, null));
 
 			// course
 			configurationsToInsert.add(new Configuration("access.course.filterlocation", false, null));
