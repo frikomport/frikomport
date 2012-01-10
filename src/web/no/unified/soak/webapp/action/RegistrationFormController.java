@@ -251,6 +251,7 @@ public class RegistrationFormController extends BaseFormController {
             registration.setEmailRepeat(registration.getEmail());
         } else {
             registration = new Registration();
+            registration.setParticipants(1);
             registration.setCourseid(new Long(courseId));
             User user = (User) session.getAttribute(Constants.USER_KEY);
             
