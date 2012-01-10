@@ -298,13 +298,11 @@ SumBuild sumsExport = new SumBuild();
     <%sumsTotal.addToNextSum("registrationsSum", theCourse, "getNumberOfRegistrations");%>
 	</c:if>    
 
-	<c:if test="${useParticipants}">
     <display:column media="html csv excel pdf" property="numberOfParticipants" sortable="true" headerClass="sortable" titleKey="statistics.numRegistered">
     <%sums.addToNextSum("participantsSum", theCourse, "getNumberOfParticipants");%>
     <%sumsExport.addToNextSum("participantsSum", theCourse, "getNumberOfParticipants");%>
     </display:column>
     <%sumsTotal.addToNextSum("participantsSum", theCourse, "getNumberOfParticipants");%>
-	</c:if>
 
 	<c:if test="${containsFinished && useAttendants}">
     <display:column media="html csv excel pdf" property="attendants" sortable="true" headerClass="sortable" titleKey="statistics.numAttended">
