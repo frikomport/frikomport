@@ -681,26 +681,36 @@ function fillSelect(obj){
 			<td></td>
 			<td class="buttonBar">
 
-				<c:if
-					test="${isAdmin || isEducationResponsible || isEventResponsible}">
+				<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
+					
 					<input type="submit" class="button" name="save"
 						onclick="bCancel=false"
 						value="<fmt:message key="button.course.save"/>" />
-					<c:if test="${(!isPublished && !isSVV) || (!isPublished && !isCancelled && isSVV)}">
+					
+					<c:if test="${(!isPublished && !isCancelled && !isSVV) || (!isPublished && !isCancelled && isSVV)}">
 						<input type="submit" class="button large" name="publish"
 							onclick="bCancel=false" id="publishButton"
 							value="<fmt:message key="button.course.publish"/>" />
 					</c:if>
+
+					<c:if test="${(!isPublished && isCancelled && rePublishAllowed && !isSVV)}">
+						<input type="submit" class="button large" name="publish"
+							onclick="bCancel=false" id="publishButton"
+							value="<fmt:message key="button.course.republishcancelled"/>" />
+					</c:if>
+					
 					<c:if test="${isPublished && !isCancelled}">
 						<input type="submit" class="button" name="cancelled"
 							onclick="bCancel=true;return confirmCancellation('<fmt:message key="courseList.theitem"/>', '<c:out value="${cancelPrefix}"/>')"
 							value="<fmt:message key="button.course.cancel"/>" />
 					</c:if>
+					
 					<c:if test="${isPublished && canUnpublish}">
                         <input type="submit" class="button large" name="unpublish"
                             onclick="bCancel=false"
                             value="<fmt:message key="button.course.unpublish"/>" />
                     </c:if>
+					
 					<c:if test="${!empty course.id && !empty course.name && canDelete}">
 						<input type="submit" class="button large" name="delete"
 							onclick="bCancel=true;return confirmDelete('<fmt:message key="courseList.theitem"/>')"

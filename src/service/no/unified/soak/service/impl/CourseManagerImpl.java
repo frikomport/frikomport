@@ -219,7 +219,7 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
 		if (!originalCourse.getInstructorid().equals(changedCourse.getInstructorid())){
 			changedList.add("instructor");
 		}
-		if (originalCourse.getMaxAttendants() != changedCourse.getMaxAttendants()){
+		if (!originalCourse.getMaxAttendants().equals(changedCourse.getMaxAttendants())){
 			changedList.add("maxAttendants");
 		}
 		if (!StringUtils.equals(originalCourse.getDescription(), changedCourse.getDescription())){

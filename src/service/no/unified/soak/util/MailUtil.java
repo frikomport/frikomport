@@ -702,6 +702,25 @@ public class MailUtil {
 	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.name")) + ": "
 	                    + course.getName() + "\n");
 	        }
+	        if (changedList.contains("status")) {
+	        	String status = "";
+	        	switch(course.getStatus()){
+	        	case 0:
+	        		status = "Opprettet";
+	        		break;
+	        	case 1:
+	        		status = "Ferdig";
+	        		break;
+	        	case 2:
+	        		status = "Publisert";
+	        		break;
+	        	case 3:
+	        		status = "Avlyst";
+	        		break;
+	        	}
+	        	msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.status")) + ": "
+	                    + status + "\n");
+	        }
 	        if (changedList.contains("type")) {
 	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.type")) + ": "
 	                    + course.getType() + "\n");
