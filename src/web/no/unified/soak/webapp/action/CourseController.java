@@ -442,8 +442,6 @@ public class CourseController extends BaseFormController {
 		Course course = (Course) command;
 		Course unpublished = new Course();
 
-		course.setStatus(CourseStatus.COURSE_PUBLISHED);
-
 		// Set up parameters, and return them to the view
 		model = addServiceAreas(model, locale);
 		model = addOrganization(model, locale);
@@ -547,7 +545,7 @@ public class CourseController extends BaseFormController {
                 model.put("enableExport", new Boolean(false));
 			} else {
 				// isReader / isEventResponsible / isEducationResponsible / isAdministrator
-				status = new Integer[] { CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED, CourseStatus.COURSE_CANCELLED };
+				status = new Integer[] { CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED };
 			}
 
 			if (StringUtils.isBlank(postalcode)) {
@@ -583,7 +581,7 @@ public class CourseController extends BaseFormController {
                 model.put("enableExport", new Boolean(false));
 			} else {
 				// isReader / isEventResponsible / isEducationResponsible / isAdministrator
-				status = new Integer[] { CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED };
+				status = new Integer[] { CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED, CourseStatus.COURSE_CANCELLED };
 			}
 
 			courseList = courseManager.searchCourses(course, starttime, stoptime, status);
