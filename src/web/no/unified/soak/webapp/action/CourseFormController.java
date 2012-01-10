@@ -726,7 +726,9 @@ public class CourseFormController extends BaseFormController {
 	}
 
 	private void enrichWithDefaultvaluesToAvoidErrors(Course course) {
-		if(!configurationManager.isActive("access.course.usePayment", true)){ // dersom betaling for kurs er deaktivert
+
+		if(!configurationManager.isActive("access.course.usePayment", true)){ 
+			// dersom betaling for kurs er deaktivert
 			if (course.getReservedInternal() == null) {
 				course.setReservedInternal(0);
 			}
@@ -738,6 +740,16 @@ public class CourseFormController extends BaseFormController {
 			}
 		}
 
+		if(configurationManager.isActive("access.course.singleprice", false)){ 
+			// kun én pris og ingen reserverte plasser
+			if (course.getReservedInternal() == null) {
+				course.setReservedInternal(0);
+			}
+			if (course.getFeeInternal() == null) {
+				course.setFeeInternal(0d);
+			}
+		}
+		
 		if(course.getRegisterBy() == null && !configurationManager.isActive("access.course.useRegisterBy", true)){
 			// setter påmeldingsfrist til starttid dersom påmeldingsfrist ikke benyttes
 			course.setRegisterBy(course.getStartTime());
