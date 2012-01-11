@@ -409,8 +409,13 @@ public class RegistrationFormController extends BaseFormController {
         	
         	// Check email
         	if(configurationManager.isActive("access.registration.emailrepeat",false) &&  !registration.getEmail().equalsIgnoreCase(registration.getEmailRepeat())){
-                //                String error = "errors.email.notSame";
-                errors.rejectValue("email", "errors.email.notSame",  new Object[] { registration.getEmail(), registration.getEmailRepeat() }, "Email addresses not equal.");
+        		if(StringUtils.isEmpty(registration.getEmailRepeat())){
+            		errors.rejectValue("emailRepeat", "errors.emailRepeat.missing",  new Object[] { }, "Email must be repeated.");
+        		}
+        		else {
+        			errors.rejectValue("email", "errors.email.notSame",  new Object[] { "" }, "Email addresses not equal.");
+        			errors.rejectValue("emailRepeat", "errors.email.notSame",  new Object[] { " ("+registration.getEmailRepeat()+")" }, "Email addresses not equal.");
+        		}
 				registrationManager.evict(registration);
                 return showForm(request,response, errors);
             }

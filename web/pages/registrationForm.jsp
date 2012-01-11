@@ -161,10 +161,11 @@
             <c:if test="${emailrepeat}">
             <tr>
                 <th>
-                    <soak:label key="registration.emailRepeat" />
+                    * <soak:label key="registration.emailRepeat" />
                 </th>
                 <td>
-                    <form:input path="emailRepeat" maxlength="50"/>
+                    <!-- form:input path="emailRepeat" maxlength="50"/ -->
+					<input type="text" name="emailRepeat" id="emailRepeat" onCopy="return false" onDrag="return false" onDrop="return false" onPaste="return false" AUTOCOMPLETE=OFF />
                     <form:errors cssClass="fieldError" path="emailRepeat" />
                 </td>
             </tr>
