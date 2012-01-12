@@ -79,7 +79,7 @@ public class MailEngine {
     public void send(SimpleMailMessage msg) {
         try {
             mailSender.send(msg);
-			log.info("Epost (SimpleMailMessage) er sendt med 'To':" + msg.getTo() + " CC:"
+			log.info("Epost (SimpleMailMessage) er sendt med 'To':" + msg.getTo().toString() + " CC:"
 					+ msg.getCc() + " BCC:" + msg.getBcc() + "\nSubject:"
 					+ msg.getSubject());
         } catch (MailException ex) {

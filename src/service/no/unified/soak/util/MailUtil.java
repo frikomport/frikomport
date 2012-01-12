@@ -955,8 +955,12 @@ public class MailUtil {
         case Constants.EMAIL_EVENT_COURSECHANGED:
         case Constants.EMAIL_EVENT_COURSECANCELLED:
             Calendar cal = getICalendar(course, registration);
-            ByteArrayResource bar = new ByteArrayResource(cal.toString().getBytes());
-            helper.addAttachment("calendar.ics", bar, "text/calendar; method=REQUEST");  
+            try {
+	            ByteArrayResource bar = new ByteArrayResource(cal.toString().getBytes(ApplicationResourcesUtil.getText("mail.encoding")));
+	            helper.addAttachment("calendar.ics", bar, "text/calendar; method=REQUEST; charset=\"" + ApplicationResourcesUtil.getText("mail.encoding") + "\"");  
+			} catch (UnsupportedEncodingException e) {
+				log.error("Bruk av mail.encoding=" + ApplicationResourcesUtil.getText("mail.encoding") + " fra properties feilet", e);
+			}
             break;
         }
     }
@@ -966,37 +970,8 @@ public class MailUtil {
         Calendar cal = null;
 
         try {
-            // Create an event
+            // Hent event for kurset
             VEvent event = getVEvent(course);
-
-            UidGenerator ug = new UidGenerator("1");
-            Uid uid = ug.generateUid();
-            event.getProperties().add(uid);
-            event.getProperties().add(Method.PUBLISH);
-
-            Description description = new Description(course.getDescription());
-            event.getProperties().add(description);
-
-            Location location = new Location(course.getLocation().getName());
-            event.getProperties().add(location);
-            StreetAddress streetAddress = new StreetAddress(course.getLocation().getAddress());
-            event.getProperties().add(streetAddress);
-
-            if (course.getStatus().equals(CourseStatus.COURSE_CANCELLED)) {
-                event.getProperties().add(Status.VEVENT_CANCELLED);
-            } else {
-                event.getProperties().add(Status.VEVENT_CONFIRMED);
-            }
-
-            if (course.getResponsible() != null) {
-                try {
-                    URI mailto = new URI("MAILTO", course.getResponsible().getEmail(), null);
-                    Organizer organizer = new Organizer(mailto);
-                    event.getProperties().add(organizer);
-                } catch (Exception ex) {
-                    log.error("Could not create Organizer object");
-                }
-            }
 
             try {
                 URI mailto = new URI("MAILTO", registration.getUser().getEmail(), null);
@@ -1005,22 +980,6 @@ public class MailUtil {
             } catch (Exception ex) {
                 log.error("Could not create Attendee object");
             }
-
-            if (course.getDetailURL() != null && course.getDetailURL().length() > 0) {
-                try {
-                    Url url = new Url(Uris.create(course.getDetailURL()));
-                    event.getProperties().add(url);
-                } catch (Exception ex) {
-                    log.error("Could not create Url object");
-                }
-            }
-
-            // // Set timezone
-            // VTimeZone tz = new VTimeZone();
-            // TzId tzParam = new
-            // TzId(tz.getProperties().getProperty(Property.TZID).getValue());
-            // TzId tzParam = new TzId(tz.getProperties().add(Property.TZID));
-            // event.getProperties().getProperty(Property.DTSTART).getParameters().add(tzParam);
 
             // Create calendar and add event
             cal = createCalendar();
@@ -1060,18 +1019,12 @@ public class MailUtil {
         StreetAddress streetAddress = new StreetAddress(course.getLocation().getAddress());
         event.getProperties().add(streetAddress);
 
-        try {
-            Url url = new Url(new URI(null,"http://www.vg.no",null));
-            event.getProperties().add(url);
-        } catch (URISyntaxException e) {
-            // Wrong format
-        }
-
         if (course.getStatus().equals(CourseStatus.COURSE_CANCELLED)) {
             event.getProperties().add(Status.VEVENT_CANCELLED);
         } else {
             event.getProperties().add(Status.VEVENT_CONFIRMED);
         }
+
         if (course.getResponsible() != null) {
             try {
                 URI mailto = new URI("MAILTO", course.getResponsible().getEmail(), null);
@@ -1079,6 +1032,15 @@ public class MailUtil {
                 event.getProperties().add(organizer);
             } catch (Exception ex) {
                 log.error("Could not create Organizer object");
+            }
+        }
+        
+        if (course.getDetailURL() != null && course.getDetailURL().length() > 0) {
+            try {
+                Url url = new Url(Uris.create(course.getDetailURL()));
+                event.getProperties().add(url);
+            } catch (Exception ex) {
+                log.error("Could not create Url object");
             }
         }
         return event;
