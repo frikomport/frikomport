@@ -17,13 +17,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import no.unified.soak.Constants;
+import no.unified.soak.model.Organization;
 import no.unified.soak.model.Role;
 import no.unified.soak.model.User;
+import no.unified.soak.model.Organization.Type;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RoleManager;
 import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.UserExistsException;
 import no.unified.soak.service.UserManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.StringUtil;
 import no.unified.soak.webapp.util.RequestUtil;
 
@@ -70,6 +73,7 @@ public class UserFormController extends BaseFormController {
         Locale locale = request.getLocale();
 
         addOrganization(model,locale);
+        addOrganization2(model,locale);
         
 //      Retrieve all serviceareas into an array
     	List serviceAreas = serviceAreaManager.getAllIncludingDummy(getText("misc.none", locale));
@@ -114,25 +118,18 @@ public class UserFormController extends BaseFormController {
             return new ModelAndView(getSuccessView());
         } else {
             if ("true".equals(request.getParameter("encryptPass"))) {
-                String algorithm = (String) getConfiguration()
-                                                .get(Constants.ENC_ALGORITHM);
+                String algorithm = (String) getConfiguration().get(Constants.ENC_ALGORITHM);
 
                 if (algorithm == null) { // should only happen for test case
-
                     if (log.isDebugEnabled()) {
-                        log.debug(
-                            "assuming testcase, setting algorithm to 'SHA'");
+                        log.debug("assuming testcase, setting algorithm to 'SHA'");
                     }
-
                     algorithm = "SHA";
                 }
-
-                user.setPassword(StringUtil.encodePassword(user.getPassword(),
-                        algorithm));
+                user.setPassword(StringUtil.encodePassword(user.getPassword(), algorithm));
             }
 
             String[] userRoles = request.getParameterValues("userRoles");
-
             if (userRoles != null) {
                 // for some reason, Spring seems to hang on to the roles in
                 // the User object, even though isSessionForm() == false
@@ -145,6 +142,20 @@ public class UserFormController extends BaseFormController {
             }
 
             try {
+            	if(!configurationManager.isActive("access.profile.showInvoiceaddress", true)){
+					// hvis ikke feiler validering av invoiceAddress.setPostalCode() for installasjoner som
+					// ikke benytter fakturaadresse pga annotations i Address.java
+            		user.setInvoiceAddress(null);
+            	}
+            	if(StringUtils.isBlank(user.getAddress().getPostalCode())){
+					// hvis ikke feiler validering av address.setPostalCode() pga annotations i Address.java
+            		user.setAddress(null);
+            	}
+            	
+            	if (validateAnnotations(user, errors, null) > 0) {
+    				this.getUserManager().evict(user);
+    				return showForm2(request, response, errors);
+    			}
                 this.getUserManager().saveUser(user);
                 session.setAttribute("username", user.getUsername());
             } catch (UserExistsException e) {
@@ -157,7 +168,7 @@ public class UserFormController extends BaseFormController {
                 // redisplay the unencrypted passwords
                 user.setPassword(user.getConfirmPassword());
 
-                return showForm(request, response, errors);
+                return showForm2(request, response, errors);
             }
 
             if (!StringUtils.equals(request.getParameter("from"), "list")) {
@@ -201,10 +212,9 @@ public class UserFormController extends BaseFormController {
             }
         }
         return new ModelAndView(getCancelView());
-//        return showForm(request, response, errors);
     }
 
-    protected ModelAndView showForm(HttpServletRequest request,
+    protected ModelAndView showForm2(HttpServletRequest request,
         HttpServletResponse response, BindException errors)
         throws Exception {
         if (request.getRequestURI().indexOf("editProfile") > -1) {
@@ -278,8 +288,32 @@ public class UserFormController extends BaseFormController {
             model = new HashMap();
         }
 
-        model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.none", locale)));
-
+        String typeDBvalue = ApplicationResourcesUtil.getText("show.organization.pulldown.typeDBvalue");
+        if (typeDBvalue != null && !StringUtils.isBlank(typeDBvalue)) {
+        	Integer value = Integer.valueOf(typeDBvalue);
+        	Type type = Organization.Type.getTypeFromDBValue(value);
+            model.put("organizations", organizationManager.getByTypeIncludingDummy(type, getText("misc.all", locale)));
+        } else {
+            model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
+        }
         return model;
     }
+    
+    private Map addOrganization2(Map model, Locale locale) {
+        if (model == null) {
+            model = new HashMap();
+        }
+
+//        String typeDBvalue = ApplicationResourcesUtil.getText("show.organization.pulldown.typeDBvalue");
+//        if (typeDBvalue != null) {
+//            model.put("organizations", organizationManager.getByTypeIncludingDummy(Organization.Type.getTypeFromDBValue(Integer
+//                    .getInteger(typeDBvalue)), getText("misc.all", locale)));
+//        } else {
+//            model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
+//        }
+        
+        model.put("organizations2", organizationManager.getByTypeIncludingParentAndDummy(Organization.Type.AREA, Organization.Type.REGION, getText("misc.all", locale)));
+        return model;
+    }
+
 }

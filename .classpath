@@ -11,11 +11,19 @@
 	<classpathentry kind="lib" path="lib/spring-2.0/acegi-security-1.0.2.jar" sourcepath="lib/spring-2.0/acegi-security-1.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/spring-2.0/antlr.jar"/>
 	<classpathentry kind="lib" path="lib/spring-2.0/aspectjweaver-1.5.2.jar"/>
-	<classpathentry kind="lib" path="C:/FKP/frikomport/lib/jakarta-commons/commons-codec-1.3.jar"/>
-	<classpathentry kind="lib" path="lib/spring-2.0/ehcache-1.2.3.jar"/>
-	<classpathentry kind="lib" path="lib/spring-2.0/spring.jar"/>
+	<classpathentry kind="lib" path="lib/jakarta-commons/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="lib/spring-2.0/ehcache-1.2.3.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://ehcache.org/apidocs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/spring-2.0/spring.jar" sourcepath="lib/spring-2.0/spring-framework-2.0.zip">
+	<attributes>
+			<attribute name="javadoc_location" value="http://static.springsource.org/spring/docs/2.0.x/api/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/spring-2.0/spring-mock.jar"/>
-	<classpathentry kind="lib" path="lib/spring-2.0/spring-modules-validation-0.5.jar"/>
+	<classpathentry kind="lib" path="lib/spring-2.0/spring-modules-validation-0.5.jar" sourcepath="lib/spring-2.0/spring-modules-validation-src.zip"/>
 	<classpathentry kind="lib" path="lib/hibernate-3.2.5/lib/antlr-2.7.6.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-3.2.5/lib/asm.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-3.2.5/lib/c3p0-0.9.1.jar"/>
@@ -23,18 +31,25 @@
 	<classpathentry kind="lib" path="lib/hibernate-3.2.5/lib/jta.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-3.2.5/lib/oscache-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-3.2.5/lib/swarmcache-1.0rc2.jar"/>
-	<classpathentry kind="lib" path="lib/hibernate-3.2.5/hibernate3.jar" sourcepath="c:/FKP/frikomport/lib/hibernate-3.2.5/hibernate-3.2.5.ga-sources.jar">
+	<classpathentry kind="lib" path="lib/hibernate-3.2.7/hibernate3.jar" sourcepath="lib/hibernate-3.2.7/hibernate-3.2.7_src.zip">
 		<attributes>
-			<attribute name="javadoc_location" value="http://www.jarvana.com/jarvana/view/org/hibernate/hibernate/3.2.5.ga/hibernate-3.2.5.ga-javadoc.jar!/index.html"/>
+			<attribute name="javadoc_location" value="http://www.jarvana.com/jarvana/view/org/hibernate/hibernate/3.2.7.ga/hibernate-3.2.7.ga-javadoc.jar!/index.html"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/jakarta-commons/commons-beanutils.jar"/>
-	<classpathentry kind="lib" path="lib/jakarta-commons/commons-collections.jar"/>
-	<classpathentry kind="lib" path="lib/jakarta-commons/commons-dbcp.jar"/>
+	<classpathentry kind="lib" path="lib/jakarta-commons/commons-collections.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://commons.apache.org/collections/apidocs-COLLECTIONS_3_1/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/jakarta-commons/commons-digester.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-commons/commons-fileupload.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-commons/commons-io.jar"/>
-	<classpathentry kind="lib" path="lib/jakarta-commons/commons-lang.jar"/>
+	<classpathentry kind="lib" path="lib/jakarta-commons/commons-lang.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://commons.apache.org/lang/api-2.1/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/jakarta-commons/commons-logging-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-commons/commons-pool.jar"/>
 	<classpathentry kind="lib" path="lib/jakarta-commons/commons-validator.jar"/>
@@ -91,5 +106,10 @@
 	<classpathentry kind="lib" path="lib/poi-3.0.1-FINAL/poi-3.0.1-FINAL-20070705.jar"/>
 	<classpathentry kind="lib" path="lib/axis-1.4/jaxrpc.jar"/>
 	<classpathentry kind="lib" path="lib/axis-1.4/axis.jar"/>
+	<classpathentry kind="lib" path="lib/jakarta-commons/commons-dbcp-1.2.2.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://commons.apache.org/dbcp/api-1.2.2/index.html"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

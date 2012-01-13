@@ -15,12 +15,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
 import no.unified.soak.dao.CourseDAO;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Person;
+import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
+import no.unified.soak.service.UserManager;
+
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.StaleObjectStateException;
 
 
 /**
@@ -29,21 +32,40 @@ import no.unified.soak.service.CourseManager;
  * @author hrj
  */
 public class CourseManagerImpl extends BaseManager implements CourseManager {
-    private CourseDAO dao;
+    private CourseDAO courseDAO;
 
-    /**
+    private ConfigurationManager configurationManager = null;
+    private UserManager userManager = null;
+
+    public void setConfigurationManager(ConfigurationManager configurationManager) {
+        this.configurationManager = configurationManager;
+    }
+
+    public void setUserManager(UserManager userManager) {
+        this.userManager = userManager;
+    }
+
+	/**
      * Set the DAO for communication with the data layer.
      * @param dao
      */
     public void setCourseDAO(CourseDAO dao) {
-        this.dao = dao;
+        this.courseDAO = dao;
     }
 
     /**
-     * @see no.unified.soak.service.CourseManager#getCourses(no.unified.soak.model.Course)
+     * @see no.unified.soak.service.CourseManager#getAllCourses()
      */
-    public List getCourses(final Course course) {
-        return dao.getCourses(course);
+    public List getAllCourses() {
+    	try {
+        	return courseDAO.getAllCourses();
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    	    	return courseDAO.getAllCourses();
+    		}
+    		throw e;
+    	}
     }
 
     /**
@@ -51,10 +73,21 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
      */
     public Course getCourse(final String id) {
     	Course result = null;
-    	if (!StringUtils.isEmpty(id))
-        	result = dao.getCourse(new Long(id));
-    	else
-    		log.error("Call to CourseManagerImpl.getCourse with empty or null id (" + id + ")");
+    	try {
+        	if (!StringUtils.isEmpty(id))
+            	result = courseDAO.getCourse(new Long(id));
+        	else
+        		log.error("Call to CourseManagerImpl.getCourse with empty or null id (" + id + ")");
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    	    	if (!StringUtils.isEmpty(id))
+    	        	result = courseDAO.getCourse(new Long(id));
+    	    	else
+    	    		log.error("Call to CourseManagerImpl.getCourse with empty or null id (" + id + ")");
+    		}
+    		throw e;
+    	}
     	return result;
     }
 
@@ -62,7 +95,7 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
      * @see no.unified.soak.service.CourseManager#saveCourse(Course course)
      */
     public void saveCourse(Course course) {
-        dao.saveCourse(course);
+        courseDAO.saveCourse(course);
     }
 
     /**
@@ -70,7 +103,7 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
      */
     public void removeCourse(final String id) {
     	if (!StringUtils.isEmpty(id))
-    		dao.removeCourse(new Long(id));
+    		courseDAO.removeCourse(new Long(id));
     	else
     		log.error("Call to CourseManagerImpl.removeCourse with empty or null id (" + id + ")");
     		
@@ -79,28 +112,73 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
     /**
      * @see no.unified.soak.service.CourseManager#searchCourses(no.unified.soak.model.Course, Date, Date)
      */
-    public List<Course> searchCourses(Course course, Date startDate, Date stopDate) {
-        return dao.searchCourses(course, startDate, stopDate);
+    public List<Course> searchCourses(Course course, Date startDate, Date stopDate, Integer[] status) {
+    	boolean showUntilFinished = configurationManager.isActive("access.course.showCourseUntilFinished", true);
+    	try {
+    		return courseDAO.searchCourses(course, startDate, stopDate, status, showUntilFinished);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    			return courseDAO.searchCourses(course, startDate, stopDate, status, showUntilFinished);
+    		}
+    		throw e;
+    	}
     }
 
     /**
      * @see no.unified.soak.service.CourseManager#getWaitingListCourses()
      */
     public List<Course> getWaitingListCourses() {
-        return dao.getWaitingListCourses();
+    	try {
+            return courseDAO.getWaitingListCourses();
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    	        return courseDAO.getWaitingListCourses();
+    		}
+    		throw e;
+    	}
     }
 
-    public List<Course> findByInstructor(Person person) {
-        return dao.findByInstructor(person);
+    public List<Course> findByInstructor(Person person, Integer[] coursestatus) {
+    	try {
+            return courseDAO.findByInstructor(person, coursestatus);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    	        return courseDAO.findByInstructor(person, coursestatus);
+    		}
+    		throw e;
+    	}
     }
 
+    public List<Course> findByLocationIds(List<Long> locationIds, Integer numberOfHits){
+    	try {
+        	return courseDAO.findByLocationIds(locationIds, numberOfHits);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    	    	return courseDAO.findByLocationIds(locationIds, numberOfHits);
+    		}
+    		throw e;
+    	}
+    }
+    
     /**
      * @see no.unified.soak.service.CourseManager#getUnpublished()
      */
     public List<Course> getUnpublished(Course course) {
-        return dao.getUnpublished(course);
+    	try {
+            return courseDAO.getUnpublished(course);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    	        return courseDAO.getUnpublished(course);
+    		}
+    		throw e;
+    	}
     }
-    
+
     /**
      * @see no.unified.soak.service.CourseManager#getUnpublished()
      */
@@ -114,7 +192,7 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
 		if (!originalCourse.getName().equals(changedCourse.getName())){
 			changedList.add("name");
 		}
-		if (!originalCourse.getType().equals(changedCourse.getType())){
+		if (!StringUtils.equals(originalCourse.getType(), changedCourse.getType())){
 			changedList.add("type");
 		}
 		if (!sdf.format(originalCourse.getStartTime()).equals(sdf.format(changedCourse.getStartTime()))){
@@ -123,13 +201,13 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
 		if (!sdf.format(originalCourse.getStopTime()).equals(sdf.format(changedCourse.getStopTime()))){
 			changedList.add("stopTime");
 		}
-		if (!originalCourse.getDuration().equals(changedCourse.getDuration())){
+		if (!StringUtils.equals(originalCourse.getDuration(), changedCourse.getDuration())) {
 			changedList.add("duration");
 		}
 		if (!originalCourse.getOrganizationid().equals(changedCourse.getOrganizationid())){
 			changedList.add("organization");
 		}
-		if (!originalCourse.getServiceAreaid().equals(changedCourse.getServiceAreaid())){
+		if ((originalCourse.getServiceAreaid() == null && changedCourse.getServiceAreaid() != null) || (originalCourse.getServiceAreaid() != null && !originalCourse.getServiceAreaid().equals(changedCourse.getServiceAreaid()))){
 			changedList.add("serviceArea");
 		}
 		if (!originalCourse.getLocationid().equals(changedCourse.getLocationid())){
@@ -141,10 +219,10 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
 		if (!originalCourse.getInstructorid().equals(changedCourse.getInstructorid())){
 			changedList.add("instructor");
 		}
-		if (originalCourse.getMaxAttendants() != changedCourse.getMaxAttendants()){
+		if (!originalCourse.getMaxAttendants().equals(changedCourse.getMaxAttendants())){
 			changedList.add("maxAttendants");
 		}
-		if (!originalCourse.getDescription().equals(changedCourse.getDescription())){
+		if (!StringUtils.equals(originalCourse.getDescription(), changedCourse.getDescription())){
 			changedList.add("description");
 		}
 		if (originalCourse.getChargeoverdue() != changedCourse.getChargeoverdue()){
@@ -154,6 +232,21 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
     }
     
     public List<Course> getCoursesWhereRegisterByExpired(long millis){
-        return dao.getCoursesWhereRegisterByExpired(millis);
+        return courseDAO.getCoursesWhereRegisterByExpired(millis);
+    }
+    
+    @Override
+    public void evict(Object entity) {
+    	courseDAO.evict(entity);
+    }
+    
+    @Override
+    public void flush() {
+    	courseDAO.flush();
+    }
+    
+    @Override 
+    public boolean contains(Object entity) {
+    	return courseDAO.contains(entity);
     }
 }

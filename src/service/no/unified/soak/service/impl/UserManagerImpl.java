@@ -10,29 +10,30 @@ package no.unified.soak.service.impl;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
 import no.unified.soak.Constants;
-import no.unified.soak.dao.EzUserDAO;
+import no.unified.soak.dao.ExtUserDAO;
 import no.unified.soak.dao.UserDAO;
-import no.unified.soak.ez.EzUser;
+import no.unified.soak.dao.ws.SVVUserDAOWS;
+import no.unified.soak.ez.ExtUser;
 import no.unified.soak.model.Address;
 import no.unified.soak.model.Organization;
 import no.unified.soak.model.Registration;
-import no.unified.soak.model.Role;
+import no.unified.soak.model.RoleEnum;
 import no.unified.soak.model.User;
 import no.unified.soak.model.UserCookie;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RoleManager;
 import no.unified.soak.service.UserExistsException;
 import no.unified.soak.service.UserManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.RandomGUID;
 import no.unified.soak.util.StringUtil;
-import no.unified.soak.util.UserUtil;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.StaleObjectStateException;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.ObjectRetrievalFailureException;
 
@@ -49,14 +50,14 @@ import org.springframework.orm.ObjectRetrievalFailureException;
 public class UserManagerImpl extends BaseManager implements UserManager {
 	private UserDAO dao;
 
-	private EzUserDAO ezUserDAO;
+	private ExtUserDAO extUserDAO;
 
 	private RoleManager roleManager;
 
 	private MessageSource messageSource;
 
 	private OrganizationManager organizationManager;
-	
+
 	/**
 	 * Set the DAO for communication with the data layer.
 	 * 
@@ -66,8 +67,8 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		this.dao = dao;
 	}
 
-	public void setEzUserDAO(EzUserDAO ezUserDAO) {
-		this.ezUserDAO = ezUserDAO;
+	public void setExtUserDAO(ExtUserDAO extUserDAO) {
+		this.extUserDAO = extUserDAO;
 	}
 
 	public void setMessageSource(MessageSource messageSource) {
@@ -81,43 +82,84 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	public void setOrganizationManager(OrganizationManager organizationManager) {
 		this.organizationManager = organizationManager;
 	}
-	
+
 	/**
 	 * @see no.unified.soak.service.UserManager#getUser(java.lang.String)
 	 */
 	public User getUser(String username) {
-		return dao.getUser(username);
+    	try {
+    		return dao.getUser(username);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, this)){
+    			return dao.getUser(username);
+    		}
+    		throw e;
+    	}
+	}
+
+	/**
+	 * @see no.unified.soak.service.UserManager#getUser(java.lang.String)
+	 */
+	public User getUserSilent(String username) {
+    	try {
+    		return dao.getUserSilent(username);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, this)){
+    			return dao.getUserSilent(username);
+    		}
+    		throw e;
+    	}
 	}
 
 	/**
 	 * @see no.unified.soak.service.UserManager#getUserByHash(java.lang.String)
 	 */
 	public User getUserByHash(String hash) {
-		return dao.getUserByHash(hash);
-	}
-	
-    /**
-     * @see no.unified.soak.service.UserManager#getUserByEmail(java.lang.String)
-     */	
-	public User getUserByEmail(String email) {
-	    User user = null;
-        try {
-            user = getUser(email.toLowerCase());
-        } catch (ObjectRetrievalFailureException e) {
-            user = findUser(email.toLowerCase());
-        }
-        return user;
+    	try {
+    		return dao.getUserByHash(hash);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, this)){
+    			return dao.getUserByHash(hash);
+    		}
+    		throw e;
+    	}
 	}
 
 	/**
 	 * @see no.unified.soak.service.UserManager#getUsers(no.unified.soak.model.User)
 	 */
-	public List<User> getUsers(User user) {
-		return dao.getUsers(user);
+	public List getUsers(User user, boolean hashuserFilter) {
+    	try {
+    		return dao.getUsers(user, hashuserFilter);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, this)){
+    			return dao.getUsers(user, hashuserFilter);
+    		}
+    		throw e;
+    	}
 	}
 
-	public User findUser(String email) {
-		return dao.findUser(email);
+	/**
+	 * @see no.unified.soak.service.UserManager#getUsernames(boolean hashuserFilter)
+	 */
+	public List getUsernames(boolean hashUser) {
+		return dao.getUsernames(hashUser);
+	}
+	
+	public User findUserByEmail(String email) {
+    	try {
+    		return dao.findUserByEmail(email);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, this)){
+    			return dao.findUserByEmail(email);
+    		}
+    		throw e;
+    	}
 	}
 
 	/**
@@ -213,37 +255,37 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		dao.removeUserCookies(username);
 	}
 
-	public List<Role> getRoles() {
-		List<Role> roles = roleManager.getRoles(null);
+	public List getRoles() {
+		List roles = roleManager.getRoles(null);
 		return roles;
 	}
 
-	public List getResponsibles() {
-		List<EzUser> ezUsers = getEZResponsibles(null);
-		List<User> users = new ArrayList<User>();
-		for (Iterator<EzUser> iter = ezUsers.iterator(); iter.hasNext();) {
-			EzUser ezUser = iter.next();
+	public List getResponsibles(boolean includeDisabled) {
+		List extUsers = getExtResponsibles();
+		List users = new ArrayList();
+		for (Iterator iter = extUsers.iterator(); iter.hasNext();) {
+			ExtUser extUser = (ExtUser) iter.next();
 			try {
-				users.add(dao.getUser(ezUser.getUsername()));
+				final User foundUser = dao.getUser(extUser.getUsername());
+				if (includeDisabled || foundUser.getEnabled()) {
+					users.add(foundUser);
+				}
 			} catch (ObjectRetrievalFailureException objectRetrievalFailureException) {
-			    User user = getUserByEmail(ezUser.getEmail());
-			    if (user == null) {
-	                user = addUser(ezUser.getUsername(), ezUser.getFirst_name(), ezUser.getLast_name(), 
-	                        ezUser.getEmail(), ezUser.getId(), ezUser.getRolenames(), ezUser.getKommune());
-                }
+				User user = addUser(extUser.getUsername(), extUser.getFirst_name(), extUser.getLast_name(), extUser
+						.getEmail(), extUser.getId(), extUser.getRolenames(), extUser.getKommune(), null, null);
 				users.add(user);
 			}
 		}
 		return users;
 	}
-
+	
 	public User addUser(String username, String firstName, String lastName, String email, Integer id,
-			List<String> rolenames, Integer kommune) {
+			List<String> rolenames, Integer kommune, String mobilePhone, String phoneNumber) {
 		User user = new User(username);
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
         user.setEmail(email);
-		user.setId(id);
+
 		if (kommune != null && kommune != 0) {
 			updateKommune(kommune, user);
 		}
@@ -252,6 +294,8 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		}
 		setRoles(rolenames, user);
 		user.setEnabled(true);
+		user.setMobilePhone(mobilePhone);
+		user.setPhoneNumber(phoneNumber);
 		user.setAddress(new Address());
 		user.setHash(StringUtil.encodeString(username));
 		user.setInvoiceAddress(new Address());
@@ -277,28 +321,40 @@ public class UserManagerImpl extends BaseManager implements UserManager {
             }
             else{
                 if ("".equals(invoiceAddress.getAddress())) {
-                    invoiceAddress.setAddress(orgAddress.getAddress());
-                    save = true;
+                	if(StringUtils.isNotBlank(orgAddress.getAddress())){
+                		invoiceAddress.setAddress(orgAddress.getAddress());
+                		save = true;
+                	}
                 }
                 if ("".equals(invoiceAddress.getCity())) {
-                    invoiceAddress.setCity(orgAddress.getCity());
-                    save = true;
+                	if(StringUtils.isNotBlank(orgAddress.getCity())){
+	                    invoiceAddress.setCity(orgAddress.getCity());
+	                    save = true;
+                	}
                 }
                 if ("".equals(invoiceAddress.getCountry())) {
-                    invoiceAddress.setCountry(orgAddress.getCountry());
-                    save = true;
+                	if(StringUtils.isNotBlank(orgAddress.getCountry())){
+	                    invoiceAddress.setCountry(orgAddress.getCountry());
+	                    save = true;
+                	}
                 }
                 if ("".equals(invoiceAddress.getPostalCode())) {
-                    invoiceAddress.setPostalCode(orgAddress.getPostalCode());
-                    save = true;
+                	if(StringUtils.isNotBlank(orgAddress.getPostalCode())){
+	                    invoiceAddress.setPostalCode(orgAddress.getPostalCode());
+	                    save = true;
+                	}
                 }
                 if ("".equals(invoiceAddress.getProvince())) {
-                    invoiceAddress.setProvince(orgAddress.getProvince());
-                    save = true;
+                	if(StringUtils.isNotBlank(orgAddress.getProvince())){
+	                    invoiceAddress.setProvince(orgAddress.getProvince());
+	                    save = true;
+                	}
                 }
                 if ("".equals(user.getInvoiceName())) {
-                    user.setInvoiceName(user.getOrganization().getInvoiceName());
-                    save = true;
+                	if(StringUtils.isNotBlank(user.getOrganization().getInvoiceName())){
+	                    user.setInvoiceName(user.getOrganization().getInvoiceName());
+	                    save = true;
+                	}
                 }
             }
 		}
@@ -307,10 +363,10 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 
 	private boolean updateKommune(Integer kommune, User user) {
 		boolean save = false;
-		List<Organization> organizations = organizationManager.getAll();
+		List organizations = organizationManager.getAll();
 		// first search in ids
-		for (Iterator<Organization> iter = organizations.iterator(); iter.hasNext();) {
-			Organization organization = iter.next();
+		for (Iterator iter = organizations.iterator(); iter.hasNext();) {
+			Organization organization = (Organization) iter.next();
 
 			if (organization.getId().equals(kommune.longValue())) {
 				if (user.getOrganizationid() == null || !user.getOrganizationid().equals(organization.getId())) {
@@ -321,8 +377,8 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 			}
 		}
 		// if no match search in numbers.
-		for (Iterator<Organization> iter = organizations.iterator(); iter.hasNext();) {
-			Organization organization = iter.next();
+		for (Iterator iter = organizations.iterator(); iter.hasNext();) {
+			Organization organization = (Organization) iter.next();
 
 			if (organization.getNumber().equals(kommune.longValue())) {
 				if (user.getOrganizationid() == null || !user.getOrganizationid().equals(organization.getId())) {
@@ -336,36 +392,60 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	}
 
 	public void updateUser(User user, String firstName, String lastName, String email, Integer id,
-			List<String> rolenames, Integer kommune) {
+			List<String> rolenames, Integer kommune, String mobilePhone, String phoneNumber) {
 		Boolean save = false;
+
+		String updated = "";
+		
 		if (!firstName.equals(user.getFirstName())) {
 			user.setFirstName(firstName);
+			updated += "firstName ";
 			save = true;
 		}
 		if (!lastName.equals(user.getLastName())) {
 			user.setLastName(lastName);
+			updated += "lastName ";
 			save = true;
 		}
 		if (!email.equals(user.getEmail())) {
 			user.setEmail(email);
-			save = true;
-		}
-		if (!id.equals(user.getId())) {
-			user.setId(id);
-			save = true;
-		}
-		if (kommune != null && kommune != 0) {
-			if (updateKommune(kommune, user)){
-				save = true;
-			}
-		}
-		setRoles(rolenames, user, save);
-		if (user.getHash() == null || user.getHash().length() == 0) {
-			user.setHash(StringUtil.encodeString(user.getUsername()));
+			updated += "email ";
 			save = true;
 		}
 
-		if (updateInvoiceAddressFromOrganization(user)){
+		if (kommune != null && kommune != 0) {
+			if (updateKommune(kommune, user)) {
+				updated += "kommune ";
+				save = true;
+			}
+		}
+
+		// Since eZ publish does not give these phone numbers but SVVs ldap
+		// does, only update phone numbers when one is presented.
+		if (mobilePhone != null && !mobilePhone.equals(user.getMobilePhone())) {
+			user.setMobilePhone(mobilePhone);
+			updated += "mobilePhone ";
+			save = true;
+		}
+		if (phoneNumber != null && !phoneNumber.equals(user.getPhoneNumber())) {
+			user.setPhoneNumber(phoneNumber);
+			updated += "phoneNumber ";
+			save = true;
+		}
+
+		if(setRoles(rolenames, user)){
+			updated += "rolenames ";
+			save = true;
+		}
+		
+		if (user.getHash() == null || user.getHash().length() == 0) {
+			user.setHash(StringUtil.encodeString(user.getUsername()));
+			updated += "hash ";
+			save = true;
+		}
+
+		if (updateInvoiceAddressFromOrganization(user)) {
+			updated += "invoiceAddress ";
 			save = true;
 		}
 
@@ -373,6 +453,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 			user.setEnabled(true);
 			try {
 				saveUser(user);
+				log.info("Lagret/oppdatert " + updated + "for : " + user.getUsername());
 			} catch (UserExistsException e) {
 				log.error("UserExistsException: " + e);
 			}
@@ -380,35 +461,39 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 
 	}
 
-	private void setRoles(List<String> rolenames, User user) {
-		setRoles(rolenames, user, true);
-	}
-
-	private void setRoles(List<String> rolenames, User user, Boolean save) {
+	private boolean setRoles(List<String> rolenames, User user) {
 		// check if roles are the same as the ones set on user.
 		if (equalRoles(user, rolenames)) {
-			return;
+			return false;
 		}
 		// Roles are different and needs to be saved.
-		save = true;
-
+		
 		// remove existing roles before new ones are added.
 		user.removeAllRoles();
-		Locale locale = LocaleContextHolder.getLocale();
 
-		for (Iterator<String> iter = rolenames.iterator(); iter.hasNext();) {
-			String rolename = iter.next();
-			if (rolename.equals(messageSource.getMessage("role.employee", null, locale))) {
-				user.addRole(roleManager.getRole(Constants.EMPLOYEE_ROLE));
-			} else if (rolename.equals(messageSource.getMessage("role.anonymous", null, locale))) {
-				user.addRole(roleManager.getRole(Constants.ANONYMOUS_ROLE));
-			} else if (rolename.equals(messageSource.getMessage("role.editor", null, locale))) {
+		String[] adminRolenames = extUserDAO.getStringForRole(RoleEnum.ADMIN_ROLE).split("\\,");
+		String[] editorRolenames = extUserDAO.getStringForRole(RoleEnum.EDITOR_ROLE).split("\\,");
+		String[] eventresponsibleRolenames = extUserDAO.getStringForRole(RoleEnum.EVENTRESPONSIBLE_ROLE).split("\\,");
+		String[] readerRolenames = extUserDAO.getStringForRole(RoleEnum.READER_ROLE).split("\\,");
+		String[] emplyeeRolenames = extUserDAO.getStringForRole(RoleEnum.EMPLOYEE).split("\\,");
+		String[] anonymousRolenames = extUserDAO.getStringForRole(RoleEnum.ANONYMOUS).split("\\,");
+
+		for (Iterator iter = rolenames.iterator(); iter.hasNext();) {
+			String rolename = (String) iter.next();
+			
+			if (ArrayUtils.contains(adminRolenames, rolename)) {
+                user.addRole(roleManager.getRole(Constants.ADMIN_ROLE));
+            } else if (ArrayUtils.contains(editorRolenames, rolename)) {
 				user.addRole(roleManager.getRole(Constants.EDITOR_ROLE));
-			} else if (rolename.equals(messageSource.getMessage("role.admin", null, locale))) {
-				user.addRole(roleManager.getRole(Constants.ADMIN_ROLE));
-			} else if (rolename.equals(messageSource.getMessage("role.instructor", null, locale))) {
-				user.addRole(roleManager.getRole(Constants.INSTRUCTOR_ROLE));
-			} else if (roleManager.findRole(rolename) != null) {
+			} else if (ArrayUtils.contains(eventresponsibleRolenames, rolename)) {
+				user.addRole(roleManager.getRole(Constants.EVENTRESPONSIBLE_ROLE));
+			} else if (ArrayUtils.contains(readerRolenames, rolename)) {
+			    user.addRole(roleManager.getRole(Constants.READER_ROLE));
+			} else if (ArrayUtils.contains(emplyeeRolenames, rolename)) {
+                user.addRole(roleManager.getRole(Constants.EMPLOYEE_ROLE));
+            } else if (ArrayUtils.contains(anonymousRolenames, rolename)) {
+                user.addRole(roleManager.getRole(Constants.ANONYMOUS_ROLE));
+            } else if (roleManager.findRole(rolename) != null) {
 				user.addRole(roleManager.findRole(rolename));
 			} else {
 				no.unified.soak.model.Role role = new no.unified.soak.model.Role("role_" + rolename);
@@ -417,6 +502,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 				user.addRole(role);
 			}
 		}
+		return true;
 	}
 
 	private boolean equalRoles(User user, List<String> rolenames) {
@@ -425,11 +511,22 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		}
 
 		for (String rolename : rolenames) {
+			
+			if(ApplicationResourcesUtil.isSVV()){
+				/*
+				 * konvertering fra SVV- til FKP navngiving av roller for at
+				 * sammenlikning ikke alltid skal feile..! Burde vært løst annerledes :-)
+				 */
+				rolename = SVVUserDAOWS.convertRole(rolename);
+			}
+			else {
+				rolename = getInternalFkpRole(rolename);
+			}
+
 			if (!user.getRoleNameList().contains(rolename)) {
 				return false;
 			}
 		}
-
 		return true;
 	}
 
@@ -439,6 +536,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		user.setFirstName(registration.getFirstName());
 		user.setLastName(registration.getLastName());
 		user.setEmail(registration.getEmail());
+		user.setBirthdate(registration.getBirthdate());
 		user.setPhoneNumber(registration.getPhone());
 		user.setMobilePhone(registration.getMobilePhone());
 		user.setJobTitle(registration.getJobTitle());
@@ -451,9 +549,10 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 
 		user.setEnabled(true);
 		user.setAddress(new Address());
-		user.setId(new Integer(0));
 		setRoles(getDefaultRoles(), user);
 		user.setHash(StringUtil.encodeString(user.getUsername()));
+		user.setHashuser(true);
+		
 		try {
 			saveUser(user);
 			return user;
@@ -464,19 +563,22 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	}
 
 	private List<String> getDefaultRoles() {
-        Locale locale = LocaleContextHolder.getLocale();
-        List<String> roles = new ArrayList<String>();
-        roles.add(messageSource.getMessage("role.anonymous", null, locale));
-        roles.add(messageSource.getMessage("role.employee", null, locale));
+        List<String> roles = new ArrayList();
+        roles.add(extUserDAO.getStringForRole(RoleEnum.ANONYMOUS));
+        roles.add(extUserDAO.getStringForRole(RoleEnum.EMPLOYEE));
 		return roles;
 	}
 
-	private List<EzUser> getEZResponsibles(EzUser user) {
-	    Locale locale = LocaleContextHolder.getLocale();
-        List<String> roles = new ArrayList<String>();
-        roles.add(messageSource.getMessage("role.instructor", null, locale));
-        roles.add(messageSource.getMessage("role.editor", null, locale));
-		List<EzUser> users = ezUserDAO.findUsers(roles);
+	private List getExtResponsibles() {
+        List<String> roles = new ArrayList();
+
+        // hack pga. av manglende datagrunnlag
+        // roles.add("administrator");
+        // -----------------------------------
+        
+        roles.add("eventresponsible");
+        roles.add("editor");
+        List users = extUserDAO.findUsers(roles);
 		return users;
 	}
 
@@ -497,9 +599,30 @@ public class UserManagerImpl extends BaseManager implements UserManager {
         }
     }
     
-    public void changeEmailAndDisable(User user) {
-        user = UserUtil.transformEmail(user, "@nonexist.no");
-        user.setEnabled(false);
-        updateUser(user);
+    @Override
+    public void evict(Object entity) {
+    	dao.evict(entity);
     }
+    
+    @Override
+    public void flush() {
+    	dao.flush();
+    }
+    
+    @Override 
+    public boolean contains(Object entity) {
+    	return dao.contains(entity);
+    }
+    
+    
+	public String getInternalFkpRole(String role) {
+		if("Administrator".equals(role)) 			return "admin";
+		else if("Opplaringsansvarlig".equals(role)) return "editor"; 
+		else if("Kursansvarlig".equals(role)) 		return "eventresponsible";
+		else if("Ansatt".equals(role)) 				return "employee"; 
+		else if("Anonymous".equals(role)) 			return "anonymous";
+		else if("FKPLesebruker".equals(role)) 		return "reader"; 
+		else return "role_" + role; // for egendefinerte roller fra eZ
+	}
+    
 }

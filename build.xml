@@ -1,191 +1,203 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="soak" basedir="." default="package-web">
 
-    <!-- import properties (app settings, classpath, jar file locations) -->
-    <import file="properties.xml"/>
+	<!-- import properties (app settings, classpath, jar file locations) -->
+	<import file="properties.xml"/>
 
 
-    <!-- Timesettings-->
-    <tstamp>
-      <format property="now" pattern="yyyy-MM-DD hh:mm:ss"/>
-      <format property="now-1" pattern="yyyy-MM-dd HH:mm:ss" offset="-1" unit="day"/>
-      <format property="now-2" pattern="yyyy-MM-dd HH:mm:ss" offset="-2" unit="day"/>
-      <format property="now-3" pattern="yyyy-MM-dd HH:mm:ss" offset="-3" unit="day"/>
-      <format property="now-4" pattern="yyyy-MM-dd HH:mm:ss" offset="-4" unit="day"/>
-      <format property="now-5" pattern="yyyy-MM-dd HH:mm:ss" offset="-5" unit="day"/>
-      <format property="now+1" pattern="yyyy-MM-dd HH:mm:ss" offset="1" unit="day"/>
-      <format property="now+2" pattern="yyyy-MM-dd HH:mm:ss" offset="2" unit="day"/>
-      <format property="now+3" pattern="yyyy-MM-dd HH:mm:ss" offset="3" unit="day"/>
-      <format property="now+4" pattern="yyyy-MM-dd HH:mm:ss" offset="4" unit="day"/>
-      <format property="now+5" pattern="yyyy-MM-dd HH:mm:ss" offset="5" unit="day"/>
-    </tstamp>
+	<!-- Timesettings-->
+	<tstamp>
+		<format property="now" pattern="yyyy-MM-DD hh:mm:ss"/>
+		<format property="now-1" pattern="yyyy-MM-dd HH:mm:ss" offset="-1" unit="day"/>
+		<format property="now-2" pattern="yyyy-MM-dd HH:mm:ss" offset="-2" unit="day"/>
+		<format property="now-3" pattern="yyyy-MM-dd HH:mm:ss" offset="-3" unit="day"/>
+		<format property="now-4" pattern="yyyy-MM-dd HH:mm:ss" offset="-4" unit="day"/>
+		<format property="now-5" pattern="yyyy-MM-dd HH:mm:ss" offset="-5" unit="day"/>
+		<format property="now+1" pattern="yyyy-MM-dd HH:mm:ss" offset="1" unit="day"/>
+		<format property="now+2" pattern="yyyy-MM-dd HH:mm:ss" offset="2" unit="day"/>
+		<format property="now+3" pattern="yyyy-MM-dd HH:mm:ss" offset="3" unit="day"/>
+		<format property="now+4" pattern="yyyy-MM-dd HH:mm:ss" offset="4" unit="day"/>
+		<format property="now+5" pattern="yyyy-MM-dd HH:mm:ss" offset="5" unit="day"/>
+	</tstamp>
 
-    <target name="init" description="defines custom tasks">
-        <!-- Taskdefs -->
-        <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${ant-contrib.jar}"/>
+	<target name="init" description="defines custom tasks">
+		<!-- Taskdefs -->
+		<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${ant-contrib.jar}"/>
 
-        <!-- Ensure that Ant 1.6.2+ is being used -->
-        <available classname="org.apache.tools.ant.DynamicAttribute" property="ant-1.6.2"/>
-        <fail unless="ant-1.6.2" message="AppFuse requires Ant 1.6.2 for faster unit testing"/>
+		<!-- Ensure that Ant 1.6.2+ is being used -->
+		<available classname="org.apache.tools.ant.DynamicAttribute" property="ant-1.6.2"/>
+		<fail unless="ant-1.6.2" message="AppFuse requires Ant 1.6.2 for faster unit testing"/>
 
-        <!-- Check that junit.jar is in $ANT_HOME/lib or junit task fails -->
-        <available classname="junit.framework.TestCase" property="junit.present"/>
-        <fail unless="junit.present" message="Please copy junit.jar into ${env.ANT_HOME}/lib"/>
+		<!-- Check that junit.jar is in $ANT_HOME/lib or junit task fails -->
+		<available classname="junit.framework.TestCase" property="junit.present"/>
+		<fail unless="junit.present" message="Please copy junit.jar into ${env.ANT_HOME}/lib"/>
 
-        <taskdef name="dbunit" classname="org.dbunit.ant.DbUnitTask" classpathref="dao.test.classpath"/>
-        
-        <!-- Test for Tomcat 5.0.x -->
-        <available classname="org.apache.catalina.ant.SessionsTask" property="tomcat5">
-            <classpath>
-                <pathelement path="${tomcat.home}/server/lib/catalina-ant.jar"/>
-            </classpath>
-        </available>
-        
-        <!-- Test for Tomcat 5.5.x -->
-        <available file="${tomcat.home}/common/lib/jasper-compiler-jdt.jar" property="tomcat5.5"/>
-        
-        <!-- Conditionally set property for converting to JSP 2.0 -->
-        <condition property="convert.to.jsp2">
-            <equals arg1="${jsp.2}" arg2="true"/>
-        </condition>
-    </target>
-    
-    <!-- Check timestamp on files -->
-    <target name="prepare" depends="init" description="create target directories">
-        <tstamp/>
-        <tstamp><format property="copyright.year" pattern="yyyy"/></tstamp>
-        <echo message="Preparing target directory '${webapp.target}'"/>
-        <mkdir dir="${webapp.target}"/>
-        <mkdir dir="${webapp.target}/WEB-INF"/>
-        <mkdir dir="${webapp.dist}"/>
-        
-        <!-- Make sure hibernatedoclet is necessary -->
-        <uptodate property="hibernatedoclet.unnecessary">
-            <srcfiles dir="src/dao" includes="**/*.java"/>
-            <srcfiles dir="${build.dir}/dao/gen" includes="**/*.java"/>
-            <mapper type="glob" from="*.java" to="${build.dir}/dao/classes/*.class"/>
-        </uptodate>
-        
-        <!-- Make sure webdoclet is necessary -->
-        <uptodate property="webdoclet.uptodate">
-            <srcfiles dir="src/web" includes="**/*.java"/>
-            <mapper type="glob" from="*.java" to="${build.dir}/web/classes/*.class"/>
-        </uptodate>
+		<taskdef name="dbunit" classname="org.dbunit.ant.DbUnitTask" classpathref="dao.test.classpath"/>
 
-        <condition property="webdoclet.unnecessary">
-            <and>
-                <equals arg1="${webdoclet.uptodate}" arg2="true"/>
-                <available file="${webapp.target}/WEB-INF/web.xml"/>
-            </and>
-        </condition>
-        
-    </target>
+		<!-- Test for Tomcat 5.0.x -->
+		<available classname="org.apache.catalina.ant.SessionsTask" property="tomcat5">
+			<classpath>
+				<pathelement path="${tomcat.home}/server/lib/catalina-ant.jar"/>
+			</classpath>
+		</available>
 
-    <!-- List of variables in .properties files that will be replaced at
+		<!-- Test for Tomcat 5.5.x -->
+		<available file="${tomcat.home}/common/lib/jasper-compiler-jdt.jar" property="tomcat5.5"/>
+
+		<!-- Conditionally set property for converting to JSP 2.0 -->
+		<condition property="convert.to.jsp2">
+			<equals arg1="${jsp.2}" arg2="true"/>
+		</condition>
+	</target>
+
+	<!-- Check timestamp on files -->
+	<target name="prepare" depends="init" description="create target directories">
+		<tstamp/>
+		<tstamp>
+			<format property="copyright.year" pattern="yyyy"/>
+		</tstamp>
+		<echo message="Preparing target directory '${webapp.target}'"/>
+		<mkdir dir="${webapp.target}"/>
+		<mkdir dir="${webapp.target}/WEB-INF"/>
+		<mkdir dir="${webapp.dist}"/>
+
+		<!-- Make sure hibernatedoclet is necessary -->
+		<uptodate property="hibernatedoclet.unnecessary">
+			<srcfiles dir="src/dao" includes="**/*.java"/>
+			<srcfiles dir="${build.dir}/dao/gen" includes="**/*.java"/>
+			<mapper type="glob" from="*.java" to="${build.dir}/dao/classes/*.class"/>
+		</uptodate>
+
+		<!-- Make sure webdoclet is necessary -->
+		<uptodate property="webdoclet.uptodate">
+			<srcfiles dir="src/web" includes="**/*.java"/>
+			<mapper type="glob" from="*.java" to="${build.dir}/web/classes/*.class"/>
+		</uptodate>
+
+		<condition property="webdoclet.unnecessary">
+			<and>
+				<equals arg1="${webdoclet.uptodate}" arg2="true"/>
+				<available file="${webapp.target}/WEB-INF/web.xml"/>
+			</and>
+		</condition>
+
+	</target>
+
+	<!-- List of variables in .properties files that will be replaced at
          build time -->
-    <filterset id="variables.to.replace">
-        <filter token="APPNAME" value="${webapp.name}"/>
-        <filter token="ENCRYPT-ALGORITHM" value="${encrypt.algorithm}"/>
-        <filter token="ERROR-MAILTO" value="${error.mailTo}"/>
-        <filter token="ERROR-MAILHOST" value="${error.mailHost}"/>
-        <filter token="ERROR-SERVER" value="${error.server}"/>
-        <filter token="FORM-AUTH-ACTION" value="${form.auth.action}"/>
-        <filter token="HTTP-PORT" value="${http.port}"/>
-        <filter token="HTTPS-PORT" value="${https.port}"/>
-        <filter token="TOMCAT-SERVER" value="${tomcat.server}"/>
-        <filter token="SECURE-LOGIN" value="${secure.login}"/>
-        <filter token="HIBERNATE-DIALECT" value="${hibernate.dialect}"/>
-    </filterset>
-            
-    <!-- List of variables to replace when configuring Tomcat -->
-    <filterset id="db.variables">
-        <filter token="DB-DRIVERNAME" value="${database.driver_class}"/>
-        <filter token="DB-URL" value="${database.url}"/>
-        <filter token="DB-USERNAME" value="${database.username}"/>
-        <filter token="DB-PASSWORD" value="${database.password}"/>
-        <filter token="EZDB-DRIVERNAME" value="${ez.database.driver_class}"/>
-        <filter token="EZDB-URL" value="${ez.database.url}"/>
-        <filter token="EZDB-USERNAME" value="${ez.database.username}"/>
-        <filter token="EZDB-PASSWORD" value="${ez.database.password}"/>
-    </filterset>
-    
-    <!-- Copy any resource or configuration files -->
-    <target name="copy-resources" depends="prepare"
-        description="Copy .properties and .xml files from source directory">
-        <copy todir="${build.dir}/web/classes" includeEmptyDirs="no">
-            <fileset dir="web/WEB-INF/classes">   
-                <exclude name="ApplicationResources_zh_CN.properties"/>
-                <include name="*.properties"/>
-                <include name="*.xml"/>
-                <include name="*.vm"/>   
-            </fileset>
-            <filterset refid="variables.to.replace"/>
-        </copy>            
-        <native2ascii src="web/WEB-INF/classes" dest="${build.dir}/web/classes" 
-            includes="ApplicationResources_zh_CN.properties" encoding="UTF-8"/>
-        <generate-database-properties/>
-        <copy todir="${build.dir}/web/classes" file="database.properties"/>
-    </target>
-    
-    <!-- =================================================================== -->
-    <!-- The "copy-web-files" target copies the static web resources portion -->
-    <!-- of your web application source into the build target area           -->
-    <!-- =================================================================== -->
-    <target name="copy-web-files" depends="prepare" description="Copy static files">
-        <echo message="Copying static files"/>
-        <!-- Remove the copy block below if you're not displaying 
-             version/copyright in the footer -->
-        <copy todir="${webapp.target}">
-            <fileset dir="web" includes="common/footer.jsp"/>
-            <filterset>
-                <filter token="APPVERSION" value="${webapp.version}"/>
-                <filter token="COPYRIGHT-YEAR" value="${copyright.year}"/>
-            </filterset>
-        </copy>
-        <copy todir="${webapp.target}" includeEmptyDirs="no">
-            <fileset dir="${basedir}/web">
-                <include name="**"/>
-                <exclude name="pages/**"/>
-                <exclude name="**/classes/**"/>
-                <exclude name="**/*-resources.xml"/>
-            </fileset>
-        </copy>
-        <!-- Copy JSP Pages under WEB-INF/pages -->
-        <copy todir="${webapp.target}/WEB-INF">
-            <fileset dir="${basedir}/web">
-                <include name="pages/**/*.jsp"/>
-            </fileset>
-            <fileset dir="${spring.dir}" includes="*.xml"/>   
-        </copy>
-        <!-- Copy *.txt files so they can be included in release notes -->
-        <copy todir="${webapp.target}">
-            <fileset dir="${basedir}">
-                <include name="*.txt"/>
-            </fileset>
-        </copy>
-    </target>
-    
-    <!-- =================================================================== -->
-    <!-- The "jsp-2" replaces JSTL's <c:out> tags with what's in "value" and -->
-    <!-- removes JSTL's 1.0 JARS                                             -->
-    <!-- =================================================================== -->
-    <target name="jsp-2" depends="webdoclet" if="convert.to.jsp2"
-        description="Convert JSP 1.2 tags (i.e. JSTL) to JSP 2.0">
-        <echo level="info">Change JSTL Tags to Run-Time</echo>
-        <replaceregexp flags="g">
-            <regexp pattern='uri="http://java.sun.com/jstl/core"'/>
-            <substitution expression='uri="http://java.sun.com/jstl/core_rt"'/>
-            <fileset dir="${webapp.target}" includes="**/*.jsp"/>
-        </replaceregexp>
-        <replaceregexp flags="g">
-            <regexp pattern='uri="http://java.sun.com/jstl/fmt"'/>
-            <substitution expression='uri="http://java.sun.com/jstl/fmt_rt"'/>
-            <fileset dir="${webapp.target}" includes="**/*.jsp"/>
-        </replaceregexp>
+	<filterset id="variables.to.replace">
+		<filter token="APPNAME" value="${webapp.name}"/>
+		<filter token="ENCRYPT-ALGORITHM" value="${encrypt.algorithm}"/>
+		<filter token="ERROR-MAILTO" value="${error.mailTo}"/>
+		<filter token="ERROR-MAILHOST" value="${error.mailHost}"/>
+		<filter token="ERROR-SERVER" value="${error.server}"/>
+		<filter token="FORM-AUTH-ACTION" value="${form.auth.action}"/>
+		<filter token="HTTP-PORT" value="${http.port}"/>
+		<filter token="HTTPS-PORT" value="${https.port}"/>
+		<filter token="TOMCAT-SERVER" value="${tomcat.server}"/>
+		<filter token="SECURE-LOGIN" value="${secure.login}"/>
+		<filter token="HIBERNATE-DIALECT" value="${hibernate.dialect}"/>
+	</filterset>
 
-        <echo level="info">Removing JSTL's c:out tags</echo>
-        <replaceregexp flags="g">
-            <regexp pattern='&lt;c:out value="([^"]*)"/&gt;'/>
+	<!-- List of variables to replace when configuring Tomcat -->
+	<filterset id="db.variables">
+		<filter token="DB-DRIVERNAME" value="${database.driver_class}"/>
+		<filter token="DB-URL" value="${database.url}"/>
+		<filter token="DB-USERNAME" value="${database.username}"/>
+		<filter token="DB-PASSWORD" value="${database.password}"/>
+		<filter token="EZDB-DRIVERNAME" value="${ez.database.driver_class}"/>
+		<filter token="EZDB-URL" value="${ez.database.url}"/>
+		<filter token="EZDB-USERNAME" value="${ez.database.username}"/>
+		<filter token="EZDB-PASSWORD" value="${ez.database.password}"/>
+		<filter token="WEBAPP-NAME" value="${webapp.name}"/>
+	</filterset>
+
+	<!-- Copy any resource or configuration files -->
+	<target name="copy-resources" depends="prepare"
+        description="Copy .properties and .xml files from source directory">
+		<copy todir="${build.dir}/web/classes" includeEmptyDirs="no">
+			<fileset dir="web/WEB-INF/classes">
+				<exclude name="ApplicationResources_zh_CN.properties"/>
+				<exclude name="ApplicationResources_no.properties"/>
+				<exclude name="ApplicationResources_no_NO_FKPSVV.properties"/>
+				<include name="*.properties"/>
+				<include name="*.xml"/>
+				<include name="*.vm"/>
+			</fileset>
+			<filterset refid="variables.to.replace"/>
+		</copy>
+		<native2ascii src="web/WEB-INF/classes" dest="${build.dir}/web/classes" 
+            includes="ApplicationResources_zh_CN.properties" encoding="UTF-8"/>
+		<generate-database-properties/>
+		<copy todir="${build.dir}/web/classes" file="database.properties"/>
+		<copy overwrite="true" tofile="${build.dir}/${webapp.name}/WEB-INF/applicationContext-${dao.type}.xml">
+			<fileset dir="src/dao" includes="**/*-${dao.type}.xml"/>
+			<filterset refid="variables.to.replace"/>
+		</copy>
+		<copy tofile="${build.dir}/${webapp.name}/WEB-INF/applicationContext-service.xml">
+			<fileset dir="src/service" includes="**/*-service.xml"/>
+		</copy>
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- The "copy-web-files" target copies the static web resources portion -->
+	<!-- of your web application source into the build target area           -->
+	<!-- =================================================================== -->
+	<target name="copy-web-files" depends="prepare" description="Copy static files">
+		<echo message="Copying static files"/>
+		<!-- Remove the copy block below if you're not displaying 
+             version/copyright in the footer -->
+		<copy todir="${webapp.target}">
+			<fileset dir="web" includes="common/footer.jsp"/>
+			<filterset>
+				<filter token="APPVERSION" value="${webapp.version}"/>
+				<filter token="COPYRIGHT-YEAR" value="${copyright.year}"/>
+			</filterset>
+		</copy>
+		<copy todir="${webapp.target}" includeEmptyDirs="no">
+			<fileset dir="${basedir}/web">
+				<include name="**"/>
+				<exclude name="pages/**"/>
+				<exclude name="**/classes/**"/>
+				<exclude name="**/*-resources.xml"/>
+			</fileset>
+		</copy>
+		<!-- Copy JSP Pages under WEB-INF/pages -->
+		<copy todir="${webapp.target}/WEB-INF">
+			<fileset dir="${basedir}/web">
+				<include name="pages/**/*.jsp"/>
+			</fileset>
+			<fileset dir="${spring.dir}" includes="*.xml"/>
+		</copy>
+		<!-- Copy *.txt files so they can be included in release notes -->
+		<copy todir="${webapp.target}">
+			<fileset dir="${basedir}">
+				<include name="*.txt"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- The "jsp-2" replaces JSTL's <c:out> tags with what's in "value" and -->
+	<!-- removes JSTL's 1.0 JARS                                             -->
+	<!-- =================================================================== -->
+	<target name="jsp-2" depends="webdoclet" if="convert.to.jsp2"
+        description="Convert JSP 1.2 tags (i.e. JSTL) to JSP 2.0">
+		<echo level="info">Change JSTL Tags to Run-Time</echo>
+		<replaceregexp flags="g">
+			<regexp pattern='uri="http://java.sun.com/jstl/core"'/>
+			<substitution expression='uri="http://java.sun.com/jstl/core_rt"'/>
+			<fileset dir="${webapp.target}" includes="**/*.jsp"/>
+		</replaceregexp>
+		<replaceregexp flags="g">
+			<regexp pattern='uri="http://java.sun.com/jstl/fmt"'/>
+			<substitution expression='uri="http://java.sun.com/jstl/fmt_rt"'/>
+			<fileset dir="${webapp.target}" includes="**/*.jsp"/>
+		</replaceregexp>
+
+		<echo level="info">Removing JSTL's c:out tags</echo>
+		<replaceregexp flags="g">
+			<regexp pattern='&lt;c:out value="([^"]*)"/&gt;'/>
             <substitution expression="\1"/>
             <fileset dir="${webapp.target}" includes="**/*.jsp"/>
         </replaceregexp>
@@ -248,7 +260,7 @@
         <!-- Copy Spring configuration files -->
         <mkdir dir="${build.dir}/dao/gen/META-INF"/>
         <copy overwrite="true" tofile="${build.dir}/dao/gen/META-INF/applicationContext-${dao.type}.xml">
-            <fileset dir="src/dao" includes="**/*-${dao.type}.xml" excludes="resources/**,target/**"/>
+            <fileset dir="src/dao" includes="**/*-${dao.type}.xml"/>
             <filterset refid="variables.to.replace"/>
         </copy>
         <jar destfile="${dist.dir}/${webapp.name}-dao.jar">
@@ -274,7 +286,7 @@
     <target name="package-service" depends="compile-service">
         <mkdir dir="${build.dir}/service/classes/META-INF"/>
         <copy tofile="${build.dir}/service/classes/META-INF/applicationContext-service.xml">
-            <fileset dir="src/service" includes="**/*-service.xml"  excludes="resources/**,target/**"/>
+            <fileset dir="src/service" includes="**/*-service.xml"/>
         </copy>
         <jar destfile="${dist.dir}/${webapp.name}-service.jar">
             <manifest>
@@ -289,7 +301,7 @@
     <target name="test-service" depends="copy-resources,compile-service,check-debug" description="Test service module">
         <test-module module="service"/>
     </target>
-<target name="compile-web" depends="package-service,stage-web" description="Compile web module">
+	<target name="compile-web" depends="package-service,stage-web" description="Compile web module">
         <compile module="web"/>
     </target>
 
@@ -301,7 +313,7 @@
     <!-- The "webdoclet" target generates web deployment descriptors.           -->
     <!-- =================================================================== -->
     <target name="webdoclet" depends="compile-web" unless="webdoclet.unnecessary"
-        description="Generate web deployment descriptors">
+        description="Generate web and Struts descriptors">
         <taskdef name="webdoclet" classname="xdoclet.modules.web.WebDocletTask">
             <classpath>
                 <path refid="xdoclet.classpath"/>
@@ -314,7 +326,7 @@
             excludedtags="@version,@author"
             verbose="true">
             <fileset dir="src/web"/>
-            <fileset dir="src/dao"/>
+            <fileset dir="${build.dir}/dao/classes"/>
             <deploymentdescriptor validateXML="true"
                 servletspec="2.3" sessiontimeout="10"
                 destdir="${webapp.target}/WEB-INF" distributable="false"
@@ -323,9 +335,19 @@
                 <configParam name="httpsPort" value="${https.port}"/>
                 <configParam name="daoType" value="${dao.type}"/>
             </deploymentdescriptor>
+            <strutsconfigxml validateXML="true" version="1.2"/>
+            <strutsvalidationxml/>
+           </webdoclet>
+           <webdoclet destdir="${webapp.target}/WEB-INF"
+              force="${xdoclet.force}"
+              mergedir="metadata/web"
+              excludedtags="@version,@author"
+              verbose="true">
+              <fileset dir="src/web" excludes="**/listener/**"/>
+              <fileset dir="${build.dir}/dao/classes"/>
             <jsptaglib validateXML="true"
                 description="Custom tag library for this application"
-                shortName="${webapp.name}" filename="${webapp.name}.tld"/>
+                shortName="soak" filename="soak.tld"/>
             <springvalidationxml/>
         </webdoclet>
     </target>
@@ -345,10 +367,15 @@
         </propertyfile>
         <!-- If Tomcat 5, uncomment the <dispatcher> elements in filter-mappings -->
         <if>
-            <or>
+            <and>    <!-- Modified Part start -->
+              <not>
+                <isset property="DeployOnOrion"/>
+              </not>
+              <or>
                 <isset property="tomcat5"/>
                 <isset property="tomcat5.5"/>
-            </or>
+              </or>
+            </and>   <!-- Modified Part end-->
             <then>
                 <replaceregexp flags="g"
                     file="${webapp.target}/WEB-INF/web.xml"
@@ -360,14 +387,15 @@
                     replace='&lt;/dispatcher&gt;'/>
             </then>
         </if>
-        <echo>Preparing tomcat-context.xml for inclusion in war</echo>
         <!-- Copy tomcat-context.xml file to context.xml -->
+    	<!--
         <if>
             <and>
                 <isset property="tomcat5"/>
                 <not><isset property="tomcat5.5"/></not>
             </and>
             <then>
+		        <echo>Preparing tomcat-context.xml for inclusion in war</echo>
                 <copy tofile="${webapp.dist}/context.xml"
                     file="metadata/conf/tomcat-context.xml" overwrite="true">
                     <filterset refid="db.variables"/>
@@ -376,13 +404,21 @@
             <elseif>
                 <isset property="tomcat5.5"/>
                 <then>
+			        <echo>Preparing tomcat-context.xml for inclusion in war</echo>
                     <copy tofile="${webapp.dist}/context.xml"
                         file="metadata/conf/tomcat-context-5.5.xml" overwrite="true">
+                -->
+			        <echo>Preparing orion-context.xml for inclusion in war</echo>
+                    <copy tofile="${webapp.dist}/context.xml"
+                        file="metadata/conf/oracle-context.xml" overwrite="true">
+    				
                         <filterset refid="db.variables"/>
                     </copy>
+    	<!--
                 </then>
             </elseif>
         </if>
+        -->
         <!-- Copy .properties files in src tree to build/web/classes -->
         <copy todir="${build.dir}/web/classes">
             <fileset dir="src/web">
@@ -396,7 +432,6 @@
             <metainf dir="${webapp.dist}" includes="context.xml"/>
 
             <classes dir="${build.dir}/web/classes">
-                <exclude name="**/database.properties"/>
             </classes>
 
             <lib file="${dist.dir}/${webapp.name}-dao.jar"/>
@@ -420,7 +455,7 @@
         	<lib dir="${ical4j.dir}" includes="*.jar"/>
         	<lib dir="${axis.dir}" includes="*.jar"/>
             <lib file="${hibernate.jar}"/>
-            <lib dir="${hibernate.dir}/lib" includes="*.jar" excludes="jta.jar"/>
+            <lib dir="${hibernate.dir}/lib" includes="*.jar"/>
             <lib dir="${spring.dir}" includes="*.jar" excludes="*mock.jar"/>
             <lib file="${commons-fileupload.jar}"/>
             <lib file="${requesttag.jar}"/>
@@ -428,7 +463,22 @@
             <lib dir="${velocity.dir}" includes="*.jar"/>   
             <lib file="${urlrewrite.jar}"/>
         </war>
-    </target>
+    	
+    	<ear appxml="ear/META-INF/application.xml" destfile="${webapp.dist}/${webapp.name}.ear">
+          <fileset dir="${webapp.dist}" includes="*.war"/>
+          <fileset dir="ear" includes="META-INF/orion-application.xml"/>
+    	</ear>
+
+    	<!-- Copy ear-file for Oracle App.server (OC4J)-->
+    	<!-- copy todir="c:/Programfiler/OCJ4/j2ee/home/applications" file="${webapp.dist}/${webapp.name}.ear"/ -->
+
+		<!-- Ekstra kopiering direkte til OC4J-mappe -->
+        <!-- copy todir="C:/oc4j_extended_101340/j2ee/home/applications" file="${webapp.dist}/${webapp.name}.ear"/ -->
+
+    	<!-- visning av tidspunkt for ferdig bygg -->
+		<tstamp><format property="finished" pattern="yyyy-MM-dd HH:mm:ss"/></tstamp>
+    	<echo>Finished: ${finished}</echo>
+	</target>
 
     <target name="test-web" depends="webdoclet,db-load,check-debug" description="Test web module">
         <copy todir="${webapp.target}/WEB-INF" file="${spring.dir}/validator-rules.xml"/>
@@ -444,17 +494,10 @@
             <echo>Compiling @{module}...</echo>
             <mkdir dir="${build.dir}/@{module}/classes"/>
             <mkdir dir="${test.dir}/@{module}/classes"/>
-            <javac srcdir="${src}/@{module};@{additional.src.dirs}"
-                destdir="${build.dir}/@{module}/classes"
-                debug="${compile.debug}"
-                deprecation="${compile.deprecation}"
-                optimize="${compile.optimize}"
-                classpathref="@{module}.compile.classpath">
-                <options/>
+            <javac srcdir="${src}/@{module};@{additional.src.dirs}" destdir="${build.dir}/@{module}/classes" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}" classpathref="@{module}.compile.classpath">
+                <options />
             </javac>
-            <javac srcdir="test/@{module}"
-                destdir="${test.dir}/@{module}/classes"
-                debug="true">
+            <javac srcdir="test/@{module}" destdir="${test.dir}/@{module}/classes" debug="true">
                 <classpath>
                     <path refid="@{module}.test.classpath"/>
                     <path location="${build.dir}/@{module}/classes"/>
@@ -903,7 +946,6 @@
 
         <unwar src="${webapp.dist}/${webapp.war}"
             dest="${tomcat.home}/webapps/${webapp.name}"/>
-
     </target>
     
     <!-- =================================================================== -->
@@ -1066,6 +1108,7 @@
                 <pathelement path="${java.home}/../lib/tools.jar"/>
                 <fileset dir="${tomcat.home}">
                     <include name="bin/bootstrap.jar"/>
+                    <include name="lib/jta.jar"/> <!-- debugStafto -->
                 </fileset>
             </classpath>
         </java>

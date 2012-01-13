@@ -49,7 +49,6 @@ public class GenericDAOTest extends BaseDAOTestCase {
         user.setPassword("bar");
         user.setFirstName("first");
         user.setLastName("last");
-        user.setId(1);
         user.getAddress().setCity("Denver");
         user.getAddress().setPostalCode("80465");
         user.setEmail("foo@bar.com");

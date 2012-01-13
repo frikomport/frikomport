@@ -14,6 +14,10 @@ import java.io.Serializable;
 import java.util.List;
 
 
+/**
+ * @author extkla
+ *
+ */
 public interface Manager {
     /**
      * Expose the setDAO method for testing purposes
@@ -50,4 +54,22 @@ public interface Manager {
      * @param id the identifier of the class
      */
     public void removeObject(Class clazz, Serializable id);
+
+	/**
+	 * @see DAO#evict(Object)
+	 * @param entity
+	 */
+	public void evict(Object entity);
+
+	/**
+	 * @see DAO#flush()
+	 * 
+	 */
+	public void flush();
+
+	/** @see DAO#contains(entity)
+	 * @param entity
+	 * @return
+	 */
+	public boolean contains(Object entity);
 }

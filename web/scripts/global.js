@@ -115,11 +115,13 @@ function getFormAsString(frmObj) {
    the search form when it is visible */
 function toggleForm(frmObj, iState) // 1 visible, 0 hidden 
 {
-	for(var i = 0; i < frmObj.length; i++) {
-		if (frmObj.elements[i].type.indexOf("select") == 0 || frmObj.elements[i].type.indexOf("checkbox") == 0) {
-            frmObj.elements[i].style.visibility = iState ? "visible" : "hidden";
+	if(frmObj != null){
+		for(var i = 0; i < frmObj.length; i++) {
+			if (frmObj.elements[i].type.indexOf("select") == 0 || frmObj.elements[i].type.indexOf("checkbox") == 0) {
+	            frmObj.elements[i].style.visibility = iState ? "visible" : "hidden";
+			}
 		}
-	} 
+	}
 }
 
 /* Helper function for re-ordering options in a select */
@@ -338,6 +340,27 @@ function confirmDeleteRegistration(obj) {
         return false;
     }
 }
+
+function confirmCancellation(obj) {
+    var msg = "Vil du avlyse " + obj + "?";
+    ans = confirm(msg);
+    if (ans) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function confirmCancellation(obj, prefix) {
+	var msg = prefix + "\n" + "Vil du avlyse " + obj + "?";
+    ans = confirm(msg);
+    if (ans) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 
 function highlightTableRows(tableId) {
     var previousClass = null;

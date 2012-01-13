@@ -19,6 +19,7 @@ import java.util.Vector;
 
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.Registration.Status;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
@@ -252,32 +253,53 @@ public class PdfUtil {
 			String start = formatter.format(course.getStartTime());
 			String stop = formatter.format(course.getStopTime());
 			String date = start.equals(stop)? start : start + " - " + stop;
+			
+			if("n/a".equalsIgnoreCase(course.getDuration())){
+				// pga. SVV's mulighet for å ikke oppgi varighet
+				course.setDuration(null);
+			}
 			String duration = course.getDuration()!=null ? (" (" + course.getDuration() + ")") : "";
 			
 			this.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.name")) + ": " + course.getName() + " - " + date + duration, 13, PdfUtil.ALIGN_LEFT);
 			this.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.responsible")) + ": " + course.getResponsible().getFullName() + "  /  " + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.instructor")) +  ": " + course.getInstructor().getName(), 9, PdfUtil.ALIGN_LEFT);
 			this.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.location")) + ": " + course.getLocation().getName() + ", " + course.getLocation().getAddress(), 9, PdfUtil.ALIGN_LEFT);
 			
-			Vector<String> tableHeader = new Vector<String>();
-			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.firstName")));
-			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.lastName")));
-			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.email")));
-			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.municipality")));
-			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.jobTitle")));
-			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.servicearea")));
-			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.workplace")));
-			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.phoneNumber.short")));
-			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.mobilePhone.short")));
-			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registration.comment")));
-			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registration.invoiced")));
-//				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registration.reserved")));
-			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registration.attended")));
+			TableHeader tableHeader = new TableHeader();
+			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.firstName")), 15);
+			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.lastName")), 15);
+			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.email")), 26);
+
+			if(ApplicationResourcesUtil.isSVV()){
+				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.organization")), 11);
+			}else{
+				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.municipality")), 11);
+			}
+
+			if(!ApplicationResourcesUtil.isSVV()){
+				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.jobTitle")), 13);
+				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.servicearea")), 13);
+				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.workplace")), 12);
+			}
 			
-			// absolute values for column widths (veeery testdriven)
-			float[] widths = {15,15,26,11,13,13,12,10,10,20,8,8};
+			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.phoneNumber.short")), 10);
+			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.mobilePhone.short")), 10);
+
+			if(!ApplicationResourcesUtil.isSVV()){
+				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registration.comment")), 20);
+			}
+
+			if(ApplicationResourcesUtil.isSVV()){
+				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registration.participants")), 8);
+			}
 			
-			Integer reserved = this.addTableHeader(tableHeader, widths);
-			Integer waiting = this.addTableHeader(tableHeader, widths);
+			if(!ApplicationResourcesUtil.isSVV()){
+				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registration.invoiced")), 8);
+				// tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registration.reserved")), 8);
+				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registration.attended")), 8);
+			}
+			
+			Integer reserved = this.addTableHeader(tableHeader.getColumnnames(), tableHeader.getWidths());
+			Integer waiting = this.addTableHeader(tableHeader.getColumnnames(), tableHeader.getWidths());
 			int rCount = 0;
 			int wCount = 0;
 				
@@ -290,34 +312,51 @@ public class PdfUtil {
 				row.add(r.getLastName());
 				row.add(r.getEmail());
 				try { row.add(r.getOrganization().getName()); }catch(Exception e) { row.add(""); } // if organization not set
-				row.add(r.getJobTitle());
-				try { row.add(r.getServiceArea().getName()); }catch(Exception e) { row.add(""); } // if servicearea not set
-				row.add(r.getWorkplace());
+
+				if(!ApplicationResourcesUtil.isSVV()){
+					row.add(r.getJobTitle());
+					try { row.add(r.getServiceArea().getName()); }catch(Exception e) { row.add(""); } // if servicearea not set
+					row.add(r.getWorkplace());
+				}
+				
 				row.add(r.getPhone());
 				row.add(r.getMobilePhone());
-				row.add(r.getComment());
-				row.add(r.getInvoiced()?StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("checkbox.checked")):StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("checkbox.unchecked")));
-//						row.add(r.getReserved()?StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("checkbox.checked")):StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("checkbox.unchecked")));
-				row.add(r.getAttended()?StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("checkbox.checked")):StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("checkbox.unchecked")));
 
-				if(r.getReserved()) {
-					this.addTableRow(row, reserved);
-					rCount++;
+				if(!ApplicationResourcesUtil.isSVV()){
+					row.add(r.getComment());
 				}
-				else {
+				
+				if(ApplicationResourcesUtil.isSVV()){
+					row.add(""+r.getParticipants());
+				}
+				
+				if(!ApplicationResourcesUtil.isSVV()){
+					row.add(r.getInvoiced()?StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("checkbox.checked")):StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("checkbox.unchecked")));
+					// row.add(r.getReserved()?StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("checkbox.checked")):StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("checkbox.unchecked")));
+					row.add(r.getAttended()?StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("checkbox.checked")):StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("checkbox.unchecked")));
+				}
+
+				if(r.getStatusAsEnum() == Status.RESERVED) {
+					this.addTableRow(row, reserved);
+					rCount += r.getParticipants();
+				}
+				else if(r.getStatusAsEnum() == Status.WAITING){
 					this.addTableRow(row, waiting);
-					wCount++;
+					wCount += r.getParticipants();
 				}
 			}
 
 			if(rCount > 0 || wCount > 0) {
-				this.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.attendants")) + ": " + rCount + "  /  " 
-						+ StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.waitlist")) + ": " + wCount 
-						+ "  (" + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationsSent.updated")) + " " + formatter.format(new Date()) + ")", 9, PdfUtil.ALIGN_LEFT);
+				String tmp = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationList.attendants")) + ": " + rCount;
+				if(!ApplicationResourcesUtil.isSVV()){
+					tmp += "  /  " + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.waitlist")) + ": " + wCount; 
+				}
+				tmp += "  (" + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationsSent.updated")) + " " + formatter.format(new Date()) + ")"; 
+				this.addText(tmp, 9, PdfUtil.ALIGN_LEFT);
 				this.emptyLine(10);
 			}
 			if(rCount > 0) {
-				this.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.attendants")), 11, PdfUtil.ALIGN_LEFT);
+				this.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationList.attendants")), 11, PdfUtil.ALIGN_LEFT);
 				this.addTableToDocument(reserved);
 			}
 			if(rCount > 0 && wCount > 0) this.emptyLine(10);
@@ -439,4 +478,36 @@ public class PdfUtil {
 		}
 	}
 
+	/**
+	 * Klasse for å "dynamisk" kunne bygge opp width[] for tilpassede kolonnebredder i tabell
+	 * @author extsam
+	 */
+	private class TableHeader {
+		Vector<String> c = null;
+		Vector<Float> w = null;
+		
+		public TableHeader(){
+			c = new Vector<String>();
+			w = new Vector<Float>();
+		}
+
+		public void add(String columnname, float approxWidth){
+			c.add(columnname);
+			w.add(approxWidth);
+		}
+		
+		public Vector<String> getColumnnames(){
+			return c;
+		}
+		
+		public float[] getWidths(){
+			int num = w.size();
+			float[] widths = new float[num];
+			for(int i=0; i<w.size(); i++){
+				widths[i] = w.elementAt(i).floatValue();
+			}
+			return widths;
+		}
+	}
+	
 }

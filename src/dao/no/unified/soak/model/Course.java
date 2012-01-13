@@ -12,6 +12,12 @@ package no.unified.soak.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
+
+import no.unified.soak.validation.LessThanField;
+import no.unified.soak.validation.MinValue;
+import no.unified.soak.validation.Required;
+import no.unified.soak.validation.ValidateOnlyIfConfigurationIsTrue;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -37,7 +43,9 @@ public class Course extends BaseObject implements Serializable {
     private Category category;
     private Long categoryid;
     private Organization organization;
+    private Organization organization2;
     private Long organizationid;
+    private Long organization2id;
     private User responsible;
     private Long responsibleid;
     private String responsibleUsername;
@@ -67,8 +75,65 @@ public class Course extends BaseObject implements Serializable {
     private Integer status = 0;
     private Boolean restricted = false;
     private Boolean chargeoverdue = false;
+    private Integer attendants;
+    private Set<Registration> registrations;
+    private Integer numberOfRegistrations;
+    private Integer numberOfParticipants;
+    private String additionalinfo;
+    
+    public void setNumberOfParticipants(Integer numberOfParticipants) {
+		this.numberOfParticipants = numberOfParticipants;
+	}
+    
+	public Integer getNumberOfParticipants() {
+		return numberOfParticipants;
+	}
 
-    /**
+	public Integer getNumberOfRegistrations() {
+		return numberOfRegistrations;
+	}
+
+	public void setNumberOfRegistrations(Integer numberOfRegistrations) {
+		this.numberOfRegistrations = numberOfRegistrations;
+	}
+
+	/**
+     * @return the registrations
+     * @hibernate.set
+     *  inverse="true"
+     *  cascade="none"
+     * @hibernate.collection-key
+     *  column="courseid"
+     * @hibernate.collection-one-to-many class="no.unified.soak.model.Registration"
+     */
+    public Set<Registration> getRegistrations() {
+		return registrations;
+	}
+
+	/**
+	 * @param registrations the registrations to set
+	 */
+	public void setRegistrations(Set<Registration> registrations) {
+		this.registrations = registrations;
+	}
+
+	/**
+	 * @return the number of attendants
+     * @hibernate.property column="attendants" not-null="false"
+	 */
+	public Integer getAttendants() {
+		return attendants;
+	}
+
+	/**
+	 * @param attendants the number of attendants to set
+	 */
+    @MinValue("0")
+	public void setAttendants(Integer attendants) {
+		this.attendants = attendants;
+	}
+
+	/**
      * @return
      * @hibernate.many-to-one not-null="false" column="categoryid"
      *                        insert="false" update="false" cascade="none"
@@ -113,6 +178,7 @@ public class Course extends BaseObject implements Serializable {
      *            The role to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setRole(String role) {
         this.role = role;
     }
@@ -130,6 +196,7 @@ public class Course extends BaseObject implements Serializable {
      *            The instructorid to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setInstructorid(Long instructorid) {
         this.instructorid = instructorid;
     }
@@ -147,6 +214,7 @@ public class Course extends BaseObject implements Serializable {
      *            The responsibleUsername to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setResponsibleUsername(String responsibleusername) {
         this.responsibleUsername = responsibleusername;
     }
@@ -168,7 +236,7 @@ public class Course extends BaseObject implements Serializable {
     }
 
     /**
-     * @hibernate.property column="serviceareaid" not-null="true"
+     * @hibernate.property column="serviceareaid" not-null="false"
      * @return Returns the serviceAreaid.
      */
     public Long getServiceAreaid() {
@@ -180,6 +248,7 @@ public class Course extends BaseObject implements Serializable {
      *            The serviceAreaid to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setServiceAreaid(Long serviceAreaid) {
         this.serviceAreaid = serviceAreaid;
     }
@@ -213,6 +282,7 @@ public class Course extends BaseObject implements Serializable {
      *            The duration to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setDuration(String duration) {
         this.duration = duration;
     }
@@ -230,6 +300,7 @@ public class Course extends BaseObject implements Serializable {
      *            The feeExternal to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setFeeExternal(Double feeExternal) {
         this.feeExternal = feeExternal;
     }
@@ -247,6 +318,7 @@ public class Course extends BaseObject implements Serializable {
      *            The feeInternal to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setFeeInternal(Double feeInternal) {
         this.feeInternal = feeInternal;
     }
@@ -301,8 +373,6 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      *
-     * /**
-     *
      * @return Returns the maxAttendants.
      * @hibernate.property column="maxattendants" not-null="true"
      */
@@ -315,6 +385,8 @@ public class Course extends BaseObject implements Serializable {
      *            The maxAttendants to set.
      * @spring.validator type="required"
      */
+    @Required
+    @MinValue("1")
     public void setMaxAttendants(Integer maxAttendants) {
         this.maxAttendants = maxAttendants;
     }
@@ -332,6 +404,7 @@ public class Course extends BaseObject implements Serializable {
      *            The name to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setName(String name) {
         this.name = name;
     }
@@ -349,6 +422,8 @@ public class Course extends BaseObject implements Serializable {
      *            The registerBy to set.
      * @spring.validator type="required"
      */
+    @Required
+    @LessThanField("stopTime")
     public void setRegisterBy(Date registerBy) {
         this.registerBy = registerBy;
     }
@@ -398,6 +473,7 @@ public class Course extends BaseObject implements Serializable {
      *            The reservedInternal to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setReservedInternal(Integer reservedInternal) {
         this.reservedInternal = reservedInternal;
     }
@@ -415,6 +491,8 @@ public class Course extends BaseObject implements Serializable {
      *            The startTime to set.
      * @spring.validator type="required"
      */
+    @Required
+    @LessThanField("stopTime")
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
@@ -432,14 +510,17 @@ public class Course extends BaseObject implements Serializable {
      *            The stopTime to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setStopTime(Date stopTime) {
         this.stopTime = stopTime;
     }
 
-    /**
-     * @return Returns the type.
-     * @hibernate.property column="type" length="100"
-     */
+	/**
+	 * Gets "maalgruppe".
+	 * 
+	 * @return Returns the type.
+	 * @hibernate.property column="type" length="100"
+	 */
     public String getType() {
         return type;
     }
@@ -468,6 +549,22 @@ public class Course extends BaseObject implements Serializable {
         this.description = description;
     }
 
+    /**
+     * @return Returns the additionalinfo.
+     * @hibernate.property column="additionalinfo" length="1000" not-null="false"
+     */
+    public String getAdditionalinfo() {
+        return additionalinfo;
+    }
+
+    /**
+     * @param additionalinfo
+     *            The additionalinfo to set.
+     */
+    public void setAdditionalinfo(String additionalinfo) {
+        this.additionalinfo = additionalinfo;
+    }
+    
     /**
      * @return Returns the instructor.
      * @hibernate.many-to-one not-null="true" column="instructorid"
@@ -515,14 +612,14 @@ public class Course extends BaseObject implements Serializable {
      *            The locationid to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setLocationid(Long locationid) {
         this.locationid = locationid;
     }
 
     /**
      * @return Returns the organization.
-     * @hibernate.many-to-one not-null="true" column="organizationid"
-     *                        update="false" cascade="none" insert="false"
+     * @hibernate.many-to-one not-null="true" column="organizationid" update="false" cascade="none" insert="false"
      */
     public Organization getOrganization() {
         return organization;
@@ -549,13 +646,50 @@ public class Course extends BaseObject implements Serializable {
      *            The organizationid to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setOrganizationid(Long organizationid) {
         this.organizationid = organizationid;
     }
 
+    /**
+     * @return Returns the organization2id.
+     * @hibernate.property column="organization2id" not-null="false"
+     */
+    public Long getOrganization2id() {
+        return organization2id;
+    }
+
+    /**
+     * @param organizationid
+     *            The organization2id to set.
+     * @spring.validator type="required"
+     */
+    @Required
+    public void setOrganization2id(Long organization2id) {
+        this.organization2id = organization2id;
+    }
+
+    /**
+     * @return Returns the organization2.
+     * @hibernate.many-to-one not-null="false" column="organization2id" update="false" cascade="none" insert="false"
+     */
+    public Organization getOrganization2() {
+    	if(organization2 == null){
+    		this.organization2 = new Organization();
+    	}
+        return organization2;
+    }
+
+    public void setOrganization2(Organization organization2) {
+    	if(organization2 == null){
+    		organization2 = new Organization();
+    	}
+        this.organization2 = organization2;
+    }
+
      /**
      * @return Returns the responsible.
-     * @hibernate.many-to-one not-null="true" column="responsibleusername" insert="false" update="false" cascade="none"
+     * @hibernate.many-to-one not-null="true" column="responsibleusername" insert="false" update="false" cascade="none" optimistic-lock="false"
      */
      public User getResponsible() {
      return responsible;
@@ -571,8 +705,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the serviceArea.
-     * @hibernate.many-to-one not-null="true" column="serviceareaid"
-     *                        cascade="none" insert="false" update="false"
+     * @hibernate.many-to-one not-null="false" column="serviceareaid" cascade="none" insert="false" update="false"
      */
     public ServiceArea getServiceArea() {
         return serviceArea;
@@ -608,6 +741,7 @@ public class Course extends BaseObject implements Serializable {
                                         .append("instructor", instructor)
                                         .append("name", name)
                                         .append("type", type)
+                                        .append("status", status)
                                         .append("startTime", startTime)
                                         .toString();
     }
@@ -650,6 +784,8 @@ public class Course extends BaseObject implements Serializable {
     	this.setInstructorid(original.getInstructorid());
     	this.setOrganization(original.getOrganization());
     	this.setOrganizationid(original.getOrganizationid());
+    	this.setOrganization2(original.getOrganization2());
+    	this.setOrganization2id(original.getOrganization2id());
     	this.setResponsible(original.getResponsible());
         this.setResponsibleUsername(original.getResponsibleUsername());
     	this.setResponsibleid(original.getResponsibleid());
@@ -669,6 +805,8 @@ public class Course extends BaseObject implements Serializable {
     	this.setRole(original.getRole());
     	this.setRestricted(original.getRestricted());
         this.setChargeoverdue(original.getChargeoverdue());
+    	this.setStatus(original.getStatus());
+    	this.setAttendants(original.getAttendants());
     }
 
     /**

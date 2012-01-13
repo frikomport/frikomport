@@ -7,12 +7,16 @@
 */
 package no.unified.soak.model;
 
+import java.io.Serializable;
+
+import no.unified.soak.validation.DigitsOnly;
+import no.unified.soak.validation.MaxLength;
+import no.unified.soak.validation.MinLength;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-
-import java.io.Serializable;
 
 
 /**
@@ -24,6 +28,7 @@ import java.io.Serializable;
  *
  */
 public class Address extends BaseObject implements Serializable {
+    private static final long serialVersionUID = 2308119741313418756L;
     protected String address;
     protected String city;
     protected String province;
@@ -125,6 +130,9 @@ public class Address extends BaseObject implements Serializable {
      * @param postalCode The postalCode to set
      *
      */
+    @DigitsOnly
+    @MinLength("4")
+    @MaxLength("4")
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }

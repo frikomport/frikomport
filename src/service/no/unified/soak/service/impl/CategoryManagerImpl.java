@@ -23,6 +23,10 @@ public class CategoryManagerImpl extends BaseManager implements CategoryManager 
         return categoryDAO.getCategory(id);
     }
 
+    public Category getCategory(String name) {
+        return categoryDAO.getCategory(name);
+    }
+    
     public List<Category> getAll() {
         return categoryDAO.getCategories(new Category(),new Boolean(false));
     }
@@ -48,4 +52,6 @@ public class CategoryManagerImpl extends BaseManager implements CategoryManager 
     public void removeCategory(Category category) {
         categoryDAO.removeCategory(category.getId());
     }
+
+    
 }

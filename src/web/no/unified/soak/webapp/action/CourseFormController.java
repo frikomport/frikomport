@@ -31,11 +31,13 @@ import no.unified.soak.model.Attachment;
 import no.unified.soak.model.Category;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Location;
+import no.unified.soak.model.Organization;
+import no.unified.soak.model.Person;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.User;
+import no.unified.soak.model.Organization.Type;
 import no.unified.soak.model.Registration.Status;
 import no.unified.soak.service.AttachmentManager;
-import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.LocationManager;
 import no.unified.soak.service.MailEngine;
@@ -46,8 +48,11 @@ import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.service.impl.CategoryManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.CourseStatus;
+import no.unified.soak.util.DateUtil;
 import no.unified.soak.util.MailUtil;
+import no.unified.soak.util.SMSUtil;
 import no.unified.soak.webapp.util.FileUtil;
 
 import org.apache.commons.lang.BooleanUtils;
@@ -85,11 +90,9 @@ public class CourseFormController extends BaseFormController {
     private RegistrationManager registrationManager = null;
 
     private NotificationManager notificationManager = null;
-
+    
     private MessageSource messageSource = null;
 
-    private ConfigurationManager configurationManager = null;
-    
     protected MailEngine mailEngine = null;
 
     protected MailSender mailSender = null;
@@ -110,11 +113,11 @@ public class CourseFormController extends BaseFormController {
     public void setMailEngine(MailEngine mailEngine) {
         this.mailEngine = mailEngine;
     }
-    
+
     public void setMailSender(MailSender mailSender) {
         this.mailSender = mailSender;
     }
-
+    
     public void setMessage(SimpleMailMessage message) {
         this.message = message;
     }
@@ -143,8 +146,7 @@ public class CourseFormController extends BaseFormController {
         this.locationManager = locationManager;
     }
 
-    public void setOrganizationManager(
-            OrganizationManager organizationManager) {
+    public void setOrganizationManager(OrganizationManager organizationManager) {
         this.organizationManager = organizationManager;
     }
 
@@ -152,15 +154,20 @@ public class CourseFormController extends BaseFormController {
         this.categoryManager = categoryManager;
     }
 
-    public void setConfigurationManager(ConfigurationManager configurationManager) {
-    	this.configurationManager = configurationManager;
+    public void setRegistrationManager(RegistrationManager registrationManager) {
+        this.registrationManager = registrationManager;
     }
+
+    
     /**
      * @see org.springframework.web.servlet.mvc.SimpleFormController#referenceData(javax.servlet.http.HttpServletRequest)
      */
     protected Map referenceData(HttpServletRequest request) throws Exception {
         Map<String, Object> model = new HashMap<String, Object>();
         Locale locale = request.getLocale();
+        if (log.isDebugEnabled()) {
+            log.debug("entering CourseFormController.referenceData() method...");
+        }
 
         List categories = categoryManager.getCategories(new Category(),new Boolean(false));
         if(categories != null){
@@ -179,7 +186,7 @@ public class CourseFormController extends BaseFormController {
             model.put("instructors", people);
         }
 
-        List responsibles = userManager.getResponsibles();
+        List responsibles = userManager.getResponsibles(false);
         if (responsibles != null) {
             model.put("responsible", responsibles);
         }
@@ -195,13 +202,18 @@ public class CourseFormController extends BaseFormController {
         if (locations != null) {
             model.put("locations", locations);
         }
-
+        
         // Retrieve all organization into an array
-        List organizations = organizationManager.getAllIncludingDummy(getText("misc.none", locale));
-        if (organizations != null) {
-            model.put("organizations", organizations);
+        String typeDBvalue = ApplicationResourcesUtil.getText("show.organization.pulldown.typeDBvalue");
+        if (typeDBvalue != null && !StringUtils.isBlank(typeDBvalue)) {
+        	Integer value = Integer.valueOf(typeDBvalue);
+        	Type type = Organization.Type.getTypeFromDBValue(value);
+        	model.put("organizations", organizationManager.getByTypeIncludingDummy(type, getText("misc.all", locale)));
+        } else {
+        	model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
         }
-
+        model.put("organizations2", organizationManager.getByTypeIncludingDummy(Organization.Type.AREA, getText("misc.all", locale)));
+        
         // Current time
         List<Date> time = new ArrayList<Date>();
         time.add(new Date());
@@ -220,7 +232,7 @@ public class CourseFormController extends BaseFormController {
         String courseid = request.getParameter("id");
 
         // Check whether or not we allow registrations
-        if ((courseid != null) && StringUtils.isNumeric(courseid)) {
+        if ((courseid != null) && StringUtils.isNotBlank(courseid) && StringUtils.isNumeric(courseid)) {
             Course course = courseManager.getCourse(courseid);
 
             HttpSession session = request.getSession(true);
@@ -259,18 +271,37 @@ public class CourseFormController extends BaseFormController {
                 if ((courseid != null) && StringUtils.isNumeric(courseid)
                         && StringUtils.isNotBlank(courseid)
                         && (Long.parseLong(courseid) != 0)) {
-                    Integer available = registrationManager.getAvailability(true, course);
-                    model.put("isCourseFull", new Boolean(available.intValue() == 0 ));
-                    Integer registrations = registrationManager.getNumberOfAttendants(false, course);
+
+                	// evnt. deaktivering av ventelistefunksjonalitet
+                    Integer availability = registrationManager.getAvailability(true, course);
+                    if (availability.intValue() > 0)
+                    	model.put("isCourseFull", new Boolean(false));
+                    else { 
+                    	if(configurationManager.isActive("access.registration.useWaitlists", true)){
+                    		// ventelistefunksjonalitet er aktivert, påmelding tillatt uten ledige plasser
+            	        	model.put("isCourseFull", new Boolean(false));
+                    		saveMessage(request, getText("errors.courseFull.waitlistwarning", locale));
+                    	}
+                    	else {
+                    		model.put("isCourseFull", new Boolean(true));
+                    		saveMessage(request, getText("errors.courseFull.warning", locale));
+                    	}
+                    }
+                    
+                    Integer registrations = registrationManager.getNumberOfAttendants(false, course, true);
                     Integer attachments = attachmentManager.getCourseAttachments(course.getId()).size();
                     // Course with registrations cannot be deleted.
                     model.put("canDelete", Boolean.valueOf(registrations.intValue() == 0 && attachments.intValue() == 0));
                     model.put("canUnpublish", Boolean.valueOf(registrations.intValue() == 0));
+                    model.put("cancelPrefix", getText("course.numberOfParticipants", new Object[]{registrations}, locale));
                 }
 
                 //Check if course is published
-                model.put("isPublished", Boolean.valueOf(course.getStatus().intValue() > CourseStatus.COURSE_CREATED.intValue()));
-                model.put("isCancelled", Boolean.valueOf(course.getStatus().equals(CourseStatus.COURSE_CANCELLED)));
+                model.put("isPublished", CourseStatus.COURSE_PUBLISHED.equals(course.getStatus()));
+                model.put("isCancelled", CourseStatus.COURSE_CANCELLED.equals(course.getStatus()));
+                
+                // re-publisering av allerede avlyst kurs
+                model.put("rePublishAllowed", new Boolean(configurationManager.isActive("access.course.rePublishCancelled", false)));
             }
             
             String altUsername = (String) request.getAttribute("altusername");
@@ -335,21 +366,35 @@ public class CourseFormController extends BaseFormController {
             newCourse = new Course();
             newCourse.copyAllButId(course);
             newCourse.setCopyid(new Long(copyid));
-        } else {
-            course = new Course();
-            course.setRole(Constants.ANONYMOUS_ROLE);
-            course.setCategoryid(1L);
-            course.setCategory(categoryManager.getCategory(1L));
-            // Check if a default organization should be applied
-            User user = getUser(request);
-            Object omid = user.getOrganizationid();
-            if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
-                course.setOrganizationid(new Long(omid.toString()));
-            }
-            // Default responsible
-            course.setResponsibleUsername(user.getUsername());
+		} else {
+			course = new Course();
+			course.setRole(Constants.ANONYMOUS_ROLE);
+			Category hendelseCategory = categoryManager.getCategory(Category.Name.HENDELSE.getDBValue());
+			if (hendelseCategory != null) {
+				course.setCategoryid(hendelseCategory.getId());
+			} else {
+				course.setCategoryid(1L);
+			}
+			course.setCategory(hendelseCategory);
+			// Check if a default organization should be applied
+			User user = (User) request.getSession().getAttribute(Constants.USER_KEY);
 
-        }
+			if(user != null){
+				// default organizations
+				Object orgId = user.getOrganizationid();
+				if ((orgId != null) && StringUtils.isNumeric(orgId.toString())) {
+					course.setOrganizationid(new Long(orgId.toString()));
+				}
+	
+				Object org2id = user.getOrganization2id();
+				if ((org2id != null) && StringUtils.isNumeric(org2id.toString())) {
+					course.setOrganization2id(new Long(org2id.toString()));
+				}
+	
+				// Default responsible
+				course.setResponsibleUsername(user.getUsername());
+			}
+		}
         if (newCourse != null) {
             return newCourse;
         } else {
@@ -366,7 +411,7 @@ public class CourseFormController extends BaseFormController {
             HttpServletResponse response, Object command, BindException errors)
     throws Exception {
         if (log.isDebugEnabled()) {
-            log.debug("entering 'onSubmit' method...");
+            log.debug("entering CourseFormController.onSubmit() method...");
         }
 
         Map<String,Object> model = new HashMap<String,Object>();
@@ -429,182 +474,123 @@ public class CourseFormController extends BaseFormController {
                 return showForm(request, response, errors);
             }
         } // or to save/update?
-        else {
-            // Save or publish
-            if(request.getParameter("save") != null && isNew){
-                course.setStatus(CourseStatus.COURSE_CREATED);
-            }
-            if(request.getParameter("unpublish") != null){
-                course.setStatus(CourseStatus.COURSE_CREATED);
-            }
-            if(request.getParameter("publish") != null){
-                course.setStatus(CourseStatus.COURSE_PUBLISHED);
-            }
-            if(request.getParameter("cancelled") != null){
-                course.setStatus(CourseStatus.COURSE_CANCELLED);
-            }
-            log.debug("recieved 'save/publish/cancel' from jsp");
-            // Parse date and time fields together
-            String format = getText("date.format", request.getLocale()) + " " + getText("time.format", request.getLocale());
-            Object[] args = null;
+		else {
+			// Save or publish
+			log.debug("recieved 'save/publish/cancel' from jsp");
+			Object[] args = null;
 
-            try {
-                Date time = parseDateAndTime(request, "startTime", format);
+			args = setDatesToCourseAndMakeErrorMessages(request, errors, course, args);
 
-                if (time != null) {
-                    course.setStartTime(time);
-                } else {
-                    throw new BindException(course, "startTime");
-                }
-            } catch (Exception e) {
-                args = new Object[] {
-                        getText("course.startTime", request.getLocale()),
-                        getText("date.format.localized", request.getLocale()),
-                        getText("time.format.localized", request.getLocale()) };
-                errors.rejectValue("startTime", "errors.dateformat", args,
-                "Invalid date or time");
-            }
+			setCourseStatus(request, course, isNew);
+			
+			if(course.getStatus() == CourseStatus.COURSE_CANCELLED){
+				/*
+				 * Dersom et kurs/møte skal avlyses velger vi å se bort i fra de faktiske innholdet i 
+				 * course-objektet mottatt fra form, og velger derfor å hente orginalen på nytt og sette 
+				 * status på nytt. 
+				 * - Dette gjøres for å unngå evnt. valideringsproblemer nå eneste ønske er å avlyse.
+				 */
+				courseManager.evict(course); // for å evnt. valideringsfeil pga. deaktivert lokale e.l.
+				course = courseManager.getCourse(course.getId().toString());
+				course.setStatus(CourseStatus.COURSE_CANCELLED);
+			}
 
-            try {
-                Date time = parseDateAndTime(request, "stopTime", format);
+			enrichWithDefaultvaluesToAvoidErrors(course);
 
-                if (time != null) {
-                    course.setStopTime(time);
-                } else {
-                    throw new BindException(course, "stopTime");
-                }
-            } catch (Exception e) {
-                args = new Object[] {
-                        getText("course.stopTime", request.getLocale()),
-                        getText("date.format.localized", request.getLocale()),
-                        getText("time.format.localized", request.getLocale()) };
-                errors.rejectValue("stopTime", "errors.dateformat", args,
-                "Invalid date or time");
-            }
+			if (validateAnnotations(course, errors, null) > 0) {
+				args = new Object[] {};
+			}
 
-            try {
-                course.setRegisterStart(parseDateAndTime(request,
-                        "registerStart", format));
-            } catch (Exception e) {
-                args = new Object[] {
-                        getText("course.registerStart", request.getLocale()),
-                        getText("date.format.localized", request.getLocale()),
-                        getText("time.format.localized", request.getLocale()) };
-                errors.rejectValue("registerStart", "errors.dateformat", args,
-                "Invalid date or time");
-            }
+			if (course.getAttendants() != null && new Date().before(course.getStartTime())) {
+				args = new Object[] { DateUtil.convertDateToString(new Date()) };
+				errors.rejectValue("attendants", "errors.toearlytosaveAttendants", args,
+						"Antall oppmøtte kan ikke registreres før arrangementet har startet.");
+			}
 
-            try {
-                course
-                .setReminder(parseDateAndTime(request, "reminder",
-                        format));
-            } catch (Exception e) {
-                args = new Object[] {
-                        getText("course.reminder", request.getLocale()),
-                        getText("date.format.localized", request.getLocale()),
-                        getText("time.format.localized", request.getLocale()) };
-                errors.rejectValue("reminder", "errors.dateformat", args,
-                "Invalid date or time");
-            }
+			if (args != null) {
+				courseManager.evict(course);
+				return showForm(request, response, errors);
+			}
 
-            try {
-                Date time = parseDateAndTime(request, "registerBy", format);
+			// håndtering av eventer som blir opprettet med dato tilbake i tid
+			if(course.getStartTime().before(new Date()) && course.getStopTime().before(new Date())){
+				course.setStatus(CourseStatus.COURSE_FINISHED);
+			}
+			
+			courseManager.saveCourse(course);
 
-                if (time != null) {
-                    course.setRegisterBy(time);
-                } else {
-                    throw new BindException(course, "registerBy");
-                }
-            } catch (Exception e) {
-                args = new Object[] {
-                        getText("course.registerBy", request.getLocale()),
-                        getText("date.format.localized", request.getLocale()),
-                        getText("time.format.localized", request.getLocale()) };
-                errors.rejectValue("registerBy", "errors.dateformat", args,
-                "Invalid date or time");
-            }
+			String key = getUserMessageKey(request, course, isNew);
+			saveMessage(request, getText(key, locale));
 
-            if (args != null) {
-                return showForm(request, response, errors);
-            }
+			boolean enablemail = false;
+			boolean waitinglist = false;
 
-            courseManager.saveCourse(course);
+			// If not new, we need to send out a message to everyone registered
+			// to the course that things have changed
+			// and check if the notificationlist for the course needs to be
+			// reset
+			if (isNew) {
+				// check if this course is a copy and is being published
+				if ((course.getCopyid() != null) && (request.getParameter("publish") != null)) {
+					List<Long> ids = new ArrayList<Long>();
+					ids.add(course.getCopyid());
+					List<Registration> registrationsOnOrginalCourse = registrationManager.getWaitingListRegistrations(ids);
+					// check if the original course has a waiting list
+					if (!registrationsOnOrginalCourse.isEmpty()) {
+						enablemail = true;
+						waitinglist = true;
+					}
+				}
+				model.put("newCourse", "true");
+				courseId = course.getId();
+				sendEmailToResponsible(course);
 
-            String key = null;
-            if(course.getStatus().equals(CourseStatus.COURSE_CREATED)) {
-                key = "course.created";
-            }
-            else if(course.getStatus().equals(CourseStatus.COURSE_PUBLISHED)) {
-                key = "course.published";
-            }
-            else if(course.getStatus().equals(CourseStatus.COURSE_CANCELLED)) {
-                key = "course.cancelled";
-            }
-            else {
-                key = "course.updated";
-            }
+			} else {
+				List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null,
+						(Status) null, null, null, null, null, null, null);
+				if (registrations.isEmpty()) {
+					// check if this course is a copy and is being published
+					if ((course.getCopyid() != null) && (request.getParameter("publish") != null)) {
+						List<Long> ids = new ArrayList<Long>();
+						ids.add(course.getCopyid());
+						List<Registration> registrationsOnOrginalCourse = registrationManager.getWaitingListRegistrations(ids);
+						// check if the original course has a waiting list
+						if (!registrationsOnOrginalCourse.isEmpty()) {
+							enablemail = true;
+							waitinglist = true;
+						}
+					}
+				} else {
 
-            boolean enablemail = false;
-            boolean waitinglist = false;
+					// check if there has been a change relevant for users
+					// registered on the course
+					Course originalCourse = (Course) request.getSession().getAttribute(Constants.ORG_COURSE_KEY);
+					List<String> changedList = new ArrayList<String>();
+					if (originalCourse != null) {
+						String format = getText("date.format", request.getLocale()) + " " + getText("time.format", request.getLocale());
+						changedList = courseManager.getChangedList(originalCourse, course, format);
+						if (changedList.size() != 0) {
+							enablemail = true;
+							if(configurationManager.isActive("sms.confirmedRegistrationChangedCourse", false)){
+								SMSUtil.sendCourseChangedMessage(course, registrations, changedList);
+							}
+						}
+					}
+				}
 
-            saveMessage(request, getText(key, locale));
-
-            // If not new, we need to send out a message to everyone registered
-            // to the course that things have changed
-            // and check if the notificationlist for the course needs to be reset
-            if (isNew) {
-                //check if this course is a copy and is being published
-                if ((course.getCopyid() != null) && (request.getParameter("publish") != null)){
-                    List <Long> ids = new ArrayList<Long>();
-                    ids.add(course.getCopyid());
-                    List<Registration> registrationsOnOrginalCourse = registrationManager
-                    .getWaitingListRegistrations(ids);
-                    //check if the original course has a waiting list
-                    if (!registrationsOnOrginalCourse.isEmpty()){
-                        enablemail=true;
-                        waitinglist= true;
-                    }
-                }
-                model.put("newCourse", "true");
-                courseId = course.getId();
-            } else {
-                List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, (Status)null, null, null, null, null);
-                if (registrations.isEmpty()) {
-                    //check if this course is a copy and is being published
-                    if ((course.getCopyid() != null) && (request.getParameter("publish") != null)){
-                        List <Long> ids = new ArrayList<Long>();
-                        ids.add(course.getCopyid());
-                        List<Registration> registrationsOnOrginalCourse = registrationManager.getWaitingListRegistrations(ids);
-                        //check if the original course has a waiting list
-                        if (!registrationsOnOrginalCourse.isEmpty()){
-                            enablemail=true;
-                            waitinglist=true;
-                        }
-                    }
-                } else {
-
-                    //check if there has been a change relevant for users registered on the course
-                    Course originalCourse = (Course) request.getSession().getAttribute(Constants.ORG_COURSE_KEY);
-                    List <String> changedList = new ArrayList<String>();
-                    if (originalCourse != null){
-                        changedList = courseManager.getChangedList(originalCourse, course, format);
-                        if (changedList.size() != 0){
-                            enablemail=true;
-                        }
-                    }
-                }
-
-                // If the reminder is set to be after this date, we need to make sure the notifications are set as not-sent
-                if (course.getReminder() != null) {
-                    if (course.getReminder().after(new Date())) {
-                        log.debug("Resetting notifications");
-                        notificationManager.resetCourse(course);
-                    }
-                }
-            }
-            model.put("enablemail", enablemail);
-            model.put("waitinglist", waitinglist);
-        }
+				// If the reminder is set to be after this date, we need to make
+				// sure the notifications are set as not-sent
+				if (course.getReminder() != null) {
+					if (course.getReminder().after(new Date())) {
+						log.debug("Resetting notifications");
+						notificationManager.resetCourse(course);
+					}
+				}
+			}
+			
+			model.put("enablemail", enablemail);
+			model.put("waitinglist", waitinglist);
+		}
 
         // Let the next page know what course we were editing here
         model.put("id", courseId.toString());
@@ -612,7 +598,186 @@ public class CourseFormController extends BaseFormController {
         return new ModelAndView(getSuccessView(), model);
     }
 
-    protected Date parseDateAndTime(HttpServletRequest request, String fieldName, String format) throws ParseException {
+	private void sendEmailToResponsible(Course course) {
+		User responsible = userManager.getUser(course.getResponsibleUsername());
+		course.setResponsible(responsible);
+		
+		Person instructor = personManager.getPerson(course.getInstructorid().toString());
+		course.setInstructor(instructor);
+		
+		Location location = locationManager.getLocation(course.getLocationid().toString());
+		course.setLocation(location);
+		
+		Organization organization = organizationManager.getOrganization(course.getOrganizationid());
+		course.setOrganization(organization);
+		
+		MailUtil.sendCourseCreatedMailToResponsible(course, mailEngine, mailSender, configurationManager.getConfigurationsMap());
+	}
+
+	private Object[] setDatesToCourseAndMakeErrorMessages(HttpServletRequest request, BindException errors, Course course,
+			Object[] args) {
+		String format = getText("date.format", request.getLocale()) + " " + getText("time.format", request.getLocale());
+
+		try {
+			Date time = parseDateAndTime(request, "startTime", format);
+
+			if (time != null) {
+				course.setStartTime(time);
+			} else {
+				course.setStartTime(null);
+				throw new BindException(course, "startTime");
+			}
+		} catch (Exception e) {
+			args = new Object[] { getText("course.startTime", request.getLocale()),
+					getText("date.format.localized", request.getLocale()), getText("time.format.localized", request.getLocale()) };
+			errors.rejectValue("startTime", "errors.dateformat", args, "Invalid date or time");
+		}
+
+		try {
+			Date time = parseDateAndTime(request, "stopTime", format);
+
+			if (time != null) {
+				course.setStopTime(time);
+			} else {
+				course.setStopTime(null);
+				throw new BindException(course, "stopTime");
+			}
+		} catch (Exception e) {
+			args = new Object[] { getText("course.stopTime", request.getLocale()),
+					getText("date.format.localized", request.getLocale()), getText("time.format.localized", request.getLocale()) };
+			errors.rejectValue("stopTime", "errors.dateformat", args, "Invalid date or time");
+		}
+
+		try {
+			course.setRegisterStart(parseDateAndTime(request, "registerStart", format));
+		} catch (Exception e) {
+			args = new Object[] { getText("course.registerStart", request.getLocale()),
+					getText("date.format.localized", request.getLocale()), getText("time.format.localized", request.getLocale()) };
+			errors.rejectValue("registerStart", "errors.dateformat", args, "Invalid date or time");
+		}
+
+		try {
+			course.setReminder(parseDateAndTime(request, "reminder", format));
+		} catch (Exception e) {
+			args = new Object[] { getText("course.reminder", request.getLocale()),
+					getText("date.format.localized", request.getLocale()), getText("time.format.localized", request.getLocale()) };
+			errors.rejectValue("reminder", "errors.dateformat", args, "Invalid date or time");
+		}
+
+		try {
+			Date registerBy = parseDateAndTime(request, "registerBy", format);
+			Date startTime = course.getStartTime();
+			boolean useRegisterBy = configurationManager.isActive("access.course.useRegisterBy", true);
+			
+			if (registerBy != null && useRegisterBy) {
+				// alt ok, registerBy settes eksplisitt fra form
+				course.setRegisterBy(registerBy);
+			}
+			else if(registerBy == null && useRegisterBy){
+				// feil, registerBy skal settes fra form, men er ikke tilstede
+				throw new BindException(course, "registerBy");
+			}
+			else if(registerBy == null && startTime != null && !useRegisterBy){
+				// registerBy settes ikke fra form, men settes fra startTime for kurs/møte
+				course.setRegisterBy(startTime);
+			}
+			else {
+				// registerBy settes ikke fra form, validering av startTime har feilet
+				// -- feilmelding skal ikke kastes, da denne vil bli kastet for startTime-feltet
+			}
+		} catch (Exception e) {
+			args = new Object[] { getText("course.registerBy", request.getLocale()),
+					getText("date.format.localized", request.getLocale()), getText("time.format.localized", request.getLocale()) };
+			errors.rejectValue("registerBy", "errors.dateformat", args, "Invalid date or time");
+		}
+		return args;
+	}
+
+	private void setCourseStatus(HttpServletRequest request, Course course, boolean isNew) {
+		if (request.getParameter("save") != null && isNew) {
+			course.setStatus(CourseStatus.COURSE_CREATED);
+		}
+		if (request.getParameter("save") != null && CourseStatus.COURSE_FINISHED.equals(course.getStatus())
+				&& course.getStartTime() != null && new Date().before(course.getStartTime())) {
+			course.setStatus(CourseStatus.COURSE_CREATED);
+		}
+		if (request.getParameter("unpublish") != null) {
+			course.setStatus(CourseStatus.COURSE_CREATED);
+		}
+		if (request.getParameter("publish") != null) {
+			course.setStatus(CourseStatus.COURSE_PUBLISHED);
+		}
+		if (request.getParameter("cancelled") != null) {
+			course.setStatus(CourseStatus.COURSE_CANCELLED);
+		}
+	}
+
+	private String getUserMessageKey(HttpServletRequest request, Course course, boolean isNew) {
+		String key = null;
+		if (course.getStatus().equals(CourseStatus.COURSE_PUBLISHED)) {
+			key = "course.published";
+		} else if (StringUtils.isNotBlank(request.getParameter("unpublish"))) {
+			key = "course.unpublished";
+		} else if (course.getStatus().equals(CourseStatus.COURSE_CREATED) || isNew) {
+			key = "course.created";
+		} else if (course.getStatus().equals(CourseStatus.COURSE_CANCELLED)) {
+			key = "course.cancelled";
+		} else {
+			key = "course.updated";
+		}
+		return key;
+	}
+
+	private void enrichWithDefaultvaluesToAvoidErrors(Course course) {
+
+		if(!configurationManager.isActive("access.course.usePayment", true)){ 
+			// dersom betaling for kurs er deaktivert
+			if (course.getReservedInternal() == null) {
+				course.setReservedInternal(0);
+			}
+			if (course.getFeeInternal() == null) {
+				course.setFeeInternal(0d);
+			}
+			if (course.getFeeExternal() == null) {
+				course.setFeeExternal(0d);
+			}
+		}
+
+		if(configurationManager.isActive("access.course.singleprice", false)){ 
+			// kun én pris og ingen reserverte plasser
+			if (course.getReservedInternal() == null) {
+				course.setReservedInternal(0);
+			}
+			if (course.getFeeInternal() == null) {
+				course.setFeeInternal(0d);
+			}
+		}
+		
+		if(course.getRegisterBy() == null && !configurationManager.isActive("access.course.useRegisterBy", true)){
+			// setter påmeldingsfrist til starttid dersom påmeldingsfrist ikke benyttes
+			course.setRegisterBy(course.getStartTime());
+		}
+		
+		if (StringUtils.isEmpty(course.getDuration()) && !configurationManager.isActive("access.course.showDuration", true)){
+			course.setDuration("N/A");
+		}
+		
+		if (StringUtils.isEmpty(course.getName()) && !configurationManager.isActive("access.course.showCourseName", true)){
+			course.setName(ApplicationResourcesUtil.getText("course.defaultname"));
+		}
+		
+		if(StringUtils.isEmpty(course.getRole())){
+			course.setRole(Constants.ANONYMOUS_ROLE);
+		}
+		
+		if(ApplicationResourcesUtil.isSVV()){
+			// påmeldinger er ikke offentlig tilgjengelig via courseDetails.jsp
+			course.setRestricted(true);
+			course.setRegisterStart(new Date());
+		}
+	}
+
+	protected Date parseDateAndTime(HttpServletRequest request, String fieldName, String format) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat(format);
         formatter.setLenient(false);
         formatter.set2DigitYearStart(formatter.parse("01.01.2000 00:00"));
@@ -639,13 +804,13 @@ public class CourseFormController extends BaseFormController {
     private void sendMail(Locale locale, Course course, int event, String mailComment) {
         log.debug("Sending mail from CourseFormController");
         // Get all registrations
-        List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, (Status) null, null, null, null, null);
+        List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, (Status) null, null, null, null, null, null, null);
 
         // Build standard e-mail body
 		StringBuffer msg = null;
 		switch(event) {
 			case Constants.EMAIL_EVENT_COURSEDELETED:
-				msg = MailUtil.create_EMAIL_EVENT_COURSEDELETED_body(course, mailComment);
+				msg = MailUtil.create_EMAIL_EVENT_COURSEDELETED_body(course, mailComment, configurationManager.getConfigurationsMap());
 				break;
 			default:
 				if(log.isDebugEnabled()) log.debug("sendMail: Handling of event:" + event + " not implemented..!");
@@ -660,11 +825,4 @@ public class CourseFormController extends BaseFormController {
 		}
     }
 
-    /**
-     * @param registrationManager
-     *            The registrationManager to set.
-     */
-    public void setRegistrationManager(RegistrationManager registrationManager) {
-        this.registrationManager = registrationManager;
-    }
 }

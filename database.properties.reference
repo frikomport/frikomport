@@ -42,9 +42,9 @@ hibernate.show_sql = false
 ## Oracle
 hibernate.dialect = org.hibernate.dialect.OracleDialect
 hibernate.connection.driver_class = oracle.jdbc.driver.OracleDriver
-hibernate.connection.username = ora
-hibernate.connection.password = ora
-hibernate.connection.url = jdbc:oracle:thin:@localhost:1521:test
+hibernate.connection.username = frikom
+hibernate.connection.password = frikom
+hibernate.connection.url = jdbc:oracle:thin:@localhost:1521:XE
 
 
 ## Sybase

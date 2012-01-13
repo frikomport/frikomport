@@ -10,16 +10,16 @@
  */
 package no.unified.soak.dao.hibernate;
 
+import java.util.List;
+
 import no.unified.soak.dao.OrganizationDAO;
 import no.unified.soak.model.Organization;
+import no.unified.soak.model.Organization.Type;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-
 import org.springframework.orm.ObjectRetrievalFailureException;
-
-import java.util.List;
 
 
 /**
@@ -71,8 +71,46 @@ public class OrganizationDAOHibernate extends BaseDAOHibernate
             criteria.add(Restrictions.eq("selectable", new Boolean("true")));
         }
 
+        criteria.addOrder(Order.desc("type"));
         criteria.addOrder(Order.asc("name"));
 
         return getHibernateTemplate().findByCriteria(criteria);
     }
+
+    public List getByType(Integer typeDBValue) {
+        DetachedCriteria criteria = DetachedCriteria.forClass(Organization.class);
+
+        // If type is provided, filter only that type of organization.
+        if (typeDBValue != null) {
+            criteria.add(Restrictions.eq("type", typeDBValue));
+        }
+        
+        // Find only active organizations
+        criteria.add(Restrictions.eq("selectable", new Boolean("true")));
+
+        criteria.addOrder(Order.asc("name"));
+
+        return getHibernateTemplate().findByCriteria(criteria);
+    }
+
+    public List getByParent(Long parentid, Type type) {
+        DetachedCriteria criteria = DetachedCriteria.forClass(Organization.class);
+
+        // If type is provided, filter only that type of organization.
+        if (type != null) {
+            criteria.add(Restrictions.eq("type", type.getTypeDBValue()));
+        }
+        
+        if (parentid != null) {
+            criteria.add(Restrictions.eq("parentid", parentid));
+        }
+        
+        // Find only active organizations
+        criteria.add(Restrictions.eq("selectable", new Boolean("true")));
+
+        criteria.addOrder(Order.asc("name"));
+
+        return getHibernateTemplate().findByCriteria(criteria);
+    }
+
 }

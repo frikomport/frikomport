@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dataset>
-	<table name="category">
-        <column>id</column>
-        <column>name</column>
-        <column>selectable</column>
-        <row>
-            <value>1</value>
-            <value>Kurs</value>
-            <value>true</value>
-        </row>
-    </table>
 	<table name="organization">
 		<column>id</column>
 		<column>number</column>
@@ -1105,14 +1095,12 @@
 	<table name='attachment'>
 		<column>contenttype</column>
 		<column>courseid</column>
-		<column>locationid</column>
 		<column>filename</column>
 		<column>id</column>
 		<column>size</column>
 		<column>storedname</column>
 		<row>
 			<value>pdf</value>
-			<value>1</value>
 			<value>1</value>
 			<value>kursinformasjon.pdf</value>
 			<value>1</value>
@@ -1122,7 +1110,6 @@
 		<row>
 			<value>text</value>
 			<value>1</value>
-			<value>1</value>
 			<value>kurslokale.txt</value>
 			<value>2</value>
 			<value>20480</value>
@@ -1131,13 +1118,30 @@
 		<row>
 			<value>jpeg</value>
 			<value>1</value>
-			<value>1</value>
 			<value>kursholderen.jpg</value>
 			<value>3</value>
 			<value>30720</value>
 			<value>attach_3</value>
 		</row>
 	</table>
+
+	<table name='attachment'>
+		<column>contenttype</column>
+		<column>filename</column>
+		<column>id</column>
+		<column>locationid</column>
+		<column>size</column>
+		<column>storedname</column>
+		<row>
+			<value>rtf</value>
+			<value>lokasjonsvisning.rtf</value>
+			<value>4</value>
+			<value>1</value>
+			<value>10241</value>
+			<value>attach_4</value>
+		</row>
+	</table>
+	<!--Attachment-END-->
 	<!--Notification-START-->
 	<table name='notification'>
 		<column>id</column>
@@ -1162,47 +1166,43 @@
 	<!--Notification-END-->
 	<!--Configuration-START-->
     <table name="configuration">
-        <column>id</column>
-        <column>name</column>
+        <column>cfg_key</column>
         <column>value</column>
-        <column>active</column>
         <row>
-            <value>1</value>
             <value>show.menu</value>
             <value>true</value>
-            <value>1</value>
         </row>
         <row>
-            <value>2</value>
             <value>access.registration.delete</value>
             <value>false</value>
-            <value>1</value>
         </row>
         <row>
-            <value>3</value>
             <value>access.course.singleprice</value>
             <value>false</value>
-            <value>1</value>
         </row>
         <row>
-            <value>4</value>
             <value>access.registration.userdefaults</value>
             <value>false</value>
-            <value>1</value>
         </row>
         <row>
-            <value>5</value>
             <value>access.registration.anonymous</value>
             <value>false</value>
-            <value>1</value>
         </row>
         <row>
-            <value>6</value>
             <value>access.course.filterlocation</value>
             <value>false</value>
-            <value>1</value>
         </row>
     </table>
     <!--Configuration-END-->
+        <table name="category">
+        <column>id</column>
+        <column>name</column>
+        <column>selectable</column>
+        <row>
+            <value>1</value>
+            <value>Kurs</value>
+            <value>true</value>
+        </row>
+    </table>
 </dataset>
 

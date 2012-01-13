@@ -44,11 +44,11 @@
     <tr>
         <td></td>
         <td class="buttonBar">            
-            <authz:authorize ifAnyGranted="admin,editor">
+<c:if test="${isAdmin || isEducationResponsible}">
             <button type="button" onclick="location.href='<c:url value="/editCategory.html"><c:param name="id" value="${category.id}"/></c:url>'">
                 <fmt:message key="button.edit"/>
             </button>
-            </authz:authorize>
+</c:if>
             <input type="submit" class="button" name="cancel" onclick="bCancel=true"
                 value="<fmt:message key="button.cancel"/>" />        
         </td>

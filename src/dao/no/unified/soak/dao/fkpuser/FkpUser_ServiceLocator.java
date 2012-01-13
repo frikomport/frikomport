@@ -9,6 +9,8 @@ package no.unified.soak.dao.fkpuser;
 
 public class FkpUser_ServiceLocator extends org.apache.axis.client.Service implements no.unified.soak.dao.fkpuser.FkpUser_Service {
 
+    private static final long serialVersionUID = 138295962537922086L;
+
     public FkpUser_ServiceLocator() {
     }
 

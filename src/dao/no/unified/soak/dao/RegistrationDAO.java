@@ -82,8 +82,7 @@ public interface RegistrationDAO extends DAO {
 	 *            new Boolean(false) to count only those in status waiting.<br>
 	 * @return the number of attendants that fulfill the criteria. 
 	 */
-	public Integer getNumberOfAttendants(Boolean localOnly, Course course,
-			Boolean reserved);
+	public Integer getNumberOfParticipants(Boolean localOnly, Course course, Boolean reserved);
 	
 	/**
 	 * Returns a list of registration (also the canceled ones) based on several given vital attributes.
@@ -113,7 +112,7 @@ public interface RegistrationDAO extends DAO {
 	 * @return List of Courses
 	 */
 	public List getSpecificRegistrations(Long courseId, Long organizationId,
-			Long serviceAreaId, Registration.Status status, Boolean invoiced,
+			Long serviceAreaId, Registration.Status status, String firstname, String lastname, Boolean invoiced,
 			Boolean attended, Collection limitToCourses, String[] orderBy);
 
 	/**
@@ -144,7 +143,7 @@ public interface RegistrationDAO extends DAO {
 	 * @return List of Courses
 	 */
 	public List getSpecificRegistrations(Long courseId, Long organizationId,
-			Long serviceAreaId, RegistrationStatusCriteria statusCriteria, Boolean invoiced,
+			Long serviceAreaId, RegistrationStatusCriteria statusCriteria, String firstname, String lastname, Boolean invoiced,
 			Boolean attended, Collection limitToCourses, String[] orderBy);
 
 	/**
@@ -206,5 +205,7 @@ public interface RegistrationDAO extends DAO {
 	 * @return List of registrations
 	 */
 	public List<Registration> getUserRegistationsForCourse(String username, Long courseId);
+	
+	public Integer getNumberOfRegistrations(Long courseId);
 	
 }

@@ -31,6 +31,10 @@
 
     <bean id="reloadController" class="no.unified.soak.webapp.action.ReloadController"/>
 
+    <bean id="beanValidator" class="org.springmodules.validation.commons.DefaultBeanValidator">
+        <property name="validatorFactory" ref="validatorFactory"/>
+    </bean>
+
     <bean id="userFormController" class="no.unified.soak.webapp.action.UserFormController" autowire="byName">
         <property name="commandName" value="user"/>
         <property name="commandClass" value="no.unified.soak.model.User"/>
@@ -71,7 +75,7 @@
     <bean id="locationFormController" class="no.unified.soak.webapp.action.LocationFormController" autowire="byName">
         <property name="commandName" value="location"/>
         <property name="commandClass" value="no.unified.soak.model.Location"/>
-        <property name="validator" ref="beanValidator"/>
+        <!-- property name="validator" ref="beanValidator"/ -->
         <property name="formView" value="locationForm"/>
         <property name="successView" value="redirect:listLocations.html"/> 
     </bean>
@@ -89,7 +93,7 @@
     <bean id="personFormController" class="no.unified.soak.webapp.action.PersonFormController" autowire="byName">
         <property name="commandName" value="person"/>
         <property name="commandClass" value="no.unified.soak.model.Person"/>
-        <property name="validator" ref="beanValidator"/>
+        <!-- property name="validator" ref="beanValidator"/ -->
         <property name="formView" value="personForm"/>
         <property name="successView" value="redirect:listPeople.html"/>
     </bean>
@@ -135,13 +139,13 @@
     <bean id="courseFormController" class="no.unified.soak.webapp.action.CourseFormController" autowire="byName">
         <property name="commandName" value="course"/>
         <property name="commandClass" value="no.unified.soak.model.Course"/>
-        <property name="validator" ref="beanValidator"/>
+        <!--property name="validator" ref="beanValidator"/-->
         <property name="formView" value="courseForm"/>
         <property name="successView" value="redirect:notifyCourse.html"/>
         <property name="cancelView" value="redirect:listCourses.html"/>
         <property name="mailEngine" ref="mailEngine"/>
         <property name="message" ref="mailMessage"/>
-        <property name="templateName" value="accountCreated.vm"/>
+        <!--property name="templateName" value="accountCreated.vm"/-->
     </bean>
 
     <bean id="courseNotificationController" class="no.unified.soak.webapp.action.CourseNotificationController" autowire="byName">
@@ -192,9 +196,11 @@
     </bean>
 
     <bean id="registrationFormController" class="no.unified.soak.webapp.action.RegistrationFormController" autowire="byName">
+        <property name="messageSource" ref="messageSource"/>
+        <property name="mailEngine" ref="mailEngine"/>
         <property name="commandName" value="registration"/>
         <property name="commandClass" value="no.unified.soak.model.Registration"/>
-        <property name="validator" ref="beanValidator"/>
+        <!--  property name="validator" ref="beanValidator"/ -->
         <property name="formView" value="registrationForm"/>
         <property name="successView" value="redirect:registrationComplete.html"/>
         <property name="cancelView" value="redirect:listCourses.html"/>
@@ -225,7 +231,7 @@
     <bean id="organizationFormController" class="no.unified.soak.webapp.action.OrganizationFormController">
     	<property name="commandName"><value>organization</value></property>
   		<property name="commandClass"><value>no.unified.soak.model.Organization</value></property>
-		<property name="validator"><ref bean="beanValidator"/></property>
+		<!-- property name="validator"><ref bean="beanValidator"/></property -->
 		<property name="formView"><value>organizationForm</value></property>
 		<property name="successView" value="redirect:listOrganizations.html"/>
 		<property name="organizationManager"><ref bean="organizationManager"/></property>
@@ -237,6 +243,10 @@
 
     <bean id="waitingListController" class="no.unified.soak.webapp.action.WaitingListController" autowire="byName">
         <property name="viewName" value="waitingList"/>
+    </bean>
+    
+    <bean id="pageDecorationCacheController" class="no.unified.soak.webapp.action.PageDecorationCacheController" autowire="byName">
+        <property name="viewName" value="pageDecorationCache"/>
     </bean>
     
     <bean id="userDetailsController" class="no.unified.soak.webapp.action.UserDetailsController" autowire="byName">
@@ -286,62 +296,169 @@
         </property>
     </bean>
 
+    <bean id="statisticsController" class="no.unified.soak.webapp.action.StatisticsController" autowire="byName">
+        <property name="statisticsManager" ref="statisticsManager"/>
+    </bean>
+
+    <bean id="welcomeController" class="no.unified.soak.webapp.action.WelcomeController" autowire="byName">
+    </bean>
+
+    <bean id="healthCheckController" class="no.unified.soak.webapp.action.HealthCheckController" autowire="byName">
+        <property name="categoryManager" ref="categoryManager"/>
+    </bean>
+
     <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
         <property name="mappings">
             <props>
+                <prop key="/public/welcome.html">welcomeController</prop>
+                <prop key="/public/mainMenu.html">filenameController</prop>
+                <prop key="/public/passwordHint.html">passwordHintController</prop>
+
+                <prop key="/public/listLocations.html">locationController</prop>
+                <prop key="/public/detailsLocation.html">locationDetailsController</prop>
+                
+                <!--Course-URL-START-->
+                <prop key="/public/listCourses.html">courseController</prop>
+                <prop key="/public">courseController</prop>
+                <prop key="/public/">courseController</prop>
+                <prop key="/public/editCourse.html">courseFormController</prop>
+                <prop key="/public/detailsCourse.html">courseDetailsController</prop>
+                <!--Course-URL-END-->
+                                
+                <!--Registration-URL-START-->
+                <prop key="/public/listRegistrations.html">registrationController</prop>
+                <prop key="/public/performRegistration.html">registrationFormController</prop>
+                <prop key="/public/registrationComplete.html">registrationCompleteController</prop>
+                <prop key="/public/cancelRegistration.html">cancelRegistrationController</prop>
+                <!--Registration-URL-END-->
+                
+                <!-- Add additional URL mappings here -->
+                <prop key="/public/waitingList.html">waitingListController</prop>
+                <prop key="/public/pageDecarationCacheTimeout.html">pageDecorationCacheController</prop>
+                <prop key="/public/detailsUser.html">userDetailsController</prop>
+				<prop key="/public/listUsers.html">userController</prop>
+				<prop key="/public/profileUser.html">userRegistrationController</prop>
+
+                <prop key="/public/listCategories.html">categoryController</prop>
+                <prop key="/public/detailsCategory.html">categoryDetailsController</prop>
+
+                <prop key="/lb/test">healthCheckController</prop>
+
+
+                <prop key="/welcome.html">welcomeController</prop>
                 <prop key="/editProfile.html">userFormController</prop>
                 <prop key="/mainMenu.html">filenameController</prop>
                 <prop key="/editUser.html">userFormController</prop> 
                 <prop key="/selectFile.html">fileUploadController</prop>
+                <prop key="/uploadFile.html">fileUploadController</prop>
                 <prop key="/passwordHint.html">passwordHintController</prop>
+
+                <prop key="/editOrganization.html">organizationFormController</prop>
                 <prop key="/listOrganizations.html">organizationController</prop>
                 <prop key="/listMunicipalities.html">organizationController</prop>
+
                 <prop key="/listLocations.html">locationController</prop>
+                <prop key="/editLocation.html">locationFormController</prop>
                 <prop key="/detailsLocation.html">locationDetailsController</prop>
+
                 <prop key="/listPeople.html">personController</prop>
                 <prop key="/editPerson.html">personFormController</prop>
                 <prop key="/detailsPerson.html">personDetailsController</prop>
+                
                 <prop key="/listResponsibles.html">responsibleController</prop>
+
                 <prop key="/listServiceAreas.html">serviceAreaController</prop>
+                <prop key="/editServiceArea.html">serviceAreaFormController</prop>
+                
+                <!--Course-URL-START-->
                 <prop key="/listCourses.html">courseController</prop>
+                <prop key="/editCourse.html">courseFormController</prop>
+                <prop key="/notifyCourse.html">courseNotificationController</prop>
                 <prop key="/detailsCourse.html">courseDetailsController</prop>
+                <prop key="/editFileCourse.html">courseFileFormController</prop>
+                <prop key="/emailCourse.html">courseEmailController</prop>
+                <!--Course-URL-END-->
+                                
+                <!--Registration-URL-START-->
                 <prop key="/listRegistrations.html">registrationController</prop>
                 <prop key="/performRegistration.html">registrationFormController</prop>
                 <prop key="/registrationComplete.html">registrationCompleteController</prop>
                 <prop key="/cancelRegistration.html">cancelRegistrationController</prop>
-                <prop key="/administerRegistration.html">registrationAdministrationController</prop>                   
+                <prop key="/administerRegistration.html">registrationAdministrationController</prop>
+                <!--Registration-URL-END-->
+                
+                <!-- Add additional URL mappings here -->
+                <prop key="/waitingList.html">waitingListController</prop>
+                <prop key="/pageDecarationCacheTimeout.html">pageDecorationCacheController</prop>
                 <prop key="/detailsUser.html">userDetailsController</prop>
 				<prop key="/listUsers.html">userController</prop>
 				<prop key="/profileUser.html">userRegistrationController</prop>
+
+                <prop key="/administerConfiguration.html">configurationFormController</prop>
+
                 <prop key="/listCategories.html">categoryController</prop>
                 <prop key="/detailsCategory.html">categoryDetailsController</prop>
+                <prop key="/editCategory.html">categoryFormController</prop>
+                <prop key="/statistics.html">statisticsController</prop>
+
+
+                <prop key="/admin/welcome.html">welcomeController</prop>
+                <prop key="/admin/editProfile.html">userFormController</prop>
+                <prop key="/admin/mainMenu.html">filenameController</prop>
+                <prop key="/admin/editUser.html">userFormController</prop> 
+                <prop key="/admin/selectFile.html">fileUploadController</prop>
+                <prop key="/admin/uploadFile.html">fileUploadController</prop>
+                <prop key="/admin/passwordHint.html">passwordHintController</prop>
+
+                <prop key="/admin/editOrganization.html">organizationFormController</prop>
+                <prop key="/admin/listOrganizations.html">organizationController</prop>
+                <prop key="/admin/listMunicipalities.html">organizationController</prop>
+
+                <prop key="/admin/listLocations.html">locationController</prop>
+                <prop key="/admin/editLocation.html">locationFormController</prop>
+                <prop key="/admin/detailsLocation.html">locationDetailsController</prop>
+
+                <prop key="/admin/listPeople.html">personController</prop>
+                <prop key="/admin/editPerson.html">personFormController</prop>
+                <prop key="/admin/detailsPerson.html">personDetailsController</prop>
+                
+                <prop key="/admin/listResponsibles.html">responsibleController</prop>
+
+                <prop key="/admin/listServiceAreas.html">serviceAreaController</prop>
+                <prop key="/admin/editServiceArea.html">serviceAreaFormController</prop>
+                
+                <!--Course-URL-START-->
+                <prop key="/admin/listCourses.html">courseController</prop>
+                <prop key="/admin/editCourse.html">courseFormController</prop>
+                <prop key="/admin/notifyCourse.html">courseNotificationController</prop>
+                <prop key="/admin/detailsCourse.html">courseDetailsController</prop>
+                <prop key="/admin/editFileCourse.html">courseFileFormController</prop>
+                <prop key="/admin/emailCourse.html">courseEmailController</prop>
+                <!--Course-URL-END-->
+                                
+                <!--Registration-URL-START-->
+                <prop key="/admin/listRegistrations.html">registrationController</prop>
+                <prop key="/admin/performRegistration.html">registrationFormController</prop>
+                <prop key="/admin/registrationComplete.html">registrationCompleteController</prop>
+                <prop key="/admin/cancelRegistration.html">cancelRegistrationController</prop>
+                <prop key="/admin/administerRegistration.html">registrationAdministrationController</prop>
+                <!--Registration-URL-END-->
+                
+                <!-- Add additional URL mappings here -->
+                <prop key="/admin/waitingList.html">waitingListController</prop>
+                <prop key="/admin/pageDecarationCacheTimeout.html">pageDecorationCacheController</prop>
+                <prop key="/admin/detailsUser.html">userDetailsController</prop>
+				<prop key="/admin/listUsers.html">userController</prop>
+				<prop key="/admin/profileUser.html">userRegistrationController</prop>
+
+                <prop key="/admin/administerConfiguration.html">configurationFormController</prop>
+
+                <prop key="/admin/listCategories.html">categoryController</prop>
+                <prop key="/admin/detailsCategory.html">categoryDetailsController</prop>
+                <prop key="/admin/editCategory.html">categoryFormController</prop>
+                <prop key="/admin/statistics.html">statisticsController</prop>
             </props>
         </property>
-    </bean>
-    
-    <bean id="instructorUrlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-        <property name="interceptors">
-            <list>
-                <ref bean="instructorInterceptor"/>
-            </list>
-        </property>
-        <property name="mappings">
-            <props>
-                <prop key="/uploadFile.html">fileUploadController</prop>
-                <prop key="/editLocation.html">locationFormController</prop>
-                <prop key="/editCourse.html">courseFormController</prop>
-                <prop key="/notifyCourse.html">courseNotificationController</prop>
-                <prop key="/editFileCourse.html">courseFileFormController</prop>
-                <prop key="/emailCourse.html">courseEmailController</prop>
-                <prop key="/activeUsers.html">filenameController</prop>
-                <prop key="/users.html">userController</prop>           
-                <prop key="/reload.html">reloadController</prop>
-            </props>
-        </property>
-    </bean>
-    
-    <bean id="instructorInterceptor" class="org.springframework.web.servlet.handler.UserRoleAuthorizationInterceptor">
-        <property name="authorizedRoles" value="admin,instructor,editor"/>
     </bean>
 
     <bean id="adminUrlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
@@ -352,17 +469,20 @@
         </property>
         <property name="mappings">
             <props>
-                <prop key="/editOrganization.html">organizationFormController</prop>
-                <prop key="/editServiceArea.html">serviceAreaFormController</prop>
-                <prop key="/editCategory.html">categoryFormController</prop>
-                <prop key="/waitingList.html">waitingListController</prop>  
-                <prop key="/administerConfiguration.html">configurationFormController</prop>
+                <prop key="/activeUsers.html">filenameController</prop>
+                <prop key="/users.html">userController</prop>
+                <prop key="/flushCache.html">filenameController</prop>                
+                <prop key="/reload.html">reloadController</prop>
+                <prop key="/admin/activeUsers.html">filenameController</prop>
+                <prop key="/admin/users.html">userController</prop>
+                <prop key="/admin/flushCache.html">filenameController</prop>                
+                <prop key="/admin/reload.html">reloadController</prop>
             </props>
         </property>
     </bean>
 
     <bean id="adminInterceptor" class="org.springframework.web.servlet.handler.UserRoleAuthorizationInterceptor">
-        <property name="authorizedRoles" value="admin"/>
+        <property name="authorizedRoles" value="admin,ROLE_ADMIN,anonymous"/>
     </bean>
 
     <bean id="filenameController" class="org.springframework.web.servlet.mvc.UrlFilenameViewController"/>
@@ -376,7 +496,16 @@
     </bean>
     
         
-    <bean id="ezUserDAO" class="no.unified.soak.dao.jdbc.EzUserDAOJdbc">
+    <bean id="extUserDAO" class="no.unified.soak.dao.jdbc.EzUserDAOJdbc">
     	<property name="dataSource" ref="userEzDataSource"/>
+        <property name="roleDAO" ref="roleDAO"/>
+        <property name="userDAO" ref="userDAO"/>
     </bean>
+<!--     
+    <bean id="extUserDAO" class="no.unified.soak.dao.ws.SVVUserDAOWS" autowire="default">
+        <property name="endpoint" value="http://svvjcapsu04.vegvesen.no:18201/ldap_searchemployees/portOppslagSVVAnsattBndPort"/>
+        <property name="roleDAO" ref="roleDAO"/>
+        <property name="userDAO" ref="userDAO"/>
+    </bean>
+     -->
 </beans>

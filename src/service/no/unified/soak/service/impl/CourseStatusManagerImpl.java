@@ -27,9 +27,8 @@ public class CourseStatusManagerImpl extends BaseManager implements CourseStatus
 
     public void processCourses(){
         Course search = new Course();
-        // Get only published courses
-        search.setStatus(CourseStatus.COURSE_PUBLISHED);
-        List<Course> courses = courseManager.searchCourses(search,null,new Date());
+        // Get created and published courses
+        List<Course> courses = courseManager.searchCourses(search, null, new Date(), new Integer[]{CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED});
         Iterator<Course> it = courses.iterator();
         while (it.hasNext()){
             Course course = it.next();

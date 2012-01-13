@@ -11,8 +11,8 @@
 package no.unified.soak.service.impl;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 
 import no.unified.soak.dao.RegistrationDAO;
 import no.unified.soak.dao.hibernate.RegistrationStatusCriteria;
@@ -20,6 +20,9 @@ import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.User;
 import no.unified.soak.service.RegistrationManager;
+import no.unified.soak.service.UserManager;
+
+import org.hibernate.StaleObjectStateException;
 
 /**
  * Implementation of RegistrationManager interface to talk to the persistence
@@ -27,10 +30,10 @@ import no.unified.soak.service.RegistrationManager;
  * 
  * @author hrj
  */
-public class RegistrationManagerImpl extends BaseManager implements
-		RegistrationManager {
+public class RegistrationManagerImpl extends BaseManager implements RegistrationManager {
 	private RegistrationDAO dao;
-
+	private UserManager userManager = null;
+	
 	/**
 	 * Set the DAO for communication with the data layer.
 	 * 
@@ -40,11 +43,23 @@ public class RegistrationManagerImpl extends BaseManager implements
 		this.dao = dao;
 	}
 
+	public void setUserManager(UserManager userManager){
+		this.userManager = userManager;
+	}
+	
 	/**
 	 * @see no.unified.soak.service.RegistrationManager#getRegistrations(no.unified.soak.model.Registration)
 	 */
 	public List getRegistrations(final Registration registration) {
-		return dao.getRegistrations(registration);
+    	try {
+    		return dao.getRegistrations(registration);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    			return dao.getRegistrations(registration);
+    		}
+    		throw e;
+    	}
 	}
 
 	/**
@@ -52,7 +67,15 @@ public class RegistrationManagerImpl extends BaseManager implements
 	 *      id)
 	 */
 	public Registration getRegistration(final String id) {
-		return dao.getRegistration(new Long(id));
+    	try {
+    		return dao.getRegistration(new Long(id));
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    			return dao.getRegistration(new Long(id));
+    		}
+    		throw e;
+    	}
 	}
 
 	/**
@@ -90,20 +113,18 @@ public class RegistrationManagerImpl extends BaseManager implements
 	}
 
 	/**
-	 * @see no.unified.soak.service.RegistrationManager#getNumberOfAttendants(java.lang.Boolean,
-	 *      no.unified.soak.model.Course)
+	 * @see no.unified.soak.service.RegistrationManager#getNumberOfAttendants(java.lang.Boolean, no.unified.soak.model.Course)
 	 */
 	public Integer getNumberOfAttendants(Boolean localOnly, Course course) {
-		return dao.getNumberOfAttendants(localOnly, course, null);
+		return dao.getNumberOfParticipants(localOnly, course, null);
 	}
 
 	/**
 	 * @see no.unified.soak.service.RegistrationManager#getNumberOfAttendants(java.lang.Boolean,
 	 *      no.unified.soak.model.Course)
 	 */
-	public Integer getNumberOfAttendants(Boolean localOnly, Course course,
-			Boolean reserved) {
-		return dao.getNumberOfAttendants(localOnly, course, reserved);
+	public Integer getNumberOfAttendants(Boolean localOnly, Course course, Boolean reserved) {
+		return dao.getNumberOfParticipants(localOnly, course, reserved);
 	}
 	
 	/**
@@ -111,12 +132,16 @@ public class RegistrationManagerImpl extends BaseManager implements
 	 *      java.lang.Long, java.lang.Long, java.lang.Boolean,
 	 *      java.lang.Boolean)
 	 */
-	public List getSpecificRegistrations(Long courseId, Long organizationId,
-			Long serviceareaId, Registration.Status status, Boolean invoiced,
-			Boolean attended, Collection limitToCourses, String[] orderBy) {
-		return dao.getSpecificRegistrations(courseId, organizationId,
-				serviceareaId, status, invoiced, attended, limitToCourses,
-				orderBy);
+	public List getSpecificRegistrations(Long courseId, Long organizationId, Long serviceareaId, Registration.Status status, String firstname, String lastname, Boolean invoiced, Boolean attended, Collection limitToCourses, String[] orderBy) {
+    	try {
+    		return dao.getSpecificRegistrations(courseId, organizationId, serviceareaId, status, firstname, lastname, invoiced, attended, limitToCourses, orderBy);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    			return dao.getSpecificRegistrations(courseId, organizationId, serviceareaId, status, firstname, lastname, invoiced, attended, limitToCourses, orderBy);
+    		}
+    		throw e;
+    	}
 	}
 
 	/**
@@ -124,18 +149,31 @@ public class RegistrationManagerImpl extends BaseManager implements
 	 *      Long, Long, RegistrationStatusCriteria, Boolean, Boolean,
 	 *      Collection, String[])
 	 */
-	public List getSpecificRegistrations(Long courseId, Long organizationId, Long serviceareaId,
-			RegistrationStatusCriteria statusCriteria, Boolean invoiced, Boolean attended, Collection limitToCourses,
-			String[] orderBy) {
-		return dao.getSpecificRegistrations(courseId, organizationId, serviceareaId, statusCriteria, invoiced, attended,
-				limitToCourses, orderBy);
+	public List getSpecificRegistrations(Long courseId, Long organizationId, Long serviceareaId, RegistrationStatusCriteria statusCriteria, String firstname, String lastname, Boolean invoiced, Boolean attended, Collection limitToCourses, String[] orderBy) {
+    	try {
+    		return dao.getSpecificRegistrations(courseId, organizationId, serviceareaId, statusCriteria, firstname, lastname, invoiced, attended, limitToCourses, orderBy);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    			return dao.getSpecificRegistrations(courseId, organizationId, serviceareaId, statusCriteria, firstname, lastname, invoiced, attended, limitToCourses, orderBy);
+    		}
+    		throw e;
+    	}
 	}
 
 	/**
 	 * @see no.unified.soak.service.RegistrationManager#getWaitingListRegistrations(java.util.List)
 	 */
 	public List<Registration> getWaitingListRegistrations(List courseIds) {
-		return dao.getWaitingListRegistrations(courseIds);
+    	try {
+    		return dao.getWaitingListRegistrations(courseIds);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    			return dao.getWaitingListRegistrations(courseIds);
+    		}
+    		throw e;
+    	}
 	}
 
 	/**
@@ -147,30 +185,67 @@ public class RegistrationManagerImpl extends BaseManager implements
 	}
 
 	public List<Registration> getRegistrations(Long courseId) {
-		return dao.getCourseRegistrations(courseId);
+    	try {
+    		return dao.getCourseRegistrations(courseId);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    			return dao.getCourseRegistrations(courseId);
+    		}
+    		throw e;
+    	}
 	}
 
 	public List<Registration> getCourseRegistrations(Long courseId) {
-		return dao.getCourseRegistrations(courseId);
+    	try {
+    		return dao.getCourseRegistrations(courseId);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    			return dao.getCourseRegistrations(courseId);
+    		}
+    		throw e;
+    	}
 	}
 
 	public List<Registration> getUserRegistrations(String username) {
-		return dao.getUserRegistrations(username);
+    	try {
+    		return dao.getUserRegistrations(username);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    			return dao.getUserRegistrations(username);
+    		}
+    		throw e;
+    	}
 	}
 
-	public List<Registration> getUserRegistrationsForCourse(String email,
-			String firstname, String lastname, Long courseId) {
-		return dao.getUserRegistationsForCourse(email, firstname, lastname,
-				courseId);
+	public List<Registration> getUserRegistrationsForCourse(String email, String firstname, String lastname, Long courseId) {
+    	try {
+    		return dao.getUserRegistationsForCourse(email, firstname, lastname, courseId);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    			return dao.getUserRegistationsForCourse(email, firstname, lastname, courseId);
+    		}
+    		throw e;
+    	}
 	}
 
 	public List<Registration> getUserRegistrationsForCourse(String username, Long courseId) {
-		return dao.getUserRegistationsForCourse(username, courseId);
+    	try {
+    		return dao.getUserRegistationsForCourse(username, courseId);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    			return dao.getUserRegistationsForCourse(username, courseId);
+    		}
+    		throw e;
+    	}
 	}
 	
 	public void moveRegistrations(User olduser, User newuser) {
-		List<Registration> registrations = getUserRegistrations(olduser
-				.getUsername());
+		List<Registration> registrations = getUserRegistrations(olduser.getUsername());
 		Iterator<Registration> it = registrations.iterator();
 		while (it.hasNext()) {
 			Registration registration = it.next();
@@ -178,6 +253,21 @@ public class RegistrationManagerImpl extends BaseManager implements
 			registration.setUsername(newuser.getUsername());
 			saveRegistration(registration);
 		}
+	}
+
+	public Integer getNumberOfRegistrations(Long courseId){
+		return dao.getNumberOfRegistrations(courseId);
+	}
+
+	
+	/**
+	 * Evict entity for hibernate sessions. This avoids automatic saving
+	 * (flush) of the entity.
+	 * 
+	 * @param entity
+	 */
+	public void evict(Object entity) {
+		dao.evict(entity);
 	}
 
 }

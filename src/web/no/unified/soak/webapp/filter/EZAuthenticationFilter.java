@@ -14,15 +14,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import no.unified.soak.Constants;
-import no.unified.soak.dao.EzUserDAO;
-import no.unified.soak.ez.EzUser;
+import no.unified.soak.dao.ExtUserDAO;
+import no.unified.soak.ez.ExtUser;
 import no.unified.soak.model.User;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.service.UserSynchronizeManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.webapp.util.RequestUtil;
 
 import org.acegisecurity.Authentication;
 import org.acegisecurity.context.SecurityContextHolder;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 public class EZAuthenticationFilter implements Filter {
@@ -31,16 +34,18 @@ public class EZAuthenticationFilter implements Filter {
     
     private UserManager userManager;
     private UserSynchronizeManager userSynchronizeManager;
-    private EzUserDAO ezUserDAO;
-    
+    private ExtUserDAO extUserDAO;
+
+    protected final Log log = LogFactory.getLog(getClass());
+
     public void setUserManager(UserManager userManager) {
         this.userManager = userManager;
     }
     public void setUserSynchronizeManager(UserSynchronizeManager userSynchronizeManager) {
         this.userSynchronizeManager = userSynchronizeManager;
     }
-    public void setEzUserDAO(EzUserDAO ezUserDAO) {
-        this.ezUserDAO = ezUserDAO;
+    public void setExtUserDAO(ExtUserDAO extUserDAO) {
+        this.extUserDAO = extUserDAO;
     }
 
     public void init(FilterConfig config) throws ServletException {
@@ -57,11 +62,9 @@ public class EZAuthenticationFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) resp;
         HttpSession session = request.getSession(true);
         
-        // notify the LocaleContextHolder what locale is being used so
-        // service and data layer classes can get the locale
-        LocaleContextHolder.setLocale(request.getLocale());
+        LocaleContextHolder.setLocale(ApplicationResourcesUtil.getNewLocaleWithDefaultCountryAndVariant(request.getLocale()));
         
-        EzUser ezUser = null;
+        ExtUser extUser = null;
         User user = null;
         boolean anonymous = true;
 
@@ -74,16 +77,17 @@ public class EZAuthenticationFilter implements Filter {
         String eZSessionId = null;
         if (cookie != null && cookie.getValue() != null && cookie.getValue().trim().length() > 0) {
             eZSessionId = cookie.getValue();
-            ezUser = ezUserDAO.findUserBySessionID(cookie.getValue());
-            if(ezUser != null && ezUser.getUsername() != null ){
-                user = userSynchronizeManager.processUser(ezUser);
+            extUser = extUserDAO.findUserBySessionID(cookie.getValue());
+            if(extUser != null && extUser.getUsername() != null ){
+                user = userSynchronizeManager.processUser(extUser, null);  // Added ", null" to
 //                session.setAttribute(Constants.USER_KEY, user);
                 anonymous = false;
             }
         }
 
         if(!anonymous) {
-            Authentication authentificationToken = new EZAuthentificationToken(user, eZSessionId);
+        	// Changed from (user, eZsessionID)
+            Authentication authentificationToken = new EZAuthentificationToken(extUser, eZSessionId);
 //            session.setAttribute("authenticationToken", authentificationToken);
             SecurityContextHolder.getContext().setAuthentication(authentificationToken);
             

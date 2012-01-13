@@ -10,6 +10,13 @@
  */
 package no.unified.soak.model;
 
+import no.unified.soak.validation.DigitsOnly;
+import no.unified.soak.validation.Email;
+import no.unified.soak.validation.MinLength;
+import no.unified.soak.validation.MinValue;
+import no.unified.soak.validation.Required;
+import no.unified.soak.validation.ValidateOnlyIfConfigurationIsTrue;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -34,6 +41,7 @@ public class Location extends BaseObject implements Serializable {
     private Long id;
     private String name;
     private String address;
+    private String postalCode;
     private String mailAddress;
     private String contactName;
     private String email;
@@ -45,7 +53,9 @@ public class Location extends BaseObject implements Serializable {
     private Double feePerDay;
     private String description;
     private Long organizationid;
+    private Long organization2id;
     private Organization organization;
+    private Organization organization2;
     private Boolean selectable;
 
     /**
@@ -78,6 +88,7 @@ public class Location extends BaseObject implements Serializable {
      * @param address
      *            The address to set.
      */
+    @Required
     public void setAddress(String address) {
         this.address = address;
     }
@@ -124,13 +135,14 @@ public class Location extends BaseObject implements Serializable {
     /**
      * @param email The email to set.
      */
+	@Email
     public void setEmail(String email) {
         this.email = email;
     }
 
     /**
       * @return Returns the detailURL.
-      * @hibernate.property column="detailurl" length="200"
+      * @hibernate.property column="detailurl" length="350"
       */
     public String getDetailURL() {
         return detailURL;
@@ -146,7 +158,7 @@ public class Location extends BaseObject implements Serializable {
 
     /**
      * @return Returns the mapURL.
-     * @hibernate.property column="mapurl" length="200"
+     * @hibernate.property column="mapurl" length="350"
      */
     public String getmapURL() {
         return mapURL;
@@ -188,6 +200,7 @@ public class Location extends BaseObject implements Serializable {
      * @param name
      *            The name to set.
      */
+    @Required
     public void setName(String name) {
         this.name = name;
     }
@@ -204,6 +217,8 @@ public class Location extends BaseObject implements Serializable {
      * @param phone
      *            The phone to set.
      */
+	@DigitsOnly
+	@MinLength("8")
     public void setPhone(String phone) {
         this.phone = phone;
     }
@@ -234,6 +249,8 @@ public class Location extends BaseObject implements Serializable {
     /**
      * @param maxAttendants The maxAttendants to set.
      */
+    @Required
+    @MinValue("0")
     public void setMaxAttendants(Integer maxAttendants) {
         this.maxAttendants = maxAttendants;
     }
@@ -270,8 +287,7 @@ public class Location extends BaseObject implements Serializable {
 
     /**
      * @return Returns the organization.
-     * @hibernate.many-to-one not-null="true" column="organizationid"
-     *                        update="false" cascade="none" insert="false"
+     * @hibernate.many-to-one not-null="true" column="organizationid" update="false" cascade="none" insert="false"
      */
     public Organization getOrganization() {
         return organization;
@@ -282,6 +298,18 @@ public class Location extends BaseObject implements Serializable {
      */
     public void setOrganization(Organization organization) {
         this.organization = organization;
+    }
+ 
+    /**
+     * @return Returns the organization.
+     * @hibernate.many-to-one not-null="false" column="organization2id" update="false" cascade="none" insert="false"
+     */
+    public Organization getOrganization2() {
+        return organization2;
+    }
+
+    public void setOrganization2(Organization organization2) {
+        this.organization2 = organization2;
     }
 
     /**
@@ -296,8 +324,52 @@ public class Location extends BaseObject implements Serializable {
      * @param organizationid The organizationid to set.
      * @spring.validator type="required"
      */
+    @Required
     public void setOrganizationid(Long organizationid) {
-        this.organizationid = organizationid;
+    	this.organizationid = organizationid;
+    }
+
+    /**
+     * @return Returns the organization2id.
+     * @hibernate.property column="organization2id" not-null="false"
+     */
+    public Long getOrganization2id() {
+        return organization2id;
+    }
+
+    /**
+     * @param organization2id The organization2id to set.
+     * @spring.validator type="required"
+     */
+    @Required
+    @ValidateOnlyIfConfigurationIsTrue("access.location.useOrganization2")
+    public void setOrganization2id(Long organization2id) {
+    	this.organization2id = organization2id;
+    }
+    
+
+    /**
+     * Returns the postalCode.
+     * @return String
+     *
+     * @hibernate.property not-null="false" length="15"
+     * @hibernate.column name="postal_code"
+     */
+    public String getPostalCode() {
+        return postalCode;
+    }
+    
+    /**
+     * Sets the postalCode.
+     * @param postalCode The postalCode to set
+     *
+     */
+    @Required
+    @MinLength("4")
+    @DigitsOnly
+    @ValidateOnlyIfConfigurationIsTrue("access.location.usePostalCode")
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
 
     /**
@@ -305,7 +377,7 @@ public class Location extends BaseObject implements Serializable {
      */
     public String toString() {
         return new ToStringBuilder(this).append("id", id).append("name", name)
-                                        .append("address", address).toString();
+                                        .append("address", address).append("postalCode", postalCode).toString();
     }
 
     /**

@@ -19,7 +19,7 @@ import org.springframework.orm.ObjectRetrievalFailureException;
 public class CategoryDAOHibernate extends BaseDAOHibernate implements CategoryDAO {
 
     /**
-     * @see no.unified.soak.dao.CategoryDAO#getCategory(String)
+     * @see no.unified.soak.dao.CategoryDAO#getCategory(Long))
      */
     public Category getCategory(Long id) {
         Category category = (Category) getHibernateTemplate().get(Category.class, id);
@@ -32,6 +32,22 @@ public class CategoryDAOHibernate extends BaseDAOHibernate implements CategoryDA
         return category;
     }
 
+    /**
+     * @see no.unified.soak.dao.CategoryDAO#getCategory(String)
+     */
+    public Category getCategory(String name) {
+        Category searchCategory = new Category();
+        searchCategory.setName(name);
+        List<Category> categories = getCategories(searchCategory , true); 
+
+        if (categories == null || categories.size() == 0) {
+            log.warn("Category with name '" + name + "' not found.");
+            throw new ObjectRetrievalFailureException(Category.class, name);
+        }
+
+        return categories.get(0);
+    }
+    
     /**
      * @see no.unified.soak.dao.CategoryDAO#getCategories(no.unified.soak.model.Category,Boolean)
      */
@@ -59,4 +75,6 @@ public class CategoryDAOHibernate extends BaseDAOHibernate implements CategoryDA
         getHibernateTemplate().delete(getCategory(id));
         
     }
+
+    
 }

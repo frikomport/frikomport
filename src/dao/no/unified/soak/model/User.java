@@ -9,10 +9,15 @@ package no.unified.soak.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import no.unified.soak.validation.DigitsOnly;
+import no.unified.soak.validation.MinLength;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -47,8 +52,9 @@ public class User extends BaseObject implements Serializable {
     protected Set roles = new HashSet();
     protected Boolean enabled;
     protected Organization organization;
-    protected Integer id;
+    protected Organization organization2;
     protected Long organizationid;
+    protected Long organization2id;
     protected String mobilePhone;
     protected Integer employeeNumber;
     protected String jobTitle;
@@ -59,6 +65,8 @@ public class User extends BaseObject implements Serializable {
     protected String invoiceName;
     protected Address invoiceAddress = new Address();
     protected String closestLeader;
+    protected Boolean hashuser;
+    protected Date birthdate;
   
     public User() {
     }
@@ -178,7 +186,7 @@ public class User extends BaseObject implements Serializable {
      * Returns the user's roles.
      * @return Set
      *
-     * @hibernate.set table="user_role" cascade="save-update" lazy="false"
+     * @hibernate.set table="user_role" cascade="none" lazy="false"
      * @hibernate.collection-key column="username"
      * @hibernate.collection-many-to-many class="no.unified.soak.model.Role"
      *                                    column="role_name"
@@ -187,15 +195,6 @@ public class User extends BaseObject implements Serializable {
         return roles;
     }
     
-      /**
-     * Returns the id.
-     * @return Integer
-     *
-     * @hibernate.property column="id" not-null="true"
-     */
-    public Integer getId() {
-        return id;
-    }
     
     /**
      * Adds a role for the user
@@ -206,6 +205,17 @@ public class User extends BaseObject implements Serializable {
         getRoles().add(role);
     }
 
+    /**
+     * Adds a role for the user
+     *
+     * @param roles
+     */
+    public void addRoles(Collection<String> roles) {
+        for (String rolleNavn : roles) {
+            getRoles().add(new Role(rolleNavn));
+        }
+    }
+    
     /**
      * Removes a role for the user
      *
@@ -281,6 +291,9 @@ public class User extends BaseObject implements Serializable {
      *
      */
     public void setAddress(Address address) {
+    	if(address == null) {
+    		address = new Address();
+    	}
         this.address = address;
     }
 
@@ -302,6 +315,8 @@ public class User extends BaseObject implements Serializable {
      */
     // @spring.validator type="mask" msgkey="errors.phone"
     // @spring.validator-var name="mask" value="${phone}"
+	@DigitsOnly
+	@MinLength("8")
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
@@ -347,14 +362,6 @@ public class User extends BaseObject implements Serializable {
 
 
     /**
-     * @param id The updated id to set.
-     * @spring.validator type="required"
-     */
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    /**
      * @return Returns the enabled.
      * @hibernate.property column="enabled"
      */
@@ -384,16 +391,17 @@ public class User extends BaseObject implements Serializable {
 
         return rolenames;
     }
-    
+
+    public void setRoleNameList(List<String> roles) {
+        for (String roleName : roles) {
+            addRole(new Role(roleName));
+        }
+    }
+
     /**
 	 * Returns the organization.
-	 * 
 	 * @return Organization
-	 * 
-	 * @hibernate.many-to-one column="organizationid" insert="false"
-	 *                        update="false" not-found="ignore" not-null="false" 
-	 *                        
-	 * 
+	 * @hibernate.many-to-one column="organizationid" insert="false" update="false" not-found="ignore" not-null="false" 
 	 */
 	public Organization getOrganization() {
 		return organization;
@@ -410,6 +418,18 @@ public class User extends BaseObject implements Serializable {
 		this.organization = organization;
 	}
 
+    /**
+     * @return Returns the organization2.
+     * @hibernate.many-to-one not-null="false" column="organization2id" update="false" cascade="none" insert="false"
+     */
+    public Organization getOrganization2() {
+        return organization2;
+    }
+
+    public void setOrganization2(Organization organization2) {
+        this.organization2 = organization2;
+    }
+
      /**
      * @return Returns the organizationid.
      * @hibernate.property column="organizationid" not-null="false"
@@ -425,7 +445,23 @@ public class User extends BaseObject implements Serializable {
     public void setOrganizationid(Long organizationid) {
         this.organizationid = organizationid;
     }
-    
+
+    /**
+     * @return Returns the organization2id.
+     * @hibernate.property column="organization2id" not-null="false"
+     */
+    public Long getOrganization2id() {
+        return organization2id;
+    }
+
+    /**
+     * @param organizationid
+     *            The organizationid to set.
+     */
+    public void setOrganization2id(Long organization2id) {
+        this.organization2id = organization2id;
+    }
+
     /**
 	 * @return Returns the serviceArea.
 	 * @hibernate.many-to-one column="serviceareaid" insert="false" update="false" not-found="ignore" not-null="false"
@@ -504,6 +540,8 @@ public class User extends BaseObject implements Serializable {
 	 * @param mobilePhone
 	 *            The mobilePhone to set.
 	 */
+	@DigitsOnly
+	@MinLength("8")
 	public void setMobilePhone(String mobilePhone) {
 		this.mobilePhone = mobilePhone;
 	}
@@ -584,8 +622,7 @@ public class User extends BaseObject implements Serializable {
 		return hash;
 	}
 
-    
-    /**
+	/**
 	 * Sets the hash.
 	 * 
 	 * @param hash
@@ -596,6 +633,46 @@ public class User extends BaseObject implements Serializable {
 		this.hash = hash;
 	}
 
+	/**
+     * @return true if user has an emailaddress as username
+	 * @hibernate.property column="hashuser" not-null="true"
+	 */
+	public Boolean getHashuser() {
+		if(hashuser == null) {
+			hashuser = false;
+		}
+		return hashuser;
+	}
+
+	
+	/**
+     * @param hashuser
+     */
+	public void setHashuser(Boolean hashuser) {
+		if(hashuser == null) {
+			hashuser = false;
+		}
+		this.hashuser = hashuser;
+	}
+	
+	
+	 /**
+	    * @return date of birth
+	    * @hibernate.property column="birthdate" not-null="false"
+	    */
+		public Date getBirthdate() {
+			return birthdate;
+		}
+
+		/**
+	    * @param birthdate
+	    *            The birthdate to set.
+	    */
+		public void setBirthdate(Date birthdate) {
+			this.birthdate = birthdate;
+		}
+
+	
 	public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -637,6 +714,11 @@ public class User extends BaseObject implements Serializable {
 			return false;
 		}
 
+		if ((organization2id != null) ? (!organization2id.equals(user.getOrganization2id())) : (user
+				.getOrganization2id() != null)) {
+			return false;
+		}
+
 		return true;
     }
     
@@ -649,22 +731,19 @@ public class User extends BaseObject implements Serializable {
      */
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).append("roles",
-            this.roles).append("firstName", this.firstName)
-                                                                        .append("lastName",
-            this.lastName).append("passwordHint", this.passwordHint)
-                                                                        .append("username",
-            this.username).append("fullName", this.getFullName())
-                                                                        .append("email",
-            this.email).append("phoneNumber", this.phoneNumber)
-                                                                        .append("password",
-            this.password).append("address", this.address)
-                                                                        .append("confirmPassword",
-            this.confirmPassword).append("website", this.website)
-                                                                        .append("version",
+            this.roles).append("firstName", this.firstName).append("lastName",
+            this.lastName).append("passwordHint", this.passwordHint).append("username",
+            this.username).append("fullName", this.getFullName()).append("email",
+            this.email).append("phoneNumber", this.phoneNumber).append("password",
+            this.password).append("address", this.address).append("confirmPassword",
+            this.confirmPassword).append("website", this.website).append("version",
             this.getVersion()).append("enabled", this.getEnabled()).toString();
     }
     
     public Address getInvoiceAddressCopy() {
+    	if (invoiceAddress == null) {
+    		return null;
+    	}
     	Address copy = new Address();
     	copy.setAddress(invoiceAddress.getAddress());
     	copy.setCity(invoiceAddress.getCity());
@@ -674,4 +753,5 @@ public class User extends BaseObject implements Serializable {
     	
 		return copy;
 	}
+
 }

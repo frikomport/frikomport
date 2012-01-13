@@ -13,11 +13,13 @@ package no.unified.soak.webapp.filter;
 import java.util.ArrayList;
 import java.util.List;
 
-import no.unified.soak.model.User;
+import no.unified.soak.ez.ExtUser;
 
 import org.acegisecurity.Authentication;
 import org.acegisecurity.GrantedAuthority;
 import org.acegisecurity.GrantedAuthorityImpl;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
@@ -25,11 +27,16 @@ import org.acegisecurity.GrantedAuthorityImpl;
  *
  */
 public class EZAuthentificationToken implements Authentication {
-    private boolean authenticated;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8096299069928687182L;
+	private boolean authenticated;
     private String eZSessionId;
-    private User ezUser;
+    private ExtUser ezUser;
     List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
-
+    protected final Log log = LogFactory.getLog(getClass());
+    
     /**
      * Constructor to "ensure" there is a EzUser and a eZSessionId.
      * <code>null</code> for both means <b>not</b> authenticated.
@@ -39,7 +46,7 @@ public class EZAuthentificationToken implements Authentication {
      * @param eZSessionId
      *            The session id of the http-session where user logged in.
      */
-    EZAuthentificationToken(User ezUser, String eZSessionId) {
+    EZAuthentificationToken(ExtUser ezUser, String eZSessionId) {
         this.ezUser = ezUser;
         this.eZSessionId = eZSessionId;
 
@@ -47,7 +54,7 @@ public class EZAuthentificationToken implements Authentication {
                 (ezUser != null) && (ezUser.getId() != null) && (ezUser.getId() > 0)) {
             authenticated = true;
 
-            for (String rolename : ezUser.getRoleNameList()) {
+            for (String rolename : ezUser.getRolenames()) {
                 addAuthority(rolename);
             }
         }
@@ -62,11 +69,21 @@ public class EZAuthentificationToken implements Authentication {
     }
 
     public GrantedAuthority[] getAuthorities() {
-        return grantedAuthorities.toArray(new GrantedAuthority[grantedAuthorities.size()]);
+    	GrantedAuthority[] gaarray;
+    	if (grantedAuthorities.size() > 0) {
+    		gaarray = new GrantedAuthority[grantedAuthorities.size()];
+    		for (int i=0; i < grantedAuthorities.size(); i++) {
+    			GrantedAuthority ga = grantedAuthorities.get(i);
+    			gaarray[i] = ga;
+    		}
+    	} else {
+    		gaarray = new GrantedAuthority[0];
+    	}
+    	return gaarray;
     }
 
     private void addAuthority(String rolename) {
-        GrantedAuthority authority = new GrantedAuthorityImpl(rolename);
+        GrantedAuthority authority = new GrantedAuthorityImpl(getInternalFkpRole(rolename));
         grantedAuthorities.add(authority);
     }
 
@@ -79,23 +96,33 @@ public class EZAuthentificationToken implements Authentication {
         return eZSessionId;
     }
 
-    /**
-     * Additional details about user. Here the user object.
-     *
-     * @see net.sf.acegisecurity.Authentication#getDetails()
-     */
     public Object getDetails() {
         return ezUser;
     }
 
-    /**
-     * Either username or UserDetails object.
-     */
     public Object getPrincipal() {
-        return ezUser.getUsername();
+        return ezUser.getId();
     }
 
     public String getName() {
-        return ezUser.getUsername();
+        return ezUser.getName();
     }
+
+    /**
+     * Mapping fra eZ-roller til interne roller i javaapp
+     * @param eZRole
+     * @return role
+     */
+	public static String getInternalFkpRole(String eZRole) {
+		// 
+		if("Administrator".equals(eZRole)) 			return "admin";
+		else if("Opplaringsansvarlig".equals(eZRole)) return "editor"; 
+		else if("Kursansvarlig".equals(eZRole)) 		return "eventresponsible";
+		else if("Ansatt".equals(eZRole)) 				return "employee"; 
+		else if("Anonymous".equals(eZRole)) 			return "anonymous";
+		else if("FKPLesebruker".equals(eZRole)) 		return "reader";
+		else return "role_" + eZRole; // for egendefinerte roller fra eZ
+	}
+
+
 }

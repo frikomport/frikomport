@@ -7,26 +7,24 @@
 <fmt:message key="personList.items" var="items"/>
 
 <c:set var="buttons">
-<authz:authorize ifAnyGranted="admin,instructor,editor">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <button type="button" style="margin-right: 5px"
         onclick="location.href='<c:url value="/editPerson.html"/>'">
         <fmt:message key="button.add"/>
     </button>
-</authz:authorize>
+</c:if>
 </c:set>
 
 <c:out value="${buttons}" escapeXml="false"/>
 
-<display:table name="${personList}" cellspacing="0" cellpadding="0"
-    id="personList" pagesize="${itemCount}" class="list" 
-    export="true" requestURI="">
-<authz:authorize ifAnyGranted="admin,instructor,editor">
+<display:table name="${personList}" cellspacing="0" cellpadding="0" id="personList" pagesize="${itemCount}" class="list" export="${!isSVV}" requestURI="">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
         <a href='<c:url value="/editPerson.html"><c:param name="id" value="${personList.id}"/><c:param name="from" value="list"/></c:url>'>
             <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
     </display:column>
-</authz:authorize>
+</c:if>
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="person.name" sortProperty="name">
          <a href="<c:url value="/detailsPerson.html"><c:param name="id" value="${personList.id}"/></c:url>" 
          title="<c:out value="${personList.description}"/>"><c:out value="${personList.name}"/></a>
@@ -38,22 +36,18 @@
     </display:column>
     <display:column media="csv excel xml pdf" property="email" sortable="true" headerClass="sortable" titleKey="person.email"/>
 
-<authz:authorize ifAnyGranted="admin,instructor,editor">
-    <display:column property="phone" sortable="true" headerClass="sortable"
-         titleKey="person.phone"/>
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+    <display:column property="phone" sortable="true" headerClass="sortable" titleKey="person.phone"/>
 
-    <display:column property="mobilePhone" sortable="true" headerClass="sortable"
-         titleKey="person.mobilePhone"/>
+    <display:column property="mobilePhone" sortable="true" headerClass="sortable" titleKey="person.mobilePhone"/>
 
-    <display:column property="mailAddress" sortable="true" headerClass="sortable"
-         titleKey="person.mailAddress"/>
+    <display:column property="mailAddress" sortable="true" headerClass="sortable" titleKey="person.mailAddress"/>
 
-    <display:column sortable="true" headerClass="sortable"
-         titleKey="person.selectable">
+    <display:column sortable="true" headerClass="sortable" titleKey="person.selectable">
         <c:if test="${personList.selectable == true}"><fmt:message key="checkbox.checked"/></c:if>
         <c:if test="${personList.selectable == false}"><fmt:message key="checkbox.unchecked"/></c:if>
     </display:column>
-</authz:authorize>
+</c:if>
 
     <display:setProperty name="paging.banner.item_name" value="${item}"/>
     <display:setProperty name="paging.banner.items_name" value="${items}"/>

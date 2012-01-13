@@ -12,7 +12,7 @@
                 PATTERN_TYPE_APACHE_ANT
                 /j_security_check*=httpSessionContextIntegrationFilter,authenticationProcessingFilter
                 /**/*.html*=httpSessionContextIntegrationFilter,remoteUserFilter,ezAuthenticationFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
-                /**/*.jsp*=httpSessionContextIntegrationFilter,remoteUserFilter,exceptionTranslationFilter,filterInvocationInterceptor
+                /**/*.jsp*=httpSessionContextIntegrationFilter,remoteUserFilter,ezAuthenticationFilter,exceptionTranslationFilter,filterInvocationInterceptor
             </value>
         </property>
     </bean>
@@ -29,14 +29,13 @@
             <value>
                 CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
                 PATTERN_TYPE_APACHE_ANT
-                /signup.html=anonymous
-                /passwordhint.html*=anonymous
-                /**/*.html*=anonymous,admin
-                /clickstreams.jsp=admin
+                /signup.html=admin,anonymous
+                /passwordhint.html*=admin,anonymous
+                /**/*.html*=admin,anonymous,ROLE_ANONYMOUS,editor,eventresponsible,reader
+                /clickstreams.jsp=admin,ROLE_ADMIN,editor,eventresponsible,reader
             </value>
         </property>
     </bean>
-    
 
     <bean id="authenticationManager" class="org.acegisecurity.providers.ProviderManager">
         <property name="providers">
@@ -46,13 +45,19 @@
             </list>
         </property>
     </bean>
-    
-    <bean id="ezAuthenticationFilter" class="no.unified.soak.webapp.filter.EZAuthenticationFilter">
+
+	<bean id="ezAuthenticationFilter" class="no.unified.soak.webapp.filter.EZAuthenticationFilter">
+		<property name="userManager" ref="userManager"/>
+        <property name="userSynchronizeManager" ref="userSynchronizeManager"/>
+        <property name="extUserDAO" ref="extUserDAO"/>
+	</bean>
+
+	<!-- bean id="svvAuthenticationFilter" class="no.unified.soak.webapp.filter.SVVAuthenticationFilter">
         <property name="userManager" ref="userManager"/>
         <property name="userSynchronizeManager" ref="userSynchronizeManager"/>
-        <property name="ezUserDAO" ref="ezUserDAO"/>
-    </bean>
-   
+        <property name="extUserDAO" ref="extUserDAO"/>
+    </bean -->
+       
     <!-- Automatically receives AuthenticationEvent messages from DaoAuthenticationProvider -->
     <bean id="loggerListener" class="org.acegisecurity.event.authentication.LoggerListener"/>
     
@@ -133,7 +138,7 @@
         <property name="target">
             <bean class="no.unified.soak.service.impl.UserManagerImpl">
                 <property name="userDAO" ref="userDAO"/>
-                <property name="ezUserDAO" ref="ezUserDAO"/>
+                <property name="extUserDAO" ref="extUserDAO"/>
                 <property name="roleManager" ref="roleManager"/>
                 <property name="messageSource" ref="messageSource"/>
                 <property name="organizationManager" ref="organizationManager"/>
@@ -142,10 +147,11 @@
         <property name="transactionAttributes">
             <props>
                 <prop key="save*">PROPAGATION_REQUIRED,-UserExistsException</prop>
+                <prop key="add*">PROPAGATION_REQUIRED,-UserExistsException</prop>
+                <prop key="update*">PROPAGATION_REQUIRED,-UserExistsException</prop>
                 <prop key="reset*">PROPAGATION_REQUIRED,-UserExistsException</prop>
                 <prop key="remove*">PROPAGATION_REQUIRED</prop>
                 <prop key="*LoginCookie">PROPAGATION_REQUIRED</prop>
-                <prop key="*">PROPAGATION_REQUIRED</prop>
             </props>
         </property>
         <property name="preInterceptors">

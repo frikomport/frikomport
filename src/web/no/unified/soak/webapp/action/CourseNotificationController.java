@@ -22,11 +22,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import no.unified.soak.Constants;
+import no.unified.soak.dao.hibernate.RegistrationStatusCriteria;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.User;
 import no.unified.soak.model.Registration.Status;
-import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.RegistrationManager;
@@ -56,7 +56,6 @@ public class CourseNotificationController extends BaseFormController {
     private MailSender mailSender = null;
     protected MailEngine mailEngine = null;
 	protected SimpleMailMessage message = null;
-	protected ConfigurationManager configurationManager = null;
 	private WaitingListManager waitingListManager = null;
 	
 	public void setMessageSource(MessageSource messageSource) {
@@ -79,10 +78,6 @@ public class CourseNotificationController extends BaseFormController {
 		this.courseManager = courseManager;
 	}
 
-    public void setConfigurationManager(ConfigurationManager configurationManager) {
-        this.configurationManager = configurationManager;
-    }
-
 	public void setWaitingListManager(WaitingListManager waitingListManager) {
 		this.waitingListManager = waitingListManager;
 	}
@@ -97,7 +92,8 @@ public class CourseNotificationController extends BaseFormController {
         Course course = (Course)command;
         String courseid = request.getParameter("id");
 		model.put("id", courseid);
-        User user = getUser(request);
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute(Constants.USER_KEY);
 
         // course is changed - waitingList should be processed
         waitingListManager.processIfNeeded(course.getId(), locale);
@@ -147,7 +143,7 @@ public class CourseNotificationController extends BaseFormController {
 		} else {
 			course = new Course();
 	        // Check if a default organization should be applied
-			User user = getUser(request);
+			User user = (User) request.getSession().getAttribute(Constants.USER_KEY);
 			Object omid = user.getOrganizationid();
 	        if ((omid != null) && StringUtils.isNumeric(omid.toString())) {
 	            course.setOrganizationid(new Long(omid.toString()));
@@ -182,7 +178,7 @@ public class CourseNotificationController extends BaseFormController {
 			if (originalCourse != null){
 				changedList = courseManager.getChangedList(originalCourse, course, format);
 			}
-			else log.error("NB!! changedList==null - Course not in session - caused by eZ Publish/forward/redirect...!!");
+//			else log.error("NB!! changedList==null - Course not in session - caused by eZ Publish/forward/redirect...!!");
 		}
 
 		Locale locale = request.getLocale();
@@ -199,7 +195,7 @@ public class CourseNotificationController extends BaseFormController {
 			return new ModelAndView(getCancelView(), "id", course.getId().toString());
 		} // or to send out notification email?
 		else if (request.getParameter("send") != null) {
-			if (course.getStatus().equals(CourseStatus.COURSE_PUBLISHED) && course.getCopyid() != null && request.getParameter("waitinglist").equals("true")){
+			if (course.getStatus().equals(CourseStatus.COURSE_PUBLISHED) && course.getCopyid() != null){
 				// FKM-517
 				sendMailToWaitingList(locale, course, Constants.EMAIL_EVENT_NEW_COURSE_NOTIFICATION, mailComment, mailSender, changedList);
 			}
@@ -227,23 +223,26 @@ public class CourseNotificationController extends BaseFormController {
      */
 	private void sendMail(Locale locale, Course course, int event, String mailComment, String from, List <String> changedList) {
 		log.debug("Sending mail from CourseNotificationController");
-		List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, (Status)null,null, null, null, null);
+		List<Registration> registrations = new ArrayList<Registration>();
 		
 		StringBuffer msg = null;
 		switch(event) {
 			case Constants.EMAIL_EVENT_COURSECHANGED:
+				registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, new RegistrationStatusCriteria(Status.RESERVED, Status.WAITING), null, null, null, null, null, null);
 				msg = MailUtil.createChangedBody(course, locale, messageSource, mailComment, changedList); 
 				break;
 			case Constants.EMAIL_EVENT_COURSECANCELLED:
-				msg = MailUtil.create_EMAIL_EVENT_COURSECANCELLED_body(course, mailComment);
+				registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, new RegistrationStatusCriteria(Status.RESERVED, Status.WAITING), null, null, null, null, null, null);
+				msg = MailUtil.create_EMAIL_EVENT_COURSECANCELLED_body(course, mailComment, configurationManager.getConfigurationsMap());
 				break;
 			default:
 				if(log.isDebugEnabled()) log.debug("sendMail: Handling of event:" + event + " not implemented..!");
+				return;
 		}
 		ArrayList<MimeMessage> emails = MailUtil.getMailMessages(registrations, event, course, msg, from, mailSender, false);
 		MailUtil.sendMimeMails(emails, mailEngine);
 		
-		if(configurationManager.isActive("mail.course.sendSummary", true)) {
+		if(configurationManager.isActive("mail.course.sendSummary", true) && !registrations.isEmpty()) {
 			MailUtil.sendSummaryToResponsibleAndInstructor(course, from, registrations, msg, mailEngine, mailSender);
 		}
 	}
@@ -266,7 +265,7 @@ public class CourseNotificationController extends BaseFormController {
 		StringBuffer msg = null;
 		switch(event) {
 			case Constants.EMAIL_EVENT_NEW_COURSE_NOTIFICATION:
-				msg = MailUtil.create_EMAIL_EVENT_NEW_COURSE_NOTIFICATION_body(course, mailComment);
+				msg = MailUtil.create_EMAIL_EVENT_NEW_COURSE_NOTIFICATION_body(course, mailComment, configurationManager.getConfigurationsMap());
 				break;
 			default:
 				if(log.isDebugEnabled()) log.debug("sendMailToWaitingList: Handling of event:" + event + " not implemented..!");
@@ -297,10 +296,13 @@ public class CourseNotificationController extends BaseFormController {
         senders.add(userfrom);
 
         User responsible = course.getResponsible();
-        if(!user.equals(responsible)){
-            String responsiblefrom = responsible.getFullName() + " <" + responsible.getEmail() + ">";
-            senders.add(responsiblefrom);
-        }
+        try {
+	        if(!user.equals(responsible)){
+	            String responsiblefrom = responsible.getFullName() + " <" + responsible.getEmail() + ">";
+	            senders.add(responsiblefrom);
+	        }
+        }catch(Exception e){/* do nothing -- added based on "onetime"-e*/ }
+
         return senders;
     }
     

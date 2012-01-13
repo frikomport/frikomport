@@ -11,6 +11,7 @@ import javax.servlet.jsp.JspException;
 
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.Registration.Status;
 import no.unified.soak.util.ApplicationResourcesUtil;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -224,7 +225,7 @@ public abstract class CustomBaseExportView implements TextExportView
         // document start
         write(out, DOCUMENT_START);
 
-        addCourseInfo(out);
+        addCourseInfoIfOk(out);
 
         if (this.header)
         {
@@ -281,7 +282,8 @@ public abstract class CustomBaseExportView implements TextExportView
     /**
      * Adds information about course to csv sheet
      */
-    private void addCourseInfo(Writer out) throws IOException {
+    private void addCourseInfoIfOk(Writer outWriter) throws IOException {
+    	StringBuffer out = new StringBuffer(200);
         final String ROW_START = getRowStart();
         final String ROW_END = getRowEnd();
         final String CELL_START = getCellStart();
@@ -292,113 +294,161 @@ public abstract class CustomBaseExportView implements TextExportView
     	
     	// find course from first registration, then calculate registered attendands / attendants on waitlist
     	boolean firstRegistration = true;
+    	Long theCourseId = null;
+    	
+    	//Only add course info if all registrations belong to the same course.
+    	boolean doAddCourseInfo = true; 
     	DateFormat f = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
     	RowIterator rowIterator = this.model.getRowIterator(this.exportFull);
-        while (rowIterator.hasNext())
-        {
-            Row row = rowIterator.next();
-            if(row.getObject() instanceof Registration) {
-            	Registration registration = (Registration)row.getObject();
-            	if(firstRegistration) {
-	            	Course course = registration.getCourse();
-	            	String start = f.format(course.getStartTime());
-	            	String stop = f.format(course.getStopTime());
-	            	String date = start.equals(stop)? start : start + " - " + stop;
-	            	String duration = course.getDuration()!=null ? StringEscapeUtils.unescapeHtml(course.getDuration()) : "";
-	            	
-	            	// adds coursename, date, duration
-	            	write(out, ROW_START);
-	            	write(out, CELL_START);
-	            	write(out, escapeColumnValue(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.name"))));
-	            	write(out, CELL_END);
-
-	            	write(out, CELL_START);
-	            	write(out, escapeColumnValue(course.getName()));
-	            	write(out, CELL_END);
-
-	            	write(out, CELL_START);
-	            	write(out, escapeColumnValue(date));
-	            	write(out, CELL_END);
-
-	            	write(out, CELL_START);
-	            	write(out, escapeColumnValue(duration));
-	            	write(out, CELL_END);
-                    write(out, ROW_END);
-                    
-	                // adds courseresponsible, instructor
-	            	write(out, ROW_START);
-	            	write(out, CELL_START);
-	            	write(out, escapeColumnValue(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.responsible"))));
-	            	write(out, CELL_END);
-
-	            	write(out, CELL_START);
-	            	write(out, escapeColumnValue(course.getResponsible().getFullName()));
-	            	write(out, CELL_END);
-
-	            	write(out, CELL_START);
-	            	write(out, escapeColumnValue(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.instructor"))));
-	            	write(out, CELL_END);
-
-	            	write(out, CELL_START);
-	            	write(out, escapeColumnValue(course.getInstructor().getName()));
-	            	write(out, CELL_END);
-                    write(out, ROW_END);
-
-                    
-	                // adds location
-	            	write(out, ROW_START);
-	            	write(out, CELL_START);
-	            	write(out, escapeColumnValue(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.location"))));
-	            	write(out, CELL_END);
-
-	            	write(out, CELL_START);
-	            	write(out, escapeColumnValue(course.getLocation().getName()));
-	            	write(out, CELL_END);
-
-	            	write(out, CELL_START);
-	            	write(out, escapeColumnValue(course.getLocation().getAddress()));
-	            	write(out, CELL_END);
-                    write(out, ROW_END);
-
-	                
-	                firstRegistration = false;
-            	}
-				if(registration.getReserved()) {
-					rCount++;
+		loop: while (rowIterator.hasNext()) {
+			Row row = rowIterator.next();
+			if (!(row.getObject() instanceof Registration)) {
+				// An object is not a registration, so quit adding course info.
+				doAddCourseInfo = false;
+				break loop;
+			} else {
+				Registration registration = (Registration) row.getObject();
+				if (theCourseId != null && theCourseId != registration.getCourse().getId()) {
+					doAddCourseInfo = false;
+					break loop;
 				}
-				else {
-					wCount++;
+				theCourseId = registration.getCourse().getId();
+				if (firstRegistration) {
+					out = makeCourseInfo(registration);
+					firstRegistration = false;
+
 				}
-            }
-        }
-		if(rCount > 0 || wCount > 0) {
-            // adds attendant counts and time of update
-        	write(out, ROW_START);
-        	write(out, CELL_START);
-        	write(out, escapeColumnValue(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.attendants")) + ": " + rCount));
-        	write(out, CELL_END);
+				if (registration.getStatusAsEnum() == Status.RESERVED) {
+					rCount += registration.getParticipants();
+				} else {
+					wCount += registration.getParticipants();
+				}
+			}
+		}
+		if (doAddCourseInfo) {
+			if (rCount > 0 || wCount > 0) {
+				// adds attendant counts and time of update
+				write(out, ROW_START);
+				write(out, CELL_START);
+				write(out, escapeColumnValue(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil
+						.getText("registrationList.attendants"))
+						+ ": " + rCount));
+				write(out, CELL_END);
 
-        	write(out, CELL_START);
-        	write(out, escapeColumnValue(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.waitlist")) + ": " + wCount));
-        	write(out, CELL_END);
+	            if(!ApplicationResourcesUtil.isSVV()){
+					write(out, CELL_START);
+					write(out, escapeColumnValue(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.waitlist"))
+							+ ": " + wCount));
+					write(out, CELL_END);
+	            }
+	            
+				write(out, CELL_START);
+				write(out, escapeColumnValue(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil
+						.getText("registrationsSent.updated"))
+						+ " " + f.format(new Date())));
+				write(out, CELL_END);
+				write(out, ROW_END);
 
-        	write(out, CELL_START);
-        	write(out, escapeColumnValue(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationsSent.updated")) + " " + f.format(new Date())));
-        	write(out, CELL_END);
-            write(out, ROW_END);
-            
-            // empty row
-        	write(out, ROW_START);
-        	write(out, CELL_START);
-        	write(out, escapeColumnValue(""));
-        	write(out, CELL_END);
-            write(out, ROW_END);
+				// empty row
+				write(out, ROW_START);
+				write(out, CELL_START);
+				write(out, escapeColumnValue(""));
+				write(out, CELL_END);
+				write(out, ROW_END);
+			}
+			write(outWriter, out.toString());
 		}
     }
 
+	private StringBuffer makeCourseInfo(Registration registration) {
+        final String ROW_START = getRowStart();
+        final String ROW_END = getRowEnd();
+        final String CELL_START = getCellStart();
+        final String CELL_END = getCellEnd();
+    	DateFormat f = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+    	StringBuffer out = new StringBuffer(200);
+
+		Course course = registration.getCourse();
+		String start = f.format(course.getStartTime());
+		String stop = f.format(course.getStopTime());
+		String date = start.equals(stop) ? start : start + " - " + stop;
+
+		if("n/a".equalsIgnoreCase(course.getDuration())){
+			// pga. SVV's mulighet for å ikke oppgi varighet
+			course.setDuration(null);
+		}
+		String duration = course.getDuration()!=null ? (" (" + course.getDuration() + ")") : "";
+
+		// adds coursename, date, duration
+		write(out , ROW_START);
+		write(out, CELL_START);
+		write(out, escapeColumnValue(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.name"))));
+		write(out, CELL_END);
+
+		write(out, CELL_START);
+		write(out, escapeColumnValue(course.getName()));
+		write(out, CELL_END);
+
+		write(out, CELL_START);
+		write(out, escapeColumnValue(date));
+		write(out, CELL_END);
+
+		if (!ApplicationResourcesUtil.isSVV()) {
+			write(out, CELL_START);
+			write(out, escapeColumnValue(duration));
+			write(out, CELL_END);
+		}
+		write(out, ROW_END);
+
+		// adds courseresponsible, instructor
+		write(out, ROW_START);
+		write(out, CELL_START);
+		write(out, escapeColumnValue(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil
+				.getText("course.responsible"))));
+		write(out, CELL_END);
+
+		write(out, CELL_START);
+		write(out, escapeColumnValue(course.getResponsible().getFullName()));
+		write(out, CELL_END);
+
+		write(out, CELL_START);
+		write(out, escapeColumnValue(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil
+				.getText("course.instructor"))));
+		write(out, CELL_END);
+
+		write(out, CELL_START);
+		write(out, escapeColumnValue(course.getInstructor().getName()));
+		write(out, CELL_END);
+		write(out, ROW_END);
+
+		// adds location
+		write(out, ROW_START);
+		write(out, CELL_START);
+		write(out, escapeColumnValue(StringEscapeUtils
+				.unescapeHtml(ApplicationResourcesUtil.getText("course.location"))));
+		write(out, CELL_END);
+
+		write(out, CELL_START);
+		write(out, escapeColumnValue(course.getLocation().getName()));
+		write(out, CELL_END);
+
+		write(out, CELL_START);
+		write(out, escapeColumnValue(course.getLocation().getAddress()));
+		write(out, CELL_END);
+		write(out, ROW_END);
+
+		return out;
+	}
+
     
-    /**
+	private void write(StringBuffer out, String string) {
+		if (string != null) {
+			out.append(string);
+		}
+	}
+
+	/**
      * Write a String, checking for nulls value.
      * @param out output writer
      * @param string String to be written

@@ -1,0 +1,350 @@
+/* ----- GENERELL UTSKRIFTSVENNLIG VERSJON ----- */
+   	   	
+	/*
+	** POSITION
+	*/
+	#PageContainer
+	{
+		position: static;
+		left: 0px;
+		top: 0px;
+		background-image: none;
+	}
+	
+	/*
+	** WIDTH
+	**/
+	#PageContainer,
+	#ContentContainer, 
+	#ContentFrameMiddle, 
+	#MainContentContainer,
+	#Header,
+	#Content
+	{
+		width: auto !important;
+	}
+	
+	/*
+	** HEIGHT TOP
+	**/
+	#HeaderContainer, 
+	#HeaderInnerContainer,
+	#HeaderInnerContainer #Header, 
+	#PageContainer #HeaderContainer.narrow, 
+	#HeaderContainer.narrow #HeaderInnerContainer,
+	#HeaderContainer.narrow #HeaderInnerContainer #Header,
+	#HeaderContainer.frontPage, 
+	#HeaderContainer.frontPage #HeaderInnerContainer,
+	#HeaderContainer.frontPage #HeaderInnerContainer #Header
+	{
+		height:auto !important;
+	}
+	
+	/*
+	** HIDE
+	*/
+	#Header div.headerPictureContainer, 
+	#Header div.headerContentContainer,
+	#Header div.narrowHeaderPictureContainer, 
+	#Header #globalOptions, 
+	#Header #userEntranceMenu,
+	#Header #logo,
+	#MainmenuContainer, 
+	#UnderMeny,
+	#MainContentContainer div.topbar, 
+	#Related,
+	div.searchnavigator_container,
+	#FooterContainer
+	{
+		display:none !important;
+	}
+	
+	/*
+	** SHOW (INCL. EXCEPTIONS TO HIDE RULES)
+	*/	
+	#Header #printLogo,
+	#Hovedinnhold.userEntrance
+	{
+		display:block !important;
+	}
+	
+	/*
+	** FLOAT
+	*/
+	#Content, 
+	#ContentFrameMiddle, 
+	#MainContentContainer,
+	ul.simplelinklist div,
+	#newsarchive .searchresultset
+	{
+		float:none !important;
+	}
+	
+	
+	/*
+	** BACKGROUND REMOVE
+	*/
+	body, 
+	div,
+	table,
+	tr,
+	tr.r0,
+	tr.r1,
+	td, 
+	th, 
+	tr.heading,
+	#HeaderInnerContainer,
+	#HeaderContainer.narrow #HeaderInnerContainer,
+	#HeaderContainer
+	{
+		background-color: #FFFFFF;
+		background-image: none;
+	}
+	
+	/*
+	** REMOVE PADDING AND MARGIN
+	*/
+	#PageContainer,
+	#HeaderContainer, 
+	#HeaderInnerContainer #Header, 
+	#HeaderContainer.narrow, 
+	#HeaderContainer.narrow #HeaderInnerContainer #Header,
+	#HeaderContainer.frontPage, 
+	#HeaderContainer.frontPage #HeaderInnerContainer #Header,
+	#Header #printLogo,
+	#Header div.headerContentContainer #headerTitle,  
+	.narrow #Header div.headerContentContainer #headerTitle,
+	#ContentContainer, 
+	#ContentFrameMiddle, 
+	#MainContentContainer
+	{
+		padding: 0px;
+		margin: 0px;
+	}
+	
+	/*
+	** PAINT IT BLACK
+	*/
+	th, tr, tr.r1, tr.r0,
+	div.article div.lastupdated
+	{
+		color: #000000;
+	}
+	
+
+	
+	/*
+	** PAGE BREAK
+	*/
+	#vpcontactpage .contactperson{
+		display:block;
+		page-break-inside: avoid;
+	}
+	
+
+	
+	/*
+	** SOME TRICKS
+	*/
+	body
+	{
+		font-size: 11pt;	
+	}
+   	
+   	a 
+   	{ 
+	   	/*text-decoration: underline;*/
+	}
+   	
+   		
+	th{
+		background-color: #C0C0C0;
+		font-weight: bold;
+	}
+	tr.heading{
+	   	background-color: #FFFFFF;
+	   	font-weight: bold;
+	}
+	td, th{
+	   	border: 1px solid #C0C0C0;
+	}
+	
+	#Content{
+		position: relative;
+		width: 17cm;   /*approx a4 width minus normal printer margins*/
+		padding: 0.75cm 0cm 0cm 0cm;
+		margin: 0;
+	}
+	
+       /* Fix to avoid blank page in IE6 print of search results */
+       #search #result{
+		position: relative;
+		width: 17cm;   /*approx a4 width minus normal printer margins*/
+		padding: 0.75cm 0cm 0cm 0cm;
+		margin: 0;
+	}
+        #search #result li {
+                width: 17cm;   /*approx a4 width minus normal printer margins*/				
+        }
+
+	div.searchresultset,
+	div#newsarchive div.searchresultset ul.simplelinklist li div.link
+	{
+		width: 17cm; 
+	}
+	
+	
+	#Header #printLogo
+	{
+		padding-top: 0.5cm;
+	}
+	
+	#ContentFrameMiddle {
+		clear: both;		
+	}
+	
+	div.topbar {
+		display: none;	
+	}
+	
+	#brodsmulemeny {
+		display: block !important;
+		padding-bottom: 15px;
+	}
+	
+	
+/****** Offentlig journal *****/
+
+	#offentligJournal .treffNummer {
+		width: 2%;
+	}
+	
+	#offentligJournal .treff {
+		width: 90%;
+	}
+	
+
+/****** Vegmeldinger *****/
+
+#vmtop, .vmrapportvalg {
+	display: none;
+}
+
+#vmEgenRapportResultat #faneTopp,
+#vmEgenRapportResultat #vmFane {
+	float:none;  /* Forhindrer sideskift */
+}
+
+/** Førerkortnavigator */
+#trinnContainer {
+	display: none;
+}
+
+/** Nyhetsarkiv */
+#newsarchive #navigation {
+	display:none;
+}
+
+#newsarchive ul.simplelinklist,
+#newsarchive ul.simplelinklist li,
+#newsarchive ul.simplelinklist li div {
+	float:none;
+}
+
+/** Nyhetsarkiv */
+#vpSok #valgtMetodeContainer {
+	width:auto;
+}
+
+/** Vegprosjekter forside**/
+#vpSok{
+	width: 17cm;
+}
+
+#vpSok #velgFylke, #vpSok #stepsHeader{
+	display:none;
+}
+
+#vpSok #valgtMetodeContainer #avansertSok,
+#vpSok #valgtMetodeContainer #fritekstSok{
+	margin: 0px;
+	padding-top: 10px;
+	float: none;
+}
+
+#vpSok #valgtMetodeContainer{
+	float: none;
+	width: 17cm;
+}
+
+#vpSok #valgtMetodeContainer #avansertSok #vpAvansertSokForm,
+#vpSok #valgtMetodeContainer #fritekstSok #vpFritekstSokForm{
+	width: 8cm;
+	float: none;
+}
+
+#vpSok #avansertSok #vpSokNullstillKnapp,
+#vpSok #avansertSok #vpSokKnappAvansert, 
+#vpSok #fritekstSok #vpSokKnappFritekst{
+	display:none !important;
+}
+ 
+#vpSok #valgtMetodeContainer #fritekstSok ul{
+	text-align:left;
+}
+
+#vpSok #resultat{
+	padding-top: 10px;
+	padding-bottom: 10px;
+	margin-left: 0px;
+	padding-left: 0px;
+	width: 17cm;
+	float: none;
+	border-bottom:1px solid #A5ACAF;
+	border-top:1px solid #A5ACAF;
+}
+
+#vpSok #resultat ul.melding{
+	display:none;
+}
+
+
+
+/** Kontaktinfo trafikkstasjoner **/
+#trafikkstasjonerKontaktinfo {
+	width: auto !important;	
+}
+
+#trafikkstasjonerKontaktinfo #informasjon {
+	display: none;	
+}
+
+#trafikkstasjonerKontaktinfo #kart {
+	display: none;	
+}
+
+#trafikkstasjonerKontaktinfo #lightboxBackground {
+	display: none !important;	
+}
+
+#trafikkstasjonerKontaktinfo #lightboxPopup {
+	position: static !important;
+	margin-left: -30px !important;
+}
+
+#trafikkstasjonerKontaktinfo #lightboxPopup #venstre,
+#trafikkstasjonerKontaktinfo #lightboxPopup #innhold,
+#trafikkstasjonerKontaktinfo #lightboxPopup #hoyre {
+		background-image: none;
+		background-color: #FFFFFF;
+}
+
+#trafikkstasjonerKontaktinfo #lightboxPopup #innhold {
+	padding-top: 0px !important;	
+}
+
+#trafikkstasjonerKontaktinfo #lightboxPopup #hoyre #closeButton img {
+	display: none;	
+}
+
+

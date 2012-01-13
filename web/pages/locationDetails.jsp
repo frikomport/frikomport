@@ -48,7 +48,7 @@
         </td>
     </tr>
 
-    <authz:authorize ifAnyGranted="admin,instructor,editor">
+<c:if test="${(isAdmin || isEducationResponsible || isEventResponsible || isReader) && !isSVV}">
     <tr>
         <th>
             <fmt:message key="location.owner"/>
@@ -68,7 +68,7 @@
         	<fmt:formatNumber value="${location.feePerDay}" minFractionDigits="2"/>
         </td>
     </tr>
-    </authz:authorize>
+</c:if>
 
     <tr>
         <th>
@@ -97,8 +97,19 @@
         </td>
     </tr>
 
-    <authz:authorize ifAnyGranted="admin,instructor,editor">
     <tr>
+        <th>
+            <fmt:message key="location.postalCode"/>
+        </th>
+        <td>
+            <spring:bind path="location.postalCode">
+            	<c:out value="${status.value}"/>
+            </spring:bind>
+        </td>
+    </tr>
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+	<c:if test="${!isSVV}">    
+	<tr>
         <th>
             <fmt:message key="location.mailAddress"/>
         </th>
@@ -108,7 +119,8 @@
             </spring:bind>
         </td>
     </tr>
-
+	</c:if>
+    
     <tr>
         <th>
             <fmt:message key="location.contactName"/>
@@ -151,6 +163,19 @@
         </td>
     </tr>
 
+<c:if test="${useOrganization2}">    
+    <tr>
+        <th>
+            <fmt:message key="location.organization2"/>
+        </th>
+        <td>
+            <spring:bind path="location.organization2.name">
+            	<c:out value="${status.value}"/>
+            </spring:bind>
+        </td>
+    </tr>
+</c:if>
+
     <tr>
         <th>
             <fmt:message key="location.selectable"/>
@@ -162,18 +187,20 @@
             </spring:bind>
         </td>
     </tr>
-</authz:authorize>
+</c:if>
 
     <tr>
-        <td class="buttonBar">
-            <button type="button" onclick="location.href='<c:url value="/listLocations.html"></c:url>'">
-                <fmt:message key="button.location.list"/>
-            </button>
-            <authz:authorize ifAnyGranted="admin,instructor,editor">
+        <td class="buttonBar" colspan="2">
+
+<c:if test="${!isSVV}">
+            <input type="submit" class="button large" name="return" onclick="bCancel=true" value="<fmt:message key="button.location.list"/>" />
+</c:if>            
+            
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
 		    <button type="button" onclick="location.href='<c:url value="/editLocation.html"><c:param name="id" value="${location.id}"/></c:url>'">
 	    	    <fmt:message key="button.edit"/>
 		    </button>
-            </authz:authorize>
+</c:if>
         </td>
     </tr>
 </table>

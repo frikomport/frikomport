@@ -17,15 +17,20 @@ import no.unified.soak.dao.NotificationDao;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Notification;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.Registration.Status;
+import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.NotificationManager;
 import no.unified.soak.service.RegistrationManager;
+import no.unified.soak.service.UserManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.MailUtil;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.hibernate.StaleObjectStateException;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.mail.MailSender;
 
 public class NotificationManagerImpl extends BaseManager implements NotificationManager {
@@ -34,7 +39,9 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 	protected MailEngine mailEngine = null;
 
 	private RegistrationManager registrationManager = null;
-
+	private ConfigurationManager configurationManager = null;
+	private UserManager userManager = null;
+	
     private MailSender mailSender = null;
 
     public void executeTask() {
@@ -65,6 +72,20 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 	}
 
 	/**
+	 * @param configurationManager the registrationManager to set
+	 */
+	public void setConfigurationManager(ConfigurationManager configurationManager) {
+		this.configurationManager = configurationManager;
+	}
+
+	/**
+	 * @param userManager the userManager to set
+	 */
+	public void setUserManager(UserManager userManager) {
+		this.userManager = userManager;
+	}
+
+	/**
 	 * Set the Dao for communication with the data layer.
 	 * 
 	 * @param dao
@@ -77,7 +98,15 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 	 * @see no.unified.soak.service.NotificationManager#getNotifications(no.unified.soak.model.Notification)
 	 */
 	public List getNotifications(final Notification notification) {
-		return dao.getNotifications(notification);
+    	try {
+    		return dao.getNotifications(notification);
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    			return dao.getNotifications(notification);
+    		}
+    		throw e;
+    	}
 	}
 
 	/**
@@ -85,7 +114,15 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 	 *      id)
 	 */
 	public Notification getNotification(final String id) {
-		return dao.getNotification(new Long(id));
+    	try {
+    		return dao.getNotification(new Long(id));
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    			return dao.getNotification(new Long(id));
+    		}
+    		throw e;
+    	}
 	}
 
 	/**
@@ -111,13 +148,24 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 	 *         sent, but that are due for sending
 	 */
 	public List<Notification> getUnsentNotifications() {
-		return dao.getUnsentNotifications();
+    	try {
+    		return dao.getUnsentNotifications();
+    	}
+    	catch(StaleObjectStateException e){
+    		if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+    			return dao.getUnsentNotifications();
+    		}
+    		throw e;
+    	}
 	}
 
 	/**
 	 * @see no.unified.soak.service.NotificationManager#sendReminders()
 	 */
 	public void sendReminders() {
+		
+		LocaleContextHolder.setLocale(ApplicationResourcesUtil.getNewLocaleWithDefaultCountryAndVariant(null));
+		
 		NotificationSummary notificationSummary = new NotificationSummary();
 
 		// Fetch all the Notifications that does not have the sent-flag set.
@@ -133,20 +181,28 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 			for (int i = 0; i < notifications.size(); i++) {
 				Date today = new Date();
 				Notification notification = notifications.get(i);
+				Registration registration = notification.getRegistration();
+				// The if-test is added mostly because of bad sample data (lazy programmer)
+				if (registration != null && registration.getCourse() != null) {
 
-				// The if-test is added mostly because of bad sample data (lazy
-				// programmer)
-				if (notification.getRegistration() != null && notification.getRegistration().getCourse() != null) {
+					if(registration.getStatusAsEnum() == Status.CANCELED || registration.getStatusAsEnum() == Status.INVITED){
+						// notification is only to be sent to reserved/waiting registrations
+						dao.removeNotification(notification.getId());
+						continue;
+					}
+					
 					Course course = notification.getRegistration().getCourse();
 					// Are we after the time of notification?
 					if (course.getStatus().equals(CourseStatus.COURSE_PUBLISHED) 
 					        && course.getReminder() != null 
-					        && course.getReminder().before(today)) {
+					        && course.getReminder().before(today)
+					        && registration.getRegistered().before(course.getReminder())) {
 						// Store that it has been successfully sent - cleanup by
 						// cleanup manager
-						StringBuffer msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_body(course, null, notification.getRegistration().getReserved());
+						boolean isReserved = notification.getRegistration().getStatusAsEnum() == Status.RESERVED;
+                        StringBuffer msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_body(course, registration, null, isReserved, configurationManager.getConfigurationsMap());
 						ArrayList<Registration> registrations = new ArrayList<Registration>();
-						registrations.add(notification.getRegistration());
+						registrations.add(registration);
 						ArrayList<MimeMessage> newEmails = MailUtil.getMailMessages(registrations, Constants.EMAIL_EVENT_NOTIFICATION, course, msg, null, mailSender, false);
 						emails.addAll(newEmails);
 						
@@ -200,7 +256,7 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 			Course course = r.getCourse();
 			
 			String waitlist = "";
-			if(!r.getReserved()) waitlist = "(" + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.waitlist")) + ")";
+			if(r.getStatusAsEnum() == Status.WAITING) waitlist = "(" + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.waitlist")) + ")";
 			String name = r.getFirstName() + " " + r.getLastName() + "  <" + r.getEmail() + "> " + waitlist + "\n";
 			addToSummary(course, name);
 		}
@@ -221,7 +277,7 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 				
 				if(log.isDebugEnabled()) log.debug(listOfNames.toString());
 				
-				StringBuffer msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_SUMMARY_body(course, listOfNames.toString());
+				StringBuffer msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_SUMMARY_body(course, listOfNames.toString(), configurationManager.getConfigurationsMap());
 				String subject = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.summarysubject", course.getName()));
 				MimeMessage mail = MailUtil.getMailMessage(new String[]{course.getInstructor().getEmail()}, new String[]{course.getResponsible().getEmail()}, null, null, subject, msg, null, null, mailSender);
 				mailEngine.send(mail);

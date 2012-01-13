@@ -9,6 +9,9 @@
 <fmt:message key="serviceAreaList.item" var="item" />
 <fmt:message key="serviceAreaList.items" var="items" />
 
+<c:choose>
+<c:when test="${!isSVV && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
+
 <form method="post" action="<c:url value="/listServiceAreas.html"/>" id="serviceAreaList">
    	<input type="hidden" id="ispostbackservicearealist" name="ispostbackservicearealist" value="1"/>
 
@@ -37,12 +40,12 @@
 </form>
 
 <c:set var="buttons">
-	<authz:authorize ifAnyGranted="admin">
+	<c:if test="${isAdmin}">
 		<button type="button" style="margin-right: 5px"
 			onclick="location.href='<c:url value="/editServiceArea.html"/>'">
 			<fmt:message key="button.add" />
 		</button>
-	</authz:authorize>
+	</c:if>
 </c:set>
 
 <c:out value="${buttons}" escapeXml="false" />
@@ -50,14 +53,14 @@
 <display:table name="${serviceAreaList}" cellspacing="0" cellpadding="0"
 	id="serviceAreaList" pagesize="${itemCount}" class="list" export="true"
 	requestURI="">
-    <authz:authorize ifAnyGranted="admin">
+    <c:if test="${isAdmin}">
         <display:column media="html" sortable="false" headerClass="sortable"
             titleKey="button.heading">
         <a href='<c:url value="/editServiceArea.html"><c:param name="id" value="${serviceAreaList.id}"/></c:url>'>
             <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
         </display:column>
-    </authz:authorize>
+    </c:if>
 	<display:column property="name" sortable="true" headerClass="sortable"
 		titleKey="serviceArea.name" />
 
@@ -65,7 +68,8 @@
 		headerClass="sortable" titleKey="serviceArea.organization" />
 
 
-	<authz:authorize ifAnyGranted="admin,instructor,editor">
+	<c:if
+		test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 		<display:column sortable="true" headerClass="sortable"
 			titleKey="serviceArea.selectable">
 			<c:if test="${serviceAreaList.selectable == true}">
@@ -75,11 +79,24 @@
 				<fmt:message key="checkbox.unchecked" />
 			</c:if>
 		</display:column>
-	</authz:authorize>
+	</c:if>
 
 	<display:setProperty name="paging.banner.item_name" value="${item}" />
 	<display:setProperty name="paging.banner.items_name" value="${items}" />
 </display:table>
+
+</c:when>
+<c:otherwise>
+	<c:if test="${!isSVV}">
+	    <div class="message" style="font-size: 12px"><fmt:message key="access.denied" /></div>
+	</c:if>
+	
+	<c:if test="${isSVV}">
+	    <div class="message" style="font-size: 12px"><fmt:message key="access.notinuse" /></div>
+	</c:if>
+</c:otherwise>
+</c:choose>
+
 
 <c:out value="${buttons}" escapeXml="false" />
 

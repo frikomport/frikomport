@@ -7,9 +7,10 @@
 */
 package no.unified.soak.webapp.action;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpSession;
 
 import no.unified.soak.model.User;
 import no.unified.soak.service.UserManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -50,7 +52,6 @@ public class UserController extends BaseFormController {
         if (log.isDebugEnabled()) {
             log.debug("entering 'handleRequest' method...");
         }
-        Locale locale = request.getLocale();
         Map model = new HashMap();
         User user = new User();
         
@@ -59,8 +60,26 @@ public class UserController extends BaseFormController {
         if(comm != null) {
             user = (User)comm;
         }
-        
-        List users = userManager.getUsers(user);
+
+        List users = null;
+        if(ApplicationResourcesUtil.isSVV()){
+        	// SVV ønsker IKKE visning av annet enn interne brukere under "Brukerliste"
+        	user.setHashuser(false);
+        	users = userManager.getUsers(user, true);
+        	List<User> usersWithRoles = new ArrayList<User>();
+        	Iterator<User> us = users.iterator();
+    		while(us.hasNext()){
+    			User u = us.next();
+    			if(!u.getRoleNameList().isEmpty()){
+    				// SVV brukere som pt. ikke har FKP-roller taes bort fra "Brukerliste".
+    				usersWithRoles.add(u);
+    			}
+    		}
+    		users = usersWithRoles;
+        }
+        else {
+        	users = userManager.getUsers(user, false);
+        }
         
         if (users != null) {
             model.put("userList", users);
@@ -76,13 +95,29 @@ public class UserController extends BaseFormController {
         Map model = new HashMap();
         HttpSession session = request.getSession();
 
-        Locale locale = request.getLocale();
-
         User user = (User) command;
         model.put("user", user);
         session.setAttribute("user", user);
-        
-        List users = userManager.getUsers(user);
+
+        List users = null;
+        if(ApplicationResourcesUtil.isSVV()){
+        	// SVV ønsker IKKE visning av annet enn interne brukere under "Brukerliste"
+        	user.setHashuser(false);
+        	users = userManager.getUsers(user, true);
+        	List<User> usersWithRoles = new ArrayList<User>();
+        	Iterator<User> us = users.iterator();
+    		while(us.hasNext()){
+    			User u = us.next();
+    			if(!u.getRoleNameList().isEmpty()){
+    				// SVV brukere som pt. ikke har FKP-roller taes bort fra "Brukerliste".
+    				usersWithRoles.add(u);
+    			}
+    		}
+    		users = usersWithRoles;
+        }
+        else {
+        	users = userManager.getUsers(user, false);
+        }
         
         if (users != null) {
             model.put("userList", users);

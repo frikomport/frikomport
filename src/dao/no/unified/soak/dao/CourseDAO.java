@@ -10,11 +10,11 @@
  */
 package no.unified.soak.dao;
 
-import no.unified.soak.model.Course;
-import no.unified.soak.model.Person;
-
 import java.util.Date;
 import java.util.List;
+
+import no.unified.soak.model.Course;
+import no.unified.soak.model.Person;
 
 
 /**
@@ -26,7 +26,7 @@ public interface CourseDAO extends DAO {
     /**
      * Retrieves all of the courses
      */
-    public List<Course> getCourses(Course course);
+    public List<Course> getAllCourses();
 
     /**
      * Gets course's information based on primary key. An
@@ -57,7 +57,7 @@ public interface CourseDAO extends DAO {
      * @param stopDate Course has to have the stop date by this date
      * @return list of all courses that applies to the given criteria
      */
-    public List<Course> searchCourses(Course course, Date startDate, Date stopDate);
+    public List<Course> searchCourses(Course course, Date startDate, Date stopDate, Integer[] status, boolean showUntilFinished);
 
     /**
      * Finds all courses in the timespan between registerBy and startTime
@@ -72,7 +72,17 @@ public interface CourseDAO extends DAO {
      */
     public List<Course> getUnpublished(Course course);
 
-    public List<Course> findByInstructor(Person person);
+    public List<Course> findByInstructor(Person person, Integer[] coursestatus);
     
     public List<Course> getCoursesWhereRegisterByExpired(long millis);
+	
+    /**
+     * Searches for published courses on given locations
+     * Handles each locationId separately and in given order until list reaches numberOfHits
+     * @param locationIds list of locationIds
+     * @param numberOfHits max number of courses returned
+     * @return list of courses limited by numberOfHits
+     */
+	public List<Course> findByLocationIds(List<Long> locationIds, Integer numberOfHits);
+	
 }

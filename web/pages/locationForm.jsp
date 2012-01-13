@@ -15,7 +15,8 @@
     </c:if>
 </spring:bind>
 
-<form:form commandName="location" onsubmit="return validateLocation(this)">
+<!-- form:form commandName="location" onsubmit="return validateLocation(this)"-->
+<form:form commandName="location">
 <table class="detail">
     <form:hidden path="id"/>
     <tr>
@@ -27,34 +28,13 @@
             <form:errors cssClass="fieldError" path="name"/>
         </td>
     </tr>
-
     <tr>
         <th>
-            <soak:label key="location.maxAttendants"/>
+            <soak:label key="location.detailURL"/>
         </th>
         <td>
-            <form:input path="maxAttendants"/>
-            <form:errors cssClass="fieldError" path="maxAttendants"/>
-        </td>
-    </tr>
-
-    <tr>
-        <th>
-            <soak:label key="location.owner"/>
-        </th>
-        <td>
-            <form:input path="owner" size="50"/>
-            <form:errors cssClass="fieldError" path="owner"/>
-        </td>
-    </tr>
-
-    <tr>
-        <th>
-            <soak:label key="location.feePerDay"/>
-        </th>
-        <td>
-            <form:input path="feePerDay"/>
-            <form:errors cssClass="fieldError" path="feePerDay"/>
+            <form:input path="detailURL" size="50"/>
+            <form:errors cssClass="fieldError" path="detailURL"/>
         </td>
     </tr>
 
@@ -70,6 +50,16 @@
 
     <tr>
         <th>
+            <soak:label key="location.maxAttendants"/>
+        </th>
+        <td>
+            <form:input path="maxAttendants"/>
+            <form:errors cssClass="fieldError" path="maxAttendants"/>
+        </td>
+    </tr>
+
+    <tr>
+        <th>
             <soak:label key="location.address"/>
         </th>
         <td>
@@ -78,6 +68,30 @@
         </td>
     </tr>
 
+
+<c:if test="${usePostalCode}">
+    <tr>
+        <th>
+            <soak:label key="location.postalCode"/>
+        </th>
+        <td>
+            <form:input path="postalCode" size="8"/>
+            <form:errors cssClass="fieldError" path="postalCode"/>
+        </td>
+    </tr>
+</c:if>
+
+    <tr>
+        <th>
+            <soak:label key="location.mapURL"/>
+        </th>
+        <td>
+            <form:input path="mapURL" size="50"/>
+            <form:errors cssClass="fieldError" path="mapURL"/>
+        </td>
+    </tr>
+
+	<c:if test="${!isSVV}">
     <tr>
         <th>
             <soak:label key="location.mailAddress"/>
@@ -87,7 +101,8 @@
             <form:errors cssClass="fieldError" path="mailAddress"/>
         </td>
     </tr>
-
+	</c:if>
+	
     <tr>
         <th>
             <soak:label key="location.contactName"/>
@@ -118,35 +133,57 @@
         </td>
     </tr>
 
+	<c:if test="${!isSVV}">
     <tr>
         <th>
-            <soak:label key="location.mapURL"/>
+            <soak:label key="location.owner"/>
         </th>
         <td>
-            <form:input path="mapURL" size="50"/>
-            <form:errors cssClass="fieldError" path="mapURL"/>
+            <form:input path="owner" size="50"/>
+            <form:errors cssClass="fieldError" path="owner"/>
         </td>
     </tr>
 
     <tr>
         <th>
-            <soak:label key="location.detailURL"/>
+            <soak:label key="location.feePerDay"/>
         </th>
         <td>
-            <form:input path="detailURL" size="50"/>
-            <form:errors cssClass="fieldError" path="detailURL"/>
+            <form:input path="feePerDay"/>
+            <form:errors cssClass="fieldError" path="feePerDay"/>
         </td>
     </tr>
-
+	</c:if>
+    
     <tr>
         <th>
-            <soak:label key="location.organization"/>
+            <soak:label key="location.organizationid"/>
         </th>
         <td>
             <form:select path="organizationid" items="${organizations}" itemLabel="name" itemValue="id"/>
             <form:errors cssClass="fieldError" path="organizationid"/>
         </td>
     </tr>
+
+
+<c:choose>
+	<c:when test="${useOrganization2}">
+		<tr>
+			<th>
+				<soak:label key="location.organization2id" />
+			</th>
+			<td>
+				<form:select path="organization2id">
+					<form:options items="${organizations2}" itemValue="id" itemLabel="name" />
+				</form:select>
+				<form:errors cssClass="fieldError" htmlEscape="false" path="organization2id" />
+			</td>
+		</tr>
+	</c:when>
+	<c:otherwise>
+		<form:hidden path="organization2id" />
+	</c:otherwise>
+</c:choose>
 
     <tr>
         <th>
@@ -161,7 +198,7 @@
     <tr>
         <td></td>
         <td class="buttonBar">            
-            <authz:authorize ifAnyGranted="admin,instructor,editor">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
             <input type="submit" class="button" name="save" 
                 onclick="bCancel=false" value="<fmt:message key="button.save"/>" />
 			<c:if test="${!empty location.id}">
@@ -169,7 +206,7 @@
 	                onclick="bCancel=true;return confirmDelete('<fmt:message key="locationList.theitem"/>')" 
 	                value="<fmt:message key="button.delete"/>" />
             </c:if>
-            </authz:authorize>
+</c:if>
             <input type="submit" class="button" name="cancel" onclick="bCancel=true"
                 value="<fmt:message key="button.cancel"/>" />        
         </td>

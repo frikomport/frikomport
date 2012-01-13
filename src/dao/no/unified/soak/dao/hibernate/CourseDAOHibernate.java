@@ -10,14 +10,20 @@
  */
 package no.unified.soak.dao.hibernate;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import no.unified.soak.dao.CourseDAO;
 import no.unified.soak.model.Course;
+import no.unified.soak.model.Organization;
 import no.unified.soak.model.Person;
+import no.unified.soak.model.Organization.Type;
+import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.CourseStatus;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -32,12 +38,11 @@ import org.springframework.orm.ObjectRetrievalFailureException;
 public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
     
     /**
-     * @see no.unified.soak.dao.CourseDAO#getCourses(no.unified.soak.model.Course)
+     * @see no.unified.soak.dao.CourseDAO#getAllCourses()
      */
-    public List getCourses(final Course course) {
+    public List<Course> getAllCourses() {
         DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
         criteria.addOrder(Order.asc("startTime"));
-
         return getHibernateTemplate().findByCriteria(criteria);
     }
 
@@ -46,11 +51,10 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
      */
     public Course getCourse(final Long id) {
         Course course = (Course) getHibernateTemplate().get(Course.class, id);
-        if (course == null) {
-            log.warn("uh oh, course with id '" + id + "' not found...");
+    	if (course == null) {
+            log.warn("Course with id '" + id + "' not found.");
             throw new ObjectRetrievalFailureException(Course.class, id);
         }
-//        getHibernateTemplate().initialize(course);
         return course;
     }
 
@@ -69,9 +73,9 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
     }
 
     /**
-     * @see no.unified.soak.dao.CourseDAO#searchCourses(no.unified.soak.model.Course, Date, Date)
+     * @see no.unified.soak.dao.CourseDAO#searchCourses(no.unified.soak.model.Course, Date, Date, Integer[])
      */
-    public List<Course> searchCourses(Course course, Date startDate, Date stopDate) {
+    public List<Course> searchCourses(Course course, Date startDate, Date stopDate, Integer[] status, boolean showUntilFinished) {
         // Default search is "find all"
         DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
 
@@ -83,10 +87,38 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
                         course.getOrganizationid()));
             }
 
+            if ((course.getOrganization2id() != null) &&
+                    (course.getOrganization2id().longValue() != 0)) {
+
+            	List family = new ArrayList<Long>();
+            	family.add(course.getOrganization2id());
+            	
+                DetachedCriteria subCriteria = DetachedCriteria.forClass(Organization.class);
+            	subCriteria.add(Restrictions.eq("parentid", course.getOrganization2id()));
+            	subCriteria.add(Restrictions.eq("type", Type.AREA.getTypeDBValue()));
+            	List childOrgs = getHibernateTemplate().findByCriteria(subCriteria);
+            	if(!childOrgs.isEmpty()){
+            		Iterator<Organization> it = childOrgs.iterator();
+            		while(it.hasNext()){
+            			Organization o = it.next();
+            			family.add(o.getId());
+            		}
+            	}
+            	criteria.add(Restrictions.in("organization2id", family));
+            }
+
             if ((course.getServiceAreaid() != null) &&
                     (course.getServiceAreaid().longValue() != 0)) {
                 criteria.add(Restrictions.eq("serviceAreaid",
                         course.getServiceAreaid()));
+            }
+            
+            if ((course.getLocation() != null) &&
+                    (course.getLocation().getId() != 0)) {
+                criteria.add(Restrictions.eq("locationid",
+                        course.getLocation().getId()));
+            } else if (course.getLocationid() != null) {
+                criteria.add(Restrictions.eq("locationid", course.getLocationid()));
             }
 
             if((course.getCategoryid() != null) && (course.getCategoryid().longValue() != 0)){
@@ -102,19 +134,33 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
                         "%" + course.getType() + "%").ignoreCase());
             }
             
-            criteria.add(Restrictions.ge("status",course.getStatus()));
+            if(status != null && status.length > 0){ // gir mulighet for å hente flere typer samtidig
+                criteria.add(Restrictions.in("status", status));
+            }
+            else if(course.getStatus() != null){
+            	criteria.add(Restrictions.eq("status", course.getStatus()));
+            }
+            else {
+            	// alle statuser..
+            }
+        }
+        
+        if(showUntilFinished){
+	        if (startDate != null) criteria.add(Restrictions.gt("stopTime", startDate));
+	        if (stopDate != null)  criteria.add(Restrictions.lt("startTime", stopDate));
+        }
+        else {
+	        if (startDate != null) criteria.add(Restrictions.gt("startTime", startDate));
+	        if (stopDate != null)  criteria.add(Restrictions.lt("startTime", stopDate));
         }
 
-        if (startDate != null) {
-            criteria.add(Restrictions.gt("stopTime", startDate));
-        }
-
-        if (stopDate != null) {
-            criteria.add(Restrictions.lt("stopTime", stopDate));
-        }
-
-        criteria.addOrder(Order.asc("startTime"));
-
+        String sortorderCSVString = ApplicationResourcesUtil.getText("courseList.order");
+		String[] sortorderArray = StringUtils.split(sortorderCSVString, ",");
+		criteria.createAlias("organization", "O");
+		for (String fieldName : sortorderArray) {
+			criteria.addOrder(Order.asc(fieldName));
+		}
+		
         return getHibernateTemplate().findByCriteria(criteria);
     }
 
@@ -145,13 +191,39 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
         if(course.getOrganizationid() != null){
             criteria.add(Restrictions.eq("organizationid", course.getOrganizationid()));
         }
+
+        if(course.getOrganization2id() != null){
+        	List family = new ArrayList<Long>();
+        	family.add(course.getOrganization2id());
+        	
+            DetachedCriteria subCriteria = DetachedCriteria.forClass(Organization.class);
+        	subCriteria.add(Restrictions.eq("parentid", course.getOrganization2id()));
+        	subCriteria.add(Restrictions.eq("type", Type.AREA.getTypeDBValue()));
+        	List childOrgs = getHibernateTemplate().findByCriteria(subCriteria);
+        	if(!childOrgs.isEmpty()){
+        		Iterator<Organization> it = childOrgs.iterator();
+        		while(it.hasNext()){
+        			Organization o = it.next();
+        			family.add(o.getId());
+        		}
+        	}
+        	criteria.add(Restrictions.in("organization2id", family));
+        }
+
+        if(course.getLocationid() != null){
+            criteria.add(Restrictions.eq("locationid", course.getLocationid()));
+        }
+
         criteria.addOrder(Order.asc("startTime"));
         return getHibernateTemplate().findByCriteria(criteria);
     }
 
-    public List<Course> findByInstructor(Person person) {
+    public List<Course> findByInstructor(Person person, Integer[] coursestatus) {
         DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
         criteria.add(Restrictions.eq("instructorid",person.getId()));
+        if(coursestatus != null && coursestatus.length > 0){
+            criteria.add(Restrictions.in("status", coursestatus));
+        }
         return getHibernateTemplate().findByCriteria(criteria);
     }
     
@@ -163,5 +235,36 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
         criteria.add(Restrictions.between("registerBy", from, to));
         return getHibernateTemplate().findByCriteria(criteria);
     }
-    
+
+    /**
+     * @see no.unified.soak.dao.CourseDAO#findByLocationIds(List<Long>, Integer)
+     */
+	public List<Course> findByLocationIds(List<Long> locationIds, Integer numberOfHits){
+        List<Course> courses = new ArrayList<Course>(numberOfHits);
+		if(!locationIds.isEmpty()){
+        	Iterator<Long> ids = locationIds.iterator();
+        	while(ids.hasNext()){ // find courses pr locationid
+        		Long locationid = ids.next();
+        		DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
+        		criteria.add(Restrictions.eq("locationid", locationid));
+        		criteria.add(Restrictions.eq("status", CourseStatus.COURSE_PUBLISHED));
+    			criteria.addOrder(Order.asc("startTime"));
+    			List coursesForLocation = getHibernateTemplate().findByCriteria(criteria);
+    			if(!coursesForLocation.isEmpty()){
+	    			Iterator<Course> it = coursesForLocation.iterator();
+    				while(it.hasNext()){
+	    				courses.add(it.next());
+	    				if(courses.size() == numberOfHits){
+	    					break;
+	    				}
+	    			}
+    			}
+				if(courses.size() == numberOfHits){
+					break;
+				}
+        	}
+        }
+		return courses;
+	}
+
 }

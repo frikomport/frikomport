@@ -7,6 +7,8 @@
  */
 package no.unified.soak.webapp.listener;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -23,6 +25,7 @@ import no.unified.soak.service.NotificationManager;
 import no.unified.soak.service.RegisterByDateManager;
 import no.unified.soak.service.UserSynchronizeManager;
 import no.unified.soak.service.WaitingListManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.webapp.action.ScheduledTasks;
 
 import org.apache.commons.logging.Log;
@@ -44,7 +47,7 @@ public class StartupListener extends ContextLoaderListener implements
 	private static final Log log = LogFactory.getLog(StartupListener.class);
 	private static Timer timer = new Timer();
 
-	public void contextInitialized(ServletContextEvent event) {
+    public void contextInitialized(ServletContextEvent event) {
 		if (log.isDebugEnabled()) {
 			log.debug("initializing context...");
 		}
@@ -84,8 +87,7 @@ public class StartupListener extends ContextLoaderListener implements
 	}
 
 	public static void setupContext(ServletContext context) {
-		ApplicationContext ctx = WebApplicationContextUtils
-				.getRequiredWebApplicationContext(context);
+		ApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(context);
 
 		LookupManager mgr = (LookupManager) ctx.getBean("lookupManager");
 
@@ -96,28 +98,42 @@ public class StartupListener extends ContextLoaderListener implements
         DatabaseUpdateManager databaseUpdateManager = (DatabaseUpdateManager) ctx.getBean("databaseUpdateManager");
 
         // Recurring tasks
-		RegisterByDateManager registerByDateManager = (RegisterByDateManager) ctx.getBean("registerByDateManager");
+    	RegisterByDateManager registerByDateManager = (RegisterByDateManager) ctx.getBean("registerByDateManager");
 		NotificationManager notificationManager = (NotificationManager) ctx.getBean("notificationManager");
 		WaitingListManager waitingListManager = (WaitingListManager) ctx.getBean("waitingListManager");
         CourseStatusManager courseStatusManager = (CourseStatusManager) ctx.getBean("courseStatusManager");
         UserSynchronizeManager userSynchronizeManager = (UserSynchronizeManager) ctx.getBean("userSynchronizeManager");
+        //DecorCacheManager decorCacheManager = (DecorCacheManager) ctx.getBean("decorCacheManager");
 
         // Tasks to be completed once
         ScheduledTasks once = new ScheduledTasks();
-        once.addTask(userSynchronizeManager);
         once.addTask(databaseUpdateManager);
         timer.schedule(once, Constants.TASK_IMMEDIATE);
 
         // Tasks to happen regularly
-        ScheduledTasks recurring = new ScheduledTasks();
-        recurring.addTask(courseStatusManager);
-        recurring.addTask(userSynchronizeManager);
-        recurring.addTask(registerByDateManager);
-        recurring.addTask(notificationManager);
-        recurring.addTask(waitingListManager);
-        // Here we set the intervals for how often
-		timer.schedule(recurring, Constants.TASK_INITIAL_DELAY, Constants.TASK_RUN_INTERVAL);
+        ScheduledTasks recurring1 = new ScheduledTasks();
+        //recurring.addTask(decorCacheManager);
+        recurring1.addTask(courseStatusManager);
+        if(!ApplicationResourcesUtil.isSVV()) recurring1.addTask(registerByDateManager);
+        recurring1.addTask(notificationManager);
+    	recurring1.addTask(waitingListManager);
 
+    	// Here we set the intervals for how often
+    	timer.schedule(recurring1, Constants.TASK_INITIAL_DELAY, Constants.TASK_RUN_INTERVAL_EVERY_HOUR);
+
+    	
+        // synchronization every night at 01:00
+        Calendar scheduled = new GregorianCalendar();
+        scheduled.roll(Calendar.DAY_OF_YEAR, true);
+        scheduled.set(Calendar.HOUR_OF_DAY, 1);
+        scheduled.set(Calendar.MINUTE, 0);
+        scheduled.set(Calendar.SECOND, 0);
+        scheduled.set(Calendar.MILLISECOND, 0);
+        
+        ScheduledTasks recurring2 = new ScheduledTasks();
+        recurring2.addTask(userSynchronizeManager);
+    	timer.schedule(recurring2, scheduled.getTime(), Constants.TASK_RUN_INTERVAL_EVERY_DAY);
+		
 		if (log.isDebugEnabled()) {
 			log.debug("drop-down initialization complete [OK]");
 		}

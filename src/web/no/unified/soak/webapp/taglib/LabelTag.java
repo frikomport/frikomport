@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
+import no.unified.soak.util.ApplicationResourcesUtil;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.validator.Field;
@@ -69,9 +71,8 @@ public class LabelTag extends TagSupport {
         ValidatorResources resources = getValidatorResources();
 
         Locale locale = pageContext.getRequest().getLocale();
-
         if (locale == null) {
-            locale = Locale.getDefault();
+            locale = ApplicationResourcesUtil.getNewLocaleWithDefaultCountryAndVariant(null);
         }
 
         // get the name of the bean from the key
@@ -149,15 +150,14 @@ public class LabelTag extends TagSupport {
                 }
 
                 label.append("<img class=\"validationWarning\" alt=\"");
-                label.append(getMessageSource()
-                                 .getMessage("icon.warning", null, locale));
+                label.append(getMessageSource().getMessage("icon.warning", null, locale));
                 label.append("\"");
 
-                String context = ((HttpServletRequest) pageContext.getRequest()).getContextPath();
-
-                label.append("src=\"" + context);
-                label.append(getMessageSource()
-                                 .getMessage("icon.warning.img", null, locale));
+                String context = (String)pageContext.getSession().getAttribute("urlContext");
+                String context2 = ((HttpServletRequest) pageContext.getRequest()).getContextPath();
+                
+                label.append("src=\"" + (context!=null ? context : context2));
+                label.append(getMessageSource().getMessage("icon.warning.img", null, locale));
                 label.append("\" />");
 
                 if (helpTip) {

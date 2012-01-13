@@ -21,6 +21,8 @@
 <c:out value="${buttons}" escapeXml="false" />
 --%>
 
+<c:choose>
+<c:when test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 <form:form commandName="user" name="user">
 <div class="searchForm">
     <ul>
@@ -49,26 +51,30 @@
 </div>
 </form:form>
 
-<display:table name="${userList}" cellspacing="0" cellpadding="0"
-    requestURI="listUsers.html" defaultsort="1" id="userList" pagesize="${itemCount}"
-    class="list userList" export="true">
-    <authz:authorize ifAnyGranted="admin,editor">
+<display:table name="${userList}" cellspacing="0" cellpadding="0" requestURI="listUsers.html" defaultsort="1" id="userList" pagesize="${itemCount}" class="list userList" export="${!isSVV}">
+    <c:if test="${isAdmin || isEducationResponsible}">
     <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
         <a href='<c:url value="/editUser.html"><c:param name="username" value="${userList.username}"/><c:param name="from" value="list"/></c:url>'>
             <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
         </a>
     </display:column>
-    </authz:authorize>
+    </c:if>
     <%-- Table columns --%>
-    <display:column property="username" sortable="true"
-        headerClass="sortable" url="/detailsUser.html?from=list"
-        paramId="username" paramProperty="username" titleKey="user.username" />
-    <display:column property="firstName" sortable="true"
-        headerClass="sortable" titleKey="user.firstName" />
-    <display:column property="lastName" sortable="true"
-        headerClass="sortable" titleKey="user.lastName" />
-    <display:column property="email" sortable="true" headerClass="sortable"
-        autolink="true" titleKey="user.mail" />
+    <display:column media="html" sortable="true" headerClass="sortable" titleKey="user.username" sortProperty="username">
+         <a href="<c:url value="/detailsUser.html?from=list"><c:param name="username" value="${userList.username}"/></c:url>">
+         <c:out value="${userList.username}"/></a>
+    </display:column>
+    <display:column media="csv excel xml pdf" property="username" sortable="true" headerClass="sortable" titleKey="user.username"/>
+    
+    <display:column property="firstName" sortable="true" headerClass="sortable" titleKey="user.firstName" />
+    <display:column property="lastName" sortable="true" headerClass="sortable" titleKey="user.lastName" />
+    <display:column property="email" sortable="true" headerClass="sortable" autolink="true" titleKey="user.email" />
+
+    <display:column sortable="true" headerClass="sortable" titleKey="user.enabled">
+		<c:if test="${userList.enabled == true}"><fmt:message key="checkbox.checked"/></c:if>
+		<c:if test="${userList.enabled == false}"><fmt:message key="checkbox.unchecked"/></c:if>
+	</display:column>
+
 
     <fmt:message var="user" key="userList.user" />
     <fmt:message var="users" key="userList.users" />
@@ -80,6 +86,11 @@
     <display:setProperty name="export.csv.filename" value="User List.csv" />
     <display:setProperty name="export.pdf.filename" value="User List.pdf" />
 </display:table>
+</c:when>
+<c:otherwise>
+    <div class="message" style="font-size: 12px"><fmt:message key="access.denied" /></div>
+</c:otherwise>
+</c:choose>
 
 <%-- 
 <c:out value="${buttons}" escapeXml="false" />

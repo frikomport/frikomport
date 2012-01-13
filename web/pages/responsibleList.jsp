@@ -6,9 +6,17 @@
 <fmt:message key="responsibleList.item" var="item"/>
 <fmt:message key="responsibleList.items" var="items"/>
 
-<display:table name="${responsibleList}" cellspacing="0" cellpadding="0"
-    id="responsibleList" pagesize="${itemCount}" class="list" 
-    export="true" requestURI="">
+<display:table name="${responsibleList}" cellspacing="0" cellpadding="0" id="responsibleList" pagesize="${itemCount}" class="list" export="${!isSVV}" requestURI="">
+
+	<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
+    <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
+		<c:if test="${isAdmin || isEducationResponsible || (isEventResponsible && currentUserForm.organization2id == responsibleList.organization2id)}">
+        <a href='<c:url value="/editUser.html"><c:param name="username" value="${responsibleList.username}"/><c:param name="from" value="list"/></c:url>'>
+            <img src="<c:url value="/images/pencil.png"/>" alt="<fmt:message key="button.edit"/>" title="<fmt:message key="button.edit"/>"></img>
+        </a>
+		</c:if>
+    </display:column>
+	</c:if>
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="user.fullname" sortProperty="fullName">
          <a href="<c:url value="/detailsUser.html"><c:param name="username" value="${responsibleList.username}"/></c:url>" 
@@ -21,25 +29,22 @@
     </display:column>
     <display:column media="csv excel xml pdf" property="email" sortable="true" headerClass="sortable" titleKey="user.email"/>
 
-<authz:authorize ifAnyGranted="admin,instructor,editor">
-    <display:column property="phoneNumber" sortable="true" headerClass="sortable"
-         titleKey="user.phoneNumber"/>
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
+    <display:column property="phoneNumber" sortable="true" headerClass="sortable" titleKey="user.phoneNumber"/>
 
-    <display:column property="mobilePhone" sortable="true" headerClass="sortable"
-         titleKey="user.mobilePhone"/>
+    <display:column property="mobilePhone" sortable="true" headerClass="sortable" titleKey="user.mobilePhone"/>
          
-    <display:column property="organization.name" sortable="true" headerClass="sortable"
-         titleKey="user.organization"/>
-    
-</authz:authorize>
+    <display:column property="organization.name" sortable="true" headerClass="sortable" titleKey="user.organization"/>
 
-<authz:authorize ifAnyGranted="admin,editor">
-    <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
-	    <button type="button" onclick="location.href='<c:url value="/editUser.html"><c:param name="username" value="${responsibleList.username}"/><c:param name="from" value="list"/></c:url>'">
-    	    <fmt:message key="button.edit"/>
-	    </button>
-    </display:column>
-</authz:authorize>
+<c:if test="${useOrganization2}">
+    <display:column property="organization2.name" sortable="true" headerClass="sortable" titleKey="user.organization2"/>
+</c:if>
+
+    <display:column sortable="true" headerClass="sortable" titleKey="user.enabled">
+		<c:if test="${responsibleList.enabled == true}"><fmt:message key="checkbox.checked"/></c:if>
+		<c:if test="${responsibleList.enabled == false}"><fmt:message key="checkbox.unchecked"/></c:if>
+	</display:column>
+</c:if>
 
     <display:setProperty name="paging.banner.item_name" value="${item}"/>
     <display:setProperty name="paging.banner.items_name" value="${items}"/>

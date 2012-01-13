@@ -21,10 +21,12 @@ import javax.mail.internet.MimeMessage;
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
+import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.WaitingListManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.MailUtil;
 
 import org.springframework.context.MessageSource;
@@ -38,6 +40,7 @@ import org.springframework.mail.MailSender;
  */
 public class WaitingListManagerImpl extends BaseManager implements WaitingListManager {
     private RegistrationManager registrationManager;
+    private ConfigurationManager configurationManager;
     private CourseManager courseManager;
     protected MailEngine mailEngine = null;
     protected MailSender mailSender = null;
@@ -50,6 +53,10 @@ public class WaitingListManagerImpl extends BaseManager implements WaitingListMa
     }
 
     public void setLocale(Locale locale) {
+    	log.debug("Locale: " + locale);
+    	if(locale == null) {
+    		locale = ApplicationResourcesUtil.getNewLocaleWithDefaultCountryAndVariant(null);
+    	}
         this.locale = locale;
     }
 
@@ -71,6 +78,10 @@ public class WaitingListManagerImpl extends BaseManager implements WaitingListMa
         this.registrationManager = registrationManager;
     }
 
+    public void setConfigurationManager(ConfigurationManager configurationManager) {
+    	this.configurationManager = configurationManager;
+    }
+    
     /**
      * @see no.unified.soak.service.WaitingListManager#setMailEngine(no.unified.soak.service.MailEngine)
      */
@@ -187,11 +198,9 @@ public class WaitingListManagerImpl extends BaseManager implements WaitingListMa
                         currentCourse = registrations.get(i).getCourse();
                         courseId = currentCourse.getId();
                         availableLocalSeats = currentCourse.getReservedInternal() -
-                            registrationManager.getNumberOfOccupiedSeats(currentCourse,
-                                new Boolean(true)).intValue();
+                            registrationManager.getNumberOfOccupiedSeats(currentCourse, new Boolean(true)).intValue();
 
-                        Integer takenInt = registrationManager.getNumberOfOccupiedSeats(currentCourse,
-                                new Boolean(false));
+                        Integer takenInt = registrationManager.getNumberOfOccupiedSeats(currentCourse, new Boolean(false));
 
                         if (takenInt != null) {
                             taken = takenInt.intValue();
@@ -200,8 +209,7 @@ public class WaitingListManagerImpl extends BaseManager implements WaitingListMa
                         }
 
                         // Calculate totally available seats at the course
-                        availableSeats = currentCourse.getMaxAttendants() -
-                            taken;
+                        availableSeats = currentCourse.getMaxAttendants() - taken;
 
                         lowestPossibleRegistration = i;
                     }
@@ -210,9 +218,7 @@ public class WaitingListManagerImpl extends BaseManager implements WaitingListMa
                         // Are there vacant seats reserved for local attendants?
                         if (availableLocalSeats > 0) {
                             // Find first unused
-                            int j = getNextRegistration(registrations,
-                                    courseId, currentCourse,
-                                    lowestPossibleRegistration, used);
+                            int j = getNextRegistration(registrations, courseId, currentCourse, lowestPossibleRegistration, used);
 
                             // If no local was found on the waitinglist for this
                             // course, we give the seat to the first one on the
@@ -226,16 +232,14 @@ public class WaitingListManagerImpl extends BaseManager implements WaitingListMa
                                 used.put(new Long(j), new Boolean(true));
                                 currentRegistration = registrations.get(j);
                             } else {
-                                // Get our local, and then make sure he isnt
-                                // picked again this run
+                                // Get our local, and then make sure he isnt picked again this run
                                 currentRegistration = registrations.get(j);
                                 availableLocalSeats--;
                                 used.put(new Long(j), new Boolean(true));
                             }
                         } else {
                             // No seats left reserved for the locals. So we're
-                            // using first come - first serve for the rest of
-                            // this course
+                            // using first come - first serve for the rest of this course
                             int j = lowestPossibleRegistration;
 
                             while (used.containsKey(new Long(j)))
@@ -250,8 +254,7 @@ public class WaitingListManagerImpl extends BaseManager implements WaitingListMa
                         used.put(new Long(i), new Boolean(true));
                     }
 
-                    availableSeats = saveReservation(availableSeats,
-                            currentRegistration);
+                    availableSeats = saveReservation(availableSeats, currentRegistration);
                 }
             }
         }
@@ -269,10 +272,10 @@ public class WaitingListManagerImpl extends BaseManager implements WaitingListMa
 	private int saveReservation(int availableSeats, Registration currentRegistration) {
 		// If there are more seats available, we reserve a seat for
 		// this one
-		if (availableSeats > 0) {
+		if (availableSeats >= currentRegistration.getParticipants().intValue()) {
 			currentRegistration.setStatus(Registration.Status.RESERVED);
 			registrationManager.saveRegistration(currentRegistration);
-			availableSeats--;
+			availableSeats = availableSeats - currentRegistration.getParticipants().intValue();
 
 			notifyAttendant(true, currentRegistration);
 		}
@@ -293,7 +296,7 @@ public class WaitingListManagerImpl extends BaseManager implements WaitingListMa
     	
     	// Create the body of the e-mail
 //    	StringBuffer msg = MailUtil.createStandardBody(course, Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION, locale, messageSource, null, confirmed);
-    	StringBuffer msg = MailUtil.create_EMAIL_EVENT_WAITINGLIST_NOTIFICATION_body(course, currentRegistration, null, confirmed);
+    	StringBuffer msg = MailUtil.create_EMAIL_EVENT_WAITINGLIST_NOTIFICATION_body(course, currentRegistration, null, confirmed, configurationManager.getConfigurationsMap());
 
     	// Create the email
     	ArrayList<MimeMessage> theEmails = MailUtil.getMailMessages(currentRegistration, Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION, course, msg, mailSender, false);

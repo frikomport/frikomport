@@ -48,10 +48,6 @@ public class GZIPFilter implements Filter {
             HttpServletResponse response = (HttpServletResponse) res;
 
             if (isGZIPSupported(request)) {
-                if (log.isDebugEnabled()) {
-                    log.debug("GZIP supported, compressing response");
-                }
-
                 GZIPResponseWrapper wrappedResponse = new GZIPResponseWrapper(response);
 
                 chain.doFilter(req, wrappedResponse);

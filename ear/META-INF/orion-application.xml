@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<orion-application  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://xmlns.oracle.com/oracleas/schema/orion-application-10_0.xsd"
+  schema-major-version="10" schema-minor-version="0" >
+     <imported-shared-libraries>
+        <remove-inherited name="oracle.toplink"/>
+        <remove-inherited name="oracle.xml"/>
+        <remove-inherited name="apache.commons.logging"/>
+    </imported-shared-libraries>
+</orion-application>

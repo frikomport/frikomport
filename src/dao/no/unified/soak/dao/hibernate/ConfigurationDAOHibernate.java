@@ -37,5 +37,9 @@ public class ConfigurationDAOHibernate extends BaseDAOHibernate implements Confi
         getHibernateTemplate().saveOrUpdate(configuration);
         getHibernateTemplate().flush();
     }
-    
+
+    public void deleteConfiguration(final Configuration configuration) {
+		getHibernateTemplate().delete(configuration);
+    }
+
 }

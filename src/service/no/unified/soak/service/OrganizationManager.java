@@ -15,6 +15,7 @@ import java.util.List;
 
 import no.unified.soak.dao.OrganizationDAO;
 import no.unified.soak.model.Organization;
+import no.unified.soak.model.Organization.Type;
 
 
 /**
@@ -67,5 +68,28 @@ public interface OrganizationManager {
      * @param dummy of the dummy organization
      * @return
      */
-    public List<Organization> getAllIncludingDummy(String dummy);
+    public List<Organization> getAllIncludingDummy(String dummyOrganizationName);
+
+    public List<Organization> getByTypeIncludingDummy(Organization.Type type, String dummyOrganizationName);
+    
+    public List<Organization> getOrganizationsByType(Organization.Type type);
+    
+    
+    public List getByTypeIncludingParentAndDummy(Type type, Type parentType, String dummy);
+
+    public List getOrganizationsByTypeIncludingParent(Type type, Type parentType);
+    
+    public List getOrganizationsByParent(Organization parent, Type type);
+
+    
+	/**
+	 * Evict entity for hibernate sessions. This avoids automatic saving
+	 * (flush) of the entity.
+	 * 
+	 * @param entity
+	 */
+	public void evict(Object entity);
+
+
+    
 }

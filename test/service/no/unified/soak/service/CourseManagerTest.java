@@ -59,7 +59,7 @@ public class CourseManagerTest extends BaseManagerTestCase {
         // set expected behavior on dao
         courseDAO.expects(once()).method("getCourses").will(returnValue(results));
 
-        List courses = courseManager.getCourses(null);
+        List courses = courseManager.getAllCourses();
         assertTrue(courses.size() == 1);
         courseDAO.verify();
     }
@@ -76,7 +76,7 @@ public class CourseManagerTest extends BaseManagerTestCase {
         courseDAO.expects(once()).method("searchCourses")
                  .will(returnValue(new ArrayList()));
 
-        List searchResults = courseManager.searchCourses(course, null, null);
+        List searchResults = courseManager.searchCourses(course, null, null, null);
         assertNotNull(searchResults);
         courseDAO.verify();
     }
@@ -89,7 +89,7 @@ public class CourseManagerTest extends BaseManagerTestCase {
         
         courseDAO.expects(once()).method("searchCourses").will(returnValue(results));
 
-        List courses = courseManager.searchCourses(course,null,null);
+        List courses = courseManager.searchCourses(course, null, null, null);
         assertNotNull(courses);
         assertEquals(1, courses.size());
 

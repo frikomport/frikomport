@@ -1,4 +1,4 @@
-<Context path="/soak" docBase="soak" debug="99" reloadable="true"
+<Context path="/@WEBAPP-NAME@" docBase="@WEBAPP-NAME@" debug="99" reloadable="true"
     antiJARLocking="true" antiResourceLocking="false">
 
     <Resource name="jdbc/soakdb" auth="Container" type="javax.sql.DataSource"

@@ -13,6 +13,13 @@ package no.unified.soak.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import no.unified.soak.validation.DigitsOnly;
+import no.unified.soak.validation.Email;
+import no.unified.soak.validation.MinLength;
+import no.unified.soak.validation.MinValue;
+import no.unified.soak.validation.Required;
+import no.unified.soak.validation.ValidateOnlyIfConfigurationIsTrue;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -55,7 +62,7 @@ public class Registration extends BaseObject implements Serializable {
 	/**
 	 * Eclipse generated UID
 	 */
-	private static final long serialVersionUID = 2175157764439098070L;
+	private static final long serialVersionUID = 2175157764429098074L;
 
 	private Long id;
 
@@ -113,6 +120,10 @@ public class Registration extends BaseObject implements Serializable {
 
 	private Status status;
 	
+    private Date birthdate;
+
+	private Integer participants;
+
 	/**
 	 * Default constructor
 	 */
@@ -122,6 +133,31 @@ public class Registration extends BaseObject implements Serializable {
 		invoiced = Boolean.FALSE;
 		attended = Boolean.FALSE;
 	}
+
+	
+	/**
+	 * @return the number of participants or 1 if value is <code>null</code>
+	 * @hibernate.property column="participants" not-null="false"
+	 */
+	public Integer getParticipants() {
+		return participants;
+	}
+
+
+	/**
+	 * Sets number of participants. Sets 1 on this object if input parameter is
+	 * <code>null</code>.
+	 * 
+	 * @param participants
+	 *            the number of participants to set
+	 */
+	@Required
+	@MinValue("1")
+	@ValidateOnlyIfConfigurationIsTrue("access.registration.useParticipants")
+	public void setParticipants(Integer participants) {
+		this.participants = participants;
+	}
+
 
 	/**
 	 * @return Returns the course.
@@ -142,8 +178,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the user.
-	 * @hibernate.many-to-one not-null="false" column="username" insert="false"
-	 *                        update="false" cascade="none"
+	 * @hibernate.many-to-one not-null="false" column="username" insert="false" update="false" cascade="none" optimistic-lock="false"
 	 */
 	public User getUser() {
 		return user;
@@ -188,6 +223,8 @@ public class Registration extends BaseObject implements Serializable {
 	 * @spring.validator type="required"
 	 * @spring.validator type="email"
 	 */
+	@Required
+	@Email
 	public void setEmail(String email) {
 		this.email = email;
 	}
@@ -240,6 +277,7 @@ public class Registration extends BaseObject implements Serializable {
 	 *            The firstName to set.
 	 * @spring.validator type="required"
 	 */
+	@Required
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
@@ -305,6 +343,7 @@ public class Registration extends BaseObject implements Serializable {
 	 *            The lastName to set.
 	 * @spring.validator type="required"
 	 */
+	@Required
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
@@ -322,6 +361,9 @@ public class Registration extends BaseObject implements Serializable {
 	 * @param mobilePhone
 	 *            The mobilePhone to set.
 	 */
+	@DigitsOnly
+	@MinLength("8")
+	@ValidateOnlyIfConfigurationIsTrue("access.registration.mobilePhone.digitsOnly.minLength8")
 	public void setMobilePhone(String mobilePhone) {
 		this.mobilePhone = mobilePhone;
 	}
@@ -371,7 +413,9 @@ public class Registration extends BaseObject implements Serializable {
 	/**
 	 * @param organizationid
 	 *            The organizationid to set.
+	 * @spring.validator type="required"
 	 */
+	@Required
 	public void setOrganizationid(Long organizationid) {
 		this.organizationid = organizationid;
 	}
@@ -388,6 +432,8 @@ public class Registration extends BaseObject implements Serializable {
 	 * @param phone
 	 *            The phone to set.
 	 */
+	@DigitsOnly
+	@MinLength("8")
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
@@ -516,7 +562,7 @@ public class Registration extends BaseObject implements Serializable {
 	public String toString() {
 		return new ToStringBuilder(this).append("id", id).append("jobTitle",
 				jobTitle).append("employeeNumber", employeeNumber).append(
-				"firstName", firstName).append("lastName", lastName).append(
+				"firstName", firstName).append("lastName", lastName).append("email", email).append(
 				"status", status).append("invoiced", invoiced).append(
 				"organizationid", organizationid).append("courseid", courseid)
 				.append("serviceareaid", serviceAreaid).toString();
@@ -658,4 +704,25 @@ public class Registration extends BaseObject implements Serializable {
 		setStatus(Status.getStatusFromDBValue(status));
 	}
 
+	
+
+	/**
+	 * @return Returns the date of birth.
+	 * @hibernate.property column="birthdate" not-null="false"
+	 */
+	public Date getBirthdate() {
+		return birthdate;
+	}
+
+	/**
+	 * @param birthdate
+	 *            The birthdate to set.
+	 * @spring.validator type="required"
+	 */
+    @Required
+	public void setBirthdate(Date birthdate) {
+		this.birthdate = birthdate;
+	}
+
+	
 }

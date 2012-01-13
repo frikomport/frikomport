@@ -13,14 +13,34 @@
     </bean>
     
     <!-- EzUserDAOJdbc: Ez-publish interface -->
-    <!--
-    <bean id="ezUserDAO" class="no.unified.soak.dao.ws.EzUserDAOWS">
-        <property name="endpoint" value="http://localhost/nusoap.php/fkpuser"/>
+
+	<!-- EzUserDAOJdbc: ExtUserDAO interface -->
+	<bean id="extUserDAO" class="no.unified.soak.dao.jdbc.EzUserDAOJdbc">
+    	<property name="dataSource" ref="userEzDataSource"/>
+        <property name="roleDAO" ref="roleDAO"/>
+        <property name="userDAO" ref="userDAO"/>
     </bean>
-    -->
+
+
+<!--  
+    <bean id="extUserDAO" class="no.unified.soak.dao.ws.EzUserDAOWS" autowire="default">
+        <property name="endpoint" value="http://localhost:90/nusoap.php/fkpuser"/>
+        <property name="roleDAO" ref="roleDAO"/>
+        <property name="userDAO" ref="userDAO"/>
+    </bean>
+-->
+
+<!-- 
+    <bean id="extUserDAO" class="no.unified.soak.dao.ws.SVVUserDAOWS" autowire="default">
+        <property name="endpoint" value="http://svvjcapsu04.vegvesen.no:18201/ldap_searchemployees/portOppslagSVVAnsattBndPort"/>
+        <property name="roleDAO" ref="roleDAO"/>
+        <property name="userDAO" ref="userDAO"/>
+    </bean>
+-->
 
     <!-- JNDI DataSource for J2EE environments -->
     <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <!-- property name="jndiName"><value>java:comp/env/jdbc/soakdb</value></property -->
         <property name="jndiName"><value>java:comp/env/jdbc/soakdb</value></property>
     </bean>
 

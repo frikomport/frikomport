@@ -25,14 +25,16 @@ import javax.servlet.http.HttpSession;
 import no.unified.soak.Constants;
 import no.unified.soak.dao.hibernate.RegistrationStatusCriteria;
 import no.unified.soak.model.Course;
+import no.unified.soak.model.Organization;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.User;
+import no.unified.soak.model.Organization.Type;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 
-import org.acegisecurity.context.SecurityContextHolder;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
@@ -95,8 +97,8 @@ public class RegistrationController extends BaseFormController {
         String postback = request.getParameter("ispostbackregistrationlist");
         if ((postback == null) || (postback.compareTo("1") != 0)) {
             // Check if a default organization should be applied
-            User user = getUser(request);
-            if (user != null && user.getOrganizationid() != null) {
+            User user = (User) session.getAttribute(Constants.USER_KEY);
+            if (!ApplicationResourcesUtil.isSVV() && user != null && user.getOrganizationid() != null) {
                 registration.setOrganizationid(user.getOrganizationid());
             }
 
@@ -130,7 +132,7 @@ public class RegistrationController extends BaseFormController {
         Map model = new HashMap();
         model = addServiceAreas(model, locale);
         model = addOrganizations(model, locale);
-        model = addReserved(model, locale);
+        model = addStatus(model, locale);
         model = addInvoiced(model, locale);
         model = addAttended(model, locale);
 
@@ -145,7 +147,7 @@ public class RegistrationController extends BaseFormController {
 
         // Set the historic-flag
         model.put("historic", historic);
-        model.put("reservedValue", new Integer(2));
+        model.put("statusValue", new Integer(0));
         model.put("invoicedValue", new Integer(2));
         model.put("attendedValue", new Integer(2));
 
@@ -154,20 +156,29 @@ public class RegistrationController extends BaseFormController {
         registration.setAttended(new Boolean(false));
 
         RegistrationStatusCriteria statusCriteria;
-        User user = getUser(request);
-        if (user.getRoleNameList().contains("admin") 
-                || user.getRoleNameList().contains("editor") 
-                || user.getRoleNameList().contains("instructor")) {
-            statusCriteria = null;
+        if ((Boolean) request.getAttribute("isAdmin") || (Boolean) request.getAttribute("isEducationResponsible")
+                || (Boolean) request.getAttribute("isEventResponsible")  || (Boolean) request.getAttribute("isReader")) {
+            if(configurationManager.isActive("access.registration.showCancelled", true)){
+            	statusCriteria = null; // viser alle
+            }
+            else{
+            	statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();
+            }
         } else {
             statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();
         }
 
+        String firstname = request.getParameter("firstName");
+        registration.setFirstName(firstname);
+
+        String lastname = request.getParameter("lastName");
+        registration.setLastName(lastname);
+        
         // Fetch all registrations that match the parameters
         List registrations = registrationManager.getSpecificRegistrations(registration.getCourseid(), registration
-                .getOrganizationid(), registration.getServiceAreaid(), statusCriteria, invoiced, attended, courseIds, null);
+                .getOrganizationid(), registration.getServiceAreaid(), statusCriteria, firstname, lastname, invoiced, attended, courseIds, new String[]{"lastName", "firstName"});
 
-        if (registrations != null) {
+        if (registrations != null && registrations.size() > 0) {
             model.put("registrationList", registrations);
         }
 
@@ -191,7 +202,7 @@ public class RegistrationController extends BaseFormController {
 
         // Setup some default parameters
         Locale locale = request.getLocale();
-        Integer reservedParameter = 0;
+        Integer statusParameter = 0;
         Integer invoicedParameter = 0;
         Integer attendedParameter = 0;
         Boolean historic = new Boolean(false);
@@ -207,76 +218,101 @@ public class RegistrationController extends BaseFormController {
             }
         }
 
-        String reservedRequest = request.getParameter("reservedField");
+        String statusRequest = request.getParameter("statusField");
         String invoicedRequest = request.getParameter("invoicedField");
         String attendedRequest = request.getParameter("attendedField");
 
         // Check the "boolean" values for invoiced, reserved and attended
         RegistrationStatusCriteria statusCriteria = null;
-        if ((reservedRequest != null) && (reservedRequest.compareTo("0") == 0)) {
-            registration.setStatus(Registration.Status.WAITING);
-            statusCriteria = new RegistrationStatusCriteria(Registration.Status.WAITING);
-        } else if ((reservedRequest != null) &&
-                (reservedRequest.compareTo("1") == 0)) {
-            registration.setStatus(Registration.Status.RESERVED);
-            statusCriteria = new RegistrationStatusCriteria(Registration.Status.RESERVED);
-        } else if ((reservedRequest != null) &&
-                (reservedRequest.compareTo("2") == 0)) {
-            
-            User user = getUser(request);
-            if (user.getRoleNameList().contains("admin") 
-                    || user.getRoleNameList().contains("editor") 
-                    || user.getRoleNameList().contains("instructor")) {
-                statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();
-            }
-            registration.setStatus((Registration.Status) null);
+        if(!ApplicationResourcesUtil.isSVV()){
+	        if ((statusRequest != null) && (statusRequest.compareTo("1") == 0)) {
+	            registration.setStatus(Registration.Status.WAITING);
+	            statusCriteria = new RegistrationStatusCriteria(Registration.Status.WAITING);
+	        }
+	        else if ((statusRequest != null) && (statusRequest.compareTo("2") == 0)) {
+	            registration.setStatus(Registration.Status.RESERVED);
+	            statusCriteria = new RegistrationStatusCriteria(Registration.Status.RESERVED);
+	        }
+	        else if ((statusRequest != null) && (statusRequest.compareTo("3") == 0)) {
+	            registration.setStatus(Registration.Status.CANCELED);
+	            statusCriteria = new RegistrationStatusCriteria(Registration.Status.CANCELED);
+	        }
+	        else if ((statusRequest != null) && (statusRequest.compareTo("0") == 0)) {
+	            if (!(Boolean) request.getAttribute("isAdmin") 
+	            		&& !(Boolean) request.getAttribute("isEducationResponsible")
+	                    && !(Boolean) request.getAttribute("isEventResponsible")
+	                    && !(Boolean) request.getAttribute("isReader")) {
+	                statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();
+	            }
+	            else {
+	            	// innlogget
+	                if(configurationManager.isActive("access.registration.showCancelled", true)){
+	                	statusCriteria = null; // viser alle
+	                }
+	                else{
+	                	statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();
+	                }
+	            }
+	            registration.setStatus((Registration.Status) null);
+	        }
+	
+	        if ((invoicedRequest != null) && (invoicedRequest.compareTo("0") == 0)) {
+	            registration.setInvoiced(new Boolean(false));
+	        }
+	        else if ((invoicedRequest != null) && (invoicedRequest.compareTo("1") == 0)) {
+	            registration.setInvoiced(new Boolean(true));
+	        }
+	        else if ((invoicedRequest != null) && (invoicedRequest.compareTo("2") == 0)) {
+	            registration.setInvoiced(null);
+	        }
+	        
+	        if ((attendedRequest != null) && (attendedRequest.compareTo("0") == 0)) {
+	            registration.setAttended(new Boolean(false));
+	        }
+	        else if ((attendedRequest != null) && (attendedRequest.compareTo("1") == 0)) {
+	            registration.setAttended(new Boolean(true));
+	        }
+	        else if ((attendedRequest != null) && (attendedRequest.compareTo("2") == 0)) {
+	            registration.setAttended(null);
+	        }
+	
+	        if ((invoicedRequest != null) && StringUtils.isNumeric(invoicedRequest)) {
+	            invoicedParameter = new Integer(invoicedRequest);
+	        }
+	
+	        if ((statusRequest != null) && StringUtils.isNumeric(statusRequest)) {
+	            statusParameter = new Integer(statusRequest);
+	        }
+	        
+	        if ((attendedRequest != null) && StringUtils.isNumeric(attendedRequest)) {
+	            attendedParameter = new Integer(attendedRequest);
+	        }
         }
-
-        if ((invoicedRequest != null) && (invoicedRequest.compareTo("0") == 0)) {
-            registration.setInvoiced(new Boolean(false));
-        } else if ((invoicedRequest != null) &&
-                (invoicedRequest.compareTo("1") == 0)) {
-            registration.setInvoiced(new Boolean(true));
-        } else if ((invoicedRequest != null) &&
-                (invoicedRequest.compareTo("2") == 0)) {
-            registration.setInvoiced(null);
+        else {
+            if ((Boolean) request.getAttribute("isAdmin") && (Boolean) request.getAttribute("isEducationResponsible")
+                    && (Boolean) request.getAttribute("isEventResponsible") && (Boolean) request.getAttribute("isReader")) {
+                if(configurationManager.isActive("access.registration.showCancelled", true)){
+                	statusCriteria = null; // viser alle
+                }
+                else{
+                	statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();
+                }
+        	}
+        	else {
+        		statusCriteria = RegistrationStatusCriteria.getNotCanceledCriteria();
+        	}
         }
         
-        if ((attendedRequest != null) && (attendedRequest.compareTo("0") == 0)) {
-            registration.setAttended(new Boolean(false));
-        } else if ((attendedRequest != null) &&
-                (attendedRequest.compareTo("1") == 0)) {
-            registration.setAttended(new Boolean(true));
-        } else if ((attendedRequest != null) &&
-                (attendedRequest.compareTo("2") == 0)) {
-            registration.setAttended(null);
-        }
-
-        if ((invoicedRequest != null) &&
-                StringUtils.isNumeric(invoicedRequest)) {
-            invoicedParameter = new Integer(invoicedRequest);
-        }
-
-        if ((reservedRequest != null) &&
-                StringUtils.isNumeric(reservedRequest)) {
-            reservedParameter = new Integer(reservedRequest);
-        }
-        
-        if ((attendedRequest != null) &&
-                StringUtils.isNumeric(attendedRequest)) {
-            attendedParameter = new Integer(attendedRequest);
-        }
-
         // Set up parameters, and return them to the view
         Map model = new HashMap();
         model = addServiceAreas(model, locale);
         model = addOrganizations(model, locale);
-        model = addReserved(model, locale);
+        model = addStatus(model, locale);
         model = addInvoiced(model, locale);
         model = addAttended(model, locale);
         model.put("registration", registration);
         model.put("historic", historic);
-        model.put("reservedValue", reservedParameter);
+        model.put("statusValue", statusParameter);
         model.put("invoicedValue", invoicedParameter);
         model.put("attendedValue", attendedParameter);
         
@@ -292,12 +328,17 @@ public class RegistrationController extends BaseFormController {
         	}
         }
 
+        String firstname = request.getParameter("firstName");
+        registration.setFirstName(firstname);
+
+        String lastname = request.getParameter("lastName");
+        registration.setLastName(lastname);
         // Find the courses that match the parameters
         model.put("registrationList",
             registrationManager.getSpecificRegistrations(
                 registration.getCourseid(), registration.getOrganizationid(),
-                registration.getServiceAreaid(), statusCriteria,
-                registration.getInvoiced(), registration.getAttended(), courseIds, null));
+                registration.getServiceAreaid(), statusCriteria, firstname, lastname, 
+                registration.getInvoiced(), registration.getAttended(), courseIds, new String[]{"lastName", "firstName"}));
 
         return new ModelAndView(getSuccessView(), model);
     }
@@ -317,9 +358,7 @@ public class RegistrationController extends BaseFormController {
         if (model == null) {
             model = new HashMap();
         }
-        
-        model.put("organizations", serviceAreaManager.getAllIncludingDummy(getText("misc.all", locale)));model.put("serviceareas", serviceAreaManager.getAllIncludingDummy(getText("misc.all", locale)));
-
+        model.put("serviceareas", serviceAreaManager.getAllIncludingDummy(getText("misc.all.serviceareas", locale)));
         return model;
     }
 
@@ -339,8 +378,14 @@ public class RegistrationController extends BaseFormController {
             model = new HashMap();
         }
 
-        model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
-
+        String typeDBvalue = ApplicationResourcesUtil.getText("show.organization.pulldown.typeDBvalue");
+        if (StringUtils.isNotBlank(typeDBvalue)) {
+        	Integer value = Integer.valueOf(typeDBvalue);
+        	Type type = Organization.Type.getTypeFromDBValue(value);
+            model.put("organizations", organizationManager.getByTypeIncludingDummy(type, getText(("misc.all.organizations" + value), locale)));
+        } else {
+            model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all.organizations", locale)));
+        }
         return model;
     }
 
@@ -352,13 +397,13 @@ public class RegistrationController extends BaseFormController {
         }
 
         // Add all courses to the list
-        List courses = courseManager.searchCourses(null, startDate, null);
+        List courses = courseManager.searchCourses(null, startDate, null, null);
 
         if (courses != null) {
             List courseList = new ArrayList();
             Course courseDummy = new Course();
             courseDummy.setId(new Long("0"));
-            courseDummy.setName(getText("misc.all", locale));
+            courseDummy.setName(getText("misc.all.courses", locale));
             courseList.add(courseDummy);
             courseList.addAll(courses);
 
@@ -393,17 +438,18 @@ public class RegistrationController extends BaseFormController {
      *            currently used locale
      * @return map with all/reserved/on waitinglist
      */
-    private Map addReserved(Map model, Locale locale) {
+    private Map addStatus(Map model, Locale locale) {
         if (model == null) {
             model = new HashMap();
         }
 
-        HashMap reserver = new HashMap();
-        reserver.put("null", getText("misc.all", locale));
-        reserver.put("true", getText("registrationList.reserved", locale));
-        reserver.put("false", getText("registrationList.notReserved", locale));
+        HashMap status = new HashMap();
+        status.put("null", getText("misc.all", locale));
+        status.put("1", getText("registrationList.status.1", locale));
+        status.put("2", getText("registrationList.status.2", locale));
+        status.put("3", getText("registrationList.status.3", locale));
 
-        model.put("reserved", reserver);
+        model.put("status", status);
 
         return model;
     }
@@ -424,8 +470,8 @@ public class RegistrationController extends BaseFormController {
 
         HashMap invoiced = new HashMap();
         invoiced.put("null", getText("misc.all", locale));
-        invoiced.put("true", getText("registrationList.invoiced", locale));
-        invoiced.put("false", getText("registrationList.notInvoiced", locale));
+        invoiced.put("true", getText("registrationList.invoiced.short", locale));
+        invoiced.put("false", getText("registrationList.notInvoiced.short", locale));
 
         if (invoiced != null) {
             model.put("invoiced", invoiced);
@@ -450,8 +496,8 @@ public class RegistrationController extends BaseFormController {
 
         HashMap attended = new HashMap();
         attended.put("null", getText("misc.all", locale));
-        attended.put("true", getText("registrationList.attended", locale));
-        attended.put("false", getText("registrationList.notAttended", locale));
+        attended.put("true", getText("registrationList.attended.short", locale));
+        attended.put("false", getText("registrationList.notAttended.short", locale));
 
         if (attended != null) {
             model.put("attended", attended);

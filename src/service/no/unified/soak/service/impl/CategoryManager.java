@@ -18,6 +18,8 @@ public interface CategoryManager extends Manager {
 
     public Category getCategory(Long id);
 
+    public Category getCategory(String name);
+
     public List<Category> getAll();
 
     public List<Category> getCategories(Category category, Boolean includeDisabled);
@@ -27,4 +29,5 @@ public interface CategoryManager extends Manager {
     public void saveCategory(Category category);
     
     public void removeCategory(Category category);
+
 }

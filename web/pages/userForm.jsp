@@ -1,5 +1,6 @@
 <%@ include file="/common/taglibs.jsp"%>
 
+<fmt:message key="date.format" var="dateformat" />
 
 <spring:bind path="user.*">
 	<c:if test="${not empty status.errorMessages}">
@@ -35,12 +36,10 @@
 			<tr>
 				<td></td>
 				<td class="buttonBar">
-					<input type="submit" class="button" name="save"
-						onclick="bCancel=false" value="<fmt:message key="button.save"/>" />
-					<input type="button" class="button" name="cancel"
-						onclick="javascript:history.go(-1)"
-						value="<fmt:message key="button.cancel"/>" />
-
+					<c:if test="${!isSVV || (isSVV && (isAdmin || isEducationResponsible || isEventResponsible))}">
+						<input type="submit" class="button" name="save"	onclick="bCancel=false" value="<fmt:message key="button.save"/>" />
+					</c:if>
+					<input type="button" class="button" name="cancel" onclick="javascript:history.go(-1)" value="<fmt:message key="button.cancel"/>" />
 				</td>
 			</tr>
 		</c:set>
@@ -60,6 +59,8 @@
 				</c:choose>
 			</td>
 		</tr>
+
+<c:if test="${showEmployeeFields}">
 		<tr>
 			<th>
 				<soak:label key="user.employeeNumber" />
@@ -69,13 +70,15 @@
 				<form:errors cssClass="fieldError" path="employeeNumber" />
 			</td>
 		</tr>
+</c:if>
+
 		<tr>
 			<th>
 				<soak:label key="user.firstName" />
 			</th>
 			<td>
 				<c:choose>
-					<c:when test="${user.id == '0'}">
+					<c:when test="${user.hashuser}">
 						<form:input path="firstName" />
 						<form:errors cssClass="fieldError" path="firstName" />
 					</c:when>
@@ -91,7 +94,7 @@
 			</th>
 			<td>
 				<c:choose>
-					<c:when test="${user.id == '0'}">
+					<c:when test="${user.hashuser}">
 						<form:input path="lastName" />
 						<form:errors cssClass="fieldError" path="lastName" />
 					</c:when>
@@ -101,6 +104,8 @@
 				</c:choose>
 			</td>
 		</tr>
+		
+<c:if test="${showAddress}">
 		<tr>
 			<th>
 				<soak:label key="user.address.address" />
@@ -108,24 +113,6 @@
 			<td>
 				<form:input path="address.address" />
 				<form:errors cssClass="fieldError" path="address.address" />
-			</td>
-		</tr>
-		<tr>
-			<th>
-				<soak:label key="user.address.city" />
-			</th>
-			<td>
-				<form:input path="address.city" />
-				<form:errors cssClass="fieldError" path="address.city" />
-			</td>
-		</tr>
-		<tr>
-			<th>
-				<soak:label key="user.address.country" />
-			</th>
-			<td>
-				<form:input path="address.country" />
-				<form:errors cssClass="fieldError" path="address.country" />
 			</td>
 		</tr>
 		<tr>
@@ -139,11 +126,33 @@
 		</tr>
 		<tr>
 			<th>
+				<soak:label key="user.address.city" />
+			</th>
+			<td>
+				<form:input path="address.city" />
+				<form:errors cssClass="fieldError" path="address.city" />
+			</td>
+		</tr>
+    <c:if test="${useCountryForUser}">
+		<tr>
+			<th>
+				<soak:label key="user.address.country" />
+			</th>
+			<td>
+				<form:input path="address.country" />
+				<form:errors cssClass="fieldError" path="address.country" />
+			</td>
+		</tr>
+    </c:if>
+</c:if>
+		
+		<tr>
+			<th>
 				<soak:label key="user.email" />
 			</th>
 			<td>
                 <c:choose>
-					<c:when test="${user.id == '0'}">
+					<c:when test="${user.hashuser}">
 						<form:input path="email" />
 						<form:errors cssClass="fieldError" path="email" />
 					</c:when>
@@ -154,9 +163,27 @@
 				</c:choose>
 			</td>
 		</tr>
+
+<c:if test="${useBirthdateForUser}">
 		<tr>
 			<th>
-				<soak:label key="user.phoneNumber" />
+				<soak:label key="user.birthdate" />
+			</th>
+			<td>
+				<fmt:formatDate value="${user.birthdate}" type="date" pattern="${dateformat}" var="birthdate" />
+				<input type="text" readonly="readonly" size="12" name="birthdate" id="birthdate" value="<c:out value="${birthdate}"/>" 
+					title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
+				<a href="#" name="a1" id="Anch_birthdate"
+					onClick="cal1.select(document.user.birthdate,'Anch_birthdate','<fmt:message key="date.format"/>',(document.user.birthdate.value=='')?null:document.user.birthdate.value,''); return false;"
+					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url value="/images/calendar.png"/>"></a>
+                    <form:errors cssClass="fieldError" path="birthdate" />
+			</td>
+		</tr>
+</c:if>
+
+		<tr>
+			<th>
+				<soak:label key="user.phoneNumber.short" />
 			</th>
 			<td>
 				<form:input path="phoneNumber" />
@@ -173,6 +200,7 @@
 			</td>
 		</tr>
 
+<c:if test="${showEmployeeFields}">
 		<tr>
 			<th>
 				<soak:label key="user.closestLeader" />
@@ -182,7 +210,9 @@
 				<form:errors cssClass="fieldError" path="closestLeader" />
 			</td>
 		</tr>
+</c:if>
 
+<c:if test="${showJobTitle}">
 		<tr>
 			<th>
 				<soak:label key="user.jobTitle" />
@@ -192,7 +222,9 @@
 				<form:errors cssClass="fieldError" path="jobTitle" />
 			</td>
 		</tr>
+</c:if>
 
+<c:if test="${showWorkplace}">
 		<tr>
 			<th>
 				<soak:label key="user.workplace" />
@@ -202,6 +234,9 @@
 				<form:errors cssClass="fieldError" path="workplace" />
 			</td>
 		</tr>
+</c:if>
+
+<c:if test="${useWebsiteForUser}">
 		<tr>
 			<th>
 				<soak:label key="user.website" />
@@ -215,6 +250,7 @@
 				</c:if>
 			</td>
 		</tr>
+</c:if>
 		<tr>
 			<th>
 				<soak:label key="course.organization" />
@@ -228,6 +264,32 @@
 					path="organizationid" />
 			</td>
 		</tr>
+
+<c:if test="${useOrganization2}">
+		<tr>
+			<th>
+				<soak:label key="course.organization2" />
+			</th>
+			<td>
+				<c:choose>
+				<c:when test="${(isAdmin || isEducationResponsible)}">
+				<form:select path="organization2id">
+					<form:options items="${organizations2}" itemValue="id" itemLabel="name" />
+				</form:select>
+				</c:when>
+				<c:otherwise>
+					<c:if test="${user.organization2 != null}">
+						<c:out value="${user.organization2.name}"/>
+					</c:if>
+					<form:hidden path="organization2id" />
+				</c:otherwise>
+				</c:choose>
+				<form:errors cssClass="fieldError" htmlEscape="false" path="organization2id" />
+			</td>
+		</tr>
+</c:if>
+
+<c:if test="${showServiceArea}">
 		<tr>
 			<th>
 				<soak:label key="user.servicearea" />
@@ -260,7 +322,9 @@
 				</spring:bind>
 			</td>
 		</tr>
+</c:if>
 
+<c:if test="${showInvoiceaddress}">
 		<tr>
 			<th>
 				<soak:label key="user.invoiceAddress" />
@@ -288,15 +352,6 @@
 		</tr>
 		<tr>
 			<th>
-				<soak:label key="user.invoiceAddress.city" />
-			</th>
-			<td>
-				<form:input path="invoiceAddress.city" />
-				<form:errors cssClass="fieldError" path="invoiceAddress.city" />
-			</td>
-		</tr>
-		<tr>
-			<th>
 				<soak:label key="user.invoiceAddress.postalCode" />
 			</th>
 			<td>
@@ -304,6 +359,17 @@
 				<form:errors cssClass="fieldError" path="invoiceAddress.postalCode" />
 			</td>
 		</tr>
+		<tr>
+			<th>
+				<soak:label key="user.invoiceAddress.city" />
+			</th>
+			<td>
+				<form:input path="invoiceAddress.city" />
+				<form:errors cssClass="fieldError" path="invoiceAddress.city" />
+			</td>
+		</tr>
+</c:if>
+		
 		<c:if test="${param.from == 'list' or param.method == 'Add'}">
 			<tr>
 				<th>
@@ -344,6 +410,13 @@ highlightFormElements();
 // if (focusControl.type != "hidden" && !focusControl.disabled) {
 //    focusControl.focus();
 // }
+
+	var cal1 = new CalendarPopup();
+	cal1.setMonthNames('Januar','Februar','Mars','April','Mai','Juni','Juli','August','September','Oktober','November','Desember'); 
+	cal1.setDayHeaders('S','M','T','O','T','F','L'); 
+	cal1.setWeekStartDay(1); 
+	cal1.setTodayText("Idag");
+	cal1.showYearNavigation();
 
 function passwordChanged(passwordField) {
     var origPassword = "<c:out value="${user.password}"/>";
@@ -389,9 +462,3 @@ function fillSelect(obj){
 
 
 </script>
-
-<v:javascript formName="user" staticJavascript="false" />
-<script type="text/javascript"
-	src="<c:url value="/scripts/validator.jsp"/>"></script>
-
-

@@ -2,26 +2,19 @@ package no.unified.soak.webapp.action;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import no.unified.soak.model.Configuration;
-import no.unified.soak.service.ConfigurationManager;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 
 public class ConfigurationFormController extends BaseFormController {
 
-	private ConfigurationManager configurationManager = null;
-	
-	public void setConfigurationManager(ConfigurationManager configurationManager) {
-		this.configurationManager = configurationManager; 
-	}
-    
 	/**
 	 * @see org.springframework.web.servlet.mvc.AbstractFormController#formBackingObject(javax.servlet.http.HttpServletRequest)
 	 */
@@ -29,11 +22,12 @@ public class ConfigurationFormController extends BaseFormController {
 		if (log.isDebugEnabled()) {
 			log.debug("entering 'formBackingObject' method in ConfigurationFormController...");
 		}
-
 		ConfigurationsBackingObject configurationsBackingObject = new ConfigurationsBackingObject();
 
-		List<Configuration> configurations = configurationManager.getConfigurations();
-		configurationsBackingObject.setConfigurations(configurations);
+        if ((Boolean) request.getAttribute("isAdmin")) {
+            List<Configuration> configurations = configurationManager.getConfigurations();
+            configurationsBackingObject.setConfigurations(configurations);
+        }
 
 		return configurationsBackingObject;
 	}
@@ -43,51 +37,54 @@ public class ConfigurationFormController extends BaseFormController {
 	 *      javax.servlet.http.HttpServletResponse, java.lang.Object, org.springframework.validation.BindException)
 	 */
 	public ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object command,
-			BindException errors) throws Exception {
-		if (log.isDebugEnabled()) {
-			log.debug("entering 'onSubmit' method in ConfigurationFormController...");
-		}
+ BindException errors)
+            throws Exception {
+        if (log.isDebugEnabled()) {
+            log.debug("entering 'onSubmit' method in ConfigurationFormController...");
+        }
 
-		Locale locale = request.getLocale();
+        ConfigurationsBackingObject configurationsBackingObject = (ConfigurationsBackingObject) command;
 
-		ConfigurationsBackingObject configurationsBackingObject = (ConfigurationsBackingObject) command;
+        Map model = new HashMap();
 
-		Map model = new HashMap();
-
-		// Are we to cancel?
-		if (request.getParameter("docancel") != null) {
-			if (log.isDebugEnabled()) {
-				log.debug("recieved 'cancel' from jsp");
-			}
-			// TODO: notify user that configuration changes are cancelled
-			// model.put("cancelled", new Boolean(false));
-			return new ModelAndView(getCancelView(), model);
-		}
-		else {
-			// save configuration
-			if (configurationsBackingObject != null) {
-				if (persistChanges(request, configurationsBackingObject)) {
-					// TODO: notify user that configuration is updated
-					// model.put("updated", new Boolean(false));
-				}
-			}
-		}
-		return new ModelAndView(getSuccessView(), model);
-	}
+        // Are we to cancel?
+        if (request.getParameter("docancel") != null) {
+            if (log.isDebugEnabled()) {
+                log.debug("recieved 'cancel' from jsp");
+            }
+            model.put("cancelled", Boolean.TRUE);
+            return new ModelAndView(getCancelView(), model);
+        } else {
+            // save configuration
+            if (configurationsBackingObject != null && (Boolean) request.getAttribute("isAdmin")) {
+                if (persistChanges(request, configurationsBackingObject)) {
+                    model.put("updated", Boolean.TRUE);
+                }
+            }
+        }
+        
+        return new ModelAndView(getSuccessView(), model);
+    }
 
 	/**
 	 * @see org.springframework.web.servlet.mvc.SimpleFormController#referenceData(javax.servlet.http.HttpServletRequest)
 	 */
-	protected Map referenceData(HttpServletRequest request) throws Exception {
-		if (log.isDebugEnabled()) {
-			log.debug("entering 'referenceData' method in Administration controller...");
-		}
+    protected Map referenceData(HttpServletRequest request) throws Exception {
+        if (log.isDebugEnabled()) {
+            log.debug("entering 'referenceData' method in Administration controller...");
+        }
 
-		Map model = new HashMap();
-        Locale locale = request.getLocale();
-        
+        Map model = new HashMap();
+        // Needs to detect also after redirect:
+        if (BooleanUtils.toBoolean((String) request.getParameter("updated"))) {
+            model.put("updated", Boolean.TRUE);
+        }
+        if (BooleanUtils.toBoolean((String) request.getParameter("cancelled"))) {
+            model.put("cancelled", Boolean.TRUE);
+        }
+
         return model;
-	}
+    }
 	
 	/**
 	 * Scans through the list of objects for changes, and persists the changes that have been made

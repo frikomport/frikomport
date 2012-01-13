@@ -1,10 +1,7 @@
 <%@ include file="/common/taglibs.jsp"%>
 
-<title><fmt:message key="registrationComplete.title" />
-</title>
-<content tag="heading">
-<fmt:message key="registrationComplete.heading" />
-</content>
+<title><fmt:message key="registrationComplete.title" /></title>
+<content tag="heading"><fmt:message key="registrationComplete.heading" /></content>
 
 <spring:bind path="registration.*">
 	<c:if test="${not empty status.errorMessages}">
@@ -19,17 +16,6 @@
 	</c:if>
 </spring:bind>
 
-<c:if test="${courseFull == false}">
-	<div class="message" style="font-size: 12px">
-		<fmt:message key="registrationComplete.completed" />
-	</div>
-</c:if>
-<c:if test="${courseFull == true}">
-	<div class="message" style="font-size: 12px">
-		<fmt:message key="registrationComplete.waitinglist" />
-	</div>
-</c:if>
-
 <fmt:message key="date.format" var="dateformat" />
 <fmt:message key="time.format" var="timeformat" />
 
@@ -40,6 +26,16 @@
 <table class="detail">
 	<tr>
 		<th>
+			<fmt:message key="course.name" />
+		</th>
+		<td>
+			<c:out value="${registration.course.name}" escapeXml="false" />, <c:out value="${registration.course.location.name}"/> - <fmt:formatDate value="${registration.course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
+		</td>
+	</tr>
+
+<c:if test="${showEmployeeFields}">
+	<tr>
+		<th>
 			<fmt:message key="registration.employeeNumber" />
 		</th>
 		<td>
@@ -47,6 +43,8 @@
 				minFractionDigits="0" />
 		</td>
 	</tr>
+</c:if>
+
 	<tr>
 		<th>
 			<fmt:message key="registration.firstName" />
@@ -57,6 +55,7 @@
 			</spring:bind>
 		</td>
 	</tr>
+
 	<tr>
 		<th>
 			<fmt:message key="registration.lastName" />
@@ -67,6 +66,7 @@
 			</spring:bind>
 		</td>
 	</tr>
+
 	<tr>
 		<th>
 			<fmt:message key="registration.email" />
@@ -77,6 +77,34 @@
 			</spring:bind>
 		</td>
 	</tr>
+
+<c:if test="${useBirthdateForRegistration}">
+	<tr>
+		<th>
+			<fmt:message key="registration.birthdate" />
+		</th>
+		<td>
+			<spring:bind path="registration.birthdate">
+				<c:out value="${status.value}" />
+			</spring:bind>
+		</td>
+	</tr>
+</c:if>
+
+<c:if test="${useParticipants}">
+	<tr>
+		<th>
+			<fmt:message key="registration.participants" />
+		</th>
+		<td>
+			<spring:bind path="registration.participants">
+				<c:out value="${status.value}" />
+			</spring:bind>
+		</td>
+	</tr>
+</c:if>
+
+<c:if test="${!isSVV}">
 	<tr>
 		<th>
 			<fmt:message key="registration.phone" />
@@ -87,6 +115,8 @@
 			</spring:bind>
 		</td>
 	</tr>
+</c:if>	
+
 	<tr>
 		<th>
 			<fmt:message key="registration.mobilePhone" />
@@ -97,6 +127,8 @@
 			</spring:bind>
 		</td>
 	</tr>
+
+<c:if test="${showEmployeeFields}">
 	<tr>
 		<th>
 			<fmt:message key="registration.closestLeader" />
@@ -107,6 +139,9 @@
 			</spring:bind>
 		</td>
 	</tr>
+</c:if>
+
+<c:if test="${showJobTitle}">
 	<tr>
 		<th>
 			<fmt:message key="registration.jobTitle" />
@@ -117,6 +152,9 @@
 			</spring:bind>
 		</td>
 	</tr>
+</c:if>
+
+<c:if test="${showWorkplace}">
 	<tr>
 		<th>
 			<fmt:message key="registration.workplace" />
@@ -127,18 +165,22 @@
 			</spring:bind>
 		</td>
 	</tr>
-	<tr>
-		<th>
-			<fmt:message key="registration.organization" />
-		</th>
-		<td>
-			<c:if test="${registration.organization != null}">
-				<spring:bind path="registration.organization.name">
-					<c:out value="${status.value}" />
-				</spring:bind>
-			</c:if>
-		</td>
-	</tr>
+</c:if>
+
+<tr>
+	<th>
+		<fmt:message key="registration.organization" />
+	</th>
+	<td>
+		<c:if test="${registration.organization != null}">
+			<spring:bind path="registration.organization.name">
+				<c:out value="${status.value}" />
+			</spring:bind>
+		</c:if>
+	</td>
+</tr>
+
+<c:if test="${showServiceArea}">
 	<tr>
 		<th>
 			<fmt:message key="registration.serviceArea" />
@@ -151,6 +193,10 @@
 			</c:if>
 		</td>
 	</tr>
+</c:if>
+
+
+<c:if test="${showComment}">
 	<tr>
 		<th>
 			<fmt:message key="registration.comment" />
@@ -161,54 +207,64 @@
 			</spring:bind>
 		</td>
 	</tr>
+</c:if>
 
-	<c:if test="${!freeCourse}">
-		<tr>
-			<th>
-				<soak:label key="registration.invoiceAddress" />
-			</th>
-		</tr>
-		<tr>
-			<th>
-				<fmt:message key="registration.invoiceAddress.name" />
-			</th>
-			<td>
-				<spring:bind path="registration.invoiceName">
-					<c:out value="${status.value}" />
-				</spring:bind>
-			</td>
-		</tr>
-		<tr>
-			<th>
-				<fmt:message key="registration.invoiceAddress.address" />
-			</th>
-			<td>
-				<spring:bind path="registration.invoiceAddress.address">
-					<c:out value="${status.value}" />
-				</spring:bind>
-			</td>
-		</tr>
-		<tr>
-			<th>
-				<fmt:message key="registration.invoiceAddress.city" />
-			</th>
-			<td>
-				<spring:bind path="registration.invoiceAddress.city">
-					<c:out value="${status.value}" />
-				</spring:bind>
-			</td>
-		</tr>
-		<tr>
-			<th>
-				<fmt:message key="registration.invoiceAddress.postalCode" />
-			</th>
-			<td>
-				<spring:bind path="registration.invoiceAddress.postalCode">
-					<c:out value="${status.value}" />
-				</spring:bind>
-			</td>
-		</tr>
+<c:if test="${!freeCourse || isSVV}">
+	<c:if test="${!isSVV}">
+	<tr>
+		<th>
+			<soak:label key="registration.invoiceAddress" />
+		</th>
+	</tr>
+	<tr>
+		<th>
+			<fmt:message key="registration.invoiceAddress.name" />
+		</th>
+		<td>
+			<spring:bind path="registration.invoiceName">
+				<c:out value="${status.value}" />
+			</spring:bind>
+		</td>
+	</tr>
+	</c:if>	
+	
+	<tr>
+		<th>
+			<fmt:message key="registration.invoiceAddress.address" />
+		</th>
+		<td>
+			<spring:bind path="registration.invoiceAddress.address">
+				<c:out value="${status.value}" />
+			</spring:bind>
+		</td>
+	</tr>
+	<tr>
+		<th>
+			<fmt:message key="registration.invoiceAddress.postalCode" />
+		</th>
+		<td>
+			<spring:bind path="registration.invoiceAddress.postalCode">
+				<c:out value="${status.value}" />
+			</spring:bind>
+		</td>
+	</tr>
+
+	<c:if test="${!isSVV}">
+	<tr>
+		<th>
+			<fmt:message key="registration.invoiceAddress.city" />
+		</th>
+		<td>
+			<spring:bind path="registration.invoiceAddress.city">
+				<c:out value="${status.value}" />
+			</spring:bind>
+		</td>
+	</tr>
 	</c:if>
+
+</c:if>
+
+
 	<tr>
 		<td class="buttonBar">
 		<form method="post" action="<c:url value="/listCourses.html"/>"
@@ -218,9 +274,12 @@
 				<input type="hidden" name="<c:out value="${status.expression}"/>"
 					value="<c:out value="${status.value}"/>" />
 			</spring:bind>
-			<input type="submit" class="button" name="return"
-				onclick="bCancel=true" value="<fmt:message key="button.course.list"/>" />
-			<c:if test="userdefaults == true">
+
+<c:if test="${!isSVV}">
+			<input type="submit" class="button" name="return" onclick="bCancel=true" value="<fmt:message key="button.course.list"/>" />
+</c:if>
+
+			<c:if test="${userdefaults == true}">
 				<button type="button"
 					onclick="location.href='<c:url value="/performRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 					<fmt:message key="button.onemore" />

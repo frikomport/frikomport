@@ -141,13 +141,15 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 		Long organizationId = new Long(1);
 		Long serviceAreaId = new Long(1);
 		Registration.Status status = Registration.Status.RESERVED;
+		String firstname = null;
+		String lastname = null;
 		Boolean invoiced = new Boolean(true);
 		Boolean attended = new Boolean(false);
 		List limitToCourses = null;
 		String[] orderBy = null;
 		
 		List courses = dao.getSpecificRegistrations(courseId, organizationId,
-				serviceAreaId, status, invoiced, attended, limitToCourses, orderBy);
+				serviceAreaId, status, firstname, lastname, invoiced, attended, limitToCourses, orderBy);
 		assertTrue(courses.size() == 1);
 	}
 
@@ -234,7 +236,7 @@ public class RegistrationDAOTest extends BaseDAOTestCase {
 
 		Boolean local = new Boolean(true);
 
-		Integer result = dao.getNumberOfAttendants(local, course, null);
+		Integer result = dao.getNumberOfParticipants(local, course, null);
 
 		// Should never be null
 		assertNotNull(result);

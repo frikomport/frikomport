@@ -25,10 +25,10 @@ public class DateUtilTest extends TestCase {
         super(name);
     }
 
-//    public void testGetNonEnglishDatePattern() {
-//        LocaleContextHolder.setLocale(new Locale("no"));
-//        assertEquals("dd.MM.yyyy", DateUtil.getDatePattern());
-//    }
+    public void testGetNonEnglishDatePattern() {
+        LocaleContextHolder.setLocale(new Locale("no"));
+        assertEquals("dd.MM.yyyy", DateUtil.getDatePattern());
+    }
 
     public void testGetDate() throws Exception {
         if (log.isDebugEnabled()) {

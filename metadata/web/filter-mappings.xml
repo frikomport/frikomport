@@ -56,10 +56,6 @@
         <url-pattern>*.html</url-pattern>
     </filter-mapping>
     <filter-mapping>
-        <filter-name>clickstreamFilter</filter-name>
-        <url-pattern>*.html</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
         <filter-name>exportFilter</filter-name>
         <url-pattern>*.html</url-pattern>
     </filter-mapping>
@@ -67,13 +63,6 @@
         <filter-name>compressionFilter</filter-name>
         <url-pattern>*.html</url-pattern>
     </filter-mapping>
-    <!--filter-mapping>
-        <filter-name>rewriteFilter</filter-name>
-        <url-pattern>/*</url-pattern-->
-        <!-- These are needed by Tomcat 5 for forwards -->
-        <!--dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher-->
-    <!--/filter-mapping-->
     <filter-mapping>
         <filter-name>sitemesh</filter-name>
         <url-pattern>/*</url-pattern>

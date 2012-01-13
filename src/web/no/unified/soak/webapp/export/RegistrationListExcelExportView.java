@@ -3,7 +3,6 @@ package no.unified.soak.webapp.export;
 import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,6 +12,7 @@ import javax.servlet.jsp.JspException;
 
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
+import no.unified.soak.model.Registration.Status;
 import no.unified.soak.util.ApplicationResourcesUtil;
 
 import org.apache.commons.lang.ObjectUtils;
@@ -202,8 +202,13 @@ public class RegistrationListExcelExportView implements BinaryExportView
 	            	String start = f.format(course.getStartTime());
 	            	String stop = f.format(course.getStopTime());
 	            	String date = start.equals(stop)? start : start + " - " + stop;
-	            	String duration = course.getDuration()!=null ? course.getDuration() : "";
-	            	
+
+	    			if("n/a".equalsIgnoreCase(course.getDuration())){
+	    				// pga. SVV's mulighet for å ikke oppgi varighet
+	    				course.setDuration(null);
+	    			}
+	    			String duration = course.getDuration()!=null ? (" (" + course.getDuration() + ")") : "";
+	    			
 	            	short colNum = 0;
 	            	// adds coursename, date, duration
 	            	HSSFRow r = sheet.createRow(rowNum++);
@@ -229,11 +234,11 @@ public class RegistrationListExcelExportView implements BinaryExportView
 	                
 	                firstRegistration = false;
             	}
-				if(registration.getReserved()) {
-					rCount++;
+				if(registration.getStatusAsEnum() == Status.RESERVED) {
+					rCount += registration.getParticipants();
 				}
-				else {
-					wCount++;
+				else if(registration.getStatusAsEnum() == Status.WAITING){
+					wCount += registration.getParticipants();
 				}
             }
         }
@@ -241,8 +246,10 @@ public class RegistrationListExcelExportView implements BinaryExportView
 			short colNum = 0;
             // adds attendant counts and time of update
 			HSSFRow r = sheet.createRow(rowNum++);
-            writeCell(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.attendants")) + ": " + rCount, r.createCell(colNum++));
-            writeCell(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.waitlist")) + ": " + wCount, r.createCell(colNum++));
+            writeCell(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationList.attendants")) + ": " + rCount, r.createCell(colNum++));
+            if(!ApplicationResourcesUtil.isSVV()){
+				writeCell(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.waitlist")) + ": " + wCount, r.createCell(colNum++));
+			}
             writeCell(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationsSent.updated")) + " " + f.format(new Date()), r.createCell(colNum++));
 
             // empty row
@@ -281,39 +288,39 @@ public class RegistrationListExcelExportView implements BinaryExportView
      */
     protected void writeCell(Object value, HSSFCell cell)
     {
-        if (value == null) {
+    	if (value == null) {
             cell.setCellValue(new HSSFRichTextString(""));
         }
-        else if (value instanceof Integer)
-        {
-            Integer integer = (Integer) value;
-            // due to a weird bug in HSSF where it uses shorts, we need to input this as a double value :(
-            cell.setCellValue(integer.doubleValue());
-            cell.setCellStyle(cellStyles.get(CellFormatTypes.INTEGER));
-        }
-        else if (value instanceof Number)
-        {
-            Number num = (Number) value;
-            if (num.equals(Double.NaN))
-            {
-                cell.setCellValue(new HSSFRichTextString(""));
-            }
-            else
-            {
-                cell.setCellValue(num.doubleValue());
-            }
-            cell.setCellStyle(cellStyles.get(CellFormatTypes.NUMBER));
-        }
-        else if (value instanceof Date)
-        {
-            cell.setCellValue((Date) value);
-            cell.setCellStyle(cellStyles.get(CellFormatTypes.DATE));
-        }
-        else if (value instanceof Calendar)
-        {
-            cell.setCellValue((Calendar) value);
-            cell.setCellStyle(cellStyles.get(CellFormatTypes.DATE));
-        }
+//        else if (value instanceof Integer)
+//        {
+//            Integer integer = (Integer) value;
+//            // due to a weird bug in HSSF where it uses shorts, we need to input this as a double value :(
+//            cell.setCellValue(integer.doubleValue());
+//            cell.setCellStyle(cellStyles.get(CellFormatTypes.INTEGER));
+//        }
+//        else if (value instanceof Number)
+//        {
+//            Number num = (Number) value;
+//            if (num.equals(Double.NaN))
+//            {
+//                cell.setCellValue(new HSSFRichTextString(""));
+//            }
+//            else
+//            {
+//                cell.setCellValue(num.doubleValue());
+//            }
+//            cell.setCellStyle(cellStyles.get(CellFormatTypes.NUMBER));
+//        }
+//        else if (value instanceof Date)
+//        {
+//            cell.setCellValue((Date) value);
+//            cell.setCellStyle(cellStyles.get(CellFormatTypes.DATE));
+//        }
+//        else if (value instanceof Calendar)
+//        {
+//            cell.setCellValue((Calendar) value);
+//            cell.setCellStyle(cellStyles.get(CellFormatTypes.DATE));
+//        }
         else
         {
             cell.setCellValue(new HSSFRichTextString(escapeColumnValue(value)));
@@ -378,7 +385,7 @@ public class RegistrationListExcelExportView implements BinaryExportView
     {
         HSSFCellStyle headerStyle = getNewCellStyle();
 
-        headerStyle.setFillPattern(HSSFCellStyle.FINE_DOTS);
+        headerStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
         headerStyle.setFillBackgroundColor(HSSFColor.BLUE_GREY.index);
         HSSFFont bold = wb.createFont();
         bold.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);

@@ -30,19 +30,30 @@ public interface UserDAO extends DAO {
      */
     public User getUser(String username);
 
+	/**
+	 * Gets users information based on login name without giving exception when
+	 * not found.
+	 * 
+	 * @param username
+	 *            the current username
+	 * @return user populated user object
+	 */
+    public User getUserSilent(String username);
+
     /**
      * Gets users information based on email address.
      * @param email the current email
      * @return user populated user object
      */
-    public User findUser(String email);
+    public User findUserByEmail(String email);
 
     /**
      * Gets a list of users based on parameters passed in.
-     *
      * @return List populated list of users
      */
-    public List getUsers(User user);
+    public List getUsers(User user, boolean hashuserFilter);
+
+	public List getUsernames(boolean hashUser);
 
     /**
      * Gets users information based on hash.
@@ -87,5 +98,17 @@ public interface UserDAO extends DAO {
      * @param username
      */
     public void removeUserCookies(String username);
+
+    /**
+     * Gets a list of users based on a rolename
+     * @return List populated list of users
+     */
+    public List getUsersByRole(String rolename);
+
+    /**
+     * Gets a list of users based on a list of rolenames
+     * @return List populated list of users
+     */
+    public List getUsersByRoles(List<String> rolenames);
 
 }

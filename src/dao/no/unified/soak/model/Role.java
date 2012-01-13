@@ -30,9 +30,8 @@ public class Role extends BaseObject implements Serializable {
     private static final long serialVersionUID = 3690197650654049848L;
     private String name;
     private String description;
-    private Integer version;
     private Set users;
-
+    
     public Role() {
     }
 
@@ -40,13 +39,17 @@ public class Role extends BaseObject implements Serializable {
         this.name = name;
     }
 
+    public Role(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     /**
      * Returns the name.
      * @return String
      *
      * @struts.validator type="required"
-     * @hibernate.id column="name" length="100"
-     *   generator-class="assigned" unsaved-value="version"
+     * @hibernate.id column="name" length="100" generator-class="assigned" unsaved-value="version"
      */
     public String getName() {
         return this.name;
@@ -77,8 +80,7 @@ public class Role extends BaseObject implements Serializable {
      * hibernate.set table="user_role" cascade="save-update"
      *                lazy="false" inverse="true"
      * hibernate.collection-key column="role_name"
-     * hibernate.collection-many-to-many class="no.unified.soak.model.User"
-     *                                    column="username"
+     * hibernate.collection-many-to-many class="no.unified.soak.model.User" column="username"
      */
     public Set getUsers() {
         return users;
@@ -89,21 +91,6 @@ public class Role extends BaseObject implements Serializable {
      */
     public void setUsers(Set users) {
         this.users = users;
-    }
-
-    /**
-     * @return Returns the version.
-     * @hibernate.version
-     */
-    public Integer getVersion() {
-        return version;
-    }
-
-    /**
-     * @param version The version to set.
-     */
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 
     public boolean equals(Object o) {

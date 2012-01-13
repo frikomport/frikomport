@@ -10,13 +10,19 @@
  */
 package no.unified.soak.webapp.action;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import no.unified.soak.model.Organization;
+import no.unified.soak.model.Organization.Type;
 import no.unified.soak.service.OrganizationManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
@@ -30,15 +36,28 @@ import org.springframework.web.servlet.ModelAndView;
  * @author hrj
  */
 public class OrganizationFormController extends BaseFormController {
-    private OrganizationManager mgr = null;
+    private OrganizationManager organizationManager = null;
 
     /**
      * @param roleManager The roleManager to set.
      */
-    public void setOrganizationManager(OrganizationManager mgr) {
-        this.mgr = mgr;
+    public void setOrganizationManager(OrganizationManager organizationManager) {
+        this.organizationManager = organizationManager;
     }
 
+    @Override
+    protected Map referenceData(HttpServletRequest request) throws Exception {
+        Map<String, Object> model = new HashMap<String, Object>();
+        List<Type> types = new LinkedList<Type>();
+
+        for (Type type : Organization.Type.values()) {
+            types.add(type);
+        }
+        model.put("types", types);
+
+        return model;
+    }
+    
     /*
      * (non-Javadoc)
      *
@@ -50,29 +69,12 @@ public class OrganizationFormController extends BaseFormController {
         Organization organization = null;
 
         if (!StringUtils.isEmpty(id)) {
-            organization = mgr.getOrganization(new Long(id));
+            organization = organizationManager.getOrganization(new Long(id));
         } else {
             organization = new Organization();
         }
 
         return organization;
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.springframework.web.servlet.mvc.AbstractFormController#processFormSubmission(javax.servlet.http.HttpServletRequest,
-     *      javax.servlet.http.HttpServletResponse, java.lang.Object,
-     *      org.springframework.validation.BindException)
-     */
-    public ModelAndView processFormSubmission(HttpServletRequest request,
-        HttpServletResponse response, Object command, BindException errors)
-        throws Exception {
-        if (request.getParameter("cancel") != null) {
-            return new ModelAndView(getSuccessView());
-        }
-
-        return super.processFormSubmission(request, response, command, errors);
     }
 
     /*
@@ -94,13 +96,38 @@ public class OrganizationFormController extends BaseFormController {
         Locale locale = request.getLocale();
 
         if (request.getParameter("delete") != null) {
-            mgr.removeOrganization(organization.getId());
+            organizationManager.removeOrganization(organization.getId());
             saveMessage(request, getText("organization.deleted", locale));
-        } else {
-            mgr.saveOrganization(organization);
+        }
+        else {
+        	
+        	Object[] args = null;
 
-            String key = (isNew) ? "organization.added"
-                                 : "organization.updated";
+			String navn = request.getParameter("name");
+			if(!StringUtils.isNotEmpty(navn)){
+				args = new Object[] { getText("organization.name", request.getLocale()), "", ""};
+				errors.rejectValue("name", "errors.required", args, "");
+			}
+
+			String number = request.getParameter("number");
+			if("".equals(number)){ number = null; } // fordi isNumberic for "" er true..!
+			if(!StringUtils.isNumeric(number)){
+				args = new Object[] { getText("organization.number", request.getLocale()), "", ""};
+				errors.rejectValue("number", "errors.positivNumber", args, "");
+			}
+
+			if (args != null) {
+				organizationManager.evict(organization);
+				return showForm(request, response, errors);
+			}
+        	
+        	if (organization.getType() == null && !ApplicationResourcesUtil.isSVV()) {
+				organization.setType(Organization.Type.MUNICIPALITY);
+			}
+        	
+            organizationManager.saveOrganization(organization);
+
+            String key = (isNew) ? "organization.added" : "organization.updated";
             saveMessage(request, getText(key, locale));
 //
 //            if (!"list".equals(request.getAttribute("from"))) {

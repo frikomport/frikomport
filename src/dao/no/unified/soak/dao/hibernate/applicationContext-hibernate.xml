@@ -37,9 +37,25 @@
             <prop key="hibernate.hbm2ddl.auto">update</prop>
             <!-- Turn batching off for better error messages under PostgreSQL -->
             <prop key="hibernate.jdbc.batch_size">0</prop>
+            
+            <prop key="hibernate.connection.release_mode">after_transaction</prop> 
+            <!-- Mulige verdier: auto (default) | on_close | after_transaction | after_statement -->
+            
+            <!-- Start: Anbefalinger fra vegloggen-prosjektet for lastbalansering -->
+            <prop key="hibernate.cache.use_query_cache">false</prop>
+           	<prop key="hibernate.generate_statistics">false</prop>
+            <prop key="hibernate.SecondLevelCacheEnabled">false</prop>
+            <prop key="hibernate.QueryCacheEnabled">false</prop>
+            <prop key="hibernate.cache.use_second_level_cache">false</prop>    
+            <!-- Slutt: Anbefalinger fra vegloggen-prosjektet -->
+            
         </props>
         </property>
+        <property name="namingStrategy" ref="namingStrategy"/>
     </bean>
+    
+    <!-- Quoted namingStrategy neded for Oracle to accept reserved words in table and column names. -->
+    <bean id="namingStrategy" class="no.unified.soak.util.DefaultQuotedNamingStrategy"/>
 
     <!-- Transaction manager for a single Hibernate SessionFactory (alternative to JTA) -->
     <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
@@ -71,8 +87,8 @@
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
 	
-	<!-- EzUserDAOJdbc: Ez-publish interface -->
-	<bean id="ezUserDAO" class="no.unified.soak.dao.jdbc.EzUserDAOJdbc">
+	<!-- EzUserDAOJdbc: ExtUserDAO interface -->
+	<bean id="extUserDAO" class="no.unified.soak.dao.jdbc.EzUserDAOJdbc">
     	<property name="dataSource" ref="userEzDataSource"/>
     </bean>
 
@@ -93,6 +109,8 @@
     <bean id="courseDAO" class="no.unified.soak.dao.hibernate.CourseDAOHibernate" autowire="byName"/>
     <!--Course-END-->
     
+    <bean id="statisticsDAO" class="no.unified.soak.dao.hibernate.StatisticsDAOHibernate" autowire="byName"/>
+    
     <!--Registration-START-->
     <bean id="registrationDAO" class="no.unified.soak.dao.hibernate.RegistrationDAOHibernate" autowire="byName"/>
     <!--Registration-END-->
@@ -112,4 +130,5 @@
     <!--Category-START-->
     <bean id="categoryDao" class="no.unified.soak.dao.hibernate.CategoryDAOHibernate" autowire="byName"/>
     <!--Category-END-->
+    
 </beans>

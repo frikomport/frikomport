@@ -16,9 +16,14 @@
         <property name="transactionAttributes">
             <props>
                 <prop key="process*">PROPAGATION_REQUIRED</prop>
+                <prop key="execute*">PROPAGATION_REQUIRED</prop>
+                <prop key="reset*">PROPAGATION_REQUIRED</prop>
                 <prop key="save*">PROPAGATION_REQUIRED</prop>
                 <prop key="remove*">PROPAGATION_REQUIRED</prop>
-                <prop key="*">PROPAGATION_REQUIRED</prop>
+                <prop key="update*">PROPAGATION_REQUIRED</prop>
+                <prop key="add*">PROPAGATION_REQUIRED</prop>
+                <prop key="create*">PROPAGATION_REQUIRED</prop>
+                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
             </props>
         </property>
     </bean>
@@ -38,17 +43,19 @@
         <property name="target">
             <bean class="no.unified.soak.service.impl.UserManagerImpl" >
                 <property name="userDAO" ref="userDAO"/>
-                <property name="ezUserDAO" ref="ezUserDAO"/>
+                <property name="extUserDAO" ref="extUserDAO"/>
                 <property name="roleManager" ref="roleManager"/>
                 <property name="messageSource" ref="messageSource"/>
                 <property name="organizationManager" ref="organizationManager"/>
-                <property name="userSynchronizeManager" ref="userSynchronizeManager"/>
             </bean>
         </property>
         <!-- Override default transaction attributes b/c of LoginCookie methods -->
         <property name="transactionAttributes">
             <props>
-                <prop key="save*">PROPAGATION_REQUIRED,-UserExistsException</prop>
+                <prop key="disableUser">PROPAGATION_REQUIRED</prop>
+                <prop key="enableUser">PROPAGATION_REQUIRED</prop>
+                <prop key="addUser">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
+                <prop key="saveUser">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
             </props>
         </property>
         <!-- This property is overriden in applicationContext-security.xml to add
@@ -66,7 +73,8 @@
         <property name="patterns" value=".*saveUser"/>
     </bean>
 
-    <bean id="userSecurityAdvice" class="no.unified.soak.service.UserSecurityAdvice"/>
+    <bean id="userSecurityAdvice" class="no.unified.soak.service.UserSecurityAdvice">
+    </bean>
 
     <bean id="roleManager" parent="txProxyTemplate">
         <property name="target">
@@ -151,6 +159,15 @@
     </bean>
     <!--Course-END-->
     
+    <!--Statistics-START-->
+    <bean id="statisticsManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.StatisticsManagerImpl" autowire="byName">
+            </bean>
+        </property>
+    </bean>
+    <!--Statistics-END-->
+    
     <!--Registration-START-->
     <bean id="registrationManager" parent="txProxyTemplate">
         <property name="target">
@@ -197,10 +214,18 @@
             <bean class="no.unified.soak.service.impl.NotificationManagerImpl">
                 <property name="notificationDao" ref="notificationDao"/>
                 <property name="registrationManager" ref="registrationManager"/>
+                <property name="configurationManager" ref="configurationManager"/>
                 <property name="messageSource" ref="messageSource"/>
 			    <property name="mailEngine" ref="mailEngine"/>
 			    <property name="mailSender" ref="mailSender"/>
             </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="send*">PROPAGATION_REQUIRED</prop>
+                <prop key="reset*">PROPAGATION_REQUIRED</prop>
+                <prop key="save*">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
+            </props>
         </property>
     </bean>
     <!--Notification-END-->
@@ -213,6 +238,14 @@
     </bean>
     <!-- CourseStatus-END-->
 
+    <!-- DecorCache-START-->
+    <bean id="decorCacheManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.DecorCacheManagerImpl" autowire="byName"/>
+        </property>
+    </bean>
+    <!-- DecorCache-END-->
+
     <!-- UserSynchronize-START-->
     <bean id="userSynchronizeManager" parent="txProxyTemplate">
          <property name="target">
@@ -220,11 +253,24 @@
         </property>
         <property name="transactionAttributes">
             <props>
-                <prop key="save*">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
+                <prop key="synchronizeUsers">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
             </props>
         </property>
     </bean>
     <!-- UserSynchronize-END-->
+
+    <!-- ActionFilter-START-->
+    <bean id="actionFilter" parent="txProxyTemplate">
+         <property name="target">
+            <bean class="no.unified.soak.webapp.filter.ActionFilter" autowire="byName"/>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="save*">PROPAGATION_REQUIRED,-ObjectRetrievalFailureException</prop>
+            </props>
+        </property>
+    </bean>
+    <!-- ActionFilter-END-->
 
     <!-- DatabaseUpdate-START-->
     <bean id="databaseUpdateManager" parent="txProxyTemplate">
@@ -240,11 +286,19 @@
         </property>
     </bean>
     <!-- DatabaseUpdate-END-->
-
+    
     <!-- Configuration-START-->
     <bean id="configurationManager" parent="txProxyTemplate">
         <property name="target">
             <bean class="no.unified.soak.service.impl.ConfigurationManagerImpl" autowire="byName"/>
+        </property>
+        <!-- Override default transaction attributes b/c of LoginCookie methods -->
+        <property name="transactionAttributes">
+            <props>
+                <prop key="isActive">PROPAGATION_NOT_SUPPORTED</prop>
+                <prop key="getValue">PROPAGATION_NOT_SUPPORTED</prop>
+                <prop key="save*">PROPAGATION_REQUIRED</prop>
+            </props>
         </property>
     </bean>
     <!-- Configuration-END-->

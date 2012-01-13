@@ -33,7 +33,7 @@ public interface CourseManager extends Manager {
     /**
      * Retrieves all of the courses
      */
-    public List getCourses(Course course);
+    public List getAllCourses();
 
     /**
      * Gets course's information based on id.
@@ -61,7 +61,7 @@ public interface CourseManager extends Manager {
      * @param stopTime Course has to have the stop date by this date
      * @return list of all courses that applies to the given criteria
      */
-    public List<Course> searchCourses(Course course, Date startTime, Date stopTime);
+    public List<Course> searchCourses(Course course, Date startTime, Date stopTime, Integer[] status);
 
     /**
      * Gets all unpublished courses
@@ -76,8 +76,10 @@ public interface CourseManager extends Manager {
      */
     public List<Course> getWaitingListCourses();
 
-    public List<Course> findByInstructor(Person person);
-    
+    public List<Course> findByInstructor(Person person, Integer[] coursestatus);
+
+	public List<Course> findByLocationIds(List<Long> locationIds, Integer numberOfHits);
+	
     /**
      * Finds all changes relevant between original course and changed course relevant for 
      * users registered on the course.
@@ -90,4 +92,5 @@ public interface CourseManager extends Manager {
     public List<String> getChangedList(Course originalCourse, Course changedCourse, String dateFormat);
     
     public List<Course> getCoursesWhereRegisterByExpired(long millis);
+
 }

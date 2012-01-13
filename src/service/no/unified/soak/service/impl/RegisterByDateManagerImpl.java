@@ -22,6 +22,7 @@ import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.Registration.Status;
+import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.RegisterByDateManager;
@@ -39,6 +40,7 @@ import org.springframework.mail.MailSender;
  */
 public class RegisterByDateManagerImpl extends BaseManager implements RegisterByDateManager {
     private RegistrationManager registrationManager;
+    private ConfigurationManager configurationManager;
     private CourseManager courseManager;
     protected MailEngine mailEngine = null;
     protected MailSender mailSender = null;
@@ -52,23 +54,18 @@ public class RegisterByDateManagerImpl extends BaseManager implements RegisterBy
 
     public void setMessageSource(MessageSource messageSource) {}
 
-    /**
-     * @see no.unified.soak.service.WaitingListManager#setCourseManager(no.unified.soak.service.CourseManager)
-     */
     public void setCourseManager(CourseManager courseManager) {
         this.courseManager = courseManager;
     }
 
-    /**
-     * @see no.unified.soak.service.WaitingListManager#setRegistrationManager(no.unified.soak.service.RegistrationManager)
-     */
     public void setRegistrationManager(RegistrationManager registrationManager) {
         this.registrationManager = registrationManager;
     }
 
-    /**
-     * @see no.unified.soak.service.WaitingListManager#setMailEngine(no.unified.soak.service.MailEngine)
-     */
+    public void setConfigurationManager(ConfigurationManager configurationManager) {
+    	this.configurationManager = configurationManager;
+    }
+    
     public void setMailEngine(MailEngine mailEngine) {
         this.mailEngine = mailEngine;
     }
@@ -83,7 +80,7 @@ public class RegisterByDateManagerImpl extends BaseManager implements RegisterBy
      */
 	public void checkRegisterByDates() {
 		// find all courses where registerBy recently expired
-		List<Course> courses = courseManager.getCoursesWhereRegisterByExpired(Constants.TASK_RUN_INTERVAL);
+		List<Course> courses = courseManager.getCoursesWhereRegisterByExpired(Constants.TASK_RUN_INTERVAL_EVERY_HOUR);
 		
 		// send registration lists for courses where registerBy date expired less than "Constants.TASK_RUN_INTERVAL" ago
 		Iterator<Course> it = courses.iterator();
@@ -104,7 +101,7 @@ public class RegisterByDateManagerImpl extends BaseManager implements RegisterBy
 	        
 	        String[] orderBy = new String[] {"lastName", "firstName"};
 	        
-	        List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, (Status)null, null, null, null, orderBy);
+	        List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, (Status)null, null, null, null, null, null, orderBy);
 	        
 	        String attachementFilename = createPdf(course, registrations);
 	        log.debug("attachementFilename: " + attachementFilename);
@@ -112,7 +109,7 @@ public class RegisterByDateManagerImpl extends BaseManager implements RegisterBy
 	        DateFormat f = new SimpleDateFormat("dd-MM-yyyy");
 	        String filenameInMail = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.id")) + "-" + course.getId() + "_" + f.format(course.getStartTime()) + ".pdf";
 	        
-	    	StringBuffer msg = MailUtil.create_EMAIL_EVENT_REGISTRATIONLIST_body(course);
+	    	StringBuffer msg = MailUtil.create_EMAIL_EVENT_REGISTRATIONLIST_body(course, configurationManager.getConfigurationsMap());
 			MimeMessage email = MailUtil.getMailMessage(to, null, null, null, (course.getName() + ", " + date), msg, filenameInMail, new File(attachementFilename), mailSender);
 
 			if(email != null && attachementFilename != null) {

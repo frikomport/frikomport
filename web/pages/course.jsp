@@ -3,7 +3,21 @@
 <fmt:message key="time.format" var="timeformat" />
 <fmt:message key="attachmentList.item" var="item" />
 <fmt:message key="attachmentList.items" var="items" />
-<fmt:message key="access.course.singleprice" var="singleprice" />
+
+
+<c:if test="${isReader || isEventResponsible || isEducationResponsible || isAdmin}">
+<tr>
+	<th>
+		<fmt:message key="course.status" />
+	</th>
+	<td>
+        <c:if test="${course.status == 0}"><fmt:message key="course.status.created"/></c:if>
+        <c:if test="${course.status == 1}"><fmt:message key="course.status.finished"/></c:if>
+        <c:if test="${course.status == 2}"><fmt:message key="course.status.published"/></c:if>
+        <c:if test="${course.status == 3}"><b><font color="red"><fmt:message key="course.status.cancelled"/>!</font></b></c:if>
+	</td>
+</tr>
+</c:if>
 
 <tr>
 	<th>
@@ -13,7 +27,8 @@
 		<c:choose>
 			<c:when test="${not empty course.detailURL}">
 				<a class="external" href="<c:out value="${course.detailURL}"/>" target="_blank"
-					title="<c:out value="${course.description}"/>"><c:out
+					title="<c:if test="${showDescription && ((isReader || isEventResponsible || isEducationResponsible || isAdmin) || (showDescriptionToPublic))}">
+					<c:out value="${course.description}"/></c:if>"><c:out
 						value="${course.name}" /></a>
 			</c:when>
 			<c:otherwise>
@@ -23,6 +38,7 @@
 	</td>
 </tr>
 
+<c:if test="${showDescription && ((isReader || isEventResponsible || isEducationResponsible || isAdmin) || (showDescriptionToPublic))}">
 <tr>
 	<th>
 		<fmt:message key="course.description" />
@@ -33,7 +49,9 @@
 		</spring:bind>
 	</td>
 </tr>
+</c:if>
 
+<c:if test="${showType}">
 <tr>
 	<th>
 		<fmt:message key="course.type" />
@@ -44,6 +62,7 @@
 		</spring:bind>
 	</td>
 </tr>
+</c:if>
 
 <tr>
 	<th>
@@ -65,16 +84,19 @@
 	</td>
 </tr>
 
-<tr>
-	<th>
-		<fmt:message key="course.duration" />
-	</th>
-	<td>
-		<spring:bind path="course.duration">
-			<c:out value="${status.value}" />
-		</spring:bind>
-	</td>
-</tr>
+
+<c:if test="${showDuration}">
+	<tr>
+		<th>
+			<fmt:message key="course.duration" />
+		</th>
+		<td>
+			<spring:bind path="course.duration">
+				<c:out value="${status.value}" />
+			</spring:bind>
+		</td>
+	</tr>
+</c:if>
 
 <tr>
 	<th>
@@ -87,6 +109,20 @@
 	</td>
 </tr>
 
+<c:if test="${useOrganization2 && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
+<tr>
+	<th>
+		<fmt:message key="course.organization2" />
+	</th>
+	<td>
+		<spring:bind path="course.organization2.name">
+			<c:out value="${status.value}" />
+		</spring:bind>
+	</td>
+</tr>
+</c:if>
+
+<c:if test="${useServiceArea}">
 <tr>
 	<th>
 		<fmt:message key="course.serviceArea" />
@@ -97,6 +133,7 @@
 		</spring:bind>
 	</td>
 </tr>
+</c:if>
 
 <tr>
 	<th>
@@ -133,6 +170,7 @@
 	</td>
 </tr>
 
+<c:if test="${!isSVV  || (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
 <tr>
 	<th>
 		<fmt:message key="course.maxAttendants" />
@@ -142,8 +180,20 @@
 			minFractionDigits="0" />
 	</td>
 </tr>
+</c:if>
 
-<c:if test="${!singleprice}">
+<c:if test="${useAttendants && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
+<tr>
+	<th>
+		<fmt:message key="course.attendants" />
+	</th>
+	<td>
+		<fmt:formatNumber value="${course.attendants}" minFractionDigits="0" />
+	</td>
+</tr>
+</c:if>
+
+<c:if test="${usePayment && !singleprice}">
 	<tr>
 		<th>
 			<fmt:message key="course.reservedInternal" />
@@ -164,15 +214,19 @@
 	</tr>
 </c:if>
 
-<tr>
-	<th>
-		<fmt:message key="course.feeExternal" />
-	</th>
-	<td>
-		<fmt:formatNumber value="${course.feeExternal}" minFractionDigits="2" />
-	</td>
-</tr>
 
+<c:if test="${usePayment}">
+	<tr>
+		<th>
+			<fmt:message key="course.feeExternal" />
+		</th>
+		<td>
+			<fmt:formatNumber value="${course.feeExternal}" minFractionDigits="2" />
+		</td>
+	</tr>
+</c:if>
+
+<c:if test="${!isSVV && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
 <tr>
 	<th>
 		<fmt:message key="course.registerStart" />
@@ -182,8 +236,9 @@
 			pattern="${dateformat} ${timeformat}" />
 	</td>
 </tr>
+</c:if>
 
-<authz:authorize ifAnyGranted="admin,instructor,editor">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 <tr>
 	<th>
 		<fmt:message key="course.reminder" />
@@ -193,8 +248,9 @@
 			pattern="${dateformat} ${timeformat}" />
 	</td>
 </tr>
-</authz:authorize>
+</c:if>
 
+<c:if test="${useRegisterBy}">
 <tr>
 	<th>
 		<fmt:message key="course.registerBy" />
@@ -204,18 +260,34 @@
 			pattern="${dateformat} ${timeformat}" />
 	</td>
 </tr>
+</c:if>
 
-<tr>
-    <th>
-        <fmt:message key="course.chargeoverdue" />
-    </th>
-    <td>
-		<c:if test="${course.chargeoverdue}">Ja</c:if>
-        <c:if test="${!course.chargeoverdue}">Nei</c:if>
-    </td>
-</tr>
+<c:if test="${usePayment}">
+	<tr>
+	    <th>
+	        <fmt:message key="course.chargeoverdue" />
+	    </th>
+	    <td>
+			<c:if test="${course.chargeoverdue}"><fmt:message key="button.yes"/></c:if>
+	        <c:if test="${!course.chargeoverdue}"><fmt:message key="button.no"/></c:if>
+	    </td>
+	</tr>
+</c:if>
 
-<authz:authorize ifAnyGranted="admin,instructor,editor">
+<c:if test="${showAdditionalInfo}">
+	<tr>
+		<th>
+			<fmt:message key="course.additionalinfo" />
+		</th>
+		<td>
+			<spring:bind path="course.additionalinfo">
+				<c:out value="${status.value}" />
+			</spring:bind>
+		</td>
+	</tr>
+</c:if>
+
+<c:if test="${!isSVV}">
 <tr>
 	<th>
 		<fmt:message key="course.url" />
@@ -227,4 +299,4 @@
 				key="javaapp.courseurl" /><c:out value="${course.id}" /></a>
 	</td>
 </tr>
-</authz:authorize>
+</c:if>

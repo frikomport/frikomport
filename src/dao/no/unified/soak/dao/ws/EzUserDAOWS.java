@@ -6,18 +6,20 @@ import java.util.List;
 
 import javax.xml.rpc.ServiceException;
 
-import no.unified.soak.dao.EzUserDAO;
+import no.unified.soak.dao.ExtUserDAO;
 import no.unified.soak.dao.fkpuser.FkpRole;
 import no.unified.soak.dao.fkpuser.FkpUserPortType;
 import no.unified.soak.dao.fkpuser.FkpUser_ServiceLocator;
 import no.unified.soak.dao.fkpuser.FkpUser_Type;
-import no.unified.soak.ez.EzUser;
+import no.unified.soak.ez.ExtUser;
+import no.unified.soak.model.RoleEnum;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 
-public class EzUserDAOWS implements EzUserDAO {
+public class EzUserDAOWS implements ExtUserDAO {
     private transient final Log log = LogFactory.getLog(EzUserDAOWS.class);
     String endpoint = "http://localhost/nusoap.php/fkpuser";
     
@@ -32,7 +34,7 @@ public class EzUserDAOWS implements EzUserDAO {
         return port;
     }
 
-    public List<EzUser> findAll() {
+    public List<ExtUser> findAll() {
         return findUsers(findRoles());
     }
 
@@ -48,10 +50,10 @@ public class EzUserDAOWS implements EzUserDAO {
         return roles;
     }
 
-    public EzUser findUserBySessionID(String sessionId) {
-        EzUser user = null;
+    public ExtUser findUserBySessionID(String sessionId) {
+        ExtUser user = null;
         try {
-            user = getEzUser(getPort().getUser(sessionId));
+            user = getExtUser(getPort().getUser(sessionId));
             user.setRolenames(getRolenames(getPort().getRoles(user.getId().toString())));
         } catch (Exception e) {
             log.error("Feilet ved henting av user", e);
@@ -59,10 +61,18 @@ public class EzUserDAOWS implements EzUserDAO {
         return user;
     }
 
-    private EzUser getEzUser(FkpUser_Type fkpUser) {
-        EzUser user = null;
+    /* (non-Javadoc)
+     * @see no.unified.soak.dao.ExtUserDAO#findUserByUsername(java.lang.String)
+     */
+    public ExtUser findUserByUsername(String username) {
+        throw new UnsupportedOperationException(
+        "findUserByUsername(String username) is unsupported. Use findUserBySessionID(sessionId) instead.");
+    }
+
+    private ExtUser getExtUser(FkpUser_Type fkpUser) {
+        ExtUser user = null;
         if(fkpUser != null){
-            user = new EzUser();
+            user = new ExtUser();
             user.setUsername(fkpUser.getLogin());
             user.setName(fkpUser.getName());
             user.setFirst_name(fkpUser.getFirst_name());
@@ -84,19 +94,13 @@ public class EzUserDAOWS implements EzUserDAO {
         return roleNames;
     }
 
-    public List<EzUser> findUsers(List<String> roles) {
-        List<EzUser> users = new ArrayList<EzUser>();
-        String roleNames = "";
-        for (int i = 0; i < roles.size(); i++) {
-            roleNames += roles.get(i);
-            if(i != roles.size()){
-                roleNames += ",";
-            }
-        }
+    public List<ExtUser> findUsers(List<String> roles) {
+        List<ExtUser> users = new ArrayList<ExtUser>();
+        String roleNames = StringUtils.join(roles.iterator(), ",");
         try {
             FkpUser_Type userArray[] = getPort().getUsers(roleNames);
             for (int i = 0; i < userArray.length; i++) {
-                EzUser user = getEzUser(userArray[i]);
+                ExtUser user = getExtUser(userArray[i]);
                 user.setRolenames(getRolenames(getPort().getRoles(user.getId().toString())));
                 users.add(user);
             }
@@ -108,4 +112,28 @@ public class EzUserDAOWS implements EzUserDAO {
         return users;
     }
 
+	/* The roles expected from the eZ publish web service.
+	 * @see no.unified.soak.dao.ExtUserDAO#getStringForRole(no.unified.soak.model.RoleEnum)
+	 */
+	public String getStringForRole(RoleEnum role) {
+		switch (role) {
+		case ADMIN_ROLE:
+			return "Administrator";
+		case EDITOR_ROLE:
+			return "Opplaringsansvarlig";
+		case EVENTRESPONSIBLE_ROLE:
+			return "Kursansvarlig";
+		case EMPLOYEE:
+			return "Ansatt";
+		case ANONYMOUS:
+			return "Anonymous";
+		case READER_ROLE:
+			return "FKPLesebruker";
+		}
+		return null;
+	}
+
+	public boolean isExternalStringRole(String roleStringFromExternal) {
+		throw new RuntimeException("Method isExternalStringRole(String) is not implemented in EzUserDAOWS implementation of ExtUserDAO.");
+	}
 }

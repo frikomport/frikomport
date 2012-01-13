@@ -50,10 +50,10 @@
     <tr>
         <td></td>
         <td class="buttonBar">
-            <authz:authorize ifAnyGranted="admin,instructor,editor">
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
             <input type="submit" name="upload" class="button" onclick="bCancel=false"
                 value="<fmt:message key="button.upload"/>" />
-            </authz:authorize>
+</c:if>
             <input type="submit" name="docancel" class="button" onclick="bCancel=true"
                 value="<fmt:message key="button.cancel"/>" />
         </td>

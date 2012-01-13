@@ -1,10 +1,10 @@
 package no.unified.soak.model;
 
+import java.io.Serializable;
+
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.EqualsBuilder;
-
-import java.io.Serializable;
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,9 +16,32 @@ import java.io.Serializable;
  */
 public class Category extends BaseObject implements Serializable {
     
+    private static final long serialVersionUID = 1351020199381038808L;
     private Long id;
-    private String name;
+    private Name name;
     private Boolean selectable;
+
+    public enum Name {
+        HENDELSE("Hendelse");
+        private String nameDBValue;
+        
+        Name(String status) {
+            this.nameDBValue = status; 
+        }
+        
+        public static Name getNameFromDBValue(String dbValue) {
+            for (Name name : values()) {
+                if (name.getDBValue().equals(dbValue)) {
+                    return name;
+                }
+            }
+            return null;
+        }
+        
+        public String getDBValue() {
+            return nameDBValue;
+        }
+    }
 
     /**
      * @return The id
@@ -34,18 +57,22 @@ public class Category extends BaseObject implements Serializable {
 
     /**
      * @return The name
-     * @hibernate.property column="name" length="100" not-null="true" 
+     * @hibernate.property column="name" length="100" not-null="true" unique="true"
      */
     public String getName() {
-        return name;
+        return name.getDBValue();
     }
 
+    public Name getNameAsEnum() {
+        return this.name;
+    }
+    
     /**
      * @param name
      * @spring.validator type="required"
      */
     public void setName(String name) {
-        this.name = name;
+        this.name = Name.getNameFromDBValue(name);
     }
 
     /**
@@ -63,6 +90,7 @@ public class Category extends BaseObject implements Serializable {
     public String toString() {
          return new ToStringBuilder(this).append("id", id)
                                         .append("name", name)
+                                        .append("selectable", selectable)
                                         .toString();
     }
 

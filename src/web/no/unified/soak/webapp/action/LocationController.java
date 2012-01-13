@@ -19,9 +19,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import no.unified.soak.Constants;
 import no.unified.soak.model.Location;
+import no.unified.soak.model.Organization;
+import no.unified.soak.model.User;
+import no.unified.soak.model.Organization.Type;
 import no.unified.soak.service.LocationManager;
 import no.unified.soak.service.OrganizationManager;
+import no.unified.soak.util.ApplicationResourcesUtil;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;
@@ -57,14 +62,25 @@ public class LocationController extends BaseFormController {
             log.debug("entering 'referenceData' method...");
         }
         HttpSession session = request.getSession();
-        Location comm = (Location)session.getAttribute("location");
+        Location location = (Location)session.getAttribute("location");
         
         Locale locale = request.getLocale();
 
-        Location location = new Location();
-
-        if (comm != null) {
-            location = (Location) comm;
+        if (location == null) {
+            location = new Location();
+        }
+        
+        User user = (User) session.getAttribute(Constants.USER_KEY);
+        String queryString = request.getQueryString();
+        
+		/**
+		 * queryString er forskjellig fra null dersom referenceData er kalt fra
+		 * displayTag-rammeverket, geografidata skal da IKKE overskrives
+		 */
+        if(ApplicationResourcesUtil.isSVV() && user != null && queryString == null){
+	        // default visning knyttet til org2 for SVV
+	        location.setOrganization2(user.getOrganization2());
+	        location.setOrganization2id(user.getOrganization2id());
         }
         
         // Don't modify organization if in postback
@@ -80,6 +96,7 @@ public class LocationController extends BaseFormController {
         // Set up parameters, and return them to the view
         Map model = new HashMap();
         model = addOrganizations(model, locale);
+        model = addOrganizations2(model, locale);
         model.put("location", location);
 
         // Add all locations to the list
@@ -114,6 +131,8 @@ public class LocationController extends BaseFormController {
 
         // Set up parameters, and return them to the view
         model = addOrganizations(model, locale);
+        model = addOrganizations2(model, locale);
+        
         model.put("location", location);
         session.setAttribute("location", location);
 
@@ -140,8 +159,35 @@ public class LocationController extends BaseFormController {
             model = new HashMap();
         }
 
-        model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
-
+        String typeDBvalue = ApplicationResourcesUtil.getText("show.organization.pulldown.typeDBvalue");
+        if (typeDBvalue != null && !StringUtils.isBlank(typeDBvalue)) {
+        	Integer value = Integer.valueOf(typeDBvalue);
+        	Type type = Organization.Type.getTypeFromDBValue(value);
+            model.put("organizations", organizationManager.getByTypeIncludingDummy(type, getText("misc.all.organizations", locale)));
+        } else {
+            model.put("organizations", organizationManager.getAllIncludingDummy(getText("misc.all", locale)));
+        }
         return model;
     }
+
+    /**
+     * Used to create a list of all organization with an option 0 that says
+     * "all organization" and is therefore made with search forms in mind.
+     *
+     * @param model
+     *            model to send to view
+     * @param locale
+     *            currently used locale
+     * @return map with all organization and one with id=0 that is "all
+     *         organization"
+     */
+    private Map addOrganizations2(Map model, Locale locale) {
+        if (model == null) {
+            model = new HashMap();
+        }
+
+        model.put("organizations2", organizationManager.getByTypeIncludingParentAndDummy(Organization.Type.AREA, Organization.Type.REGION, getText("misc.all.organization2s", locale)));
+        return model;
+    }
+
 }

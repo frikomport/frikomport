@@ -31,8 +31,7 @@ import org.springframework.orm.ObjectRetrievalFailureException;
  * 
  * @author hrj
  */
-public class RegistrationDAOHibernate extends BaseDAOHibernate implements
-		RegistrationDAO {
+public class RegistrationDAOHibernate extends BaseDAOHibernate implements RegistrationDAO {
 
 	/**
 	 * @see no.unified.soak.dao.RegistrationDAO#getRegistrations(no.unified.soak.model.Registration)
@@ -45,8 +44,7 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 	 * @see no.unified.soak.dao.RegistrationDAO#getRegistration(Long id)
 	 */
 	public Registration getRegistration(final Long id) {
-		Registration registration = (Registration) getHibernateTemplate().get(
-				Registration.class, id);
+		Registration registration = (Registration) getHibernateTemplate().get(Registration.class, id);
 
 		if (registration == null) {
 			log.warn("uh oh, registration with id '" + id + "' not found...");
@@ -72,8 +70,7 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 
 		// First we need to make sure there are no Notifications to this
 		// registration
-		DetachedCriteria criteria = DetachedCriteria
-				.forClass(Notification.class);
+		DetachedCriteria criteria = DetachedCriteria.forClass(Notification.class);
 		criteria.add(Restrictions.eq("registrationid", id));
 		List result = getHibernateTemplate().findByCriteria(criteria);
 		if (result != null && result.size() > 0) {
@@ -88,11 +85,9 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 	}
 
 	/**
-	 * @see no.unified.soak.dao.RegistrationDAO#getNumberOfAttendants(java.lang.Boolean,
-	 *      no.unified.soak.model.Course, Boolean)
+	 * @see no.unified.soak.dao.RegistrationDAO#getNumberOfParticipants(java.lang.Boolean, no.unified.soak.model.Course, Boolean)
 	 */
-	public Integer getNumberOfAttendants(Boolean localOnly, Course course,
- Boolean reservedOnly) {
+	public Integer getNumberOfParticipants(Boolean localOnly, Course course, Boolean reservedOnly) {
 		DetachedCriteria criteria = DetachedCriteria.forClass(Registration.class);
 
 		// Find number of registrations totally on the course
@@ -106,24 +101,25 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 			criteria.add(Restrictions.eq("organizationid", course.getOrganizationid()));
 		}
 
-		criteria.setProjection(Projections.rowCount());
+		criteria.setProjection(Projections.sum("participants"));
 
 		List queryResult = getHibernateTemplate().findByCriteria(criteria);
 		Integer result = (Integer) queryResult.get(0);
 
+		if(result == null){
+			result = new Integer(0);
+		}
 		return result;
 	}
 
 	/**
-	 * @see no.unified.soak.dao.RegistrationDAO#getAvailability(java.lang.Boolean,
-	 *      Course)
+	 * @see no.unified.soak.dao.RegistrationDAO#getAvailability(java.lang.Boolean, Course, java.lang.Boolean)
 	 */
 	public Integer getAvailability(Boolean localAttendant, Course course) {
 		Integer availableSeats = null;
 
 		// Find number of registrations totally on the course
-		int allAttendants = getNumberOfAttendants(new Boolean(false), course,
-				true).intValue();
+		int allAttendants = getNumberOfParticipants(new Boolean(false), course, true).intValue();
 		int maxAttendants = course.getMaxAttendants().intValue();
 
 		// if local attendant
@@ -134,21 +130,16 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 				availableSeats = 0;
 			}
 		} else { // if non-local attendant
-			int localAttendants = getNumberOfAttendants(new Boolean(true),
-					course, true).intValue();
+			int localAttendants = getNumberOfParticipants(new Boolean(true), course, true).intValue();
 			int otherAttendants = allAttendants - localAttendants; // non-locals
-			// with a
-			// reserved
-			// seat
+			// with a reserved seat
 
 			// Find number of seats reserved for the locals
 			int reservedInternal = course.getReservedInternal().intValue();
 			int seatsOtherAvailable = 0;
 			if (reservedInternal > 0 && reservedInternal >= localAttendants) {
-				// reserved seats are not taken, but still not available for
-				// non-locals
-				seatsOtherAvailable = maxAttendants - reservedInternal
-						- otherAttendants;
+				// reserved seats are not taken, but still not available for non-locals
+				seatsOtherAvailable = maxAttendants - reservedInternal - otherAttendants;
 			} else {
 				// no reserved seats or all reserved seats taken
 				seatsOtherAvailable = maxAttendants - allAttendants;
@@ -159,18 +150,17 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 		return new Integer(availableSeats);
 	}
 
-	public List getSpecificRegistrations(Long courseId, Long organizationId, Long serviceAreaId, Status status, Boolean invoiced,
+	public List getSpecificRegistrations(Long courseId, Long organizationId, Long serviceAreaId, Status status, String firstname, String lastname, Boolean invoiced,
 			Boolean attended, Collection limitToCourses, String[] orderBy) {
-		return getSpecificRegistrations(courseId, organizationId, serviceAreaId, new RegistrationStatusCriteria(status), invoiced,
+		return getSpecificRegistrations(courseId, organizationId, serviceAreaId, new RegistrationStatusCriteria(status), firstname, lastname, invoiced,
 				attended, limitToCourses, orderBy);
 	}
 	
 	public List getSpecificRegistrations(Long courseId, Long organizationId,
-			Long serviceAreaId, RegistrationStatusCriteria statusCriteria, Boolean invoiced,
+			Long serviceAreaId, RegistrationStatusCriteria statusCriteria, String firstname, String lastname, Boolean invoiced,
 			Boolean attended, Collection limitToCourses, String[] orderBy) {
 		// The default setup - returns everything
-		DetachedCriteria criteria = DetachedCriteria
-				.forClass(Registration.class);
+		DetachedCriteria criteria = DetachedCriteria.forClass(Registration.class);
 
 		// Start adding restrictions based on the input parameteres
 
@@ -194,6 +184,13 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 			criteria.add(Restrictions.in("status", statusCriteria.getStatusValueList()));
 		}
 
+        if(firstname != null && !"".equals(firstname)) {
+            criteria.add(Restrictions.like("firstName", "%" + firstname + "%").ignoreCase());
+        }
+        if(lastname != null && !"".equals(lastname)) {
+            criteria.add(Restrictions.like("lastName", "%" + lastname + "%").ignoreCase());
+        }
+		
 		// Is an invoice sent
 		if (invoiced != null) {
 			criteria.add(Restrictions.eq("invoiced", invoiced));
@@ -228,8 +225,7 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 	 */
 	public List<Registration> getWaitingListRegistrations(List courseIds) {
 		if ((courseIds != null) && (courseIds.size() > 0)) {
-			DetachedCriteria criteria = DetachedCriteria
-					.forClass(Registration.class);
+			DetachedCriteria criteria = DetachedCriteria.forClass(Registration.class);
 			criteria.add(Restrictions.in("courseid", courseIds));
 			criteria.add(Restrictions.eq("status", Registration.Status.WAITING.getDBValue()));
 			criteria.addOrder(Order.asc("courseid"));
@@ -242,28 +238,29 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 	}
 
 	/**
-	 * @see no.unified.soak.dao.RegistrationDAO#getNumberOfOccupiedSeats(no.unified.soak.model.Course,
-	 *      java.lang.Boolean)
+	 * @see no.unified.soak.dao.RegistrationDAO#getNumberOfOccupiedSeats(no.unified.soak.model.Course, java.lang.Boolean, java.lang.Boolean)
 	 */
 	public Integer getNumberOfOccupiedSeats(Course course, Boolean localOnly) {
 		Integer result = null;
 
 		if (course != null) {
-			DetachedCriteria criteria = DetachedCriteria
-					.forClass(Registration.class);
+			DetachedCriteria criteria = DetachedCriteria.forClass(Registration.class);
 			criteria.add(Restrictions.eq("courseid", course.getId()));
 			criteria.add(Restrictions.eq("status", Registration.Status.RESERVED.getDBValue()));
 
 			// Are we only to include "locals" in the search
 			if (localOnly.booleanValue()) {
-				criteria.add(Restrictions.eq("organizationid", course
-						.getOrganizationid()));
+				criteria.add(Restrictions.eq("organizationid", course.getOrganizationid()));
 			}
 
-			criteria.setProjection(Projections.rowCount());
+			criteria.setProjection(Projections.sum("participants"));
 
 			List queryResult = getHibernateTemplate().findByCriteria(criteria);
 			result = (Integer) queryResult.get(0);
+			
+			if(result == null){
+				result = new Integer(0);
+			}
 		}
 
 		return result;
@@ -272,8 +269,7 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 	public List<Registration> getCourseRegistrations(Long courseId) {
 		List<Registration> result = new ArrayList<Registration>();
 		if (courseId != null) {
-			DetachedCriteria criteria = DetachedCriteria
-					.forClass(Registration.class);
+			DetachedCriteria criteria = DetachedCriteria.forClass(Registration.class);
 			criteria.add(Restrictions.eq("courseid", courseId));
 			criteria.add(Restrictions.ne("status", Registration.Status.CANCELED.getDBValue()));
 			result = getHibernateTemplate().findByCriteria(criteria);
@@ -284,8 +280,7 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 	public List<Registration> getUserRegistrations(String username) {
 		List<Registration> result = new ArrayList<Registration>();
 		if (username != null) {
-			DetachedCriteria criteria = DetachedCriteria
-					.forClass(Registration.class);
+			DetachedCriteria criteria = DetachedCriteria.forClass(Registration.class);
 			criteria.add(Restrictions.eq("username", username));
 			criteria.add(Restrictions.ne("status", Registration.Status.CANCELED.getDBValue()));
 			result = getHibernateTemplate().findByCriteria(criteria);
@@ -297,8 +292,7 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 			String firstname, String lastname, Long courseId) {
 		List<Registration> result = new ArrayList<Registration>();
 
-		DetachedCriteria criteria = DetachedCriteria
-				.forClass(Registration.class);
+		DetachedCriteria criteria = DetachedCriteria.forClass(Registration.class);
 		criteria.add(Restrictions.eq("email", email));
 		criteria.add(Restrictions.eq("firstName", firstname));
 		criteria.add(Restrictions.eq("lastName", lastname));
@@ -314,8 +308,7 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 			Long courseId) {
 		List<Registration> result = new ArrayList<Registration>();
 
-		DetachedCriteria criteria = DetachedCriteria
-				.forClass(Registration.class);
+		DetachedCriteria criteria = DetachedCriteria.forClass(Registration.class);
 		criteria.add(Restrictions.eq("username", username));
 		criteria.add(Restrictions.eq("courseid", courseId));
 		criteria.add(Restrictions.ne("status", Registration.Status.CANCELED.getDBValue()));
@@ -323,6 +316,21 @@ public class RegistrationDAOHibernate extends BaseDAOHibernate implements
 		result = getHibernateTemplate().findByCriteria(criteria);
 
 		return result;
+	}
+	
+	public Integer getNumberOfRegistrations(Long courseId){
+		DetachedCriteria criteria = DetachedCriteria.forClass(Registration.class);
+		criteria.add(Restrictions.eq("courseid", courseId));
+		criteria.add(Restrictions.eq("status", Registration.Status.RESERVED.getDBValue())); 
+		criteria.setProjection(Projections.rowCount());
+
+		List queryResult = getHibernateTemplate().findByCriteria(criteria);
+		Integer numberOfRegistration = (Integer) queryResult.get(0);
+
+		if(numberOfRegistration == null){
+			numberOfRegistration = new Integer(0);
+		}
+		return numberOfRegistration;
 	}
 	
 }

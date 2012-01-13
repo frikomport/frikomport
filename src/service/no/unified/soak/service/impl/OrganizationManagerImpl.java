@@ -4,27 +4,28 @@
  * of the GPL.
  *
  * @author Unified Consulting AS
-*/
+ */
 /*
  * Created on 13.des.2005
  */
 package no.unified.soak.service.impl;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import no.unified.soak.dao.OrganizationDAO;
 import no.unified.soak.model.Organization;
+import no.unified.soak.model.Organization.Type;
 import no.unified.soak.service.OrganizationManager;
 
-import java.util.List;
-import java.util.ArrayList;
-
-
 /**
- * Implementation of OrganizationManager interface to talk to the persistence layer.
- *
+ * Implementation of OrganizationManager interface to talk to the persistence
+ * layer.
+ * 
  * @author hrj
  */
-public class OrganizationManagerImpl extends BaseManager
-    implements OrganizationManager {
+public class OrganizationManagerImpl extends BaseManager implements OrganizationManager {
     private OrganizationDAO dao;
 
     /**
@@ -71,11 +72,63 @@ public class OrganizationManagerImpl extends BaseManager
 
     public List getAllIncludingDummy(String dummy) {
         List organizations = new ArrayList();
-        Organization organizationDummy = new Organization();
-        organizationDummy.setId(null);
-        organizationDummy.setName(dummy);
-        organizations.add(organizationDummy);
+        organizations.add(makeDummyOrganization(dummy));
         organizations.addAll(getAll());
         return organizations;
     }
+
+    public List getByTypeIncludingDummy(Type type, String dummy) {
+        List organizations = new ArrayList();
+        organizations.add(makeDummyOrganization(dummy));
+        organizations.addAll(getOrganizationsByType(type));
+        return organizations;
+    }
+
+    public List getOrganizationsByType(Type orgType) {
+        return dao.getByType(orgType.getTypeDBValue());
+    }
+
+    public List getByTypeIncludingParentAndDummy(Type type, Type parentType, String dummy) {
+        List organizations = new ArrayList();
+        organizations.add(makeDummyOrganization(dummy));
+        organizations.addAll(getOrganizationsByTypeIncludingParent(type, parentType));
+        return organizations;
+    }
+
+    public List getOrganizationsByTypeIncludingParent(Type type, Type parentType) {
+        List organizations = new ArrayList();
+    	List parents = getOrganizationsByType(parentType);
+    	if(!parents.isEmpty()){
+    		Iterator p = parents.iterator();
+    		while(p.hasNext()){
+    			Organization parent = (Organization)p.next();
+    			organizations.add(parent);
+    			organizations.addAll(getOrganizationsByParent(parent, type));
+    		}
+    	}
+        return organizations;
+    }
+    
+    public List getOrganizationsByParent(Organization parent, Type type){
+    	return dao.getByParent(parent.getId(), type);
+    }
+    
+    private Organization makeDummyOrganization(String dummy) {
+        Organization organizationDummy = new Organization();
+        organizationDummy.setId(null);
+        organizationDummy.setName(dummy);
+        return organizationDummy;
+    }
+
+	/**
+	 * Evict entity for hibernate sessions. This avoids automatic saving
+	 * (flush) of the entity.
+	 * 
+	 * @param entity
+	 */
+	public void evict(Object entity) {
+		dao.evict(entity);
+	}
+
+
 }

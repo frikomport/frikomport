@@ -15,7 +15,8 @@
     </c:if>
 </spring:bind>
 
-<form:form commandName="person" onsubmit="return validatePerson(this)">
+<!-- form:form commandName="person" onsubmit="return validatePerson(this)" -->
+<form:form commandName="person">
 
 <table class="detail">
     <form:hidden path="id"/>
@@ -25,7 +26,7 @@
         </th>
         <td>
             <form:input path="name" size="50"/>
-            <form:errors htmlEscape="false" path="name"/>
+            <form:errors path="name" cssClass="fieldError"/>
         </td>
     </tr>
 
@@ -102,17 +103,15 @@
     <tr>
         <td></td>
         <td class="buttonBar">            
-<authz:authorize ifAnyGranted="admin,instructor,editor">
-            <input type="submit" class="button" name="save" 
-                onclick="bCancel=false" value="<fmt:message key="button.save"/>" />
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
+            <input type="submit" class="button" name="save" onclick="bCancel=false" value="<fmt:message key="button.save"/>" />
 			<c:if test="${!empty person.id}">
 	            <input type="submit" class="button" name="delete"
     	            onclick="bCancel=true;return confirmDelete('<fmt:message key="personList.theitem"/>')" 
         	        value="<fmt:message key="button.delete"/>" />
         	</c:if>
-</authz:authorize>
-            <input type="submit" class="button" name="cancel" onclick="bCancel=true"
-                value="<fmt:message key="button.cancel"/>" />        
+</c:if>
+            <input type="submit" class="button" name="cancel" onclick="bCancel=true" value="<fmt:message key="button.cancel"/>" />        
         </td>
     </tr>
 </table>

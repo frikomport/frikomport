@@ -27,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class CourseEmailController extends CourseNotificationController
 {
     private RegistrationManager registrationManager;
+    @SuppressWarnings("unused")
     private MessageSource messageSource;
     private MailSender mailSender;
 
@@ -47,7 +48,7 @@ public class CourseEmailController extends CourseNotificationController
         Map model = new HashMap();
         Locale locale = request.getLocale();
         HttpSession session = request.getSession();
-        User user = getUser(request);
+        User user = (User) session.getAttribute(Constants.USER_KEY);
 
         model.put("mailsenders",getMailSenders((Course)command, user, locale));
 
@@ -102,13 +103,13 @@ public class CourseEmailController extends CourseNotificationController
      */
 	private void sendMail(Locale locale, Course course, int event, String mailComment, String from) {
 		log.debug("Sending mail from CourseEmailController");
-		List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, Registration.Status.RESERVED, null, null, null, null);
+		List<Registration> registrations = registrationManager.getSpecificRegistrations(course.getId(), null, null, Registration.Status.RESERVED, null, null, null, null, null, null);
 
 		// Sender mail til kun reserverte.
 		StringBuffer msg = null;
 		switch(event) {
 			case Constants.EMAIL_EVENT_NOTIFICATION:
-				msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_body(course, mailComment, true);
+				msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_body(course, null, mailComment, true, configurationManager.getConfigurationsMap());
 				break;
 			default:
 				if(log.isDebugEnabled()) log.debug("sendMail: Handling of event:" + event + " not implemented..!");

@@ -14,9 +14,12 @@ public interface CategoryDAO extends DAO {
 
     public Category getCategory(Long id);
 
+    public Category getCategory(String name);
+
     public List<Category> getCategories(Category category, Boolean includeDisabled);
 
     public void saveCategory(Category category);
 
     public void removeCategory(Long id);
+
 }

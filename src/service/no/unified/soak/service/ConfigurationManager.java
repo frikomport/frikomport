@@ -1,6 +1,7 @@
 package no.unified.soak.service;
 
 import java.util.List;
+import java.util.Map;
 
 import no.unified.soak.dao.ConfigurationDAO;
 import no.unified.soak.model.Configuration;
@@ -36,10 +37,23 @@ public interface ConfigurationManager extends Manager{
      * @return configurations
      */
 	public List<Configuration> getConfigurations();
+	
+    /**
+     * Get all configurations as a Map
+     * @return configurations
+     */
+	public Map<String, Configuration> getConfigurationsMap();
 
 	/**
 	 * Save configuration
 	 * @param configuration
 	 */
 	public void saveConfiguration(Configuration configuration);
+
+	/**
+	 * Delete configuration
+	 * @param configuration
+	 */
+	public void deleteConfiguration(Configuration configuration);
+
 }

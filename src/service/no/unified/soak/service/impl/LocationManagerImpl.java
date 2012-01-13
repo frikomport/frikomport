@@ -4,7 +4,7 @@
  * of the GPL.
  *
  * @author Unified Consulting AS
-*/
+ */
 /*
  * created 14. dec 2005
  */
@@ -16,70 +16,89 @@ import java.util.List;
 import no.unified.soak.dao.LocationDAO;
 import no.unified.soak.model.Location;
 import no.unified.soak.service.LocationManager;
-
+import no.unified.soak.util.PostalCodesSuperduperLoader;
 
 /**
  * Implementation of LocationManager interface to talk to the persistence layer.
- *
+ * 
  * @author hrj
  */
 public class LocationManagerImpl extends BaseManager implements LocationManager {
-    private LocationDAO dao;
+	private LocationDAO dao;
 
-    /**
-     * Set the DAO for communication with the data layer.
-     *
-     * @param dao
-     */
-    public void setLocationDAO(LocationDAO dao) {
-        this.dao = dao;
+	/**
+	 * Set the DAO for communication with the data layer.
+	 * 
+	 * @param dao
+	 */
+	public void setLocationDAO(LocationDAO dao) {
+		this.dao = dao;
+	}
+
+	/**
+	 * @see no.unified.soak.service.LocationManager#getLocations(no.unified.soak.model.Location)
+	 */
+	public List getLocations(final Location location, final Boolean includeDisabled) {
+		return dao.getLocations(location, includeDisabled);
+	}
+
+	/**
+	 * @see no.unified.soak.service.LocationManager#getLocation(String id)
+	 */
+	public Location getLocation(final String id) {
+		return dao.getLocation(new Long(id));
+	}
+
+	/**
+	 * @see no.unified.soak.service.LocationManager#saveLocation(Location
+	 *      location)
+	 */
+	public void saveLocation(Location location) {
+		dao.saveLocation(location);
+	}
+
+	/**
+	 * @see no.unified.soak.service.LocationManager#removeLocation(String id)
+	 */
+	public void removeLocation(final String id) {
+		dao.removeLocation(new Long(id));
+	}
+
+	/**
+	 * @see no.unified.soak.service.LocationManager#searchLocations(no.unified.soak.model.Location)
+	 */
+	public List searchLocations(Location location) {
+		return dao.searchLocations(location);
+	}
+
+	/**
+	 * @see no.unified.soak.service.LocationManager#getLocationIds(String postalcode)
+	 */
+    public List getLocationIds(String postalcode){
+    	List<Location> locations = dao.getLocations(null, false);
+    	final Integer MAX_NUMBER_OF_LOCATIONIDS = 999;
+    	return PostalCodesSuperduperLoader.calculateDistance(postalcode, locations, MAX_NUMBER_OF_LOCATIONIDS);
     }
 
-    /**
-     * @see no.unified.soak.service.LocationManager#getLocations(no.unified.soak.model.Location)
-     */
-    public List getLocations(final Location location,
-        final Boolean includeDisabled) {
-        return dao.getLocations(location, includeDisabled);
-    }
+	
+	public List getAllIncludingDummy(Location location, Boolean includeDisabled, String dummy) {
+		List locations = new ArrayList();
+		Location locationDummy = new Location();
+		locationDummy.setId(null);
+		locationDummy.setName(dummy);
+		locationDummy.setMaxAttendants(0);
+		locations.add(locationDummy);
+		locations.addAll(getLocations(location, includeDisabled));
+		return locations;
+	}
 
-    /**
-     * @see no.unified.soak.service.LocationManager#getLocation(String id)
-     */
-    public Location getLocation(final String id) {
-        return dao.getLocation(new Long(id));
-    }
-
-    /**
-     * @see no.unified.soak.service.LocationManager#saveLocation(Location
-     *      location)
-     */
-    public void saveLocation(Location location) {
-        dao.saveLocation(location);
-    }
-
-    /**
-     * @see no.unified.soak.service.LocationManager#removeLocation(String id)
-     */
-    public void removeLocation(final String id) {
-        dao.removeLocation(new Long(id));
-    }
-
-    /**
-     * @see no.unified.soak.service.LocationManager#searchLocations(no.unified.soak.model.Location)
-     */
-    public List searchLocations(Location location) {
-        return dao.searchLocations(location);
-    }
-    
-    public List getAllIncludingDummy(Location location, Boolean includeDisabled, String dummy) {
-        List locations = new ArrayList();
-        Location locationDummy = new Location();
-        locationDummy.setId(null);
-        locationDummy.setName(dummy);
-        locationDummy.setMaxAttendants(0);
-        locations.add(locationDummy);
-        locations.addAll(getLocations(location, includeDisabled));
-        return locations;
-    }
+	/**
+	 * Evict entity for hibernate sessions. This avoids automatic saving (flush)
+	 * of the entity.
+	 * 
+	 * @param entity
+	 */
+	public void evict(Object entity) {
+		dao.evict(entity);
+	}
 }

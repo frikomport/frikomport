@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -32,6 +33,7 @@ import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.util.UidGenerator;
 import net.fortuna.ical4j.util.Uris;
 import no.unified.soak.Constants;
+import no.unified.soak.model.Configuration;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.User;
@@ -49,7 +51,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 public class MailUtil {
-    // public static final Log log = LogFactory.getLog(MailUtil.class);
+    public static final Log log = LogFactory.getLog(MailUtil.class);
 
     public static void sendMimeMails(ArrayList<MimeMessage> Emails, MailEngine engine) {
         if (Emails != null) {
@@ -67,23 +69,24 @@ public class MailUtil {
 	 *            The course in question
 	 * @param mailComment
 	 *            Optional comment from the admin initiating the sending of this mail
+	 * @param listConfigurations 
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_COURSECANCELLED_body(Course course, String mailComment) {
+    public static StringBuffer create_EMAIL_EVENT_COURSECANCELLED_body(Course course, String mailComment, Map<String, Configuration> configurationsMap) {
         StringBuffer msg = new StringBuffer();
 
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
-
-        msg.append("\n"); // empty line
-
+        if(!ApplicationResourcesUtil.isSVV()){
+        	msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
+        }
+        
         addMailComment(mailComment, msg);
 
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseCancelled.mail.body", " " + course.getName())));
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseCancelled.mail.body")) + "\n");
 
         msg.append("\n");
 
         // coursedetails are appended in separate method
-        appendCourseDetails(course, msg);
+        appendCourseDetails(course, msg, configurationsMap);
 
         msg.append("\n\n"); // empty lines
         
@@ -91,9 +94,6 @@ public class MailUtil {
 
         msg.append("\n\n"); // empty lines
 
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseCancelled.mail.body", " " + course.getName() + "\n")));
-
-        msg.append("\n\n");
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from")))	+ "\n");
         return msg;
     }
@@ -106,13 +106,16 @@ public class MailUtil {
 	 * @param mailComment
 	 *            Optional comment from the admin initiating the sending of this
 	 *            mail
+	 * @param configurationsMap 
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_COURSEDELETED_body(Course course, String mailComment) {
+    public static StringBuffer create_EMAIL_EVENT_COURSEDELETED_body(Course course, String mailComment, Map<String, Configuration> configurationsMap) {
         StringBuffer msg = new StringBuffer();
 
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
-        msg.append("\n");
+        if(!ApplicationResourcesUtil.isSVV()){
+	        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
+	        msg.append("\n");
+        }
         
         addMailComment(mailComment, msg);
 
@@ -121,7 +124,7 @@ public class MailUtil {
         msg.append("\n");
 
         // coursedetails are appended in separate method
-        appendCourseDetails(course, msg);
+        appendCourseDetails(course, msg, configurationsMap);
 
         msg.append("\n\n");
 
@@ -145,38 +148,55 @@ public class MailUtil {
 	 * @param reservationConfirmed
 	 *            Set to true if the reservation is confirmed, and to false if
 	 *            the attendee is on the waiting list
+	 * @param configurationsMap 
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_NOTIFICATION_body(Course course, String mailComment, boolean reservationConfirmed) {
+    public static StringBuffer create_EMAIL_EVENT_NOTIFICATION_body(Course course, Registration registration, String mailComment, boolean reservationConfirmed, Map<String, Configuration> configurationsMap) {
         StringBuffer msg = new StringBuffer();
 
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
-        msg.append("\n");
+        if(!ApplicationResourcesUtil.isSVV()){
+	        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
+	        msg.append("\n");
+        }
         
         addMailComment(mailComment, msg);
 
         if(reservationConfirmed)
-            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.mail.body.reserved")));
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.mail.body.reserved", course.getName())));
         else
-            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.mail.body.waitinglist")));
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.mail.body.waitinglist", course.getName())));
 
         msg.append("\n");
 
         // coursedetails are appended in separate method
-        appendCourseDetails(course, msg);
+        appendCourseDetails(course, msg, configurationsMap);
 
-        msg.append("\n\n"); // empty lines
+        msg.append("\n"); // empty line
 
-        addDetailsLink(course, msg);
+        if(registration != null){
+	        addParticipants(registration, msg);
+	        
+	        msg.append("\n"); // empty line
+	        
+	        if(ApplicationResourcesUtil.isSVV()){
+	        	addEditRegistrationLink(course, registration, msg);
+	        }
+	        else {
+	        	addDetailsLink(course, msg);
+	        	msg.append("\n"); // empty line
+	        	addCancelLink(course, registration, msg);
+	        }
+	        msg.append("\n");
+        }
         
-        msg.append("\n\n");
-
-        if(reservationConfirmed)
-            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.mail.footer.registered")));
-        else
-            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.mail.footer.waitinglist")));
-
-        msg.append("\n\n");
+        if(!ApplicationResourcesUtil.isSVV()){
+	        if(reservationConfirmed)
+	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.mail.footer.registered")));
+	        else
+	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.mail.footer.waitinglist")));
+        }
+        
+        msg.append("\n");
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from"))) + "\n");
         return msg;
     }
@@ -187,6 +207,7 @@ public class MailUtil {
 	 * 
 	 * @param course
 	 *            The course in question
+	 * @param configurationsMap 
 	 * @param mailComment
 	 *            Optional comment from the admin initiating the sending of this
 	 *            mail
@@ -195,7 +216,7 @@ public class MailUtil {
 	 *            the attendee is on the waiting list
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_NOTIFICATION_SUMMARY_body(Course course, String summary) {
+    public static StringBuffer create_EMAIL_EVENT_NOTIFICATION_SUMMARY_body(Course course, String summary, Map<String, Configuration> configurationsMap) {
         StringBuffer msg = new StringBuffer();
 
         String instructor = " " + course.getInstructor().getName() + " ";
@@ -211,13 +232,15 @@ public class MailUtil {
         msg.append("\n");
 
         // coursedetails are appended in separate method
-        appendCourseDetails(course, msg);
+        appendCourseDetails(course, msg, configurationsMap);
 
-        msg.append("\n\n"); // empty lines
+        msg.append("\n"); // empty lines
 
         addDetailsLink(course, msg);
         
-        msg.append("\n\n");
+        msg = new StringBuffer(msg.toString().replaceAll("&hash=<userhash/>", "")); // removes "&hash=<userhash/>" from link
+        
+        msg.append("\n");
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from"))) + "\n");
         return msg;
     }
@@ -236,9 +259,10 @@ public class MailUtil {
 	 * @param reservationConfirmed
 	 *            Set to true if the reservation is confirmed, and to false if
 	 *            the attendee is on the waiting list
+	 * @param configurationsMap 
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_WAITINGLIST_NOTIFICATION_body(Course course, Registration registration, String mailComment, boolean reservationConfirmed) {
+    public static StringBuffer create_EMAIL_EVENT_WAITINGLIST_NOTIFICATION_body(Course course, Registration registration, String mailComment, boolean reservationConfirmed, Map<String, Configuration> configurationsMap) {
         StringBuffer msg = new StringBuffer();
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
@@ -254,15 +278,24 @@ public class MailUtil {
         msg.append("\n");
 
         // coursedetails are appended in separate method
-        appendCourseDetails(course, msg);
+        appendCourseDetails(course, msg, configurationsMap);
 
         msg.append("\n\n"); // emptyt lines
+
+        addParticipants(registration, msg);
+
+        msg.append("\n"); // empty line
 
         addDetailsLink(course, msg);
 
         msg.append("\n"); // empty line
 
-        addCancelLink(course, registration, msg);
+        if(ApplicationResourcesUtil.isSVV()){
+        	addEditRegistrationLink(course, registration, msg);
+        }
+        else {
+        	addCancelLink(course, registration, msg);
+        }
 
         msg.append("\n\n");
 
@@ -287,13 +320,16 @@ public class MailUtil {
 	 *            The course in question
 	 * @param chargeOverdue
 	 *            If true unit has to pay for cancelled course
+	 * @param configurationsMap 
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_REGISTRATION_DELETED_body(Course course, boolean chargeOverdue) {
+    public static StringBuffer create_EMAIL_EVENT_REGISTRATION_CANCELLED_body(Course course, Registration registration, boolean chargeOverdue, Map<String, Configuration> configurationsMap) {
         StringBuffer msg = new StringBuffer();
 
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
-        msg.append("\n");
+        if(!ApplicationResourcesUtil.isSVV()){
+	        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
+	        msg.append("\n");
+        }
         
         if(chargeOverdue)
         	msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationDeleted.mail.body.chargeoverdue", course.getName())) + "\n");
@@ -303,11 +339,16 @@ public class MailUtil {
         msg.append("\n");
 
         // coursedetails are appended in separate method
-        appendCourseDetails(course, msg);
+        appendCourseDetails(course, msg, configurationsMap);
 
-        msg.append("\n\n");
+        msg.append("\n"); // empty line
+        
+        addParticipants(registration, msg);
 
-        addDetailsLink(course, msg);
+        if(!ApplicationResourcesUtil.isSVV()){
+	        msg.append("\n\n");
+	        addDetailsLink(course, msg);
+        }
         
         msg.append("\n");
         
@@ -325,16 +366,19 @@ public class MailUtil {
 	 * 
 	 * @param course
 	 *            The course in question
+	 * @param configurationsMap 
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_REGISTRATIONLIST_body(Course course) {
+    public static StringBuffer create_EMAIL_EVENT_REGISTRATIONLIST_body(Course course, Map<String, Configuration> configurationsMap) {
         StringBuffer msg = new StringBuffer();
 
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
-        msg.append("\n");
-        
+        if(!ApplicationResourcesUtil.isSVV()){
+	        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
+	        msg.append("\n");
+        }
+	        
         // coursedetails are appended in separate method
-        appendCourseDetails(course, msg);
+        appendCourseDetails(course, msg, configurationsMap);
 
         msg.append("\n\n");
 
@@ -357,9 +401,10 @@ public class MailUtil {
 	 * @param mailComment
 	 *            Optional comment from the admin initiating the sending of this
 	 *            mail
+	 * @param configurationsMap 
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST_body(Course course, String mailComment) {
+    public static StringBuffer create_EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST_body(Course course, String mailComment, Map<String, Configuration> configurationsMap) {
         StringBuffer msg = new StringBuffer();
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
@@ -372,7 +417,7 @@ public class MailUtil {
         msg.append("\n");
 
         // coursedetails are appended in separate method
-        appendCourseDetails(course, msg);
+        appendCourseDetails(course, msg, configurationsMap);
 
         msg.append("\n\n");
 
@@ -404,11 +449,13 @@ public class MailUtil {
 	 *            the attendee is on the waiting list
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_REGISTRATION_CONFIRMED_body(Course course, Registration registration, String mailComment) {
+    public static StringBuffer create_EMAIL_EVENT_REGISTRATION_CONFIRMED_body(Course course, Registration registration, String mailComment, Map<String, Configuration> configurationsMap) {
         StringBuffer msg = new StringBuffer();
         
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
-        msg.append("\n");
+        if(!ApplicationResourcesUtil.isSVV()){
+	        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
+	        msg.append("\n");
+        }
         
         // Include user defined comment if specified
         if (mailComment != null && StringUtils.isNotBlank(mailComment)) {
@@ -418,15 +465,22 @@ public class MailUtil {
         
         msg.append("\n"); // empty line
 
-        appendCourseDetails(course, msg);
+        appendCourseDetails(course, msg, configurationsMap);
 
-        msg.append("\n\n"); // empty lines
+        msg.append("\n"); // empty line
         
-        addDetailsLink(course, msg);
+        addParticipants(registration, msg);
 
         msg.append("\n"); // empty line
 
-        addCancelLink(course, registration, msg);
+        if(ApplicationResourcesUtil.isSVV()){
+        	addEditRegistrationLink(course, registration, msg);
+        }
+        else {
+        	addDetailsLink(course, msg);
+        	msg.append("\n"); // empty line
+        	addCancelLink(course, registration, msg);
+        }
 
         msg.append("\n"); // empty lines
 
@@ -446,11 +500,13 @@ public class MailUtil {
 	 *            mail
 	 * @return A complete mail body ready to be inserted into an e-mail object
 	 */
-    public static StringBuffer create_EMAIL_EVENT_NEW_COURSE_NOTIFICATION_body(Course course, String mailComment) {
+    public static StringBuffer create_EMAIL_EVENT_NEW_COURSE_NOTIFICATION_body(Course course, String mailComment, Map<String, Configuration> configurationsMap) {
         StringBuffer msg = new StringBuffer();
 
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
-        msg.append("\n");
+        if(!ApplicationResourcesUtil.isSVV()){
+	        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")));
+	        msg.append("\n");
+        }
         
         addMailComment(mailComment, msg);
 
@@ -459,7 +515,7 @@ public class MailUtil {
         msg.append("\n");
 
         // coursedetails are appended in separate method
-        appendCourseDetails(course, msg);
+        appendCourseDetails(course, msg, configurationsMap);
 
         msg.append("\n\n");
 
@@ -489,27 +545,35 @@ public class MailUtil {
 	}
 
 	/**
-	 * Adds link to details of current course
+	 * Adds number of participants (if > 1)
 	 * @param course
-	 * @param locale
-	 * @param messageSource
 	 * @param msg
 	 */
-    private static void addDetailsLink(Course course, StringBuffer msg) {
-    	// link til detaljer om registrering
-    	String baseurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.baseurl"));
-    	
-    	msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.findurlhere")) + "\n");
-    	String coursedetailurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.coursedetailurl", ""+course.getId()));
-    	msg.append(baseurl + coursedetailurl + "\n");
-    }
+	private static void addParticipants(Registration registration, StringBuffer msg){
+		if(registration.getParticipants() > 1){
+			msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registration.participants")) + ": " + registration.getParticipants() +  "\n");
+		}
+	}
+	
+	/**
+	 * Adds link to details of current course
+	 * 
+	 * @param course
+	 * @param msg
+	 */
+	private static void addDetailsLink(Course course, StringBuffer msg) {
+		// link til detaljer om registrering
+		String baseurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.baseurl"));
+
+		msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.findurlhere")) + "\n");
+		String coursedetailurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.coursedetailurl", "" + course.getId()));
+		msg.append(baseurl + coursedetailurl + "\n");
+	}
 
     /**
      * Adds link to direct cancellation of registration, including info about chargeoverdue if present
      * @param course
      * @param registration
-     * @param locale
-     * @param messageSource
      * @param msg
      */
     private static void addCancelLink(Course course, Registration registration, StringBuffer msg) {
@@ -523,6 +587,22 @@ public class MailUtil {
         if(course.getChargeoverdue()) msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationConfirmed.mail.footer.overdue")) + "\n");
 	}
 
+    /**
+     * Adds link to actual registration, including info about chargeoverdue if present
+     * @param course
+     * @param registration
+     * @param msg
+     */
+    private static void addEditRegistrationLink(Course course, Registration registration, StringBuffer msg) {
+    	String baseurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.baseurl"));
+
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.editregistration")) + "\n");
+        String editregistrationurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.editregistrationurl", new String[]{""+registration.getId(), ""+course.getId()}));
+        msg.append(baseurl + editregistrationurl + "\n");
+        
+        if(course.getChargeoverdue()) msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationConfirmed.mail.footer.overdue")) + "\n");
+	}
+
     
     /**
      * Adds course details to msg
@@ -530,39 +610,60 @@ public class MailUtil {
      * @param locale
      * @param messageSource
      * @param msg
+     * @param configurationsMap
      */
-	private static void appendCourseDetails(Course course, StringBuffer msg) {
+	private static void appendCourseDetails(Course course, StringBuffer msg, Map<String, Configuration> configurationsMap) {
 		// Include all the course details
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.name")) + ": "
                 + course.getName() + "\n");
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.type")) + ": "
-                + course.getType() + "\n");
+
+        if(!StringUtils.isEmpty(course.getType())){
+	        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.type")) + ": "
+	                + course.getType() + "\n");
+        }
+        
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.startTime"))
                 + ": "
                 + DateUtil.getDateTime(ApplicationResourcesUtil.getText("date.format") + " "
                         + ApplicationResourcesUtil.getText("time.format"), course.getStartTime()) + "\n");
+        
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.stopTime"))
                 + ": "
                 + DateUtil.getDateTime(ApplicationResourcesUtil.getText("date.format") + " "
                         + ApplicationResourcesUtil.getText("time.format"), course.getStopTime()) + "\n");
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.duration")) + ": "
-                + course.getDuration() + "\n");
+        
+        if(!StringUtils.isEmpty(course.getDuration()) && !course.getDuration().equals("N/A")){
+	        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.duration")) + ": "
+	                + course.getDuration() + "\n");
+        }
+        
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.organization")) + ": "
                 + course.getOrganization().getName() + "\n");
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.serviceArea")) + ": "
-                + course.getServiceArea().getName() + "\n");
+
+        if(course.getServiceArea() != null){
+	        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.serviceArea")) + ": "
+	                + course.getServiceArea().getName() + "\n");
+        }
+        
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.location")) + ": "
                 + course.getLocation().getName() + "\n");
 
-        if (course.getResponsible() != null) {
-            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.responsible")) + ": "
-                    + course.getResponsible().getFullName() + ", mailto:" + course.getResponsible().getEmail() + "\n");
+        if(!ApplicationResourcesUtil.isSVV()){
+	        if (course.getResponsible() != null) {
+	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.responsible")) + ": "
+	                    + course.getResponsible().getFullName() + ", mailto:" + course.getResponsible().getEmail() + "\n");
+	        }
+	
+	        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.instructor")) + ": "
+	                + course.getInstructor().getName() + ", mailto:" + course.getInstructor().getEmail() + "\n");
         }
-
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.instructor")) + ": "
-                + course.getInstructor().getName() + ", mailto:" + course.getInstructor().getEmail() + "\n");
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.description")) + ": "
-                + course.getDescription() + "\n");
+        
+		if (!StringUtils.isEmpty(course.getDescription())
+				&& Configuration.getActiveAcceptNull(configurationsMap.get("access.course.showDescriptionToPublic"))
+				&& Configuration.getActiveAcceptNull(configurationsMap.get("access.course.showDescription"))) {
+			msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.description")) + ": "
+					+ course.getDescription() + "\n");
+		}
 	}
 
     /**
@@ -601,6 +702,25 @@ public class MailUtil {
 	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.name")) + ": "
 	                    + course.getName() + "\n");
 	        }
+	        if (changedList.contains("status")) {
+	        	String status = "";
+	        	switch(course.getStatus()){
+	        	case 0:
+	        		status = "Opprettet";
+	        		break;
+	        	case 1:
+	        		status = "Ferdig";
+	        		break;
+	        	case 2:
+	        		status = "Publisert";
+	        		break;
+	        	case 3:
+	        		status = "Avlyst";
+	        		break;
+	        	}
+	        	msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.status")) + ": "
+	                    + status + "\n");
+	        }
 	        if (changedList.contains("type")) {
 	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.type")) + ": "
 	                    + course.getType() + "\n");
@@ -633,6 +753,7 @@ public class MailUtil {
 	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.location")) + ": "
 	                    + course.getLocation().getName() + "\n");
 	        }
+
 	        if (changedList.contains("responsible")) {
 	            if (course.getResponsible() != null) {
 	                msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.responsible")) + ": "
@@ -682,7 +803,11 @@ public class MailUtil {
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseChanged.mail.footer")));
 
         msg.append("\n\n");
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
+        
+        if(!ApplicationResourcesUtil.isSVV()){
+        	msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
+        }
+        
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from"))) + "\n");
 
         return msg;
@@ -736,19 +861,40 @@ public class MailUtil {
         String registered = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.phrase.registered"));
         String waiting = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.phrase.waitinglist"));
 
+        if(course.getStatus() == CourseStatus.COURSE_CANCELLED.intValue()){
+        	// ettersom kurset er avlyst er det naturlig å korrigere 
+        	// "du er påmeldt" til "du var påmeldt"
+        	// og "du står på venteliste til" til "du stod på venteliste til"
+        	// 
+        	registered = registered.replaceAll(" er ", " var ");
+        	waiting = waiting.replaceAll(" står ", " stod ");
+        }
+        
         for (Registration registration : registrations) {
             MimeMessage message = ((JavaMailSenderImpl) sender).createMimeMessage();
             MimeMessageHelper helper = null;
             try {
                 helper = new MimeMessageHelper(message, true, (ApplicationResourcesUtil.getText("mail.encoding")));
-                helper.setSubject(getSubject(registration, event, registered, waiting, course));
-                helper.setText(getBody(registration, msg, registered, waiting));
-                addCalendar(helper,event,course, registration);
+                String subject = getSubject(registration, event, registered, waiting, course);
+                if(subject != null){
+                	helper.setSubject(subject);
+                }
+                
+                String body = getBody(registration, msg, registered, waiting);
+                if(body == null){
+                	// det er ingen grunn til å sende ut en tom epost
+                	continue;
+                }
+                helper.setText(body);
 
-                helper.setTo(registration.getUser().getEmail()); // Bruker brukerens epostadresse. FKM-381
+                if(!ApplicationResourcesUtil.isSVV()){
+                	addCalendar(helper,event,course, registration);
+                }
+                
+                helper.setTo(registration.getEmail());
                 if(ccToResponsible) helper.setCc(course.getResponsible().getEmail());
                 
-                if (from != null && !from.equals(""))
+                if (!StringUtils.isEmpty(from))
                     helper.setFrom(from);
                 else {
                     helper.setFrom(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.default.from")));
@@ -809,8 +955,12 @@ public class MailUtil {
         case Constants.EMAIL_EVENT_COURSECHANGED:
         case Constants.EMAIL_EVENT_COURSECANCELLED:
             Calendar cal = getICalendar(course, registration);
-            ByteArrayResource bar = new ByteArrayResource(cal.toString().getBytes());
-            helper.addAttachment("calendar.ics", bar, "text/calendar; method=REQUEST");  
+            try {
+	            ByteArrayResource bar = new ByteArrayResource(cal.toString().getBytes(ApplicationResourcesUtil.getText("mail.encoding")));
+	            helper.addAttachment("calendar.ics", bar, "text/calendar; method=REQUEST; charset=\"" + ApplicationResourcesUtil.getText("mail.encoding") + "\"");  
+			} catch (UnsupportedEncodingException e) {
+				log.error("Bruk av mail.encoding=" + ApplicationResourcesUtil.getText("mail.encoding") + " fra properties feilet", e);
+			}
             break;
         }
     }
@@ -820,7 +970,7 @@ public class MailUtil {
         Calendar cal = null;
 
         try {
-            // Create an event
+            // Hent event for kurset
             VEvent event = getVEvent(course);
 
             try {
@@ -830,13 +980,6 @@ public class MailUtil {
             } catch (Exception ex) {
                 log.error("Could not create Attendee object");
             }
-
-            // // Set timezone
-            // VTimeZone tz = new VTimeZone();
-            // TzId tzParam = new
-            // TzId(tz.getProperties().getProperty(Property.TZID).getValue());
-            // TzId tzParam = new TzId(tz.getProperties().add(Property.TZID));
-            // event.getProperties().getProperty(Property.DTSTART).getParameters().add(tzParam);
 
             // Create calendar and add event
             cal = createCalendar();
@@ -863,7 +1006,7 @@ public class MailUtil {
         VEvent event = new VEvent(new DateTime(course.getStartTime()), new DateTime(course.getStopTime()), course
                 .getName());
 
-        UidGenerator ug = new UidGenerator(course.getId().toString());
+        UidGenerator ug = new UidGenerator("1");
         Uid uid = ug.generateUid();
         event.getProperties().add(uid);
         event.getProperties().add(Method.PUBLISH);
@@ -876,19 +1019,12 @@ public class MailUtil {
         StreetAddress streetAddress = new StreetAddress(course.getLocation().getAddress());
         event.getProperties().add(streetAddress);
 
-        try {
-            String link = ApplicationResourcesUtil.getText("javaapp.baseurl") + ApplicationResourcesUtil.getText("javaapp.courseurl") + course.getId();
-            Url url = new Url(new URI(null,link,null));
-            event.getProperties().add(url);
-        } catch (URISyntaxException e) {
-            // Wrong format
-        }
-
         if (course.getStatus().equals(CourseStatus.COURSE_CANCELLED)) {
             event.getProperties().add(Status.VEVENT_CANCELLED);
         } else {
             event.getProperties().add(Status.VEVENT_CONFIRMED);
         }
+
         if (course.getResponsible() != null) {
             try {
                 URI mailto = new URI("MAILTO", course.getResponsible().getEmail(), null);
@@ -896,6 +1032,15 @@ public class MailUtil {
                 event.getProperties().add(organizer);
             } catch (Exception ex) {
                 log.error("Could not create Organizer object");
+            }
+        }
+        
+        if (course.getDetailURL() != null && course.getDetailURL().length() > 0) {
+            try {
+                Url url = new Url(Uris.create(course.getDetailURL()));
+                event.getProperties().add(url);
+            } catch (Exception ex) {
+                log.error("Could not create Url object");
             }
         }
         return event;
@@ -921,57 +1066,57 @@ public class MailUtil {
         String coursename = course.getName();
         switch (event) {
         case Constants.EMAIL_EVENT_COURSECHANGED:
-            if (registration.getReserved()) {
+            if (registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.RESERVED) {
                 subject = StringEscapeUtils.unescapeHtml(
                 		ApplicationResourcesUtil.getText("courseChanged.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", registered).replaceAll("<coursename/>", coursename);
-            } else {
+            } else if(registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.WAITING){
                 subject = StringEscapeUtils.unescapeHtml(
                 		ApplicationResourcesUtil.getText("courseChanged.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", waiting).replaceAll("<coursename/>", coursename);
             }
             break;
         case Constants.EMAIL_EVENT_COURSECANCELLED:
-            if (registration.getReserved()) {
+            if (registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.RESERVED) {
                 subject = StringEscapeUtils.unescapeHtml(
                 		ApplicationResourcesUtil.getText("courseCancelled.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", registered).replaceAll("<coursename/>", coursename);
-            } else {
+            } else if(registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.WAITING){
                 subject = StringEscapeUtils.unescapeHtml(
                 		ApplicationResourcesUtil.getText("courseCancelled.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", waiting).replaceAll("<coursename/>", coursename);
             }
             break;
         case Constants.EMAIL_EVENT_COURSEDELETED:
-            if (registration.getReserved()) {
+            if (registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.RESERVED) {
                 subject = StringEscapeUtils.unescapeHtml(
                 		ApplicationResourcesUtil.getText("courseDeleted.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", registered).replaceAll("<coursename/>", coursename);
-            } else {
+            } else if(registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.WAITING){
                 subject = StringEscapeUtils.unescapeHtml(
                 		ApplicationResourcesUtil.getText("courseDeleted.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", waiting).replaceAll("<coursename/>", coursename);
             }
             break;
         case Constants.EMAIL_EVENT_NOTIFICATION:
-            if (registration.getReserved()) {
+            if (registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.RESERVED) {
                 subject = StringEscapeUtils.unescapeHtml(
                 		ApplicationResourcesUtil.getText("courseNotification.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", registered).replaceAll("<coursename/>", coursename);
-            } else {
+            } else if(registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.WAITING){
                 subject = StringEscapeUtils.unescapeHtml(
                 		ApplicationResourcesUtil.getText("courseNotification.mail.subject", coursename)).replaceAll(
                                 "<registeredfor/>", waiting).replaceAll("<coursename/>", coursename);
             }
             break;
         case Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION:
-            if (registration.getReserved()) {
+            if (registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.RESERVED) {
                 subject = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationComplete.mail.subject", coursename));
-            } else {
+            } else if(registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.WAITING){
                 subject = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationToWaitinglist.mail.subject", coursename));
             }
             break;
-        case Constants.EMAIL_EVENT_REGISTRATION_DELETED:
+        case Constants.EMAIL_EVENT_REGISTRATION_CANCELLED:
             subject = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationDeleted.mail.subject", coursename));
             break;
         case Constants.EMAIL_EVENT_REGISTRATION_MOVED_TO_WAITINGLIST:
@@ -988,9 +1133,9 @@ public class MailUtil {
 
     public static String getBody(Registration registration, StringBuffer msg, String registeredMsg, String waitingMsg) {
         String custom = msg.toString();
-        if (registration.getReserved()) {
+        if (registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.RESERVED) {
             custom = custom.replaceAll("<registeredfor/>", registeredMsg);
-        } else {
+        } else if(registration.getStatusAsEnum() == no.unified.soak.model.Registration.Status.WAITING){
             custom = custom.replaceAll("<registeredfor/>", waitingMsg);
         }
         custom = custom.replaceAll("<coursename/>", registration.getCourse().getName()).replaceAll("<userhash/>",
@@ -1044,19 +1189,52 @@ public class MailUtil {
 	 * @param mailSender
 	 */
 	public static void sendSummaryToResponsibleAndInstructor(Course course, String from, List<Registration> registrations, StringBuffer orginalMessageBody, MailEngine mailEngine, MailSender mailSender) {
-		String[] to = new String[] {course.getResponsible().getEmail()};
-		String[] cc = new String[] {course.getInstructor().getEmail()};
-		String subject = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.summarysubject", course.getName()));
-		String attendants = MailUtil.getAttendantsNameAndEmail(registrations);
-		StringBuffer summaryMsg = new StringBuffer();
-		summaryMsg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.summaryheader")) + ":\n\n");
-		summaryMsg.append(attendants);
-		summaryMsg.append("-- " + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.summarymiddle")) + " --\n");
-		String replacedorginalMessageBody = orginalMessageBody.toString().replace("&hash=<userhash/>", ""); // removed incomplete link-attribute
-		summaryMsg.append(replacedorginalMessageBody);
-		MimeMessage summary = getMailMessage(to, cc, null, from, subject, summaryMsg, null, null, mailSender);
-		mailEngine.send(summary);
+		try {
+			String[] to = new String[] {course.getResponsible().getEmail()};
+			String[] cc = new String[] {course.getInstructor().getEmail()};
+			String subject = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.summarysubject", course.getName()));
+			String attendants = MailUtil.getAttendantsNameAndEmail(registrations);
+			StringBuffer summaryMsg = new StringBuffer();
+			summaryMsg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.summaryheader")) + ":\n\n");
+			summaryMsg.append(attendants);
+			summaryMsg.append("-- " + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseNotification.summarymiddle")) + " --\n");
+			String replacedorginalMessageBody = orginalMessageBody.toString().replace("&hash=<userhash/>", ""); // removed incomplete link-attribute
+			summaryMsg.append(replacedorginalMessageBody);
+			MimeMessage summary = getMailMessage(to, cc, null, from, subject, summaryMsg, null, null, mailSender);
+			mailEngine.send(summary);
+		}catch(Exception e){
+			log.error("Sending of email failed", e);
+		}
 	}
+	
+	
+	public static void sendCourseCreatedMailToResponsible(Course course, MailEngine mailEngine, MailSender mailSender, Map<String, Configuration> configurationsMap){
+		String[] to = {course.getResponsible().getEmail()};
+		String from = null; // default from is used
+		
+		String start = DateUtil.convertDateToString(course.getStartTime());
+		String subject = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseCreated.subject", new Object[]{course.getName(), start, course.getLocation().getName()}));
+		
+		StringBuffer msg = new StringBuffer();
+		if(course.getStatus() == CourseStatus.COURSE_CREATED){
+			msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.status.created") + "\n\n"));
+		}
+		else if(course.getStatus() == CourseStatus.COURSE_FINISHED){
+			msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.status.finished") + "\n\n"));
+		}
+		else {
+			msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.status.published") + "\n\n"));
+		}
+				
+		appendCourseDetails(course, msg, configurationsMap);
+		msg.append("\n");
+		addDetailsLink(course, msg);
+		msg = new StringBuffer(msg.toString().replaceAll("&hash=<userhash/>", ""));
+		
+		MimeMessage created = getMailMessage(to, null, null, from, subject, msg, null, null, mailSender);
+		mailEngine.send(created);
+	}
+	
 
 
 }

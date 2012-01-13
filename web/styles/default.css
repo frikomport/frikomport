@@ -11,7 +11,7 @@
 }
 
 table {
-	font-size: 100%; //1.0em; /* IE5.x fix */
+	font-size: 100%; /* IE5.x fix. Could have used 1.0em; */
 }
 
 a {
@@ -24,8 +24,8 @@ a:visited, body#login div#menu a:visited  {
 
 a:hover {
     background-color: transparent;
-    color: #0000ff !important; 
-    text-decoration: none; //underline overline;
+    color: #0000ff; 
+    text-decoration: none;
 }
 
 a img { border: 0 }
@@ -39,7 +39,7 @@ body {
     background: #FFFFFF;
     color: #000000;
     font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 0.6em; //12px;
+    font-size: 0.6em; /* 12px; */
     margin: 0 !important;
     padding: 0 !important;
 }
@@ -58,16 +58,16 @@ div#activeUsers {
     color: #000;
 }
 
-div#content {
+div#fkp-content {
     margin: 0px 10px 10px 1px;
-    padding: 10px 10px 10px 0px;
+    padding: 10px 0px 10px 0px;
     text-align: left;
 }
 
-div#content>p {margin:10px 0px}
+div#fkp-content>p {margin:10px 0px}
 
 
-/*div#content button {
+/*div#fkp-content button {
 	margin-top: 0.3em;
 	margin-bottom: 0.3em;
 }*/
@@ -101,10 +101,6 @@ select#categoryid {
 select#courseid {
     width: 280px;
     max-width: 280px;
-}
-input#name {
-    width: 100px;
-    max-width: 100px;
 }
 
 div#footer {
@@ -262,12 +258,10 @@ input.button {
     color: #000;
     padding-left: 1px;
     background-image: url(../images/btn_bg.png);
-
 }
 
 input.button {
     /* fix button size in IE */
-    //line-height: 17px;
 }
 
 form input.focus, form textarea.focus {
@@ -291,7 +285,7 @@ h1 {
 
 h2 {
 	margin: 0;
-	font-size: 1em; //10px;
+	font-size: 1em; /* 10px; */
 	font-weight: bold;
 	color: #000;
 	padding-top: 2px;
@@ -357,6 +351,9 @@ table.detail {
     font-weight: normal;
 }
 
+div.screen {
+margin:0 0 0 -2px;
+}
 
 table tbody td button {
   vertical-align: middle;
@@ -454,12 +451,13 @@ table.pickList td select {
 }
 
 th, td, pre, code {
-    font-size: 1.0em; //12px; //uc
+    font-size: 1.0em; /* 12px; */
 }
 
-th label {
+th label,
+form label {
 	margin: 0;
-	font-size: 1.0em; //10px;
+	font-size: 1.0em; /* 10px; */
 	font-weight: bold;
 	color: #000;
 	padding-top: 2px;
@@ -477,9 +475,9 @@ pre {
     color: #000000;
     padding: 5px 5px 5px 7px;
 }
-div#content table th {
+div#fkp-content table th {
 	margin: 0;
-	font-size: 1.0em; //10px;
+	font-size: 1.0em; /* 10px; */
 	font-weight: bold;
 	color: #000;
 	padding-top: 3px;
@@ -493,4 +491,15 @@ thead th.sortable {
 
 td.canceled, tr.canceled {
 	text-decoration:line-through;
+}
+
+#loggedin {
+	text-align: right;
+	display:none;
+	font-size: 0.8em;
+}
+
+tr.sum, 
+td.sum {
+	font-weight:bold;
 }
