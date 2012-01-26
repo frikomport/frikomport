@@ -501,6 +501,16 @@ public class CourseFormController extends BaseFormController {
 				args = new Object[] {};
 			}
 
+			if(isNew && isDuplicate(course)){
+				errors.rejectValue("name", "", new Object[] { course.getName() },
+						"Kombinasjon av kursnavn, starttidspunkt og lokale finnes allerede!");
+				errors.rejectValue("startTime", "", new Object[] { course.getName() },
+						"Kombinasjon av kursnavn, starttidspunkt og lokale finnes allerede!");
+				errors.rejectValue("locationid", "", new Object[] { course.getLocationid() },
+						"Kombinasjon av kursnavn, starttidspunkt og lokale finnes allerede!");
+				args = new Object[] {};
+			}
+			
 			if (course.getAttendants() != null && new Date().before(course.getStartTime())) {
 				args = new Object[] { DateUtil.convertDateToString(new Date()) };
 				errors.rejectValue("attendants", "errors.toearlytosaveAttendants", args,
@@ -825,4 +835,14 @@ public class CourseFormController extends BaseFormController {
 		}
     }
 
+
+    /**
+     * Checks if course with name + starttime exists from before (to avoid duplicates)
+     * @param newCourse
+     * @return true if duplicate exists
+     */
+    private boolean isDuplicate(Course newCourse){
+    	return courseManager.checkIfCourseExist(newCourse.getName(), newCourse.getStartTime(), newCourse.getLocationid());
+    }
+    
 }

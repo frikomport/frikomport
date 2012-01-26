@@ -63,6 +63,8 @@ public interface CourseManager extends Manager {
      */
     public List<Course> searchCourses(Course course, Date startTime, Date stopTime, Integer[] status);
 
+    public boolean checkIfCourseExist(String courseName, Date startDate, Long locationid);
+    
     /**
      * Gets all unpublished courses
      * @return List of courses with status 0 @param user @param course

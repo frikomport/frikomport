@@ -16,8 +16,8 @@ import java.util.Set;
 
 import no.unified.soak.validation.LessThanField;
 import no.unified.soak.validation.MinValue;
+import no.unified.soak.validation.NotLessThanField;
 import no.unified.soak.validation.Required;
-import no.unified.soak.validation.ValidateOnlyIfConfigurationIsTrue;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -423,6 +423,7 @@ public class Course extends BaseObject implements Serializable {
      * @spring.validator type="required"
      */
     @Required
+    @NotLessThanField("registerStart")
     @LessThanField("stopTime")
     public void setRegisterBy(Date registerBy) {
         this.registerBy = registerBy;

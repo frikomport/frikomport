@@ -51,6 +51,7 @@ public interface CourseDAO extends DAO {
     public void removeCourse(final Long id);
 
     /**
+     * NB! Uses "like '%name%' for searching
      * Searches for all courses that apples to the conditions given
      * @param course contains the parameteres used for searching
      * @param startDate Course has to have the start date by this date
@@ -59,6 +60,15 @@ public interface CourseDAO extends DAO {
      */
     public List<Course> searchCourses(Course course, Date startDate, Date stopDate, Integer[] status, boolean showUntilFinished);
 
+    /**
+     * Check if courseName exists from before at given time and location
+     * @param courseName
+     * @param startDate
+     * @param location
+     * @return true if a course exists according to criterias
+     */
+    public boolean checkIfCourseExist(String courseName, Date startDate, Long locationid);
+    
     /**
      * Finds all courses in the timespan between registerBy and startTime
      *

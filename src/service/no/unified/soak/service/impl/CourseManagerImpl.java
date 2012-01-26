@@ -125,6 +125,10 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
     	}
     }
 
+    public boolean checkIfCourseExist(String courseName, Date startDate, Long locationid){
+		return courseDAO.checkIfCourseExist(courseName, startDate, locationid);
+    }
+    
     /**
      * @see no.unified.soak.service.CourseManager#getWaitingListCourses()
      */

@@ -18,8 +18,8 @@ import java.util.List;
 import no.unified.soak.dao.CourseDAO;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Organization;
-import no.unified.soak.model.Person;
 import no.unified.soak.model.Organization.Type;
+import no.unified.soak.model.Person;
 import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.CourseStatus;
 
@@ -164,6 +164,31 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
         return getHibernateTemplate().findByCriteria(criteria);
     }
 
+    
+    /**
+     * @see no.unified.soak.dao.CourseDAO#checkIfCourseExist(String, Date, Long)
+     */
+    public boolean checkIfCourseExist(String courseName, Date startDate, Long locationid){
+
+    	if(StringUtils.isEmpty(courseName)) return false; // no reason to check for duplicate
+    	
+    	DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
+    	
+        criteria.add(Restrictions.eq("name", courseName).ignoreCase());
+
+        if (startDate != null) {
+            criteria.add(Restrictions.eq("startTime", startDate));
+        }
+
+        if (locationid != null) {
+            criteria.add(Restrictions.eq("locationid", locationid));
+        }
+        
+        // size == 0 - no duplicate
+        return getHibernateTemplate().findByCriteria(criteria).size() > 0;
+    }
+
+    
     /**
 	 * @see no.unified.soak.dao.CourseDAO#getWaitingListCourses()
 	 */

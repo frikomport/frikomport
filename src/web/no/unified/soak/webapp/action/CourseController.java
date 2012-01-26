@@ -266,6 +266,11 @@ public class CourseController extends BaseFormController {
         		status = new Integer[]{ CourseStatus.COURSE_PUBLISHED };
                 model.put("enableExport", new Boolean(false));
         	}
+        	else if(roles.contains(Constants.ANONYMOUS_ROLE) && roles.contains(Constants.EMPLOYEE_ROLE) && roles.size() == 2){ 
+        		// publikumsbruker
+        		status = new Integer[]{ CourseStatus.COURSE_PUBLISHED };
+                model.put("enableExport", new Boolean(false));
+        	}
         	else{ 
         		// isReader / isEventResponsible / isEducationResponsible / isAdministrator
         			status = new Integer[]{ CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED, CourseStatus.COURSE_CANCELLED };
@@ -579,7 +584,13 @@ public class CourseController extends BaseFormController {
 				// publikumsbruker
 				status = new Integer[] { CourseStatus.COURSE_PUBLISHED };
                 model.put("enableExport", new Boolean(false));
-			} else {
+			} 
+        	else if(roles.contains(Constants.ANONYMOUS_ROLE) && roles.contains(Constants.EMPLOYEE_ROLE) && roles.size() == 2){ 
+        		// publikumsbruker
+        		status = new Integer[]{ CourseStatus.COURSE_PUBLISHED };
+                model.put("enableExport", new Boolean(false));
+        	}
+			else {
 				// isReader / isEventResponsible / isEducationResponsible / isAdministrator
 				status = new Integer[] { CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED, CourseStatus.COURSE_CANCELLED };
 			}

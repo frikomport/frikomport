@@ -37,6 +37,7 @@ import no.unified.soak.validation.LessThanField;
 import no.unified.soak.validation.MaxLength;
 import no.unified.soak.validation.MinLength;
 import no.unified.soak.validation.MinValue;
+import no.unified.soak.validation.NotLessThanField;
 import no.unified.soak.validation.Required;
 import no.unified.soak.validation.ValidateOnlyIfConfigurationIsTrue;
 
@@ -349,6 +350,7 @@ public class BaseFormController extends SimpleFormController {
 			i += validateMinLength(obj, errors, method, referencingObjectFieldnamePrefix);
 			i += validateMaxLength(obj, errors, method, referencingObjectFieldnamePrefix);
 			i += validateLessThanField(obj, errors, method, referencingObjectFieldnamePrefix);
+			i += validateNotLessThanField(obj, errors, method, referencingObjectFieldnamePrefix);
 		}
 		return i;
 	}
@@ -386,6 +388,51 @@ public class BaseFormController extends SimpleFormController {
 
 				} else if (lessThanFieldValue != null) {
 					log.warn("Feil under validering av regel lessThanField for feltet " + lessThanField
+							+ ": Kan ikke validere felt av datatypen " + methodResult.getClass());
+					return nErrors;
+				}
+
+			} catch (Exception e) {
+				log.warn("Feil under validering av " + fieldName + ": " + e);
+			}
+		}
+
+		return nErrors;
+	}
+
+	private int validateNotLessThanField(Object obj, BindException errors, Method method, String referencingObjectFieldnamePrefix) {
+		int nErrors = 0;
+		NotLessThanField notLessThanFieldAnnotation = method.getAnnotation(NotLessThanField.class);
+		if (notLessThanFieldAnnotation != null) {
+			String fieldNameCamelCase = method.getName().substring(3);
+			String fieldName = lowercaseFirstLetter(fieldNameCamelCase);
+			Class<? extends Object> objClass = obj.getClass();
+
+			try {
+				Method getMethod = objClass.getMethod("get" + fieldNameCamelCase);
+				Object methodResult = getMethod.invoke(obj);
+				if (methodResult == null) {
+					return nErrors;
+				}
+
+				String notLessThanField = notLessThanFieldAnnotation.value();
+				Object notLessThanFieldValue = callGetterOfField(obj, notLessThanField);
+				if (notLessThanFieldValue instanceof Date && methodResult instanceof Date) {
+					Date notLessThanFieldValueDate = (Date) notLessThanFieldValue;
+					if (((Date) methodResult).before(notLessThanFieldValueDate)) {
+						String fieldText = getFieldDisplayName(obj, referencingObjectFieldnamePrefix + fieldName);
+						String notLessThanFieldsText = getFieldDisplayName(obj, referencingObjectFieldnamePrefix + notLessThanField);
+						String notLessThanValueMessage = DateUtil.getDateTime("dd.MM.yyyy HH:mm", notLessThanFieldValueDate) + " ("
+								+ notLessThanFieldsText + ")";
+						
+						Object[] args = new Object[] { fieldText, notLessThanValueMessage };
+						nErrors = 1;
+						errors.rejectValue(referencingObjectFieldnamePrefix + fieldName, "errors.XCanNotBeLessThanY", args,
+								fieldName + " can not be lower than " + notLessThanValueMessage + ".");
+					}
+
+				} else if (notLessThanFieldValue != null) {
+					log.warn("Feil under validering av regel notLessThanField for feltet " + notLessThanField
 							+ ": Kan ikke validere felt av datatypen " + methodResult.getClass());
 					return nErrors;
 				}
@@ -562,14 +609,18 @@ public class BaseFormController extends SimpleFormController {
 				Method getMethod = objClass.getMethod("get" + fieldNameCamelCase);
 				Object methodResult = getMethod.invoke(obj);
 
-				int minValue = Integer.parseInt(minValueAnnotation.value());
 				String fieldText = getFieldDisplayName(obj, referencingObjectFieldnamePrefix+fieldName);
-				if (methodResult != null && methodResult instanceof Integer && ((Integer) methodResult) < minValue) {
-					Object[] args = new Object[] { fieldText, minValue };
-					nErrors = 1;
-					errors.rejectValue(referencingObjectFieldnamePrefix+fieldName, "errors.XCanNotBeLessThanY", args, fieldName + " can not be lower than "
-							+ minValue + ".");
-				} else if (methodResult != null && !(methodResult instanceof Integer)) {
+
+				if (methodResult != null && methodResult instanceof Integer){
+					int minValue = Integer.parseInt(minValueAnnotation.value());
+					if(((Integer) methodResult) < minValue){
+						Object[] args = new Object[] { fieldText, minValue };
+						nErrors = 1;
+						errors.rejectValue(referencingObjectFieldnamePrefix+fieldName, "errors.XCanNotBeLessThanY", args, fieldName + " can not be lower than "
+								+ minValue + ".");
+					}
+				}
+				else if (methodResult != null && !(methodResult instanceof Integer)) {
 					Object[] args = new Object[] { fieldText };
 					nErrors = 1;
 					errors.rejectValue(referencingObjectFieldnamePrefix+fieldName, "errors.integer", args, fieldName + " must be an integer number.");
