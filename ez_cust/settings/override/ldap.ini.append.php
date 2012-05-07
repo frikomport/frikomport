@@ -34,7 +34,7 @@ LDAPLoginAttribute=samaccountname
 LDAPUserGroupType=name
 # Default place to store LDAP users. Could be content object id or group name for LDAP user group,
 # depends on LDAPUserGroupType.
-LDAPUserGroup[]=
+LDAPUserGroup[]=Ansatte
 
 # Group mapping settings:
 # Possible values: UseGroupAttribute (old style group assignig using LDAPUserGroupAttribute setting),
