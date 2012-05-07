@@ -7,6 +7,8 @@ SessionTimeout=7200
 
 [UserSettings]
 LogoutRedirect=/
+LoginHandler[]=standard
+#LoginHandler[]=LDAP
 
 [SiteSettings]
 DefaultAccess=fkp_nob
