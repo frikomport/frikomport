@@ -45,7 +45,6 @@ ContentObjectLocale=eng-GB
 TranslationList=nno-NO;nor-NO;eng-GB
 
 [ExtensionSettings]
-ActiveExtensions[]=enhancedselection
 ActiveExtensions[]=ezdhtml
 ActiveExtensions[]=fkp
 ActiveExtensions[]=fkp_oppl
@@ -54,10 +53,10 @@ ActiveExtensions[]=nusoap
 
 [DatabaseSettings]
 DatabaseImplementation=ezmysql
-Server=localhost
-User=frikom_ez
-Password=frikom_ez
-Database=frikom_ezdb
+Server=$SERVER$
+User=$USER$
+Password=$PASSWORD$
+Database=$DATABASE$
 Charset=
 Socket=disabled
 */ ?>

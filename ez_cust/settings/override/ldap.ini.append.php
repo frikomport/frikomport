@@ -9,15 +9,15 @@ LDAPVersion=3
 LDAPEnabled=true
 # LDAP host
 #LDAPServer=ldaps://hostname
-LDAPServer=
+LDAPServer=$LDAPSERVER$
 # Port nr for LDAP, default is 389, LDAPS is 636
-LDAPPort=
+LDAPPort=$LDAPPORT$
 # Specifies the base DN for the directory.
-LDAPBaseDn=
+LDAPBaseDn=$LDAPBASEDN$
 # If the server does not allow anonymous bind, specify the user name for the bind here. AD requires the form username@domain
-LDAPBindUser=
+LDAPBindUser=$LDAPUSER$
 # If the server does not allow anonymous bind, specify the password for the bind here.
-LDAPBindPassword=
+LDAPBindPassword=$LDAPPASSWORD$
 # Could be sub, one, base.
 LDAPSearchScope=sub
 # Use the equla sign to replace "=" when specify LDAPBaseDn or LDAPSearchFilters
@@ -28,7 +28,7 @@ LDAPEqualSign=--
 #LDAPSearchFilters[]=memberOf--*
 #LDAPSearchFilters[]=!(objectClass--computer)
 
-# LDAP attribute for login. Normally, uid
+# LDAP attribute for login. Normally, uid. AD uses samaccountname
 LDAPLoginAttribute=samaccountname
 # Could be id or name
 LDAPUserGroupType=name
