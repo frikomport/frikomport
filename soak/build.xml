@@ -462,6 +462,7 @@
             <lib file="${sitemesh.jar}"/>
             <lib dir="${velocity.dir}" includes="*.jar"/>   
             <lib file="${urlrewrite.jar}"/>
+			<lib file="${mysql.jar}"/>
         </war>
     	
     	<ear appxml="ear/META-INF/application.xml" destfile="${webapp.dist}/${webapp.name}.ear">
