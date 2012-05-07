@@ -14,10 +14,6 @@
         <translation>Kursoversikt</translation>
     </message>
     <message>
-        <source>Accomplished courses</source>
-        <translation>Gjennomførde kurs</translation>
-    </message>
-    <message>
         <source>Edit profile</source>
         <translation>Rediger profil</translation>
     </message>
@@ -27,7 +23,7 @@
     </message>
     <message>
         <source>Instructor list</source>
-        <translation>Instruktørar</translation>
+        <translation>Instruktører</translation>
     </message>
     <message>
         <source>Responsible list</source>
@@ -35,7 +31,7 @@
     </message>
     <message>
         <source>Commune list</source>
-        <translation>Kommuneliste</translation>
+        <translation>Organisasjoner</translation>
     </message>
     <message>
         <source>Locations list</source>
@@ -43,11 +39,11 @@
     </message>
     <message>
         <source>Fields of service list</source>
-        <translation>Tjenesteområdar</translation>
+        <translation>Tjenesteområder</translation>
     </message>
     <message>
         <source>attendee list</source>
-        <translation>Påmeldingar</translation>
+        <translation>Påmeldinger</translation>
     </message>
     <message>
         <source>User management</source>
@@ -56,6 +52,10 @@
     <message>
         <source>User list</source>
         <translation>Brukarliste</translation>
+    </message>
+    <message>
+        <source>Statistics</source>
+        <translation>Statistikk</translation>
     </message>
     <message>
         <source>Configuration</source>

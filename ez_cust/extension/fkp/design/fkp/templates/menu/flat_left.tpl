@@ -1,12 +1,26 @@
 <div id="leftmenu">
 <div id="leftmenu-design">
 
+
+{def $item=fetch('content', 'node', hash('node_id', 77))}
+
+{*
+	{def $item=fetch('content', 'node', hash('parent_node_id', 2, 'class_filter_type', 'include', 'class_filter_array', array('folder')))}
+	is_set( $module_result.node_id )|choose( 93, $module_result.node_id ), 93,
+*}
+
 {let docs=treemenu( $module_result.path,
                     is_set( $module_result.node_id )|choose( 93, $module_result.node_id ),
                     ezini( 'MenuContentSettings', 'LeftIdentifierList', 'menu.ini' ),
                     0 , 5 )
                     depth=1
                     last_level=1}
+{*
+<br/>node_id=[{$module_result.node_id}]<br/>
+{$docs|attribute('show', 3)}
+<br/>exini=[{ezini( 'MenuContentSettings', 'LeftIdentifierList', 'menu.ini' )|attribute('show')}]
+*}
+
 
 {if $docs|count|gt(0)}
 	  {section var=menu loop=$:docs last-value}
@@ -16,6 +30,10 @@
 			</div>
 			{set depth=$menu.level}
 	  {/section}
+{else}
+			<div class="menuContainer-level-0">
+			<a href={$item.url_alias|ezurl}>{$item.name|shorten( 25 )}</a>
+			</div>
 {/if}
     
 {def $user=fetch( 'user', 'current_user' )}
@@ -48,10 +66,6 @@
 	
 	<div class="menuContainer-level-0"><a href={concat($urls.url_alias, $urls.course_listURL)|ezurl}>{"Course list"|i18n("extension/fkp/menu")}</a></div> 
 	
-	{if or($isAdmin, $isOppl, $isKursansv)}
-        <div class="menuContainer-level-0"><a href={concat($urls.url_alias, $urls.historic_course_listURL)|ezurl}>{"Accomplished courses"|i18n("extension/fkp/menu")}</a></div> 
-    {/if}
-	
     {if or($isAdmin, $isOppl, $isKursansv)}
 		<div class="menuContainer-level-0"><a href={concat($urls.url_alias, $urls.attendee_listURL)|ezurl}>{"attendee list"|i18n("extension/fkp/menu")}</a></div> 
 		<div class="menuContainer-level-0"><a href={concat($urls.url_alias, $urls.Instructor_listURL)|ezurl}>{"Instructor list"|i18n("extension/fkp/menu")}</a></div>
@@ -72,12 +86,21 @@
         <div class="menuContainer-level-0"><a href={concat($urls.url_alias, $urls.user_listURL)|ezurl}>{"User list"|i18n("extension/fkp/menu")}</a></div> 
 	{/if}
 
+    	{if or($isAdmin, $isOppl, $isKursansv)}
+        	<div class="menuContainer-level-0"><a href={concat($urls.url_alias, $urls.statistics_url)|ezurl}>{"Statistics"|i18n("extension/fkp/menu")}</a></div>
+	{/if}
+
     {if or($isAdmin)}
         <div class="menuContainer-level-0"><a href={concat($urls.url_alias, $urls.ConfigurationURL)|ezurl}>{"Configuration"|i18n("extension/fkp/menu")}</a></div> 
     {/if}
 
 
 {/let}
+
+{*
+{Tester tilgang til funksjon "fetchURL": [{def $rates=fetch( 'fkp', 'fetchURL' )}{$rates.exthttp_result}]
+{undef}
+*}
 
 </div>
 </div>

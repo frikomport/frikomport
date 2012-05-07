@@ -74,6 +74,7 @@ _SERVER["REQUEST_URI"]
        $result['user_listURL'] =& $xmlini->variable( 'URLs', 'User_list_URLParam' );
        $result['editProfile_URL'] =& $xmlini->variable( 'URLs', 'EditProfile_URLParam' );
        $result['profile_URL'] =& $xmlini->variable( 'URLs', 'Profile_URLParam' );
+       $result['statistics_url'] =& $xmlini->variable( 'URLs', 'Statistics_URLParam' );
 
 		return array( 'result' => $result );
 	}
@@ -100,14 +101,17 @@ _SERVER["REQUEST_URI"]
       
        
 		
+		if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+          		$extensionURL .= $_SERVER['HTTP_X_FORWARDED_FOR'];
 		
       		
-		//	Use REMOTE_ADDR when FriKomPort is hosted by LinuxLabs	
-		//if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-		//	$extensionURL .= $_SERVER['HTTP_X_FORWARDED_FOR'];
-	  	if (isset($_SERVER['REMOTE_ADDR'])) {
-	       	$extensionURL .= $_SERVER['REMOTE_ADDR'];
-			$hostname = $_SERVER['REMOTE_HOST'];
+	//	Use REMOTE_ADDR when FriKomPort is hosted by LinuxLabs	
+	//  			if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+	//          		$extensionURL .= $_SERVER['REMOTE_ADDR'];
+		
+
+
+		$hostname = $_SERVER['REMOTE_HOST'];
 		}
 
  

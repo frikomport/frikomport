@@ -14,10 +14,6 @@
         <translation>Kursoversikt</translation>
     </message>
     <message>
-        <source>Accomplished courses</source>
-        <translation>Gjennomførte kurs</translation>
-    </message>
-    <message>
         <source>Edit profile</source>
         <translation>Rediger profil</translation>
     </message>
@@ -35,7 +31,7 @@
     </message>
     <message>
         <source>Commune list</source>
-        <translation>Kommuneliste</translation>
+        <translation>Organisasjoner</translation>
     </message>
     <message>
         <source>Locations list</source>
@@ -56,6 +52,10 @@
     <message>
         <source>User list</source>
         <translation>Brukerliste</translation>
+    </message>
+    <message>
+        <source>Statistics</source>
+        <translation>Statistikk</translation>
     </message>
     <message>
         <source>Configuration</source>
