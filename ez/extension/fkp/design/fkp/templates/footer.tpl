@@ -1,0 +1,2 @@
+  <div id="footer">&copy;2006 <a href="http://www.frikomport.no" target="_blank">FriKomPort</a> | Drevet av <a href="http://ez.no"  target="_blank">eZ publish&reg;</a> 
+&aring;pen kildekode innholdsh&aring;ndteringssystem og utviklingsmilj&oslash;.</div>

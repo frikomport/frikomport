@@ -1,0 +1,60 @@
+/******************************************************
+/* framework.css
+/* Developed by Objectnet AS
+/* 
+/* By using relative measure % (or em) instead of absolute
+/* measure px for font-size, it is possible to resize text size in IE.
+/******************************************************/
+
+/***** selfregisterlink *****/
+#registerLink {
+    visibility: hidden;
+}
+
+/***** logo styles *****/
+.toolbar_image {
+	top: 8 px;
+}
+
+.logo {
+	position: absolute;
+	top: 8px;
+	left: 13px;
+}
+
+.siljanvapen {
+	position: absolute;
+	top: 8px;
+	left: 470px;
+}
+
+.porsgrunnvapen {
+	position: absolute;
+	top: 8px;
+	left: 400px;
+}
+
+.bamblevapen {
+	position: absolute;
+	top: 8px;
+	left: 190px;
+}
+
+.skienvapen {
+	position: absolute;
+	top: 8px;
+	left: 540px;
+}
+
+.drangedalvapen {
+	position: absolute;
+	top: 8px;
+	left: 260px;
+}
+
+.kragerovapen {
+	position: absolute;
+	top: 8px;
+	left: 330px;
+}
+

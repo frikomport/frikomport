@@ -1,0 +1,2 @@
+<a href="http://www.uia.no/no/content/view/full/7778">{'Contact'|i18n( 'extension/fkp/layout' )}</a> 
+<a href="http://www.uia.no/no/content/view/full/23452">{'Vacancies'|i18n( 'extension/fkp/layout' )}</a> 

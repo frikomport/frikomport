@@ -1,0 +1,2 @@
+<a href={'fkp/exthttp?url=/listCourses.html?mid=1%26historic=0'|ezurl}><img src=
+{'motstoff.gif'|ezimage} alt="Kurs arrangert av Landsforbundet mot Stoffmisbruk" title="Kurs arrangert av Landsforbundet mot Stoffmisbruk" height="50" border=0 class="motstoffvapen"/></a>
