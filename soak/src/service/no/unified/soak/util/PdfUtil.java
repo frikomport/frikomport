@@ -268,16 +268,11 @@ public class PdfUtil {
 			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.firstName")), 15);
 			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.lastName")), 15);
 			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.email")), 26);
-
-			if(ApplicationResourcesUtil.isSVV()){
-				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.organization")), 11);
-			}else{
-				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.municipality")), 11);
-			}
+			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.organization")), 11);
 
 			if(!ApplicationResourcesUtil.isSVV()){
 				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.jobTitle")), 13);
-				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.servicearea")), 13);
+				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.servicearea.short")), 13);
 				tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.workplace")), 12);
 			}
 			
