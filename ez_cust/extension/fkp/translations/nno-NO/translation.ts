@@ -31,7 +31,7 @@
     </message>
     <message>
         <source>Commune list</source>
-        <translation>Organisasjoner</translation>
+        <translation>Virksomheter</translation>
     </message>
     <message>
         <source>Locations list</source>
@@ -39,7 +39,7 @@
     </message>
     <message>
         <source>Fields of service list</source>
-        <translation>Tjenesteområder</translation>
+        <translation>Virksomhetsområder</translation>
     </message>
     <message>
         <source>attendee list</source>
