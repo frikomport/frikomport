@@ -46,17 +46,17 @@ cal1.setTodayText("Idag");
 	<display:table name="${statisticsRows}" cellspacing="0" cellpadding="0" 
 	    id="statisticsRows" pagesize="${itemCount}" class="list" export="true" requestURI="statistics.html">
 		
-		<!--  REGION -->
+		<!--  VIRKSOMHETER -->
 		<c:set var="levelTd" value="level2" />
 		<display:setProperty name="css.tr.even" value=""/>
 		<display:setProperty name="css.tr.odd" value=""/>
 
-		<!--  HELE LANDET / SUM -->
+		<!--  ALLE VIRKSOMHETER / SUM -->
 		<c:if test="${empty statisticsRows.unitParent}">
 			<c:set var="levelTd" value="level1" />
 		</c:if>
 
-		<!--  OMRÅDE -->
+		<!--  VIRKSOMHETSOMRÅDER -->
 		<c:if test="${not empty statisticsRows.unitParent && empty statisticsRows.cssClass}">
 			<c:set var="levelTd" value="level3_name" />
 		</c:if>
@@ -66,7 +66,7 @@ cal1.setTodayText("Idag");
 	    	<c:out value="${statisticsRows.unit}"/>
 	    </display:column>
 
-		<!--  OMRÅDE -->
+		<!--  VIRKSOMHETSOMRÅDER -->
 		<c:if test="${not empty statisticsRows.unitParent && empty statisticsRows.cssClass}">
 			<c:set var="levelTd" value="level3" />
 		</c:if>
@@ -99,14 +99,14 @@ cal1.setTodayText("Idag");
 
 <h2>Forklaring</h2>
 <ul class="bulletlist">
-	<li>"<b>Antall påmeldinger</b>": Antall påmeldinger til kurs/arrangementer innen organisasjon/tjenesteområde i statistikkperioden.</li>
+	<li>"<b>Antall påmeldinger</b>": Antall påmeldinger til kurs/arrangementer innen virksomhet/virksomhetsområde i statistikkperioden.</li>
 
 	<c:if test="${useParticipants}">
-	<li>"<b>Antall påmeldte</b>": Summen av feltet "Antall deltakere" for påmeldingene til kurs/arrangementer innen området/regionen i statistikkperioden.</li>
+	<li>"<b>Antall påmeldte</b>": Summen av feltet "Antall deltakere" for påmeldingene til kurs/arrangementer innen virksomhetsområdet/virksomheten i statistikkperioden.</li>
 	</c:if>
 
 	<c:if test="${useAttendants}">
-	<li>"<b>Antall fremmøtte</b>": Tas fra oppmøteregistreringen som er gjort for kurset/arrangementet. Dersom denne ikke er gjort, tas summen av "Antall påmeldte" for kursets/arrangementets påmeldinger. Tallet beregnes for kurs/arrangement innen organisasjon/område i statistikkperioden.</li>
+	<li>"<b>Antall fremmøtte</b>": Tas fra oppmøteregistreringen som er gjort for kurset/arrangementet. Dersom denne ikke er gjort, tas summen av "Antall påmeldte" for kursets/arrangementets påmeldinger. Tallet beregnes for kurs/arrangement innen virksomheten/virksomhetsområdet i statistikkperioden.</li>
 	</c:if>
 	&nbsp;<br>
 	<li><b>Upubliserte kurs/arrangementer teller med på linje med publiserte kurs/arrangementer.</b></li>
