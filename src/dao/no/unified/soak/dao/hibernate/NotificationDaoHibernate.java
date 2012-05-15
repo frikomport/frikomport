@@ -4,7 +4,6 @@ import java.util.List;
 
 import no.unified.soak.dao.NotificationDao;
 import no.unified.soak.model.Notification;
-import no.unified.soak.model.User;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
