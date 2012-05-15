@@ -23,6 +23,7 @@ import no.unified.soak.ez.ExtUser;
 import no.unified.soak.model.Role;
 import no.unified.soak.model.RoleEnum;
 import no.unified.soak.model.User;
+import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.ConvertDAO;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -50,10 +51,6 @@ public class SVVUserDAOWS implements ExtUserDAO {
 	RoleDAO roleDAO;
 	String endpoint;
 	private transient final static Log log = LogFactory.getLog(SVVUserDAOWS.class);
-
-	public void setEndpoint(String endpoint) {
-		this.endpoint = endpoint;
-	}
 
 	public void setRoleDAO(RoleDAO roleDAO) {
 		this.roleDAO = roleDAO;
@@ -147,6 +144,14 @@ public class SVVUserDAOWS implements ExtUserDAO {
 	}
 
 	public String getUserXMLFromWebservice(String username) {
+
+		if(endpoint == null){
+			endpoint = ApplicationResourcesUtil.getText("javaapp.ldapEndpoint");
+			
+			if(!StringUtils.isNotBlank(endpoint)){
+				log.fatal("javaapp.ldapEndpoint ikke funnet fra ApplicationResources_no_NO_FKPSVV.properties - henting av brukere vil ikke fungere!");
+			}
+		}
 		String responseString = null;
 		PrintWriter output = null;
 		InputStream inputStream = null;

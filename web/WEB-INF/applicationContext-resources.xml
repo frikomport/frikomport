@@ -19,7 +19,6 @@
     </bean>
     -->
     <bean id="extUserDAO" class="no.unified.soak.dao.ws.SVVUserDAOWS" autowire="default">
-        <property name="endpoint" value="http://svvjcapsu04.vegvesen.no:18201/ldap_searchemployees/portOppslagSVVAnsattBndPort"/>
         <property name="roleDAO" ref="roleDAO"/>
         <property name="userDAO" ref="userDAO"/>
     </bean>

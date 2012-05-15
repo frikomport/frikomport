@@ -284,7 +284,7 @@
         <property name="successView" value="redirect:administerConfiguration.html"/>
         <property name="cancelView" value="redirect:administerConfiguration.html"/>
     </bean>
-
+	 
 
     <!-- Load WEB-INF/classes/ApplicationResources.properties for i18n messages using JSTL's fmt tag -->
     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
@@ -499,9 +499,8 @@
     <!--bean id="extUserDAO" class="no.unified.soak.dao.jdbc.EzUserDAOJdbc">
     	<property name="dataSource" ref="userEzDataSource"/>
     </bean-->
-    
+
     <bean id="extUserDAO" class="no.unified.soak.dao.ws.SVVUserDAOWS" autowire="default">
-        <property name="endpoint" value="http://svvjcapsu04.vegvesen.no:18201/ldap_searchemployees/portOppslagSVVAnsattBndPort"/>
         <property name="roleDAO" ref="roleDAO"/>
         <property name="userDAO" ref="userDAO"/>
     </bean>
