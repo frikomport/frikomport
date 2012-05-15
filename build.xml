@@ -514,6 +514,9 @@
 		<!-- Ekstra kopiering direkte til OC4J-mappe -->
         <copy todir="C:/oc4j_extended_101340/j2ee/home/applications" file="${webapp.dist}/${webapp.name}.ear"/>
 
+		<!-- Kopierer bygget war-fil til build-mappe for deployment -->
+		<copy todir="${build.dir}/../build" file="${webapp.dist}/${webapp.name}.ear"/>
+	
     	<!-- visning av tidspunkt for ferdig bygg -->
 		<tstamp><format property="finished" pattern="yyyy-MM-dd HH:mm:ss"/></tstamp>
     	<echo>Finished: ${finished}</echo>
