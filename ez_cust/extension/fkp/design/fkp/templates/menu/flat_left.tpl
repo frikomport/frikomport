@@ -2,12 +2,7 @@
 <div id="leftmenu-design">
 
 
-{def $item=fetch('content', 'node', hash('node_id', 77))}
-
-{*
-	{def $item=fetch('content', 'node', hash('parent_node_id', 2, 'class_filter_type', 'include', 'class_filter_array', array('folder')))}
-	is_set( $module_result.node_id )|choose( 93, $module_result.node_id ), 93,
-*}
+{def $item=fetch('content', 'node', hash('node_id', 2))}
 
 {let docs=treemenu( $module_result.path,
                     is_set( $module_result.node_id )|choose( 93, $module_result.node_id ),
