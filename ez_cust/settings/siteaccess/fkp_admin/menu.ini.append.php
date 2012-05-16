@@ -91,6 +91,7 @@ Tabs[]=users
 Tabs[]=shop
 Tabs[]=design
 Tabs[]=setup
+Tabs[]=tilbake
 Tabs[]=my_account
 
 # Example of adding a custom topmenu entry
@@ -202,10 +203,26 @@ Shown[default]=true
 Shown[navigation]=true
 Shown[browse]=true
 
+[Topmenu_tilbake]
+NavigationPartIdentifier=eztilbakenavigationpart
+Name=Til forsida
+Tooltip=Tilbake ut av redigeringsmodus.
+URL[]
+URL[default]=../
+Enabled[]
+Enabled[default]=true
+Enabled[browse]=true
+Enabled[edit]=true
+Shown[]
+Shown[default]=true
+Shown[navigation]=true
+Shown[browse]=true
+
+
 [Topmenu_my_account]
 NavigationPartIdentifier=ezmynavigationpart
-#Name=My account
-#Tooltip=Manage items and settings that belong to your account.
+Name=My account
+Tooltip=Manage items and settings that belong to your account.
 URL[]
 URL[default]=content/draft
 Enabled[]
