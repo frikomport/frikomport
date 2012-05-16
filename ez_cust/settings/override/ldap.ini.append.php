@@ -41,7 +41,7 @@ LDAPUserGroup[]=Ansatte
 # SimpleMapping (using LDAPUserGroupMap array for name-to-name group mapping) or GetGroupsTree
 LDAPGroupMappingType=SimpleMapping
 # Base LDAP dn which should be used to fetch user group objects from LDAP
-LDAPGroupBaseDN=
+LDAPGroupBaseDN=$LDAPGROUPBASEDN$
 # LDAP user group class
 LDAPGroupClass=group
 # Attribute which should be used to obtain name of an LDAP group

@@ -441,6 +441,12 @@ MatchFile=automatisk_paalogg_nynorsk.tpl
 Subdir=templates
 Match[node]=198
 
+[full_view_welcome]
+Source=node/view/full.tpl
+MatchFile=fkp_redirect.tpl
+Subdir=templates
+Match[node]=2
+
 [user_full]
 Source=node/view/full.tpl
 MatchFile=full/user.tpl

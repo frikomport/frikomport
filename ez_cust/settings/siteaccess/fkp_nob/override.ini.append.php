@@ -443,9 +443,9 @@ Match[node]=198
 
 [full_view_welcome]
 Source=node/view/full.tpl
-MatchFile=full_view_welcome.tpl
+MatchFile=fkp_redirect.tpl
 Subdir=templates
-Match[node]=3
+Match[node]=2
 
 [user_full]
 Source=node/view/full.tpl
