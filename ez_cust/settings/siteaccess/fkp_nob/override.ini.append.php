@@ -445,7 +445,7 @@ Match[node]=198
 Source=node/view/full.tpl
 MatchFile=full_view_welcome.tpl
 Subdir=templates
-Match[node]=2
+Match[node]=3
 
 [user_full]
 Source=node/view/full.tpl
