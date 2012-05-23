@@ -22,6 +22,8 @@ INSERT INTO `ezcontentobject_attribute` VALUES
 (0,155,1,0,NULL,'FriKomPort','ezstring',193,'eng-GB',3,0,'frikomport',4),
 (0,119,1,0,1045487555,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\" xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\" xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\"><paragraph xmlns:tmp=\"http://ez.no/namespaces/ezpublish3/temporary/\">Velkommen til FriKomPort</paragraph></section>\n','ezxmltext',194,'eng-GB',3,0,'',4),
 (0,156,1,0,1045487555,'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<section xmlns:image=\"http://ez.no/namespaces/ezpublish3/image/\" xmlns:xhtml=\"http://ez.no/namespaces/ezpublish3/xhtml/\" xmlns:custom=\"http://ez.no/namespaces/ezpublish3/custom/\"/>\n','ezxmltext',195,'eng-GB',3,0,'',4);
+UPDATE `ezcontentobject_attribute` SET `data_text` = 'FriKomPort' where `id` = 1;
+UPDATE `ezcontentobject_attribute` SET `data_text` = 'FriKomPort' where `id` = 2;
 
 INSERT INTO `ezcontentobject_name` VALUES 
 ('eng-GB',4,1,3,'FriKomPort','eng-GB'),
