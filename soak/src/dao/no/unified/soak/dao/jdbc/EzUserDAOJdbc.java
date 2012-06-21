@@ -83,25 +83,31 @@ public class EzUserDAOJdbc implements ExtUserDAO {
 			fakeLogin = true; // ikke sjekk utløp for session
 		}
 		
-		String sql = "select user_id, expiration_time from ezsession where session_key = \'" + sessionId + "\'";
-		SqlRowSet rowSet = jt.queryForRowSet(sql);
 		ExtUser eZuser = null;
-		if (rowSet.next()) {
-			Integer uid = rowSet.getInt("user_id");
-			Long expTime = rowSet.getLong("expiration_time");
-			Long curTime = new Date().getTime() / 1000;
-//			System.out.println("UserEzDaoJdbc.findUserBySessionID(): expTime=" + expTime + ", curTime=" + curTime);
-
-			if ((curTime < expTime) || fakeLogin) {
-				eZuser = findUser(uid, null, true);
-			} else {
-				/*
-				 * User is not logged in any more, so don't return the user
-				 * object.
-				 */
-				eZuser = new ExtUser();
-//				System.out.println("UserEzDaoJdbc.findUserBySessionID(): eZ user has timedout. Java module is therefore not accepting the user.");
+		try {
+			String sql = "select user_id, expiration_time from ezsession where session_key = \'" + sessionId + "\'";
+			SqlRowSet rowSet = jt.queryForRowSet(sql);
+			if (rowSet.next()) {
+				Integer uid = rowSet.getInt("user_id");
+				Long expTime = rowSet.getLong("expiration_time");
+				Long curTime = new Date().getTime() / 1000;
+				// System.out.println("UserEzDaoJdbc.findUserBySessionID(): expTime=" + expTime + ", curTime=" + curTime);
+	
+				if ((curTime < expTime) || fakeLogin) {
+					eZuser = findUser(uid, null, true);
+				} else {
+					/*
+					 * User is not logged in any more, so don't return the user
+					 * object.
+					 */
+					eZuser = new ExtUser();
+					// System.out.println("UserEzDaoJdbc.findUserBySessionID(): eZ user has timedout. Java module is therefore not accepting the user.");
+				}
 			}
+		}
+		catch (Exception e) {
+			/* feil ved oppslag av bruker ved første kobling mot instans - mest sannsynlig pga. sammenblanding av cookies fra andre instanser */ 
+			eZuser = new ExtUser();
 		}
 		return eZuser;
 	}
