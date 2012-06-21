@@ -74,8 +74,8 @@
 	{/if}
 	
 	{if or($isAdmin)}
-		<div class="menuContainer-level-0"><a href={concat($urls.url_alias, $urls.Fields_of_service_listURL)|ezurl}>{"Fields of service list"|i18n("extension/fkp/menu")}</a></div> 
 		<div class="menuContainer-level-0"><a href={concat($urls.url_alias, $urls.Commune_listURL)|ezurl}>{"Commune list"|i18n("extension/fkp/menu")}</a></div> 
+		<div class="menuContainer-level-0"><a href={concat($urls.url_alias, $urls.Fields_of_service_listURL)|ezurl}>{"Fields of service list"|i18n("extension/fkp/menu")}</a></div> 
 	{/if}
 	
 	{if $isAdmin}
@@ -88,8 +88,8 @@
         <div class="menuContainer-level-0"><a href={concat($urls.url_alias, $urls.user_listURL)|ezurl}>{"User list"|i18n("extension/fkp/menu")}</a></div> 
 	{/if}
 
-    	{if or($isAdmin, $isOppl, $isKursansv)}
-        	<div class="menuContainer-level-0"><a href={concat($urls.url_alias, $urls.statistics_url)|ezurl}>{"Statistics"|i18n("extension/fkp/menu")}</a></div>
+	{if or($isAdmin, $isOppl, $isKursansv)}
+		<div class="menuContainer-level-0"><a href={concat($urls.url_alias, $urls.statistics_url)|ezurl}>{"Statistics"|i18n("extension/fkp/menu")}</a></div>
 	{/if}
 
     {if or($isAdmin)}
