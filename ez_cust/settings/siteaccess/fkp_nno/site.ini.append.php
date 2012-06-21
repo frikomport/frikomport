@@ -47,6 +47,6 @@ DebugRedirection=disabled
 
 [SiteSettings]
 LoginPage=embedded
-IndexPage=/content/view/full/198
+IndexPage=/content/view/full/2
 
 */ ?>
