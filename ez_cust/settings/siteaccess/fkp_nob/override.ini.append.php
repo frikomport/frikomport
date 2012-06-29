@@ -435,17 +435,17 @@ MatchFile=listitem/kursinfo.tpl
 Subdir=templates
 Match[class_identifier]=kursinfo
 
-[autom_paalogging_bokmaal]
-Source=node/view/full.tpl
-MatchFile=autom_paalogging_bokmaal.tpl
-Subdir=templates
-Match[node]=198
-
 [full_view_welcome]
 Source=node/view/full.tpl
 MatchFile=fkp_redirect.tpl
 Subdir=templates
 Match[node]=2
+
+[autom_paalogging_bokmaal]
+Source=node/view/full.tpl
+MatchFile=autom_paalogging_bokmaal.tpl
+Subdir=templates
+Match[node]=198
 
 [user_full]
 Source=node/view/full.tpl
