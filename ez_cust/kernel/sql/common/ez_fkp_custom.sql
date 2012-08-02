@@ -3,6 +3,10 @@ INSERT INTO `ezcobj_state_link` VALUES
 (58,1),
 (59,1);
 
+INSERT INTO `ezcontent_language` VALUES 
+(0,4,'nor-NO','Norwegian (Bokmal)'),
+(0,8,'nno-NO','Norwegian (Nynorsk)');
+
 INSERT INTO `ezcontentobject` VALUES 
 (3,1,57,4,0,5,1337165924,'Ansatte',14,1337165924,'e547686e6118e08ebc496c9d7d888eff',2,1),
 (3,1,58,4,0,5,1337165944,'Kursansvarlige',14,1337165944,'c45e3301b4fbafcc8eacffbe67529f1c',2,1),
