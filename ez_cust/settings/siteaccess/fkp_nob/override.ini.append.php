@@ -445,7 +445,7 @@ Match[node]=2
 Source=node/view/full.tpl
 MatchFile=autom_paalogging_bokmaal.tpl
 Subdir=templates
-Match[node]=198
+Match[node]=2
 
 [user_full]
 Source=node/view/full.tpl

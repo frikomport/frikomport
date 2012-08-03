@@ -435,15 +435,15 @@ MatchFile=listitem/kursinfo.tpl
 Subdir=templates
 Match[class_identifier]=kursinfo
 
-[automatisk_paalogg_nynorsk]
-Source=node/view/full.tpl
-MatchFile=automatisk_paalogg_nynorsk.tpl
-Subdir=templates
-Match[node]=198
-
 [full_view_welcome]
 Source=node/view/full.tpl
 MatchFile=fkp_redirect.tpl
+Subdir=templates
+Match[node]=2
+
+[automatisk_paalogg_nynorsk]
+Source=node/view/full.tpl
+MatchFile=automatisk_paalogg_nynorsk.tpl
 Subdir=templates
 Match[node]=2
 
