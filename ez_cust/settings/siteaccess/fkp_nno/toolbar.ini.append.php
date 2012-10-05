@@ -15,5 +15,6 @@ show_subtree=
 limit=5
 
 [Tool_top_language_link_1]
+lang_siteaccess=fkp_nob
 text=Bokmål
 */ ?>
