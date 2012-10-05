@@ -31,7 +31,7 @@
                 PATTERN_TYPE_APACHE_ANT
                 /signup.html=admin,anonymous
                 /passwordhint.html*=admin,anonymous
-                /**/*.html*=admin,anonymous,ROLE_ANONYMOUS,editor,eventresponsible,reader
+                /**/*.html*=admin,anonymous,ROLE_ANONYMOUS,editor,eventresponsible,reader,employee
                 /clickstreams.jsp=admin,ROLE_ADMIN,editor,eventresponsible,reader
             </value>
         </property>
