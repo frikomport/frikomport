@@ -17,9 +17,6 @@ AdditionalSiteDesignList[]=fkp
 AdditionalSiteDesignList[]=intranet
 AdditionalSiteDesignList[]=base
 
-[ExtensionSettings]
-ActiveAccessExtensions[]
-
 [RegionalSettings]
 Locale=nor-NO
 HTTPLocale=nor-NO
@@ -38,7 +35,7 @@ AdminEmail=frikomport@gmail.com
 EmailSender=
 
 [TemplateSettings]
-Debug=enabled
+Debug=disabled
 TemplateCache=enabled
 TemplateCompile=enabled
 ShowXHTMLCode=disabled
@@ -52,6 +49,4 @@ DebugRedirection=disabled
 LoginPage=custom
 IndexPage=/content/view/full/2
 
-[DatabaseSettings]
-SQLOutput=disabled
 */ ?>

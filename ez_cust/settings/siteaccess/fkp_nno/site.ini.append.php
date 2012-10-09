@@ -31,22 +31,22 @@ VarDir=var/intranet
 ViewCaching=enabled
 
 [MailSettings]
-AdminEmail=kst@unified.no
+AdminEmail=frikomport@gmail.com
 EmailSender=
 
 [TemplateSettings]
 Debug=disabled
 TemplateCache=enabled
 TemplateCompile=enabled
-ShowXHTMLCode=enabled
-ShowUsedTemplates=enabled
+ShowXHTMLCode=disabled
+ShowUsedTemplates=disabled
 
 [DebugSettings]
 DebugOutput=disabled
 DebugRedirection=disabled
 
 [SiteSettings]
-LoginPage=embedded
+LoginPage=custom
 IndexPage=/content/view/full/2
 
 */ ?>
