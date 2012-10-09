@@ -130,8 +130,12 @@ public class CourseController extends BaseFormController {
             roles = user.getRoleNameList();
             isAdmin = (Boolean) roles.contains(Constants.ADMIN_ROLE);
         }
+
         if (roles == null) {
             roles = new ArrayList<String>();
+            roles.add(Constants.ANONYMOUS_ROLE);
+        }
+        else if(roles != null && !roles.contains(Constants.ANONYMOUS_ROLE)){
             roles.add(Constants.ANONYMOUS_ROLE);
         }
 
@@ -261,23 +265,19 @@ public class CourseController extends BaseFormController {
         }
         else {
         	Integer[] status = null; 
-        	if(roles.contains(Constants.ANONYMOUS_ROLE) && roles.size() == 1){ 
-        		// publikumsbruker
-        		status = new Integer[]{ CourseStatus.COURSE_PUBLISHED };
-                model.put("enableExport", new Boolean(false));
-        	}
-        	else if(roles.contains(Constants.ANONYMOUS_ROLE) && roles.contains(Constants.EMPLOYEE_ROLE) && roles.size() == 2){ 
-        		// publikumsbruker
-        		status = new Integer[]{ CourseStatus.COURSE_PUBLISHED };
-                model.put("enableExport", new Boolean(false));
-        	}
-        	else{ 
+        	
+        	if(roles.contains(Constants.EVENTRESPONSIBLE_ROLE) || roles.contains(Constants.EDITOR_ROLE) || roles.contains(Constants.ADMIN_ROLE) || roles.contains(Constants.READER_ROLE)){ 
         		// isReader / isEventResponsible / isEducationResponsible / isAdministrator
         			status = new Integer[]{ CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED, CourseStatus.COURSE_FINISHED, CourseStatus.COURSE_CANCELLED };
         	}
-	        
-			courseList = courseManager.searchCourses(course, starttime, stoptime, status);
-			courseList = enrichCoursesWithExternalValues(courseList, request);
+        	else {
+        		status = new Integer[]{ CourseStatus.COURSE_PUBLISHED };
+                model.put("enableExport", new Boolean(false));
+        	}
+
+        	courseList = courseManager.searchCourses(course, starttime, stoptime, status);
+        	courseList = filterByRole(isAdmin, roles, courseList);
+        	courseList = enrichCoursesWithExternalValues(courseList, request);
 			configureColumnView(status, courseList, model);
         }
 
@@ -338,11 +338,7 @@ public class CourseController extends BaseFormController {
         if (roles != null) {
             for (Iterator iterator = courses.iterator(); iterator.hasNext();) {
                 Course roleCourse = (Course) iterator.next();
-                roleCourse.setAvailableAttendants(0);
                 if (roles.contains(roleCourse.getRole()) || admin.booleanValue()) {
-                    if (roleCourse.getStopTime().after(new Date())) {
-                        roleCourse.setAvailableAttendants(registrationManager.getAvailability(true, roleCourse));
-                    }
                     filtered.add(roleCourse);
                 }
             }
