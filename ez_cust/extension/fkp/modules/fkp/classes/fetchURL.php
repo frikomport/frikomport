@@ -98,22 +98,18 @@ _SERVER["REQUEST_URI"]
 
 	function getIpAddress()
 	{
-      
-       
-		
+		$extensionURL=null;
+		$hostname=null;
+
+		//	Use REMOTE_ADDR when FriKomPort is behind proxy	
 		if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-          		$extensionURL .= $_SERVER['HTTP_X_FORWARDED_FOR'];
-		
-      		
-	//	Use REMOTE_ADDR when FriKomPort is hosted by LinuxLabs	
-	//  			if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-	//          		$extensionURL .= $_SERVER['REMOTE_ADDR'];
-		
-
-
-		$hostname = $_SERVER['REMOTE_HOST'];
+			$extensionURL .= $_SERVER['HTTP_X_FORWARDED_FOR'];
+			$hostname = $_SERVER['HTTP_X_FORWARDED_FOR'];
 		}
-
+		elseif (isset($_SERVER['REMOTE_ADDR'])) {
+			$extensionURL .= $_SERVER['REMOTE_ADDR'];
+			$hostname = $_SERVER['REMOTE_HOST'];
+		}
  
 		$result = array( );
 		$result['ip_address'] =& $extensionURL;
