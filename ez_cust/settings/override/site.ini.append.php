@@ -6,7 +6,7 @@ SessionNamePerSiteAccess=disabled
 SessionTimeout=7200 
 
 [UserSettings]
-LogoutRedirect=/
+LogoutRedirect=/user/login
 LoginHandler[]=standard
 #LoginHandler[]=LDAP
 
