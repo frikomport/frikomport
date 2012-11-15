@@ -15,10 +15,7 @@ SiteDesign=fkp_oppl
 AdditionalSiteDesignList[]=admin
 
 [ExtensionSettings]
-ActiveExtensions[]=ezdhtml
-ActiveExtensions[]=fkp
-ActiveExtensions[]=fkp_oppl
-ActiveExtensions[]=nusoap
+ActiveAccessExtensions[]
 
 [RegionalSettings]
 Locale=nor-NO

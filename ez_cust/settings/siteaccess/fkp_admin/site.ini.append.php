@@ -14,10 +14,7 @@ ShowHiddenNodes=true
 SiteDesign=admin
 
 [ExtensionSettings]
-ActiveExtensions[]=ezdhtml
-ActiveExtensions[]=fkp
-ActiveExtensions[]=fkp_oppl
-ActiveExtensions[]=nusoap
+ActiveAccessExtensions[]
 
 [RegionalSettings]
 Locale=nor-NO

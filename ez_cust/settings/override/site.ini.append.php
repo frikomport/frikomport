@@ -33,6 +33,12 @@ RelatedSiteAccessList[]=fkp_admin
 MatchOrder=uri
 HostMatchMapItems[]
 
+[ExtensionSettings]
+ActiveExtensions[]=ezdhtml
+ActiveExtensions[]=fkp
+ActiveExtensions[]=fkp_oppl
+ActiveExtensions[]=nusoap
+
 [MailSettings]
 Transport=SMTP
 AdminEmail=frikomport@gmail.no
