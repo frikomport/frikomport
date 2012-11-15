@@ -17,6 +17,12 @@ AdditionalSiteDesignList[]=fkp
 AdditionalSiteDesignList[]=intranet
 AdditionalSiteDesignList[]=base
 
+[ExtensionSettings]
+ActiveExtensions[]=ezdhtml
+ActiveExtensions[]=fkp
+ActiveExtensions[]=fkp_oppl
+ActiveExtensions[]=nusoap
+
 [RegionalSettings]
 Locale=nor-NO
 HTTPLocale=nor-NO

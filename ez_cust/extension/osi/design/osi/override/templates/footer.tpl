@@ -1,2 +1,0 @@
-<div id="footer">&copy;2009 <a href="http://www.frikomport.no" target="_blank">FriKomPort</a> | Drevet av <a href="http://ez.no"  target="_blank">eZ publish&reg;</a> 
- | <a href="http://www.osidans.no/" target="_blank">OSI Dans</a> | Sponset av <a href="http://www.knowit.no" target="_blank">Know IT Objectnet</a></div>

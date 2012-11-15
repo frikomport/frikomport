@@ -15,18 +15,11 @@
 .logo {
 	position: absolute;
 	top: 8px;
-	left: 110px; /* 13px */
+	left: 13px;
 }
 
-.drammen {
-	position: absolute;
-	top: 8px;
-	left: 13px; /* 190px */
+.ovreeiker {
+        position: absolute;
+        top: 8px;
+        left: 240px;
 }
-
-.royken {
-	position: absolute;
-	top: 8px;
-	left: 55px;
-}
-

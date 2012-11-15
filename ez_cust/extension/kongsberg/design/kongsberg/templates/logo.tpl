@@ -1,3 +1,4 @@
+{*
 <a href={'fkp/exthttp?url=/listCourses.html?mid=2%26historic=0'|ezurl}><img src=
 {'Kongsbergkommunevaapen.gif'|ezimage} alt="Kurs i Kongsberg" title="Kurs i Kongsberg 
 kommune" height="50" border=0 class="kongsbergvapen"/></a>
@@ -22,3 +23,7 @@ Flesberg kommune" border=0 class="flesbergvapen"/></a>
 <a href={'fkp/exthttp?url=/listCourses.html?mid=9%26historic=0'|ezurl}><img src=
 {'Hjartdal.png'|ezimage} alt="Kurs i Hjartdal" height="50" title="Kurs i 
 Hjartdal kommune" border=0 class="hjartdalvapen"/></a>
+*}
+<a href={'fkp/exthttp?url=/listCourses.html?historic=0'|ezurl}><img src=
+{'kongsbergregionen.gif'|ezimage} alt="Kurs i Kongsbergregionen" height="50" title="Kurs i 
+Kongsbergregionen" border=0 class="kongsbergregionen"/></a>

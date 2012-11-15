@@ -13,3 +13,6 @@ fylkeskommune" height="50" border=0 class="austagder"/></a>
 <a href={'fkp/exthttp?url=/listCourses.html?mid=7%26historic=0'|ezurl}><img src=
 {'iktagder.png'|ezimage} alt="Kurs for IKT Agder" title="Kurs for IKT Agder" 
 height="50" border=0 class="iktagder"/></a>
+<!-- a href={'fkp/exthttp?url=/listCourses.html?mid=9%26historic=0'|ezurl}><img src=
+{'agderarbeidsmiljo.png'|ezimage} alt="Kurs fra Agder Arbeidsmiljø IKS" title="Kurs fra Agder Arbeidsmiljø IKS" 
+height="50" border=0 class="agderarbeidsmiljo"/></a -->

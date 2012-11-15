@@ -44,13 +44,6 @@ ContentObjectLocale=eng-GB
 [ContentSettings]
 TranslationList=nno-NO;nor-NO;eng-GB
 
-[ExtensionSettings]
-ActiveExtensions[]=ezdhtml
-ActiveExtensions[]=fkp
-ActiveExtensions[]=fkp_oppl
-ActiveExtensions[]=nusoap
-
-
 [DatabaseSettings]
 DatabaseImplementation=ezmysql
 Server=$SERVER$

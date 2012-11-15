@@ -13,6 +13,7 @@
 
 /***** logo styles *****/
 
+/* kommentert ut ved overgang fra mange til én logo
 .logo {
 	position: absolute;
 	top: 8px;
@@ -66,4 +67,10 @@
 	top: 7px;
 	left: 544px;
 }
+*/
 
+.kongsbergregionen {
+	position: absolute;
+	top: 7px;
+	left: 13px;
+}

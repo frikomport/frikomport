@@ -15,18 +15,17 @@
 .logo {
 	position: absolute;
 	top: 8px;
-	left: 110px; /* 13px */
+	left: 13px;
 }
 
-.drammen {
+.vesteralen {
 	position: absolute;
 	top: 8px;
-	left: 13px; /* 190px */
+	left: 240px;
 }
 
-.royken {
+.kystlinje {
 	position: absolute;
 	top: 8px;
-	left: 55px;
+	left:328px;
 }
-
