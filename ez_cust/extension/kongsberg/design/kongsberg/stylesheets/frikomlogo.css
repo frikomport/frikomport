@@ -13,64 +13,23 @@
 
 /***** logo styles *****/
 
-/* kommentert ut ved overgang fra mange til én logo
-.logo {
-	position: absolute;
-	top: 8px;
-	left: 13px;
-}
-
-.kongsbergvapen {
-	position: absolute;
-	top: 8px;
-	left: 190px;
-}
-
-.noreoguvdalvapen {
-	position: absolute;
-	top: 8px;
-	left: 238px;
-}
-
-.notoddenvapen {
-	position: absolute;
-	top: 8px;
-	left: 288px;
-}
-
-.rollagvapen {
-	position: absolute;
-	top: 8px;
-	left: 342px;
-}
-
-.tinnvapen {
-	position: absolute;
-	top: 8px;
-	left: 394px;
-}
-
-.ovreeikervapen {
-	position: absolute;
-	top: 8px;
-	left: 444px;
-}
-
-.flesbergvapen {
-	position: absolute;
-	top: 7px;
-	left: 494px;
-}
-
-.hjartdalvapen {
-	position: absolute;
-	top: 7px;
-	left: 544px;
-}
-*/
-
 .kongsbergregionen {
 	position: absolute;
 	top: 7px;
 	left: 13px;
+}
+
+/***** overrides *****/
+
+#toolbar-design {
+    background-image: url("../images/logobar_bg_ny.gif");
+    background-position: center;
+    background-repeat: repeat-x;
+    height: 70px;
+    position: relative;
+    width: 100%;
+}
+
+.logo {
+    visibility: hidden;
 }
