@@ -2,6 +2,12 @@
 # eZ publish configuration file for connection and authentication of users via LDAP
 #
 
+[LDAPServerSettings]
+LDAPEnabled=true
+LDAPServerConfig[]=LDAPSettings
+
+
+# Denne kan repeteres ved behov
 [LDAPSettings]
 # Set LDAP version number
 LDAPVersion=3
@@ -12,7 +18,7 @@ LDAPEnabled=true
 LDAPServer=$LDAPSERVER$
 # Port nr for LDAP, default is 389, LDAPS is 636
 LDAPPort=$LDAPPORT$
-# Specifies the base DN for the directory.
+# Specifies the base DN for the directory. Use -- instead of = here!
 LDAPBaseDn=$LDAPBASEDN$
 # If the server does not allow anonymous bind, specify the user name for the bind here. AD requires the form username@domain
 LDAPBindUser=$LDAPUSER$
@@ -40,7 +46,7 @@ LDAPUserGroup[]=Ansatte
 # Possible values: UseGroupAttribute (old style group assignig using LDAPUserGroupAttribute setting),
 # SimpleMapping (using LDAPUserGroupMap array for name-to-name group mapping) or GetGroupsTree
 LDAPGroupMappingType=SimpleMapping
-# Base LDAP dn which should be used to fetch user group objects from LDAP
+# Base LDAP dn which should be used to fetch user group objects from LDAP. Use -- instead of = here!
 LDAPGroupBaseDN=$LDAPGROUPBASEDN$
 # LDAP user group class
 LDAPGroupClass=group
@@ -55,7 +61,8 @@ LDAPGroupDescriptionAttribute=description
 # Group names map (from LDAP to ezpublish user-groups),
 # used then 'LDAPGroupMappingType' is set to 'SimpleMapping'
 #LDAPUserGroupMap[Domain Admins]=Administratorer
-#LDAPUserGroupMap[Kurs-Admin]=Opplæringsansvarlige
+#LDAPUserGroupMap[Kurs-Admin]=OpplÃ¦ringsansvarlige
+#LDAPUserGroupMap[Kurs-Holder]=Kursansvarlige
 #LDAPUserGroupMap[Domain Users]=Ansatte
 
 # LDAP attribute type for user group. Could be name or id

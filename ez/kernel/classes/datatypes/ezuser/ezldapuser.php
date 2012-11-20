@@ -35,7 +35,6 @@
   \class eZLDAPUser ezldapuser.php
   \ingroup eZDatatype
   \brief The class eZLDAPUser does
-
 */
 class eZLDAPUser extends eZUser
 {
@@ -43,7 +42,7 @@ class eZLDAPUser extends eZUser
      Constructor
     */
     function eZLDAPUser()
-    {
+    { 
     }
 
     /*!
@@ -161,35 +160,40 @@ class eZLDAPUser extends eZUser
 
             return $user;
         }
-        else if ( $LDAPIni->variable( 'LDAPSettings', 'LDAPEnabled' ) === 'true' )
+        else if ( $LDAPIni->variable( 'LDAPServerSettings', 'LDAPEnabled' ) === 'true' ) //GUIC changed LDAPServerSettings from LDAPSetting
         {
             // read LDAP ini settings
             // and then try to bind to the ldap server
+            // added for GUIC: changed 'LDAPSettings' to $LDAPSettings
+            $LDAPServerSetting = $LDAPIni->variable( 'LDAPServerSettings', 'LDAPServerConfig' );//GUIC added
+            foreach( array_keys($LDAPServerSetting) as $key)//GUIC added
+            {//GUIC added
+            $LDAPSettings = $LDAPServerSetting[$key]; //GUIC added
 
-            $LDAPDebugTrace         = $LDAPIni->variable( 'LDAPSettings', 'LDAPDebugTrace' ) === 'enabled';
-            $LDAPVersion            = $LDAPIni->variable( 'LDAPSettings', 'LDAPVersion' );
-            $LDAPServer             = $LDAPIni->variable( 'LDAPSettings', 'LDAPServer' );
-            $LDAPPort               = $LDAPIni->variable( 'LDAPSettings', 'LDAPPort' );
-            $LDAPFollowReferrals    = (int) $LDAPIni->variable( 'LDAPSettings', 'LDAPFollowReferrals' );
-            $LDAPBaseDN             = $LDAPIni->variable( 'LDAPSettings', 'LDAPBaseDn' );
-            $LDAPBindUser           = $LDAPIni->variable( 'LDAPSettings', 'LDAPBindUser' );
-            $LDAPBindPassword       = $LDAPIni->variable( 'LDAPSettings', 'LDAPBindPassword' );
-            $LDAPSearchScope        = $LDAPIni->variable( 'LDAPSettings', 'LDAPSearchScope' );
+            $LDAPDebugTrace         = $LDAPIni->variable( $LDAPSettings, 'LDAPDebugTrace' ) === 'enabled';
+            $LDAPVersion            = $LDAPIni->variable( $LDAPSettings, 'LDAPVersion' );
+            $LDAPServer             = $LDAPIni->variable( $LDAPSettings, 'LDAPServer' );
+            $LDAPPort               = $LDAPIni->variable( $LDAPSettings, 'LDAPPort' );
+            $LDAPFollowReferrals    = (int) $LDAPIni->variable( $LDAPSettings, 'LDAPFollowReferrals' );
+            $LDAPBaseDN             = $LDAPIni->variable( $LDAPSettings, 'LDAPBaseDn' );
+            $LDAPBindUser           = $LDAPIni->variable( $LDAPSettings, 'LDAPBindUser' );
+            $LDAPBindPassword       = $LDAPIni->variable( $LDAPSettings, 'LDAPBindPassword' );
+            $LDAPSearchScope        = $LDAPIni->variable( $LDAPSettings, 'LDAPSearchScope' );
 
-            $LDAPLoginAttribute     = strtolower( $LDAPIni->variable( 'LDAPSettings', 'LDAPLoginAttribute' ) );
-            $LDAPFirstNameAttribute = strtolower( $LDAPIni->variable( 'LDAPSettings', 'LDAPFirstNameAttribute' ) );
-            $LDAPFirstNameIsCN      = $LDAPIni->variable( 'LDAPSettings', 'LDAPFirstNameIsCommonName' ) === 'true';
-            $LDAPLastNameAttribute  = strtolower( $LDAPIni->variable( 'LDAPSettings', 'LDAPLastNameAttribute' ) );
-            $LDAPEmailAttribute     = strtolower( $LDAPIni->variable( 'LDAPSettings', 'LDAPEmailAttribute' ) );
+            $LDAPLoginAttribute     = strtolower( $LDAPIni->variable( $LDAPSettings, 'LDAPLoginAttribute' ) );
+            $LDAPFirstNameAttribute = strtolower( $LDAPIni->variable( $LDAPSettings, 'LDAPFirstNameAttribute' ) );
+            $LDAPFirstNameIsCN      = $LDAPIni->variable( $LDAPSettings, 'LDAPFirstNameIsCommonName' ) === 'true';
+            $LDAPLastNameAttribute  = strtolower( $LDAPIni->variable( $LDAPSettings, 'LDAPLastNameAttribute' ) );
+            $LDAPEmailAttribute     = strtolower( $LDAPIni->variable( $LDAPSettings, 'LDAPEmailAttribute' ) );
 
             $defaultUserPlacement   = $ini->variable( "UserSettings", "DefaultUserPlacement" );
 
-            $LDAPUserGroupAttributeType = strtolower( $LDAPIni->variable( 'LDAPSettings', 'LDAPUserGroupAttributeType' ) );
-            $LDAPUserGroupAttribute     = strtolower( $LDAPIni->variable( 'LDAPSettings', 'LDAPUserGroupAttribute' ) );
+            $LDAPUserGroupAttributeType = strtolower( $LDAPIni->variable( $LDAPSettings, 'LDAPUserGroupAttributeType' ) );
+            $LDAPUserGroupAttribute     = strtolower( $LDAPIni->variable( $LDAPSettings, 'LDAPUserGroupAttribute' ) );
 
-            if ( $LDAPIni->hasVariable( 'LDAPSettings', 'Utf8Encoding' ) )
+            if ( $LDAPIni->hasVariable( $LDAPSettings, 'Utf8Encoding' ) )
             {
-                $Utf8Encoding = $LDAPIni->variable( 'LDAPSettings', 'Utf8Encoding' );
+                $Utf8Encoding = $LDAPIni->variable( $LDAPSettings, 'Utf8Encoding' );
                 if ( $Utf8Encoding == "true" )
                     $isUtf8Encoding = true;
                 else
@@ -200,14 +204,14 @@ class eZLDAPUser extends eZUser
                 $isUtf8Encoding = false;
             }
 
-            if ( $LDAPIni->hasVariable( 'LDAPSettings', 'LDAPSearchFilters' ) )
+            if ( $LDAPIni->hasVariable( $LDAPSettings, 'LDAPSearchFilters' ) )
             {
-                $LDAPFilters = $LDAPIni->variable( 'LDAPSettings', 'LDAPSearchFilters' );
+                $LDAPFilters = $LDAPIni->variable( $LDAPSettings, 'LDAPSearchFilters' );
             }
-            if ( $LDAPIni->hasVariable( 'LDAPSettings', 'LDAPUserGroupType' ) and  $LDAPIni->hasVariable( 'LDAPSettings', 'LDAPUserGroup' ) )
+            if ( $LDAPIni->hasVariable( $LDAPSettings, 'LDAPUserGroupType' ) and  $LDAPIni->hasVariable( $LDAPSettings, 'LDAPUserGroup' ) )
             {
-                $LDAPUserGroupType = $LDAPIni->variable( 'LDAPSettings', 'LDAPUserGroupType' );
-                $LDAPUserGroup = $LDAPIni->variable( 'LDAPSettings', 'LDAPUserGroup' );
+                $LDAPUserGroupType = $LDAPIni->variable( $LDAPSettings, 'LDAPUserGroupType' );
+                $LDAPUserGroup = $LDAPIni->variable( $LDAPSettings, 'LDAPUserGroup' );
             }
 
             $LDAPFilter = "( &";
@@ -218,7 +222,7 @@ class eZLDAPUser extends eZUser
                     $LDAPFilter .= "(" . $LDAPFilters[$key] . ")";
                 }
             }
-            $LDAPEqualSign = trim($LDAPIni->variable( 'LDAPSettings', "LDAPEqualSign" ) );
+            $LDAPEqualSign = trim($LDAPIni->variable( $LDAPSettings, "LDAPEqualSign" ) );
             $LDAPBaseDN    = str_replace( $LDAPEqualSign, "=", $LDAPBaseDN );
             $LDAPFilter    = str_replace( $LDAPEqualSign, "=", $LDAPFilter );
             $LDAPBindUser  = str_replace( $LDAPEqualSign, "=", $LDAPBindUser );
@@ -258,11 +262,12 @@ class eZLDAPUser extends eZUser
                 {
                     // Increase number of failed login attempts.
                     eZDebug::writeError( 'Cannot bind to LDAP server, might be something wronge with connetion or bind user!', 'eZLDAPUser::loginUser()' );
-                    if ( isset( $userID ) )
-                        eZUser::setFailedLoginAttempts( $userID );
+                    //if ( isset( $userID ) ) //GUIC commentet
+                    //    eZUser::setFailedLoginAttempts( $userID ); //GUIC commented
 
                     $user = false;
-                    return $user;
+                    //return $user; //GUIC commented
+                    continue; //GUIC added
                 }
 
                 $LDAPFilter .= "($LDAPLoginAttribute=$loginLdapEscaped)";
@@ -270,6 +275,8 @@ class eZLDAPUser extends eZUser
 
                 ldap_set_option( $ds, LDAP_OPT_SIZELIMIT, 0 );
                 ldap_set_option( $ds, LDAP_OPT_TIMELIMIT, 0 );
+                ldap_set_option( $ds, LDAP_OPT_REFERRALS, false ); //GUIC added
+                ldap_set_option( $ds, LDAP_OPT_SIZELIMIT, 1000 ); //GUIC added
 
                 $retrieveAttributes = array( $LDAPLoginAttribute,
                                              $LDAPFirstNameAttribute,
@@ -302,7 +309,8 @@ class eZLDAPUser extends eZUser
                     // More than one user with same uid, not allow login.
                     eZDebug::writeWarning( 'More then one user with same uid, not allowed to login!', 'eZLDAPUser::loginUser()' );
                     $user = false;
-                    return $user;
+                    //return $user; //GUIC commented
+                    break; // GUIC added
                 }
                 else if ( $info['count'] < 1 )
                 {
@@ -313,7 +321,8 @@ class eZLDAPUser extends eZUser
                     // user DN was not found
                     eZDebug::writeWarning( 'User DN was not found!', 'eZLDAPUser::loginUser()' );
                     $user = false;
-                    return $user;
+                    //return $user; //GUIC commented
+                    continue; //GUIC added
                 }
                 else if ( $LDAPDebugTrace )
                 {
@@ -337,7 +346,8 @@ class eZLDAPUser extends eZUser
 
                     eZDebug::writeWarning( "User $userID failed to login!", 'eZLDAPUser::loginUser()' );
                     $user = false;
-                    return $user;
+                    //return $user; //GUIC commented
+                    break; //GUIC added
                 }
 
                 $extraNodeAssignments = array();
@@ -427,8 +437,8 @@ class eZLDAPUser extends eZUser
                 }
 
                 // read group mapping LDAP settings
-                $LDAPGroupMappingType = $LDAPIni->variable( 'LDAPSettings', 'LDAPGroupMappingType' );
-                $LDAPUserGroupMap     = $LDAPIni->variable( 'LDAPSettings', 'LDAPUserGroupMap' );
+                $LDAPGroupMappingType = $LDAPIni->variable( $LDAPSettings, 'LDAPGroupMappingType' );
+                $LDAPUserGroupMap     = $LDAPIni->variable( $LDAPSettings, 'LDAPUserGroupMap' );
 
                 if ( !is_array( $LDAPUserGroupMap ) )
                     $LDAPUserGroupMap = array();
@@ -464,13 +474,13 @@ class eZLDAPUser extends eZUser
                 if ( $LDAPGroupMappingType == $ByMemberAttribute or
                      $LDAPGroupMappingType == $ByMemberAttributeHierarhicaly )
                 {
-                    $LDAPGroupBaseDN          = $LDAPIni->variable( 'LDAPSettings', 'LDAPGroupBaseDN' );
+                    $LDAPGroupBaseDN          = $LDAPIni->variable( $LDAPSettings, 'LDAPGroupBaseDN' );
                     $LDAPGroupBaseDN          = str_replace( $LDAPEqualSign, '=', $LDAPGroupBaseDN );
-                    $LDAPGroupClass           = $LDAPIni->variable( 'LDAPSettings', 'LDAPGroupClass' );
+                    $LDAPGroupClass           = $LDAPIni->variable( $LDAPSettings, 'LDAPGroupClass' );
 
-                    $LDAPGroupNameAttribute   = strtolower( $LDAPIni->variable( 'LDAPSettings', 'LDAPGroupNameAttribute' ) );
-                    $LDAPGroupMemberAttribute = strtolower( $LDAPIni->variable( 'LDAPSettings', 'LDAPGroupMemberAttribute' ) );
-                    $LDAPGroupDescriptionAttribute = strtolower( $LDAPIni->variable( 'LDAPSettings', 'LDAPGroupDescriptionAttribute' ) );
+                    $LDAPGroupNameAttribute   = strtolower( $LDAPIni->variable( $LDAPSettings, 'LDAPGroupNameAttribute' ) );
+                    $LDAPGroupMemberAttribute = strtolower( $LDAPIni->variable( $LDAPSettings, 'LDAPGroupMemberAttribute' ) );
+                    $LDAPGroupDescriptionAttribute = strtolower( $LDAPIni->variable( $LDAPSettings, 'LDAPGroupDescriptionAttribute' ) );
 
                     $groupSearchingDepth = ( $LDAPGroupMappingType == '1' ) ? 1 : 1000;
 
@@ -483,8 +493,8 @@ class eZLDAPUser extends eZUser
                     $requiredParams[ 'LDAPGroupMemberAttribute' ] = $LDAPGroupMemberAttribute;
                     $requiredParams[ 'LDAPGroupDescriptionAttribute' ] = $LDAPGroupDescriptionAttribute;
                     $requiredParams[ 'ds' ] =& $ds;
-                    if ( $LDAPIni->variable( 'LDAPSettings', 'LDAPGroupRootNodeId' ) !== '' )
-                        $requiredParams[ 'TopUserGroupNodeID' ] = $LDAPIni->variable( 'LDAPSettings', 'LDAPGroupRootNodeId' );
+                    if ( $LDAPIni->variable( $LDAPSettings, 'LDAPGroupRootNodeId' ) !== '' )
+                        $requiredParams[ 'TopUserGroupNodeID' ] = $LDAPIni->variable( $LDAPSettings, 'LDAPGroupRootNodeId' );
                     else
                         $requiredParams[ 'TopUserGroupNodeID' ] = 5;
 
@@ -552,9 +562,9 @@ class eZLDAPUser extends eZUser
                     if ( $LDAPUserGroupAttributeType )
                     {
                         // Should we create user groups that are specified in LDAP, but not found in eZ Publish?
-                        $createMissingGroups = ( $LDAPIni->variable( 'LDAPSettings', 'LDAPCreateMissingGroups' ) === 'enabled' );
-                        if ( $LDAPIni->variable( 'LDAPSettings', 'LDAPGroupRootNodeId' ) !== '' )
-                            $parentNodeID = $LDAPIni->variable( 'LDAPSettings', 'LDAPGroupRootNodeId' );
+                        $createMissingGroups = ( $LDAPIni->variable( $LDAPSettings, 'LDAPCreateMissingGroups' ) === 'enabled' );
+                        if ( $LDAPIni->variable( $LDAPSettings, 'LDAPGroupRootNodeId' ) !== '' )
+                            $parentNodeID = $LDAPIni->variable( $LDAPSettings, 'LDAPGroupRootNodeId' );
                         else
                             $parentNodeID = 5;
 
@@ -601,7 +611,7 @@ class eZLDAPUser extends eZUser
                             for ( $i = 0; $i < $groupAttributeCount; $i++ )
                             {
                                 $groupDN = $info[0][$LDAPUserGroupAttribute][$i];
-                                $groupName = self::getGroupNameByDN( $ds, $groupDN );
+                                $groupName = self::getGroupNameByDN( $ds, $groupDN, $LDAPSettings );
 
                                 if ( $groupName )
                                 {
@@ -629,8 +639,8 @@ class eZLDAPUser extends eZUser
 
                 if ( isset( $userData[ $LDAPEmailAttribute ] ) )
                     $LDAPuserEmail = $userData[ $LDAPEmailAttribute ][0];
-                else if( trim( $LDAPIni->variable( 'LDAPSettings', 'LDAPEmailEmptyAttributeSuffix' ) ) )
-                    $LDAPuserEmail = $login . $LDAPIni->variable( 'LDAPSettings', 'LDAPEmailEmptyAttributeSuffix' );
+                else if( trim( $LDAPIni->variable( $LDAPSettings, 'LDAPEmailEmptyAttributeSuffix' ) ) )
+                    $LDAPuserEmail = $login . $LDAPIni->variable( $LDAPSettings, 'LDAPEmailEmptyAttributeSuffix' );
                 else
                     $LDAPuserEmail = false;
 
@@ -670,9 +680,20 @@ class eZLDAPUser extends eZUser
             {
                 eZDebug::writeError( 'Cannot initialize connection for LDAP server', 'eZLDAPUser::loginUser()' );
                 $user = false;
-                return $user;
+                // return $user; // GUIC commented
+                continue;
             }
+        }//GUIC added
+        if ($user == false)//GUIC added
+        {//GUIC added
+            if ( isset( $userID ) )//GUIC added
+                eZUser::setFailedLoginAttempts( $userID );//GUIC added
+            return $user;//GUIC added
+        }//GUIC added
         }
+
+
+
         else
         {
             // Increase number of failed login attempts.
@@ -1420,10 +1441,10 @@ class eZLDAPUser extends eZUser
         Static method, for internal usage only
         Fetch the LDAP group object given by the DN, and return its name
     */
-    static function getGroupNameByDN( $ds, $groupDN )
+    static function getGroupNameByDN( $ds, $groupDN, $LDAPSettings ) // GUIC added $LDAPSettings
     {
         $LDAPIni = eZINI::instance( 'ldap.ini' );
-        $LDAPGroupNameAttribute = $LDAPIni->variable( 'LDAPSettings', 'LDAPGroupNameAttribute' );
+        $LDAPGroupNameAttribute = $LDAPIni->variable( $LDAPSettings, 'LDAPGroupNameAttribute' );
 
         // First, try to see if the $LDAPGroupNameAttribute is contained within the DN, in that case we can read it directly
         $groupDNParts = ldap_explode_dn( $groupDN, 0 );

@@ -8,7 +8,7 @@ SessionTimeout=7200
 [UserSettings]
 LogoutRedirect=/user/login
 LoginHandler[]=standard
-#LoginHandler[]=LDAP
+LoginHandler[]=LDAP
 
 [SiteSettings]
 DefaultAccess=fkp_nob
@@ -37,7 +37,7 @@ HostMatchMapItems[]
 ActiveExtensions[]=ezdhtml
 ActiveExtensions[]=fkp
 ActiveExtensions[]=fkp_oppl
-ActiveExtensions[]=nusoap
+#ActiveExtensions[]=nusoap
 
 [MailSettings]
 Transport=SMTP
