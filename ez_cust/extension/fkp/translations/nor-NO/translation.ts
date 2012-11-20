@@ -61,6 +61,10 @@
         <source>Configuration</source>
         <translation>Konfigurasjon</translation>
     </message>
+    <message>
+        <source>Change password</source>
+        <translation>Bytt passord</translation>
+    </message>
 
     <message>
         <source>Test med params: %node_id Visibility: %visibility</source>

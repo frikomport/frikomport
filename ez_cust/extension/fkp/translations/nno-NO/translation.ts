@@ -62,9 +62,10 @@
         <translation>Konfigurasjon</translation>
     </message>
     <message>
-        <source>Test med params: %node_id Visibility: %visibility</source>
-        <translation>Test med params: %node_id Synlig/skjult: %visibility</translation>
+        <source>Change password</source>
+        <translation>Bytt passord</translation>
     </message>
+
 </context>
 
 <context>

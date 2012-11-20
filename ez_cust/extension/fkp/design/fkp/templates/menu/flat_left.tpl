@@ -85,16 +85,20 @@
 		<div class="menuContainer-level-0"><a href={"index.php/fkp_oppl/content/view/full/5"|ezroot}>{"User management"|i18n("extension/fkp/menu")}</a></div> 
 	{/if}  
 	{if or($isAdmin, $isOppl)}
-        <div class="menuContainer-level-0"><a href={concat($urls.url_alias, $urls.user_listURL)|ezurl}>{"User list"|i18n("extension/fkp/menu")}</a></div> 
+		<div class="menuContainer-level-0"><a href={concat($urls.url_alias, $urls.user_listURL)|ezurl}>{"User list"|i18n("extension/fkp/menu")}</a></div> 
 	{/if}
 
 	{if or($isAdmin, $isOppl, $isKursansv)}
 		<div class="menuContainer-level-0"><a href={concat($urls.url_alias, $urls.statistics_url)|ezurl}>{"Statistics"|i18n("extension/fkp/menu")}</a></div>
 	{/if}
 
-    {if or($isAdmin)}
-        <div class="menuContainer-level-0"><a href={concat($urls.url_alias, $urls.ConfigurationURL)|ezurl}>{"Configuration"|i18n("extension/fkp/menu")}</a></div> 
-    {/if}
+	{if or($isAdmin)}
+		<div class="menuContainer-level-0"><a href={concat($urls.url_alias, $urls.ConfigurationURL)|ezurl}>{"Configuration"|i18n("extension/fkp/menu")}</a></div> 
+	{/if}
+	{if or($isAdmin, $isOppl, $isKursansv)}
+		<div class="menuContainer-level-0"><a href={'index.php/user/password'|ezroot}>{"Change password"|i18n("extension/fkp/menu")}</a></div>
+	{/if}
+
 
 
 {/let}

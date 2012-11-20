@@ -70,11 +70,11 @@ INSERT INTO `ezpolicy` VALUES
 ('login',333,'user',6),
 ('read',334,'content',6),
 ('pdf',335,'content',6),
-('login',339,'user',8),
+('*',339,'user',8),
 ('read',340,'content',8),
 ('pdf',341,'content',8),
 ('*',344,'content',10),
-('login',345,'user',10);
+('*',345,'user',10);
 
 INSERT INTO `ezpolicy_limitation` VALUES 
 (255,'Section',334),
