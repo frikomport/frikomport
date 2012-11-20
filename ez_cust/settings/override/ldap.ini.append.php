@@ -3,7 +3,9 @@
 #
 
 [LDAPServerSettings]
-LDAPEnabled=true
+# Set to true if use LDAP server
+LDAPEnabled=false
+# List of configs
 LDAPServerConfig[]=LDAPSettings
 
 
