@@ -37,7 +37,8 @@ HostMatchMapItems[]
 ActiveExtensions[]=ezdhtml
 ActiveExtensions[]=fkp
 ActiveExtensions[]=fkp_oppl
-#ActiveExtensions[]=nusoap
+ActiveExtensions[]=ezoe
+ActiveExtensions[]=ezjscore
 
 [MailSettings]
 Transport=SMTP
