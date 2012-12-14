@@ -1,3 +1,4 @@
+{set-block scope=root variable=cache_ttl}0{/set-block} 
 	{def $httpAddress=fetch('fkp','get_http_referer')}
 	{def $ip=fetch('fkp','get_ip_address')}
 	{default current_user=fetch('user','current_user')}
