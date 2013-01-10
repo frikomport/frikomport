@@ -1,16 +1,12 @@
 package no.unified.soak.service.impl;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import no.unified.soak.Constants;
 import no.unified.soak.dao.ExtUserDAO;
 import no.unified.soak.dao.UserDAO;
 import no.unified.soak.ez.ExtUser;
-import no.unified.soak.model.Role;
 import no.unified.soak.model.User;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.RoleManager;
@@ -78,7 +74,7 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 
 		} else {
 //			int antall = 0;
-//			List<ExtUser> ezUsers = extUserDAO.findAll();
+//			List<ExtUser> ezUsers = userManager.getExtResponsibles();
 //			if (ezUsers != null) {
 //				Iterator<ExtUser> it = ezUsers.iterator();
 //				while (it.hasNext()) {
@@ -180,9 +176,17 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
     }
 
     private void byttNavnOgDisable(User user) {
-        user = UserUtil.transformEmail(user, "@nonexist.no");
+        String email = UserUtil.transformEmail(user, "@nonexist.no");
+        user.setEmail(email);
         user.setEnabled(false);
-        userManager.updateUser(user);
+        try {
+        	userManager.updateUser(user);			
+		} catch (Exception e) {
+			// Brukeren finnes med denne eposten allerede
+			User oldUser = userManager.findUserByEmail(email);
+			userManager.removeUser(oldUser.getUsername());
+			userManager.updateUser(user);
+		}
     }
 
     public void executeTask() {

@@ -13,8 +13,8 @@ public class UserUtilTest extends TestCase{
         user.setUsername(email);
         
         assertEquals(email, user.getEmail());
-        user = UserUtil.transformEmail(user, "@nonexist.no");
-        assertEquals(email + "@nonexist.no", user.getEmail());
+        String transformed = UserUtil.transformEmail(user, "@nonexist.no");
+        assertEquals(email + "@nonexist.no", transformed);
     }
 
 

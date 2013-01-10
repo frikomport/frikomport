@@ -167,7 +167,7 @@
         <property name="accessDecisionManager" ref="accessDecisionManager"/>
         <property name="objectDefinitionSource">
              <value>
-                 no.unified.soak.service.UserManager.removeUser=admin
+<!--                  no.unified.soak.service.UserManager.removeUser=admin -->
              </value>
         </property>
     </bean>
