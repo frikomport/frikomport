@@ -1002,6 +1002,10 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			while (it.hasNext()) {
 				boolean save = false;
 				User user = it.next();
+				// Checks username
+				if ("".equals(user.getUsername())) {
+					userManager.removeUser("");
+				}
 				// Updates invoice address
 				if (user.getInvoiceAddress() == null) {
 					Address invoice = new Address();

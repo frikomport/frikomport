@@ -470,6 +470,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		
 		// remove existing roles before new ones are added.
 		user.removeAllRoles();
+		dao.saveUser(user);
 
 		String[] adminRolenames = extUserDAO.getStringForRole(RoleEnum.ADMIN_ROLE).split("\\,");
 		String[] editorRolenames = extUserDAO.getStringForRole(RoleEnum.EDITOR_ROLE).split("\\,");
