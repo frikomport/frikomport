@@ -1,7 +1,5 @@
 package no.unified.soak.util;
 
-import no.unified.soak.Constants;
-
 import org.acegisecurity.GrantedAuthority;
 
 public class GrantedAuthorityUtil {

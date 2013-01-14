@@ -186,7 +186,7 @@ public class User extends BaseObject implements Serializable {
      * Returns the user's roles.
      * @return Set
      *
-     * @hibernate.set table="user_role" cascade="none" lazy="false"
+     * @hibernate.set table="user_role" cascade="all" lazy="false"
      * @hibernate.collection-key column="username"
      * @hibernate.collection-many-to-many class="no.unified.soak.model.Role"
      *                                    column="role_name"

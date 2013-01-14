@@ -23,7 +23,6 @@ import org.hibernate.StaleObjectStateException;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.orm.ObjectRetrievalFailureException;
 
 /**
@@ -52,7 +51,12 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
 	
 	RetryMechanism.OperationInterface<User, String> getUserOperation = new RetryMechanism.OperationInterface<User, String>() {
 		public User operate(String param) {
-			return (User) getHibernateTemplate().get(User.class, param);
+			DetachedCriteria criteria = DetachedCriteria.forClass(User.class);
+			criteria.add(Restrictions.eq("username", param).ignoreCase());
+			List users = getHibernateTemplate().findByCriteria(criteria);
+			if(users != null && users.size() == 1)
+				return (User)users.get(0);
+			return null;
 		}
 	};
 
@@ -68,7 +72,7 @@ public class UserDAOHibernate extends BaseDAOHibernate implements UserDAO {
 
 	public User findUserByEmail(String email) {
 		DetachedCriteria criteria = DetachedCriteria.forClass(User.class);
-		criteria.add(Restrictions.eq("email", email));
+		criteria.add(Restrictions.eq("email", email).ignoreCase());
 		List<User> result = findUsersByCriteria(criteria);
 		if (result == null || result.size() != 1) {
 			return null;
