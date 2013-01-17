@@ -138,20 +138,20 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
     	
     	User emailuser = null;
 
-    	if(current.getEmail() != null){ // mulig dette egentlig er unødvendig, men oppstod pga. inkonsistens mellom frikomdb og ezdb i utviklingsmiljø
-	    	// Sjekker om epostadressa er brukt som username i FriKomPort-databasen.
-	    	try {
-	            emailuser = userManager.getUser(current.getEmail().toLowerCase());
-	        } catch (ObjectRetrievalFailureException e) {
-	        	// extUser finnes ikke. Forsøker med annen vri.
-	            User tmpUser = userManager.findUserByEmail(current.getEmail().toLowerCase());
-	            if ((tmpUser != null) && !tmpUser.getUsername().equals(current.getUsername())) {
-	                emailuser = tmpUser;
-	            }
-	        }
-	        if (emailuser != null) {
-	            byttNavnOgDisable(emailuser);
-	        }
+    	if(current.getEmail() != null){ 
+//    		// mulig dette egentlig er unødvendig, men oppstod pga. inkonsistens mellom frikomdb og ezdb i utviklingsmiljø   		
+    		try {
+				emailuser = userManager.findUserByEmail(current.getEmail().toLowerCase());
+				if(!current.getUsername().equalsIgnoreCase(emailuser.getUsername())) {
+					// Gjør nokke med gammel bruker
+					byttNavnOgDisable(emailuser, false);
+				}
+			} catch (Exception e) {
+				if(emailuser != null && emailuser.getHashuser()) {
+					// Det finnes allerede ein bruker med nonexist.no adresse, må slettes.
+					byttNavnOgDisable(emailuser, true);					
+				}
+			}
     	}
         
         try {
@@ -175,18 +175,15 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
         return user;
     }
 
-    private void byttNavnOgDisable(User user) {
+    private void byttNavnOgDisable(User user, boolean slettGammelBruker) {
         String email = UserUtil.transformEmail(user, "@nonexist.no");
+        if (slettGammelBruker) {
+			User gammel = userManager.findUserByEmail(email);
+			userManager.removeUser(gammel.getUsername());
+		}
         user.setEmail(email);
         user.setEnabled(false);
-        try {
-        	userManager.updateUser(user);			
-		} catch (Exception e) {
-			// Brukeren finnes med denne eposten allerede
-			User oldUser = userManager.findUserByEmail(email);
-			userManager.removeUser(oldUser.getUsername());
-			userManager.updateUser(user);
-		}
+        userManager.updateUser(user);			
     }
 
     public void executeTask() {

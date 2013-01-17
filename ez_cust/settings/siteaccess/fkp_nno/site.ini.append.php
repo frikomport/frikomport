@@ -34,7 +34,7 @@ VarDir=var/intranet
 ViewCaching=enabled
 
 [MailSettings]
-AdminEmail=frikomport@gmail.com
+AdminEmail=ikke-svar@frikomport.no
 EmailSender=
 
 [TemplateSettings]

@@ -42,8 +42,8 @@ ActiveExtensions[]=ezjscore
 
 [MailSettings]
 Transport=SMTP
-AdminEmail=frikomport@gmail.com
-EmailSender=$MAIL.DEFAULT.FROM$
+AdminEmail=ikke-svar@frikomport.no
+EmailSender=ikke-svar@frikomport.no
 
 [RegionalSettings]
 ContentObjectLocale=eng-GB
