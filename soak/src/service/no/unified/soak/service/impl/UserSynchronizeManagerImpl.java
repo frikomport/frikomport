@@ -147,7 +147,7 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 					byttNavnOgDisable(emailuser, false);
 				}
 			} catch (Exception e) {
-				if(emailuser != null && emailuser.getHashuser()) {
+				if(emailuser != null) {
 					// Det finnes allerede ein bruker med nonexist.no adresse, må slettes.
 					byttNavnOgDisable(emailuser, true);					
 				}
