@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+    "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<import resource="applicationContext-hibernate.xml"/>
+	<import resource="applicationContext-service.xml"/>
+	<import resource="applicationContext-resources.xml"/>
+	<import resource="applicationContext-security.xml"/>
+    <import resource="applicationContext-validation.xml"/>
+	<import resource="applicationContext-mvc.xml"/>
+
+    <!-- For mail settings and future properties files -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="ignoreResourceNotFound" value="true" />
+        <property name="locations">
+            <list>
+                <value>classpath:ApplicationResources.properties</value>
+                <value>classpath:soak.properties</value>
+                <value>file:conf/$webapp$.properties</value>
+            </list>
+        </property>
+    </bean>
+</beans>

@@ -72,8 +72,10 @@ public class FileUploadController extends BaseFormController {
                     "file");
 
             // the directory to upload to
-            String uploadDir = getServletContext().getRealPath("/resources") +
-                "/" + request.getRemoteUser() + "/";
+            uploadDir = resourceFolder + "/" + getServletContext();
+            if (!resourceFolder.startsWith("/")) {
+            	uploadDir = getServletContext() + "/" + uploadDir;
+			}
 
             // Create the directory if it doesn't exist
             File dirPath = new File(uploadDir);

@@ -450,13 +450,8 @@ public class CourseFormController extends BaseFormController {
                         && (new Integer(attachmentId).intValue() != 0)) {
                     Attachment attachment = attachmentManager
                     .getAttachment(new Long(attachmentId));
-                    String filename = getServletContext().getRealPath(
-                    "/resources")
-                    + "/" + attachment.getStoredname();
 
-                    FileUtil.downloadFile(request, response, attachment
-                            .getContentType(), filename, attachment
-                            .getFilename());
+                    FileUtil.downloadFile(request, response, attachment.getContentType(), attachment.getStoredname(), attachment.getFilename());
                 }
             } catch (FileNotFoundException fnfe) {
                 log.error(fnfe);

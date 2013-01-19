@@ -49,10 +49,6 @@
     <context-param>
       <param-name>contextConfigLocation</param-name>
       <param-value>
-        /WEB-INF/applicationContext-hibernate.xml
-        /WEB-INF/applicationContext-service.xml
-        /WEB-INF/applicationContext-resources.xml
-        /WEB-INF/applicationContext-security.xml
-        /WEB-INF/applicationContext-validation.xml
+        /WEB-INF/applicationContext.xml
       </param-value> 
     </context-param>

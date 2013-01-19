@@ -10,9 +10,11 @@
  */
 package no.unified.soak.webapp.util;
 
+import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -20,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,7 +33,41 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author hrj
  */
-public class FileUtil {
+public class FileUtil implements ServletContextAware{
+	
+	private static ServletContext servletContext;
+
+	private static String resourceFolder;
+	
+	private static String uploadFolder;
+	
+	public void setServletContext(ServletContext context) {
+		servletContext = context;
+	}
+	
+	public void setResourceFolder(String folder) {
+		resourceFolder = folder;
+	}
+	
+	private static String fileSeparator(){
+		//TODO: Add support for windows "\\"
+		return "/";
+	}
+	
+    private static void initUploadFolder() {
+    	if (resourceFolder.startsWith("/")) { 
+			uploadFolder = resourceFolder + fileSeparator();
+		} else { 
+			uploadFolder = servletContext.getRealPath("") + fileSeparator() + resourceFolder;
+		}
+    	
+        // Create the directory if it doesn't exist
+        File dirPath = new File(uploadFolder);
+        if (!dirPath.exists()) {
+            dirPath.mkdirs();
+        }
+	}
+	
     /**
      * Streams a file to the user for download
      *
@@ -41,14 +78,16 @@ public class FileUtil {
      * @throws IOException
      * @throws FileNotFoundException
      */
-    public static void downloadFile(HttpServletRequest request,
-        HttpServletResponse response, String contentType,
-        String storedFilename, String outFilename)
+    public static void downloadFile(HttpServletRequest request, HttpServletResponse response, String contentType, String storedFilename, String outFilename)
         throws IOException, FileNotFoundException {
+    	
+    	if (uploadFolder == null) {
+			initUploadFolder();
+		}
+    	
         response.setContentType(contentType);
 
-        response.setHeader("Content-Disposition",
-            "attachment; filename=\"" + outFilename + "\"");
+        response.setHeader("Content-Disposition","attachment; filename=\"" + outFilename + "\"");
 
         ServletOutputStream out = response.getOutputStream();
 
@@ -56,7 +95,7 @@ public class FileUtil {
         InputStream in = null;
 
         try {
-            in = new BufferedInputStream(new FileInputStream(storedFilename));
+            in = new BufferedInputStream(new FileInputStream(uploadFolder + fileSeparator() + storedFilename));
 
             int ch;
 
@@ -72,7 +111,7 @@ public class FileUtil {
         out.close();
     }
 
-    /**
+	/**
      * Recieves a file from the client
      *
      * @param file
@@ -84,13 +123,16 @@ public class FileUtil {
      * @throws IOException
      * @throws FileNotFoundException
      */
-    public static void recieveFile(CommonsMultipartFile file, String uploadDir,
-        String storedname) throws IOException, FileNotFoundException {
-        // retrieve the file data
+    public static void recieveFile(CommonsMultipartFile file, String uploadDir, String storedname) throws IOException, FileNotFoundException {
+    	if (uploadFolder == null) {
+			initUploadFolder();
+		}
+    	
+    	// retrieve the file data
         InputStream stream = file.getInputStream();
 
         // write the file to the file specified
-        OutputStream bos = new FileOutputStream(uploadDir + storedname);
+        OutputStream bos = new FileOutputStream(uploadFolder + fileSeparator() + storedname);
         int bytesRead = 0;
         byte[] buffer = new byte[8192];
 
@@ -102,4 +144,19 @@ public class FileUtil {
         // close the stream
         stream.close();
     }
+    
+    /**
+     * Deletes a file
+     * @param storedname
+     * @return
+     */
+    public static boolean deleteFile(String storedname){
+    	if (uploadFolder == null) {
+			initUploadFolder();
+		}
+    	
+    	File fileToBeDeleted = new File(uploadFolder + fileSeparator() + storedname);
+    	return fileToBeDeleted.delete();
+    }
+
 }

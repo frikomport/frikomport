@@ -120,13 +120,8 @@ public class CourseFileFormController extends BaseFormController {
                         (new Integer(attachmentId).intValue() != 0)) {
                     Attachment attachment = attachmentManager.getAttachment(new Long(
                                 attachmentId));
-                    String filename = getServletContext()
-                                          .getRealPath("/resources") + "/" +
-                        attachment.getStoredname();
 
-                    FileUtil.downloadFile(request, response,
-                        attachment.getContentType(), filename,
-                        attachment.getFilename());
+                    FileUtil.downloadFile(request, response, attachment.getContentType(), attachment.getStoredname(), attachment.getFilename());
                     saveMessage(request, getText("attachment.sent", locale));
                 }
             } catch (FileNotFoundException fnfe) {
@@ -150,14 +145,10 @@ public class CourseFileFormController extends BaseFormController {
 
             if ((attachmentId != null) && StringUtils.isNumeric(attachmentId) &&
                     (new Integer(attachmentId).intValue() != 0)) {
-                Attachment attachment = attachmentManager.getAttachment(new Long(
-                            attachmentId));
-                String filename = getServletContext().getRealPath("/resources") +
-                    "/" + attachment.getStoredname();
+                Attachment attachment = attachmentManager.getAttachment(new Long(attachmentId));
 
                 try {
-                    File fileToBeDeleted = new File(filename);
-                    boolean deleted = fileToBeDeleted.delete();
+                    boolean deleted = FileUtil.deleteFile(attachment.getStoredname());
 
                     if (!deleted) {
                         String key = "errors.deleteFile";
@@ -212,15 +203,6 @@ public class CourseFileFormController extends BaseFormController {
                     "file");
 
             // the directory to upload to
-            String uploadDir = getServletContext().getRealPath("/resources") +
-                "/";
-
-            // Create the directory if it doesn't exist
-            File dirPath = new File(uploadDir);
-
-            if (!dirPath.exists()) {
-                dirPath.mkdirs();
-            }
 
             Attachment attachment = saveAttachment(courseid, file);
 
@@ -228,7 +210,7 @@ public class CourseFileFormController extends BaseFormController {
                 attachment.getId();
 
             try {
-                FileUtil.recieveFile(file, uploadDir, storedname);
+                FileUtil.recieveFile(file, null, storedname);
                 saveMessage(request, getText("attachment.recieved", locale));
             } catch (FileNotFoundException fnfe) {
                 log.error(fnfe);

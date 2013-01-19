@@ -3,16 +3,6 @@
     "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
-    <!-- For mail settings and future properties files -->
-    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="locations">
-            <list>
-                <value>classpath:ApplicationResources.properties</value>
-            </list>
-        </property>
-    </bean>
-    
-    <!-- EzUserDAOJdbc: Ez-publish interface -->
 
 	<!-- EzUserDAOJdbc: ExtUserDAO interface -->
 	<bean id="extUserDAO" class="no.unified.soak.dao.jdbc.EzUserDAOJdbc">
