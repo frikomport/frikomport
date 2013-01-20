@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.SocketException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -52,6 +51,20 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 
 public class MailUtil {
     public static final Log log = LogFactory.getLog(MailUtil.class);
+    
+    private static String fromAddress;
+    private static String baseUrl;
+    private static String encoding;
+    
+    public void setFromAddress(String fromAddress) {
+		MailUtil.fromAddress = fromAddress;
+	}
+    public void setBaseUrl(String baseUrl) {
+		MailUtil.baseUrl = baseUrl;
+	}
+    public void setEncoding(String encoding) {
+		MailUtil.encoding = encoding;
+	}
 
     public static void sendMimeMails(ArrayList<MimeMessage> Emails, MailEngine engine) {
         if (Emails != null) {
@@ -94,7 +107,7 @@ public class MailUtil {
 
         msg.append("\n\n"); // empty lines
 
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from")))	+ "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", fromAddress))	+ "\n");
         return msg;
     }
 
@@ -131,7 +144,7 @@ public class MailUtil {
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("courseDeleted.mail.body", " " + course.getName() + "\n")));
 
         msg.append("\n");
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from"))) + "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", fromAddress)) + "\n");
         return msg;
     }
 
@@ -197,7 +210,7 @@ public class MailUtil {
         }
         
         msg.append("\n");
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from"))) + "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", fromAddress)) + "\n");
         return msg;
     }
 
@@ -241,7 +254,7 @@ public class MailUtil {
         msg = new StringBuffer(msg.toString().replaceAll("&hash=<userhash/>", "")); // removes "&hash=<userhash/>" from link
         
         msg.append("\n");
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from"))) + "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", fromAddress)) + "\n");
         return msg;
     }
     
@@ -307,7 +320,7 @@ public class MailUtil {
             msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationToWaitinglist.mail.footer", " " + course.getName() + "\n")));
 
         msg.append("\n\n");
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from")))	+ "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", fromAddress))	+ "\n");
         return msg;
     }
 
@@ -356,7 +369,7 @@ public class MailUtil {
 
         msg.append("\n");
         
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from")))	+ "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", fromAddress))	+ "\n");
         
         return msg;
     }
@@ -386,7 +399,7 @@ public class MailUtil {
 
         msg.append("\n");
         
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from")))	+ "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", fromAddress))	+ "\n");
         
         return msg;
     }
@@ -428,7 +441,7 @@ public class MailUtil {
         msg.append("\n"	+ StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationToWaitinglist.mail.footer")) + "\n");
 
         msg.append("\n");
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from")))	+ "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", fromAddress))	+ "\n");
         return msg;
     }
     
@@ -484,7 +497,7 @@ public class MailUtil {
 
         msg.append("\n"); // empty lines
 
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from")))	+ "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", fromAddress))	+ "\n");
         return msg;
     }
 
@@ -526,7 +539,7 @@ public class MailUtil {
         msg.append("\n" + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("registrationNewCourse.mail.footer")) + "\n");
 
         msg.append("\n");
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from")))	+ "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", fromAddress))	+ "\n");
         return msg;
     }
     
@@ -563,7 +576,7 @@ public class MailUtil {
 	 */
 	private static void addDetailsLink(Course course, StringBuffer msg) {
 		// link til detaljer om registrering
-		String baseurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.baseurl"));
+		String baseurl = StringEscapeUtils.unescapeHtml(baseUrl);
 
 		msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.findurlhere")) + "\n");
 		String coursedetailurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.coursedetailurl", "" + course.getId()));
@@ -578,7 +591,7 @@ public class MailUtil {
      */
     private static void addCancelLink(Course course, Registration registration, StringBuffer msg) {
 		// link for direkte avmelding
-    	String baseurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.baseurl"));
+    	String baseurl = StringEscapeUtils.unescapeHtml(baseUrl);
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.cancelcourse")) + "\n");
         String coursecancelurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.coursecancelurl", ""+registration.getId()));
@@ -594,7 +607,7 @@ public class MailUtil {
      * @param msg
      */
     private static void addEditRegistrationLink(Course course, Registration registration, StringBuffer msg) {
-    	String baseurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.baseurl"));
+    	String baseurl = StringEscapeUtils.unescapeHtml(baseUrl);
 
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.editregistration")) + "\n");
         String editregistrationurl = StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("javaapp.editregistrationurl", new String[]{""+registration.getId(), ""+course.getId()}));
@@ -808,7 +821,7 @@ public class MailUtil {
         	msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.contactinfo")) + "\n");
         }
         
-        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", ApplicationResourcesUtil.getText("mail.default.from"))) + "\n");
+        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.donotreply", fromAddress)) + "\n");
 
         return msg;
     }
@@ -874,7 +887,7 @@ public class MailUtil {
             MimeMessage message = ((JavaMailSenderImpl) sender).createMimeMessage();
             MimeMessageHelper helper = null;
             try {
-                helper = new MimeMessageHelper(message, true, (ApplicationResourcesUtil.getText("mail.encoding")));
+                helper = new MimeMessageHelper(message, true, encoding);
                 String subject = getSubject(registration, event, registered, waiting, course);
                 if(subject != null){
                 	helper.setSubject(subject);
@@ -897,7 +910,7 @@ public class MailUtil {
                 if (!StringUtils.isEmpty(from))
                     helper.setFrom(from);
                 else {
-                    helper.setFrom(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.default.from")));
+                    helper.setFrom(StringEscapeUtils.unescapeHtml(fromAddress));
                     try { helper.setReplyTo(course.getResponsible().getEmail(), course.getResponsible().getFullName()); }
                     catch(UnsupportedEncodingException r) { log.warn("Could not set replyTo-address", r); }
                 }
@@ -919,7 +932,7 @@ public class MailUtil {
 
 	        message = ((JavaMailSenderImpl) sender).createMimeMessage();
 	        MimeMessageHelper helper = null;
-	        helper = new MimeMessageHelper(message, true, (ApplicationResourcesUtil.getText("mail.encoding")));
+	        helper = new MimeMessageHelper(message, true, encoding);
 	
 	        helper.setSubject(subject);
 	        helper.setText(msg.toString());
@@ -931,7 +944,7 @@ public class MailUtil {
 	        if (from != null && !from.equals(""))
 	            helper.setFrom(from);
 	        else
-	            helper.setFrom(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("mail.default.from")));
+	            helper.setFrom(StringEscapeUtils.unescapeHtml(fromAddress));
 	
 	        if(attachmentName != null && attachementFileOnDisk != null) helper.addAttachment(attachmentName, attachementFileOnDisk);
         }
@@ -956,10 +969,10 @@ public class MailUtil {
         case Constants.EMAIL_EVENT_COURSECANCELLED:
             Calendar cal = getICalendar(course, registration);
             try {
-	            ByteArrayResource bar = new ByteArrayResource(cal.toString().getBytes(ApplicationResourcesUtil.getText("mail.encoding")));
-	            helper.addAttachment("calendar.ics", bar, "text/calendar; method=REQUEST; charset=\"" + ApplicationResourcesUtil.getText("mail.encoding") + "\"");  
+	            ByteArrayResource bar = new ByteArrayResource(cal.toString().getBytes(encoding));
+	            helper.addAttachment("calendar.ics", bar, "text/calendar; method=REQUEST; charset=\"" + encoding + "\"");  
 			} catch (UnsupportedEncodingException e) {
-				log.error("Bruk av mail.encoding=" + ApplicationResourcesUtil.getText("mail.encoding") + " fra properties feilet", e);
+				log.error("Bruk av mail.encoding=" + encoding + " fra properties feilet", e);
 			}
             break;
         }

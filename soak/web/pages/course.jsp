@@ -294,9 +294,8 @@
 	</th>
 	<td>
 		<a class="external"
-			href="<fmt:message key="javaapp.baseurl"/><fmt:message key="javaapp.courseurl"/><c:out value="${course.id}"/>"
-			target="_blank"><fmt:message key="javaapp.baseurl" /><fmt:message
-				key="javaapp.courseurl" /><c:out value="${course.id}" /></a>
+			href="<c:out value="${baseUrl}" /><fmt:message key="javaapp.courseurl"/><c:out value="${course.id}"/>"
+			target="_blank"><c:out value="${baseUrl}" /><fmt:message key="javaapp.courseurl" /><c:out value="${course.id}" /></a>
 	</td>
 </tr>
 </c:if>

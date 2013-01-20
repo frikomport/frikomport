@@ -97,7 +97,7 @@ public class CourseFormController extends BaseFormController {
 
     protected MailSender mailSender = null;
 
-    protected SimpleMailMessage message = null;
+//    protected SimpleMailMessage message = null;
 
     /**
      * @param notificationManager the notificationManager to set
@@ -118,9 +118,9 @@ public class CourseFormController extends BaseFormController {
         this.mailSender = mailSender;
     }
     
-    public void setMessage(SimpleMailMessage message) {
-        this.message = message;
-    }
+//    public void setMessage(SimpleMailMessage message) {
+//        this.message = message;
+//    }
 
     public void setCourseManager(CourseManager courseManager) {
         this.courseManager = courseManager;

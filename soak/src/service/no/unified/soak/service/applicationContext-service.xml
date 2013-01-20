@@ -113,15 +113,21 @@
         <property name="from" value="${mail.default.from}"/>
     </bean>
 
-    <!-- Load WEB-INF/classes/ApplicationResources.properties for i18n messages using JSTL's fmt tag -->
-    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-        <property name="cacheSeconds" value="10"/>
-        <property name="basenames">
-            <list>
-                <value>classpath:ApplicationResources</value>
-            </list>
-        </property>
+    <bean id="mailUtil" class="no.unified.soak.util.MailUtil">
+        <property name="fromAddress" value="${mail.default.from}"/>
+        <property name="baseUrl" value="${javaapp.baseurl}"/>
+        <property name="encoding" value="${mail.encoding}"/>
     </bean>
+
+    <!-- Load WEB-INF/classes/ApplicationResources.properties for i18n messages using JSTL's fmt tag -->
+<!--     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"> -->
+<!--         <property name="cacheSeconds" value="10"/> -->
+<!--         <property name="basenames"> -->
+<!--             <list> -->
+<!--                 <value>classpath:ApplicationResources</value> -->
+<!--             </list> -->
+<!--         </property> -->
+<!--     </bean> -->
 
     <bean id="organizationManager" parent="txProxyTemplate">
     	<property name="target">

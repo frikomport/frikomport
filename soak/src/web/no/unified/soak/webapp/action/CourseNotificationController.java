@@ -55,24 +55,23 @@ public class CourseNotificationController extends BaseFormController {
 	private MessageSource messageSource = null;
     private MailSender mailSender = null;
     protected MailEngine mailEngine = null;
-	protected SimpleMailMessage message = null;
+//	protected SimpleMailMessage message = null;
 	private WaitingListManager waitingListManager = null;
+	protected String defaultFrom;
 	
 	public void setMessageSource(MessageSource messageSource) {
 		this.messageSource = messageSource;
 	}
-
     public void setMailSender(MailSender mailSender) {
         this.mailSender = mailSender;
     }
-
     public void setMailEngine(MailEngine mailEngine) {
 		this.mailEngine = mailEngine;
 	}
 
-	public void setMessage(SimpleMailMessage message) {
-		this.message = message;
-	}
+//	public void setMessage(SimpleMailMessage message) {
+//		this.message = message;
+//	}
 
 	public void setCourseManager(CourseManager courseManager) {
 		this.courseManager = courseManager;
@@ -80,6 +79,10 @@ public class CourseNotificationController extends BaseFormController {
 
 	public void setWaitingListManager(WaitingListManager waitingListManager) {
 		this.waitingListManager = waitingListManager;
+	}
+	
+	public void setDefaultFrom(String defaultFrom) {
+		this.defaultFrom = defaultFrom;
 	}
 
     
@@ -289,7 +292,6 @@ public class CourseNotificationController extends BaseFormController {
 
     protected List<String> getMailSenders(Course course, User user, Locale locale){
         List<String> senders = new ArrayList<String>();
-        String defaultFrom = getText("mail.default.from",locale);
         senders.add(defaultFrom);
 
         String userfrom =  user.getFullName() + " <" + user.getEmail() + ">";

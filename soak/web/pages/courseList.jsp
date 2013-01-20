@@ -506,7 +506,7 @@ for(int i=0; i<sumsExport.size(); i++) {
 <c:out value="${buttons}" escapeXml="false"/>
 
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
-<c:set var="parameters"><fmt:message key="javaapp.baseurl"/><c:out value="${urlContextAppendix}"/><fmt:message key="javaapp.courselisturl"/>
+<c:set var="parameters"><c:out value="${baseUrl}" /><c:out value="${urlContextAppendix}"/><fmt:message key="javaapp.courselisturl"/>
 <c:if test="${course.name != null && course.name ne ''}">name=<c:out value="${course.name}"/>%26</c:if>
 <c:if test="${course.organizationid > 0}">organizationid=<c:out value="${course.organizationid}"/>%26</c:if>
 <c:if test="${course.serviceAreaid > 0}">serviceArea=<c:out value="${course.serviceAreaid}"/>%26</c:if>

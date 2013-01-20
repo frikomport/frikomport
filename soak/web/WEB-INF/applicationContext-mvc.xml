@@ -49,6 +49,8 @@
         <property name="commandClass" value="no.unified.soak.model.User"/>
         <property name="formView" value="userRegistrationList"/>
         <property name="successView" value="userRegistrationList"/>
+        <property name="defaultFrom" value="${mail.default.from}"/>
+        <property name="baseUrl" value="${javaapp.baseurl}"/>
     </bean>
 
     <bean id="fileUploadController" class="no.unified.soak.webapp.action.FileUploadController">
@@ -58,6 +60,7 @@
         <property name="cancelView" value="redirect:mainMenu.html"/>
         <property name="formView" value="uploadForm"/>
         <property name="successView" value="uploadDisplay"/>
+        <property name="resourceFolder" value="${resource.folder}"/>
     </bean>
 
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
@@ -148,7 +151,7 @@
         <property name="successView" value="redirect:notifyCourse.html"/>
         <property name="cancelView" value="redirect:listCourses.html"/>
         <property name="mailEngine" ref="mailEngine"/>
-        <property name="message" ref="mailMessage"/>
+<!--         <property name="message" ref="mailMessage"/> -->
         <!--property name="templateName" value="accountCreated.vm"/-->
     </bean>
 
@@ -159,8 +162,9 @@
         <property name="successView" value="courseDetails"/>
         <property name="cancelView" value="redirect:editCourse.html"/>
         <property name="mailEngine" ref="mailEngine"/>
-        <property name="message" ref="mailMessage"/>
+<!--         <property name="message" ref="mailMessage"/> -->
         <property name="templateName" value="accountCreated.vm"/>
+        <property name="defaultFrom" value="${mail.default.from}"/>
     </bean>
     
     <bean id="courseEmailController" class="no.unified.soak.webapp.action.CourseEmailController" autowire="byName">
@@ -170,8 +174,9 @@
         <property name="successView" value="courseDetails"/>
         <property name="cancelView" value="redirect:detailsCourse.html"/>
         <property name="mailEngine" ref="mailEngine"/>
-        <property name="message" ref="mailMessage"/>
+<!--         <property name="message" ref="mailMessage"/> -->
         <property name="templateName" value="accountCreated.vm"/>
+        <property name="defaultFrom" value="${mail.default.from}"/>
     </bean>
 
     <bean id="courseFileFormController" class="no.unified.soak.webapp.action.CourseFileFormController" autowire="byName">
@@ -497,6 +502,10 @@
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
         <property name="prefix" value="/WEB-INF/pages/"/>
         <property name="suffix" value=".jsp"/>
+    </bean>
+    
+    <bean id="courseListRssExportView" class="no.unified.soak.webapp.export.CourseListRssExportView">
+    	<property name="baseURL" value="${javaapp.baseurl}"/>
     </bean>
     
         

@@ -34,6 +34,12 @@ import javax.servlet.http.HttpServletResponse;
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
  */
 public class FileUploadController extends BaseFormController {
+	private String resourceFolder = "resources";
+	
+	public void setResourceFolder(String resourceFolder) {
+		this.resourceFolder = resourceFolder;
+	}
+	
     public ModelAndView processFormSubmission(HttpServletRequest request,
         HttpServletResponse response, Object command, BindException errors)
         throws Exception {
@@ -72,7 +78,7 @@ public class FileUploadController extends BaseFormController {
                     "file");
 
             // the directory to upload to
-            uploadDir = resourceFolder + "/" + getServletContext();
+            String uploadDir = resourceFolder + "/" + getServletContext();
             if (!resourceFolder.startsWith("/")) {
             	uploadDir = getServletContext() + "/" + uploadDir;
 			}

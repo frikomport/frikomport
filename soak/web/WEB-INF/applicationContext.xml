@@ -17,8 +17,26 @@
             <list>
                 <value>classpath:ApplicationResources.properties</value>
                 <value>classpath:soak.properties</value>
-                <value>file:conf/$webapp$.properties</value>
+                <value>classpath:guic.properties</value>
+                <value>file:conf/soak.properties</value>
             </list>
         </property>
     </bean>
+
+    <!-- Load WEB-INF/classes/ApplicationResources.properties for i18n messages using JSTL's fmt tag -->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="cacheSeconds" value="10"/>
+        <property name="basenames">
+            <list>
+                <value>classpath:ApplicationResources</value>
+            </list>
+        </property>
+    </bean>
+    
+    <bean id="applicationResourcesUtil" class="no.unified.soak.util.ApplicationResourcesUtil">
+    	<property name="messageSource" ref="messageSource"/>
+    	<property name="baseUrl" value="${javaapp.baseurl}"/>
+    </bean>
+    
+    
 </beans>

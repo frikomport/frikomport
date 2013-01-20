@@ -65,11 +65,6 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	public void setLocale(Locale locale) {
 		// ApplicationResourcesUtil.setLocale(locale);
 	}
-
-	public void setMessageSource(MessageSource messageSource) {
-		ApplicationResourcesUtil.setMessageSource(messageSource);
-	}
-
 	// --- end hack
 
 	public void setDataSource(DataSource dataSource) {

@@ -22,7 +22,10 @@ public class CourseListRssExportView extends XmlView {
 	
 	private StringBuffer feed = null;
 	private String baseURL = null;
-	
+
+	public void setBaseURL(String baseURL) {
+		this.baseURL = baseURL;
+	}
 	
 	public String getMimeType() {
 		return "application/rss+xml";
@@ -43,9 +46,6 @@ public class CourseListRssExportView extends XmlView {
      */
     public void doExport(Writer out) throws IOException, JspException
     {
-
-    	baseURL = ApplicationResourcesUtil.getText("javaapp.baseurl");
-    	
         RowIterator rowIterator = this.model.getRowIterator(this.exportFull);
 
         while (rowIterator.hasNext())

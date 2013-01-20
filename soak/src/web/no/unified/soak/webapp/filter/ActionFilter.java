@@ -75,7 +75,7 @@ public class ActionFilter implements Filter {
 	protected final Log log = LogFactory.getLog(getClass());
 
 	private FilterConfig config = null;
-
+	
 	public void init(FilterConfig config) throws ServletException {
 		this.config = config;
 
@@ -126,7 +126,10 @@ public class ActionFilter implements Filter {
 			doEZAccessing(request, session);
 			request.setAttribute("isSVV", Boolean.FALSE);
 		}
-
+		
+		// Global settings
+		session.setAttribute("baseUrl", ApplicationResourcesUtil.getBaseUrl());
+		
 		doConfiguration(request, session);
 
 		User user = (User) session.getAttribute(Constants.USER_KEY);

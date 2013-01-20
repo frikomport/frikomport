@@ -18,6 +18,15 @@ public class ApplicationResourcesUtil {
     private static final Log log = LogFactory.getLog(ApplicationResourcesUtil.class);
 
     private static final String localeVariant = System.getenv("FRIKOMPORT_VARIANT");
+    private static String baseUrl;
+    
+    public void setBaseUrl(String baseUrl) {
+		ApplicationResourcesUtil.baseUrl = baseUrl;
+	}
+    
+    public static String getBaseUrl() {
+		return baseUrl;
+	}
 
     public static String getLocaleVariant() {
         return localeVariant;
@@ -26,7 +35,7 @@ public class ApplicationResourcesUtil {
     public static void setLocale(Locale l) {
     }
 
-    public static void setMessageSource(MessageSource m) {
+    public void setMessageSource(MessageSource m) {
         messageSource = m;
     }
 

@@ -32,6 +32,8 @@ public class UserRegistrationController extends BaseFormController{
     private RegistrationManager registrationManager = null;
     private UserManager userManager = null;
     private CourseManager courseManager = null;
+    private String defaultFrom;
+    private String baseUrl;
 
     public void setRegistrationManager(RegistrationManager registrationManager) {
         this.registrationManager = registrationManager;
@@ -42,6 +44,12 @@ public class UserRegistrationController extends BaseFormController{
     public void setCourseManager(CourseManager courseManager) {
         this.courseManager = courseManager;
     }
+    public void setDefaultFrom(String defaultFrom) {
+		this.defaultFrom = defaultFrom;
+	}
+    public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
+	}
 
     protected Map referenceData(HttpServletRequest request, Object o, Errors errors) throws Exception {
         if (log.isDebugEnabled()) {
@@ -94,11 +102,11 @@ public class UserRegistrationController extends BaseFormController{
         message.setSubject(getText("userRegistrationForm.mail.subject",locale));
         StringBuffer msg = new StringBuffer();
         msg.append(getText("userRegistrationForm.mail.body",locale));
-        msg.append(getText("javaapp.baseurl",locale));
+        msg.append(baseUrl);
         msg.append(getText("javaapp.profileurl",locale));
         String body = msg.toString().replaceAll("<userhash/>",user.getHash());
         message.setText(body);
-        message.setFrom(getText("mail.default.from",locale));
+        message.setFrom(defaultFrom);
         this.mailEngine.send(message);
     }
 
