@@ -49,7 +49,7 @@ public class FileUtil implements ServletContextAware{
 		resourceFolder = folder;
 	}
 	
-	private static String fileSeparator(){
+	public static String fileSeparator(){
 		//TODO: Add support for windows "\\"
 		return "/";
 	}

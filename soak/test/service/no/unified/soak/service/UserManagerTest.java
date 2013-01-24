@@ -18,6 +18,7 @@ import no.unified.soak.model.User;
 import no.unified.soak.model.UserCookie;
 import no.unified.soak.service.impl.RoleManagerImpl;
 import no.unified.soak.service.impl.UserManagerImpl;
+import no.unified.soak.util.StringUtil;
 
 import org.jmock.Mock;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -158,6 +159,32 @@ public class UserManagerTest extends BaseManagerTestCase {
             log.debug("expected exception: " + e.getMessage());
             assertNotNull(e);
         }
+    }
+    
+    public void testGetUserWithHash(){
+    	String username = "testuser";
+    	String email = "test@frikomport.no";
+    	String encoded = StringUtil.encodeString(email);
+    	
+    	user = new User(username);
+    	user.setEmail(email);
+    	user.setHash(encoded);
+    	
+    	userDAO.expects(once()).method("getUserByHash").with(eq(user.getHash()));
+    	userDAO.expects(once()).method("findUserByEmail").with(eq(email));
+    	
+    	userManager.getUserByHash(encoded);
+    	userDAO.verify();
+    	
+    	encoded = StringUtil.encodeString(username);
+    	user.setHash(encoded);
+
+    	userDAO.expects(once()).method("getUserByHash").with(eq(user.getHash()));
+    	userDAO.expects(once()).method("getUser").with(eq(username));
+
+    	userManager.getUserByHash(encoded);
+    	userDAO.verify();
+    	
     }
     
 }

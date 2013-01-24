@@ -117,15 +117,30 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 	 * @see no.unified.soak.service.UserManager#getUserByHash(java.lang.String)
 	 */
 	public User getUserByHash(String hash) {
+		User user = null;
+		String decoded = StringUtil.decodeString(hash);
     	try {
-    		return dao.getUserByHash(hash);
+    		user = searchUser(hash, decoded);
     	}
     	catch(StaleObjectStateException e){
     		if(handleStaleObjectStateExceptionForUserObject(e, this)){
-    			return dao.getUserByHash(hash);
+    			user = searchUser(hash, decoded);
     		}
     		throw e;
     	}
+    	return user;
+	}
+
+	private User searchUser(String hash, String decoded) {
+		User user;
+		user = dao.getUserByHash(hash);
+		if (user == null) {
+			if(decoded.contains("@"))
+				user = dao.findUserByEmail(decoded);
+			else
+				user = dao.getUser(decoded);
+		}
+		return user;
 	}
 
 	/**
