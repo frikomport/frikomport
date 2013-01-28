@@ -438,8 +438,6 @@
             <lib file="${dist.dir}/${webapp.name}-service.jar"/>
 
             <webinf dir="web/WEB-INF" includes="*-resources.xml"/>
-            <webinf dir="${spring.dir}" includes="*.xml"/>
-            
             <lib file="${clickstream.jar}"/>
             <lib dir="${commons.dir}" includes="*.jar"/>
             <lib dir="${jstl.dir}/lib">
