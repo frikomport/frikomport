@@ -103,7 +103,7 @@ class eZMail
 
         $this->MIMEVersion = '1.0';
         $this->ContentType = array( 'type' => 'text/plain',
-                                    'charset' => eZTextCodec::internalCharset(),
+                                    'charset' => $this->usedCharset(),
                                     'transfer-encoding' => '8bit',
                                     'disposition' => 'inline',
                                     'boundary' => false );
@@ -701,6 +701,7 @@ class eZMail
     function setSubject( $newSubject )
     {
         $this->Mail->subject = trim( $newSubject );
+        $this->Mail->subjectCharset = $this->usedCharset();
         $this->Subject = trim( $newSubject );
     }
 
@@ -732,7 +733,7 @@ class eZMail
         }
         else
         {
-            $this->Mail->body = new ezcMailText( $newBody );
+            $this->Mail->body = new ezcMailText( $$newBody, $this->usedCharset() );
 
             // if the content-type is in the form of 'text/plain'
             if ( strpos( $this->ContentType['type'] ,'/' ) !== false )
