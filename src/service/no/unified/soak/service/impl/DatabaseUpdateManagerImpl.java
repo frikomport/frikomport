@@ -593,6 +593,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 				organizationsToInsert.add(new Organization("Område Midtre Troms", 0, areaTypeDBValue, true, north));
 				organizationsToInsert.add(new Organization("Område Nord-Troms og Vest-Finnmark", 0, areaTypeDBValue, true, north));
 				organizationsToInsert.add(new Organization("Område Øst-Finnmark", 0, areaTypeDBValue, true, north));
+                organizationsToInsert.add(new Organization("Område Svalbard", 0, areaTypeDBValue, true, north));
 
 				organizationsToInsert.add(new Organization("Område Møre og Romsdal", 0, areaTypeDBValue, true, mid));
 				organizationsToInsert.add(new Organization("Område Sør-Trøndelag", 0, areaTypeDBValue, true, mid));
@@ -634,6 +635,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 				organizationsToInsert.add(new Organization("Nordland", 18, countyTypeDBValue, true, north));
 				organizationsToInsert.add(new Organization("Troms", 19, countyTypeDBValue, true, north));
 				organizationsToInsert.add(new Organization("Finnmark", 20, countyTypeDBValue, true, north));
+                organizationsToInsert.add(new Organization("Svalbard", 21, countyTypeDBValue, true, north));
 			}
 
 			if (organizationsInDB.isEmpty() || omrader.isEmpty()) {
