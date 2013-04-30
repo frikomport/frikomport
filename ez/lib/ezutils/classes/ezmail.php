@@ -733,7 +733,7 @@ class eZMail
         }
         else
         {
-            $this->Mail->body = new ezcMailText( $$newBody, $this->usedCharset() );
+            $this->Mail->body = new ezcMailText( $newBody, $this->usedCharset() );
 
             // if the content-type is in the form of 'text/plain'
             if ( strpos( $this->ContentType['type'] ,'/' ) !== false )
