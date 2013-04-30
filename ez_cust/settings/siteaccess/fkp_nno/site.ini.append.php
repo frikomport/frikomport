@@ -1,11 +1,6 @@
 <?php /* #?ini charset="iso-8859-1"?
 
-[InformationCollectionSettings]
-EmailReceiver=
-
-[UserSettings]
-RegistrationEmail=
-LogoutRedirect=/
+# Override settings for fkp
 
 [SiteAccessSettings]
 RequireUserLogin=false
@@ -24,29 +19,6 @@ ActiveAccessExtensions[]
 Locale=nno-NO
 HTTPLocale=nno-NO
 ContentObjectLocale=nno-NO
-TextTranslation=enabled
-TranslationCache=enabled
-
-[FileSettings]
-VarDir=var/intranet
-
-[ContentSettings]
-ViewCaching=enabled
-
-[MailSettings]
-AdminEmail=ikke-svar@frikomport.no
-EmailSender=
-
-[TemplateSettings]
-Debug=disabled
-TemplateCache=enabled
-TemplateCompile=enabled
-ShowXHTMLCode=disabled
-ShowUsedTemplates=disabled
-
-[DebugSettings]
-DebugOutput=disabled
-DebugRedirection=disabled
 
 [SiteSettings]
 LoginPage=custom

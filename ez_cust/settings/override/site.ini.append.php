@@ -18,7 +18,7 @@ SiteName=FriKomPort
 MetaDataArray[copyright]=FriKomPort
 MetaDataArray[description]=Fri kompetanseportal
 MetaDataArray[keywords]=fri, programvare, kurs, kompetanse, portal
-SiteURL=/index.php
+SiteURL=$SERVER$
 
 [SiteAccessSettings]
 CheckValidity=false
@@ -40,6 +40,12 @@ ActiveExtensions[]=fkp_oppl
 ActiveExtensions[]=ezoe
 ActiveExtensions[]=ezjscore
 
+[FileSettings]
+VarDir=var/intranet
+
+[ContentSettings]
+ViewCaching=enabled
+
 [MailSettings]
 Transport=SMTP
 AdminEmail=ikke-svar@frikomport.no
@@ -47,6 +53,19 @@ EmailSender=ikke-svar@frikomport.no
 
 [RegionalSettings]
 ContentObjectLocale=eng-GB
+TextTranslation=enabled
+TranslationCache=enabled
+
+[TemplateSettings]
+Debug=disabled
+TemplateCache=enabled
+TemplateCompile=enabled
+ShowXHTMLCode=disabled
+ShowUsedTemplates=disabled
+
+[DebugSettings]
+DebugOutput=disabled
+DebugRedirection=disabled
 
 [ContentSettings]
 TranslationList=nno-NO;nor-NO;eng-GB
