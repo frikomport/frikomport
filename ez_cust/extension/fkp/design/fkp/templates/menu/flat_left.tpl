@@ -62,6 +62,7 @@
 	{/if}
 	
 	<div class="menuContainer-level-0"><a href={concat($urls.url_alias, $urls.course_listURL)|ezurl}>{"Course list"|i18n("extension/fkp/menu")}</a></div> 
+	<div class="menuContainer-level-0"><a href={concat($urls.url_alias, $urls.historic_course_listURL)|ezurl}>{"Course list"|i18n("extension/fkp/menu")}</a></div> 
 	
     {if or($isAdmin, $isOppl, $isKursansv)}
 		<div class="menuContainer-level-0"><a href={concat($urls.url_alias, $urls.attendee_listURL)|ezurl}>{"attendee list"|i18n("extension/fkp/menu")}</a></div> 

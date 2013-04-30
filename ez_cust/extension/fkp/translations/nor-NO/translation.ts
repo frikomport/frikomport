@@ -14,6 +14,10 @@
         <translation>Kursoversikt</translation>
     </message>
     <message>
+        <source>Accomplished courses</source>
+        <translation>Gjennomførte kurs</translation>
+    </message>
+    <message>
         <source>Edit profile</source>
         <translation>Rediger profil</translation>
     </message>

@@ -10,6 +10,7 @@ extentionURLFragment=/fkp/exthttp
 EditProfile_URLParam=?url=/editUser.html?username=
 Profile_URLParam=?url=/profileUser.html
 Course_list_URLParam=?url=/listCourses.html
+HistoricCourse_list_URLParam=?url=/listCourses.html?past=1
 attendee_listURLParam=?url=/listRegistrations.html
 Instructor_listURLParam=?url=/listPeople.html
 Responsible_listURLParam=?url=/listResponsibles.html
