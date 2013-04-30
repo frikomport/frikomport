@@ -1,0 +1,2 @@
+INSTALLATION:
+To set up the siteaccess correctly, rename all *.tpl.dist to *.tpl
