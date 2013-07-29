@@ -19,7 +19,7 @@ public interface ExtUserDAO {
      * @param username Kan være henta fra konfigurerbar http header.
      * @return
      */
-    public abstract ExtUser findUserByUsername(String username);
+    public abstract ExtUser findUserByUsername(String username) throws Exception;
 
     /**
      * Henter brukere med gitte roller.

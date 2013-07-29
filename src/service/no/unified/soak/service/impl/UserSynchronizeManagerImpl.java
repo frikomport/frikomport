@@ -63,17 +63,33 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 			int antall = 0;
 			while (it.hasNext()) {
 				User local = it.next();
-				ExtUser ldapUser = extUserDAO.findUserByUsername(local.getUsername());
 				antall++;
-				if (ldapUser == null) {
-					// brukeren finnes ikke lenger i eksternt system, settes som inaktiv bruker
-					processUser(null, local.getUsername());
-					log.info("Deaktivert: " + local.getFullName() + " [" + local.getUsername() + "] " + local.getEmail());
-				} else {
-					processUser(ldapUser, null);
-					String roller = "";
-					try { roller = " roller: " + ldapUser.getRolenames().toString(); }catch(Exception e) { /* do noting */ }
-					log.info("LDAP: " + ldapUser.getName() + " [" + ldapUser.getUsername() + "] " + ldapUser.getEmail() + roller);
+				ExtUser ldapUser = null; 
+				try {
+					ldapUser = extUserDAO.findUserByUsername(local.getUsername());
+					if(ldapUser != null && ldapUser.getRolenames() != null){
+						if(ldapUser.getRolenames().isEmpty()){
+							// brukeren har ikke lenger rolle(r) for Mengdetrening
+							// settes som inaktiv bruker
+							processUser(null, local.getUsername());
+							log.info("Deaktivert (pga. ingen roller): " + local.getFullName() + " [" + local.getUsername() + "] " + local.getEmail());
+						}
+						else {
+							processUser(ldapUser, null);
+							String roller = "";
+							try { roller = " roller: " + ldapUser.getRolenames().toString(); }catch(Exception e) { /* do noting */ }
+							log.info("LDAP: " + ldapUser.getName() + " [" + ldapUser.getUsername() + "] " + ldapUser.getEmail() + roller);
+						}
+					}
+					else {
+						// brukerenavnet ble ikke funnet
+						// settes som inaktiv bruker
+						processUser(null, local.getUsername());
+						log.info("Deaktivert (pga. brukernavn ikke funnet): " + local.getFullName() + " [" + local.getUsername() + "] " + local.getEmail());
+					}
+				}
+				catch(Exception e){
+					// ldapUser is null - do nothing -- LDAP might be unavailable
 				}
 			}
 			log.info("Synkronisering av " + antall + " brukere ferdig!");

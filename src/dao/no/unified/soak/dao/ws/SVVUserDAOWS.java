@@ -100,7 +100,7 @@ public class SVVUserDAOWS implements ExtUserDAO {
 		return extUsers;
 	}
 
-	public ExtUser findUserByUsername(String username) {
+	public ExtUser findUserByUsername(String username) throws Exception {
 		ExtUser extUser = null;
 		try {
 			String xmlString = getUserXMLFromWebservice(username);
@@ -133,8 +133,8 @@ public class SVVUserDAOWS implements ExtUserDAO {
 
 			}
 		} catch (Exception e) {
-			log.error("Feilet ved tolkning av data funnet ved oppslag på [" + username.toUpperCase() + "] fra webservice!", e);
-			return null;
+			log.error("Feilet ifbm. oppslag på [" + username.toUpperCase() + "] fra webservice!", e);
+			throw e;
 		}
 
 		if (extUser == null) {
@@ -143,7 +143,7 @@ public class SVVUserDAOWS implements ExtUserDAO {
 		return extUser;
 	}
 
-	public String getUserXMLFromWebservice(String username) {
+	public String getUserXMLFromWebservice(String username) throws Exception {
 
 		if(endpoint == null){
 			endpoint = ApplicationResourcesUtil.getText("javaapp.ldapEndpoint");
@@ -158,7 +158,16 @@ public class SVVUserDAOWS implements ExtUserDAO {
 		String requestXML = null;
 		try {
 			URL url = new URL(endpoint);
-			URLConnection connection = url.openConnection();
+			URLConnection connection = null;
+			
+			try {
+				connection = url.openConnection();
+			} 
+			catch (IOException e) {
+				log.error("Failed connecting to WS-endpoint: " + endpoint, e);
+				throw e;
+			}
+			
 			connection.setDoOutput(true);
 			connection.setDoInput(true);
 			connection.setUseCaches(false);
@@ -177,14 +186,28 @@ public class SVVUserDAOWS implements ExtUserDAO {
 			output.print(requestXML);
 			output.flush();
 
-			inputStream = connection.getInputStream();
-			responseString = convertStreamToString(inputStream);
-
-		} catch (IOException e) {
-			log.info("Webservice call failed. " + e);
-		} catch (Exception e2) {
-			log.info("Parsing webservice answer failed. " + e2);
-		} finally {
+			try {
+				inputStream = connection.getInputStream();
+			} 
+			catch (IOException e) {
+				log.error("Failed getting inputstream from connection (endpoint: " + endpoint + ")", e);
+				throw e;
+			}
+			
+			try {
+				responseString = convertStreamToString(inputStream);
+			} 
+			catch (IOException e) {
+				log.error("Failed converting inputstream to string", e);
+				throw e;
+			}
+			
+		}
+		catch (Exception e) {
+			log.error("Getting user-XML from WS failed.", e);
+			throw e;
+		}
+		finally {
 			if (inputStream != null) {
 				try {
 					inputStream.close();

@@ -87,7 +87,12 @@ public class SVVAuthenticationFilter implements Filter {
 			if (StringUtils.isEmpty(usernameFromSession) || !usernameFromSession.equals(usernameFromHTTPHeader) || userTmp == null
 					|| !StringUtils.equals(userTmp.getUsername(), usernameFromHTTPHeader)) {
 
-				extUser = extUserDAO.findUserByUsername(usernameFromHTTPHeader);
+				try {
+					extUser = extUserDAO.findUserByUsername(usernameFromHTTPHeader);
+				}
+				catch(Exception e){
+					// problemer med tilkobling mot LDAP eller tolkning av resultat
+				}
 
 				if (extUser == null || StringUtils.isEmpty(extUser.getUsername())) {
 					log.warn("No LDAP user found for username=[" + usernameFromHTTPHeader
