@@ -1,16 +1,12 @@
 package no.unified.soak.service.impl;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import no.unified.soak.Constants;
 import no.unified.soak.dao.ExtUserDAO;
 import no.unified.soak.dao.UserDAO;
 import no.unified.soak.ez.ExtUser;
-import no.unified.soak.model.Role;
 import no.unified.soak.model.User;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.RoleManager;
