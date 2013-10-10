@@ -106,8 +106,11 @@ public class SVVUserDAOWS implements ExtUserDAO {
 			String xmlString = getUserXMLFromWebservice(username);
 			if (StringUtils.isNotBlank(xmlString)) {
 				extUser = new ExtUser();
+				
+				String ansattTagPrefix = getPostfixOfPrefixXmlnsValueFragment("SVVAnsattType", xmlString) + ":";
+				String roleTagPrefix = getPostfixOfPrefixXmlnsValueFragment("KeyPairListType", xmlString) + ":";
 
-				String uid = getTagValue("urn1:uid", xmlString);
+				String uid = getTagValue(ansattTagPrefix+"uid", xmlString);
 				if (StringUtils.isEmpty(uid)) {
 					// Bruker ikke funnet
 					log.info("Ingen informasjom om brukernavn [" + username.toUpperCase() + "] funnet fra webserviceoppslag!");
@@ -115,12 +118,12 @@ public class SVVUserDAOWS implements ExtUserDAO {
 				}
 
 				extUser.setUsername(uid.toLowerCase());
-				extUser.setEmail(getTagValue("urn1:mail", xmlString));
-				extUser.setFirst_name(SVVUserDAOWS.getTagValue("urn1:givenName", xmlString));
-				extUser.setLast_name(SVVUserDAOWS.getTagValue("urn1:sn", xmlString));
-				extUser.setName(SVVUserDAOWS.getTagValue("urn1:cn", xmlString));
-				extUser.setMobilePhone(SVVUserDAOWS.getTagValue("urn1:mobile", xmlString));
-				extUser.setPhoneNumber(SVVUserDAOWS.getTagValue("urn1:telephoneNumber", xmlString));
+				extUser.setEmail(getTagValue(ansattTagPrefix+"mail", xmlString));
+				extUser.setFirst_name(SVVUserDAOWS.getTagValue(ansattTagPrefix+"givenName", xmlString));
+				extUser.setLast_name(SVVUserDAOWS.getTagValue(ansattTagPrefix+"sn", xmlString));
+				extUser.setName(SVVUserDAOWS.getTagValue(ansattTagPrefix+"cn", xmlString));
+				extUser.setMobilePhone(SVVUserDAOWS.getTagValue(ansattTagPrefix+"mobile", xmlString));
+				extUser.setPhoneNumber(SVVUserDAOWS.getTagValue(ansattTagPrefix+"telephoneNumber", xmlString));
 
 				String adminRoles = getStringForRole(RoleEnum.ADMIN_ROLE);
 				String editorRoles = getStringForRole(RoleEnum.EDITOR_ROLE);
@@ -128,9 +131,8 @@ public class SVVUserDAOWS implements ExtUserDAO {
 				String readerRoles = getStringForRole(RoleEnum.READER_ROLE);
 
 				// Parsing av rollene etter endring hos SVV:
-				extUser.setRolenames(SVVUserDAOWS.getTagvaluesAfterSiblingTagInOuterTag(xmlString, "urn1:svvrole", "urn2:Key",
-						ROLEKEY_FROM_WEBSERVICE, "urn2:Value", adminRoles, editorRoles, eventResponsible, readerRoles));
-
+				extUser.setRolenames(SVVUserDAOWS.getTagvaluesAfterSiblingTagInOuterTag(xmlString, ansattTagPrefix+"svvrole", roleTagPrefix+"Key",
+						ROLEKEY_FROM_WEBSERVICE, roleTagPrefix+"Value", adminRoles, editorRoles, eventResponsible, readerRoles));
 			}
 		} catch (Exception e) {
 			log.error("Feilet ifbm. oppslag på [" + username.toUpperCase() + "] fra webservice!", e);
@@ -229,15 +231,73 @@ public class SVVUserDAOWS implements ExtUserDAO {
 	public static String getTagValue(String tagname, String xml) {
 		try {
 			int startTagFirstpos = xml.indexOf("<" + tagname);
+			if (startTagFirstpos == -1) {
+				return null;
+			}
 			int startTagLastpos = xml.indexOf(">", startTagFirstpos);
 			int endTagFirstpos = xml.indexOf("</" + tagname + ">", startTagLastpos);
+			if (startTagFirstpos == -1 && startTagLastpos == -1 && endTagFirstpos == -1) {
+				if (log.isDebugEnabled())
+					log.debug("<" + tagname + "> finnes ikke i xml");
+				return null;
+			}
 			return xml.substring(startTagLastpos + 1, endTagFirstpos);
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
-				log.debug("<" + tagname + "> finnes ikke i xml");
+				log.debug("En uventet feil skjedde ved henting av verdi for tag [" + tagname + "] fra xml.", e);
 			return null;
 		}
 	}
+	
+	public static String getPostfixOfPrefixXmlnsValueFragment(String valueFragment, String xml) {
+		int i=0;
+		while (i < xml.length()) {
+			int xmlnsAttributeStartpos = xml.indexOf(" xmlns", i);
+			if (xmlnsAttributeStartpos == -1) {
+				return logWarnReturnNull("Could not find xmlns attribute for namespace in xml while searching for ["
+						+ valueFragment + "]");
+			}
+			int xmlnsValueStartpos = xml.indexOf("\"", xmlnsAttributeStartpos);
+			if (xmlnsValueStartpos == -1) {
+				return logWarnReturnNull("Could not find any \" after for xmlns attribute in xml while searching for [" + valueFragment
+						+ "]");
+			}
+			int xmlnsValueEndpos = xml.indexOf("\"", xmlnsValueStartpos+1);
+			if (xmlnsValueEndpos == -1) {
+				return logWarnReturnNull("Could not find second \" after for xmlns attribute in xml while searching for [" + valueFragment
+						+ "]");
+			}
+			
+			String xmlnsValue = xml.substring(xmlnsValueStartpos+1, xmlnsValueEndpos-1);
+			boolean isSVVAnsatttype = xmlnsValue.indexOf(valueFragment) != -1;
+			if (!isSVVAnsatttype) {
+				i=xmlnsValueEndpos;
+				continue;
+			}
+
+			String attributeName = xml.substring(xmlnsAttributeStartpos, xmlnsValueStartpos);
+			String[] attribNameSplit1 = attributeName.split(":");
+			if (attribNameSplit1.length < 2) {
+				continue;
+			}
+			String[] attribNameSplit2 = attribNameSplit1[1].split("=");
+			if (attribNameSplit2.length < 1) {
+				continue;
+			}
+			
+		 	return attribNameSplit2[0].trim();  //return the wanted prefix for the xml tags.
+		}
+
+		return null; //No malformed xml discovered, but could not find the prefix, so return null;
+	}
+
+	private static String logWarnReturnNull(String text) {
+		if (log.isWarnEnabled()) {
+			log.warn(text);
+		}
+		return null;
+	}
+	
 
 	public static List<String> getTagvaluesAfterSiblingTagInOuterTag(String xml, String outerTagname, String siblingTagBefore,
 			String siblingtagValue, String valueTagname, String... valueTagValues) {
