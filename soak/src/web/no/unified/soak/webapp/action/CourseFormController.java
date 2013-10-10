@@ -278,7 +278,7 @@ public class CourseFormController extends BaseFormController {
                     	model.put("isCourseFull", new Boolean(false));
                     else { 
                     	if(configurationManager.isActive("access.registration.useWaitlists", true)){
-                    		// ventelistefunksjonalitet er aktivert, påmelding tillatt uten ledige plasser
+                    		// ventelistefunksjonalitet er aktivert, pï¿½melding tillatt uten ledige plasser
             	        	model.put("isCourseFull", new Boolean(false));
                     		saveMessage(request, getText("errors.courseFull.waitlistwarning", locale));
                     	}
@@ -321,7 +321,7 @@ public class CourseFormController extends BaseFormController {
 //				registrationManager.cancelRegistration(registrationId);
 //				List<String> messages = new LinkedList<String>();
 //				ApplicationResourcesUtil.getText("registrationCancel.completed");
-//				messages.add("Påmeldingen er nå slettet");
+//				messages.add("Pï¿½meldingen er nï¿½ slettet");
 //				model.put("messages", messages);
 //			}
 			
@@ -480,12 +480,12 @@ public class CourseFormController extends BaseFormController {
 			
 			if(course.getStatus() == CourseStatus.COURSE_CANCELLED){
 				/*
-				 * Dersom et kurs/møte skal avlyses velger vi å se bort i fra de faktiske innholdet i 
-				 * course-objektet mottatt fra form, og velger derfor å hente orginalen på nytt og sette 
-				 * status på nytt. 
-				 * - Dette gjøres for å unngå evnt. valideringsproblemer nå eneste ønske er å avlyse.
+				 * Dersom et kurs/mï¿½te skal avlyses velger vi ï¿½ se bort i fra de faktiske innholdet i 
+				 * course-objektet mottatt fra form, og velger derfor ï¿½ hente orginalen pï¿½ nytt og sette 
+				 * status pï¿½ nytt. 
+				 * - Dette gjï¿½res for ï¿½ unngï¿½ evnt. valideringsproblemer nï¿½ eneste ï¿½nske er ï¿½ avlyse.
 				 */
-				courseManager.evict(course); // for å evnt. valideringsfeil pga. deaktivert lokale e.l.
+				courseManager.evict(course); // for ï¿½ evnt. valideringsfeil pga. deaktivert lokale e.l.
 				course = courseManager.getCourse(course.getId().toString());
 				course.setStatus(CourseStatus.COURSE_CANCELLED);
 			}
@@ -509,7 +509,7 @@ public class CourseFormController extends BaseFormController {
 			if (course.getAttendants() != null && new Date().before(course.getStartTime())) {
 				args = new Object[] { DateUtil.convertDateToString(new Date()) };
 				errors.rejectValue("attendants", "errors.toearlytosaveAttendants", args,
-						"Antall oppmøtte kan ikke registreres før arrangementet har startet.");
+						"Antall oppmï¿½tte kan ikke registreres fï¿½r arrangementet har startet.");
 			}
 
 			if (args != null) {
@@ -517,10 +517,18 @@ public class CourseFormController extends BaseFormController {
 				return showForm(request, response, errors);
 			}
 
-			// håndtering av eventer som blir opprettet med dato tilbake i tid
+			// hï¿½ndtering av eventer som blir opprettet med dato tilbake i tid
 			if(course.getStartTime().before(new Date()) && course.getStopTime().before(new Date())){
 				course.setStatus(CourseStatus.COURSE_FINISHED);
 			}
+			
+			// check if course is finished but stop time has been updated to a future date.
+			if(course.getStatus().equals( CourseStatus.COURSE_FINISHED ) && (new Date()).before(course.getStopTime()) ) 
+			{
+				// assume published over saved
+				course.setStatus(CourseStatus.COURSE_PUBLISHED);
+			}
+			
 			
 			courseManager.saveCourse(course);
 
@@ -683,7 +691,7 @@ public class CourseFormController extends BaseFormController {
 				throw new BindException(course, "registerBy");
 			}
 			else if(registerBy == null && startTime != null && !useRegisterBy){
-				// registerBy settes ikke fra form, men settes fra startTime for kurs/møte
+				// registerBy settes ikke fra form, men settes fra startTime for kurs/mï¿½te
 				course.setRegisterBy(startTime);
 			}
 			else {
@@ -699,6 +707,7 @@ public class CourseFormController extends BaseFormController {
 	}
 
 	private void setCourseStatus(HttpServletRequest request, Course course, boolean isNew) {
+
 		if (request.getParameter("save") != null && isNew) {
 			course.setStatus(CourseStatus.COURSE_CREATED);
 		}
@@ -749,7 +758,7 @@ public class CourseFormController extends BaseFormController {
 		}
 
 		if(configurationManager.isActive("access.course.singleprice", false)){ 
-			// kun én pris og ingen reserverte plasser
+			// kun ï¿½n pris og ingen reserverte plasser
 			if (course.getReservedInternal() == null) {
 				course.setReservedInternal(0);
 			}
@@ -759,7 +768,7 @@ public class CourseFormController extends BaseFormController {
 		}
 		
 		if(course.getRegisterBy() == null && !configurationManager.isActive("access.course.useRegisterBy", true)){
-			// setter påmeldingsfrist til starttid dersom påmeldingsfrist ikke benyttes
+			// setter pï¿½meldingsfrist til starttid dersom pï¿½meldingsfrist ikke benyttes
 			course.setRegisterBy(course.getStartTime());
 		}
 		
@@ -776,7 +785,7 @@ public class CourseFormController extends BaseFormController {
 		}
 		
 		if(ApplicationResourcesUtil.isSVV()){
-			// påmeldinger er ikke offentlig tilgjengelig via courseDetails.jsp
+			// pï¿½meldinger er ikke offentlig tilgjengelig via courseDetails.jsp
 			course.setRestricted(true);
 			course.setRegisterStart(new Date());
 		}
