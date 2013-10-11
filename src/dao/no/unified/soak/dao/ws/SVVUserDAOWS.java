@@ -158,18 +158,19 @@ public class SVVUserDAOWS implements ExtUserDAO {
 		PrintWriter output = null;
 		InputStream inputStream = null;
 		String requestXML = null;
+		URL url = null;
 		try {
-			URL url = new URL(endpoint);
+			url = new URL(endpoint);
 			URLConnection connection = null;
-			
+
 			try {
 				connection = url.openConnection();
-			} 
+			}
 			catch (IOException e) {
 				log.error("Failed connecting to WS-endpoint: " + endpoint, e);
 				throw e;
 			}
-			
+
 			connection.setDoOutput(true);
 			connection.setDoInput(true);
 			connection.setUseCaches(false);
@@ -190,23 +191,23 @@ public class SVVUserDAOWS implements ExtUserDAO {
 
 			try {
 				inputStream = connection.getInputStream();
-			} 
+			}
 			catch (IOException e) {
 				log.error("Failed getting inputstream from connection (endpoint: " + endpoint + ")", e);
 				throw e;
 			}
-			
+
 			try {
 				responseString = convertStreamToString(inputStream);
-			} 
+			}
 			catch (IOException e) {
 				log.error("Failed converting inputstream to string", e);
 				throw e;
 			}
-			
+
 		}
 		catch (Exception e) {
-			log.error("Getting user-XML from WS failed.", e);
+			log.error("Getting user-XML from WS failed using url ["+url+"].", e);
 			throw e;
 		}
 		finally {
