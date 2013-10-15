@@ -212,7 +212,7 @@ public class CourseController extends BaseFormController {
 			try {
 				stoptime = DateUtil.convertStringToDate(stopTimeString);
 				
-				// legger på 24timer for å sikre til-og-med sluttdato
+				// legger pï¿½ 24timer for ï¿½ sikre til-og-med sluttdato
 				Calendar stop = new GregorianCalendar();
 				stop.setTime(stoptime);
 				stop.add(Calendar.HOUR, 24);
@@ -233,7 +233,7 @@ public class CourseController extends BaseFormController {
 			return model;
 		}
 		
-        if(ApplicationResourcesUtil.isSVV()){ // alle LDAP-brukere ser alle møter (kurs), men endringstilgang styres av JSP.
+        if(ApplicationResourcesUtil.isSVV()){ // alle LDAP-brukere ser alle mï¿½ter (kurs), men endringstilgang styres av JSP.
         	Integer[] status = null; 
         		
         	if(roles.contains(Constants.ANONYMOUS_ROLE) && roles.size() == 1){ 
@@ -287,7 +287,7 @@ public class CourseController extends BaseFormController {
     }
 
     /**
-     * Metode for å sette parametre i modell som benyttes av jsp for å vise/skjule kolonner
+     * Metode for ï¿½ sette parametre i modell som benyttes av jsp for ï¿½ vise/skjule kolonner
      * @param status
      * @param courseList
      * @param model
@@ -410,13 +410,13 @@ public class CourseController extends BaseFormController {
 				int MAX_TRIES = 25;
 				int pc = Integer.parseInt(postalcode);
 
-				// håndterer kun grenseverdier slik at søk mot ikke-eksisterende x000 kun gir søk oppover
-				// tilsvarende for ikke eksisterene x999 som kun vil gi søk nedover
+				// hï¿½ndterer kun grenseverdier slik at sï¿½k mot ikke-eksisterende x000 kun gir sï¿½k oppover
+				// tilsvarende for ikke eksisterene x999 som kun vil gi sï¿½k nedover
 				boolean doNotGoUp = pc % 1000 == 999;
 				boolean doNotGoDown = pc % 1000 == 0;
 				
 				while(approx){
-					// oppgitt postnummer finnes ikke - vi søker i omkringliggende nr-serier
+					// oppgitt postnummer finnes ikke - vi sï¿½ker i omkringliggende nr-serier
 					numberOfTries++;
 					int pcUp = pc + numberOfTries;
 					int pcDown = pc - numberOfTries;
@@ -520,7 +520,7 @@ public class CourseController extends BaseFormController {
 		}
 
 		if (stopInterval != null) {
-			// legger på 24timer for å sikre til-og-med sluttdato
+			// legger pï¿½ 24timer for ï¿½ sikre til-og-med sluttdato
 			Calendar stop = new GregorianCalendar();
 			stop.setTime(stopInterval);
 			stop.add(Calendar.HOUR, 24);
@@ -537,7 +537,7 @@ public class CourseController extends BaseFormController {
 			return new ModelAndView(getSuccessView(), model);
 		}
 
-		if (ApplicationResourcesUtil.isSVV()) { // alle LDAP-brukere ser alle møter (kurs), men endringstilgang styres av JSP.
+		if (ApplicationResourcesUtil.isSVV()) { // alle LDAP-brukere ser alle mï¿½ter (kurs), men endringstilgang styres av JSP.
 			Integer[] status = null;
 
 			if (roles.contains(Constants.ANONYMOUS_ROLE) && roles.size() == 1) {
@@ -563,9 +563,9 @@ public class CourseController extends BaseFormController {
 
 				model.put("containsUnfinished", new Boolean(true));
 				model.put("containsFinished", new Boolean(false));
-		        model.put("enableExport", new Boolean(false)); // deaktivering av fileksport for postnummersøkeresultat
+		        model.put("enableExport", new Boolean(false)); // deaktivering av fileksport for postnummersï¿½keresultat
 				
-				// melding til bruker som forklarer postnr-søk
+				// melding til bruker som forklarer postnr-sï¿½k
 				if(postalCodeApprox != null){
 					saveMessage(request, getText("courseList.postalCodeInfoApprox", new String[] { postalcode, postalCodeApprox }, locale));
 				}else {
@@ -592,6 +592,7 @@ public class CourseController extends BaseFormController {
 			}
 
 			courseList = courseManager.searchCourses(course, starttime, stoptime, status);
+            courseList = filterByRole(isAdmin, roles, courseList);
 			courseList = enrichCoursesWithExternalValues(courseList, request);
 			configureColumnView(status, courseList, model);
 		}
