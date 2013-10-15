@@ -69,7 +69,7 @@
 		    </button>
 	</c:when>
 	<c:otherwise>
-		<c:if test="${!course.restricted}">
+		<c:if test="${!course.restricted || admin == true}">
 		    <button type="button" class="large" onclick="location.href='<c:url value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.displayRegistrations"/>
 		    </button>
