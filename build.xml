@@ -189,6 +189,11 @@
 				<include name="scripts/**/*.jsp"/>
 			</fileset>
 			<fileset dir="${basedir}/web/">
+				<include name="fonts/**/*.eot"/>
+				<include name="fonts/**/*.woff"/>
+				<include name="fonts/**/*.ttf"/>
+			</fileset>
+			<fileset dir="${basedir}/web/">
 				<include name="images/**/*.gif"/>
 				<include name="images/**/*.png"/>
 				<include name="images/**/*.jpg"/>
@@ -206,6 +211,11 @@
 			<fileset dir="${basedir}/web/">
 				<include name="scripts/**/*.js"/>
 				<include name="scripts/**/*.jsp"/>
+			</fileset>
+			<fileset dir="${basedir}/web/">
+				<include name="fonts/**/*.eot"/>
+				<include name="fonts/**/*.woff"/>
+				<include name="fonts/**/*.ttf"/>
 			</fileset>
 			<fileset dir="${basedir}/web/">
 				<include name="images/**/*.gif"/>

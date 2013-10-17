@@ -29,7 +29,7 @@
         </style>
 
 <c:out value="${pageDecorationBetweenHeadAndBodyPleaceholders}" escapeXml="false"/>
-
+<div id="frikomport-body">
 <%
 User user = (User)session.getAttribute(Constants.USER_KEY);
 User hashUser = (User)session.getAttribute(Constants.ALT_USER_KEY);
@@ -58,7 +58,7 @@ if (divstart) {
     </div>
     <![endif]-->  
 
-    <div id="screen">
+    <div id="screen" class="article">
         <c:import url="/WEB-INF/pages/menu.jsp" charEncoding="UTF-8"/>
         <div id="fkp-content">
             <h1><decorator:getProperty property="page.heading"/></h1>
@@ -67,5 +67,5 @@ if (divstart) {
         </div>
     </div>
     <%@ include file="/common/tracker.jsp" %>
-
+</div>
 <c:out value="${pageDecorationAfterBodyPleaceholder}" escapeXml="false"/>

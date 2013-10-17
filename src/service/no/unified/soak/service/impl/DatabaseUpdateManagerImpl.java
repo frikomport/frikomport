@@ -286,62 +286,6 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	private void insertDefaultValues() {
 
 		// ROLES
-		// int addedRoles = 0;
-		// try {
-		// Role anonymous = roleManager.getRole("anonymous");
-		// if(anonymous == null){
-		// roleManager.saveRole(new Role("anonymous", "Anonymous"));
-		// addedRoles++;
-		// }
-		// }
-		// catch(Exception e){
-		// log.error("Feil i opprettelse av \"Role\"", e);
-		// }
-		//
-		// try {
-		// Role admin = roleManager.getRole("admin");
-		// if(admin == null){
-		// roleManager.saveRole(new Role("admin", "Administrator"));
-		// addedRoles++;
-		// }
-		// }
-		// catch(Exception e){
-		// log.error("Feil i opprettelse av \"Role\"", e);
-		// }
-		//
-		// try {
-		// Role employee = roleManager.getRole("employee");
-		// if(employee == null){
-		// roleManager.saveRole(new Role("employee", "Ansatt"));
-		// addedRoles++;
-		// }
-		// }
-		// catch(Exception e){
-		// log.error("Feil i opprettelse av \"Role\"", e);
-		// }
-		//
-		// try {
-		// Role eventResponsible = roleManager.getRole("eventresponsible");
-		// if(eventResponsible == null){
-		// roleManager.saveRole(new Role("eventresponsible", "Kursansvarlig"));
-		// addedRoles++;
-		// }
-		// }
-		// catch(Exception e){
-		// log.error("Feil i opprettelse av \"Role\"", e);
-		// }
-		//
-		// try {
-		// Role editor = roleManager.getRole("editor");
-		// if(editor == null){
-		// roleManager.saveRole(new Role("editor", "Opplaringsansvarlig"));
-		// addedRoles++;
-		// }
-		// }
-		// catch(Exception e){
-		// log.error("Feil i opprettelse av \"Role\"", e);
-		// }
-
 		try {
 			String[][] sqlSelectAndInsertRoleArray = {
 					// Role insert
@@ -361,13 +305,6 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		}
 
 		if (ApplicationResourcesUtil.isSVV()) {
-			// inserts new role for SVV
-			// try { roleManager.getRole("reader"); }
-			// catch(ObjectRetrievalFailureException e){
-			// roleManager.saveRole(new Role("reader", "Reader"));
-			// addedRoles++;
-			// }
-
 			try {
 				String[][] sqlSelectAndInsertRoleSVVArray = {
 				// Role insert
@@ -377,11 +314,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			} catch (Exception e) {
 				log.warn("Feil ved insert av rolle", e);
 			}
-
 		}
-		// if (addedRoles != 0) {
-		// log.info("Antall nye roller lagt til i database: " + addedRoles);
-		// }
 
 		// CATEGORIES
 		try {
@@ -591,7 +524,6 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			organizationsToInsert.add(new Organization("Område Midtre Troms", 0, areaTypeDBValue, true, north));
 			organizationsToInsert.add(new Organization("Område Nord-Troms og Vest-Finnmark", 0, areaTypeDBValue, true, north));
 			organizationsToInsert.add(new Organization("Område Øst-Finnmark", 0, areaTypeDBValue, true, north));
-            organizationsToInsert.add(new Organization("Område Svalbard", 0, areaTypeDBValue, true, north));
 
 			organizationsToInsert.add(new Organization("Område Møre og Romsdal", 0, areaTypeDBValue, true, mid));
 			organizationsToInsert.add(new Organization("Område Sør-Trøndelag", 0, areaTypeDBValue, true, mid));

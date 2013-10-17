@@ -1,4 +1,4 @@
-div.exportlinks {
+div#frikomport-body div.exportlinks {
     width: 100%;
     background-color: #FFFFFF;
     font-size: 1.0em; /* 10px; */
@@ -11,46 +11,46 @@ div.exportlinks {
     border-top: 1px dotted #888;
 }
 
-div.exportlinks a {
+div#frikomport-body div.exportlinks a {
     text-decoration: none;
 }
 
-div.exportlinks span {
+div#frikomport-body div.exportlinks span {
     background-repeat: no-repeat;
 }
 
-span.csv {
+div#frikomport-body span.csv {
     background-image: url(../images/page_white_text.png);
 }
 
-span.excel {
+div#frikomport-body span.excel {
     background-image: url(../images/page_white_excel.png);
 }
 
-span.pdf {
+div#frikomport-body span.pdf {
     background-image: url(../images/page_white_acrobat.png);
 }
 
-span.xml {
+div#frikomport-body span.xml {
     background-image: url(../images/page_white_code.png);
 }
 
-span.ics {
+div#frikomport-body span.ics {
     background-image: url(../images/calendar.png);
 }
 
-span.rss {
+div#frikomport-body span.rss {
     background-image: url(../images/feed.png);
 }
 
-span.export {
+div#frikomport-body span.export {
     cursor: pointer;
     display: inline;
     display: inline-block;
     padding: 0 4px 4px 20px;
 }
 
-span.pagebanner {
+div#frikomport-body span.pagebanner {
     display: block;
     width: 100%;
     background-color: #FFFFFF;
@@ -63,7 +63,7 @@ span.pagebanner {
     padding-bottom: 4px;
 }
 
-span.pagelinks {
+div#frikomport-body span.pagelinks {
     display: block;
     font-size: .95em;
     margin-bottom: 5px;
@@ -73,75 +73,77 @@ span.pagelinks {
     width: 100%;
 }
 
-table.list {
+div#frikomport-body table.list {
     border-collapse: collapse;
     margin: 10px 0px 10px 5px;
     margin-top: 0px;
     width: 100%;
 }
 
-table.list td {
+div#frikomport-body table.list td {
     padding: 3px;
 }
 
-table.list th {
+div#frikomport-body table.list th {
     background-color: #C0C0C0;
     color: #000000;
     padding: 3px;
     text-align: left;
 }
 
-table.list th a, table.list th a:visited {
+div#frikomport-body table.list th a, table.list th a:visited {
     background-color: transparent;
     color: #000000;
     text-decoration: none;
 }
 
-table.list th a:hover {
+div#frikomport-body table.list th a:hover {
     background-color: transparent;
     color: #008000 !important;
     text-decoration: overline underline;
 }
 
-th.sorted a, th.sortable a {
+div#frikomport-body th.sorted a, 
+div#frikomport-body th.sortable a {
     background-position: right;
     display: block;
 }
 
-table.list th.sortable a {
+div#frikomport-body table.list th.sortable a {
   padding-right: 7px;
     background-image: url(../images/arrow_off.png);
 }
 
-table.list th.order1 a {
+div#frikomport-body table.list th.order1 a {
     background-image: url(../images/arrow_down.png) !important;
 }
 
-table.list th.order2 a {
+div#frikomport-body table.list th.order2 a {
     background-image: url(../images/arrow_up.png) !important;
 }
 
-table.list th.sorted {
+tdiv#frikomport-body able.list th.sorted {
     background-color: #ddf;
     color: #000000;
 }
 
-table.list th.sorted a, table.list th.sortable a {
+div#frikomport-body table.list th.sorted a, 
+div#frikomport-body table.list th.sortable a {
     background-position: right;
     background-repeat: no-repeat;
     display: block;
 }
 
-table.list th.sortable:hover {
+div#frikomport-body table.list th.sortable:hover {
     background-color: #B3B3FF;
     color: #008000;
 }
 
-table.list thead tr {
+div#frikomport-body table.list thead tr {
     background-color: #FFCC00;
 }
 
-table.list tr.even {
+div#frikomport-body table.list tr.even {
     background-color: #f0f0f0;
     margin: 0;
     font-size: 1.0em; /* 10px; */
@@ -152,7 +154,7 @@ table.list tr.even {
     padding-bottom: 4px;
 }
 
-table.list tr.odd {
+div#frikomport-body table.list tr.odd {
     background-color: #FFFFFF;
     margin: 0;
     font-size: 1.0em; /* 10px; */
@@ -164,7 +166,7 @@ table.list tr.odd {
 }
 
 /* highlight table row onmouseover */
-table.list tr.over {
+div#frikomport-body table.list tr.over {
     background-color: #B3B3FF;
     border-bottom: 1px solid #C0C0C0;
     border-top: 1px solid #C0C0C0;
@@ -173,21 +175,22 @@ table.list tr.over {
 }
 
 /* override width for user list */
-table.userList {
+div#frikomport-body table.userList {
     width: 80% !important;
 }
 
-table.activeUserList, body#activeUsers span.pagelinks {
+div#frikomport-body table.activeUserList, 
+div#frikomport-body body#activeUsers span.pagelinks {
     width: 450px !important;
 }
 
 
-table.list td.level1 {
+div#frikomport-body table.list td.level1 {
 	background-color:#C9CDCF;
 	font-weight:bold;
 }
 
-table.list td.level2 {
+div#frikomport-body table.list td.level2 {
     background-color: #EDEEF0;
     margin: 0;
     font-size: 1.0em; /* 10px; */
@@ -198,12 +201,12 @@ table.list td.level2 {
     padding-bottom: 4px;
 }
 
-table.list td.level3 {
+div#frikomport-body table.list td.level3 {
     font-weight: normal;
     padding-left: 5px;  
 }
 
-table.list td.level3_name {
+div#frikomport-body table.list td.level3_name {
     font-weight: normal;
     padding-left: 25px;  
 }

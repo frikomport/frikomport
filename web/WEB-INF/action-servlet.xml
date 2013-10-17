@@ -10,6 +10,9 @@
                 <prop key="org.springframework.dao.DataAccessException">        
                     dataAccessFailure
                 </prop>
+                <prop key="no.unified.soak.service.CourseAccessException">        
+                    courseAccessFailure
+                </prop>
             </props>
         </property>
     </bean>

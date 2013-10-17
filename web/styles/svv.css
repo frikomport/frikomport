@@ -1,10 +1,10 @@
 @CHARSET "ISO-8859-1";
 @import url(menuTop.css);
 
-body a,
-body a:VISITED,
-body a.highlight,
-body#login div#menu a:visited {
+body a div#frikomport-body,
+body a:VISITED div#frikomport-body,
+body a.highlight div#frikomport-body,
+body#login div#frikomport-body div#menu a:visited {
 	color:#F48600; /* For lite kontrast med den originale #ff9000 */
 	text-decoration: none;
 }
@@ -17,7 +17,7 @@ div#MainContentContainer button[class~="large"]
 	min-width:128px;
 }
 
-td.mediumButtonWidth {
+div#frikomport-body td.mediumButtonWidth {
 	width: 79px;
 }
 
@@ -41,19 +41,19 @@ div#PageContainer div#ContentContainer {
     width:990px;
 }
 
-html body {
+html body div#frikomport-body {
 	font-family: Frutiger,Verdana,Arial,Helvetica,sans-serif !important;
 	color:#37424A;
 	font-size:75% !important;
 }
 
-div form input, 
-div form textarea, 
-div form select {
+div#frikomport-body div form input, 
+div#frikomport-body div form textarea, 
+div#frikomport-body div form select {
 	color:#37424A;
 }
 
-table.detail {
+div#frikomport-body table.detail {
 	width:auto;
 }
 
@@ -61,12 +61,12 @@ div#fkp-content table.list {
 	margin-left:1px;
 }
 
-table.detail tr th {
+div#frikomport-body table.detail tr th {
 	padding-left:3px !important;
 }
 
-tr th,
-tr.sumfinal {
+div#frikomport-body tr th,
+div#frikomport-body tr.sumfinal {
 	background-color:#C9CDCF; 	
 }
 
@@ -106,13 +106,13 @@ div#fkp-content h2 {
 	font-family: Frutiger,Verdana,Arial,Helvetica,sans-serif !important;
 }
 
-body thead tr th.sortable a,
-body thead tr th.sortable a:visited {
+body div#frikomport-body thead tr th.sortable a,
+body div#frikomport-body thead tr th.sortable a:visited {
 	color:#FFD199 !important;
 }
 
-table.list thead th.sorted,
-table.list thead tr th {
+div#frikomport-body table.list thead th.sorted,
+div#frikomport-body table.list thead tr th {
 	background-color:#5f686E;
 }
 
@@ -129,19 +129,19 @@ div#fkp-content table thead tr th {
 	color:inherit;
 }
 
-tr.sum1 {
+div#frikomport-body tr.sum1 {
 	background-color:#EDEEF0;
 }
 
-div.indentleft {
+div#frikomport-body div.indentleft {
 	padding-left:15px;
 }
 	
-table.list thead th.sortable:hover {
+div#frikomport-body table.list thead th.sortable:hover {
 	background-color:#FF8C00; /* #FFD199; */
 }
 
-table.list thead th a:hover {
+div#frikomport-body table.list thead th a:hover {
 	color:#FFFFFF !important;
 	text-decoration:none;
 }
@@ -173,8 +173,8 @@ div#loggedin {
  SVV-variant of menuExpandable.css 
 ---------------------------------------- 
 */
-div .menu li, 
-div .submenu li {
+div#frikomport-body div .menu li, 
+div#frikomport-body div .submenu li {
 list-style:none outside none;
 }
 

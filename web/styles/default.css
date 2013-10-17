@@ -1,41 +1,46 @@
 @import url(messages.css);
 @import url(displaytag.css);
 
-* {
+div#frikomport-body * {
     padding: 0;
     margin: 0;
 }
 
-.hidden {
+div#frikomport-body .hidden {
     visibility: hidden;
 }
 
-table {
+div#frikomport-body table {
 	font-size: 100%; /* IE5.x fix. Could have used 1.0em; */
 }
 
-a {
+/*
+div#frikomport-body a {
     color: #1b74b2;
 }
 
-a:visited, body#login div#menu a:visited  {
+div#frikomport-body a:visited, 
+body#login div#frikomport-body div#menu a:visited  {
     color: #1b74b2;
 }
 
-a:hover {
+div#frikomport-body a:hover {
     background-color: transparent;
     color: #0000ff; 
     text-decoration: none;
 }
+*/
 
-a img { border: 0 }
+div#frikomport-body a img { 
+	border: 0 
+}
 
-a.external{
+div#frikomport-body a.external{
     background: transparent url(../images/External.png) no-repeat scroll right center;
     padding-right: 13px;
 }
 /* 0 means zero regardless of measurement */
-body {
+body div#frikomport-body {
     background: #FFFFFF;
     color: #000000;
     font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -44,13 +49,13 @@ body {
     padding: 0 !important;
 }
 
-button {
+div#frikomport-body button {
   font-size: 1.1em;
   background-image: url(../images/btn_bg.png);
   padding: 1px 8px 1px 8px;
 }
 
-div#activeUsers {
+div#frikomport-body div#activeUsers {
     float: right;
     margin-right: 5px;
     font-size: 0.9em;
@@ -58,52 +63,47 @@ div#activeUsers {
     color: #000;
 }
 
-div#fkp-content {
+div#frikomport-body div#fkp-content {
     margin: 0px 10px 10px 1px;
     padding: 10px 0px 10px 0px;
     text-align: left;
 }
 
-div#fkp-content>p {margin:10px 0px}
+div#frikomport-body div#fkp-content>p {margin:10px 0px}
 
 
-/*div#fkp-content button {
-	margin-top: 0.3em;
-	margin-bottom: 0.3em;
-}*/
-
-.searchForm ul {
+div#frikomport-body .searchForm ul {
     padding: 2px;
 }
 
-.searchForm ul li {
+div#frikomport-body .searchForm ul li {
     display: inline;
     white-space: nowrap;
     line-height: 20px;
 }
-.searchForm ul li label {
+div#frikomport-body .searchForm ul li label {
     margin-left: 4px;
     margin-right: 2px;
 }
 
-select#organizationid {
+div#frikomport-body select#organizationid {
     width: 100px;
     max-width: 100px;
 }
-select#serviceAreaid {
+div#frikomport-body select#serviceAreaid {
     width: 100px;
     max-width: 100px;
 }
-select#categoryid {
+div#frikomport-body select#categoryid {
     width: 100px;
     max-width: 100px;
 }
-select#courseid {
+div#frikomport-body select#courseid {
     width: 280px;
     max-width: 280px;
 }
 
-div#footer {
+div#frikomport-body div#footer {
     background: transparent;
     border-top: 1px solid #C0C0C0;
     color: #666666;
@@ -113,46 +113,30 @@ div#footer {
     text-align: left;
 }
 
-div#footer a, div#footer a:visited {
+div#frikomport-body div#footer a, div#footer a:visited {
     background: transparent;
     color: #666666;
 }
 
-div#footer a:hover {
+div#frikomport-body div#footer a:hover {
     background: transparent;
     border-bottom: 1px dashed #FFA500;
     color: #000000;
     text-decoration: none;
 }
 
-div#header {
+div#frikomport-body div#header {
     margin: 50px 0px 10px 0px;
     padding: 17px 0px 5px 20px;
-    /* For IE5/Win's benefit height = [correct height] + [top padding] + [top and bottom border widths] */
-    height: 33px; /* 14px + 17px + 2px = 33px */
+    height: 14px; 
     border-style: solid;
     border-color: black;
-    border-width: 1px 0px; /* top and bottom borders: 1px; left and right borders: 0px */
+    border-width: 1px 0px;
     line-height: 11px;
     background-color: #eee;
-
-/* Here is the ugly brilliant hack that protects IE5/Win from its own stupidity. 
-Thanks to Tantek Celik for the hack and to Eric Costello for publicizing it. 
-IE5/Win incorrectly parses the "\"}"" value, prematurely closing the style 
-declaration. The incorrect IE5/Win value is above, while the correct value is 
-below. See http://glish.com/css/hacks.asp for details. */
-    voice-family: "\"}\"";
-    voice-family: inherit;
-    height:14px; /* the correct height */
 }
 
-/* I've heard this called the "be nice to Opera 5" rule. Basically, it feeds correct 
-length values to user agents that exhibit the parsing error exploited above yet get 
-the CSS box model right and understand the CSS2 parent-child selector. ALWAYS include
-a "be nice to Opera 5" rule every time you use the Tantek Celik hack (above). */
-body>#header {height: 14px;}
-
-div#loginTable {
+div#frikomport-body div#loginTable {
     background: #EEEEEE;
     border: 1px solid #C0C0C0;
     color: inherit;
@@ -161,38 +145,31 @@ div#loginTable {
     width: 400px;
 }
 
-div#loginTable th {
+div#frikomport-body div#loginTable th {
     text-align: right;
 }
 
-div#menuDiv {
-    position: absolute;
-    /*top: 100px;*/
+div#frikomport-body div#menuDiv {
+    /* position: absolute; */
+    /* top: 100px; */
     right: 20px;
-    width: 190px;
     padding: 0px;
     background-color: #fff;
     border: 1px dotted #c0c0c0;
     /*line-height: 17px;*/
-    /* Again, the ugly brilliant hack. */
-    voice-family: "\"}\"";
-    voice-family: inherit;
-    width: 166px;
 }
-/* Again, "be nice to Opera 5". */
-body>div#menuDiv {width: 150px;}
 
-div#menuDiv a:visited {
+div#frikomport-body div#menuDiv a:visited {
     background: transparent;
     color: black;
 }
 
-div#menuDiv ul {
+div#frikomport-body div#menuDiv ul {
     padding-left: 10px;
     margin: 0.7em;
 }
 
-div#readme {
+div#frikomport-body div#readme {
     background: #ffd;
     border: 1px solid silver;
     color: #008000;
@@ -203,17 +180,17 @@ div#readme {
     width: 600px;
 }
 
-div#readme pre {
+div#frikomport-body div#readme pre {
     border: 0;
 }
 
-div#flags {
+div#frikomport-body div#flags {
     position: absolute;
     left: 20px;
     top: 10px;
 }
 
-div#userStatus {
+div#frikomport-body div#userStatus {
     position: absolute;
     right: 5px;
     top: 5px;
@@ -224,56 +201,56 @@ div#userStatus {
 }
 
 
-div#validators {
+div#frikomport-body div#validators {
     float: right;
 }
 
-div.separator {
+div#frikomport-body div.separator {
     border-bottom: 1px solid green;
     margin: 10px 0px; 
     width: 300px;
 }
 
-div.standardsNote {
+div#frikomport-body div.standardsNote {
     display: block;
 }
 
-form, table {
+div#frikomport-body form, 
+div#frikomport-body table {
     margin: 0;
     padding: 0;
 }
 
 /* for cool looking "sunken" input boxes, from www.theserverside.com */
-form input, form textarea, form select {
+div#frikomport-body form input, 
+div#frikomport-body form textarea, 
+div#frikomport-body form select {
     padding-left: 4px;
     color: #666;
     font-size: 1.0em;
 }
 
-form textarea {
+div#frikomport-body form textarea {
     font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 
-input.button {
+div#frikomport-body input.button {
     color: #000;
     padding-left: 1px;
     background-image: url(../images/btn_bg.png);
 }
 
-input.button {
-    /* fix button size in IE */
-}
-
-form input.focus, form textarea.focus {
+div#frikomport-body form input.focus, 
+div#frikomport-body form textarea.focus {
     border-color: orange;
     color: #000;
 }
 
-form select {
+div#frikomport-body form select {
     padding-left: 0px;
 }
 
-h1 {
+div#frikomport-body h1 {
 	margin: 0;
 	font-size: 1.25em;
 	font-weight: bold;
@@ -283,7 +260,7 @@ h1 {
 	margin-bottom: 0.4em;
 }
 
-h2 {
+div#frikomport-body h2 {
 	margin: 0;
 	font-size: 1em; /* 10px; */
 	font-weight: bold;
@@ -291,7 +268,7 @@ h2 {
 	padding-top: 2px;
 }
 
-h3 {
+div#frikomport-body h3 {
     color: #7A786E;
     font-size: 20px;
     font-weight: 900;
@@ -300,7 +277,7 @@ h3 {
     padding: 0px;
 }
 
-h4 {
+div#frikomport-body h4 {
     color: #7A786E;
     font-size: 16px;
     font-weight: 900;
@@ -309,153 +286,156 @@ h4 {
     padding: 0px;
 }
 
-img.badge {
+div#frikomport-body img.badge {
     border: 0px;
     height: 31px;
     margin-right: 5px;
     width: 88px;
 }
 
-p {
+div#frikomport-body p {
     font: 12px;
     margin: 0px 0px 16px 0px;
     padding: 0px;
 }
 
-span.attention {
+div#frikomport-body span.attention {
     background: transparent;
     color: #0000ff;
 }
 
 /* Labels for validation and label tag */
 
-label {
+div#frikomport-body label {
     font-weight: normal;
     cursor: pointer;
 }
 
-label.required {
+div#frikomport-body label.required {
     font-weight: bold;
 }
 
-label.error {
+div#frikomport-body label.error {
     font-weight: bold;
     background: transparent;
     color: red;
 }
 
 /* These are the styles for detail screen tables */
-table.detail {
+div#frikomport-body table.detail {
     margin-left: 10px;
     padding: 5px;
     font-weight: normal;
 }
 
-div.screen {
+div#frikomport-body div.screen {
 margin:0 0 0 -2px;
 }
 
-table tbody td button {
+div#frikomport-body table tbody td button {
   vertical-align: middle;
 }
 
 
-table tbody td input.button {
+div#frikomport-body table tbody td input.button {
   vertical-align: middle;
 }
 
-table.detail th {
+div#frikomport-body table.detail th {
     text-align: right;
     vertical-align: top;
     margin: 0 !important;
     padding: 0 3px 7px 0 !important;
 }
 
-table.detail th.tallCell {
+div#frikomport-body table.detail th.tallCell {
     vertical-align: top;
 }
 
-table.detail td {
+div#frikomport-body table.detail td {
     text-align: left;
     vertical-align: top;
     margin: 0 !important;
     padding: 0 !important;
 }
 
-table.detail td a {
+div#frikomport-body table.detail td a {
   vertical-align: top;
 }
 
-table.detail td button {
+div#frikomport-body table.detail td button {
   vertical-align: middle;
   padding: 0 0 0 0px !important;
   margin: 0 0 0 8px !important;
 }
 
-table.detail td input.button {
+div#frikomport-body table.detail td input.button {
   vertical-align: middle;
   padding: 0 2px 0px 1px !important;
    padding-bottom: 0px !important;
    padding-top: 0px !important;
 }
 
-table.detail td.moveOptions {
+div#frikomport-body table.detail td.moveOptions {
     text-align: center;
     width: 50px;
     padding: 5px;
 }
 
-table.detail td.moveOptions button {
+div#frikomport-body table.detail td.moveOptions button {
     margin-bottom: 3px;
     width: 45px;
     white-space: nowrap;
 }
 
-table.detail td.buttonBar {
+div#frikomport-body table.detail td.buttonBar {
     padding-top: 10px;
 }
 
-table.detail td.updateStatus {
+div#frikomport-body table.detail td.updateStatus {
     font-size: 11px;
     color: #c0c0c0;
 }
 
-fieldset.pickList {
+div#frikomport-body fieldset.pickList {
     margin-top: 5px;
     padding: 5px;
     background: transparent;
     border-color: #eee;
 }
 
-fieldset.pickList legend {
+div#frikomport-body fieldset.pickList legend {
     font-weight: bold;    
 }
 
-table.pickList {
+div#frikomport-body table.pickList {
     padding: 0;
     border-spacing: 0;
 }
 
-table.pickList th.pickLabel {
+div#frikomport-body table.pickList th.pickLabel {
     text-align: center;
     background: transparent;
     color: #666;
 }
 
-table.pickList td {
+div#frikomport-body table.pickList td {
     text-align: center;
 }
 
-table.pickList td select {
+div#frikomport-body table.pickList td select {
     width: 150px;
 }
 
-th, td, pre, code {
+div#frikomport-body th, 
+div#frikomport-body td, 
+div#frikomport-body pre, 
+div#frikomport-body code {
     font-size: 1.0em; /* 12px; */
 }
 
-th label,
-form label {
+div#frikomport-body th label,
+div#frikomport-body form label {
 	margin: 0;
 	font-size: 1.0em; /* 10px; */
 	font-weight: bold;
@@ -463,19 +443,19 @@ form label {
 	padding-top: 2px;
 }
 
-ul.glassList {
+div#frikomport-body ul.glassList {
     list-style: url(../images/aquadot.jpg) disc outside;
     vertical-align: top;
     line-height: 1.5;
 }
 
-pre {
+div#frikomport-body pre {
     background: #ffffdd;
     border: 1px solid #999999;
     color: #000000;
     padding: 5px 5px 5px 7px;
 }
-div#fkp-content table th {
+div#frikomport-body div#fkp-content table th {
 	margin: 0;
 	font-size: 1.0em; /* 10px; */
 	font-weight: bold;
@@ -485,21 +465,22 @@ div#fkp-content table th {
 	padding-bottom: 4px;
 }
 
-thead th.sortable {
+div#frikomport-body thead th.sortable {
 	background-color: #e2eaef;
 }
 
-td.canceled, tr.canceled {
+div#frikomport-body td.canceled, 
+div#frikomport-body tr.canceled {
 	text-decoration:line-through;
 }
 
-#loggedin {
+div#frikomport-body #loggedin {
 	text-align: right;
-	display:none;
 	font-size: 0.8em;
+	float: right;
 }
 
-tr.sum, 
-td.sum {
+div#frikomport-body tr.sum, 
+div#frikomport-body td.sum {
 	font-weight:bold;
 }

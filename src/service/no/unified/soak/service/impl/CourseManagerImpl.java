@@ -14,16 +14,19 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import no.unified.soak.dao.CourseDAO;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Person;
 import no.unified.soak.service.ConfigurationManager;
+import no.unified.soak.service.CourseAccessException;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.UserManager;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.StaleObjectStateException;
+import org.springframework.context.MessageSource;
 
 
 /**
@@ -36,6 +39,12 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
 
     private ConfigurationManager configurationManager = null;
     private UserManager userManager = null;
+
+	private MessageSource messageSource;
+
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
+	}
 
     public void setConfigurationManager(ConfigurationManager configurationManager) {
         this.configurationManager = configurationManager;
@@ -88,6 +97,11 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
     		}
     		throw e;
     	}
+		catch (CourseAccessException e) {
+			String[] stringArr = {id};
+			CourseAccessException courseAccessException = new CourseAccessException(messageSource.getMessage("courseErrorPage.message", stringArr, new Locale("no_NO")), e);
+			throw courseAccessException;
+		}
     	return result;
     }
 

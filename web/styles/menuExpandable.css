@@ -1,41 +1,44 @@
 /* These id's are static, so keep the same names */
-div#menuDiv {
+div#frikomport-body div#menuDiv {
     padding: 0px;
 }
 
-#menuDiv {
+div#frikomport-body #menuDiv {
     background-color: #EEE;
     color: #000;
 }
 
-#menuList {
+div#frikomport-body #menuList {
     margin: 0px;
     padding: 10px 0px 10px 15px;
 }
 
-li.menubar {
+div#frikomport-body li.menubar {
     background: url(../images/plus.gif) no-repeat 0em 0.3em;
     font-size: 12px;
     line-height: 1.5em;
     list-style: none outside;
 }
 
-.menu, .submenu {
+div#frikomport-body .menu, 
+div#frikomport-body .submenu {
     display: none;
     margin-left: 15px;
     padding: 0px;
 }
 
-.menu li, .submenu li  {
+div#frikomport-body .menu li, 
+div#frikomport-body .submenu li  {
     background: url(../images/bullet_go.png) no-repeat 0em 0em;
     list-style: none outside;
 }
 
-li.menubar a.standalone {
+div#frikomport-body li.menubar a.standalone {
     background: url(../images/bullet_go.png) no-repeat 0em 0em !important;
 }
 
-a.actuator, a.standalone {
+div#frikomport-body a.actuator, 
+div#frikomport-body a.standalone {
     background-color: transparent;
     color: #000;
     font-size: 12px;
@@ -43,7 +46,8 @@ a.actuator, a.standalone {
     text-decoration: none;
 }
 
-.menu li a, .submenu li a {
+div#frikomport-body .menu li a, 
+div#frikomport-body .submenu li a {
     background-color: transparent;
     color: #000;
     font-size: 12px;
@@ -51,15 +55,18 @@ a.actuator, a.standalone {
     text-decoration: none;
 }
 
-a.actuator:hover, .menu li a:hover, submenu li a:hover, li a.standalone:hover {
+div#frikomport-body a.actuator:hover, 
+div#frikomport-body .menu li a:hover, 
+div#frikomport-body submenu li a:hover, 
+div#frikomport-body li a.standalone:hover {
     text-decoration: underline;
 }
 
-span.key {
+div#frikomport-body span.key {
     text-decoration: underline;
 }
 
-a.highlight {
+div#frikomport-body a.highlight {
     color: red !important;
     font-weight: bold;
 }

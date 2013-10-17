@@ -38,6 +38,7 @@ import no.unified.soak.model.User;
 import no.unified.soak.model.Organization.Type;
 import no.unified.soak.model.Registration.Status;
 import no.unified.soak.service.AttachmentManager;
+import no.unified.soak.service.CourseAccessException;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.LocationManager;
 import no.unified.soak.service.MailEngine;
@@ -58,6 +59,7 @@ import no.unified.soak.webapp.util.FileUtil;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.MessageSource;
+import org.springframework.dao.DataAccessException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.validation.BindException;
@@ -356,9 +358,15 @@ public class CourseFormController extends BaseFormController {
         Course course = null;
         Course newCourse = null;
 
-        if (!StringUtils.isEmpty(id)) {
-            course = courseManager.getCourse(id);
-        } else if (!StringUtils.isEmpty(copyid)) {
+		if (!StringUtils.isEmpty(id)) {
+			try {
+				course = courseManager.getCourse(id);
+			} catch (DataAccessException e) {
+				String[] stringArr = {id};
+				request.setAttribute("courseErrorPage.heading.localized", messageSource.getMessage("courseErrorPage.heading", null, request.getLocale()));
+				throw new CourseAccessException(messageSource.getMessage("courseErrorPage.message", stringArr, request.getLocale()), e);
+			}
+		} else if (!StringUtils.isEmpty(copyid)) {
             course = courseManager.getCourse(copyid);
             newCourse = new Course();
             newCourse.copyAllButId(course);
