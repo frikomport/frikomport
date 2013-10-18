@@ -41,7 +41,6 @@ div#frikomport-body a.external{
 }
 /* 0 means zero regardless of measurement */
 body div#frikomport-body {
-    background: #FFFFFF;
     color: #000000;
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 0.6em; /* 12px; */
@@ -154,7 +153,6 @@ div#frikomport-body div#menuDiv {
     /* top: 100px; */
     right: 20px;
     padding: 0px;
-    background-color: #fff;
     border: 1px dotted #c0c0c0;
     /*line-height: 17px;*/
 }

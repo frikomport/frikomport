@@ -58,7 +58,7 @@ if (divstart) {
     </div>
     <![endif]-->  
 
-    <div id="screen" class="article">
+    <div id="screen" class="text">
         <c:import url="/WEB-INF/pages/menu.jsp" charEncoding="UTF-8"/>
         <div id="fkp-content">
             <h1><decorator:getProperty property="page.heading"/></h1>

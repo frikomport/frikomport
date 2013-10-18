@@ -178,3 +178,9 @@ div#frikomport-body div .submenu li {
 list-style:none outside none;
 }
 
+/* Fjerner language-valget i hovedmenyen forde det ikke skal vises for 
+IE-brukere og mengdetrening ikke holder flere varianter av sidedekoren 
+avhengig av brukerens nettleser. */
+div.hovedmeny-spraak {
+	display:none;
+}
