@@ -31,19 +31,20 @@ public class PostalCodesSuperduperLoader {
 	 *            -is ignored.
 	 */
 	public static void main(String[] args) {
-	    /* Last updated 2013-04-02 based on data last updated 2013-01-07 */
-//	    PostalCodesSuperduperLoader psl = new PostalCodesSuperduperLoader();
-//	    psl.loadAndWriteJavaCode();
+	    /* Last updated 2013-10-18 based on data last updated 2013-09-19 */
+	    PostalCodesSuperduperLoader psl = new PostalCodesSuperduperLoader();
+	    psl.loadAndWriteJavaCode();
 	}
 
 	private static void loadPostalCodes() {
-		List<PostalCodeCoordinate> all = new ArrayList<PostalCodeCoordinate>(4700);
+		List<PostalCodeCoordinate> all = new ArrayList<PostalCodeCoordinate>(4800);
 		all.addAll(loadPostalCodesPart1());
 		all.addAll(loadPostalCodesPart2());
 		all.addAll(loadPostalCodesPart3());
 		all.addAll(loadPostalCodesPart4());
 		all.addAll(loadPostalCodesPart5());
 		all.addAll(loadPostalCodesPart6());
+		all.addAll(loadPostalCodesPart7());
 		
 		for (PostalCodeCoordinate postalCodeCoordinate : all) {
 			allMap.put(postalCodeCoordinate.getPostalCode(), postalCodeCoordinate);
@@ -102,6 +103,7 @@ public class PostalCodesSuperduperLoader {
 		return allMap.containsKey(postalcode); 
 	}
 	
+
 	private static List<PostalCodeCoordinate> loadPostalCodesPart1() {
 	    List list = new ArrayList<PostalCodeCoordinate>();
 	    list.add(new PostalCodeCoordinate("0001",10.7545, 59.9116));
@@ -500,7 +502,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("0650",10.7728, 59.9115));
 	    list.add(new PostalCodeCoordinate("0651",10.7701, 59.9133));
 	    list.add(new PostalCodeCoordinate("0652",10.7752, 59.9122));
-	    list.add(new PostalCodeCoordinate("0653",10.8713, 59.9267));
+	    list.add(new PostalCodeCoordinate("0653",10.776906, 59.912725));
 	    list.add(new PostalCodeCoordinate("0654",10.7798, 59.9127));
 	    list.add(new PostalCodeCoordinate("0655",10.7827, 59.9121));
 	    list.add(new PostalCodeCoordinate("0656",10.774, 59.9076));
@@ -924,6 +926,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("1501",10.6669, 59.43765));
 	    list.add(new PostalCodeCoordinate("1502",10.6669, 59.4377));
 	    list.add(new PostalCodeCoordinate("1503",10.6669, 59.4377));
+	    list.add(new PostalCodeCoordinate("1504",10.6669, 59.4377));
 	    list.add(new PostalCodeCoordinate("1506",10.69072, 59.47158));
 	    list.add(new PostalCodeCoordinate("1508",10.61895, 59.44273));
 	    list.add(new PostalCodeCoordinate("1509",10.7031, 59.44620));
@@ -1052,7 +1055,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("1711",11.0874, 59.2832));
 	    list.add(new PostalCodeCoordinate("1712",11.0681, 59.2905));
 	    list.add(new PostalCodeCoordinate("1713",11.06076, 59.29284));
-	    list.add(new PostalCodeCoordinate("1714",11.1096, 59.2839));
+	    list.add(new PostalCodeCoordinate("1714",11.0681, 59.2905));
 	    list.add(new PostalCodeCoordinate("1715",11.0708, 59.2804));
 	    list.add(new PostalCodeCoordinate("1718",11.0466, 59.2703));
 	    list.add(new PostalCodeCoordinate("1719",11.035, 59.2659));
@@ -1137,6 +1140,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("1830",11.1624, 59.5829));
 	    list.add(new PostalCodeCoordinate("1831",11.1522, 59.5822));
 	    list.add(new PostalCodeCoordinate("1832",11.126, 59.5986));
+	    list.add(new PostalCodeCoordinate("1833",11.12, 59.59));
 	    list.add(new PostalCodeCoordinate("1850",11.3258, 59.5535));
 	    list.add(new PostalCodeCoordinate("1851",11.33273, 59.55329));
 	    list.add(new PostalCodeCoordinate("1859",11.2615, 59.5854));
@@ -1200,6 +1204,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("2020",11.0329, 60.0045));
 	    list.add(new PostalCodeCoordinate("2021",11.04014, 60.00119));
 	    list.add(new PostalCodeCoordinate("2022",11.0345, 60.0717));
+	    list.add(new PostalCodeCoordinate("2023",11.04014, 60.00119));
 	    list.add(new PostalCodeCoordinate("2024",11.03247, 60.07276));
 	    list.add(new PostalCodeCoordinate("2025",11.06735, 59.93236));
 	    list.add(new PostalCodeCoordinate("2026",10.99986, 59.96684));
@@ -1705,13 +1710,13 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("3159",10.33862, 59.23075));
 	    list.add(new PostalCodeCoordinate("3160",10.2984, 59.2233));
 	    list.add(new PostalCodeCoordinate("3161",10.30854, 59.22319));
-	    list.add(new PostalCodeCoordinate("3162",10.17684, 59.30531));
-	    list.add(new PostalCodeCoordinate("3163",10.4082, 59.22600));
-	    list.add(new PostalCodeCoordinate("3164",10.2643, 59.37174));
 	    return list;
 	}
 	private static List<PostalCodeCoordinate> loadPostalCodesPart3() {
 	    List list = new ArrayList<PostalCodeCoordinate>();
+	    list.add(new PostalCodeCoordinate("3162",10.17684, 59.30531));
+	    list.add(new PostalCodeCoordinate("3163",10.4082, 59.22600));
+	    list.add(new PostalCodeCoordinate("3164",10.2643, 59.37174));
 	    list.add(new PostalCodeCoordinate("3165",10.39115, 59.11459));
 	    list.add(new PostalCodeCoordinate("3166",10.471124,  59.272860));
 	    list.add(new PostalCodeCoordinate("3167",10.45981, 59.34955));
@@ -1904,7 +1909,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("3513",10.2736, 60.168));
 	    list.add(new PostalCodeCoordinate("3514",10.3208, 60.1723));
 	    list.add(new PostalCodeCoordinate("3515",10.2597, 60.1791));
-	    list.add(new PostalCodeCoordinate("3516",10.1063, 60.3349));
+	    list.add(new PostalCodeCoordinate("3516",10.216187, 60.234799));
 	    list.add(new PostalCodeCoordinate("3517",10.2344, 60.1743));
 	    list.add(new PostalCodeCoordinate("3518",10.199, 60.1843));
 	    list.add(new PostalCodeCoordinate("3519",10.1678, 60.1353));
@@ -1928,6 +1933,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("3539",9.46217, 60.42919));
 	    list.add(new PostalCodeCoordinate("3540",9.11164, 60.57045));
 	    list.add(new PostalCodeCoordinate("3541",9.104, 60.5696));
+	    list.add(new PostalCodeCoordinate("3544",8.7682, 60.4615));
 	    list.add(new PostalCodeCoordinate("3550",8.9457, 60.7014));
 	    list.add(new PostalCodeCoordinate("3551",8.94545, 60.70057));
 	    list.add(new PostalCodeCoordinate("3560",8.5541, 60.863));
@@ -1936,7 +1942,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("3571",8.56376, 60.63052));
 	    list.add(new PostalCodeCoordinate("3575",8.29652, 60.61481));
 	    list.add(new PostalCodeCoordinate("3576",8.2940, 60.6151));
-	    list.add(new PostalCodeCoordinate("3577",8.15343, 60.62235));
+	    list.add(new PostalCodeCoordinate("3577",8.1533, 60.6224));
 	    list.add(new PostalCodeCoordinate("3579",8.7199, 60.6644));
 	    list.add(new PostalCodeCoordinate("3580",8.2081, 60.5355));
 	    list.add(new PostalCodeCoordinate("3581",8.20778, 60.53405));
@@ -1950,6 +1956,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("3605",9.6443, 59.6639));
 	    list.add(new PostalCodeCoordinate("3606",9.65246, 59.66858));
 	    list.add(new PostalCodeCoordinate("3608",9.6635, 59.596));
+	    list.add(new PostalCodeCoordinate("3609",9.65246, 59.66858));
 	    list.add(new PostalCodeCoordinate("3610",9.65953, 59.65338));
 	    list.add(new PostalCodeCoordinate("3611",9.6441, 59.6742));
 	    list.add(new PostalCodeCoordinate("3612",9.6647, 59.6686));
@@ -2249,6 +2256,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("4096",5.61825, 58.99915));
 	    list.add(new PostalCodeCoordinate("4097",5.64658, 58.88481));
 	    list.add(new PostalCodeCoordinate("4098",5.5870, 58.9362));
+	    list.add(new PostalCodeCoordinate("4099",5.73911, 58.94799));
 	    list.add(new PostalCodeCoordinate("4100",6.0408, 59.0225));
 	    list.add(new PostalCodeCoordinate("4102",5.9409, 58.9872));
 	    list.add(new PostalCodeCoordinate("4110",6.1048, 58.9033));
@@ -2391,6 +2399,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("4391",5.72521, 58.87892));
 	    list.add(new PostalCodeCoordinate("4392",5.71180, 58.82018));
 	    list.add(new PostalCodeCoordinate("4393",5.71209, 58.83305));
+	    list.add(new PostalCodeCoordinate("4394",5.75220, 58.85453));
 	    list.add(new PostalCodeCoordinate("4395",5.84779, 58.92975));
 	    list.add(new PostalCodeCoordinate("4396",5.75220, 58.85453));
 	    list.add(new PostalCodeCoordinate("4397",5.75330, 58.82103));
@@ -2505,6 +2514,10 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("4651",8.08580, 58.19306));
 	    list.add(new PostalCodeCoordinate("4656",8.082, 58.1925));
 	    list.add(new PostalCodeCoordinate("4657",8.0799, 58.2073));
+	    return list;
+	}
+	private static List<PostalCodeCoordinate> loadPostalCodesPart4() {
+	    List list = new ArrayList<PostalCodeCoordinate>();
 	    list.add(new PostalCodeCoordinate("4658",8.1091, 58.2217));
 	    list.add(new PostalCodeCoordinate("4659",8.1269, 58.1725));
 	    list.add(new PostalCodeCoordinate("4661",7.99232, 58.14502));
@@ -2512,10 +2525,6 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("4663",7.9923, 58.145));
 	    list.add(new PostalCodeCoordinate("4664",7.9923, 58.145));
 	    list.add(new PostalCodeCoordinate("4665",7.9923, 58.145));
-	    return list;
-	}
-	private static List<PostalCodeCoordinate> loadPostalCodesPart4() {
-	    List list = new ArrayList<PostalCodeCoordinate>();
 	    list.add(new PostalCodeCoordinate("4666",7.9923, 58.145));
 	    list.add(new PostalCodeCoordinate("4670",7.9536, 58.1341));
 	    list.add(new PostalCodeCoordinate("4671",7.92903, 58.18824));
@@ -2542,6 +2551,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("4695",8.0739, 58.1336));
 	    list.add(new PostalCodeCoordinate("4696",8.1271, 58.1725));
 	    list.add(new PostalCodeCoordinate("4697",8.12952, 58.17993));
+	    list.add(new PostalCodeCoordinate("4698",8.12952, 58.17993));
 	    list.add(new PostalCodeCoordinate("4699",8.12255, 58.23266));
 	    list.add(new PostalCodeCoordinate("4700",7.9741, 58.2694));
 	    list.add(new PostalCodeCoordinate("4701",7.9719, 58.2694));
@@ -2637,6 +2647,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("4889",8.67561, 58.38164));
 	    list.add(new PostalCodeCoordinate("4891",8.5934, 58.3405));
 	    list.add(new PostalCodeCoordinate("4892",8.5934, 58.3405));
+	    list.add(new PostalCodeCoordinate("4893",8.5841, 58.3445));
 	    list.add(new PostalCodeCoordinate("4894",8.5841, 58.3445));
 	    list.add(new PostalCodeCoordinate("4895",8.5841, 58.3445));
 	    list.add(new PostalCodeCoordinate("4896",8.5841, 58.3445));
@@ -2740,6 +2751,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("5121",5.2932, 60.4647));
 	    list.add(new PostalCodeCoordinate("5122",5.281, 60.4672));
 	    list.add(new PostalCodeCoordinate("5124",5.2750, 60.4698));
+	    list.add(new PostalCodeCoordinate("5130",5.3358, 60.4684));
 	    list.add(new PostalCodeCoordinate("5131",5.3545, 60.477));
 	    list.add(new PostalCodeCoordinate("5132",5.3456, 60.467));
 	    list.add(new PostalCodeCoordinate("5134",5.3632, 60.4639));
@@ -2871,8 +2883,9 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("5347",5.0024, 60.408));
 	    list.add(new PostalCodeCoordinate("5350",5.16, 60.3495));
 	    list.add(new PostalCodeCoordinate("5353",5.1256, 60.3586));
+	    list.add(new PostalCodeCoordinate("5354",5.1220, 60.3613));
 	    list.add(new PostalCodeCoordinate("5355",5.1578, 60.3738));
-	    list.add(new PostalCodeCoordinate("5357",5.1242, 60.3571));
+	    list.add(new PostalCodeCoordinate("5357",5.0761, 60.3304));
 	    list.add(new PostalCodeCoordinate("5358",5.07680, 60.33069));
 	    list.add(new PostalCodeCoordinate("5360",5.0825, 60.3573));
 	    list.add(new PostalCodeCoordinate("5363",5.0192, 60.4031));
@@ -2923,7 +2936,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("5430",5.1853, 59.7943));
 	    list.add(new PostalCodeCoordinate("5437",5.2595, 59.745));
 	    list.add(new PostalCodeCoordinate("5440",5.3858, 59.6992));
-	    list.add(new PostalCodeCoordinate("5443",5.1853, 59.7943));
+	    list.add(new PostalCodeCoordinate("5443",5.2291, 59.6043));
 	    list.add(new PostalCodeCoordinate("5444",5.15321, 59.58852));
 	    list.add(new PostalCodeCoordinate("5445",5.17345, 59.79344));
 	    list.add(new PostalCodeCoordinate("5447",5.38775, 59.69881));
@@ -2952,7 +2965,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("5484",5.71201, 59.79491));
 	    list.add(new PostalCodeCoordinate("5486",6.00991, 59.98643));
 	    list.add(new PostalCodeCoordinate("5497",5.5759, 59.8484));
-	    list.add(new PostalCodeCoordinate("5498",5.9932, 59.859));
+	    list.add(new PostalCodeCoordinate("5498",5.9673, 59.7972));
 	    list.add(new PostalCodeCoordinate("5499",6.1023, 59.7901));
 	    list.add(new PostalCodeCoordinate("5501",5.26919, 59.41439));
 	    list.add(new PostalCodeCoordinate("5502",5.2692, 59.4144));
@@ -2999,7 +3012,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("5554",5.4725, 59.6993));
 	    list.add(new PostalCodeCoordinate("5555",5.47159, 59.61261));
 	    list.add(new PostalCodeCoordinate("5559",5.36405, 59.54511));
-	    list.add(new PostalCodeCoordinate("5560",5.83311, 59.35670));
+	    list.add(new PostalCodeCoordinate("5560",5.8501, 59.3464));
 	    list.add(new PostalCodeCoordinate("5561",5.43941, 59.23236));
 	    list.add(new PostalCodeCoordinate("5563",5.4045, 59.4163));
 	    list.add(new PostalCodeCoordinate("5565",5.4878, 59.3244));
@@ -3076,8 +3089,10 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("5708",6.3272, 60.6224));
 	    list.add(new PostalCodeCoordinate("5709",6.5378, 60.6153));
 	    list.add(new PostalCodeCoordinate("5710",6.43510, 60.66011));
+	    list.add(new PostalCodeCoordinate("5711",6.4351, 60.6600));
 	    list.add(new PostalCodeCoordinate("5712",6.50925, 60.79234));
 	    list.add(new PostalCodeCoordinate("5713",6.5084, 60.7919));
+	    list.add(new PostalCodeCoordinate("5714",6.4194, 60.6279));
 	    list.add(new PostalCodeCoordinate("5715",6.6833, 60.839));
 	    list.add(new PostalCodeCoordinate("5718",7.1230, 60.7353));
 	    list.add(new PostalCodeCoordinate("5719",7.49241, 60.60288));
@@ -3105,6 +3120,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("5749",6.8689, 60.9163));
 	    list.add(new PostalCodeCoordinate("5750",6.5457, 60.0691));
 	    list.add(new PostalCodeCoordinate("5751",6.54214, 60.07029));
+	    list.add(new PostalCodeCoordinate("5752",6.54214, 60.07029));
 	    list.add(new PostalCodeCoordinate("5760",6.82267, 59.83078));
 	    list.add(new PostalCodeCoordinate("5763",6.5942, 59.932));
 	    list.add(new PostalCodeCoordinate("5770",6.5569, 60.1161));
@@ -3129,8 +3145,11 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("5807",5.3263, 60.3927));
 	    list.add(new PostalCodeCoordinate("5808",5.3263, 60.3927));
 	    list.add(new PostalCodeCoordinate("5809",5.3263, 60.3927));
+	    list.add(new PostalCodeCoordinate("5810",5.3263, 60.3927));
 	    list.add(new PostalCodeCoordinate("5811",5.32633, 60.39266));
 	    list.add(new PostalCodeCoordinate("5812",5.32552, 60.39989));
+	    list.add(new PostalCodeCoordinate("5813",5.3255, 60.3998));
+	    list.add(new PostalCodeCoordinate("5814",5.3255, 60.3998));
 	    list.add(new PostalCodeCoordinate("5815",5.30524, 60.42475));
 	    list.add(new PostalCodeCoordinate("5816",5.3114, 60.3974));
 	    list.add(new PostalCodeCoordinate("5817",5.31136, 60.39742));
@@ -3208,6 +3227,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("5947",4.7174, 60.7810));
 	    list.add(new PostalCodeCoordinate("5948",4.7196, 60.7787));
 	    list.add(new PostalCodeCoordinate("5951",5.16174, 60.73509));
+	    list.add(new PostalCodeCoordinate("5952",4.9940, 60.8031));
 	    list.add(new PostalCodeCoordinate("5953",4.99369, 60.80309));
 	    list.add(new PostalCodeCoordinate("5954",5.0364, 60.8046));
 	    list.add(new PostalCodeCoordinate("5955",5.1557, 60.7399));
@@ -3279,7 +3299,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("6063",6.0743, 62.3548));
 	    list.add(new PostalCodeCoordinate("6064",5.8692, 62.2824));
 	    list.add(new PostalCodeCoordinate("6065",5.8519, 62.3408));
-	    list.add(new PostalCodeCoordinate("6067",5.85165, 62.34076));
+	    list.add(new PostalCodeCoordinate("6067",5.8485, 62.3422));
 	    list.add(new PostalCodeCoordinate("6068",5.8934, 62.2522));
 	    list.add(new PostalCodeCoordinate("6069",6.02918, 62.37116));
 	    list.add(new PostalCodeCoordinate("6070",5.73024, 62.28351));
@@ -3298,6 +3318,10 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("6095",5.7339, 62.3544));
 	    list.add(new PostalCodeCoordinate("6096",5.6237, 62.4043));
 	    list.add(new PostalCodeCoordinate("6098",5.5932, 62.3429));
+	    return list;
+	}
+	private static List<PostalCodeCoordinate> loadPostalCodesPart5() {
+	    List list = new ArrayList<PostalCodeCoordinate>();
 	    list.add(new PostalCodeCoordinate("6099",5.63858, 62.33793));
 	    list.add(new PostalCodeCoordinate("6100",6.0672, 62.1447));
 	    list.add(new PostalCodeCoordinate("6101",6.06897, 62.14644));
@@ -3316,10 +3340,6 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("6143",5.5579, 62.1006));
 	    list.add(new PostalCodeCoordinate("6144",5.6226, 62.0535));
 	    list.add(new PostalCodeCoordinate("6146",5.53082, 62.03613));
-	    return list;
-	}
-	private static List<PostalCodeCoordinate> loadPostalCodesPart5() {
-	    List list = new ArrayList<PostalCodeCoordinate>();
 	    list.add(new PostalCodeCoordinate("6149",5.44102, 62.17334));
 	    list.add(new PostalCodeCoordinate("6150",6.1217, 62.2020));
 	    list.add(new PostalCodeCoordinate("6151",6.12810, 62.19684));
@@ -3404,7 +3424,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("6407",7.1387, 62.7369));
 	    list.add(new PostalCodeCoordinate("6408",7.1024, 62.8125));
 	    list.add(new PostalCodeCoordinate("6409",6.9854, 62.7773));
-	    list.add(new PostalCodeCoordinate("6410",7.281, 62.7697));
+	    list.add(new PostalCodeCoordinate("6410",7.120299, 62.737721));
 	    list.add(new PostalCodeCoordinate("6411",7.0898, 62.7363));
 	    list.add(new PostalCodeCoordinate("6412",7.1379, 62.7375));
 	    list.add(new PostalCodeCoordinate("6413",7.1591, 62.7393));
@@ -3476,7 +3496,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("6524",7.7949, 63.0265));
 	    list.add(new PostalCodeCoordinate("6525",7.8814, 63.0667));
 	    list.add(new PostalCodeCoordinate("6529",7.82091, 63.09810));
-	    list.add(new PostalCodeCoordinate("6530",7.50126, 63.06436));
+	    list.add(new PostalCodeCoordinate("6530",7.6315, 63.0521));
 	    list.add(new PostalCodeCoordinate("6538",7.63219, 63.05236));
 	    list.add(new PostalCodeCoordinate("6539",7.44359, 63.01325));
 	    list.add(new PostalCodeCoordinate("6570",8.07925, 63.33044));
@@ -3504,7 +3524,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("6643",8.3655, 63.0197));
 	    list.add(new PostalCodeCoordinate("6644",8.59228, 63.02500));
 	    list.add(new PostalCodeCoordinate("6645",8.70681, 62.82009));
-	    list.add(new PostalCodeCoordinate("6650",8.6616, 62.9703));
+	    list.add(new PostalCodeCoordinate("6650",8.7272, 62.9740));
 	    list.add(new PostalCodeCoordinate("6652",8.6616, 62.9703));
 	    list.add(new PostalCodeCoordinate("6653",9.0599, 63.013));
 	    list.add(new PostalCodeCoordinate("6655",8.9238, 62.9916));
@@ -3750,7 +3770,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("7053",10.5095, 63.4322));
 	    list.add(new PostalCodeCoordinate("7054",10.5451, 63.4215));
 	    list.add(new PostalCodeCoordinate("7056",10.5179, 63.4236));
-	    list.add(new PostalCodeCoordinate("7057",10.5572, 63.3816));
+	    list.add(new PostalCodeCoordinate("7057",10.5450, 63.3970));
 	    list.add(new PostalCodeCoordinate("7058",10.4927, 63.4239));
 	    list.add(new PostalCodeCoordinate("7059",10.4965, 63.4186));
 	    list.add(new PostalCodeCoordinate("7070",10.14925, 63.42259));
@@ -3973,6 +3993,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("7468",10.3927, 63.4284));
 	    list.add(new PostalCodeCoordinate("7469",10.4001, 63.4321));
 	    list.add(new PostalCodeCoordinate("7470",10.44866, 63.43346));
+	    list.add(new PostalCodeCoordinate("7471",10.35572, 63.35080));
 	    list.add(new PostalCodeCoordinate("7472",10.35572, 63.35080));
 	    list.add(new PostalCodeCoordinate("7473",10.3557, 63.3508));
 	    list.add(new PostalCodeCoordinate("7474",10.3557, 63.3508));
@@ -4094,13 +4115,17 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("7715",11.4933, 64.0266));
 	    list.add(new PostalCodeCoordinate("7716",11.5386, 64.0217));
 	    list.add(new PostalCodeCoordinate("7717",11.6392, 64.0819));
-	    list.add(new PostalCodeCoordinate("7718",11.8751, 63.9964));
+	    list.add(new PostalCodeCoordinate("7718",11.609066, 64.016920));
 	    list.add(new PostalCodeCoordinate("7724",11.4882, 64.038));
 	    list.add(new PostalCodeCoordinate("7725",11.4801, 64.02));
 	    list.add(new PostalCodeCoordinate("7726",11.48824, 64.02204));
 	    list.add(new PostalCodeCoordinate("7728",11.4801, 64.0199));
 	    list.add(new PostalCodeCoordinate("7729",11.4954, 64.0149));
 	    list.add(new PostalCodeCoordinate("7730",11.3615, 64.0855));
+	    return list;
+	}
+	private static List<PostalCodeCoordinate> loadPostalCodesPart6() {
+	    List list = new ArrayList<PostalCodeCoordinate>();
 	    list.add(new PostalCodeCoordinate("7732",11.73971, 64.14009));
 	    list.add(new PostalCodeCoordinate("7734",11.5003, 64.0075));
 	    list.add(new PostalCodeCoordinate("7735",11.4801, 64.0143));
@@ -4120,10 +4145,6 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("7761",12.38384, 64.24671));
 	    list.add(new PostalCodeCoordinate("7770",10.8940, 64.5006));
 	    list.add(new PostalCodeCoordinate("7771",10.89422, 64.49985));
-	    return list;
-	}
-	private static List<PostalCodeCoordinate> loadPostalCodesPart6() {
-	    List list = new ArrayList<PostalCodeCoordinate>();
 	    list.add(new PostalCodeCoordinate("7777",11.1475, 64.4969));
 	    list.add(new PostalCodeCoordinate("7790",11.2172, 64.0721));
 	    list.add(new PostalCodeCoordinate("7791",11.22277, 64.07522));
@@ -4283,6 +4304,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("8200",15.3915, 67.259));
 	    list.add(new PostalCodeCoordinate("8201",15.39459, 67.25861));
 	    list.add(new PostalCodeCoordinate("8202",15.43236, 67.25516));
+	    list.add(new PostalCodeCoordinate("8203",15.43236, 67.25516));
 	    list.add(new PostalCodeCoordinate("8205",15.3918, 67.2588));
 	    list.add(new PostalCodeCoordinate("8206",15.3515,  67.2494));
 	    list.add(new PostalCodeCoordinate("8207",15.3721, 67.2586));
@@ -4346,7 +4368,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("8328",14.8433, 68.2632));
 	    list.add(new PostalCodeCoordinate("8340",13.8493, 68.1301));
 	    list.add(new PostalCodeCoordinate("8352",13.7081, 68.1123));
-	    list.add(new PostalCodeCoordinate("8357",13.5653, 68.1717));
+	    list.add(new PostalCodeCoordinate("8357",13.9403, 68.1949));
 	    list.add(new PostalCodeCoordinate("8360",13.74612, 68.23763));
 	    list.add(new PostalCodeCoordinate("8370",13.6116, 68.1482));
 	    list.add(new PostalCodeCoordinate("8372",13.5534, 68.1183));
@@ -4379,7 +4401,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("8412",15.5069, 68.3471));
 	    list.add(new PostalCodeCoordinate("8413",15.2239, 68.5723));
 	    list.add(new PostalCodeCoordinate("8414",15.2242, 68.5318));
-	    list.add(new PostalCodeCoordinate("8415",15.3748, 68.7123));
+	    list.add(new PostalCodeCoordinate("8415",15.160237, 68.715382));
 	    list.add(new PostalCodeCoordinate("8416",15.3234,  68.7470));
 	    list.add(new PostalCodeCoordinate("8426",14.8072, 68.8173));
 	    list.add(new PostalCodeCoordinate("8428",14.9074, 68.8746));
@@ -4471,6 +4493,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("8647",13.8133, 65.9083));
 	    list.add(new PostalCodeCoordinate("8648",13.82584, 66.07752));
 	    list.add(new PostalCodeCoordinate("8651",13.19028, 65.83973));
+	    list.add(new PostalCodeCoordinate("8652",13.19028, 65.83973));
 	    list.add(new PostalCodeCoordinate("8654",13.1908, 65.836));
 	    list.add(new PostalCodeCoordinate("8655",13.19681, 65.86221));
 	    list.add(new PostalCodeCoordinate("8656",13.1956, 65.8354));
@@ -4479,7 +4502,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("8659",13.4397, 65.8910));
 	    list.add(new PostalCodeCoordinate("8661",13.2227, 65.8251));
 	    list.add(new PostalCodeCoordinate("8663",13.1999, 65.8502));
-	    list.add(new PostalCodeCoordinate("8664",13.2077, 65.9765));
+	    list.add(new PostalCodeCoordinate("8664",13.1785, 65.9589));
 	    list.add(new PostalCodeCoordinate("8665",13.1939, 65.8676));
 	    list.add(new PostalCodeCoordinate("8672",13.5481, 66.1031));
 	    list.add(new PostalCodeCoordinate("8680",13.4065, 65.5336));
@@ -4538,6 +4561,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("8897",13.3908, 66.2184));
 	    list.add(new PostalCodeCoordinate("8900",12.2098, 65.4734));
 	    list.add(new PostalCodeCoordinate("8901",12.20557, 65.46985));
+	    list.add(new PostalCodeCoordinate("8902",12.20557, 65.46985));
 	    list.add(new PostalCodeCoordinate("8904",12.2040, 65.4634));
 	    list.add(new PostalCodeCoordinate("8905",12.2057, 65.4677));
 	    list.add(new PostalCodeCoordinate("8906",12.2252, 65.4777));
@@ -4573,6 +4597,7 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("9022",19.0721, 69.6841));
 	    list.add(new PostalCodeCoordinate("9024",19.0182, 69.6594));
 	    list.add(new PostalCodeCoordinate("9027",19.182, 69.5614));
+	    list.add(new PostalCodeCoordinate("9029",18.9708, 69.6399));
 	    list.add(new PostalCodeCoordinate("9030",19.6390, 69.5382));
 	    list.add(new PostalCodeCoordinate("9034",19.676, 69.7569));
 	    list.add(new PostalCodeCoordinate("9037",18.9708, 69.6797));
@@ -4901,6 +4926,10 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("9846",28.18696, 70.19859));
 	    list.add(new PostalCodeCoordinate("9900",30.0507, 69.7244));
 	    list.add(new PostalCodeCoordinate("9910",29.9842, 69.6668));
+	    return list;
+	}
+	private static List<PostalCodeCoordinate> loadPostalCodesPart7() {
+	    List list = new ArrayList<PostalCodeCoordinate>();
 	    list.add(new PostalCodeCoordinate("9912",29.9888, 69.6875));
 	    list.add(new PostalCodeCoordinate("9914",29.98547, 69.66668));
 	    list.add(new PostalCodeCoordinate("9915",30.03827, 69.72799));
@@ -4920,12 +4949,15 @@ public class PostalCodesSuperduperLoader {
 	    list.add(new PostalCodeCoordinate("9991",29.72712, 70.63792));
 	    return list;
 	}
-
-
+	
 //	@SuppressWarnings("unused")
 	private void loadAndWriteJavaCode() {
 		try {
-			InputStream is = new FileInputStream("C:\\Java\\workspace\\SVV\\postnummer-20130402.kml");
+			/* 
+			The kml input file is downloaded from 
+			http://www.erikbolstad.no/postnummer-koordinatar/kml/
+			*/
+			InputStream is = new FileInputStream("C:\\\\temp\\postnummer-downloaded 20131018.kml");
 			if (is != null) {
 				String line;
 
@@ -4937,10 +4969,14 @@ public class PostalCodesSuperduperLoader {
 					int pos = 0;
 					int start = 0;
 					int end = 0;
+					Boolean placemarkFound = false;
 					while ((line = reader.readLine()) != null) {
 						// find next postalCode
 						String postalCode = null;
-						if ((pos = line.indexOf("<name>")) != -1) {
+						if (line.indexOf("<Placemark") > -1 || line.indexOf("<placemark") > -1) {
+							placemarkFound = true; //To avoid other name tag in the start of the file.
+						}
+						if (placemarkFound && (pos = line.indexOf("<name>", pos)) != -1) {
 							start = pos + "<name>".length();
 							end = start + 4;
 							postalCode = line.substring(start, end);
