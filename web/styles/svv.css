@@ -42,8 +42,6 @@ div#PageContainer div#ContentContainer {
 }
 
 html body div#frikomport-body {
-	font-family: Frutiger,Verdana,Arial,Helvetica,sans-serif !important;
-	color:#37424A;
 	font-size:75% !important;
 }
 
@@ -103,7 +101,6 @@ div#fkp-content h2 {
 #fkp-content div.error, 
 #fkp-content div.message {
 	color:#37424A;
-	font-family: Frutiger,Verdana,Arial,Helvetica,sans-serif !important;
 }
 
 body div#frikomport-body thead tr th.sortable a,
@@ -113,7 +110,7 @@ body div#frikomport-body thead tr th.sortable a:visited {
 
 div#frikomport-body table.list thead th.sorted,
 div#frikomport-body table.list thead tr th {
-	background-color:#5f686E;
+	background-color:#444f55;
 }
 
 #fkp-content table.list tr.odd {

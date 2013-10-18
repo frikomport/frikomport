@@ -2,7 +2,6 @@
 @import url(displaytag.css);
 
 div#frikomport-body * {
-    padding: 0;
     margin: 0;
 }
 
@@ -42,7 +41,6 @@ div#frikomport-body a.external{
 /* 0 means zero regardless of measurement */
 body div#frikomport-body {
     color: #000000;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 0.6em; /* 12px; */
     margin: 0 !important;
     padding: 0 !important;
@@ -50,8 +48,6 @@ body div#frikomport-body {
 
 div#frikomport-body button {
   font-size: 1.1em;
-  background-image: url(../images/btn_bg.png);
-  padding: 1px 8px 1px 8px;
 }
 
 div#frikomport-body div#activeUsers {
@@ -223,7 +219,6 @@ div#frikomport-body table {
 div#frikomport-body form input, 
 div#frikomport-body form textarea, 
 div#frikomport-body form select {
-    padding-left: 4px;
     color: #666;
     font-size: 1.0em;
 }
@@ -457,7 +452,6 @@ div#frikomport-body div#fkp-content table th {
 	margin: 0;
 	font-size: 1.0em; /* 10px; */
 	font-weight: bold;
-	color: #000;
 	padding-top: 3px;
 	padding-left: 5px;	
 	padding-bottom: 4px;

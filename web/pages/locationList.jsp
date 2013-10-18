@@ -39,7 +39,7 @@
             </spring:bind>
 		</li>
 		<li>        
-	        <button type="submit" name="search" onclick="bCancel=false" style="margin-right: 5px">
+	        <button class="btn btn-orange" type="submit" name="search" onclick="bCancel=false" style="margin-right: 5px">
 	            <fmt:message key="button.search"/>
 	        </button>
         </li>

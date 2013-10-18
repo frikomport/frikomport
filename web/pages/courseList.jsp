@@ -174,7 +174,7 @@ function fillSelect(obj){
 </c:if>
 
             <li>
-                <button type="submit" name="search" onclick="bCancel=false" style="margin-right: 5px">
+                <button class="btn btn-orange" type="submit" name="search" onclick="bCancel=false" style="margin-right: 5px">
 					<fmt:message key="button.search"/>
 				</button>
             </li>
@@ -232,7 +232,7 @@ SumBuild sumsExport = new SumBuild();
    <c:if test="${containsUnfinished}">
    <display:column media="html" sortable="false" class="mediumButtonWidth" titleKey="button.signup">
 		<c:if test="${courseList.status == 2 && (courseList.availableAttendants > 0 || useWaitlists)}">
-		    <button type="button"
+		    <button class="btn btn-orange" type="button"
 		        onclick="location.href='<c:url context="${urlContext}" value="/performRegistration.html"><c:param name="courseId" value="${courseList.id}" /></c:url>'">
 		        <fmt:message key="button.signup"/>
 		    </button>

@@ -11,7 +11,7 @@
 <form action="listCourses.html" name="postalcode" method="post">
 	<label><fmt:message key="welcome.postalcode"/></label>
 	<input type="text" name="postalcode" size="5" maxlength="4" style="vertical-align:middle;"/> &nbsp;
-    <input type="submit" value="<fmt:message key="welcome.searchButtonlabel"/>"/>    	
+    <input type="submit" value="<fmt:message key="welcome.searchButtonlabel"/>" class="btn btn-orange"/>    	
 </form>
 </div>
 <fmt:message key="welcome.body2"/>
