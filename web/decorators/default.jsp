@@ -68,4 +68,15 @@ if (divstart) {
     </div>
     <%@ include file="/common/tracker.jsp" %>
 </div>
+<style type="text/css"><!-- Hack for IE 8 -->
+body div div.footer A, 
+body div div.footer A:hover,
+div#frikomport-body div.text div#fkp-content a:link,
+div#frikomport-body div.text div#fkp-content a:visited {
+color:#444f55; <% //#444f55 equals rgb(68, 79, 85)%>
+}
+</style>
+<script>
+
+</script>
 <c:out value="${pageDecorationAfterBodyPleaceholder}" escapeXml="false"/>

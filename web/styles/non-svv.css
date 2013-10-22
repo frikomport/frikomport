@@ -1,0 +1,49 @@
+@CHARSET "ISO-8859-1";
+
+/* 
+===============================
+Fra default.css
+*/
+div#frikomport-body * {
+    padding: 0;
+}
+
+div#frikomport-body form input, 
+div#frikomport-body form textarea, 
+div#frikomport-body form select {
+    padding-left: 4px;
+}
+
+body div#frikomport-body {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+div#frikomport-body button {
+  background-image: url(../images/btn_bg.png);
+  padding: 1px 8px 1px 8px;
+}
+
+div#frikomport-body div#fkp-content table th {
+	color: #000;
+}
+
+/* for cool looking "sunken" input boxes, from www.theserverside.com */
+div#frikomport-body form input, 
+div#frikomport-body form textarea, 
+div#frikomport-body form select {
+    padding-left: 4px;
+}
+
+div#frikomport-body table.detail td button {
+  padding: 0 0 0 0px !important;
+}
+
+
+/*
+===============================
+Fra displaytag.css
+*/
+div#frikomport-body table.list th {
+    color: #000000;
+}
+

@@ -41,7 +41,10 @@ a.helpLink:hover {
 	z-index:	10000;
 }
 
-.helpTooltip a,
+.helpTooltip a {
+	background:	none;
+}
+
 .helpTooltip a:hover {
 	color:		blue !important;
 	background:	none;
