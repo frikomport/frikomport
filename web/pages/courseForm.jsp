@@ -285,7 +285,7 @@ function fillSelect(obj){
 					onClick="cal1.select(document.course.startTimeDate,'Anch_startTimeDate','<fmt:message key="date.format"/>'); return false;"
 					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url context="${urlContext}" value="/images/calendar.png"/>"></a>
 				<soak:label key="course.time" />
-				<input type="text" size="6" name="startTimeTime" id="startTimeTime" value="<c:out value="${startTimeTime}"/>"
+				<input type="text" size="6" name="startTimeTime" id="startTimeTime" class="input-small" value="<c:out value="${startTimeTime}"/>"
 					title="<fmt:message key="time.format.title"/>: <fmt:message key="time.format.localized"/>" />
 				<spring:bind path="course.startTime">
 					<span class="fieldError"><c:out
@@ -307,7 +307,7 @@ function fillSelect(obj){
 					onClick="cal1.select(document.course.stopTimeDate,'Anch_stopTimeDate','<fmt:message key="date.format"/>'); return false;"
 					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url context="${urlContext}" value="/images/calendar.png"/>"></a>
 				<soak:label key="course.time" />
-				<input type="text" size="6" name="stopTimeTime" id="stopTimeTime" value="<c:out value="${stopTimeTime}"/>"
+				<input type="text" size="6" name="stopTimeTime" id="stopTimeTime" class="input-small" value="<c:out value="${stopTimeTime}"/>"
 					title="<fmt:message key="time.format.title"/>: <fmt:message key="time.format.localized"/>" />
 				<spring:bind path="course.stopTime">
 					<span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false" /> </span>
@@ -592,7 +592,7 @@ function fillSelect(obj){
 					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url context="${urlContext}" value="/images/calendar.png"/>"></a>
 				<soak:label key="course.time" />
 				<input type="text" size="6" name="reminderTime" id="reminderTime"
-					value="<c:out value="${reminderTime}"/>"
+					class="input-small" value="<c:out value="${reminderTime}"/>"
 					title="<fmt:message key="time.format.title"/>: <fmt:message key="time.format.localized"/>" />
 				<spring:bind path="course.reminder">
 					<input type="hidden" name="<c:out value="${status.expression}"/>"
@@ -671,32 +671,32 @@ function fillSelect(obj){
 
 				<c:if
 					test="${isAdmin || isEducationResponsible || isEventResponsible}">
-					<input type="submit" class="button" name="save"
+					<input type="submit" class="btn btn-orange" name="save"
 						onclick="bCancel=false"
 						value="<fmt:message key="button.course.save"/>" />
 					<c:if test="${(!isPublished && !isSVV) || (!isPublished && !isCancelled && isSVV)}">
-						<input type="submit" class="button large" name="publish"
+						<input type="submit" class="btn btn-orange large" name="publish"
 							onclick="bCancel=false" id="publishButton"
 							value="<fmt:message key="button.course.publish"/>" />
 					</c:if>
 					<c:if test="${isPublished && !isCancelled}">
-						<input type="submit" class="button" name="cancelled"
+						<input type="submit" class="btn btn-orange" name="cancelled"
 							onclick="bCancel=true;return confirmCancellation('<fmt:message key="courseList.theitem"/>', '<c:out value="${cancelPrefix}"/>')"
 							value="<fmt:message key="button.course.cancel"/>" />
 					</c:if>
 					<c:if test="${isPublished && canUnpublish}">
-                        <input type="submit" class="button large" name="unpublish"
+                        <input type="submit" class="btn btn-orange large" name="unpublish"
                             onclick="bCancel=false"
                             value="<fmt:message key="button.course.unpublish"/>" />
                     </c:if>
 					<c:if test="${!empty course.id && !empty course.name && canDelete}">
-						<input type="submit" class="button large" name="delete"
+						<input type="submit" class="btn btn-orange large" name="delete"
 							onclick="bCancel=true;return confirmDelete('<fmt:message key="courseList.theitem"/>')"
 							value="<fmt:message key="button.course.delete"/>" />
 					</c:if>
 				</c:if>
 
-				<input type="submit" class="button" name="cancel"
+				<input type="submit" class="btn btn-orange" name="cancel"
 					onclick="bCancel=true" value="<fmt:message key="button.cancel"/>" />
 
 			</td>

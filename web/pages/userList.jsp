@@ -28,19 +28,19 @@
     <ul>
         <li>
             <label class="required"><fmt:message key="user.username"/>:</label>
-            <form:input path="username" size="15"/>
+            <form:input path="username" size="15" cssClass="input-small"/>
         </li>
         <li>
             <label class="required"><fmt:message key="user.firstName"/>:</label>
-            <form:input path="firstName" size="15"/>
+            <form:input path="firstName" size="15" cssClass="input-medium"/>
         </li>
         <li>
             <label class="required"><fmt:message key="user.lastName"/>:</label>
-            <form:input path="lastName" size="15"/>
+            <form:input path="lastName" size="15" cssClass="input-medium"/>
         </li>
         <li>
             <label class="required"><fmt:message key="user.email"/>:</label>
-            <form:input path="email" size="15"/>
+            <form:input path="email" size="15" cssClass="input-medium"/>
         </li>
         <li>
             <button type="submit" name="search" onclick="bCancel=false" style="margin-right: 5px">

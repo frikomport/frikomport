@@ -56,12 +56,12 @@
         <tr>
             <td colspan="2" class="buttonBar">
                 <c:if test="${isAdmin || isEducationResponsible || (isEventResponsible && username == course.responsibleUsername)}">
-                <button type="button"
+                <button type="button" class="btn btn-orange"
                     onclick="location.href='<c:url context="${urlContext}" value="/editCourse.html"><c:param name="id" value="${course.id}"/></c:url>'">
                 <fmt:message key="button.reedit" /></button>
                 </c:if> 
-                <input type="submit" class="button" name="skip" onclick="bCancel = true;" value="<fmt:message key="button.skipmail"/>" /> 
-                <input type="submit" class="button" name="send" onclick="bCancel = false;" value="<fmt:message key="button.sendmail"/>" />
+                <input type="submit" class="btn btn-orange" name="skip" onclick="bCancel = true;" value="<fmt:message key="button.skipmail"/>" /> 
+                <input type="submit" class="btn btn-orange" name="send" onclick="bCancel = false;" value="<fmt:message key="button.sendmail"/>" />
             </td>
         </tr>
     </table>

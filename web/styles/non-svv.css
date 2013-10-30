@@ -34,9 +34,55 @@ div#frikomport-body form select {
     padding-left: 4px;
 }
 
-div#frikomport-body table.detail td button {
+
+div#frikomport-body table.detail td button,
+div#frikomport-body table.detail td btn {
   padding: 0 0 0 0px !important;
 }
+
+div#frikomport-body table tbody td input.button,
+div#frikomport-body table tbody td input.btn {
+    vertical-align: middle;
+}
+
+div#frikomport-body button, 
+div#frikomport-body btn {
+  font-size: 1.1em;
+}
+
+div#frikomport-body input.button,
+div#frikomport-body input.btn {
+    color: #000;
+    padding-left: 1px;
+    background-image: url(../images/btn_bg.png);
+}
+
+div#frikomport-body table tbody td button,
+div#frikomport-body table tbody td btn {
+	  vertical-align: middle;
+}
+
+div#frikomport-body table.detail td button,
+div#frikomport-body table.detail td btn {
+	  vertical-align: middle;
+  margin: 1px 0 0 8px !important;
+}
+
+div#frikomport-body table.detail td input.button,
+div#frikomport-body table.detail td input.btn {
+	vertical-align: middle;
+	adding: 0 2px 0px 1px !important;
+	padding-bottom: 0px !important;
+	padding-top: 0px !important;
+}
+
+div#frikomport-body table.detail td.moveOptions button,
+div#frikomport-body table.detail td.moveOptions btn {
+	    margin-bottom: 3px;
+    width: 45px;
+    white-space: nowrap;
+}
+
 
 
 /*

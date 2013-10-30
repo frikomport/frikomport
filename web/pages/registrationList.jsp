@@ -139,18 +139,18 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 
         <li>
             <label class="required"><fmt:message key="registration.lastName"/>:</label>
-            <input type="text" name="lastName" id="lastName" value="<c:out value="${registration.lastName}"/>" size="15"/>
+            <input type="text" name="lastName" id="lastName" value="<c:out value="${registration.lastName}"/>" size="15" class="input-medium"/>
         </li>
         <li>
             <label class="required"><fmt:message key="registration.firstName"/>:</label>
-            <input type="text" name="firstName" id="firstName" value="<c:out value="${registration.firstName}"/>" size="15"/>
+            <input type="text" name="firstName" id="firstName" value="<c:out value="${registration.firstName}"/>" size="15" class="input-medium"/>
         </li>
 
 
         <li>
             <soak:label key="course.includeHistoric" styleClass="required"/>
             <INPUT type="hidden" name="_historic" value="0"/>
-		    <INPUT type="checkbox" id="historic" name="historic" value="1"
+		    <INPUT type="checkbox" id="historic" name="historic" value="1" class="input-small"
 		    <c:if test="${historic == true}"> checked </c:if> />
         </li>
         <li>

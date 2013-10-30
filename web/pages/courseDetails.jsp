@@ -51,20 +51,20 @@
 </c:if>
 
 <c:if test="${admin == true}">
-		    <button type="button" onclick="location.href='<c:url context="${urlContext}" value="/editCourse.html"><c:param name="id" value="${course.id}"/></c:url>'">
+		    <button type="button" class="btn btn-orange" onclick="location.href='<c:url context="${urlContext}" value="/editCourse.html"><c:param name="id" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.edit"/>
 		    </button>
 </c:if>
 
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
-			<button type="button" onclick="location.href='<c:url context="${urlContext}" value="/editCourse.html"><c:param name="copyid" value="${course.id}"/></c:url>'">
+			<button type="button" class="btn btn-orange" onclick="location.href='<c:url context="${urlContext}" value="/editCourse.html"><c:param name="copyid" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.copy"/>
 		    </button>
 </c:if>
 
 <c:choose>
 	<c:when test="${(admin == true || isReader) && isPublished}">
-		    <button type="button" class="large" onclick="location.href='<c:url context="${urlContext}" value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
+		    <button type="button" class="btn btn-orange large" onclick="location.href='<c:url context="${urlContext}" value="/administerRegistration.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.administerRegistrations"/>
 		    </button>
 	</c:when>
@@ -78,12 +78,12 @@
 </c:choose>
 
 <c:if test="${admin == true && !isSVV}">
-		    <button type="button" class="large" onclick="location.href='<c:url context="${urlContext}" value="/editFileCourse.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
+		    <button type="button" class="btn btn-orange large" onclick="location.href='<c:url context="${urlContext}" value="/editFileCourse.html"><c:param name="courseId" value="${course.id}"/></c:url>'">
 	    	    <fmt:message key="button.administerFiles"/>
 		    </button>
 </c:if>
 <c:if test="${admin == true}">
-		    <button type="button" class="large" onclick="location.href='<c:url context="${urlContext}" value="/emailCourse.html"><c:param name="id" value="${course.id}"/><c:param name="enablemail" value="true"/></c:url>'">
+		    <button type="button" class="btn btn-orange large" onclick="location.href='<c:url context="${urlContext}" value="/emailCourse.html"><c:param name="id" value="${course.id}"/><c:param name="enablemail" value="true"/></c:url>'">
 	    	    <fmt:message key="button.mails"/>
 		    </button>
 </c:if>

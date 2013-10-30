@@ -165,6 +165,17 @@ div#loggedin {
 	font-size: 0.9em;
 }
 
+#frikomport-body form div.searchForm label,
+#frikomport-body div.searchForm form label,
+#frikomport-body form table label {
+			display:inline;	
+}
+
+div#frikomport-body .buttonBar .btn {
+	margin-top:5px;
+}
+
+
 /* 
 ----------------------------------------
  SVV-variant of menuExpandable.css 

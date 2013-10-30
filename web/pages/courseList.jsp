@@ -78,7 +78,7 @@ function fillSelect(obj){
 </c:if>
 
             <li>
-                <form:select  path="organizationid" onchange="fillSelect(this);" id="organizationidElement">
+                <form:select cssClass="input-medium" path="organizationid" onchange="fillSelect(this);" id="organizationidElement">
                     <form:options items="${organizations}" itemValue="id" itemLabel="name" />
                 </form:select>
                 <form:errors cssClass="fieldError" htmlEscape="false" path="organizationid" />
@@ -140,14 +140,14 @@ function fillSelect(obj){
 
 			<li>
 				<label class="required">Fra:</label>
-				<input id="startTime" name="startTime" value="<fmt:formatDate value="${startTime}" pattern="${dateformat}"/>" type="text" size="12" />
+				<input id="startTime" name="startTime" value="<fmt:formatDate value="${startTime}" pattern="${dateformat}"/>" type="text" size="12" class="input-small" />
 				<a href="#" name="a1" id="Anch_startTime"
 					onClick="cal1.select(document.courseList.startTime,'Anch_startTime','<fmt:message key="date.format"/>'); return false;"
 					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url context="${urlContext}" value="/images/calendar.png"/>"></a>
 			</li>
 			<li>
 				<label class="required">Til:</label>
-				<input id="stopTime" name="stopTime" value="<fmt:formatDate value="${stopTime}" pattern="${dateformat}"/>" type="text" size="12"/>
+				<input id="stopTime" name="stopTime" value="<fmt:formatDate value="${stopTime}" pattern="${dateformat}"/>" type="text" size="12" class="input-small" />
 				<a href="#" name="a1" id="Anch_stopTime"
 					onClick="cal1.select(document.courseList.stopTime,'Anch_stopTime','<fmt:message key="date.format"/>'); return false;"
 					title="<fmt:message key="course.calendar.title"/>"><img src="<c:url context="${urlContext}" value="/images/calendar.png"/>"></a>
@@ -183,7 +183,7 @@ function fillSelect(obj){
 </form:form>
 <c:set var="buttons">
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible}">
-    <button type="button" style="margin-right: 5px"
+    <button type="button" style="margin-right: 5px" class="btn btn-orange"
         onclick="location.href='<c:url context="${urlContext}" value="/editCourse.html"/>'">
         <fmt:message key="button.add"/>
     </button>

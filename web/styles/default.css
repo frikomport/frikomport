@@ -46,10 +46,6 @@ body div#frikomport-body {
     padding: 0 !important;
 }
 
-div#frikomport-body button {
-  font-size: 1.1em;
-}
-
 div#frikomport-body div#activeUsers {
     float: right;
     margin-right: 5px;
@@ -227,12 +223,6 @@ div#frikomport-body form textarea {
     font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 
-div#frikomport-body input.button {
-    color: #000;
-    padding-left: 1px;
-    background-image: url(../images/btn_bg.png);
-}
-
 div#frikomport-body form input.focus, 
 div#frikomport-body form textarea.focus {
     border-color: orange;
@@ -325,15 +315,6 @@ div#frikomport-body div.screen {
 margin:0 0 0 -2px;
 }
 
-div#frikomport-body table tbody td button {
-  vertical-align: middle;
-}
-
-
-div#frikomport-body table tbody td input.button {
-  vertical-align: middle;
-}
-
 div#frikomport-body table.detail th {
     text-align: right;
     vertical-align: top;
@@ -356,28 +337,10 @@ div#frikomport-body table.detail td a {
   vertical-align: top;
 }
 
-div#frikomport-body table.detail td button {
-  vertical-align: middle;
-  margin: 1px 0 0 8px !important;
-}
-
-div#frikomport-body table.detail td input.button {
-  vertical-align: middle;
-  padding: 0 2px 0px 1px !important;
-   padding-bottom: 0px !important;
-   padding-top: 0px !important;
-}
-
 div#frikomport-body table.detail td.moveOptions {
     text-align: center;
     width: 50px;
     padding: 5px;
-}
-
-div#frikomport-body table.detail td.moveOptions button {
-    margin-bottom: 3px;
-    width: 45px;
-    white-space: nowrap;
 }
 
 div#frikomport-body table.detail td.buttonBar {

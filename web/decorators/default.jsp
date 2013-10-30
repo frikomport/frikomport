@@ -16,6 +16,9 @@
 <c:if test="${isSVV}">
         <link rel="stylesheet" type="text/css" media="all" href="<c:url context="${urlContext}" value='/styles/svv.css'/>" />    
 </c:if>
+<c:if test="${!isSVV}">
+        <link rel="stylesheet" type="text/css" media="all" href="<c:url context="${urlContext}" value='/styles/non-svv.css'/>" />
+</c:if>
         <script type="text/javascript" src="<c:url context="${urlContext}" value='/scripts/prototype.js'/>"></script> 
         <script type="text/javascript" src="<c:url context="${urlContext}" value='/scripts/effects.js'/>"></script>
         <script type="text/javascript" src="<c:url context="${urlContext}" value='/scripts/helptip.js'/>"></script>

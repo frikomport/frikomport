@@ -134,7 +134,7 @@
 					<soak:label key="registration.firstName" />
 				</th>
 				<td>
-					<form:input path="firstName" maxlength="100"/>
+					<form:input path="firstName" maxlength="100" />
 					<form:errors cssClass="fieldError" htmlEscape="false" path="firstName" />
 				</td>
 			</tr>
@@ -387,7 +387,7 @@
 			<tr>
 				<td class="buttonBar" colspan="2" align="left">
 					<c:if test="${empty registration.id && isCourseFull == false}">
-	                    <input type="submit" class="button" name="save" onclick="bCancel=false" value="<fmt:message key="button.register.send"/>" />
+	                    <input type="submit" class="btn btn-orange" name="save" onclick="bCancel=false" value="<fmt:message key="button.register.send"/>"/>
     	            </c:if>
 					<c:if test="${!empty registration.id && registration.status < 3}">
                     <input type="submit" class="button" name="save" id="savebutton" onclick="bCancel=false" value="<fmt:message key="button.register.update"/>" />
@@ -400,7 +400,7 @@
 							value="<fmt:message key="button.unregister"/>" />
 						</c:if>
 					</c:if>
-					<input type="submit" class="button" name="cancel"
+					<input type="submit" class="btn btn-orange" name="cancel"
 						onclick="bCancel=true" value="<fmt:message key="button.cancel"/>" />
 				</td>
 			</tr>
