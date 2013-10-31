@@ -116,8 +116,8 @@
 	<display:column property="phone" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.phone"/>
 
 	<display:column property="mobilePhone" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.mobilePhone"/>
-
-	<c:if test="${showWorkplace}">
+	
+	<c:if test="${showComment}">
 	<display:column property="comment" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.comment"/>
 	</c:if>
 
