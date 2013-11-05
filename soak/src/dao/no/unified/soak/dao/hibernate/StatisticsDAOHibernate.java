@@ -54,7 +54,7 @@ public class StatisticsDAOHibernate extends BaseDAOHibernate implements Statisti
 							+ "(select C2.\"attendants\" from COURSE C2 where C2.\"id\" = C.\"id\") as partNumAttendants \r\n"
 				
 						+ "from ORGANIZATION O \r\n"
-						+ "inner join COURSE C on O.\"id\" = C.\"organization2id\" \r\n"
+						+ "inner join COURSE C on O.\"id\" = C.\"organization2id\" \r\n" 
 						+ "left outer join REGISTRATION R on (R.\"courseid\" = C.\"id\" and R.\"status\" = 2) \r\n"
 						+ "left outer join ORGANIZATION OP on OP.\"id\" = O.\"parentid\" \r\n"
 				
@@ -89,7 +89,23 @@ public class StatisticsDAOHibernate extends BaseDAOHibernate implements Statisti
 						
 					+ "order by 1 asc, 2 desc";
 			} else {
-				sql = "select F.Organisasjon, F.Tjenesteomrade, \r\n" 
+				/*
+				 * spørringen består av en ytre og to indre selects. 
+				 * De to indre håndterer henholdsvis kurs hvor det finnes attendants, og kurs hvor attendants=null/0.
+				 * Disse to blir satt sammen av en union og den ytre select sørger for at dataen blir gruppert via group by og rollup.
+				 */
+				
+				sql = 
+					"select \r\n"
+					+ "Organisasjon, \r\n" 
+					+ "Tjenesteomrade, \r\n"  
+					+ "sum(numCourses) as numCourses, \r\n" 
+					+ "sum(numRegistrations) as numRegistrations,\r\n" 
+					+ "sum(numRegistered) as numRegistered, \r\n"
+					+ "sum(numAttendants) as numAttendants \r\n"
+					+ "from (	\r\n"
+					+ "( \r\n"
+					+ "select F.Organisasjon, F.Tjenesteomrade, \r\n" 
 					+ "sum(F.partNumCourses) as numCourses, \r\n"
 					+ "sum(F.partNumRegistrations) as numRegistrations, \r\n"
 					+ "sum(F.partNumRegistered) as numRegistered, \r\n"
@@ -101,18 +117,18 @@ public class StatisticsDAOHibernate extends BaseDAOHibernate implements Statisti
 					+ "sum(R.participants) as partNumRegistered, \r\n"
 					+ "(select C2.attendants from course C2 where C2.id = C.id) as partNumAttendants \r\n" 
 					+ "from servicearea S \r\n" 
-					+ "inner join course C on C.serviceareaid = S.id \r\n" 
-					+ "left outer join registration R on (R.courseid = C.id and R.status = 2) \r\n" 
-					+ "left outer join organization O on O.id = S.organizationid \r\n"
+					+ "right outer join course C on C.serviceareaid = S.id \r\n" // from inner join to right outer join //OLE : ta også med kurs som ikke er registrert på en servicearea
+					+ "left outer join registration R on (R.courseid = C.id and R.status = 2) \r\n"
+					+ "left outer join organization O on O.id = C.organizationid \r\n" // from S.organizationid to C.organizationid //OLE : ikke alle kurs er knyttet til en servicearea, men alle har en organisasjon
 					+ "where \r\n"
 					+ "C.starttime >= :beginPeriod  and C.starttime <= :endPeriod \r\n"
 					+ "and C.attendants > 0 and C.status != 3 \r\n" 
 					+ "group by C.id, O.name, S.name \r\n" 
 					+ ") as F \r\n"
-					+ "group by F.Organisasjon, F.Tjenesteomrade with rollup \r\n" 
-															
+					+ "group by F.Organisasjon, F.Tjenesteomrade \r\n" 
+					+")" 								
 					+ "union \r\n"
-							
+					+"("
 					+ "select O.name as Organisasjon, S.name as Tjenesteomrade, \r\n" 
 					+ "count(distinct C.id) as numCourses, \r\n"
 					+ "count(R.id) as numRegistrations, \r\n"
@@ -120,16 +136,18 @@ public class StatisticsDAOHibernate extends BaseDAOHibernate implements Statisti
 					+ "sum(R.participants) as numAttendants \r\n"  
 					
 					+ "from servicearea S \r\n"
-					+ "inner join course C on C.serviceareaid = S.id \r\n"
+					+ "right outer join course C on C.serviceareaid = S.id \r\n" // from inner join to right outer join //OLE : ta også med kurs som ikke er registrert på en servicearea
 					+ "inner join registration R on R.courseid = C.id \r\n" 
-					+ "left outer join organization O on O.id = S.organizationid \r\n" 
+					+ "left outer join organization O on O.id = C.organizationid \r\n" //  from S.organizationid to C.organizationid //OLE : ikke alle kurs er knyttet til en servicearea, men alle har en organisasjon
 					
 					+ "where \r\n" 
 					    // for testing i Aqua Data Studio el. benytt følgende for generering av timestamp: to_timestamp('2011-05-02 00:00:00','yyyy-mm-dd hh24:mi:ss')
 					+ "C.starttime >= :beginPeriod  and C.starttime <= :endPeriod \r\n" 
 					+ "and (C.attendants is null or C.attendants = 0) \r\n" 
 					+ "and R.status = 2 and C.status != 3 \r\n"
-					+ "group by Organisasjon, Tjenesteomrade with rollup"; 
+					+ "group by Organisasjon, Tjenesteomrade )"
+					+ ") T\n"
+					+"group by Organisasjon, Tjenesteomrade with rollup";
 			}
 	
 			SQLQuery query = getSession().createSQLQuery(sql);
@@ -163,10 +181,16 @@ public class StatisticsDAOHibernate extends BaseDAOHibernate implements Statisti
 				
 				if (StringUtils.equals(prevRow.getUnit(), currentRow.getUnit())
 						&& StringUtils.equals(prevRow.getUnitParent(), currentRow.getUnitParent())) {
+					
+					// the row is a duplicate caused by rollup, skip it.
+					
+					/*
+					// old code to handle two rows of the same course from the two different selects joined by the union
 					prevRow.setNumAttendants(prevRow.getNumAttendants() + currentRow.getNumAttendants());
 					prevRow.setNumCourses(prevRow.getNumCourses() + currentRow.getNumCourses());
 					prevRow.setNumRegistered(prevRow.getNumRegistered() + currentRow.getNumRegistered());
 					prevRow.setNumRegistrations(prevRow.getNumRegistrations() + currentRow.getNumRegistrations());
+					*/
 				} 
 				else {
 					statRows.add(currentRow);
