@@ -3,6 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{$site.http_equiv.Content-language|wash}" lang="{$site.http_equiv.Content-language|wash}">
 
 <head>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" >
+
 {include uri='design:page_head.tpl'}
 
 {set-block variable=$admin_right_menu}
