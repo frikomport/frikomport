@@ -50,7 +50,7 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 
 	public void synchronizeUsers() {
 		if (ApplicationResourcesUtil.isSVV()) {
-			// SVV-synking mot LDAP av alle påloggingsbrukere trengs i fall en brukerrolle fjernes i LDAP.
+			// SVV-synking mot LDAP av alle pï¿½loggingsbrukere trengs i fall en brukerrolle fjernes i LDAP.
 			log.info("Synkronisering av brukere starter...");
 			User filter = new User();
 			filter.setHashuser(false);
@@ -86,8 +86,8 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 //			}
 //			log.info("Synkronisering av " + antall + " brukere ferdig!");
 
-			/* Alternativ løsning for synkronisering av ezBrukere (med basis i "java"-database fremfor "eZ"-database
-			 * Brukere blir uansett lagt til i APP_USER-tabellen ved første innlogging, det bør derfor være ok å 
+			/* Alternativ lï¿½sning for synkronisering av ezBrukere (med basis i "java"-database fremfor "eZ"-database
+			 * Brukere blir uansett lagt til i APP_USER-tabellen ved fï¿½rste innlogging, det bï¿½r derfor vï¿½re ok ï¿½ 
 			 * synkronisere med basis i user.hashuser==false 
 			 * */
 
@@ -139,17 +139,17 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
     	User emailuser = null;
 
     	if(current.getEmail() != null){ 
-//    		// mulig dette egentlig er unødvendig, men oppstod pga. inkonsistens mellom frikomdb og ezdb i utviklingsmiljø   		
+//    		// mulig dette egentlig er unï¿½dvendig, men oppstod pga. inkonsistens mellom frikomdb og ezdb i utviklingsmiljï¿½   		
     		try {
 				emailuser = userManager.findUserByEmail(current.getEmail().toLowerCase());
 				if(!current.getUsername().equalsIgnoreCase(emailuser.getUsername())) {
-					// Gjør nokke med gammel bruker
+					// Gjï¿½r nokke med gammel bruker
 					byttNavnOgDisable(emailuser, false);
 				}
 			} catch (Exception e) {
 				if(emailuser != null) {
-					// Det finnes allerede ein bruker med nonexist.no adresse, må slettes.
-					byttNavnOgDisable(emailuser, true);					
+					// Det finnes allerede ein bruker med nonexist.no adresse, mï¿½ slettes.
+					byttNavnOgDisable(emailuser, true);
 				}
 			}
     	}
@@ -159,14 +159,14 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 			userManager.updateUser(user, current.getFirst_name(), current.getLast_name(), current.getEmail().toLowerCase(), current
 					.getId(), current.getRolenames(), current.getKommune(), current.getMobilePhone(), current.getPhoneNumber());
         } catch (ObjectRetrievalFailureException e) {
-        	// extUser finnes ikkje og må opprettes
+        	// extUser finnes ikkje og mï¿½ opprettes
         	user = userManager.addUser(current.getUsername(), current.getFirst_name(), current.getLast_name(), current.getEmail()
         			.toLowerCase(), current.getId(), current.getRolenames(), current.getKommune(), current.getMobilePhone(),
         			current.getPhoneNumber());
         } 
 
         // Flytt registreringer
-        if (emailuser != null) {
+        if (emailuser != null && emailuser.getUsername() != null && !emailuser.getUsername().equals(user.getUsername()) ) {
             user.setHash(emailuser.getHash());
             userManager.updateUser(user);
             registrationManager.moveRegistrations(emailuser, user);
@@ -183,7 +183,7 @@ public class UserSynchronizeManagerImpl extends BaseManager implements UserSynch
 		}
         user.setEmail(email);
         user.setEnabled(false);
-        userManager.updateUser(user);			
+        userManager.updateUser(user);
     }
 
     public void executeTask() {
