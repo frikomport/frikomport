@@ -137,12 +137,12 @@ code that's used to render this table.
 <input type="submit" name="method" value="Delete" class="button" />
 <br /><br />
 <display:table name="${users.rows}" id="user" class="list">
-  <display:column width="5" title="${checkAll}">
+  <display:column escapeXml="true" width="5" title="${checkAll}">
     <input type="checkbox" name="id" value="<c:out value="${user.id}"/>" 
     <c:if test="${param.id == user.id and param.method != 'Save'}">checked="checked"</c:if>
         style="margin: 0 0 0 4px" onclick="radio(this)" />
   </display:column>
-  <display:column title="Username">
+  <display:column escapeXml="true" title="Username">
     <c:choose>
         <c:when test="${param.method == 'Edit' and param.id == user.id}">
             <input type="text" name="username" style="padding: 0"
@@ -151,7 +151,7 @@ code that's used to render this table.
         <c:otherwise><c:out value="${user.username}"/></c:otherwise>
     </c:choose>
   </display:column>
-  <display:column title="First Name">
+  <display:column escapeXml="true" title="First Name">
     <c:choose>
         <c:when test="${param.method == 'Edit' and param.id == user.id}">
             <input type="text" name="firstName" style="padding: 0"
@@ -160,7 +160,7 @@ code that's used to render this table.
         <c:otherwise><c:out value="${user.firstName}"/></c:otherwise>
     </c:choose>
   </display:column>
-  <display:column title="Last Name">
+  <display:column escapeXml="true" title="Last Name">
       <c:choose>
         <c:when test="${param.method == 'Edit' and param.id == user.id}">
             <input type="text" name="lastName" style="padding: 0"

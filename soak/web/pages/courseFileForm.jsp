@@ -71,10 +71,10 @@
     id="attachmentsList" pagesize="${itemCount}" class="list"
     export="true" requestURI="">
     
-    <display:column property="filename" sortable="true" headerClass="sortable"
+    <display:column escapeXml="true" property="filename" sortable="true" headerClass="sortable"
          titleKey="attachment.filename"/>
          
-    <display:column sortable="true" headerClass="sortable"
+    <display:column escapeXml="true" sortable="true" headerClass="sortable"
          titleKey="attachment.size">
 		<fmt:formatNumber value="${attachmentsList.size}" minFractionDigits="0"/>
     </display:column>

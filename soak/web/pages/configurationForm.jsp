@@ -21,7 +21,7 @@
 		<display:table name="${configurationsBackingObject.configurations}" cellspacing="0" cellpadding="0"
 		    pagesize="${itemCount}" class="list" export="true" id="configurationList" requestURI="">
 		
-		    <display:column property="name" sortable="true" headerClass="sortable" 
+		    <display:column escapeXml="true" property="name" sortable="true" headerClass="sortable"
 		        titleKey="configuration.name"/>
 		
 		    <display:column media="html" sortable="true" headerClass="sortable" titleKey="configuration.active">
@@ -34,10 +34,10 @@
 		        <c:if test="${configurationList.active == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 		    </display:column>
 		
-		    <!--  display:column property="value" sortable="true" headerClass="sortable" 
+		    <!--  display:column property="value" sortable="true" headerClass="sortable"
 		        titleKey="configuration.value"/ -->
 		
-		    <display:column sortable="true" headerClass="sortable" titleKey="configuartion.description">
+		    <display:column escapeXml="true" sortable="true" headerClass="sortable" titleKey="configuartion.description">
 		        <fmt:message key="${configurationList.name}" />
 		    </display:column>
 		

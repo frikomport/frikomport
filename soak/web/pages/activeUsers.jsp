@@ -16,7 +16,7 @@
     defaultsort="1" class="list activeUserList" pagesize="${itemCount}" requestURI="">
   
     <%-- Table columns --%>
-    <display:column property="username" width="30%" headerClass="sortable"
+    <display:column escapeXml="true" property="username" width="30%" headerClass="sortable"
         titleKey="user.username" sortable="true"/>
     <display:column titleKey="activeUsers.fullName" headerClass="sortable"
         sortable="true">

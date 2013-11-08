@@ -30,28 +30,28 @@
     </display:column>
 	</c:if>
     
-    <display:column property="name" sortable="true" headerClass="sortable" titleKey="organization.name"/>
+    <display:column escapeXml="true" property="name" sortable="true" headerClass="sortable" titleKey="organization.name"/>
          
 	<c:if test="${!isSVV}">
-    <display:column sortable="true" headerClass="sortable" titleKey="organization.number">
+    <display:column escapeXml="true" sortable="true" headerClass="sortable" titleKey="organization.number">
          <fmt:formatNumber value="${organizationList.number}" minFractionDigits="0"/>
     </display:column>
 	</c:if>
 	    
 	<c:if test="${useOrganizationType}">
-    <display:column property="typeAsEnum.displayName" sortable="true" headerClass="sortable" titleKey="organization.type">
+    <display:column escapeXml="true" property="typeAsEnum.displayName" sortable="true" headerClass="sortable" titleKey="organization.type">
     </display:column>
 	</c:if>
     
 <c:if test="${(isAdmin || isEducationResponsible || isEventResponsible || isReader) && usePayment && !isSVV}">
-    <display:column property="invoiceName" sortable="true" headerClass="sortable" titleKey="organizationList.invoiceAddress.name"/>
-    <display:column property="invoiceAddress.address" sortable="true" headerClass="sortable" titleKey="organizationList.invoiceAddress.address"/>
-    <display:column property="invoiceAddress.city" sortable="true" headerClass="sortable" titleKey="organizationList.invoiceAddress.city"/>
-    <display:column property="invoiceAddress.postalCode" sortable="true" headerClass="sortable" titleKey="organizationList.invoiceAddress.postalCode"/>
+    <display:column escapeXml="true" property="invoiceName" sortable="true" headerClass="sortable" titleKey="organizationList.invoiceAddress.name"/>
+    <display:column escapeXml="true" property="invoiceAddress.address" sortable="true" headerClass="sortable" titleKey="organizationList.invoiceAddress.address"/>
+    <display:column escapeXml="true" property="invoiceAddress.city" sortable="true" headerClass="sortable" titleKey="organizationList.invoiceAddress.city"/>
+    <display:column escapeXml="true" property="invoiceAddress.postalCode" sortable="true" headerClass="sortable" titleKey="organizationList.invoiceAddress.postalCode"/>
 </c:if>    
     
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
-    <display:column sortable="true" headerClass="sortable"
+    <display:column escapeXml="true" sortable="true" headerClass="sortable"
          titleKey="organization.selectable">
 		<c:if test="${organizationList.selectable == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${organizationList.selectable == false}"><fmt:message key="checkbox.unchecked"/></c:if>

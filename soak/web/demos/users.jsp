@@ -94,11 +94,11 @@ this same data set, but this time you get column sorting.
 </p>
 
 <display:table name="${users.rows}" id="user" class="list">
-    <display:column property="username" sortable="true"
+    <display:column escapeXml="true" property="username" sortable="true"
         titleKey="user.username" headerClass="sortable"/>
-    <display:column property="firstName" sortable="true" 
+    <display:column escapeXml="true" property="firstName" sortable="true"
         titleKey="user.firstName" headerClass="sortable"/>
-    <display:column property="lastName" sortable="true" 
+    <display:column escapeXml="true" property="lastName" sortable="true"
         titleKey="user.lastName" headerClass="sortable"/>
 </display:table>
 

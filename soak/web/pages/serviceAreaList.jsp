@@ -61,16 +61,16 @@
         </a>
         </display:column>
     </c:if>
-	<display:column property="name" sortable="true" headerClass="sortable"
+	<display:column escapeXml="true" property="name" sortable="true" headerClass="sortable"
 		titleKey="serviceArea.name" />
 
-	<display:column property="organization.name" sortable="true"
+	<display:column escapeXml="true" property="organization.name" sortable="true"
 		headerClass="sortable" titleKey="serviceArea.organization" />
 
 
 	<c:if
 		test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
-		<display:column sortable="true" headerClass="sortable"
+		<display:column escapeXml="true" sortable="true" headerClass="sortable"
 			titleKey="serviceArea.selectable">
 			<c:if test="${serviceAreaList.selectable == true}">
 				<fmt:message key="checkbox.checked" />

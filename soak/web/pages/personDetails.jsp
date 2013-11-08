@@ -137,45 +137,45 @@
          <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>"
          title="<c:out value="${courseList.description}"/>"><c:out value="${courseList.name}"/></a>
     </display:column>
-    <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="course.name"/>
+    <display:column escapeXml="true" media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="course.name"/>
 
-    <display:column sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
+    <display:column escapeXml="true" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
          <fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
 
 
 	<c:if test="${!isSVV}">
-    <display:column sortable="true" headerClass="sortable" titleKey="course.stopTime" sortProperty="stopTime">
+    <display:column escapeXml="true" sortable="true" headerClass="sortable" titleKey="course.stopTime" sortProperty="stopTime">
          <fmt:formatDate value="${courseList.stopTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
 	</c:if>
 
 	<c:if test="${showDuration}">
-    <display:column property="duration" sortable="true" headerClass="sortable" titleKey="course.duration"/>
+    <display:column escapeXml="true" property="duration" sortable="true" headerClass="sortable" titleKey="course.duration"/>
 	</c:if>
 	
-    <display:column property="organization.name" sortable="true" headerClass="sortable" titleKey="course.organization"/>
+    <display:column escapeXml="true" property="organization.name" sortable="true" headerClass="sortable" titleKey="course.organization"/>
 
 	<c:if test="${useOrganization2}">
-    <display:column property="organization2.name" sortable="true" headerClass="sortable" titleKey="course.organization2"/>
+    <display:column escapeXml="true" property="organization2.name" sortable="true" headerClass="sortable" titleKey="course.organization2"/>
 	</c:if>
 
 	<c:if test="${useServiceArea}">
-    <display:column property="serviceArea.name" sortable="true" headerClass="sortable" titleKey="course.serviceArea"/>
+    <display:column escapeXml="true" property="serviceArea.name" sortable="true" headerClass="sortable" titleKey="course.serviceArea"/>
 	</c:if>
 	
 	<c:if test="${!isSVV}">
-    <display:column media="csv excel xml pdf" property="type" sortable="true" headerClass="sortable" titleKey="course.type.export"/>
+    <display:column escapeXml="true" media="csv excel xml pdf" property="type" sortable="true" headerClass="sortable" titleKey="course.type.export"/>
 	</c:if>
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.location">
          <a href="<c:url value="/detailsLocation.html"><c:param name="id" value="${courseList.location.id}"/></c:url>" title="<c:out value="${courseList.location.description}"/>"><c:out value="${courseList.location.name}"/></a>
     </display:column>
-    <display:column media="csv excel xml pdf" property="location.name" sortable="true" headerClass="sortable" titleKey="course.location"/>
+    <display:column escapeXml="true" media="csv excel xml pdf" property="location.name" sortable="true" headerClass="sortable" titleKey="course.location"/>
 	<display:column media="html" sortable="true" headerClass="sortable" titleKey="course.responsible">
          <a href="<c:url value="/detailsUser.html"><c:param name="username" value="${courseList.responsible.username}"/></c:url>"><c:out value="${courseList.responsible.fullName}"/></a>
     </display:column>
-    <display:column media="csv excel xml pdf" property="responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible"/>
+    <display:column escapeXml="true" media="csv excel xml pdf" property="responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible"/>
 
     <display:setProperty name="paging.banner.item_name" value="${item}"/>
     <display:setProperty name="paging.banner.items_name" value="${items}"/>

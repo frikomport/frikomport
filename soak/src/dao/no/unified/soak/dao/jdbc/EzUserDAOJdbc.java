@@ -10,6 +10,10 @@
  */
 package no.unified.soak.dao.jdbc;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -34,6 +38,7 @@ import no.unified.soak.util.NumConvert;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.InvalidResultSetAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 /**
@@ -78,15 +83,19 @@ public class EzUserDAOJdbc implements ExtUserDAO {
 	public ExtUser findUserBySessionID(String sessionId) {
 		boolean fakeLogin = false;
 		if(Constants.FAKE_LOGIN.equals(sessionId)){
-			// session_key for bruker som ønskes benyttet
+			// session_key for bruker som ï¿½nskes benyttet
 			sessionId = "qfb4q61lgduigesf41q7kq4kt5";
-			fakeLogin = true; // ikke sjekk utløp for session
+			fakeLogin = true; // ikke sjekk utlï¿½p for session
 		}
 		
 		ExtUser eZuser = null;
 		try {
-			String sql = "select user_id, expiration_time from ezsession where session_key = \'" + sessionId + "\'";
-			SqlRowSet rowSet = jt.queryForRowSet(sql);
+			String sql = "select user_id, expiration_time from ezsession where session_key = ?";
+
+            PreparedStatement preparedStatement = jt.getDataSource().getConnection().prepareStatement(sql);
+            preparedStatement.setString(1,sessionId);
+            ResultSet rowSet = preparedStatement.executeQuery();
+
 			if (rowSet.next()) {
 				Integer uid = rowSet.getInt("user_id");
 				Long expTime = rowSet.getLong("expiration_time");
@@ -106,7 +115,7 @@ public class EzUserDAOJdbc implements ExtUserDAO {
 			}
 		}
 		catch (Exception e) {
-			/* feil ved oppslag av bruker ved første kobling mot instans - mest sannsynlig pga. sammenblanding av cookies fra andre instanser */ 
+			/* feil ved oppslag av bruker ved fï¿½rste kobling mot instans - mest sannsynlig pga. sammenblanding av cookies fra andre instanser */ 
 			eZuser = new ExtUser();
 		}
 		return eZuser;
@@ -121,18 +130,23 @@ public class EzUserDAOJdbc implements ExtUserDAO {
 		}
 		ExtUser user = new ExtUser();
 		try {
-			String sql = "select O.id, O.name, CA.identifier, A.data_int, A.data_text, U.email, U.login from ezcontentobject O \r\n"
+            String sql = "select O.id, O.name, CA.identifier, A.data_int, A.data_text, U.email, U.login from ezcontentobject O \r\n"
 					+ "inner join ezcontentclass C on O.contentclass_id = C.id\r\n"
 					+ "inner join ezcontentobject_attribute A on A.contentobject_id = O.id\r\n"
 					+ "inner join ezcontentclass_attribute CA on CA.contentclass_id = C.id and CA.id = A.contentclassattribute_id\r\n"
 					+ "inner join ezuser U on U.contentobject_id = O.id\r\n"
 					+ "where C.identifier = \'user\' and O.current_version = A.version and CA.identifier in (\'first_name\',\'last_name\',\'kommune\')\r\n"
-					+ "and U.login = '" + username + "'\r\n" 
+					+ "and U.login = '?'\r\n"
 					+ " and exists \r\n"
 					+ " (select null from ezcontentobject_tree OT, ezuser_role UR, ezrole R, ezcontentobject_tree OT2 \r\n"
 					+ " where OT.contentobject_id = UR.contentobject_id and OT.node_id = OT2.parent_node_id and OT2.contentobject_id = O.id and UR.role_id = R.id)\r\n" 
 					+ "order by O.id, CA.id";
-			SqlRowSet rowSet = jt.queryForRowSet(sql);
+
+
+            PreparedStatement preparedStatement = jt.getDataSource().getConnection().prepareStatement(sql);
+            preparedStatement.setString(1,username);
+            ResultSet rowSet = preparedStatement.executeQuery();
+
 			int curId = 0;
 
 			while (rowSet.next()) {
@@ -155,7 +169,7 @@ public class EzUserDAOJdbc implements ExtUserDAO {
 
 			if(user.getId() == null && user.getEmail() == null && user.getUsername() == null){
 				//System.out.println("Tomt resultat for ExtUser: " + username);
-				// Ideelt sett burde new'ing av ExtUser-objektet ligget ett annet sted enn det gjør nå, men dette var raskeste vei rundt problemet :-)
+				// Ideelt sett burde new'ing av ExtUser-objektet ligget ett annet sted enn det gjï¿½r nï¿½, men dette var raskeste vei rundt problemet :-)
 				return null;
 			}
 			
@@ -164,9 +178,11 @@ public class EzUserDAOJdbc implements ExtUserDAO {
 			e.printStackTrace();
 		} catch (DataAccessException e) {
 			e.printStackTrace();
-		}
-		
-		return user;
+		} catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return user;
     }
 
 	/**
@@ -185,7 +201,7 @@ public class EzUserDAOJdbc implements ExtUserDAO {
 		}
 		String roleCriteriaSQL = "";
 		if (roleCriteria != null && roleCriteria.trim().length() > 0) {
-			roleCriteriaSQL = " and R.name in (" + roleCriteria + ")";
+			roleCriteriaSQL = " and R.name in (?)";
 		}
 		ExtUser user = new ExtUser();
 		try {
@@ -195,13 +211,18 @@ public class EzUserDAOJdbc implements ExtUserDAO {
 					+ "inner join ezcontentclass_attribute CA on CA.contentclass_id = C.id and CA.id = A.contentclassattribute_id\r\n"
 					+ "inner join ezuser U on U.contentobject_id = O.id\r\n"
 					+ "where C.identifier = \'user\' and O.current_version = A.version and CA.identifier in (\'first_name\',\'last_name\',\'kommune\')\r\n"
-					+ "and O.id = "
-					+ userid
-					+ " and exists \r\n"
+					+ "and O.id = ? and exists \r\n"
 					+ " (select null from ezcontentobject_tree OT, ezuser_role UR, ezrole R, ezcontentobject_tree OT2 \r\n"
 					+ " where OT.contentobject_id = UR.contentobject_id and OT.node_id = OT2.parent_node_id and OT2.contentobject_id = O.id and UR.role_id = R.id"
 					+ roleCriteriaSQL + " )\r\n" + "order by O.id, CA.id";
-			SqlRowSet rowSet = jt.queryForRowSet(sql);
+
+            PreparedStatement preparedStatement = jt.getDataSource().getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, userid);
+            if (!roleCriteriaSQL.equals("")) {
+                preparedStatement.setString(2, roleCriteria);
+            }
+            ResultSet rowSet = preparedStatement.executeQuery();
+
 			int curId = 0;
 
 			while (rowSet.next()) {
@@ -228,31 +249,37 @@ public class EzUserDAOJdbc implements ExtUserDAO {
 			e.printStackTrace();
 		} catch (DataAccessException e) {
 			e.printStackTrace();
-		}
+		} catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-		return user;
+        return user;
 	}
 
-	private List<String> findRoles(Integer userid) {
-		if (userid == null) {
-			return null;
-		}
-		String sql = "select distinct R.name from ezcontentobject_tree OT, ezuser_role UR, ezrole R, ezcontentobject_tree OT2"
-				+ " where OT.contentobject_id = UR.contentobject_id and OT.node_id = OT2.parent_node_id"
-				+ " and OT2.contentobject_id = "
-				+ userid
-				+ " and UR.role_id = R.id";
-		SqlRowSet rowSet = jt.queryForRowSet(sql);
-		List<String> roles = new LinkedList();
-		while (rowSet.next()) {
-			roles.add(rowSet.getString("name"));
-		}
-		return roles;
-	}
+    private List<String> findRoles(Integer userid) {
+        if (userid == null) {
+            return null;
+        }
+        List<String> roles = new LinkedList();
+        String sql = "select distinct R.name from ezcontentobject_tree OT, ezuser_role UR, ezrole R, ezcontentobject_tree OT2"
+                + " where OT.contentobject_id = UR.contentobject_id and OT.node_id = OT2.parent_node_id"
+                + " and OT2.contentobject_id = ? and UR.role_id = R.id";
+        try {
+            PreparedStatement preparedStatement = jt.getDataSource().getConnection().prepareStatement(sql);
+            preparedStatement.setInt(1, userid);
+            ResultSet rowSet = preparedStatement.executeQuery();
+            while (rowSet.next()) {
+                roles.add(rowSet.getString("name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return roles;
+    }
 
-	
-	
-	
+
+
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -292,9 +319,11 @@ public class EzUserDAOJdbc implements ExtUserDAO {
 					+ "and exists \r\n"
 					+ " (select null from ezcontentobject_tree OT, ezuser_role UR, ezrole R, ezcontentobject_tree OT2 \r\n"
 					+ " where OT.contentobject_id = UR.contentobject_id and OT.node_id = OT2.parent_node_id and OT2.contentobject_id = O.id"
-					+ " and UR.role_id =  R.id and R.name in (" + roleNames + ") )\r\n"
+					+ " and UR.role_id =  R.id and R.name in (?) )\r\n"
 					+ " order by O.id, CA.id";
-			SqlRowSet rowSet = jt.queryForRowSet(sql);
+            PreparedStatement preparedStatement = jt.getDataSource().getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, roleNames);
+            ResultSet rowSet = preparedStatement.executeQuery();
 			int curId = 0;
 
 			ExtUser user = null;
@@ -322,8 +351,10 @@ public class EzUserDAOJdbc implements ExtUserDAO {
 			e.printStackTrace();
 		} catch (DataAccessException e) {
 			e.printStackTrace();
-		}
-		return eZUsers;
+		} catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return eZUsers;
 	}
 
     	/* (non-Javadoc)

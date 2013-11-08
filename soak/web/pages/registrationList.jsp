@@ -195,32 +195,32 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
          <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${registrationList.course.id}"/></c:url>" 
          title="<c:out value="${registrationList.course.description}"/>"><c:out value="${registrationList.course.name}"/></a>
     </display:column>
-    <display:column media="csv excel xml pdf" property="course.name" sortable="true" headerClass="sortable" titleKey="course.name" class="${tdClass2}"/>
+    <display:column escapeXml="true" media="csv excel xml pdf" property="course.name" sortable="true" headerClass="sortable" titleKey="course.name" class="${tdClass2}"/>
 </c:if>
 
 <c:choose>
 <c:when test="${showCourseName}">
-    <display:column sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="course.startTime" class="${tdClass2}">
+    <display:column escapeXml="true" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="course.startTime" class="${tdClass2}">
          <fmt:formatDate value="${registrationList.course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
 </c:when>
 <c:otherwise>
-    <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="course.startTime" class="${tdClass2}">
+    <display:column escapeXml="true" media="html" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="course.startTime" class="${tdClass2}">
          <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${registrationList.course.id}"/></c:url>" 
          title="<c:out value="${registrationList.course.description}"/>"><fmt:formatDate value="${registrationList.course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/></a>
     </display:column>
-    <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="course.startTime" class="${tdClass2}">
+    <display:column escapeXml="true" media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="course.startTime" class="${tdClass2}">
 		<fmt:formatDate value="${registrationList.course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     </display:column>
 </c:otherwise>    
 </c:choose>
     
-    <display:column property="lastName" sortable="true" headerClass="sortable" titleKey="registration.lastName" class="${tdClass}"/>
+    <display:column escapeXml="true" property="lastName" sortable="true" headerClass="sortable" titleKey="registration.lastName" class="${tdClass}"/>
          
-    <display:column property="firstName" sortable="true" headerClass="sortable" titleKey="registration.firstName" class="${tdClass}"/>
+    <display:column escapeXml="true" property="firstName" sortable="true" headerClass="sortable" titleKey="registration.firstName" class="${tdClass}"/>
 
 <c:if test="${useBirthdateForRegistration}">
-    <display:column sortable="true" headerClass="sortable" titleKey="registration.birthdate" sortProperty="birthdate" class="${tdClass}">
+    <display:column escapeXml="true" sortable="true" headerClass="sortable" titleKey="registration.birthdate" sortProperty="birthdate" class="${tdClass}">
          <fmt:formatDate value="${registrationList.birthdate}" type="date" pattern="${dateformat}"/>
     </display:column>
 </c:if>         
@@ -228,36 +228,36 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="registration.email" class="${tdClass}">
          <a href="mailto:<c:out value="${registrationList.email}"/>"><c:out value="${registrationList.email}"/></a>
     </display:column>
-    <display:column media="csv excel xml pdf" property="email" sortable="true" headerClass="sortable" titleKey="registration.email"/>
+    <display:column escapeXml="true" media="csv excel xml pdf" property="email" sortable="true" headerClass="sortable" titleKey="registration.email"/>
     
 	<c:if test="${!isSVV}">
-    <display:column property="phone" sortable="true" headerClass="sortable" titleKey="registration.phone" class="${tdClass}"/>
+    <display:column escapeXml="true" property="phone" sortable="true" headerClass="sortable" titleKey="registration.phone" class="${tdClass}"/>
 	</c:if>
          
-    <display:column property="mobilePhone" sortable="true" headerClass="sortable" titleKey="registration.mobilePhone" class="${tdClass}"/>
+    <display:column escapeXml="true" property="mobilePhone" sortable="true" headerClass="sortable" titleKey="registration.mobilePhone" class="${tdClass}"/>
          
 	<c:if test="${!isSVV}">
-    <display:column property="organization.name" sortable="true" headerClass="sortable" titleKey="registration.organization" class="${tdClass}"/>
+    <display:column escapeXml="true" property="organization.name" sortable="true" headerClass="sortable" titleKey="registration.organization" class="${tdClass}"/>
 	</c:if>
 
 	<c:if test="${isSVV}">
-    <display:column sortable="true" headerClass="sortable" titleKey="registration.invoiceAddress.postalCode.short" class="${tdClass}">
+    <display:column escapeXml="true" sortable="true" headerClass="sortable" titleKey="registration.invoiceAddress.postalCode.short" class="${tdClass}">
     	<c:out value="${registrationList.invoiceAddress.postalCode}"/>
     </display:column>
 	</c:if>
 	
 <c:if test="${useServiceArea}">
-	<display:column property="serviceArea.name" sortable="true" headerClass="sortable" titleKey="registration.serviceArea.export" class="${tdClass}"/>
+	<display:column escapeXml="true" property="serviceArea.name" sortable="true" headerClass="sortable" titleKey="registration.serviceArea.export" class="${tdClass}"/>
 </c:if>
 
-    <display:column sortable="true" headerClass="sortable" titleKey="registration.status">
+    <display:column escapeXml="true" sortable="true" headerClass="sortable" titleKey="registration.status">
 		<c:if test="${registrationList.status == 1}"><fmt:message key="registrationList.status.1"/></c:if>
 		<c:if test="${registrationList.status == 2}"><fmt:message key="registrationList.status.2"/></c:if>
 		<c:if test="${registrationList.status == 3}"><fmt:message key="registrationList.status.3"/></c:if>
     </display:column>
          
 <c:if test="${usePayment}">
-    <display:column sortable="true" headerClass="sortable"
+    <display:column escapeXml="true" sortable="true" headerClass="sortable"
          titleKey="registration.invoiced">
 		<c:if test="${registrationList.invoiced == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${registrationList.invoiced == false}"><fmt:message key="checkbox.unchecked"/></c:if>
@@ -265,21 +265,21 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 </c:if>
     
 <c:if test="${!isSVV}">
-    <display:column sortable="true" headerClass="sortable" titleKey="registration.attended.export">
+    <display:column escapeXml="true" sortable="true" headerClass="sortable" titleKey="registration.attended.export">
 		<c:if test="${registrationList.attended == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${registrationList.attended == false}"><fmt:message key="checkbox.unchecked"/></c:if>
     </display:column>
 </c:if>
 
 <c:if test="${useParticipants}">
-	<display:column property="participants" sortable="true" headerClass="sortable" titleKey="registration.participants" class="${tdClass}"/>
+	<display:column escapeXml="true" property="participants" sortable="true" headerClass="sortable" titleKey="registration.participants" class="${tdClass}"/>
 </c:if>
     
 <c:if test="${usePayment}">
-    <display:column media="csv excel xml pdf" property="invoiceName" sortable="true" headerClass="sortable" titleKey="registrationList.invoiceAddress.name"/>
-    <display:column media="csv excel xml pdf" property="invoiceAddress.address" sortable="true" headerClass="sortable" titleKey="registrationList.invoiceAddress.address"/>
-    <display:column media="csv excel xml pdf" property="invoiceAddress.city" sortable="true" headerClass="sortable" titleKey="registrationList.invoiceAddress.city"/>
-    <display:column media="csv excel xml pdf" property="invoiceAddress.postalCode" sortable="true" headerClass="sortable" titleKey="registrationList.invoiceAddress.postalCode"/>
+    <display:column escapeXml="true" media="csv excel xml pdf" property="invoiceName" sortable="true" headerClass="sortable" titleKey="registrationList.invoiceAddress.name"/>
+    <display:column escapeXml="true" media="csv excel xml pdf" property="invoiceAddress.address" sortable="true" headerClass="sortable" titleKey="registrationList.invoiceAddress.address"/>
+    <display:column escapeXml="true" media="csv excel xml pdf" property="invoiceAddress.city" sortable="true" headerClass="sortable" titleKey="registrationList.invoiceAddress.city"/>
+    <display:column escapeXml="true" media="csv excel xml pdf" property="invoiceAddress.postalCode" sortable="true" headerClass="sortable" titleKey="registrationList.invoiceAddress.postalCode"/>
 </c:if>
     
     <display:setProperty name="paging.banner.item_name" value="${item}"/>

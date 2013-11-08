@@ -209,7 +209,7 @@ SumBuild sumsExport = new SumBuild();
         <% sums.addToNextSum(null, null); %>
     </display:column>
     <% sumsTotal.addToNextSum(null, null); %>
-    <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="course.name"/>
+    <display:column escapeXml="true" media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="course.name"/>
 </c:when>
 <c:otherwise>
    <c:if test="${containsUnfinished}">
@@ -273,7 +273,7 @@ SumBuild sumsExport = new SumBuild();
 
 
 <c:if test="${!isSVV}">
-    <display:column media="csv excel" sortable="true" headerClass="sortable" titleKey="course.stopTime" sortProperty="stopTime">
+    <display:column escapeXml="true" media="csv excel" sortable="true" headerClass="sortable" titleKey="course.stopTime" sortProperty="stopTime">
          <fmt:formatDate value="${courseList.stopTime}" type="both" pattern="${dateformat} ${timeformat}"/>
     <% sumsExport.addToNextSum(null, null); %>
     </display:column>
@@ -281,7 +281,7 @@ SumBuild sumsExport = new SumBuild();
     
     
 <c:if test="${containsUnfinished}">
-    <display:column property="availableAttendants" sortable="true" headerClass="sortable" titleKey="course.availableAttendants" total="true">
+    <display:column escapeXml="true" property="availableAttendants" sortable="true" headerClass="sortable" titleKey="course.availableAttendants" total="true">
     <%sums.addToNextSum("availableSum", theCourse, "getAvailableAttendants");%>
     <%sumsExport.addToNextSum("availableSum", theCourse, "getAvailableAttendants");%>
     </display:column>
@@ -291,21 +291,21 @@ SumBuild sumsExport = new SumBuild();
 <c:if test="${showAttendantDetails && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
 
 	<c:if test="${containsFinished}">
-    <display:column media="html csv excel pdf" property="numberOfRegistrations" sortable="true" headerClass="sortable" titleKey="statistics.numRegistrations">
+    <display:column escapeXml="true" media="html csv excel pdf" property="numberOfRegistrations" sortable="true" headerClass="sortable" titleKey="statistics.numRegistrations">
     <%sums.addToNextSum("registrationsSum", theCourse, "getNumberOfRegistrations");%>
     <%sumsExport.addToNextSum("registrationsSum", theCourse, "getNumberOfRegistrations");%>
     </display:column>
     <%sumsTotal.addToNextSum("registrationsSum", theCourse, "getNumberOfRegistrations");%>
 	</c:if>    
 
-    <display:column media="html csv excel pdf" property="numberOfParticipants" sortable="true" headerClass="sortable" titleKey="statistics.numRegistered">
+    <display:column escapeXml="true" media="html csv excel pdf" property="numberOfParticipants" sortable="true" headerClass="sortable" titleKey="statistics.numRegistered">
     <%sums.addToNextSum("participantsSum", theCourse, "getNumberOfParticipants");%>
     <%sumsExport.addToNextSum("participantsSum", theCourse, "getNumberOfParticipants");%>
     </display:column>
     <%sumsTotal.addToNextSum("participantsSum", theCourse, "getNumberOfParticipants");%>
 
 	<c:if test="${containsFinished && useAttendants}">
-    <display:column media="html csv excel pdf" property="attendants" sortable="true" headerClass="sortable" titleKey="statistics.numAttended">
+    <display:column escapeXml="true" media="html csv excel pdf" property="attendants" sortable="true" headerClass="sortable" titleKey="statistics.numAttended">
     <%sums.addToNextSum("attendedSum", theCourse, "getAttendants");%>
     <%sumsExport.addToNextSum("attendedSum", theCourse, "getAttendants");%>
     </display:column>
@@ -327,27 +327,27 @@ SumBuild sumsExport = new SumBuild();
     <%sums.addToNextSum(null, null);%>
 	</display:column>
     <%sumsTotal.addToNextSum(null, null);%>
-    <display:column media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="course.registerBy.export">
+    <display:column escapeXml="true" media="csv excel xml pdf" sortable="true" headerClass="sortable" titleKey="course.registerBy.export">
         <fmt:formatDate value="${courseList.registerBy}" type="both" pattern="${dateformat} ${timeformat}" />
     <%sumsExport.addToNextSum(null, null);%>
     </display:column>
 </c:if>
 
 <c:if test="${showDuration}">
-    <display:column property="duration" sortable="true" headerClass="sortable" titleKey="course.duration">
+    <display:column escapeXml="true" property="duration" sortable="true" headerClass="sortable" titleKey="course.duration">
     <%sums.addToNextSum(null, null);%>
     </display:column>
     <%sumsTotal.addToNextSum(null, null);%>
     <%sumsExport.addToNextSum(null, null);%>
 </c:if>
-    <display:column property="organization.name" sortable="true" headerClass="sortable" titleKey="course.organization">
+    <display:column escapeXml="true" property="organization.name" sortable="true" headerClass="sortable" titleKey="course.organization">
     <%sums.addToNextSum(null, null);%>
     </display:column>
     <%sumsTotal.addToNextSum(null, null);%>
     <%sumsExport.addToNextSum(null, null);%>
 
 <c:if test="${useOrganization2 && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
-    <display:column property="organization2.name" sortable="true" headerClass="sortable" titleKey="course.organization2">
+    <display:column escapeXml="true" property="organization2.name" sortable="true" headerClass="sortable" titleKey="course.organization2">
     <%sums.addToNextSum(null, null);%>
     </display:column>
     <%sumsTotal.addToNextSum(null, null);%>
@@ -355,24 +355,24 @@ SumBuild sumsExport = new SumBuild();
 </c:if>
 
 <c:if test="${useServiceArea}">
-    <display:column property="serviceArea.name" sortable="true" headerClass="sortable" titleKey="course.serviceArea">
+    <display:column escapeXml="true" property="serviceArea.name" sortable="true" headerClass="sortable" titleKey="course.serviceArea">
     <%sums.addToNextSum(null, null);%>
     </display:column>
     <%sumsTotal.addToNextSum(null, null);%>
     <%sumsExport.addToNextSum(null, null);%>
 </c:if>
          
-    <display:column media="html" property="location.name" sortable="true" headerClass="sortable" titleKey="course.location">
+    <display:column escapeXml="true" media="html" property="location.name" sortable="true" headerClass="sortable" titleKey="course.location">
          <a href="<c:url value="/detailsLocation.html"><c:param name="id" value="${courseList.location.id}"/></c:url>" title="<c:out value="${courseList.location.description}"/>"><c:out value="${courseList.location.name}"/></a>
     <%sums.addToNextSum(null, null);%>
     </display:column>
     <%sumsTotal.addToNextSum(null, null);%>
-    <display:column media="csv excel xml pdf" property="location.name" sortable="true" headerClass="sortable" titleKey="course.location">
+    <display:column escapeXml="true" media="csv excel xml pdf" property="location.name" sortable="true" headerClass="sortable" titleKey="course.location">
     <%sumsExport.addToNextSum(null, null);%>
     </display:column>
 
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
-	<display:column media="html" property="responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible">
+	<display:column escapeXml="true" media="html" property="responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible">
          <a href="<c:url value="/detailsUser.html"><c:param name="username" value="${courseList.responsible.username}"/></c:url>"><c:out value="${courseList.responsible.fullName}"/></a>
     <%sums.addToNextSum(null, null);%>
     </display:column>
@@ -380,67 +380,67 @@ SumBuild sumsExport = new SumBuild();
 </c:if>
 
 <c:if test="${!isSVV || (isSVV && (isAdmin || isEducationResponsible || isEventResponsible || isReader))}">
-    <display:column media="csv excel xml pdf" property="responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible">
+    <display:column escapeXml="true" media="csv excel xml pdf" property="responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible">
     <%sumsExport.addToNextSum(null, null);%>
     </display:column>
 </c:if>
 
 <c:if test="${!isSVV}">
-    <display:column media="excel" property="instructor.name" sortable="true" headerClass="sortable" titleKey="course.instructor.export">
+    <display:column escapeXml="true" media="excel" property="instructor.name" sortable="true" headerClass="sortable" titleKey="course.instructor.export">
     <%sumsExport.addToNextSum(null, null);%>
     </display:column>
 </c:if>
 
 <c:if test="${!showAttendantDetails && !isSVV}">
-    <display:column media="csv excel pdf" property="maxAttendants" sortable="true" headerClass="sortable" titleKey="course.maxAttendants.export">
+    <display:column escapeXml="true" media="csv excel pdf" property="maxAttendants" sortable="true" headerClass="sortable" titleKey="course.maxAttendants.export">
     <%sumsExport.addToNextSum(null, null);%>
     </display:column>
 </c:if>
 
 <c:if test="${!singleprice && usePayment}">
-    <display:column media="excel" property="reservedInternal" sortable="true" headerClass="sortable" titleKey="course.reservedInternal.export">
+    <display:column escapeXml="true" media="excel" property="reservedInternal" sortable="true" headerClass="sortable" titleKey="course.reservedInternal.export">
     <%sumsExport.addToNextSum(null, null);%>
     </display:column>
     
-    <display:column media="excel" property="feeInternal" sortable="true" headerClass="sortable" titleKey="course.feeInternal.export">
+    <display:column escapeXml="true" media="excel" property="feeInternal" sortable="true" headerClass="sortable" titleKey="course.feeInternal.export">
     <%sumsExport.addToNextSum(null, null);%>
     </display:column>
 </c:if>
 
 
 <c:if test="${usePayment}">
-    <display:column media="excel" property="feeExternal" sortable="true" headerClass="sortable" titleKey="course.feeExternal.export">
+    <display:column escapeXml="true" media="excel" property="feeExternal" sortable="true" headerClass="sortable" titleKey="course.feeExternal.export">
     <%sumsExport.addToNextSum(null, null);%>
     </display:column>
 </c:if>
 
 <c:if test="${!isSVV}">
-    <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.registerStart.export" sortProperty="registerStart">
+    <display:column escapeXml="true" media="excel" sortable="true" headerClass="sortable" titleKey="course.registerStart.export" sortProperty="registerStart">
          <fmt:formatDate value="${courseList.registerStart}" type="both" pattern="${dateformat} ${timeformat}"/>
     <%sumsExport.addToNextSum(null, null);%>
     </display:column>
 </c:if>
 
 <c:if test="${useRegisterBy && !isSVV}">
-    <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.registerBy.export" sortProperty="registerBy">
+    <display:column escapeXml="true" media="excel" sortable="true" headerClass="sortable" titleKey="course.registerBy.export" sortProperty="registerBy">
          <fmt:formatDate value="${courseList.registerBy}" type="both" pattern="${dateformat} ${timeformat}"/>
     <%sumsExport.addToNextSum(null, null);%>
     </display:column>
 </c:if>
 
 <c:if test="${!isSVV}">
-    <display:column media="excel" sortable="true" headerClass="sortable" titleKey="course.reminder.export" sortProperty="reminder">
+    <display:column escapeXml="true" media="excel" sortable="true" headerClass="sortable" titleKey="course.reminder.export" sortProperty="reminder">
          <fmt:formatDate value="${courseList.reminder}" type="both" pattern="${dateformat} ${timeformat}"/>
     <%sumsExport.addToNextSum(null, null);%>
     </display:column>
 </c:if>
 
 <c:if test="${!isSVV}">
-    <display:column media="excel" property="description" sortable="true" headerClass="sortable" titleKey="course.description.export">
+    <display:column escapeXml="true" media="excel" property="description" sortable="true" headerClass="sortable" titleKey="course.description.export">
     <%sumsExport.addToNextSum(null, null);%>
     </display:column>
 
-    <display:column media="excel" property="detailURL" sortable="true" headerClass="sortable" titleKey="course.detailURL.export">
+    <display:column escapeXml="true" media="excel" property="detailURL" sortable="true" headerClass="sortable" titleKey="course.detailURL.export">
     <%sumsExport.addToNextSum(null, null);%>
     </display:column>
 </c:if>

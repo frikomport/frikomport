@@ -101,11 +101,11 @@ to copy and/or improve.
     </p>
 
     <display:table name="${menus.rows}" class="list" style="width: 600px">
-        <display:column property="id"/>
-        <display:column property="name"/>
-        <display:column property="parent_name" title="Parent Name"/>
-        <display:column property="title"/>
-        <display:column property="location"/>
+        <display:column escapeXml="true" property="id"/>
+        <display:column escapeXml="true" property="name"/>
+        <display:column escapeXml="true" property="parent_name" title="Parent Name"/>
+        <display:column escapeXml="true" property="title"/>
+        <display:column escapeXml="true" property="location"/>
     </display:table>
     <p>
         If you <a href="#" onclick="toggleDisplay('sqlSource'); return false">

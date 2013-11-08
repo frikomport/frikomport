@@ -22,12 +22,12 @@
     class="list" export="true">
 
     <%-- Table columns --%>
-    <display:column property="name" sortable="true"
+    <display:column escapeXml="true" property="name" sortable="true"
         headerClass="sortable" url="/detailsCategory.html?from=list"
         paramId="id" paramProperty="id" titleKey="category.name" />
 
 <c:if test="${isAdmin || isEducationResponsible}">
-    <display:column media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
+    <display:column escapeXml="true" media="html" sortable="false" headerClass="sortable" titleKey="button.heading">
 <c:if test="${isAdmin || isEducationResponsible}">
         <button type="button" onclick="location.href='<c:url value="/editCategory.html"><c:param name="id" value="${category.id}"/></c:url>'">
             <fmt:message key="button.edit"/>

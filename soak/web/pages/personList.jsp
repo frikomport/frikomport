@@ -29,19 +29,19 @@
          <a href="<c:url value="/detailsPerson.html"><c:param name="id" value="${personList.id}"/></c:url>" 
          title="<c:out value="${personList.description}"/>"><c:out value="${personList.name}"/></a>
     </display:column>
-    <display:column media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="person.name"/>
+    <display:column escapeXml="true" media="csv excel xml pdf" property="name" sortable="true" headerClass="sortable" titleKey="person.name"/>
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="person.email">
          <a href="mailto:<c:out value="${personList.email}"/>"><c:out value="${personList.email}"/></a>
     </display:column>
-    <display:column media="csv excel xml pdf" property="email" sortable="true" headerClass="sortable" titleKey="person.email"/>
+    <display:column escapeXml="true" media="csv excel xml pdf" property="email" sortable="true" headerClass="sortable" titleKey="person.email"/>
 
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
-    <display:column property="phone" sortable="true" headerClass="sortable" titleKey="person.phone"/>
+    <display:column escapeXml="true" property="phone" sortable="true" headerClass="sortable" titleKey="person.phone"/>
 
-    <display:column property="mobilePhone" sortable="true" headerClass="sortable" titleKey="person.mobilePhone"/>
+    <display:column escapeXml="true" property="mobilePhone" sortable="true" headerClass="sortable" titleKey="person.mobilePhone"/>
 
-    <display:column property="mailAddress" sortable="true" headerClass="sortable" titleKey="person.mailAddress"/>
+    <display:column escapeXml="true" property="mailAddress" sortable="true" headerClass="sortable" titleKey="person.mailAddress"/>
 
     <display:column sortable="true" headerClass="sortable" titleKey="person.selectable">
         <c:if test="${personList.selectable == true}"><fmt:message key="checkbox.checked"/></c:if>

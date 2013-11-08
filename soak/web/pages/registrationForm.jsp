@@ -425,7 +425,7 @@
 						id="courseList" pagesize="${itemCount}" class="list" export="false"
 						requestURI="performRegistration.html">
 
-						<display:column media="html" sortable="false"
+						<display:column escapeXml="true" media="html" sortable="false"
 							headerClass="sortable" titleKey="button.heading">
 							<input type="radio" name="changeCourse" value="${courseList.id}"
 								onclick="chooseCourse(<c:out value="${courseList.id}"/>);"
@@ -433,7 +433,7 @@
 						</display:column>
 
 						<c:if test="${showCourseName}">
-						<display:column media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="name">
+						<display:column escapeXml="true" media="html" sortable="true" headerClass="sortable" titleKey="course.name" sortProperty="name">
 							<c:set var="courseDescription" value="" />
 							<c:if test="${showDescriptionToPublic || isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 								<c:set var="courseDescription"><c:out value="${courseList.description}"/></c:set>
@@ -449,7 +449,7 @@
 						</display:column>
 						</c:if>
 
-						<display:column sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
+						<display:column escapeXml="true" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
 							<c:if test="${showCourseName}">
 								<fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}" />
 							</c:if>
@@ -465,27 +465,27 @@
 							</c:if>
 						</display:column>
 
-						<display:column property="availableAttendants" sortable="true"
+						<display:column escapeXml="true" property="availableAttendants" sortable="true"
 							headerClass="sortable" titleKey="course.availableAttendants" />
 
 <c:if test="${showDuration}">
-						<display:column property="duration" sortable="true"
+						<display:column escapeXml="true" property="duration" sortable="true"
 							headerClass="sortable" titleKey="course.duration" />
 </c:if>
-						<display:column property="organization.name" sortable="true"
+						<display:column escapeXml="true" property="organization.name" sortable="true"
 							headerClass="sortable" titleKey="course.organization" />
 
 <c:if test="${useServiceArea}">
-						<display:column property="serviceArea.name" sortable="true"
+						<display:column escapeXml="true" property="serviceArea.name" sortable="true"
 							headerClass="sortable" titleKey="course.serviceArea" />
 </c:if>
 
 <c:if test="${useOrganization2 && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
-						<display:column property="organization2.name" sortable="true"
+						<display:column escapeXml="true" property="organization2.name" sortable="true"
 							headerClass="sortable" titleKey="course.organization2" />
 </c:if>
 
-						<display:column media="html" sortable="true"
+						<display:column escapeXml="true" media="html" sortable="true"
 							headerClass="sortable" titleKey="course.location">
 							<a
 								href="<c:url value="/detailsLocation.html"><c:param name="id" value="${courseList.location.id}"/></c:url>"
@@ -494,7 +494,7 @@
 						</display:column>
 
 <c:if test="${!isSVV || (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
-						<display:column media="html" sortable="true"
+						<display:column escapeXml="true" media="html" sortable="true"
 							headerClass="sortable" titleKey="course.responsible">
 							<a
 								href="<c:url value="/detailsUser.html"><c:param name="username" value="${courseList.responsible.username}"/></c:url>"><c:out

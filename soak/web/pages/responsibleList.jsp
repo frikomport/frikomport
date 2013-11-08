@@ -22,25 +22,25 @@
          <a href="<c:url value="/detailsUser.html"><c:param name="username" value="${responsibleList.username}"/></c:url>" 
          title="responsibleListDescription"><c:out value="${responsibleList.fullName}"/></a>
     </display:column>
-    <display:column media="csv excel xml pdf" property="fullName" sortable="true" headerClass="sortable" titleKey="user.fullname"/>
+    <display:column escapeXml="true" media="csv excel xml pdf" property="fullName" sortable="true" headerClass="sortable" titleKey="user.fullname"/>
 
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="user.email">
          <a href="mailto:<c:out value="${responsibleList.email}"/>"><c:out value="${responsibleList.email}"/></a>
     </display:column>
-    <display:column media="csv excel xml pdf" property="email" sortable="true" headerClass="sortable" titleKey="user.email"/>
+    <display:column escapeXml="true" media="csv excel xml pdf" property="email" sortable="true" headerClass="sortable" titleKey="user.email"/>
 
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
-    <display:column property="phoneNumber" sortable="true" headerClass="sortable" titleKey="user.phoneNumber"/>
+    <display:column escapeXml="true" property="phoneNumber" sortable="true" headerClass="sortable" titleKey="user.phoneNumber"/>
 
-    <display:column property="mobilePhone" sortable="true" headerClass="sortable" titleKey="user.mobilePhone"/>
+    <display:column escapeXml="true" property="mobilePhone" sortable="true" headerClass="sortable" titleKey="user.mobilePhone"/>
          
-    <display:column property="organization.name" sortable="true" headerClass="sortable" titleKey="user.organization"/>
+    <display:column escapeXml="true" property="organization.name" sortable="true" headerClass="sortable" titleKey="user.organization"/>
 
 <c:if test="${useOrganization2}">
-    <display:column property="organization2.name" sortable="true" headerClass="sortable" titleKey="user.organization2"/>
+    <display:column escapeXml="true" property="organization2.name" sortable="true" headerClass="sortable" titleKey="user.organization2"/>
 </c:if>
 
-    <display:column sortable="true" headerClass="sortable" titleKey="user.enabled">
+    <display:column escapeXml="true" sortable="true" headerClass="sortable" titleKey="user.enabled">
 		<c:if test="${responsibleList.enabled == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${responsibleList.enabled == false}"><fmt:message key="checkbox.unchecked"/></c:if>
 	</display:column>

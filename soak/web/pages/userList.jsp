@@ -64,11 +64,11 @@
          <a href="<c:url value="/detailsUser.html?from=list"><c:param name="username" value="${userList.username}"/></c:url>">
          <c:out value="${userList.username}"/></a>
     </display:column>
-    <display:column media="csv excel xml pdf" property="username" sortable="true" headerClass="sortable" titleKey="user.username"/>
+    <display:column escapeXml="true" media="csv excel xml pdf" property="username" sortable="true" headerClass="sortable" titleKey="user.username"/>
     
-    <display:column property="firstName" sortable="true" headerClass="sortable" titleKey="user.firstName" />
-    <display:column property="lastName" sortable="true" headerClass="sortable" titleKey="user.lastName" />
-    <display:column property="email" sortable="true" headerClass="sortable" autolink="true" titleKey="user.email" />
+    <display:column escapeXml="true" property="firstName" sortable="true" headerClass="sortable" titleKey="user.firstName" />
+    <display:column escapeXml="true" property="lastName" sortable="true" headerClass="sortable" titleKey="user.lastName" />
+    <display:column escapeXml="true" property="email" sortable="true" headerClass="sortable" autolink="true" titleKey="user.email" />
 
     <display:column sortable="true" headerClass="sortable" titleKey="user.enabled">
 		<c:if test="${userList.enabled == true}"><fmt:message key="checkbox.checked"/></c:if>

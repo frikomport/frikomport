@@ -84,52 +84,52 @@
     </display:column>
     </c:if>
 
-	<display:column property="firstName" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.firstName"/>
+	<display:column escapeXml="true" property="firstName" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.firstName"/>
 
-	<display:column property="lastName" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.lastName"/>
+	<display:column escapeXml="true" property="lastName" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.lastName"/>
 
     <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
-    <display:column media="html ccsv cexcel cxml cpdf" property="email" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.email"/>
+    <display:column escapeXml="true" media="html ccsv cexcel cxml cpdf" property="email" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.email"/>
     </c:if>
 
 	 <c:if test="${useBirthdateForRegistration}">
-	<display:column sortable="true" headerClass="sortable" titleKey="registration.birthdate" sortProperty="birthdate">
+	<display:column escapeXml="true" sortable="true" headerClass="sortable" titleKey="registration.birthdate" sortProperty="birthdate">
 		<fmt:formatDate value="${registrationList.birthdate}" type="date" pattern="${dateformat}"/>
     </display:column>
 	</c:if>
 
-	<display:column property="organization.name" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.organization"/>
+	<display:column escapeXml="true" property="organization.name" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.organization"/>
 
 	<c:if test="${showJobTitle}">
-	<display:column property="jobTitle" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.jobTitle"/>
+	<display:column escapeXml="true" property="jobTitle" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.jobTitle"/>
 	</c:if>
 
 	<c:if test="${showServiceArea}">		
-	<display:column property="serviceArea.name" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.serviceArea.export"/>
+	<display:column escapeXml="true" property="serviceArea.name" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.serviceArea.export"/>
 	</c:if>
 
 	<c:if test="${showWorkplace}">
-	<display:column property="workplace" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.workplace"/>
+	<display:column escapeXml="true" property="workplace" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.workplace"/>
 	</c:if>
 
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
-	<display:column property="phone" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.phone"/>
+	<display:column escapeXml="true" property="phone" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.phone"/>
 
-	<display:column property="mobilePhone" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.mobilePhone"/>
+	<display:column escapeXml="true" property="mobilePhone" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.mobilePhone"/>
 	
 	<c:if test="${showComment}">
-	<display:column property="comment" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.comment"/>
+	<display:column escapeXml="true" property="comment" sortable="true" headerClass="sortable" class="${tdClass}" titleKey="registration.comment"/>
 	</c:if>
 
 	<c:if test="${useParticipants}">
-	<display:column property="participants" sortable="true" headerClass="sortable" titleKey="registration.participants" class="${tdClass}"/>
+	<display:column escapeXml="true" property="participants" sortable="true" headerClass="sortable" titleKey="registration.participants" class="${tdClass}"/>
 	</c:if>
 
 	<c:if test="${(admin == true || isReader) && usePayment}">
-	<display:column media="ccsv cexcel cxml cpdf" property="invoiceName" sortable="true" headerClass="sortable" titleKey="registration.invoiceAddress.name"/>
-	<display:column media="ccsv cexcel cxml cpdf" property="invoiceAddress.address" sortable="true" headerClass="sortable" titleKey="registration.invoiceAddress.address"/>
-	<display:column media="ccsv cexcel cxml cpdf" property="invoiceAddress.postalCode" sortable="true" headerClass="sortable" titleKey="registration.invoiceAddress.postalCode"/>		
-	<display:column media="ccsv cexcel cxml cpdf" property="invoiceAddress.city" sortable="true" headerClass="sortable" titleKey="registration.invoiceAddress.city"/>
+	<display:column escapeXml="true" media="ccsv cexcel cxml cpdf" property="invoiceName" sortable="true" headerClass="sortable" titleKey="registration.invoiceAddress.name"/>
+	<display:column escapeXml="true" media="ccsv cexcel cxml cpdf" property="invoiceAddress.address" sortable="true" headerClass="sortable" titleKey="registration.invoiceAddress.address"/>
+	<display:column escapeXml="true" media="ccsv cexcel cxml cpdf" property="invoiceAddress.postalCode" sortable="true" headerClass="sortable" titleKey="registration.invoiceAddress.postalCode"/>
+	<display:column escapeXml="true" media="ccsv cexcel cxml cpdf" property="invoiceAddress.city" sortable="true" headerClass="sortable" titleKey="registration.invoiceAddress.city"/>
 	</c:if>
 
 	<c:if test="${usePayment}">	
