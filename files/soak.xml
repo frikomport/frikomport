@@ -1,0 +1,27 @@
+<Context path="/soak" docBase="soak" debug="99" reloadable="true"
+         antiJARLocking="true" antiResourceLocking="false">
+
+    <Resource name="jdbc/soakdb" auth="Container" type="javax.sql.DataSource"
+              maxActive="100" maxIdle="30" maxWait="10000"
+              driverClassName="com.mysql.jdbc.Driver"
+              username="friuser" password="friuser"
+              url="jdbc:mysql://localhost/fdb?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8"
+              defaultAutoCommit="true" removeAbandoned="true"
+              removeAbandonedTimeout="60" logAbandoned="true"/>
+
+    <!-- eZ resource -->
+    <Resource name="jdbc/ezdb" auth="Container" type="javax.sql.DataSource"
+              maxActive="100" maxIdle="30" maxWait="10000"
+              username="fezuser" password="fezuser"
+              driverClassName="com.mysql.jdbc.Driver" defaultAutoCommit="true"
+              url="jdbc:mysql://localhost/fezdb?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8" removeAbandoned="true"
+              removeAbandonedTimeout="60" logAbandoned="true" />
+
+    <Resource name="jdbc/userEzDataSource" auth="Container" type="javax.sql.DataSource"
+              maxActive="100" maxIdle="30" maxWait="10000"
+              username="fezuser" password="fezuser"
+              driverClassName="com.mysql.jdbc.Driver" defaultAutoCommit="true"
+              url="jdbc:mysql://localhost/fezdb?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8" removeAbandoned="true"
+              removeAbandonedTimeout="60" logAbandoned="true" />
+
+</Context>
