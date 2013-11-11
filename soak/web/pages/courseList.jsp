@@ -362,7 +362,7 @@ SumBuild sumsExport = new SumBuild();
     <%sumsExport.addToNextSum(null, null);%>
 </c:if>
          
-    <display:column escapeXml="true" media="html" property="location.name" sortable="true" headerClass="sortable" titleKey="course.location">
+    <display:column media="html" property="location.name" sortable="true" headerClass="sortable" titleKey="course.location">
          <a href="<c:url value="/detailsLocation.html"><c:param name="id" value="${courseList.location.id}"/></c:url>" title="<c:out value="${courseList.location.description}"/>"><c:out value="${courseList.location.name}"/></a>
     <%sums.addToNextSum(null, null);%>
     </display:column>
@@ -372,7 +372,7 @@ SumBuild sumsExport = new SumBuild();
     </display:column>
 
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
-	<display:column escapeXml="true" media="html" property="responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible">
+	<display:column media="html" property="responsible.fullName" sortable="true" headerClass="sortable" titleKey="course.responsible">
          <a href="<c:url value="/detailsUser.html"><c:param name="username" value="${courseList.responsible.username}"/></c:url>"><c:out value="${courseList.responsible.fullName}"/></a>
     <%sums.addToNextSum(null, null);%>
     </display:column>

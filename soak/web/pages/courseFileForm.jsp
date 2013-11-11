@@ -74,7 +74,7 @@
     <display:column escapeXml="true" property="filename" sortable="true" headerClass="sortable"
          titleKey="attachment.filename"/>
          
-    <display:column escapeXml="true" sortable="true" headerClass="sortable"
+    <display:column sortable="true" headerClass="sortable"
          titleKey="attachment.size">
 		<fmt:formatNumber value="${attachmentsList.size}" minFractionDigits="0"/>
     </display:column>

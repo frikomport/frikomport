@@ -51,7 +51,7 @@
 </c:if>    
     
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
-    <display:column escapeXml="true" sortable="true" headerClass="sortable"
+    <display:column sortable="true" headerClass="sortable"
          titleKey="organization.selectable">
 		<c:if test="${organizationList.selectable == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${organizationList.selectable == false}"><fmt:message key="checkbox.unchecked"/></c:if>

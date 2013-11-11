@@ -37,7 +37,7 @@
 		    <!--  display:column property="value" sortable="true" headerClass="sortable"
 		        titleKey="configuration.value"/ -->
 		
-		    <display:column escapeXml="true" sortable="true" headerClass="sortable" titleKey="configuartion.description">
+		    <display:column sortable="true" headerClass="sortable" titleKey="configuartion.description">
 		        <fmt:message key="${configurationList.name}" />
 		    </display:column>
 		

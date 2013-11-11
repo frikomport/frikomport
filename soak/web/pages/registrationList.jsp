@@ -205,7 +205,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
     </display:column>
 </c:when>
 <c:otherwise>
-    <display:column escapeXml="true" media="html" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="course.startTime" class="${tdClass2}">
+    <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="course.startTime" class="${tdClass2}">
          <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${registrationList.course.id}"/></c:url>" 
          title="<c:out value="${registrationList.course.description}"/>"><fmt:formatDate value="${registrationList.course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/></a>
     </display:column>
@@ -241,7 +241,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 	</c:if>
 
 	<c:if test="${isSVV}">
-    <display:column escapeXml="true" sortable="true" headerClass="sortable" titleKey="registration.invoiceAddress.postalCode.short" class="${tdClass}">
+    <display:column sortable="true" headerClass="sortable" titleKey="registration.invoiceAddress.postalCode.short" class="${tdClass}">
     	<c:out value="${registrationList.invoiceAddress.postalCode}"/>
     </display:column>
 	</c:if>
@@ -257,7 +257,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
     </display:column>
          
 <c:if test="${usePayment}">
-    <display:column escapeXml="true" sortable="true" headerClass="sortable"
+    <display:column sortable="true" headerClass="sortable"
          titleKey="registration.invoiced">
 		<c:if test="${registrationList.invoiced == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${registrationList.invoiced == false}"><fmt:message key="checkbox.unchecked"/></c:if>
@@ -265,7 +265,7 @@ else if ("<c:out value="${servicearea.organizationid}"/>" == orgid){
 </c:if>
     
 <c:if test="${!isSVV}">
-    <display:column escapeXml="true" sortable="true" headerClass="sortable" titleKey="registration.attended.export">
+    <display:column sortable="true" headerClass="sortable" titleKey="registration.attended.export">
 		<c:if test="${registrationList.attended == true}"><fmt:message key="checkbox.checked"/></c:if>
 		<c:if test="${registrationList.attended == false}"><fmt:message key="checkbox.unchecked"/></c:if>
     </display:column>

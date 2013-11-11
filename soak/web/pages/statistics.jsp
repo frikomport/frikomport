@@ -175,7 +175,7 @@ cal1.setTodayText("Idag");
     </display:column>
 </c:when>
 <c:otherwise>
-    <display:column escapeXml="true" media="html" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
+    <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.startTime" sortProperty="startTime">
          <a href="<c:url value="/detailsCourse.html"><c:param name="id" value="${courseList.id}"/></c:url>" 
          title="<c:out value="${courseList.description}"/>"><fmt:formatDate value="${courseList.startTime}" type="both" pattern="${dateformat} ${timeformat}"/></a>
     </display:column>
