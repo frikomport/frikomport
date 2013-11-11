@@ -338,7 +338,7 @@ function fillSelect(obj){
 			</th>
 			<td>
 				<form:select path="organizationid" onchange="fillSelect(this);" id="organizationidElement">
-					<form:options items="${organizations}" itemValue="id" itemLabel="name" />
+					<form:options items="${organizations}" itemValue="id" itemLabel="name" htmlEscape="true"/>
 				</form:select>
 				<form:errors cssClass="fieldError" htmlEscape="false" path="organizationid" />
 			</td>
@@ -352,7 +352,7 @@ function fillSelect(obj){
 			</th>
 			<td>
 				<form:select path="organization2id">
-					<form:options items="${organizations2}" itemValue="id" itemLabel="name" />
+					<form:options items="${organizations2}" itemValue="id" itemLabel="name" htmlEscape="true"/>
 				</form:select>
 				<form:errors cssClass="fieldError" htmlEscape="false" path="organization2id" />
 			</td>
@@ -432,7 +432,7 @@ function fillSelect(obj){
                     </c:when>
                     <c:otherwise>
                 <form:select path="locationid" onchange="setMaxAttendants(this)">
-					<form:options items="${locations}" itemValue="id" itemLabel="name" />
+					<form:options items="${locations}" itemValue="id" itemLabel="name" htmlEscape="true" />
 				</form:select>
 				<form:errors cssClass="fieldError" htmlEscape="false" path="locationid" />
                     </c:otherwise>
@@ -447,7 +447,7 @@ function fillSelect(obj){
 			<td>
 				<form:select path="responsibleUsername">
 					<form:options items="${responsible}" itemValue="username"
-						itemLabel="fullName"  />
+						itemLabel="fullName" htmlEscape="true" />
 				</form:select>
 				<form:errors cssClass="fieldError" htmlEscape="false"
 					path="responsibleUsername" />
@@ -460,7 +460,7 @@ function fillSelect(obj){
 			</th>
 			<td>
 				<form:select path="instructorid">
-					<form:options items="${instructors}" itemValue="id"
+					<form:options htmlEscape="true" items="${instructors}" itemValue="id"
 						itemLabel="name" />
 				</form:select>
 				<form:errors cssClass="fieldError" htmlEscape="false"
