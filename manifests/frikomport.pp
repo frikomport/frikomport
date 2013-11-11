@@ -194,6 +194,14 @@ class apache_config {
 	path => "/home/vagrant/ezcache_delete.sh",
 	source => '/vagrant/files/ezcache_delete.sh',
   }
+  file {
+	"recreate_eztest.sh":
+	mode => 755,
+	owner => root,
+	group => root,
+	path => "/home/vagrant/recreate_eztest.sh",
+	source => '/vagrant/files/recreate_eztest.sh',
+  }
   exec { 
     "apache-log-link":
     command => "/bin/ln -s /var/log/apache2/ /home/vagrant/apache_logs"
