@@ -56,7 +56,7 @@ cal1.setTodayText("Idag");
 			<c:set var="levelTd" value="level1" />
 		</c:if>
 
-		<!--  VIRKSOMHETSOMRÃ…DER -->
+		<!--  VIRKSOMHETSOMRÅDER -->
 		<c:if test="${not empty statisticsRows.unitParent && empty statisticsRows.cssClass}">
 			<c:set var="levelTd" value="level3_name" />
 		</c:if>
@@ -66,7 +66,7 @@ cal1.setTodayText("Idag");
 	    	<c:out value="${statisticsRows.unit}"/>
 	    </display:column>
 
-		<!--  VIRKSOMHETSOMRÃ…DER -->
+		<!--  VIRKSOMHETSOMRÅDER -->
 		<c:if test="${not empty statisticsRows.unitParent && empty statisticsRows.cssClass}">
 			<c:set var="levelTd" value="level3" />
 		</c:if>
@@ -99,17 +99,17 @@ cal1.setTodayText("Idag");
 
 <h2>Forklaring</h2>
 <ul class="bulletlist">
-	<li>"<b>Antall pÃ¥meldinger</b>": Antall pÃ¥meldinger til kurs/arrangementer innen virksomhet/virksomhetsomrÃ¥de i statistikkperioden.</li>
+	<li>"<b>Antall påmeldinger</b>": Antall påmeldinger til kurs/arrangementer innen virksomhet/virksomhetsområde i statistikkperioden.</li>
 
 	<c:if test="${useParticipants}">
-	<li>"<b>Antall pÃ¥meldte</b>": Summen av feltet "Antall deltakere" for pÃ¥meldingene til kurs/arrangementer innen virksomhetsomrÃ¥det/virksomheten i statistikkperioden.</li>
+	<li>"<b>Antall påmeldte</b>": Summen av feltet "Antall deltakere" for påmeldingene til kurs/arrangementer innen virksomhetsområdet/virksomheten i statistikkperioden.</li>
 	</c:if>
 
 	<c:if test="${useAttendants}">
-	<li>"<b>Antall fremmÃ¸tte</b>": Tas fra oppmÃ¸teregistreringen som er gjort for kurset/arrangementet. Dersom denne ikke er gjort, tas summen av "Antall pÃ¥meldte" for kursets/arrangementets pÃ¥meldinger. Tallet beregnes for kurs/arrangement innen virksomheten/virksomhetsomrÃ¥det i statistikkperioden.</li>
+	<li>"<b>Antall fremmøtte</b>": Tas fra oppmøteregistreringen som er gjort for kurset/arrangementet. Dersom denne ikke er gjort, tas summen av "Antall påmeldte" for kursets/arrangementets påmeldinger. Tallet beregnes for kurs/arrangement innen virksomheten/virksomhetsområdet i statistikkperioden.</li>
 	</c:if>
 	&nbsp;<br>
-	<li><b>Upubliserte kurs/arrangementer teller med pÃ¥ linje med publiserte kurs/arrangementer.</b></li>
+	<li><b>Upubliserte kurs/arrangementer teller med på linje med publiserte kurs/arrangementer.</b></li>
 </ul>
 
 <p/><br/>
@@ -117,10 +117,10 @@ cal1.setTodayText("Idag");
 <c:if test="${!empty courseList}">
 
 <c:if test="${useAttendants}">
-<h2>Kurs/arrangementer uten pÃ¥meldinger og etterregistering av fremmÃ¸tte deltakere</h2>
+<h2>Kurs/arrangementer uten påmeldinger og etterregistering av fremmøtte deltakere</h2>
 </c:if>
 <c:if test="${!useAttendants}">
-<h2>Kurs/arrangementer uten pÃ¥meldinger</h2>
+<h2>Kurs/arrangementer uten påmeldinger</h2>
 </c:if>
 
 
