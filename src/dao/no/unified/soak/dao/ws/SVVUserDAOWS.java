@@ -27,6 +27,7 @@ import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.ConvertDAO;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -239,34 +240,6 @@ public class SVVUserDAOWS implements ExtUserDAO {
 		return responseString;
 	}
 
-    public static String xmlChardecodeValue(String xmlValue) {
-    	StringBuffer returnString = new StringBuffer(xmlValue);
-    	int encodingStart = returnString.indexOf("&#");
-    	int encodingEnd = returnString.indexOf(";");
-    	int pointer = 0;
-    	while (encodingStart > -1 &&  encodingStart < encodingEnd) {
-    		String charValueStr = returnString.substring(encodingStart+2, encodingEnd);
-    		int charValue;
-			try {
-				charValue = Integer.parseInt(charValueStr);
-				pointer = 0;
-			} catch (NumberFormatException e) {
-				pointer = encodingEnd;
-	    		encodingStart = returnString.indexOf("&#", pointer);
-	    		encodingEnd = returnString.indexOf(";", encodingStart);
-				continue; //Ignore random "&#" in the xml;
-			}
-    		String newChar = String.valueOf(Character.toChars(charValue)[0]);
-    		
-    		returnString.delete(encodingStart, encodingEnd+1);
-    		returnString.insert(encodingStart, newChar);
-    		encodingStart = returnString.indexOf("&#", pointer);
-    		encodingEnd = returnString.indexOf(";", encodingStart);
-    	}
-    	
-    	return returnString.toString();
-    }
-	
 	public static String getTagValue(String tagname, String xml) {
 		try {
 			int startTagFirstpos = xml.indexOf("<" + tagname);
@@ -280,7 +253,8 @@ public class SVVUserDAOWS implements ExtUserDAO {
 					log.debug("<" + tagname + "> finnes ikke i xml");
 				return null;
 			}
-			return xmlChardecodeValue(xml.substring(startTagLastpos + 1, endTagFirstpos));
+			String value = xml.substring(startTagLastpos + 1, endTagFirstpos);
+			return StringEscapeUtils.unescapeXml(value.replaceAll("&amp;", "&"));
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
 				log.debug("En uventet feil skjedde ved henting av verdi for tag [" + tagname + "] fra xml.", e);

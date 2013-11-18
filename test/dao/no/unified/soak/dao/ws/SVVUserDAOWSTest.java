@@ -39,12 +39,12 @@ public class SVVUserDAOWSTest extends TestCase {
 			"				<urn2:Pair xmlns:urn2=\"urn:no:vegvesen:ldap:felles:KeyPairListType:cct:1:0\"><urn2:Key>984761805000000000</urn2:Key><urn2:Value/></urn2:Pair>" +
 			"            </urn:ObjInfo>\r\n" + 
 			"            <urn:SVVAnsatt>\r\n" +
-			"               <urn1:sn xmlns:urn1=\"urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0\">Aalberg[&#248;&#230;&#229;]</urn1:sn>\r\n" + 
-			"               <urn1:cn xmlns:urn1=\"urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0\">Anders Aalberg[&#248;&#230;&#229;]</urn1:cn>\r\n" + 
+			"               <urn1:sn xmlns:urn1=\"urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0\">Aalberg[&#248;&amp;#230;&#229;]</urn1:sn>\r\n" + 
+			"               <urn1:cn xmlns:urn1=\"urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0\">Anders Aalberg[&#248;&#230;&amp;#229;]</urn1:cn>\r\n" + 
 			"               <urn1:uid xmlns:urn1=\"urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0\">ANAALB</urn1:uid>\r\n" + 
 			"               <urn1:telephoneNumber xmlns:urn1=\"urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0\">74122126</urn1:telephoneNumber>\r\n" + 
 			"               <urn1:department xmlns:urn1=\"urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0\">Prosjekt</urn1:department>\r\n" + 
-			"               <urn1:givenName xmlns:urn1=\"urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0\">Anders[&#248;&#230;&#229;]</urn1:givenName>\r\n" + 
+			"               <urn1:givenName xmlns:urn1=\"urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0\">Anders[&amp;#248;&#230;&#229;]</urn1:givenName>\r\n" + 
 			"               <urn1:mail xmlns:urn1=\"urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0\">anders.aalberg@vegvesen.no</urn1:mail>\r\n" + 
 			"               <urn1:mobile xmlns:urn1=\"urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0\">91184399</urn1:mobile>\r\n" + 
 			"               <urn1:svvansattstatus xmlns:urn1=\"urn:no:vegvesen:ldap:soa2:SVVAnsattType:cct:1:0\">Aktiv organisasjonstilknytning</urn1:svvansattstatus>\r\n" + 
@@ -73,7 +73,10 @@ public class SVVUserDAOWSTest extends TestCase {
 		String username = "ANAALB";
 		SVVUserDAOWS svvUserDAOWS = new SVVUserDAOWS();
 		extUser = svvUserDAOWS.parseUserXML(xmlString, extUser, username);
-		System.out.println(extUser);
+		assertEquals("Fornavn inneholder feil.", "Anders[רזו]", extUser.getFirst_name());
+		assertEquals("Etternavn inneholder feil.", "Aalberg[רזו]", extUser.getLast_name());
+		assertEquals("Navn (hele navnet i ett felt) inneholder feil.", "Anders Aalberg[רזו]", extUser.getName());
+		System.out.println("Dette navn kom ut korrekt fra xml-dekodinga: " + extUser);
 	}
 	
 	/* (non-Javadoc)
