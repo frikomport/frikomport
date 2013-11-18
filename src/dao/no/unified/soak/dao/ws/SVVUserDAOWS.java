@@ -99,41 +99,51 @@ public class SVVUserDAOWS implements ExtUserDAO {
 		}
 		return extUsers;
 	}
+	
+	public ExtUser parseUserXML(String xmlString, ExtUser extUser, String username) {
+			extUser = new ExtUser();
+			
+			String ansattTagPrefix = getPostfixOfPrefixXmlnsValueFragment("SVVAnsattType", xmlString) + ":";
+			String roleTagPrefix = getPostfixOfPrefixXmlnsValueFragment("KeyPairListType", xmlString) + ":";
+
+			String uid = getTagValue(ansattTagPrefix+"uid", xmlString);
+			if (StringUtils.isEmpty(uid)) {
+				// Bruker ikke funnet
+				log.info("Ingen informasjom om brukernavn [" + username.toUpperCase() + "] funnet fra webserviceoppslag!");
+				return null;
+			}
+
+			extUser.setUsername(uid.toLowerCase());
+			extUser.setEmail(getTagValue(ansattTagPrefix+"mail", xmlString));
+			extUser.setFirst_name(getTagValue(ansattTagPrefix+"givenName", xmlString));
+			extUser.setLast_name(getTagValue(ansattTagPrefix+"sn", xmlString));
+			extUser.setName(getTagValue(ansattTagPrefix+"cn", xmlString));
+			extUser.setMobilePhone(getTagValue(ansattTagPrefix+"mobile", xmlString));
+			extUser.setPhoneNumber(getTagValue(ansattTagPrefix+"telephoneNumber", xmlString));
+
+			String adminRoles = getStringForRole(RoleEnum.ADMIN_ROLE);
+			String editorRoles = getStringForRole(RoleEnum.EDITOR_ROLE);
+			String eventResponsible = getStringForRole(RoleEnum.EVENTRESPONSIBLE_ROLE);
+			String readerRoles = getStringForRole(RoleEnum.READER_ROLE);
+
+			// Parsing av rollene etter endring hos SVV:
+			extUser.setRolenames(getTagvaluesAfterSiblingTagInOuterTag(xmlString, ansattTagPrefix+"svvrole", roleTagPrefix+"Key",
+					ROLEKEY_FROM_WEBSERVICE, roleTagPrefix+"Value", adminRoles, editorRoles, eventResponsible, readerRoles));
+		
+		return extUser;
+	}
 
 	public ExtUser findUserByUsername(String username) throws Exception {
 		ExtUser extUser = null;
 		try {
 			String xmlString = getUserXMLFromWebservice(username);
 			if (StringUtils.isNotBlank(xmlString)) {
-				extUser = new ExtUser();
-				
-				String ansattTagPrefix = getPostfixOfPrefixXmlnsValueFragment("SVVAnsattType", xmlString) + ":";
-				String roleTagPrefix = getPostfixOfPrefixXmlnsValueFragment("KeyPairListType", xmlString) + ":";
-
-				String uid = getTagValue(ansattTagPrefix+"uid", xmlString);
-				if (StringUtils.isEmpty(uid)) {
-					// Bruker ikke funnet
-					log.info("Ingen informasjom om brukernavn [" + username.toUpperCase() + "] funnet fra webserviceoppslag!");
+				extUser = parseUserXML(xmlString, extUser, username);
+				if (extUser == null) {
 					return null;
 				}
-
-				extUser.setUsername(uid.toLowerCase());
-				extUser.setEmail(getTagValue(ansattTagPrefix+"mail", xmlString));
-				extUser.setFirst_name(SVVUserDAOWS.getTagValue(ansattTagPrefix+"givenName", xmlString));
-				extUser.setLast_name(SVVUserDAOWS.getTagValue(ansattTagPrefix+"sn", xmlString));
-				extUser.setName(SVVUserDAOWS.getTagValue(ansattTagPrefix+"cn", xmlString));
-				extUser.setMobilePhone(SVVUserDAOWS.getTagValue(ansattTagPrefix+"mobile", xmlString));
-				extUser.setPhoneNumber(SVVUserDAOWS.getTagValue(ansattTagPrefix+"telephoneNumber", xmlString));
-
-				String adminRoles = getStringForRole(RoleEnum.ADMIN_ROLE);
-				String editorRoles = getStringForRole(RoleEnum.EDITOR_ROLE);
-				String eventResponsible = getStringForRole(RoleEnum.EVENTRESPONSIBLE_ROLE);
-				String readerRoles = getStringForRole(RoleEnum.READER_ROLE);
-
-				// Parsing av rollene etter endring hos SVV:
-				extUser.setRolenames(SVVUserDAOWS.getTagvaluesAfterSiblingTagInOuterTag(xmlString, ansattTagPrefix+"svvrole", roleTagPrefix+"Key",
-						ROLEKEY_FROM_WEBSERVICE, roleTagPrefix+"Value", adminRoles, editorRoles, eventResponsible, readerRoles));
 			}
+
 		} catch (Exception e) {
 			log.error("Feilet ifbm. oppslag på [" + username.toUpperCase() + "] fra webservice!", e);
 			throw e;
@@ -229,6 +239,34 @@ public class SVVUserDAOWS implements ExtUserDAO {
 		return responseString;
 	}
 
+    public static String xmlChardecodeValue(String xmlValue) {
+    	StringBuffer returnString = new StringBuffer(xmlValue);
+    	int encodingStart = returnString.indexOf("&#");
+    	int encodingEnd = returnString.indexOf(";");
+    	int pointer = 0;
+    	while (encodingStart > -1 &&  encodingStart < encodingEnd) {
+    		String charValueStr = returnString.substring(encodingStart+2, encodingEnd);
+    		int charValue;
+			try {
+				charValue = Integer.parseInt(charValueStr);
+				pointer = 0;
+			} catch (NumberFormatException e) {
+				pointer = encodingEnd;
+	    		encodingStart = returnString.indexOf("&#", pointer);
+	    		encodingEnd = returnString.indexOf(";", encodingStart);
+				continue; //Ignore random "&#" in the xml;
+			}
+    		String newChar = String.valueOf(Character.toChars(charValue)[0]);
+    		
+    		returnString.delete(encodingStart, encodingEnd+1);
+    		returnString.insert(encodingStart, newChar);
+    		encodingStart = returnString.indexOf("&#", pointer);
+    		encodingEnd = returnString.indexOf(";", encodingStart);
+    	}
+    	
+    	return returnString.toString();
+    }
+	
 	public static String getTagValue(String tagname, String xml) {
 		try {
 			int startTagFirstpos = xml.indexOf("<" + tagname);
@@ -242,7 +280,7 @@ public class SVVUserDAOWS implements ExtUserDAO {
 					log.debug("<" + tagname + "> finnes ikke i xml");
 				return null;
 			}
-			return xml.substring(startTagLastpos + 1, endTagFirstpos);
+			return xmlChardecodeValue(xml.substring(startTagLastpos + 1, endTagFirstpos));
 		} catch (Exception e) {
 			if (log.isDebugEnabled())
 				log.debug("En uventet feil skjedde ved henting av verdi for tag [" + tagname + "] fra xml.", e);
