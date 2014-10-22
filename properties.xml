@@ -48,16 +48,26 @@
     <property name="database.url" 
         value="jdbc:${database.type}://${database.host}/${database.name}?autoReconnect=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8"/>
 -->
-    <property name="database.jar" location="${oracle.jar}"/>
+
+	<!-- Under utvikling localhost med Oracle db -->
+    <property name="database.name" value="orcl"/>
+    <property name="database.port" value="1521"/>
+    <property name="database.host" value="localhost"/>
+    <property name="database.admin.username" value="sys"/>
+    <property name="database.admin.password" value="Hurra1814"/>
+
+	<property name="database.jar" location="${oracle.jar}"/>
     <property name="database.type" value="oracle"/>
+<!--
     <property name="database.name" value="mengdetrening"/>
     <property name="database.port" value="1641"/>
     <property name="database.host" value="udb1.vegvesen.no"/>
+    <property name="database.admin.username" value="mengdetrening"/>
+    <property name="database.admin.password" value="mengdetrening"/>
+-->	
     <property name="database.username" value="mengdetrening"/>
     <property name="database.password" value="mengdetrening"/>
     <property name="database.admin.url" value="jdbc:${database.type}:thin:@${database.host}:${database.port}:${database.name}"/>
-    <property name="database.admin.username" value="mengdetrening"/>
-    <property name="database.admin.password" value="mengdetrening"/>
     <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
 	<!-- property name="hibernate.hbm2ddl.auto" value="update"/ -->
     <property name="database.driver_class" value="oracle.jdbc.OracleDriver"/>
