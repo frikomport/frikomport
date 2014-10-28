@@ -101,7 +101,7 @@ public class Course extends BaseObject implements Serializable {
      *  inverse="true"
      *  cascade="none"
      * @hibernate.collection-key
-     *  column="courseid"
+     *  column="COURSEID"
      * @hibernate.collection-one-to-many class="no.unified.soak.model.Registration"
      */
     public Set<Registration> getRegistrations() {
@@ -117,7 +117,7 @@ public class Course extends BaseObject implements Serializable {
 
 	/**
 	 * @return the number of attendants
-     * @hibernate.property column="attendants" not-null="false"
+     * @hibernate.property column="ATTENDANTS" not-null="false"
 	 */
 	public Integer getAttendants() {
 		return attendants;
@@ -133,7 +133,7 @@ public class Course extends BaseObject implements Serializable {
 
 	/**
      * @return
-     * @hibernate.many-to-one not-null="false" column="categoryid"
+     * @hibernate.many-to-one not-null="false" column="CATEGORYID"
      *                        insert="false" update="false" cascade="none"
      */
     public Category getCategory() {
@@ -149,7 +149,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return The categoryid
-     * @hibernate.property column="categoryid" not-null="false"
+     * @hibernate.property column="CATEGORYID" not-null="false"
      */
     public Long getCategoryid() {
         return categoryid;
@@ -165,7 +165,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the role.
-     * @hibernate.property column="role" length="50" not-null="true"
+     * @hibernate.property column="ROLE" length="50" not-null="true"
      */
     public String getRole() {
         return role;
@@ -182,7 +182,7 @@ public class Course extends BaseObject implements Serializable {
     }
 
     /**
-     * @hibernate.property column="instructorid" not-null="true"
+     * @hibernate.property column="INSTRUCTORID" not-null="true"
      * @return Returns the instructorid.
      */
     public Long getInstructorid() {
@@ -200,7 +200,7 @@ public class Course extends BaseObject implements Serializable {
     }
 
     /**
-     * @hibernate.property column="responsibleusername" not-null="false" length="100"
+     * @hibernate.property column="RESPONSIBLEUSERNAME" not-null="false" length="100"
      * @return Returns the responsibleUsername.
      */
     public String getResponsibleUsername() {
@@ -218,7 +218,7 @@ public class Course extends BaseObject implements Serializable {
     }
 
     /**
-     * @hibernate.property column="responsibleid" not-null="false"
+     * @hibernate.property column="RESPONSIBLEID" not-null="false"
      * @return Returns the responsibleid.
      */
     public Long getResponsibleid() {
@@ -234,7 +234,7 @@ public class Course extends BaseObject implements Serializable {
     }
 
     /**
-     * @hibernate.property column="serviceareaid" not-null="false"
+     * @hibernate.property column="SERVICEAREAID" not-null="false"
      * @return Returns the serviceAreaid.
      */
     public Long getServiceAreaid() {
@@ -253,7 +253,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the detailURL.
-     * @hibernate.property column="detailurl" length="200"
+     * @hibernate.property column="DETAILURL" length="200"
      */
     public String getDetailURL() {
         return detailURL;
@@ -269,7 +269,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the duration.
-     * @hibernate.property column="duration" length="100" not-null="true"
+     * @hibernate.property column="DURATION" length="100" not-null="true"
      */
     public String getDuration() {
         return duration;
@@ -287,7 +287,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the feeExternal.
-     * @hibernate.property column="feexternal" not-null="true"
+     * @hibernate.property column="FEEXTERNAL" not-null="true"
      */
     public Double getFeeExternal() {
         return feeExternal;
@@ -305,7 +305,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the feeInternal.
-     * @hibernate.property column="feeinternal" not-null="true"
+     * @hibernate.property column="FEEINTERNAL" not-null="true"
      */
     public Double getFeeInternal() {
         return feeInternal;
@@ -323,7 +323,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the freezeAttendance.
-     * @hibernate.property column="freezeAttendance" not-null="false"
+     * @hibernate.property column="FREEZEATTENDANCE" not-null="false"
      */
     public Date getFreezeAttendance() {
         return freezeAttendance;
@@ -339,7 +339,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the id.
-     * @hibernate.id column="id" generator-class="native" unsaved-value="null"
+     * @hibernate.id column="ID" generator-class="native" unsaved-value="null"
      */
     public Long getId() {
         return id;
@@ -355,7 +355,7 @@ public class Course extends BaseObject implements Serializable {
     
     /**
      * @return Returns the copyid.
-     * @hibernate.property column="copyid" not-null="false"
+     * @hibernate.property column="COPYID" not-null="false"
      */
     public Long getCopyid() {
         return copyid;
@@ -372,7 +372,7 @@ public class Course extends BaseObject implements Serializable {
     /**
      *
      * @return Returns the maxAttendants.
-     * @hibernate.property column="maxattendants" not-null="true"
+     * @hibernate.property column="MAXATTENDANTS" not-null="true"
      */
     public Integer getMaxAttendants() {
         return maxAttendants;
@@ -391,7 +391,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the name.
-     * @hibernate.property column="name" length="100" not-null="true"
+     * @hibernate.property column="NAME" length="100" not-null="true"
      */
     public String getName() {
         return name;
@@ -409,7 +409,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the registerBy.
-     * @hibernate.property column="registerby" not-null="true"
+     * @hibernate.property column="REGISTERBY" not-null="true"
      */
     public Date getRegisterBy() {
         return registerBy;
@@ -427,7 +427,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the registerStart.
-     * @hibernate.property column="registerstart" not-null="false"
+     * @hibernate.property column="REGISTERSTART" not-null="false"
      */
     public Date getRegisterStart() {
         return registerStart;
@@ -443,7 +443,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the reminder.
-     * @hibernate.property column="reminder"
+     * @hibernate.property column="REMINDER"
      */
     public Date getReminder() {
         return reminder;
@@ -459,7 +459,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the reservedInternal.
-     * @hibernate.property column="reservedinternal" not-null="true"
+     * @hibernate.property column="RESERVEDINTERNAL" not-null="true"
      */
     public Integer getReservedInternal() {
         return reservedInternal;
@@ -477,7 +477,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the startTime.
-     * @hibernate.property column="starttime" not-null="true"
+     * @hibernate.property column="STARTTIME" not-null="true"
      */
     public Date getStartTime() {
         return startTime;
@@ -496,7 +496,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the stopTime.
-     * @hibernate.property column="stoptime" not-null="true"
+     * @hibernate.property column="STOPTIME" not-null="true"
      */
     public Date getStopTime() {
         return stopTime;
@@ -516,7 +516,7 @@ public class Course extends BaseObject implements Serializable {
 	 * Gets "maalgruppe".
 	 * 
 	 * @return Returns the type.
-	 * @hibernate.property column="type" length="100"
+	 * @hibernate.property column="TYPE" length="100"
 	 */
     public String getType() {
         return type;
@@ -532,7 +532,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the description.
-     * @hibernate.property column="description" length="1000" not-null="false"
+     * @hibernate.property column="DESCRIPTION" length="1000" not-null="false"
      */
     public String getDescription() {
         return description;
@@ -548,7 +548,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the instructor.
-     * @hibernate.many-to-one not-null="true" column="instructorid"
+     * @hibernate.many-to-one not-null="true" column="INSTRUCTORID"
      *                        insert="false" update="false" cascade="none"
      */
     public Person getInstructor() {
@@ -565,7 +565,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the location.
-     * @hibernate.many-to-one not-null="true" column="locationid" update="false"
+     * @hibernate.many-to-one not-null="true" column="LOCATIONID" update="false"
      *                        cascade="none" insert="false"
      */
     public Location getLocation() {
@@ -582,7 +582,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the locationid.
-     * @hibernate.property column="locationid" not-null="true"
+     * @hibernate.property column="LOCATIONID" not-null="true"
      */
     public Long getLocationid() {
         return locationid;
@@ -600,7 +600,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the organization.
-     * @hibernate.many-to-one not-null="true" column="organizationid" update="false" cascade="none" insert="false"
+     * @hibernate.many-to-one not-null="true" column="ORGANIZATIONID" update="false" cascade="none" insert="false"
      */
     public Organization getOrganization() {
         return organization;
@@ -616,7 +616,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the organizationid.
-     * @hibernate.property column="organizationid" not-null="true"
+     * @hibernate.property column="ORGANIZATIONID" not-null="true"
      */
     public Long getOrganizationid() {
         return organizationid;
@@ -634,7 +634,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the organization2id.
-     * @hibernate.property column="organization2id" not-null="false"
+     * @hibernate.property column="ORGANIZATION2ID" not-null="false"
      */
     public Long getOrganization2id() {
         return organization2id;
@@ -652,7 +652,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the organization2.
-     * @hibernate.many-to-one not-null="false" column="organization2id" update="false" cascade="none" insert="false"
+     * @hibernate.many-to-one not-null="false" column="ORGANIZATION2ID" update="false" cascade="none" insert="false"
      */
     public Organization getOrganization2() {
     	if(organization2 == null){
@@ -670,7 +670,7 @@ public class Course extends BaseObject implements Serializable {
 
      /**
      * @return Returns the responsible.
-     * @hibernate.many-to-one not-null="true" column="responsibleusername" insert="false" update="false" cascade="none" optimistic-lock="false"
+     * @hibernate.many-to-one not-null="true" column="RESPONSIBLEUSERNAME" insert="false" update="false" cascade="none" optimistic-lock="false"
      */
      public User getResponsible() {
      return responsible;
@@ -686,7 +686,7 @@ public class Course extends BaseObject implements Serializable {
 
     /**
      * @return Returns the serviceArea.
-     * @hibernate.many-to-one not-null="false" column="serviceareaid" cascade="none" insert="false" update="false"
+     * @hibernate.many-to-one not-null="false" column="SERVICEAREAID" cascade="none" insert="false" update="false"
      */
     public ServiceArea getServiceArea() {
         return serviceArea;
@@ -703,7 +703,7 @@ public class Course extends BaseObject implements Serializable {
     /**
      *
      * @return
-     * @hibernate.property column="status" not-null="true"
+     * @hibernate.property column="STATUS" not-null="true"
      */
     public Integer getStatus() {
         return status;
@@ -807,7 +807,7 @@ public class Course extends BaseObject implements Serializable {
     /**
      * Sets if attendees are visible to other attendees
      * @return
-     * @hibernate.property column="restricted" not-null="false"
+//     * @hibernate.property column="RESTRICTED" not-null="false"
      */
     public Boolean getRestricted() {
         return restricted;
@@ -820,7 +820,7 @@ public class Course extends BaseObject implements Serializable {
     /**
      * Charge course fee if user cancel registration after duedate
      * @return
-     * @hibernate.property column="chargeoverdue" not-null="false"
+     * @hibernate.property column="CHARGEOVERDUE" not-null="false"
      */
     public Boolean getChargeoverdue() {
         return chargeoverdue;

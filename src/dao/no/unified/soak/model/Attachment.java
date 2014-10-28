@@ -40,7 +40,7 @@ public class Attachment extends BaseObject implements Serializable {
     private Long locationId;
 
     /**
-    * @hibernate.property column="contenttype" length="100"
+    * @hibernate.property column="CONTENTTYPE" length="100"
      * @return Returns the contentType.
      */
     public String getContentType() {
@@ -56,7 +56,7 @@ public class Attachment extends BaseObject implements Serializable {
 
     /**
      * @return Returns the course.
-    * @hibernate.many-to-one column="courseid"
+    * @hibernate.many-to-one column="COURSEID"
     *                        insert="false" update="false" cascade="none"
     */
     public Course getCourse() {
@@ -71,7 +71,7 @@ public class Attachment extends BaseObject implements Serializable {
     }
 
     /**
-    * @hibernate.property column="courseid"
+    * @hibernate.property column="COURSEID"
      * @return Returns the courseId.
      */
     public Long getCourseId() {
@@ -86,7 +86,7 @@ public class Attachment extends BaseObject implements Serializable {
     }
 
     /**
-    * @hibernate.property column="filename" length="100"
+    * @hibernate.property column="FILENAME" length="100"
      * @return Returns the filename.
      */
     public String getFilename() {
@@ -101,7 +101,7 @@ public class Attachment extends BaseObject implements Serializable {
     }
 
     /**
-    * @hibernate.id column="id" generator-class="native" unsaved-value="null"
+    * @hibernate.id column="ID" generator-class="native" unsaved-value="null"
      * @return Returns the id.
      */
     public Long getId() {
@@ -116,7 +116,7 @@ public class Attachment extends BaseObject implements Serializable {
     }
 
     /**
-    * @hibernate.many-to-one column="locationid"
+    * @hibernate.many-to-one column="LOCATIONID"
     *                        insert="false" update="false" cascade="none"
      * @return Returns the location.
      */
@@ -132,7 +132,7 @@ public class Attachment extends BaseObject implements Serializable {
     }
 
     /**
-    * @hibernate.property column="locationid"
+    * @hibernate.property column="LOCATIONID"
      * @return Returns the locationId.
      */
     public Long getLocationId() {
@@ -147,7 +147,7 @@ public class Attachment extends BaseObject implements Serializable {
     }
 
     /**
-    * @hibernate.property column="size"
+    * @hibernate.property column="SIZE"
      * @return Returns the size.
      */
     public Long getSize() {
@@ -162,7 +162,7 @@ public class Attachment extends BaseObject implements Serializable {
     }
 
     /**
-    * @hibernate.property column="storedname" size="100"
+    * @hibernate.property column="STOREDNAME" size="100"
      * @return Returns the storedname.
      */
     public String getStoredname() {

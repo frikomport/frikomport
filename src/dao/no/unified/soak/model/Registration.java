@@ -137,7 +137,7 @@ public class Registration extends BaseObject implements Serializable {
 	
 	/**
 	 * @return the number of participants or 1 if value is <code>null</code>
-	 * @hibernate.property column="participants" not-null="false"
+	 * @hibernate.property column="PARTICIPANTS" not-null="false"
 	 */
 	public Integer getParticipants() {
 		return participants;
@@ -160,7 +160,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the course.
-	 * @hibernate.many-to-one not-null="true" column="courseid" insert="false"
+	 * @hibernate.many-to-one not-null="true" column="COURSEID" insert="false"
 	 *                        update="false" cascade="none"
 	 */
 	public Course getCourse() {
@@ -177,7 +177,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the user.
-	 * @hibernate.many-to-one not-null="false" column="username" insert="false" update="false" cascade="none" optimistic-lock="false"
+	 * @hibernate.many-to-one not-null="false" column="USERNAME" insert="false" update="false" cascade="none" optimistic-lock="false"
 	 */
 	public User getUser() {
 		return user;
@@ -193,7 +193,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the courseid.
-	 * @hibernate.property column="courseid" not-null="true"
+	 * @hibernate.property column="COURSEID" not-null="true"
 	 */
 	public Long getCourseid() {
 		return courseid;
@@ -210,7 +210,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the email.
-	 * @hibernate.property column="email" not-null="true" length="50"
+	 * @hibernate.property column="EMAIL" not-null="true" length="50"
 	 */
 	public String getEmail() {
 		return email;
@@ -249,7 +249,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the employeeNumber.
-	 * @hibernate.property column="employeenumber"
+	 * @hibernate.property column="EMPLOYEENUMBER"
 	 */
 	public Integer getEmployeeNumber() {
 		return employeeNumber;
@@ -265,7 +265,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the firstName.
-	 * @hibernate.property column="firstname" length="100" not-null="true"
+	 * @hibernate.property column="FIRSTNAME" length="100" not-null="true"
 	 */
 	public String getFirstName() {
 		return firstName;
@@ -283,7 +283,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the id.
-	 * @hibernate.id column="id" generator-class="native" unsaved-value="null"
+	 * @hibernate.id column="ID" generator-class="native" unsaved-value="null"
 	 */
 	public Long getId() {
 		return id;
@@ -299,7 +299,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the invoiced.
-	 * @hibernate.property column="invoiced" not-null="true"
+	 * @hibernate.property column="INVOICED" not-null="true"
 	 */
 	public Boolean getInvoiced() {
 		return invoiced;
@@ -315,7 +315,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the jobTitle.
-	 * @hibernate.property column="jobtitle" length="100"
+	 * @hibernate.property column="JOBTITLE" length="100"
 	 */
 	public String getJobTitle() {
 		return jobTitle;
@@ -331,7 +331,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the lastName.
-	 * @hibernate.property column="lastname" length="100" not-null="true"
+	 * @hibernate.property column="LASTNAME" length="100" not-null="true"
 	 */
 	public String getLastName() {
 		return lastName;
@@ -349,7 +349,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the mobilePhone.
-	 * @hibernate.property column="mobilephone" length="30"
+	 * @hibernate.property column="MOBILEPHONE" length="30"
 	 * 
 	 */
 	public String getMobilePhone() {
@@ -369,7 +369,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the locale with which this registration was performed.
-	 * @hibernate.property column="locale" length="10" not-null="true"
+	 * @hibernate.property column="LOCALE" length="10" not-null="true"
 	 */
 	public String getLocale() {
 		return locale;
@@ -385,7 +385,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the organization.
-	 * @hibernate.many-to-one not-null="false" column="organizationid"
+	 * @hibernate.many-to-one not-null="false" column="ORGANIZATIONID"
 	 *                        not-found="ignore" insert="false" update="false"
 	 *                        cascade="none"
 	 */
@@ -403,7 +403,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the organizationid.
-	 * @hibernate.property column="organizationid" not-null="false"
+	 * @hibernate.property column="ORGANIZATIONID" not-null="false"
 	 */
 	public Long getOrganizationid() {
 		return organizationid;
@@ -421,7 +421,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the phone.
-	 * @hibernate.property column="phone" length="30"
+	 * @hibernate.property column="PHONE" length="30"
 	 */
 	public String getPhone() {
 		return phone;
@@ -439,7 +439,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the registered.
-	 * @hibernate.property column="registered" not-null="true"
+	 * @hibernate.property column="REGISTERED" not-null="true"
 	 */
 	public Date getRegistered() {
 		return registered;
@@ -467,7 +467,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the serviceArea.
-	 * @hibernate.many-to-one not-null="false" column="serviceareaid"
+	 * @hibernate.many-to-one not-null="false" column="SERVICEAREAID"
 	 *                        not-found="ignore" insert="false" update="false"
 	 *                        cascade="none"
 	 */
@@ -485,7 +485,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the serviceAreaid.
-	 * @hibernate.property column="serviceareaid" not-null="false"
+	 * @hibernate.property column="SERVICEAREAID" not-null="false"
 	 */
 	public Long getServiceAreaid() {
 		return serviceAreaid;
@@ -501,7 +501,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the username.
-	 * @hibernate.property column="username" not-null="false" length="50"
+	 * @hibernate.property column="USERNAME" not-null="false" length="50"
 	 */
 	public String getUsername() {
 		return username;
@@ -517,7 +517,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the useMailAddress.
-	 * @hibernate.property column="usemailaddress" length="100"
+	 * @hibernate.property column="USEMAILADDRESS" length="100"
 	 */
 	public String getUseMailAddress() {
 		return useMailAddress;
@@ -569,7 +569,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return the comment
-	 * @hibernate.property column="comment" length="255"
+	 * @hibernate.property column="COMMENT" length="255"
 	 */
 	public String getComment() {
 		return comment;
@@ -585,7 +585,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return the attended
-	 * @hibernate.property column="attended" not-null="true"
+	 * @hibernate.property column="ATTENDED" not-null="true"
 	 */
 	public Boolean getAttended() {
 		return attended;
@@ -601,7 +601,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return the workplace
-	 * @hibernate.property column="workplace" length="100"
+	 * @hibernate.property column="WORKPLACE" length="100"
 	 */
 	public String getWorkplace() {
 		return workplace;
@@ -638,7 +638,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return the invoice name.
-	 * @hibernate.property column="invoice_name" not-null="false"
+	 * @hibernate.property column="INVOICE_NAME" not-null="false"
 	 */
 	public String getInvoiceName() {
 		return invoiceName;
@@ -654,7 +654,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return the closest leader name.
-	 * @hibernate.property column="closest_leader" not-null="false"
+	 * @hibernate.property column="CLOSEST_LEADER" not-null="false"
 	 */
 	public String getClosestLeader() {
 		return closestLeader;
@@ -682,7 +682,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * Gets the status of the registration.
 	 * 
 	 * @return The registration status
-	 * @hibernate.property column="status" not-null="true" type="integer"
+	 * @hibernate.property column="STATUS" not-null="true" type="integer"
 	 */
 	public Integer getStatus() {
 		return (status == null ? null : status.getDBValue());
@@ -707,7 +707,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the date of birth.
-	 * @hibernate.property column="birthdate" not-null="false"
+	 * @hibernate.property column="BIRTHDATE" not-null="false"
 	 */
 	public Date getBirthdate() {
 		return birthdate;
