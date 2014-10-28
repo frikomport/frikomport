@@ -45,7 +45,7 @@ public class Category extends BaseObject implements Serializable {
 
     /**
      * @return The id
-     * @hibernate.id column="id" generator-class="native" unsaved-value="null"
+     * @hibernate.id column="ID" generator-class="native" unsaved-value="null"
      */
     public Long getId() {
         return id;
@@ -57,8 +57,7 @@ public class Category extends BaseObject implements Serializable {
 
     /**
      * @return The name
-     * @hibernate.property column="name" length="100" not-null="true" unique="true"
-     */
+     * @hibernate.property column="NAME" length="100" not-null="true" unique="true"
     public String getName() {
         return name.getDBValue();
     }
@@ -77,7 +76,7 @@ public class Category extends BaseObject implements Serializable {
 
     /**
      * @return If the category is selectable
-     * @hibernate.property column="selectable"
+     * @hibernate.property column="SELECTABLE"
      */
     public Boolean getSelectable() {
         return selectable;

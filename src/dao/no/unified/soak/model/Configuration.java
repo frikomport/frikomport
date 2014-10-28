@@ -26,7 +26,7 @@ public class Configuration extends BaseObject implements Serializable {
     }
     
     /**
-     * @hibernate.id column="id" not-null="true" generator-class="native"
+     * @hibernate.id column="ID" not-null="true" generator-class="native"
      * @return The key
      */
     public Long getId() {
@@ -41,7 +41,7 @@ public class Configuration extends BaseObject implements Serializable {
     }
     
     /**
-     * @hibernate.property column="name" not-null="true" length="100"
+     * @hibernate.property column="NAME" not-null="true" length="100"
      * @return The name
      */
     public String getName() {
@@ -56,7 +56,7 @@ public class Configuration extends BaseObject implements Serializable {
     }
 
 	/**
-	 * @hibernate.property column="active" not-null="true"
+	 * @hibernate.property column="ACTIVE" not-null="true"
 	 * @return Returns active
 	 */
 	public Boolean getActive() {
@@ -72,7 +72,7 @@ public class Configuration extends BaseObject implements Serializable {
 	}
     
     /**
-     * @hibernate.property column="value" not-null="false" length="100"
+     * @hibernate.property column="VALUE" not-null="false" length="100"
      * @return
      */
     public String getValue() {

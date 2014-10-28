@@ -30,6 +30,7 @@
             <list><value>file:dist/appfuse-dao.jar</value></list>
         </property>
         -->
+
         <property name="hibernateProperties">
         <props>
             <prop key="hibernate.dialect">@HIBERNATE-DIALECT@</prop>
@@ -46,7 +47,8 @@
            	<prop key="hibernate.generate_statistics">false</prop>
             <prop key="hibernate.SecondLevelCacheEnabled">false</prop>
             <prop key="hibernate.QueryCacheEnabled">false</prop>
-            <prop key="hibernate.cache.use_second_level_cache">false</prop>    
+            <prop key="hibernate.cache.use_second_level_cache">false</prop>
+			<prop key="hibernate.show_sql">true</prop>    
             <!-- Slutt: Anbefalinger fra vegloggen-prosjektet -->
             
         </props>

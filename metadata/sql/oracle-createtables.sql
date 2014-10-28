@@ -1,3 +1,10 @@
+/*
+Dette skript skal kun brukes på Oracle og kompletterer Ant-target "db-prepare":
+ant db-prepare
+
+Kommandoen "ant db-prepare" feiler etter opprettelsen av noen tabeller. Dette skript oppretter gjenstående tabeller og constraints. 
+*/
+
 create table attachment (
 	id number(18,0) not null, 
 	contenttype varchar(100), 

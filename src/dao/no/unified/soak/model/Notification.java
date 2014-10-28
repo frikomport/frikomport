@@ -27,7 +27,7 @@ public class Notification extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the id.
-	 * @hibernate.id column="id" generator-class="native" unsaved-value="null"
+	 * @hibernate.id column="ID" generator-class="native" unsaved-value="null"
 	 */
 	public Long getId() {
 		return id;
@@ -44,7 +44,7 @@ public class Notification extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the registration.
-	 * @hibernate.many-to-one not-null="true" column="registrationid" insert="false"
+	 * @hibernate.many-to-one not-null="true" column="REGISTRATIONID" insert="false"
 	 *                        update="false" cascade="none"
 	 */
 	public Registration getRegistration() {
@@ -61,7 +61,7 @@ public class Notification extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the registered.
-	 * @hibernate.property column="reminderSent" not-null="true"
+	 * @hibernate.property column="REMINDERSENT" not-null="true"
 	 */
 	public boolean getReminderSent() {
 		return reminderSent;
@@ -94,7 +94,7 @@ public class Notification extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the registrationid.
-	 * @hibernate.property column="registrationid" not-null="true"
+	 * @hibernate.property column="REGISTRATIONID" not-null="true"
 	 */
 	public Long getRegistrationid() {
 		return registrationid;
