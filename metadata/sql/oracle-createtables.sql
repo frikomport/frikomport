@@ -11,7 +11,7 @@ create table attachment (
 	courseid number(18,0), 
 	filename varchar(100), 
 	locationid number(18,0),
-	"size" number(18,0), 
+	"SIZE" number(18,0), 
 	storedname varchar(255), 
 	primary key (id)
 );
@@ -20,7 +20,7 @@ create table organization (
   id number(19,0) not null, 
   selectable number(1,0) not null, 
   name varchar2(50 char) not null, 
-  "number" number(19,0) not null, 
+  "NUMBER" number(19,0) not null, 
   invoice_address varchar2(255 char), 
   invoice_city varchar2(255 char), 
   invoice_province varchar2(255 char), 
@@ -50,7 +50,7 @@ create table registration (
   registered timestamp not null,
   serviceareaid number(19,0),
   usemailaddress varchar2(100 char),
-  "comment" varchar2(255 char),
+  "COMMENT" varchar2(255 char),
   attended number(1,0) not null,
   workplace varchar2(100 char),
   invoice_address varchar2(255 char),
