@@ -48,7 +48,7 @@ public class ServiceArea extends BaseObject implements Serializable {
     
     /**
      * @return Returns the id.
-     * @hibernate.id column="ID" generator-class="native" unsaved-value="null"
+     * @hibernate.id column="id" generator-class="native" unsaved-value="null"
      */
     public Long getId() {
         return Id;
@@ -64,7 +64,7 @@ public class ServiceArea extends BaseObject implements Serializable {
 
     /**
      * @return Returns the name.
-     * @hibernate.property column="NAME" length="100" not-null="true"
+     * @hibernate.property column="name" length="100" not-null="true"
      */
     public String getName() {
         return name;
@@ -81,7 +81,7 @@ public class ServiceArea extends BaseObject implements Serializable {
 
     /**
      * @return Returns the selectable.
-     * @hibernate.property column="SELECTABLE" not-null="true"
+     * @hibernate.property column="selectable" not-null="true"
      */
     public Boolean getSelectable() {
         return selectable;
@@ -101,7 +101,7 @@ public class ServiceArea extends BaseObject implements Serializable {
 	 * 
 	 * @return Organization
 	 * 
-	 * @hibernate.many-to-one column="ORGANIZATIONID" insert="false"
+	 * @hibernate.many-to-one column="organizationid" insert="false"
 	 *                        update="false" not-found="ignore" not-null="true" 
 	 *                        
 	 * 
@@ -123,7 +123,7 @@ public class ServiceArea extends BaseObject implements Serializable {
 
      /**
      * @return Returns the organizationid.
-     * @hibernate.property column="ORGANIZATIONID" not-null="true"
+     * @hibernate.property column="organizationid" not-null="true"
      */
     public Long getOrganizationid() {
         return organizationid;

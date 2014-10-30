@@ -38,7 +38,7 @@ public class UserCookie extends BaseObject {
      * Returns the id.
      * @return String
      *
-     * @hibernate.id column="ID"
+     * @hibernate.id column="id"
      *  generator-class="increment" unsaved-value="null"
      */
     public Long getId() {
@@ -59,7 +59,7 @@ public class UserCookie extends BaseObject {
      *
      * @hibernate.property
      * @hibernate.property
-     * @hibernate.column name="USERNAME" not-null="true"
+     * @hibernate.column name="username" not-null="true"
      *  length="30" index="user_cookie_username_cookie_id"
      */
     public String getUsername() {
@@ -79,7 +79,7 @@ public class UserCookie extends BaseObject {
      * @return String
      *
      * @hibernate.property
-     * @hibernate.column name="COOKIE_ID" not-null="true"
+     * @hibernate.column name="cookie_id" not-null="true"
      *  length="100" index="user_cookie_username_cookie_id"
      */
     public String getCookieId() {
@@ -96,7 +96,7 @@ public class UserCookie extends BaseObject {
 
     /**
      * @return Returns the dateCreated.
-    * @hibernate.property column="DATE_CREATED" not-null="true"
+    * @hibernate.property column="date_created" not-null="true"
      */
     public Date getDateCreated() {
         return dateCreated;

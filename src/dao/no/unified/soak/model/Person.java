@@ -45,7 +45,7 @@ public class Person extends BaseObject implements Serializable {
 
     /**
      * @return Returns the selectable.
-     * @hibernate.property column="SELECTABLE" not-null="true"
+     * @hibernate.property column="selectable" not-null="true"
      */
     public Boolean getSelectable() {
         return selectable;
@@ -62,7 +62,7 @@ public class Person extends BaseObject implements Serializable {
 
     /**
      * @return Returns the detailURL.
-     * @hibernate.property column="DETAILURL" length="200"
+     * @hibernate.property column="detailurl" length="200"
      */
     public String getDetailURL() {
         return detailURL;
@@ -78,7 +78,7 @@ public class Person extends BaseObject implements Serializable {
 
     /**
      * @return Returns the email.
-     * @hibernate.property column="EMAIL" length="50" not-null="true"
+     * @hibernate.property column="email" length="50" not-null="true"
      */
     public String getEmail() {
         return email;
@@ -98,7 +98,7 @@ public class Person extends BaseObject implements Serializable {
 
     /**
      * @return Returns the id.
-     * @hibernate.id column="ID" generator-class="native" unsaved-value="null"
+     * @hibernate.id column="id" generator-class="native" unsaved-value="null"
      */
     public Long getId() {
         return id;
@@ -114,7 +114,7 @@ public class Person extends BaseObject implements Serializable {
 
     /**
      * @return Returns the mailAdress.
-     * @hibernate.property column="MAILADDRESS" length="100"
+     * @hibernate.property column="mailaddress" length="100"
      */
     public String getMailAddress() {
         return mailAddress;
@@ -130,7 +130,7 @@ public class Person extends BaseObject implements Serializable {
 
     /**
      * @return Returns the name.
-     * @hibernate.property column="NAME" length="50" not-null="true"
+     * @hibernate.property column="name" length="50" not-null="true"
      */
     public String getName() {
         return name;
@@ -147,7 +147,7 @@ public class Person extends BaseObject implements Serializable {
 
     /**
      * @return Returns the phone.
-     * @hibernate.property column="PHONE" length="30"
+     * @hibernate.property column="phone" length="30"
      */
     public String getPhone() {
         return phone;
@@ -164,7 +164,7 @@ public class Person extends BaseObject implements Serializable {
 
     /**
      * @return Returns the mobilePhone.
-     * @hibernate.property column="MOBILEPHONE" length="30"
+     * @hibernate.property column="mobilephone" length="30"
      *
      */
     public String getMobilePhone() {
@@ -182,7 +182,7 @@ public class Person extends BaseObject implements Serializable {
 
     /**
      * @return Returns the description.
-     * @hibernate.property column="DESCRIPTION" length="1000" not-null="false"
+     * @hibernate.property column="description" length="1000" not-null="false"
      */
     public String getDescription() {
         return description;

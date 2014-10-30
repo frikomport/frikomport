@@ -49,7 +49,7 @@ public class Role extends BaseObject implements Serializable {
      * @return String
      *
      * @struts.validator type="required"
-     * @hibernate.id column="NAME" length="100" generator-class="assigned" unsaved-value="version"
+     * @hibernate.id column="name" length="100" generator-class="assigned" unsaved-value="version"
      */
     public String getName() {
         return this.name;
@@ -60,7 +60,7 @@ public class Role extends BaseObject implements Serializable {
      * @return String
      *
      * @struts.validator type="required"
-     * @hibernate.property column="DESCRIPTION"
+     * @hibernate.property column="description"
      */
     public String getDescription() {
         return this.description;
@@ -79,8 +79,8 @@ public class Role extends BaseObject implements Serializable {
      * This inverse relation causes exceptions :-( drk
      * hibernate.set table="user_role" cascade="save-update"
      *                lazy="false" inverse="true"
-     * hibernate.collection-key column="ROLE_NAME"
-     * hibernate.collection-many-to-many class="no.unified.soak.model.User" column="USERNAME"
+     * hibernate.collection-key column="role_name"
+     * hibernate.collection-many-to-many class="no.unified.soak.model.User" column="username"
      */
     public Set getUsers() {
         return users;

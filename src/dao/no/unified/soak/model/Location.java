@@ -59,7 +59,7 @@ public class Location extends BaseObject implements Serializable {
 
     /**
      * @return Returns the selectable.
-     * @hibernate.property column="SELECTABLE" not-null="true"
+     * @hibernate.property column="selectable" not-null="true"
      */
     public Boolean getSelectable() {
         return selectable;
@@ -76,7 +76,7 @@ public class Location extends BaseObject implements Serializable {
 
     /**
      * @return Returns the address.
-     * @hibernate.property column="ADDRESS" length="50" not-null="true"
+     * @hibernate.property column="address" length="50" not-null="true"
      */
     public String getAddress() {
         return address;
@@ -94,7 +94,7 @@ public class Location extends BaseObject implements Serializable {
 
     /**
      * @return Returns the mailAdress.
-     * @hibernate.property column="MAILADDRESS" length="100" not-null="false"
+     * @hibernate.property column="mailaddress" length="100" not-null="false"
      */
     public String getMailAddress() {
         return mailAddress;
@@ -109,7 +109,7 @@ public class Location extends BaseObject implements Serializable {
 
     /**
      * @return Returns the contactName.
-     * @hibernate.property column="CONTACTNAME" length="50"
+     * @hibernate.property column="contactname" length="50"
      */
     public String getContactName() {
         return contactName;
@@ -125,7 +125,7 @@ public class Location extends BaseObject implements Serializable {
 
     /**
      * @return Returns the email.
-     * @hibernate.property column="EMAIL" length="50" not-null="false"
+     * @hibernate.property column="email" length="50" not-null="false"
      */
     public String getEmail() {
         return email;
@@ -141,7 +141,7 @@ public class Location extends BaseObject implements Serializable {
 
     /**
       * @return Returns the detailURL.
-      * @hibernate.property column="DETAILURL" length="350"
+      * @hibernate.property column="detailurl" length="350"
       */
     public String getDetailURL() {
         return detailURL;
@@ -157,7 +157,7 @@ public class Location extends BaseObject implements Serializable {
 
     /**
      * @return Returns the mapURL.
-     * @hibernate.property column="MAPURL" length="350"
+     * @hibernate.property column="mapurl" length="350"
      */
     public String getmapURL() {
         return mapURL;
@@ -172,7 +172,7 @@ public class Location extends BaseObject implements Serializable {
 
     /**
      * @return Returns the id.
-     * @hibernate.id column="ID" generator-class="native" unsaved-value="null"
+     * @hibernate.id column="id" generator-class="native" unsaved-value="null"
      */
     public Long getId() {
         return id;
@@ -188,7 +188,7 @@ public class Location extends BaseObject implements Serializable {
 
     /**
      * @return Returns the name.
-     * @hibernate.property column="NAME" length="50" not-null="true"
+     * @hibernate.property column="name" length="50" not-null="true"
      */
     public String getName() {
         return name;
@@ -206,7 +206,7 @@ public class Location extends BaseObject implements Serializable {
 
     /**
      * @return Returns the phone.
-     * @hibernate.property column="PHONE" length="30"
+     * @hibernate.property column="phone" length="30"
      */
     public String getPhone() {
         return phone;
@@ -224,7 +224,7 @@ public class Location extends BaseObject implements Serializable {
 
     /**
      * @return Returns the owner.
-     * @hibernate.property column="OWNER" length="50" not-null="false"
+     * @hibernate.property column="owner" length="50" not-null="false"
      */
     public String getOwner() {
         return owner;
@@ -239,7 +239,7 @@ public class Location extends BaseObject implements Serializable {
 
     /**
      * @return Returns the maxAttendants.
-     * @hibernate.property column="MAXATTENDANTS" not-null="false"
+     * @hibernate.property column="maxattendants" not-null="false"
      */
     public Integer getMaxAttendants() {
         return maxAttendants;
@@ -256,7 +256,7 @@ public class Location extends BaseObject implements Serializable {
 
     /**
      * @return Returns the feePerDay.
-     * @hibernate.property column="FEEPERDAY" not-null="false"
+     * @hibernate.property column="feeperday" not-null="false"
      */
     public Double getFeePerDay() {
         return feePerDay;
@@ -271,7 +271,7 @@ public class Location extends BaseObject implements Serializable {
 
     /**
      * @return Returns the description.
-     * @hibernate.property column="DESCRIPTION" length="1000" not-null="false"
+     * @hibernate.property column="description" length="1000" not-null="false"
      */
     public String getDescription() {
         return description;
@@ -286,7 +286,7 @@ public class Location extends BaseObject implements Serializable {
 
     /**
      * @return Returns the organization.
-     * @hibernate.many-to-one not-null="true" column="ORGANIZATIONID" update="false" cascade="none" insert="false"
+     * @hibernate.many-to-one not-null="true" column="organizationid" update="false" cascade="none" insert="false"
      */
     public Organization getOrganization() {
         return organization;
@@ -301,7 +301,7 @@ public class Location extends BaseObject implements Serializable {
  
     /**
      * @return Returns the organization.
-     * @hibernate.many-to-one not-null="false" column="ORGANIZATION2ID" update="false" cascade="none" insert="false"
+     * @hibernate.many-to-one not-null="false" column="organization2id" update="false" cascade="none" insert="false"
      */
     public Organization getOrganization2() {
         return organization2;
@@ -313,7 +313,7 @@ public class Location extends BaseObject implements Serializable {
 
     /**
      * @return Returns the organizationid.
-     * @hibernate.property column="ORGANIZATIONID" not-null="true"
+     * @hibernate.property column="organizationid" not-null="true"
      */
     public Long getOrganizationid() {
         return organizationid;
@@ -330,7 +330,7 @@ public class Location extends BaseObject implements Serializable {
 
     /**
      * @return Returns the organization2id.
-     * @hibernate.property column="ORGANIZATION2ID" not-null="false"
+     * @hibernate.property column="organization2id" not-null="false"
      */
     public Long getOrganization2id() {
         return organization2id;
@@ -351,7 +351,7 @@ public class Location extends BaseObject implements Serializable {
      * @return String
      *
      * @hibernate.property not-null="false" length="15"
-     * @hibernate.column name="POSTAL_CODE"
+     * @hibernate.column name="postal_code"
      */
     public String getPostalCode() {
         return postalCode;

@@ -48,7 +48,7 @@ public class Address extends BaseObject implements Serializable {
      * @return String
      *
      * @hibernate.property not-null="false" length="150"
-     * @hibernate.column name="ADDRESS"
+     * @hibernate.column name="address"
      */
     public String getAddress() {
         return address;
@@ -59,7 +59,7 @@ public class Address extends BaseObject implements Serializable {
      * @return String
      *
      * @hibernate.property not-null="false" length="50"
-     * @hibernate.column name="CITY"
+     * @hibernate.column name="city"
      */
     public String getCity() {
         return city;
@@ -71,7 +71,7 @@ public class Address extends BaseObject implements Serializable {
      *
     
      * @hibernate.property length="100" not-null="false"
-     * @hibernate.column name="PROVINCE" 
+     * @hibernate.column name="province" 
      */
     public String getProvince() {
         return province;
@@ -82,7 +82,7 @@ public class Address extends BaseObject implements Serializable {
      * @return String
      *
      * @hibernate.property length="100" 
-     * @hibernate.column name="COUNTRY"
+     * @hibernate.column name="country"
      */
     public String getCountry() {
         return country;
@@ -93,7 +93,7 @@ public class Address extends BaseObject implements Serializable {
      * @return String
      *
      * @hibernate.property not-null="false" length="15"
-     * @hibernate.column name="POSTAL_CODE"
+     * @hibernate.column name="postal_code"
      */
     public String getPostalCode() {
         return postalCode;

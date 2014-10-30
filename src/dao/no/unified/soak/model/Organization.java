@@ -121,7 +121,7 @@ public class Organization extends BaseObject implements Serializable {
 
     /**
      * @return Returns the selectable.
-     * @hibernate.property column="SELECTABLE" not-null="true"
+     * @hibernate.property column="selectable" not-null="true"
      */
     public Boolean getSelectable() {
         return selectable;
@@ -138,7 +138,7 @@ public class Organization extends BaseObject implements Serializable {
 
     /**
      * @return Returns the id.
-     * @hibernate.id column="ID" generator-class="native" unsaved-value="null"
+     * @hibernate.id column="id" generator-class="native" unsaved-value="null"
      */
     public Long getId() {
         return id;
@@ -154,7 +154,7 @@ public class Organization extends BaseObject implements Serializable {
 
     /**
      * @return Returns the name.
-     * @hibernate.property column="NAME" length="50" not-null="true"
+     * @hibernate.property column="name" length="50" not-null="true"
      */
     public String getName() {
         return name;
@@ -171,7 +171,7 @@ public class Organization extends BaseObject implements Serializable {
 
     /**
      * @return Returns the number.
-     * @hibernate.property column="NUMBER" not-null="true"
+     * @hibernate.property column="number" not-null="true"
      */
     public Long getNumber() {
         return number;
@@ -238,7 +238,7 @@ public class Organization extends BaseObject implements Serializable {
 
     /**
      * @return Returns the invoice name.
-     * @hibernate.property column="INVOICE_NAME" not-null="false"
+     * @hibernate.property column="invoice_name" not-null="false"
      */
     public String getInvoiceName() {
         return invoiceName;
@@ -254,7 +254,7 @@ public class Organization extends BaseObject implements Serializable {
 
     /**
      * @return Returns the parent organization.
-     * @hibernate.many-to-one not-null="false" column="PARENTID" insert="false" update="false" cascade="none"
+     * @hibernate.many-to-one not-null="false" column="parentid" insert="false" update="false" cascade="none"
      */
     public Organization getParent() {
         return parent;
@@ -266,7 +266,7 @@ public class Organization extends BaseObject implements Serializable {
 
     /**
      * @return Returns the parentid.
-     * @hibernate.property column="PARENTID" not-null="false"
+     * @hibernate.property column="parentid" not-null="false"
      */
     public Long getParentid() {
         return parentid;
@@ -284,7 +284,7 @@ public class Organization extends BaseObject implements Serializable {
      * Gets the status of the registration.
      * 
      * @return The registration status
-     * @hibernate.property column="TYPE" not-null="true" type="integer"
+     * @hibernate.property column="type" not-null="true" type="integer"
      */
     public Integer getType() {
         if (type == null) {

@@ -80,7 +80,7 @@ public class User extends BaseObject implements Serializable {
      *
      * @return String
      *
-     * @hibernate.id column="USERNAME" length="100" generator-class="assigned"
+     * @hibernate.id column="username" length="100" generator-class="assigned"
      *               unsaved-value="version"
      */
     public String getUsername() {
@@ -91,7 +91,7 @@ public class User extends BaseObject implements Serializable {
      * Returns the password.
      * @return String
      *
-     * @hibernate.property column="PASSWORD" not-null="false"
+     * @hibernate.property column="password" not-null="false"
      */
     public String getPassword() {
         return password;
@@ -109,7 +109,7 @@ public class User extends BaseObject implements Serializable {
      * Returns the firstName.
      * @return String
      *
-     * @hibernate.property column="FIRST_NAME" not-null="true" length="100"
+     * @hibernate.property column="first_name" not-null="true" length="100"
      */
     public String getFirstName() {
         return firstName;
@@ -119,7 +119,7 @@ public class User extends BaseObject implements Serializable {
      * Returns the lastName.
      * @return String
      *
-     * @hibernate.property column="LAST_NAME" not-null="true" length="100"
+     * @hibernate.property column="last_name" not-null="true" length="100"
      */
     public String getLastName() {
         return lastName;
@@ -156,7 +156,7 @@ public class User extends BaseObject implements Serializable {
      * Returns the phoneNumber.
      * @return String
      *
-     * @hibernate.property column="PHONE_NUMBER" not-null="false"
+     * @hibernate.property column="phone_number" not-null="false"
      */
     public String getPhoneNumber() {
         return phoneNumber;
@@ -166,7 +166,7 @@ public class User extends BaseObject implements Serializable {
      * Returns the website.
      * @return String
      *
-     * @hibernate.property column="WEBSITE" not-null="false"
+     * @hibernate.property column="website" not-null="false"
      */
     public String getWebsite() {
         return website;
@@ -176,7 +176,7 @@ public class User extends BaseObject implements Serializable {
      * Returns the passwordHint.
      * @return String
      *
-     * @hibernate.property column="PASSWORD_HINT" not-null="false"
+     * @hibernate.property column="password_hint" not-null="false"
      */
     public String getPasswordHint() {
         return passwordHint;
@@ -187,9 +187,9 @@ public class User extends BaseObject implements Serializable {
      * @return Set
      *
      * @hibernate.set table="user_role" cascade="none" lazy="false"
-     * @hibernate.collection-key column="USERNAME"
+     * @hibernate.collection-key column="username"
      * @hibernate.collection-many-to-many class="no.unified.soak.model.Role"
-     *                                    column="ROLE_NAME"
+     *                                    column="role_name"
      */
     public Set getRoles() {
         return roles;
@@ -363,7 +363,7 @@ public class User extends BaseObject implements Serializable {
 
     /**
      * @return Returns the enabled.
-     * @hibernate.property column="ENABLED"
+     * @hibernate.property column="enabled"
      */
     public Boolean getEnabled() {
         return enabled;
@@ -401,7 +401,7 @@ public class User extends BaseObject implements Serializable {
     /**
 	 * Returns the organization.
 	 * @return Organization
-	 * @hibernate.many-to-one column="ORGANIZATIONID" insert="false" update="false" not-found="ignore" not-null="false" 
+	 * @hibernate.many-to-one column="organizationid" insert="false" update="false" not-found="ignore" not-null="false" 
 	 */
 	public Organization getOrganization() {
 		return organization;
@@ -420,7 +420,7 @@ public class User extends BaseObject implements Serializable {
 
     /**
      * @return Returns the organization2.
-     * @hibernate.many-to-one not-null="false" column="ORGANIZATION2ID" update="false" cascade="none" insert="false"
+     * @hibernate.many-to-one not-null="false" column="organization2id" update="false" cascade="none" insert="false"
      */
     public Organization getOrganization2() {
         return organization2;
@@ -432,7 +432,7 @@ public class User extends BaseObject implements Serializable {
 
      /**
      * @return Returns the organizationid.
-     * @hibernate.property column="ORGANIZATIONID" not-null="false"
+     * @hibernate.property column="organizationid" not-null="false"
      */
     public Long getOrganizationid() {
         return organizationid;
@@ -448,7 +448,7 @@ public class User extends BaseObject implements Serializable {
 
     /**
      * @return Returns the organization2id.
-     * @hibernate.property column="ORGANIZATION2ID" not-null="false"
+     * @hibernate.property column="organization2id" not-null="false"
      */
     public Long getOrganization2id() {
         return organization2id;
@@ -464,7 +464,7 @@ public class User extends BaseObject implements Serializable {
 
     /**
 	 * @return Returns the serviceArea.
-	 * @hibernate.many-to-one column="SERVICEAREAID" insert="false" update="false" not-found="ignore" not-null="false"
+	 * @hibernate.many-to-one column="serviceareaid" insert="false" update="false" not-found="ignore" not-null="false"
     */
 	public ServiceArea getServiceArea() {
 		return serviceArea;
@@ -480,7 +480,7 @@ public class User extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the serviceAreaid.
-	 * @hibernate.property column="SERVICEAREAID" not-null="false"
+	 * @hibernate.property column="serviceareaid" not-null="false"
 	 */
 	public Long getServiceAreaid() {
 		return serviceAreaid;
@@ -496,7 +496,7 @@ public class User extends BaseObject implements Serializable {
 
     /**
 	 * @return Returns the employeeNumber.
-	 * @hibernate.property column="EMPLOYEENUMBER"
+	 * @hibernate.property column="employeenumber"
 	 */
 	public Integer getEmployeeNumber() {
 		return employeeNumber;
@@ -512,7 +512,7 @@ public class User extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the jobTitle.
-	 * @hibernate.property column="JOBTITLE" length="100"
+	 * @hibernate.property column="jobtitle" length="100"
 	 */
 	public String getJobTitle() {
 		return jobTitle;
@@ -529,7 +529,7 @@ public class User extends BaseObject implements Serializable {
 
 	/**
 	 * @return Returns the mobilePhone.
-	 * @hibernate.property column="MOBILEPHONE" length="30"
+	 * @hibernate.property column="mobilephone" length="30"
 	 * 
 	 */
 	public String getMobilePhone() {
@@ -549,7 +549,7 @@ public class User extends BaseObject implements Serializable {
 
 	/**
      * @return the workplace
-     * @hibernate.property column="WORKPLACE" length="100"
+     * @hibernate.property column="workplace" length="100"
      */
     public String getWorkplace() {
         return workplace;
@@ -584,7 +584,7 @@ public class User extends BaseObject implements Serializable {
 
 	 /**
     * @return the invoice name.
-    * @hibernate.property column="INVOICE_NAME" not-null="false"
+    * @hibernate.property column="invoice_name" not-null="false"
     */
 	public String getInvoiceName() {
 		return invoiceName;
@@ -600,7 +600,7 @@ public class User extends BaseObject implements Serializable {
 	
 	 /**
      * @return the closest leader name.
-     * @hibernate.property column="CLOSEST_LEADER" not-null="false"
+     * @hibernate.property column="closest_leader" not-null="false"
      */
 	public String getClosestLeader() {
 		return closestLeader;
@@ -616,7 +616,7 @@ public class User extends BaseObject implements Serializable {
 
     /**
      * @return the hash
-	 * @hibernate.property column="HASH" 
+	 * @hibernate.property column="hash" 
 	 */
 	public String getHash() {
 		return hash;
@@ -635,7 +635,7 @@ public class User extends BaseObject implements Serializable {
 
 	/**
      * @return true if user has an emailaddress as username
-	 * @hibernate.property column="HASHUSER" not-null="true"
+	 * @hibernate.property column="hashuser" not-null="true"
 	 */
 	public Boolean getHashuser() {
 		if(hashuser == null) {
@@ -658,7 +658,7 @@ public class User extends BaseObject implements Serializable {
 	
 	 /**
 	    * @return date of birth
-	    * @hibernate.property column="BIRTHDATE" not-null="false"
+	    * @hibernate.property column="birthdate" not-null="false"
 	    */
 		public Date getBirthdate() {
 			return birthdate;
