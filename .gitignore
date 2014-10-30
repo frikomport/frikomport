@@ -1,3 +1,7 @@
 properties.xml
 .idea/**
-.buildFromAnt/**
+buildFromAnt/**
+build/**
+dist/**
+**/*.iml
+database.properties
