@@ -45,6 +45,15 @@ public class ApplicationResourcesUtil {
      *            The source of our messages
      */
     public static String getText(String msgKey) {
+        //TODO: Denne må fjernes, er kun for testformål!!!
+        //TODO: Denne må fjernes, er kun for testformål!!!
+        //TODO: Denne må fjernes, er kun for testformål!!!
+        //TODO: Denne må fjernes, er kun for testformål!!!
+        if (msgKey != null && msgKey.startsWith("global.")) {
+            return null;
+        }
+
+
         String result = "";
         try {
             result = messageSource.getMessage(msgKey, new String[] {}, LocaleContextHolder.getLocale());

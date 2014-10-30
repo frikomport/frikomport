@@ -34,13 +34,13 @@ public class DefaultQuotedNamingStrategy extends DefaultNamingStrategy {
     @Override
     public String columnName(String columnName) {
         StringBuffer columnNameNew = addQuotes(new StringBuffer(super.columnName(columnName)));
-        return columnNameNew.toString();
+        return columnNameNew.toString().toUpperCase();
     }
 
     @Override
     public String propertyToColumnName(String propertyName) {
         String propertyToColumnName = addQuotes(new StringBuffer(super.propertyToColumnName(propertyName))).toString();
-        return propertyToColumnName;
+        return propertyToColumnName.toUpperCase();
     }
 
     /**
