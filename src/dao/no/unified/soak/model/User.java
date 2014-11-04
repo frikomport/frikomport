@@ -385,7 +385,9 @@ public class User extends BaseObject implements Serializable {
         if (this.roles != null) {
             for (Iterator it = roles.iterator(); it.hasNext();) {
                 Role role = (Role) it.next();
-                rolenames.add(role.getName());
+                if (role != null) {
+                	rolenames.add(role.getName());
+                }
             }
         }
 

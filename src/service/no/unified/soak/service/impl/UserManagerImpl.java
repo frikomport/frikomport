@@ -300,6 +300,9 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		} catch (UserExistsException e) {
 			log.error("UserExistsException: " + e);
 			return null;
+		} catch (Exception e2) {
+			log.error("Exception: " + e2);
+			return null;
 		}
 	}
 	

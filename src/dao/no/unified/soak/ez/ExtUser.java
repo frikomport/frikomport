@@ -46,9 +46,9 @@ public class ExtUser extends BaseObject implements Serializable {
         setFirst_name(firstName);
         setLast_name(lastName);
         setName(firstName+" "+lastName);
-        String[] RoleStringList = StringUtils.split(rolenamesCSV, ',');
+        String[] roleStringList = StringUtils.split(rolenamesCSV, ',');
         List<String> rolenamesList = getRolenames();
-        CollectionUtils.addAll(rolenamesList, RoleStringList);
+        CollectionUtils.addAll(rolenamesList, roleStringList);
         setRolenames(rolenamesList);
         setMobilePhone(mobilePhone);
     }

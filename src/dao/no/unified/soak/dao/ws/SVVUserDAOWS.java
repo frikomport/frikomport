@@ -27,6 +27,7 @@ import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.ConvertDAO;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -137,16 +138,21 @@ public class SVVUserDAOWS implements ExtUserDAO {
 	public ExtUser findUserByUsername(String username) throws Exception {
 		ExtUser extUser = null;
 		try {
-			String xmlString = getUserXMLFromWebservice(username);
-			if (StringUtils.isNotBlank(xmlString)) {
-				extUser = parseUserXML(xmlString, extUser, username);
-				if (extUser == null) {
-					return null;
+			if (BooleanUtils.toBoolean(System.getProperty("void.ldap.webservice"))) {
+				extUser = new ExtUser(null, username, username + "@vegvesen.no", "Fetter", "Anton", "FKPAdministrator,FKPMoteadministrator", "12345678");
+			} else {
+				String xmlString = getUserXMLFromWebservice(username);
+				if (StringUtils.isNotBlank(xmlString)) {
+					extUser = parseUserXML(xmlString, extUser, username);
+					if (extUser == null) {
+						return null;
+					}
 				}
 			}
 
 		} catch (Exception e) {
-			log.error("Feilet ifbm. oppslag på [" + username.toUpperCase() + "] fra webservice!", e);
+			log.error("Feilet ifbm. oppslag på [" + username.toUpperCase()
+					+ "] fra webservice!", e);
 			throw e;
 		}
 

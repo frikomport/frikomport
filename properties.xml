@@ -33,7 +33,7 @@
 
     <!-- Defaults for database.properties -->
 
-	<!--
+<!--
     <property name="database.jar" location="${mysql.jar}"/>
     <property name="database.type" value="mysql"/>
     <property name="database.name" value="frikomdb"/>
@@ -50,22 +50,24 @@
 -->
 
 	<!-- Under utvikling localhost med Oracle db. Dette overstyres av datasource-setting ved bruk av OC4J. -->
+	<property name="database.jar" location="${oracle.jar}"/>
+    <property name="database.type" value="oracle"/>
+
     <property name="database.name" value="orcl"/>
     <property name="database.port" value="1521"/>
     <property name="database.host" value="localhost"/>
 	<property name="database.admin.username" value="sys"/>
     <property name="database.admin.password" value="Hurra1814"/>
 
-	<property name="database.jar" location="${oracle.jar}"/>
-    <property name="database.type" value="oracle"/>
 <!--
-    <property name="database.name" value="mengdetrening"/>
+	<property name="database.name" value="mengdetrening"/>
     <property name="database.port" value="1641"/>
     <property name="database.host" value="udb1.vegvesen.no"/>
     <property name="database.admin.username" value="mengdetrening"/>
     <property name="database.admin.password" value="mengdetrening"/>
--->	
-    <property name="database.username" value="mengdetrening"/>
+-->
+
+	<property name="database.username" value="mengdetrening"/>
     <property name="database.password" value="mengdetrening"/>
     <property name="database.admin.url" value="jdbc:${database.type}:thin:@${database.host}:${database.port}:${database.name}"/>
     <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
