@@ -33,7 +33,7 @@
     </bean>
 
     <bean id="reloadController" class="no.unified.soak.webapp.action.ReloadController"/>
-
+    
     <bean id="beanValidator" class="org.springmodules.validation.commons.DefaultBeanValidator">
         <property name="validatorFactory" ref="validatorFactory"/>
     </bean>
@@ -346,8 +346,7 @@
                 <prop key="/public/detailsCategory.html">categoryDetailsController</prop>
 
                 <prop key="/lb/test">healthCheckController</prop>
-
-
+                
                 <prop key="/welcome.html">welcomeController</prop>
                 <prop key="/editProfile.html">userFormController</prop>
                 <prop key="/mainMenu.html">filenameController</prop>

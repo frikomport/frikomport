@@ -18,7 +18,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/spring-2.0/spring.jar" sourcepath="lib/spring-2.0/spring-framework-2.0.zip">
-	<attributes>
+		<attributes>
 			<attribute name="javadoc_location" value="http://static.springsource.org/spring/docs/2.0.x/api/"/>
 		</attributes>
 	</classpathentry>
@@ -90,7 +90,6 @@
 	<classpathentry kind="lib" path="lib/pmd-3.0/lib/pmd-3.0.jar"/>
 	<classpathentry kind="lib" path="lib/pmd-3.0/lib/saxpath-1.0-fcs.jar"/>
 	<classpathentry kind="lib" path="lib/postgresql-jdbc-8.0-310/postgresql-jdbc3-8.0-310.jar"/>
-	<classpathentry kind="lib" path="lib/rename-packages-1.1/rename-packages-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/servletapi-2.3/servletapi-2.3.jar"/>
 	<classpathentry kind="lib" path="lib/sitemesh-2.2.1/sitemesh-2.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/struts-menu-2.4.1/struts-menu-2.4.1.jar"/>
@@ -111,5 +110,9 @@
 			<attribute name="javadoc_location" value="http://commons.apache.org/dbcp/api-1.2.2/index.html"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/jersey-client-1.2/jersey-client-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/jersey-client-1.2/jsr311-api-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/jersey-client-1.2/jersey-spring-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/jersey-client-1.2/jersey-server-1.2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
