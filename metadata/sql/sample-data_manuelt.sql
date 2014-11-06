@@ -1,21 +1,6 @@
-INSERT INTO "MENGDETRENING"."APP_USER" 
-	(USERNAME, VERSION, FIRST_NAME, LAST_NAME, POSTAL_CODE, EMAIL, HASHUSER) VALUES 
-	('extkla', '1', 'Klaus', 'Stafto', '7014', 'kst@knowit.no', '0');
-	
-
-INSERT INTO "MENGDETRENING"."ROLE" 
-	(NAME, DESCRIPTION) VALUES 
-	('FKPAdministrator', 'Admin');
-INSERT INTO "MENGDETRENING"."ROLE" 
-	(NAME, DESCRIPTION) VALUES 
-	('FKPRegionsadministrator', 'Regionsadministrator');
-INSERT INTO "MENGDETRENING"."ROLE" 
-	(NAME, DESCRIPTION) VALUES 
-	('FKPMoteadministrator', 'Møteadministrator');
-INSERT INTO "MENGDETRENING"."ROLE" 
-	(NAME, DESCRIPTION) VALUES 
-	('FKPLesebruker', 'Lesebruker');
-
-INSERT INTO "MENGDETRENING"."USER_ROLE" 
-(USERNAME, ROLE_NAME) 
-VALUES ('extkla', 'FKPAdministrator');
+Insert into "MENGDETRENING"."ROLE" (NAME,DESCRIPTION) values ('admin','Administrator');
+Insert into "MENGDETRENING"."ROLE" (NAME,DESCRIPTION) values ('editor','Regionsansvarlig');
+Insert into "MENGDETRENING"."ROLE" (NAME,DESCRIPTION) values ('eventresponsible','Møteansvarlig');
+Insert into "MENGDETRENING"."ROLE" (NAME,DESCRIPTION) values ('reader','Lesebruker');
+Insert into "MENGDETRENING"."ROLE" (NAME,DESCRIPTION) values ('employee','Ansattbruker');
+Insert into "MENGDETRENING"."ROLE" (NAME,DESCRIPTION) values ('anonymous','Anonymbruker');
