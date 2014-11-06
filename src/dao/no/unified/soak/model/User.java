@@ -16,6 +16,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import no.unified.soak.validation.DigitsOnly;
 import no.unified.soak.validation.MinLength;
 
@@ -36,6 +38,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
  *
  * @hibernate.class table="app_user" lazy="false"
  */
+@XmlRootElement()
 public class User extends BaseObject implements Serializable {
     private static final long serialVersionUID = 3832626162173359411L;
     protected String username;

@@ -16,6 +16,8 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 
 /**
  * This class holds information about the attachment/files that are connected to
@@ -24,6 +26,7 @@ import java.io.Serializable;
  * @author Henrik RJ
  * @hibernate.class table = "attachment"
  */
+@XmlRootElement()
 public class Attachment extends BaseObject implements Serializable {
     /**
      * Eclipse-generated UID

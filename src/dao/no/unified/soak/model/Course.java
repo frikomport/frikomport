@@ -14,6 +14,9 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 import no.unified.soak.validation.LessThanField;
 import no.unified.soak.validation.MinValue;
 import no.unified.soak.validation.Required;
@@ -32,10 +35,12 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @author hrj
  * @hibernate.class table="course" lazy="false"
  */
+@XmlRootElement()
 public class Course extends BaseObject implements Serializable {
     /**
      * When adding / removing attributes to this class, remember to update the copyAllButId-function
      */
+	@XmlTransient
     private static final long serialVersionUID = -4869033333668709720L;
     private Long id;
     private Long copyid;

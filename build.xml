@@ -511,6 +511,7 @@
             <lib file="${requesttag.jar}"/>
             <lib file="${sitemesh.jar}"/>
             <lib dir="${velocity.dir}" includes="*.jar"/>   
+            <lib dir="${jersey-client.dir}" includes="*.jar"/>   
             <lib file="${urlrewrite.jar}"/>
         </war>
     	
