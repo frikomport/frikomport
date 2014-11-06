@@ -22,6 +22,8 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 
 /**
  * This class is used to represent a location on which a course can be held
@@ -32,6 +34,7 @@ import java.io.Serializable;
  * @author hrj
  * @hibernate.class table="location" lazy="false"
  */
+@XmlRootElement()
 public class Location extends BaseObject implements Serializable {
     /**
          * Eclipse generated UID

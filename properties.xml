@@ -141,6 +141,7 @@
         <fileset dir="${ical4j.dir}" includes="*.jar"/>
         <fileset dir="${axis.dir}" includes="*.jar"/>
         <fileset dir="${spring.dir}" includes="*.jar"/>
+    	<fileset dir="${jersey-client.dir}" includes="*.jar"/>
     </path>
     <path id="dao.test.classpath">
         <path refid="dao.compile.classpath"/>

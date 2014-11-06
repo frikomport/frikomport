@@ -12,6 +12,8 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 
 /**
  * This class is used to manage cookie-based authentication.
@@ -23,6 +25,7 @@ import java.util.Date;
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
  * @hibernate.class table="user_cookie"
  */
+@XmlRootElement()
 public class UserCookie extends BaseObject {
     private static final long serialVersionUID = 4050479002315731765L;
     private Long id;

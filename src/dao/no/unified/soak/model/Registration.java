@@ -13,6 +13,8 @@ package no.unified.soak.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import no.unified.soak.validation.DigitsOnly;
 import no.unified.soak.validation.Email;
 import no.unified.soak.validation.MinLength;
@@ -33,6 +35,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @author hrj
  * @hibernate.class table="registration" lazy="false"
  */
+@XmlRootElement()
 public class Registration extends BaseObject implements Serializable {
 	
 

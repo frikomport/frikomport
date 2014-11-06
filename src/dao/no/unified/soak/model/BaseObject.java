@@ -9,6 +9,8 @@ package no.unified.soak.model;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 
 /**
  * Base class for Model objects.  Child objects should implement toString(),

@@ -11,8 +11,9 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 import java.io.Serializable;
-
 import java.util.Set;
+
+import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
@@ -26,6 +27,7 @@ import java.util.Set;
  * @struts.form extends="BaseForm"
  * @hibernate.class table="role" lazy="false"
  */
+@XmlRootElement()
 public class Role extends BaseObject implements Serializable {
     private static final long serialVersionUID = 3690197650654049848L;
     private String name;

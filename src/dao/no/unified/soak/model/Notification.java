@@ -1,6 +1,9 @@
 package no.unified.soak.model;
 
 import java.io.Serializable;
+
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -14,6 +17,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @author hrj
  * @hibernate.class table="notification"
  */
+@XmlRootElement()
 public class Notification extends BaseObject implements Serializable {
 	private static final long serialVersionUID = 2L;
 

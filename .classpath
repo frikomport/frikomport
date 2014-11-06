@@ -111,8 +111,14 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/jersey-client-1.2/jersey-client-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/jersey-client-1.2/jsr311-api-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/jersey-client-1.2/jsr311-api-1.1.1.jar" sourcepath="C:/Users/lty/.m2/repository/javax/ws/rs/jsr311-api/1.1.1/jsr311-api-1.1.1-sources.jar"/>
 	<classpathentry kind="lib" path="lib/jersey-client-1.2/jersey-spring-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/jersey-client-1.2/jersey-server-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/jersey-client-1.2/jersey-server-1.2.jar" sourcepath="C:/Users/lty/.m2/repository/com/sun/jersey/jersey-server/1.2/jersey-server-1.2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/jersey-client-1.2/jersey-core-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/jersey-client-1.2/jaxb-api.jar"/>
+	<classpathentry kind="lib" path="lib/jersey-client-1.2/jaxb-impl.jar"/>
+	<classpathentry kind="lib" path="lib/jersey-client-1.2/jaxb-xjc.jar"/>
+	<classpathentry kind="lib" path="lib/jersey-client-1.2/jersey-json-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/jersey-client-1.2/stax-api-1.0.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

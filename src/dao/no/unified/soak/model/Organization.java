@@ -13,6 +13,8 @@ package no.unified.soak.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import no.unified.soak.util.ApplicationResourcesUtil;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -28,6 +30,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @author hrj
  * @hibernate.class table="organization" lazy="false"
  */
+@XmlRootElement()
 public class Organization extends BaseObject implements Serializable {
     /**
      * Eclipse generated UID

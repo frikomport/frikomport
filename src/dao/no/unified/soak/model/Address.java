@@ -9,6 +9,8 @@ package no.unified.soak.model;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import no.unified.soak.validation.DigitsOnly;
 import no.unified.soak.validation.MaxLength;
 import no.unified.soak.validation.MinLength;
@@ -27,6 +29,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
  *
  */
+@XmlRootElement()
 public class Address extends BaseObject implements Serializable {
     private static final long serialVersionUID = 2308119741313418756L;
     protected String address;

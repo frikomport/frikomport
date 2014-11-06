@@ -1,5 +1,7 @@
 package no.unified.soak.model;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.apache.commons.lang.builder.CompareToBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;

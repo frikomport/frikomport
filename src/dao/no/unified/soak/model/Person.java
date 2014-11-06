@@ -21,6 +21,8 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 
 /**
  * This class is used to represent a person
@@ -31,6 +33,7 @@ import java.io.Serializable;
  * @author hrj
  * @hibernate.class table="person" lazy="false" 
  */
+@XmlRootElement()
 public class Person extends BaseObject implements Serializable {
     private static final long serialVersionUID = 8470485480268638081L;
     private Long id;
