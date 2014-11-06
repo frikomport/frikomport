@@ -1,0 +1,21 @@
+INSERT INTO "MENGDETRENING"."APP_USER" 
+	(USERNAME, VERSION, FIRST_NAME, LAST_NAME, POSTAL_CODE, EMAIL, HASHUSER) VALUES 
+	('extkla', '1', 'Klaus', 'Stafto', '7014', 'kst@knowit.no', '0');
+	
+
+INSERT INTO "MENGDETRENING"."ROLE" 
+	(NAME, DESCRIPTION) VALUES 
+	('FKPAdministrator', 'Admin');
+INSERT INTO "MENGDETRENING"."ROLE" 
+	(NAME, DESCRIPTION) VALUES 
+	('FKPRegionsadministrator', 'Regionsadministrator');
+INSERT INTO "MENGDETRENING"."ROLE" 
+	(NAME, DESCRIPTION) VALUES 
+	('FKPMoteadministrator', 'Møteadministrator');
+INSERT INTO "MENGDETRENING"."ROLE" 
+	(NAME, DESCRIPTION) VALUES 
+	('FKPLesebruker', 'Lesebruker');
+
+INSERT INTO "MENGDETRENING"."USER_ROLE" 
+(USERNAME, ROLE_NAME) 
+VALUES ('extkla', 'FKPAdministrator');

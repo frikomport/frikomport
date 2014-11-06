@@ -162,7 +162,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		try {
 			dao.saveUser(user);
 		} catch (DataIntegrityViolationException e) {
-			throw new UserExistsException("User '" + user.getUsername() + "' already exists!");
+			throw new UserExistsException("User '" + user.getUsername() + "' already exists or other integrity violation occurred!\n" + e);
 		}
 	}
 

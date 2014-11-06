@@ -138,8 +138,8 @@ public class SVVUserDAOWS implements ExtUserDAO {
 	public ExtUser findUserByUsername(String username) throws Exception {
 		ExtUser extUser = null;
 		try {
-			if (BooleanUtils.toBoolean(System.getProperty("void.ldap.webservice"))) {
-				extUser = new ExtUser(null, username, username + "@vegvesen.no", "Fetter", "Anton", "FKPAdministrator,FKPMoteadministrator", "12345678");
+			if (BooleanUtils.toBoolean(System.getProperty("ldap.webservice.void"))) {
+				extUser = makeExtUserWithoutWebservice(username);
 			} else {
 				String xmlString = getUserXMLFromWebservice(username);
 				if (StringUtils.isNotBlank(xmlString)) {
@@ -162,8 +162,23 @@ public class SVVUserDAOWS implements ExtUserDAO {
 		return extUser;
 	}
 
-	public String getUserXMLFromWebservice(String username) throws Exception {
+	private ExtUser makeExtUserWithoutWebservice(String username) {
+		int alphaIndex = username.indexOf("@");
+		if (alphaIndex < 0) {
+			log.error("Prøvde å opprette bruker uten Ldap-webservice, men brukernavn ("
+					+ username + ") er ingen epostadresse.");
+			return null;
+		}
+		String navn = StringUtils.left(username, alphaIndex);
 
+		ExtUser user = new ExtUser(null, username, username,
+				StringUtils.capitalize(navn) + " Fake", "Fakeson",
+				"FKPAdministrator,FKPMoteadministrator", "12345678");
+
+		return user;
+	}
+
+	public String getUserXMLFromWebservice(String username) throws Exception {
 		if(endpoint == null){
 			endpoint = ApplicationResourcesUtil.getText("javaapp.ldapEndpoint");
 			
