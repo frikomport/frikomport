@@ -14,6 +14,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+import javax.xml.bind.annotation.XmlAccessorOrder;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -40,7 +42,6 @@ public class Course extends BaseObject implements Serializable {
     /**
      * When adding / removing attributes to this class, remember to update the copyAllButId-function
      */
-	@XmlTransient
     private static final long serialVersionUID = -4869033333668709720L;
     private Long id;
     private Long copyid;
@@ -108,7 +109,8 @@ public class Course extends BaseObject implements Serializable {
      * @hibernate.collection-key
      *  column="courseid"
      * @hibernate.collection-one-to-many class="no.unified.soak.model.Registration"
-     */
+     */ 
+	@XmlTransient
     public Set<Registration> getRegistrations() {
 		return registrations;
 	}
@@ -141,6 +143,7 @@ public class Course extends BaseObject implements Serializable {
      * @hibernate.many-to-one not-null="false" column="categoryid"
      *                        insert="false" update="false" cascade="none"
      */
+	@XmlTransient
     public Category getCategory() {
         return category;
     }
@@ -156,6 +159,7 @@ public class Course extends BaseObject implements Serializable {
      * @return The categoryid
      * @hibernate.property column="categoryid" not-null="false"
      */
+	@XmlTransient
     public Long getCategoryid() {
         return categoryid;
     }
@@ -172,6 +176,7 @@ public class Course extends BaseObject implements Serializable {
      * @return Returns the role.
      * @hibernate.property column="role" length="50" not-null="true"
      */
+	@XmlTransient
     public String getRole() {
         return role;
     }
@@ -190,6 +195,7 @@ public class Course extends BaseObject implements Serializable {
      * @hibernate.property column="instructorid" not-null="true"
      * @return Returns the instructorid.
      */
+	@XmlTransient
     public Long getInstructorid() {
         return instructorid;
     }
@@ -208,6 +214,7 @@ public class Course extends BaseObject implements Serializable {
      * @hibernate.property column="responsibleusername" not-null="false" length="100"
      * @return Returns the responsibleUsername.
      */
+	@XmlTransient
     public String getResponsibleUsername() {
         return responsibleUsername;
     }
@@ -226,6 +233,7 @@ public class Course extends BaseObject implements Serializable {
      * @hibernate.property column="responsibleid" not-null="false"
      * @return Returns the responsibleid.
      */
+	@XmlTransient
     public Long getResponsibleid() {
         return responsibleid;
     }
@@ -242,6 +250,7 @@ public class Course extends BaseObject implements Serializable {
      * @hibernate.property column="serviceareaid" not-null="false"
      * @return Returns the serviceAreaid.
      */
+	@XmlTransient
     public Long getServiceAreaid() {
         return serviceAreaid;
     }
@@ -276,6 +285,7 @@ public class Course extends BaseObject implements Serializable {
      * @return Returns the duration.
      * @hibernate.property column="duration" length="100" not-null="true"
      */
+    @XmlTransient
     public String getDuration() {
         return duration;
     }
@@ -294,6 +304,7 @@ public class Course extends BaseObject implements Serializable {
      * @return Returns the feeExternal.
      * @hibernate.property column="feexternal" not-null="true"
      */
+    @XmlTransient
     public Double getFeeExternal() {
         return feeExternal;
     }
@@ -312,6 +323,7 @@ public class Course extends BaseObject implements Serializable {
      * @return Returns the feeInternal.
      * @hibernate.property column="feeinternal" not-null="true"
      */
+    @XmlTransient
     public Double getFeeInternal() {
         return feeInternal;
     }
@@ -346,6 +358,7 @@ public class Course extends BaseObject implements Serializable {
      * @return Returns the id.
      * @hibernate.id column="id" generator-class="native" unsaved-value="null"
      */
+    @XmlElement(name="kursId")
     public Long getId() {
         return id;
     }
@@ -362,6 +375,7 @@ public class Course extends BaseObject implements Serializable {
      * @return Returns the copyid.
      * @hibernate.property column="copyid" not-null="false"
      */
+	@XmlTransient
     public Long getCopyid() {
         return copyid;
     }
@@ -379,6 +393,7 @@ public class Course extends BaseObject implements Serializable {
      * @return Returns the maxAttendants.
      * @hibernate.property column="maxattendants" not-null="true"
      */
+    @XmlTransient
     public Integer getMaxAttendants() {
         return maxAttendants;
     }
@@ -416,6 +431,7 @@ public class Course extends BaseObject implements Serializable {
      * @return Returns the registerBy.
      * @hibernate.property column="registerby" not-null="true"
      */
+	@XmlTransient
     public Date getRegisterBy() {
         return registerBy;
     }
@@ -434,6 +450,7 @@ public class Course extends BaseObject implements Serializable {
      * @return Returns the registerStart.
      * @hibernate.property column="registerstart" not-null="false"
      */
+	@XmlTransient
     public Date getRegisterStart() {
         return registerStart;
     }
@@ -450,6 +467,7 @@ public class Course extends BaseObject implements Serializable {
      * @return Returns the reminder.
      * @hibernate.property column="reminder"
      */
+	@XmlTransient
     public Date getReminder() {
         return reminder;
     }
@@ -466,6 +484,7 @@ public class Course extends BaseObject implements Serializable {
      * @return Returns the reservedInternal.
      * @hibernate.property column="reservedinternal" not-null="true"
      */
+    @XmlTransient
     public Integer getReservedInternal() {
         return reservedInternal;
     }
@@ -484,6 +503,7 @@ public class Course extends BaseObject implements Serializable {
      * @return Returns the startTime.
      * @hibernate.property column="starttime" not-null="true"
      */
+    @XmlElement(name="start")
     public Date getStartTime() {
         return startTime;
     }
@@ -503,6 +523,7 @@ public class Course extends BaseObject implements Serializable {
      * @return Returns the stopTime.
      * @hibernate.property column="stoptime" not-null="true"
      */
+    @XmlElement(name="slutt")
     public Date getStopTime() {
         return stopTime;
     }
@@ -523,6 +544,7 @@ public class Course extends BaseObject implements Serializable {
 	 * @return Returns the type.
 	 * @hibernate.property column="type" length="100"
 	 */
+	@XmlTransient
     public String getType() {
         return type;
     }
@@ -556,6 +578,7 @@ public class Course extends BaseObject implements Serializable {
      * @hibernate.many-to-one not-null="true" column="instructorid"
      *                        insert="false" update="false" cascade="none"
      */
+	@XmlTransient
     public Person getInstructor() {
         return instructor;
     }
@@ -573,6 +596,7 @@ public class Course extends BaseObject implements Serializable {
      * @hibernate.many-to-one not-null="true" column="locationid" update="false"
      *                        cascade="none" insert="false"
      */
+    @XmlElement(name="lokale")
     public Location getLocation() {
         return location;
     }
@@ -589,6 +613,7 @@ public class Course extends BaseObject implements Serializable {
      * @return Returns the locationid.
      * @hibernate.property column="locationid" not-null="true"
      */
+    @XmlTransient
     public Long getLocationid() {
         return locationid;
     }
@@ -607,6 +632,7 @@ public class Course extends BaseObject implements Serializable {
      * @return Returns the organization.
      * @hibernate.many-to-one not-null="true" column="organizationid" update="false" cascade="none" insert="false"
      */
+	@XmlTransient
     public Organization getOrganization() {
         return organization;
     }
@@ -623,6 +649,7 @@ public class Course extends BaseObject implements Serializable {
      * @return Returns the organizationid.
      * @hibernate.property column="organizationid" not-null="true"
      */
+	@XmlTransient
     public Long getOrganizationid() {
         return organizationid;
     }
@@ -641,6 +668,7 @@ public class Course extends BaseObject implements Serializable {
      * @return Returns the organization2id.
      * @hibernate.property column="organization2id" not-null="false"
      */
+	@XmlTransient
     public Long getOrganization2id() {
         return organization2id;
     }
@@ -659,6 +687,7 @@ public class Course extends BaseObject implements Serializable {
      * @return Returns the organization2.
      * @hibernate.many-to-one not-null="false" column="organization2id" update="false" cascade="none" insert="false"
      */
+	@XmlTransient
     public Organization getOrganization2() {
     	if(organization2 == null){
     		this.organization2 = new Organization();
@@ -677,6 +706,7 @@ public class Course extends BaseObject implements Serializable {
      * @return Returns the responsible.
      * @hibernate.many-to-one not-null="true" column="responsibleusername" insert="false" update="false" cascade="none" optimistic-lock="false"
      */
+	@XmlTransient
      public User getResponsible() {
      return responsible;
      }
@@ -693,6 +723,7 @@ public class Course extends BaseObject implements Serializable {
      * @return Returns the serviceArea.
      * @hibernate.many-to-one not-null="false" column="serviceareaid" cascade="none" insert="false" update="false"
      */
+ 	@XmlTransient
     public ServiceArea getServiceArea() {
         return serviceArea;
     }
@@ -710,10 +741,26 @@ public class Course extends BaseObject implements Serializable {
      * @return
      * @hibernate.property column="status" not-null="true"
      */
+    @XmlTransient
     public Integer getStatus() {
         return status;
     }
 
+    @XmlElement(name="status")
+    public String getStatusAsString() {
+    	switch (status) {
+    	case 0:
+    		return "opprettet";
+    	case 1:
+    		return "ferdig";
+    	case 2:
+    		return "publisert";
+    	case 3:
+    		return "avlyst";
+    	}
+    	return null;
+    }
+    
     public void setStatus(Integer status) {
         this.status = status;
     }
@@ -798,6 +845,7 @@ public class Course extends BaseObject implements Serializable {
     /**
      * @return the availableAttendants
      */
+    @XmlElement(name="ledigePlasser")
     public Integer getAvailableAttendants() {
         return availableAttendants;
     }
@@ -814,6 +862,7 @@ public class Course extends BaseObject implements Serializable {
      * @return
      * @hibernate.property column="restricted" not-null="false"
      */
+    @XmlTransient
     public Boolean getRestricted() {
         return restricted;
     }
@@ -827,6 +876,7 @@ public class Course extends BaseObject implements Serializable {
      * @return
      * @hibernate.property column="chargeoverdue" not-null="false"
      */
+    @XmlTransient
     public Boolean getChargeoverdue() {
         return chargeoverdue;
     }

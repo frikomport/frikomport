@@ -20,9 +20,13 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import com.sun.xml.txw2.annotation.XmlNamespace;
+
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
@@ -39,6 +43,7 @@ public class Location extends BaseObject implements Serializable {
     /**
          * Eclipse generated UID
          */
+    @XmlTransient
     private static final long serialVersionUID = -914547049154205712L;
     private Long id;
     private String name;
@@ -54,9 +59,13 @@ public class Location extends BaseObject implements Serializable {
     private Integer maxAttendants;
     private Double feePerDay;
     private String description;
+    @XmlTransient
     private Long organizationid;
+    @XmlTransient
     private Long organization2id;
+    @XmlTransient
     private Organization organization;
+    @XmlTransient
     private Organization organization2;
     private Boolean selectable;
 
@@ -81,6 +90,7 @@ public class Location extends BaseObject implements Serializable {
      * @return Returns the address.
      * @hibernate.property column="address" length="50" not-null="true"
      */
+    @XmlElement(name="adresse")
     public String getAddress() {
         return address;
     }
@@ -177,6 +187,7 @@ public class Location extends BaseObject implements Serializable {
      * @return Returns the id.
      * @hibernate.id column="id" generator-class="native" unsaved-value="null"
      */
+	@XmlTransient
     public Long getId() {
         return id;
     }
@@ -193,6 +204,7 @@ public class Location extends BaseObject implements Serializable {
      * @return Returns the name.
      * @hibernate.property column="name" length="50" not-null="true"
      */
+    @XmlElement(name="navn")
     public String getName() {
         return name;
     }
@@ -244,6 +256,7 @@ public class Location extends BaseObject implements Serializable {
      * @return Returns the maxAttendants.
      * @hibernate.property column="maxattendants" not-null="false"
      */
+    @XmlElement(name="plasser")
     public Integer getMaxAttendants() {
         return maxAttendants;
     }
@@ -276,6 +289,7 @@ public class Location extends BaseObject implements Serializable {
      * @return Returns the description.
      * @hibernate.property column="description" length="1000" not-null="false"
      */
+    @XmlElement(name="beskrivelse")
     public String getDescription() {
         return description;
     }
@@ -291,6 +305,7 @@ public class Location extends BaseObject implements Serializable {
      * @return Returns the organization.
      * @hibernate.many-to-one not-null="true" column="organizationid" update="false" cascade="none" insert="false"
      */
+	@XmlTransient
     public Organization getOrganization() {
         return organization;
     }
@@ -306,6 +321,7 @@ public class Location extends BaseObject implements Serializable {
      * @return Returns the organization.
      * @hibernate.many-to-one not-null="false" column="organization2id" update="false" cascade="none" insert="false"
      */
+	@XmlTransient
     public Organization getOrganization2() {
         return organization2;
     }
@@ -318,6 +334,7 @@ public class Location extends BaseObject implements Serializable {
      * @return Returns the organizationid.
      * @hibernate.property column="organizationid" not-null="true"
      */
+	@XmlTransient
     public Long getOrganizationid() {
         return organizationid;
     }
@@ -335,6 +352,7 @@ public class Location extends BaseObject implements Serializable {
      * @return Returns the organization2id.
      * @hibernate.property column="organization2id" not-null="false"
      */
+	@XmlTransient
     public Long getOrganization2id() {
         return organization2id;
     }
@@ -356,6 +374,7 @@ public class Location extends BaseObject implements Serializable {
      * @hibernate.property not-null="false" length="15"
      * @hibernate.column name="postal_code"
      */
+    @XmlElement(name="postnummer")
     public String getPostalCode() {
         return postalCode;
     }

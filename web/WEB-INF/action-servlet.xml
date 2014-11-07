@@ -507,4 +507,7 @@
         <property name="userDAO" ref="userDAO"/>
     </bean>
     
+    <bean id="moterJsonController" class="no.unified.soak.webapp.json.MoterJsonController" autowire="byName">
+      
+    </bean>    
 </beans>
