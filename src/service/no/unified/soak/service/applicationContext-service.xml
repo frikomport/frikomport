@@ -312,4 +312,9 @@
         </property>
     </bean>
     <!-- Category-END-->
+
+    <bean id="moterJsonController" class="no.unified.soak.webapp.json.MoterJsonController">
+      	<property name="courseManager" ref="courseManager"/>
+    	<property name="locationManager" ref="locationManager"/>
+    </bean> 
 </beans>
