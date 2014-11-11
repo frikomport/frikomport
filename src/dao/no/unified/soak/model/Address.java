@@ -9,7 +9,9 @@ package no.unified.soak.model;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import no.unified.soak.validation.DigitsOnly;
 import no.unified.soak.validation.MaxLength;
@@ -53,6 +55,7 @@ public class Address extends BaseObject implements Serializable {
      * @hibernate.property not-null="false" length="150"
      * @hibernate.column name="address"
      */
+    @XmlElement(name="adresse")
     public String getAddress() {
         return address;
     }
@@ -64,6 +67,7 @@ public class Address extends BaseObject implements Serializable {
      * @hibernate.property not-null="false" length="50"
      * @hibernate.column name="city"
      */
+    @XmlTransient
     public String getCity() {
         return city;
     }
@@ -76,6 +80,7 @@ public class Address extends BaseObject implements Serializable {
      * @hibernate.property length="100" not-null="false"
      * @hibernate.column name="province" 
      */
+    @XmlElement(name="fylke")
     public String getProvince() {
         return province;
     }
@@ -87,6 +92,7 @@ public class Address extends BaseObject implements Serializable {
      * @hibernate.property length="100" 
      * @hibernate.column name="country"
      */
+    @XmlTransient
     public String getCountry() {
         return country;
     }
@@ -98,6 +104,7 @@ public class Address extends BaseObject implements Serializable {
      * @hibernate.property not-null="false" length="15"
      * @hibernate.column name="postal_code"
      */
+    @XmlElement(name="postnr")
     public String getPostalCode() {
         return postalCode;
     }

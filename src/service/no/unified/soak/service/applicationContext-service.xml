@@ -316,5 +316,10 @@
     <bean id="moterJsonController" class="no.unified.soak.webapp.json.MoterJsonController">
       	<property name="courseManager" ref="courseManager"/>
     	<property name="locationManager" ref="locationManager"/>
+    	<property name="registrationManager" ref="registrationManager"/>
+	</bean> 
+
+    <bean id="pameldingJsonController" class="no.unified.soak.webapp.json.PameldingJsonController">
+    	<property name="registrationManager" ref="registrationManager"/>
     </bean> 
 </beans>

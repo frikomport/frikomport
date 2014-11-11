@@ -13,7 +13,9 @@ package no.unified.soak.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import no.unified.soak.validation.DigitsOnly;
 import no.unified.soak.validation.Email;
@@ -142,6 +144,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return the number of participants or 1 if value is <code>null</code>
 	 * @hibernate.property column="participants" not-null="false"
 	 */
+	@XmlElement(name="deltakere")
 	public Integer getParticipants() {
 		return participants;
 	}
@@ -166,6 +169,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @hibernate.many-to-one not-null="true" column="courseid" insert="false"
 	 *                        update="false" cascade="none"
 	 */
+	@XmlTransient
 	public Course getCourse() {
 		return course;
 	}
@@ -182,6 +186,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return Returns the user.
 	 * @hibernate.many-to-one not-null="false" column="username" insert="false" update="false" cascade="none" optimistic-lock="false"
 	 */
+	@XmlTransient
 	public User getUser() {
 		return user;
 	}
@@ -198,6 +203,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return Returns the courseid.
 	 * @hibernate.property column="courseid" not-null="true"
 	 */
+	@XmlElement(name="kursId")
 	public Long getCourseid() {
 		return courseid;
 	}
@@ -215,6 +221,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return Returns the email.
 	 * @hibernate.property column="email" not-null="true" length="50"
 	 */
+	@XmlElement(name="epost")
 	public String getEmail() {
 		return email;
 	}
@@ -235,6 +242,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * 
 	 * @return the email repeated
 	 */
+	@XmlTransient
 	public String getEmailRepeat() {
 		return emailRepeat;
 	}
@@ -254,6 +262,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return Returns the employeeNumber.
 	 * @hibernate.property column="employeenumber"
 	 */
+	@XmlTransient
 	public Integer getEmployeeNumber() {
 		return employeeNumber;
 	}
@@ -270,6 +279,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return Returns the firstName.
 	 * @hibernate.property column="firstname" length="100" not-null="true"
 	 */
+	@XmlElement(name="fornavn")
 	public String getFirstName() {
 		return firstName;
 	}
@@ -304,6 +314,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return Returns the invoiced.
 	 * @hibernate.property column="invoiced" not-null="true"
 	 */
+	@XmlTransient
 	public Boolean getInvoiced() {
 		return invoiced;
 	}
@@ -320,6 +331,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return Returns the jobTitle.
 	 * @hibernate.property column="jobtitle" length="100"
 	 */
+	@XmlTransient
 	public String getJobTitle() {
 		return jobTitle;
 	}
@@ -336,6 +348,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return Returns the lastName.
 	 * @hibernate.property column="lastname" length="100" not-null="true"
 	 */
+	@XmlElement(name="etternavn")
 	public String getLastName() {
 		return lastName;
 	}
@@ -355,6 +368,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @hibernate.property column="mobilephone" length="30"
 	 * 
 	 */
+	@XmlElement(name="mobil")
 	public String getMobilePhone() {
 		return mobilePhone;
 	}
@@ -374,6 +388,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return Returns the locale with which this registration was performed.
 	 * @hibernate.property column="locale" length="10" not-null="true"
 	 */
+	@XmlTransient
 	public String getLocale() {
 		return locale;
 	}
@@ -392,6 +407,7 @@ public class Registration extends BaseObject implements Serializable {
 	 *                        not-found="ignore" insert="false" update="false"
 	 *                        cascade="none"
 	 */
+	@XmlTransient
 	public Organization getOrganization() {
 		return organization;
 	}
@@ -408,6 +424,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return Returns the organizationid.
 	 * @hibernate.property column="organizationid" not-null="false"
 	 */
+	@XmlTransient
 	public Long getOrganizationid() {
 		return organizationid;
 	}
@@ -426,6 +443,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return Returns the phone.
 	 * @hibernate.property column="phone" length="30"
 	 */
+	@XmlTransient
 	public String getPhone() {
 		return phone;
 	}
@@ -444,6 +462,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return Returns the registered.
 	 * @hibernate.property column="registered" not-null="true"
 	 */
+	@XmlTransient
 	public Date getRegistered() {
 		return registered;
 	}
@@ -464,6 +483,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * 
 	 * @return
 	 */
+	@XmlTransient
 	public boolean getReserved() {
 		return getStatusAsEnum() == Status.RESERVED;
 	}
@@ -474,6 +494,7 @@ public class Registration extends BaseObject implements Serializable {
 	 *                        not-found="ignore" insert="false" update="false"
 	 *                        cascade="none"
 	 */
+	@XmlTransient
 	public ServiceArea getServiceArea() {
 		return serviceArea;
 	}
@@ -490,6 +511,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return Returns the serviceAreaid.
 	 * @hibernate.property column="serviceareaid" not-null="false"
 	 */
+	@XmlTransient
 	public Long getServiceAreaid() {
 		return serviceAreaid;
 	}
@@ -506,6 +528,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return Returns the username.
 	 * @hibernate.property column="username" not-null="false" length="50"
 	 */
+	@XmlTransient
 	public String getUsername() {
 		return username;
 	}
@@ -522,6 +545,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return Returns the useMailAddress.
 	 * @hibernate.property column="usemailaddress" length="100"
 	 */
+	@XmlTransient
 	public String getUseMailAddress() {
 		return useMailAddress;
 	}
@@ -574,6 +598,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return the comment
 	 * @hibernate.property column="comment" length="255"
 	 */
+	@XmlTransient
 	public String getComment() {
 		return comment;
 	}
@@ -590,6 +615,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return the attended
 	 * @hibernate.property column="attended" not-null="true"
 	 */
+	@XmlTransient
 	public Boolean getAttended() {
 		return attended;
 	}
@@ -606,6 +632,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return the workplace
 	 * @hibernate.property column="workplace" length="100"
 	 */
+	@XmlTransient
 	public String getWorkplace() {
 		return workplace;
 	}
@@ -624,9 +651,30 @@ public class Registration extends BaseObject implements Serializable {
 	 * 
 	 * @hibernate.component not-null="false" prefix="invoice_"
 	 */
+	@XmlTransient
 	public Address getInvoiceAddress() {
 		return invoiceAddress;
 	}
+
+	/*
+	 * Convenience-methods used by JSON - BEGIN
+	 */
+	public String getPostnr() {
+		return invoiceAddress.getPostalCode();
+	}
+	public void setPostnr(String postnr) {
+		invoiceAddress.setPostalCode(postnr);
+	}
+	public String getAdresse() {
+		return invoiceAddress.getAddress();
+	}
+	public void setAdresse(String adresse) {
+		invoiceAddress.setAddress(adresse);
+	}
+
+	/*
+	 * Convenience-methods used by JSON - END
+	 */
 
 	/**
 	 * Sets the invoice address.
@@ -643,6 +691,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return the invoice name.
 	 * @hibernate.property column="invoice_name" not-null="false"
 	 */
+	@XmlTransient
 	public String getInvoiceName() {
 		return invoiceName;
 	}
@@ -659,6 +708,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return the closest leader name.
 	 * @hibernate.property column="closest_leader" not-null="false"
 	 */
+	@XmlTransient
 	public String getClosestLeader() {
 		return closestLeader;
 	}
@@ -677,6 +727,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return <code>true</code> if the registration is canceled.
 	 *         <code>false</code> otherwise.
 	 */
+	@XmlTransient
 	public Boolean getCanceled() {
 		return getStatusAsEnum() == Status.CANCELED;
 	}
@@ -687,10 +738,12 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return The registration status
 	 * @hibernate.property column="status" not-null="true" type="integer"
 	 */
+	@XmlTransient
 	public Integer getStatus() {
 		return (status == null ? null : status.getDBValue());
 	}
 
+	@XmlTransient
 	public Status getStatusAsEnum() {
 		return status;
 	}
@@ -712,6 +765,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return Returns the date of birth.
 	 * @hibernate.property column="birthdate" not-null="false"
 	 */
+	@XmlElement(name="fodselsdato")
 	public Date getBirthdate() {
 		return birthdate;
 	}

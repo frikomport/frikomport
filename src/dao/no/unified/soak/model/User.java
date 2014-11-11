@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import no.unified.soak.validation.DigitsOnly;
 import no.unified.soak.validation.MinLength;
@@ -86,6 +87,7 @@ public class User extends BaseObject implements Serializable {
      * @hibernate.id column="username" length="100" generator-class="assigned"
      *               unsaved-value="version"
      */
+	@XmlTransient
     public String getUsername() {
         return username;
     }
@@ -96,6 +98,7 @@ public class User extends BaseObject implements Serializable {
      *
      * @hibernate.property column="password" not-null="false"
      */
+	@XmlTransient
     public String getPassword() {
         return password;
     }
@@ -104,6 +107,7 @@ public class User extends BaseObject implements Serializable {
      * Returns the confirmedPassword.
      * @return String
      */
+	@XmlTransient
     public String getConfirmPassword() {
         return confirmPassword;
     }
@@ -128,6 +132,7 @@ public class User extends BaseObject implements Serializable {
         return lastName;
     }
 
+	@XmlTransient
     public String getFullName() {
         return firstName + ' ' + lastName;
     }
@@ -139,6 +144,7 @@ public class User extends BaseObject implements Serializable {
      *
      * @hibernate.component not-null="false"
      */
+	@XmlTransient
     public Address getAddress() {
         return address;
     }
@@ -171,6 +177,7 @@ public class User extends BaseObject implements Serializable {
      *
      * @hibernate.property column="website" not-null="false"
      */
+	@XmlTransient
     public String getWebsite() {
         return website;
     }
@@ -181,6 +188,7 @@ public class User extends BaseObject implements Serializable {
      *
      * @hibernate.property column="password_hint" not-null="false"
      */
+	@XmlTransient
     public String getPasswordHint() {
         return passwordHint;
     }
@@ -194,6 +202,7 @@ public class User extends BaseObject implements Serializable {
      * @hibernate.collection-many-to-many class="no.unified.soak.model.Role"
      *                                    column="role_name"
      */
+	@XmlTransient
     public Set getRoles() {
         return roles;
     }
@@ -352,6 +361,7 @@ public class User extends BaseObject implements Serializable {
      * @return Returns the updated timestamp.
      * @hibernate.version
      */
+	@XmlTransient
     public Integer getVersion() {
         return version;
     }
@@ -368,6 +378,7 @@ public class User extends BaseObject implements Serializable {
      * @return Returns the enabled.
      * @hibernate.property column="enabled"
      */
+	@XmlTransient
     public Boolean getEnabled() {
         return enabled;
     }
@@ -382,6 +393,7 @@ public class User extends BaseObject implements Serializable {
     /**
      * Returns a list with the rolenames
      */
+	@XmlTransient
     public List <String> getRoleNameList() {
     	List<String> rolenames = new ArrayList<String>();
 
@@ -408,6 +420,7 @@ public class User extends BaseObject implements Serializable {
 	 * @return Organization
 	 * @hibernate.many-to-one column="organizationid" insert="false" update="false" not-found="ignore" not-null="false" 
 	 */
+	@XmlTransient
 	public Organization getOrganization() {
 		return organization;
 	}
@@ -427,6 +440,7 @@ public class User extends BaseObject implements Serializable {
      * @return Returns the organization2.
      * @hibernate.many-to-one not-null="false" column="organization2id" update="false" cascade="none" insert="false"
      */
+	@XmlTransient
     public Organization getOrganization2() {
         return organization2;
     }
@@ -439,6 +453,7 @@ public class User extends BaseObject implements Serializable {
      * @return Returns the organizationid.
      * @hibernate.property column="organizationid" not-null="false"
      */
+	@XmlTransient
     public Long getOrganizationid() {
         return organizationid;
     }
@@ -455,6 +470,7 @@ public class User extends BaseObject implements Serializable {
      * @return Returns the organization2id.
      * @hibernate.property column="organization2id" not-null="false"
      */
+	@XmlTransient
     public Long getOrganization2id() {
         return organization2id;
     }
@@ -471,6 +487,7 @@ public class User extends BaseObject implements Serializable {
 	 * @return Returns the serviceArea.
 	 * @hibernate.many-to-one column="serviceareaid" insert="false" update="false" not-found="ignore" not-null="false"
     */
+	@XmlTransient
 	public ServiceArea getServiceArea() {
 		return serviceArea;
 	}
@@ -487,6 +504,7 @@ public class User extends BaseObject implements Serializable {
 	 * @return Returns the serviceAreaid.
 	 * @hibernate.property column="serviceareaid" not-null="false"
 	 */
+	@XmlTransient
 	public Long getServiceAreaid() {
 		return serviceAreaid;
 	}
@@ -503,6 +521,7 @@ public class User extends BaseObject implements Serializable {
 	 * @return Returns the employeeNumber.
 	 * @hibernate.property column="employeenumber"
 	 */
+	@XmlTransient
 	public Integer getEmployeeNumber() {
 		return employeeNumber;
 	}
@@ -519,6 +538,7 @@ public class User extends BaseObject implements Serializable {
 	 * @return Returns the jobTitle.
 	 * @hibernate.property column="jobtitle" length="100"
 	 */
+	@XmlTransient
 	public String getJobTitle() {
 		return jobTitle;
 	}
@@ -537,6 +557,7 @@ public class User extends BaseObject implements Serializable {
 	 * @hibernate.property column="mobilephone" length="30"
 	 * 
 	 */
+	@XmlTransient
 	public String getMobilePhone() {
 		return mobilePhone;
 	}
@@ -556,6 +577,7 @@ public class User extends BaseObject implements Serializable {
      * @return the workplace
      * @hibernate.property column="workplace" length="100"
      */
+	@XmlTransient
     public String getWorkplace() {
         return workplace;
     }
@@ -574,6 +596,7 @@ public class User extends BaseObject implements Serializable {
     * @hibernate.component not-null="false" prefix="invoice_"
     * 
     */
+	@XmlTransient
 	public Address getInvoiceAddress() {
 		return invoiceAddress;
 	}
@@ -591,6 +614,7 @@ public class User extends BaseObject implements Serializable {
     * @return the invoice name.
     * @hibernate.property column="invoice_name" not-null="false"
     */
+	@XmlTransient
 	public String getInvoiceName() {
 		return invoiceName;
 	}
@@ -607,6 +631,7 @@ public class User extends BaseObject implements Serializable {
      * @return the closest leader name.
      * @hibernate.property column="closest_leader" not-null="false"
      */
+	@XmlTransient
 	public String getClosestLeader() {
 		return closestLeader;
 	}
@@ -623,6 +648,7 @@ public class User extends BaseObject implements Serializable {
      * @return the hash
 	 * @hibernate.property column="hash" 
 	 */
+	@XmlTransient
 	public String getHash() {
 		return hash;
 	}
@@ -642,6 +668,7 @@ public class User extends BaseObject implements Serializable {
      * @return true if user has an emailaddress as username
 	 * @hibernate.property column="hashuser" not-null="true"
 	 */
+	@XmlTransient
 	public Boolean getHashuser() {
 		if(hashuser == null) {
 			hashuser = false;
@@ -744,7 +771,8 @@ public class User extends BaseObject implements Serializable {
             this.confirmPassword).append("website", this.website).append("version",
             this.getVersion()).append("enabled", this.getEnabled()).toString();
     }
-    
+
+	@XmlTransient
     public Address getInvoiceAddressCopy() {
     	if (invoiceAddress == null) {
     		return null;

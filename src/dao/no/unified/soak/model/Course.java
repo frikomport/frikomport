@@ -89,10 +89,12 @@ public class Course extends BaseObject implements Serializable {
 		this.numberOfParticipants = numberOfParticipants;
 	}
 
+    @XmlTransient
 	public Integer getNumberOfParticipants() {
 		return numberOfParticipants;
 	}
 
+    @XmlTransient
 	public Integer getNumberOfRegistrations() {
 		return numberOfRegistrations;
 	}
@@ -126,6 +128,7 @@ public class Course extends BaseObject implements Serializable {
 	 * @return the number of attendants
      * @hibernate.property column="attendants" not-null="false"
 	 */
+	@XmlElement(name="deltakere")
 	public Integer getAttendants() {
 		return attendants;
 	}
