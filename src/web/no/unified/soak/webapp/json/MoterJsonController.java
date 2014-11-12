@@ -48,7 +48,7 @@ public class MoterJsonController {
 		if (postnr == null) {
 			List<Course> tmpList = courseManager.getAllCourses();
 			for (Course course : tmpList) {
-				if (course.getStatus() == CourseStatus.COURSE_PUBLISHED) {
+				if (course.getStatus().equals(CourseStatus.COURSE_PUBLISHED)) {
 					courseList.add(course);				
 				}
 			}
@@ -73,7 +73,7 @@ public class MoterJsonController {
 			updateAvailability(course);
 			
 		} catch (RuntimeException e) {
-			throw new NotFoundException("Course not found. " + e.getLocalizedMessage());
+			throw new NotFoundException(e.getLocalizedMessage());
 		}
 		return course;
 	}

@@ -48,7 +48,7 @@ public class PameldingJsonController {
 		
 		return Response.created(createdUri).build();
 		} catch (RuntimeException e) {
-			throw new NotFoundException("Registration not saved. " + e.getLocalizedMessage());
+			throw new NotFoundException(e.getLocalizedMessage());
 		}
 	}
 	
@@ -60,7 +60,7 @@ public class PameldingJsonController {
 		try {
 			registration = registrationManager.getRegistration(registrationId);
 		} catch (RuntimeException e) {
-			throw new NotFoundException("Registration not found. " + e.getLocalizedMessage());
+			throw new NotFoundException(e.getLocalizedMessage());
 		}
 		return registration;
 	}
@@ -71,7 +71,7 @@ public class PameldingJsonController {
 		try {
 			registrationManager.removeRegistration(registrationId);
 		} catch (RuntimeException e) {
-			throw new NotFoundException("Registration not deleted. " + e.getLocalizedMessage());
+			throw new NotFoundException(e.getLocalizedMessage());
 		}
 		return Response.noContent().build();
 	}
