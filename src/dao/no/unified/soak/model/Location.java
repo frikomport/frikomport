@@ -43,7 +43,6 @@ public class Location extends BaseObject implements Serializable {
     /**
          * Eclipse generated UID
          */
-    @XmlTransient
     private static final long serialVersionUID = -914547049154205712L;
     private Long id;
     private String name;
@@ -59,13 +58,9 @@ public class Location extends BaseObject implements Serializable {
     private Integer maxAttendants;
     private Double feePerDay;
     private String description;
-    @XmlTransient
     private Long organizationid;
-    @XmlTransient
     private Long organization2id;
-    @XmlTransient
     private Organization organization;
-    @XmlTransient
     private Organization organization2;
     private Boolean selectable;
 

@@ -17,7 +17,6 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @author hrj
  * @hibernate.class table="notification"
  */
-@XmlRootElement()
 public class Notification extends BaseObject implements Serializable {
 	private static final long serialVersionUID = 2L;
 

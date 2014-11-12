@@ -25,7 +25,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author <a href="mailto:matt@raibledesigns.com">Matt Raible</a>
  * @hibernate.class table="user_cookie"
  */
-@XmlRootElement()
 public class UserCookie extends BaseObject {
     private static final long serialVersionUID = 4050479002315731765L;
     private Long id;

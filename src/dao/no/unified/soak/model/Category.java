@@ -16,7 +16,6 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @author gv
  * @hibernate.class table="category" lazy="false"
  */
-@XmlRootElement()
 public class Category extends BaseObject implements Serializable {
     
     private static final long serialVersionUID = 1351020199381038808L;

@@ -28,7 +28,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author hrj
  * @hibernate.class table="servicearea" lazy="false"
  */
-@XmlRootElement
 public class ServiceArea extends BaseObject implements Serializable {
     /**
          * Eclipse generated UID

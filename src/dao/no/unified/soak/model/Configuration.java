@@ -11,7 +11,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * @hibernate.class table="configuration" lazy="false"
  */
-@XmlRootElement()
 public class Configuration extends BaseObject implements Serializable {
 
     private static final long serialVersionUID = 2027089783395343906L;    

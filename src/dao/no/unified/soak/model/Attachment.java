@@ -26,7 +26,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Henrik RJ
  * @hibernate.class table = "attachment"
  */
-@XmlRootElement()
 public class Attachment extends BaseObject implements Serializable {
     /**
      * Eclipse-generated UID

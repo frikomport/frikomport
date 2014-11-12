@@ -30,7 +30,6 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @author hrj
  * @hibernate.class table="organization" lazy="false"
  */
-@XmlRootElement()
 public class Organization extends BaseObject implements Serializable {
     /**
      * Eclipse generated UID
