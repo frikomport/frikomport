@@ -46,7 +46,7 @@ public class PameldingJsonController {
 			UriBuilder ub = uriInfo.getAbsolutePathBuilder();
 			URI createdUri  = ub.path(""+registration.getId()).build();
 		
-		return Response.created(createdUri).build();
+			return Response.created(createdUri).build();
 		} catch (RuntimeException e) {
 			throw new NotFoundException(e.getLocalizedMessage());
 		}
