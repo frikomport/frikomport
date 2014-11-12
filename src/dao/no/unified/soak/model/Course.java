@@ -748,21 +748,6 @@ public class Course extends BaseObject implements Serializable {
     public Integer getStatus() {
         return status;
     }
-
-    @XmlElement(name="status")
-    public String getStatusAsString() {
-    	switch (status) {
-    	case 0:
-    		return "opprettet";
-    	case 1:
-    		return "ferdig";
-    	case 2:
-    		return "publisert";
-    	case 3:
-    		return "avlyst";
-    	}
-    	return null;
-    }
     
     public void setStatus(Integer status) {
         this.status = status;

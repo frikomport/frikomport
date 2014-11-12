@@ -15,6 +15,7 @@ import no.unified.soak.model.Course;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.LocationManager;
 import no.unified.soak.service.RegistrationManager;
+import no.unified.soak.util.CourseStatus;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -43,9 +44,14 @@ public class MoterJsonController {
 	@GET
 	@Produces( MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public List<Course> getMoter(@QueryParam("postnr") String postnr) {
-		List<Course> courseList = null;
+		List<Course> courseList = new ArrayList<Course>();
 		if (postnr == null) {
-			courseList = courseManager.getAllCourses();
+			List<Course> tmpList = courseManager.getAllCourses();
+			for (Course course : tmpList) {
+				if (course.getStatus() == CourseStatus.COURSE_PUBLISHED) {
+					courseList.add(course);				
+				}
+			}
 		} else {
 			List<Long> locationIds = locationManager.getLocationIds((StringUtils.leftPad(""+postnr, 4, '0')));
 			courseList = courseManager.findByLocationIds(locationIds,15);
