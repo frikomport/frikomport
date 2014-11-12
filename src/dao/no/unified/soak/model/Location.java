@@ -68,6 +68,7 @@ public class Location extends BaseObject implements Serializable {
      * @return Returns the selectable.
      * @hibernate.property column="selectable" not-null="true"
      */
+    @XmlTransient
     public Boolean getSelectable() {
         return selectable;
     }
