@@ -39,12 +39,14 @@ public class PameldingJsonController {
 	@Produces( MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response registrerPamelding(Registration registration) {
 		
-		registration.setLocale("no");
-		registration.setStatus(Status.RESERVED);
 		
 		if (!isValid(registration)) {
 			throw new WebApplicationException(Response.status(com.sun.jersey.api.client.ClientResponse.Status.PRECONDITION_FAILED).build());
 		}
+
+		registration.setLocale("no");
+		registration.setStatus(Status.RESERVED);
+		registration.setUsername(registration.getEmail());
 		
 		try {
 			registrationManager.saveRegistration(registration);
