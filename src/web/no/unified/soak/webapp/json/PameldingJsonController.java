@@ -11,6 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -38,8 +39,15 @@ public class PameldingJsonController {
 	@Produces( MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response registrerPamelding(Registration registration) {
 		
+		
+		if (!isValid(registration)) {
+			throw new WebApplicationException(Response.status(com.sun.jersey.api.client.ClientResponse.Status.PRECONDITION_FAILED).build());
+		}
+
 		registration.setLocale("no");
 		registration.setStatus(Status.RESERVED);
+		registration.setUsername(registration.getEmail());
+		
 		try {
 			registrationManager.saveRegistration(registration);
 	
@@ -52,6 +60,21 @@ public class PameldingJsonController {
 		}
 	}
 	
+	private boolean isValid(Registration registration) {
+		return (isSet(registration.getFirstName()) &&
+				isSet(registration.getLastName()) &&
+				isSet(registration.getBirthdate()) &&
+				isSet(registration.getMobilePhone()) &&
+				isSet(registration.getCourseid()) &&
+				isSet(registration.getParticipants()) &&
+				isSet(registration.getEmail()) &&
+				isSet(registration.getPostnr()));
+	}
+
+	private boolean isSet(Object value) {
+		return value != null && !"".equals(""+value);
+	}
+
 	@GET
 	@Produces( MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@Path("/{id}")

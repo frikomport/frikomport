@@ -298,6 +298,7 @@ public class Registration extends BaseObject implements Serializable {
 	 * @return Returns the id.
 	 * @hibernate.id column="id" generator-class="native" unsaved-value="null"
 	 */
+	@XmlTransient
 	public Long getId() {
 		return id;
 	}
