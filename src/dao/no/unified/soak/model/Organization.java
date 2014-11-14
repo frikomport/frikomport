@@ -12,8 +12,7 @@ package no.unified.soak.model;
 
 import java.io.Serializable;
 import java.util.List;
-
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Map;
 
 import no.unified.soak.util.ApplicationResourcesUtil;
 
@@ -307,12 +306,21 @@ public class Organization extends BaseObject implements Serializable {
         this.type = Type.getTypeFromDBValue(type);
     }
 
-	public static Organization getFirstOrgByNumber(List<Organization> orgList, long i) {
-		for (Organization org : orgList) {
+	public static Organization getFirstOrgByNumber(List<Organization> orgCollection, long i) {
+		for (Organization org : orgCollection) {
 			if (org.getNumber() == i) {
 				return org;
 			}
 		}
+		return null;
+	}
+	
+	public static Organization getFirstOrgByNumber(Map<Long, Organization> orgCollection, long i) {
+		Organization organizationI = orgCollection.get(i);
+		if (organizationI != null) {
+			return organizationI;
+		} 
+		
 		return null;
 	}
 

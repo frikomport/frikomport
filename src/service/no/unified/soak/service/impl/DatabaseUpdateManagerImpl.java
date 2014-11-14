@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.sql.DataSource;
@@ -41,6 +42,8 @@ import org.apache.commons.validator.EmailValidator;
 import org.springframework.context.MessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.ObjectRetrievalFailureException;
+
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
 /**
  * User: gv Date: 05.jun.2008 Time: 10:26:23
@@ -118,7 +121,8 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		alterUserAndRoleAndCoursebySQL();
 		changeRolesBySQL();
 
-		insertDefaultValues();
+		insertDefaultValuesRoleCategoryConfiguration();
+		insertDefaultValuesOrganization();
 
 		updateBySQLStatements();
 
@@ -283,36 +287,36 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
 	}
 
-	private void insertDefaultValues() {
+	private void insertDefaultValuesRoleCategoryConfiguration() {
 
 		// ROLES
 		try {
 			String[][] sqlSelectAndInsertRoleArray = {
 					// Role insert
-					{ "select count(*) from role where name='anonymous'",
-							"INSERT INTO role (name, description) VALUES('anonymous', 'Anonymous')" },
-					{ "select count(*) from role where name='admin'",
-							"INSERT INTO role (name, description) VALUES('admin', 'Administrator')" },
-					{ "select count(*) from role where name='employee'",
-							"INSERT INTO role (name, description) VALUES('employee', 'Ansatt')" },
-					{ "select count(*) from role where name='eventresponsible'",
-							"INSERT INTO role (name, description) VALUES('eventresponsible', 'Kursansvarlig')" },
-					{ "select count(*) from role where name='editor'",
-							"INSERT INTO role (name, description) VALUES('editor', 'Opplaringsansvarlig')" } };
+					{ "select count(*) from role where NAME='anonymous'",
+							"INSERT INTO role (NAME, DESCRIPTION) VALUES('anonymous', 'Anonymous')" },
+					{ "select count(*) from role where NAME='admin'",
+							"INSERT INTO role (NAME, DESCRIPTION) VALUES('admin', 'Administrator')" },
+					{ "select count(*) from role where NAME='employee'",
+							"INSERT INTO role (NAME, DESCRIPTION) VALUES('employee', 'Ansatt')" },
+					{ "select count(*) from role where NAME='eventresponsible'",
+							"INSERT INTO role (NAME, DESCRIPTION) VALUES('eventresponsible', 'Kursansvarlig')" },
+					{ "select count(*) from role where NAME='editor'",
+							"INSERT INTO role (NAME, DESCRIPTION) VALUES('editor', 'Opplaringsansvarlig')" } };
 			insertIntoTableBySQLStatements("role", sqlSelectAndInsertRoleArray);
 		} catch (Exception e) {
-			log.warn("Feil ved insert av roller", e);
+			log.error("Feil ved insert av roller", e);
 		}
 
 		if (ApplicationResourcesUtil.isSVV()) {
 			try {
 				String[][] sqlSelectAndInsertRoleSVVArray = {
 				// Role insert
-				{ "select count(*) from role where name='reader'",
-						"INSERT INTO role (name, description) VALUES('reader', 'Reader')" } };
+				{ "select count(*) from role where NAME='reader'",
+						"INSERT INTO role (NAME, DESCRIPTION) VALUES('reader', 'Reader')" } };
 				insertIntoTableBySQLStatements("role", sqlSelectAndInsertRoleSVVArray);
 			} catch (Exception e) {
-				log.warn("Feil ved insert av rolle", e);
+				log.error("Feil ved insert av rolle", e);
 			}
 		}
 
@@ -480,54 +484,48 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			log.info(c.getName() + ": " + c.getActive());
 		}
 		// ------------------------------------------------------
+	}
+	
+	private Organization saveOrGetRegion(int number, String orgName, Map<Long, Organization> regioner) {
+		Organization organization;
+		if (!regioner.containsKey(new Long(number))) {
+			organization = new Organization(orgName, new Long(number), Type.REGION.getTypeDBValue(), true, null);
+			organizationManager.saveOrganization(organization);
+		} else {
+			organization = regioner.get(new Long(number));
+		}
 		
+		return organization;
+	}
+
+	private void insertDefaultValuesOrganization() {
 		if (ApplicationResourcesUtil.isSVV()) {
 
 			List<Organization> organizationsInDB = organizationManager.getAll();
 			
-			List regioner = organizationManager.getOrganizationsByType(Type.REGION);
-			List omrader = organizationManager.getOrganizationsByType(Type.AREA);
-			Organization north;
-			Organization mid;
-			Organization west;
-			Organization south;
-			Organization east;
-			Integer regionTypeDBValue = Type.REGION.getTypeDBValue();
+			Map regioner = organizationManager.getOrganizationsNumbermapByType(Type.REGION);
+			
+			Organization north = saveOrGetRegion(1, "Region Nord", regioner);
+			Organization mid = saveOrGetRegion(2, "Region Midt", regioner);
+			Organization west = saveOrGetRegion(3, "Region Vest", regioner);
+			Organization south = saveOrGetRegion(4, "Region Sør", regioner);
+			Organization east = saveOrGetRegion(5, "Region Øst", regioner);
+			
 			Integer areaTypeDBValue = Type.AREA.getTypeDBValue();
 			Integer countyTypeDBValue = Type.COUNTY.getTypeDBValue();
 
-			if (regioner.isEmpty()) {
-				// regioner
-				north = new Organization("Region Nord", 1, regionTypeDBValue, true, null);
-				mid = new Organization("Region Midt", 2, regionTypeDBValue, true, null);
-				west = new Organization("Region Vest", 3, regionTypeDBValue, true, null);
-				south = new Organization("Region Sør", 4, regionTypeDBValue, true, null);
-				east = new Organization("Region Øst", 5, regionTypeDBValue, true, null);
-				organizationManager.saveOrganization(north);
-				organizationManager.saveOrganization(mid);
-				organizationManager.saveOrganization(west);
-				organizationManager.saveOrganization(south);
-				organizationManager.saveOrganization(east);
-			} else {
-				north = Organization.getFirstOrgByNumber(regioner, 1);
-				mid = Organization.getFirstOrgByNumber(regioner, 2);
-				west = Organization.getFirstOrgByNumber(regioner, 3);
-				south = Organization.getFirstOrgByNumber(regioner, 4);
-				east = Organization.getFirstOrgByNumber(regioner, 5);
-			}
-
 			Vector<Organization> organizationsToInsert = new Vector<Organization>();
-			// områder
+			// Områder
 			organizationsToInsert.add(new Organization("Område Helgeland", 0, areaTypeDBValue, true, north));
 			organizationsToInsert.add(new Organization("Område Salten", 0, areaTypeDBValue, true, north));
 			organizationsToInsert.add(new Organization("Område Midtre Hålogaland", 0, areaTypeDBValue, true, north));
 			organizationsToInsert.add(new Organization("Område Midtre Troms", 0, areaTypeDBValue, true, north));
 			organizationsToInsert.add(new Organization("Område Nord-Troms og Vest-Finnmark", 0, areaTypeDBValue, true, north));
-			organizationsToInsert.add(new Organization("Område åst-Finnmark", 0, areaTypeDBValue, true, north));
+			organizationsToInsert.add(new Organization("Område Øst-Finnmark", 0, areaTypeDBValue, true, north));
 
-			organizationsToInsert.add(new Organization("Område Måre og Romsdal", 0, areaTypeDBValue, true, mid));
-			organizationsToInsert.add(new Organization("Område Sør-Tråndelag", 0, areaTypeDBValue, true, mid));
-			organizationsToInsert.add(new Organization("Område Nord-Tråndelag", 0, areaTypeDBValue, true, mid));
+			organizationsToInsert.add(new Organization("Område Møre og Romsdal", 0, areaTypeDBValue, true, mid));
+			organizationsToInsert.add(new Organization("Område Sør-Trøndelag", 0, areaTypeDBValue, true, mid));
+			organizationsToInsert.add(new Organization("Område Nord-Trøndelag", 0, areaTypeDBValue, true, mid));
 
 			organizationsToInsert.add(new Organization("Område Sør-Rogaland", 0, areaTypeDBValue, true, west));
 			organizationsToInsert.add(new Organization("Område Haugaland og Sunnhordaland", 0, areaTypeDBValue, true, west));
@@ -566,7 +564,8 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			organizationsToInsert.add(new Organization("Finnmark", 20, countyTypeDBValue, true, north));
             organizationsToInsert.add(new Organization("Svalbard", 21, countyTypeDBValue, true, north));
 
-			
+			List omrader = organizationManager.getOrganizationsByType(Type.AREA);
+
 			if (organizationsInDB.isEmpty() || omrader.isEmpty()) {
 				// insert organizations for env
 				for (int i = 0; i < organizationsToInsert.size(); i++) {
@@ -637,7 +636,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	}
 
 	private String adjustToOracle(String sql) {
-		StringBuffer sqlSB = new StringBuffer(sql.toLowerCase());
+		StringBuffer sqlSB = new StringBuffer(sql);
 		boolean usesOracle = DefaultQuotedNamingStrategy.usesOracle();
 		if (usesOracle) {
 			// Table name adjustment for Oracle

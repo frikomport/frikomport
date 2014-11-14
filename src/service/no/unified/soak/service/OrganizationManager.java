@@ -12,6 +12,7 @@ package no.unified.soak.service;
 
 
 import java.util.List;
+import java.util.Map;
 
 import no.unified.soak.dao.OrganizationDAO;
 import no.unified.soak.model.Organization;
@@ -74,6 +75,7 @@ public interface OrganizationManager {
     
     public List<Organization> getOrganizationsByType(Organization.Type type);
     
+    public Map<Long, Organization> getOrganizationsNumbermapByType(Organization.Type type);
     
     public List getByTypeIncludingParentAndDummy(Type type, Type parentType, String dummy);
 

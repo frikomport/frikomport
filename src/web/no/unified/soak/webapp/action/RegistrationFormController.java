@@ -545,12 +545,16 @@ public class RegistrationFormController extends BaseFormController {
 						saveMessage(request, getText("registrationComplete.completed", locale));
 					} catch (Exception e) {
 						saveMessage(request, getText("registrationComplete.completed.saved", locale));
-						saveErrorMessage(request, getText("registrationComplete.completed.mailsending.failed", locale));
+						String errorMsg = getText("registrationComplete.completed.mailsending.failed", locale);
+						log.error(errorMsg + "\nEmail content that could not be sent:[\n"
+										+ MailUtil.create_EMAIL_EVENT_REGISTRATION_CONFIRMED_body(course, registration, null,
+												configurationManager.getConfigurationsMap()) + "\n]\n", e);
+						saveErrorMessage(request, errorMsg);
 					}
-                	if(configurationManager.isActive("sms.confirmedRegistrationChangedCourse", false)){
-                		SMSUtil.sendRegistrationConfirmedMessage(registration, course);
-                	}
-                }
+					if (configurationManager.isActive("sms.confirmedRegistrationChangedCourse", false)) {
+						SMSUtil.sendRegistrationConfirmedMessage(registration, course);
+					}
+				}
 
             } else {
                 // The course is fully booked, put the applicant on the waiting list

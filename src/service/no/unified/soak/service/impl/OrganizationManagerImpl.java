@@ -11,8 +11,10 @@
 package no.unified.soak.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import no.unified.soak.dao.OrganizationDAO;
 import no.unified.soak.model.Organization;
@@ -86,6 +88,16 @@ public class OrganizationManagerImpl extends BaseManager implements Organization
 
     public List getOrganizationsByType(Type orgType) {
         return dao.getByType(orgType.getTypeDBValue());
+    }
+
+    public Map<Long, Organization> getOrganizationsNumbermapByType(Type orgType) {
+        List<Organization> organizationsByType = dao.getByType(orgType.getTypeDBValue());
+        Map<Long, Organization> organizationsNumbermapByType = new HashMap<Long, Organization>();
+        
+        for (Organization organization : organizationsByType) {
+			organizationsNumbermapByType.put(organization.getNumber(), organization);
+		}
+		return organizationsNumbermapByType;
     }
 
     public List getByTypeIncludingParentAndDummy(Type type, Type parentType, String dummy) {
