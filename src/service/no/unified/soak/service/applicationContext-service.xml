@@ -321,5 +321,11 @@
 
     <bean id="pameldingJsonController" class="no.unified.soak.webapp.json.PameldingJsonController">
     	<property name="registrationManager" ref="registrationManager"/>
+    	<property name="courseManager" ref="courseManager"/>
+    	<property name="notificationManager" ref="notificationManager"/>
+    	<property name="configurationManager" ref="configurationManager" />
+    	<property name="userManager" ref="userManager"/>
+    	<property name="mailSender" ref="mailSender" />
+    	<property name="mailEngine" ref="mailEngine" />
     </bean> 
 </beans>

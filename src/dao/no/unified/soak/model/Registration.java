@@ -672,7 +672,10 @@ public class Registration extends BaseObject implements Serializable {
 	public void setAdresse(String adresse) {
 		invoiceAddress.setAddress(adresse);
 	}
-
+	public String getHash() {
+		return user.getHash();
+	}
+	
 	/*
 	 * Convenience-methods used by JSON - END
 	 */
