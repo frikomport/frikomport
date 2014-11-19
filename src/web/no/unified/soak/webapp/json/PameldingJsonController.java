@@ -1,12 +1,10 @@
 package no.unified.soak.webapp.json;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import javax.mail.internet.MimeMessage;
 import javax.ws.rs.Consumes;
@@ -16,7 +14,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -24,10 +21,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
-import org.springframework.mail.MailSender;
-import org.springframework.orm.ObjectRetrievalFailureException;
-
-import sun.util.logging.resources.logging;
 import no.unified.soak.Constants;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Notification;
@@ -41,6 +34,9 @@ import no.unified.soak.service.NotificationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.UserManager;
 import no.unified.soak.util.MailUtil;
+
+import org.springframework.mail.MailSender;
+import org.springframework.orm.ObjectRetrievalFailureException;
 
 @Path("/paamelding")
 public class PameldingJsonController {
