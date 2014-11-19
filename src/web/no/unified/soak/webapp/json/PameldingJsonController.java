@@ -4,7 +4,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.mail.internet.MimeMessage;
 import javax.ws.rs.Consumes;
@@ -23,6 +25,7 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import org.springframework.mail.MailSender;
+import org.springframework.orm.ObjectRetrievalFailureException;
 
 import sun.util.logging.resources.logging;
 import no.unified.soak.Constants;
@@ -53,6 +56,8 @@ public class PameldingJsonController {
 	private MailSender mailSender;
 
 	private UserManager userManager;
+	
+    private static boolean ongoingBooking = false;
 
 	public void setRegistrationManager(RegistrationManager registrationManager) {
         this.registrationManager = registrationManager;
@@ -91,51 +96,73 @@ public class PameldingJsonController {
 		if (!isValid(registration)) {
 			throw new WebApplicationException(Response.status(com.sun.jersey.api.client.ClientResponse.Status.PRECONDITION_FAILED).build());
 		}
-		try {
-			Course course = courseManager.getCourse(""+registration.getCourseid());
-			
-			if (course == null) {
-				throw new WebApplicationException(Response.status(com.sun.jersey.api.client.ClientResponse.Status.PRECONDITION_FAILED).build());
-			}
-			registration.setCourse(course);
-		} catch (RuntimeException e) {
-			throw new WebApplicationException(Response.status(com.sun.jersey.api.client.ClientResponse.Status.PRECONDITION_FAILED).build());
-		}
-//TODO: Sjekk om det er ledig plass
+
+		
 		registration.setLocale("no");
 		registration.setStatus(Status.RESERVED);
+		registration.setEmail(registration.getEmail().toLowerCase());
 		registration.setUsername(registration.getEmail());
 		
-		User user = userManager.findUserByEmail(registration.getEmail());
+		ENTER__Critical__Section(registration.getEmail());
 		
+		Course course;
+		try {
+			course = courseManager.getCourse(""+registration.getCourseid());
+		} catch (ObjectRetrievalFailureException e) {
+			LEAVE__Critical__Section();
+			throw new NotFoundException(e.getMessage());
+		}
+		
+		//Check if user is already registered - send error
+		User user = userManager.findUserByEmail(registration.getEmail());
         if(user == null){
             user = userManager.addUser(registration);
         }
+        //Check if already registered
+        List<Registration> registrations = registrationManager.getCourseRegistrations(course.getId());
+        for (Registration reg : registrations) {
+			if (reg.getEmail() != null && reg.getEmail().equals(registration.getEmail())) {
+				LEAVE__Critical__Section();
+				throw new AlreadyRegisteredException();
+			}
+		}
+        
+        //Check if course is full
+		updateAvailability(course);
+		if (course.getAvailableAttendants() < registration.getParticipants()) {
+			LEAVE__Critical__Section();
+			throw new CourseFullException(); 
+		}
 
+		registration.setCourse(course);
 		registration.setUser(user);
 		try {
 			registrationManager.saveRegistration(registration);
 	
 			saveNotification(registration, registration.getCourse());
+			LEAVE__Critical__Section();
 			
 			UriBuilder ub = uriInfo.getAbsolutePathBuilder();
 			URI createdUri  = ub.path(""+registration.getId()).path(registration.getHash()).build();
-			boolean emailSent = false;
 	        try {
 				sendMail(new Locale("no"), registration.getCourse(), registration, Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED);
-				emailSent = true;
 			} catch (Exception e) {
-	        	return Response.created(createdUri).entity("Email not sent").build();
+				//Returning HTTP code 201 Created - response body contains "EMAIL_NOT_SENT"-message
+	        	return Response.created(createdUri).entity("EMAIL_NOT_SENT").build();
 			}
 			
-	        if (emailSent) {
-	        	return Response.created(createdUri).build();
-	        } else {
-	        	return Response.created(createdUri).entity("Email not sent").build();
-	        }
+	        return Response.created(createdUri).build();
+	        
 		} catch (RuntimeException e) {
 			throw new NotFoundException(e.getLocalizedMessage());
+		} finally {
+			LEAVE__Critical__Section();
 		}
+	}
+	
+	private void updateAvailability(Course course) {
+		Integer available = registrationManager.getAvailability(true, course);
+		course.setAvailableAttendants(available);
 	}
 	
 	private void saveNotification(Registration registration, Course course) {
@@ -197,7 +224,7 @@ public class PameldingJsonController {
 				throw new NotFoundException();
 			}
 			return registration;
-		} catch (RuntimeException e) {
+		} catch (ObjectRetrievalFailureException e) {
 			throw new NotFoundException(e.getLocalizedMessage());
 		}
 	}
@@ -213,14 +240,51 @@ public class PameldingJsonController {
 			registrationManager.removeRegistration(registrationId);
 
 			try {
-				sendMail(new Locale("no"), registration.getCourse(), registration, Constants.EMAIL_EVENT_REGISTRATION_CONFIRMED);
+				sendMail(new Locale("no"), registration.getCourse(), registration, Constants.EMAIL_EVENT_REGISTRATION_CANCELLED);
 				return Response.noContent().build();
 			} catch (Exception e) {
-				return Response.noContent().entity("Email not sent").build();
+				return Response.noContent().entity("EMAIL_NOT_SENT").type("text/plain").build();
 			}
 			
-		} catch (Throwable e) {
+		} catch (ObjectRetrievalFailureException e) {
 			throw new NotFoundException(e.getLocalizedMessage());
 		}
+	}
+	
+
+	/**
+	 * Innført pga dobbeltbooking problem hos SVV (som ikke benytter ventelister)
+	 * @param email som identifikator i loggmeldinger
+	 */
+	private void ENTER__Critical__Section(String email){
+		int venteTid = 0;
+		final int MAX_VENTETID = 500; // ms
+		
+		if(!ongoingBooking){
+			// Starter sekvens for sjekk av tilgjengelighet og evnt. lagring 
+			ongoingBooking = true;
+			return;
+		}
+
+		while(true){
+			// Sekvens for å vente på en egen tidsluke
+			if(!ongoingBooking && venteTid > 0) {
+				//log.info(email + " ventet " + venteTid + "ms i registreringssekvens");
+				return;
+			}
+			if(venteTid == MAX_VENTETID){
+				//log.warn("Registreringssekvens TIMEOUT for " + email);
+				return;
+			}
+
+			try {
+				Thread.sleep(20);
+				venteTid += 20;
+			}catch(Exception e){ /* do nothing */ }
+		}
+	}
+	
+	private void LEAVE__Critical__Section(){
+		ongoingBooking = false;
 	}
 }

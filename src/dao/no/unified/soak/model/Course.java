@@ -37,7 +37,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @author hrj
  * @hibernate.class table="course" lazy="false"
  */
-@XmlRootElement()
+@XmlRootElement(name="kursliste")
 public class Course extends BaseObject implements Serializable {
     /**
      * When adding / removing attributes to this class, remember to update the copyAllButId-function
@@ -416,6 +416,7 @@ public class Course extends BaseObject implements Serializable {
      * @return Returns the name.
      * @hibernate.property column="name" length="100" not-null="true"
      */
+    @XmlTransient
     public String getName() {
         return name;
     }
