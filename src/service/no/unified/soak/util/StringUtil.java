@@ -95,6 +95,15 @@ public class StringUtil {
 	}
 
 	/**
+	 * Encode a string using the SHA-algorithm
+	 * Adds salt before encoding to ensure unique results
+	 * 
+	 */
+	public static String createUserHash(String str) {
+		return encodePassword(str+System.currentTimeMillis(), "SHA");
+	}
+	
+	/**
 	 * Decode a string using Base64 encoding.
 	 * 
 	 * @param str

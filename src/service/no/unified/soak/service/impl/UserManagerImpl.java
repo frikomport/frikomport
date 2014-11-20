@@ -290,7 +290,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		user.setMobilePhone(mobilePhone);
 		user.setPhoneNumber(phoneNumber);
 		user.setAddress(new Address());
-		user.setHash(StringUtil.encodeString(username));
+		user.setHash(StringUtil.createUserHash(username));
 		user.setInvoiceAddress(new Address());
 		updateInvoiceAddressFromOrganization(user);
 
@@ -423,7 +423,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		}
 		
 		if (user.getHash() == null || user.getHash().length() == 0) {
-			user.setHash(StringUtil.encodeString(user.getUsername()));
+			user.setHash(StringUtil.createUserHash(user.getUsername()));
 			updated += "hash ";
 			save = true;
 		}
@@ -531,7 +531,7 @@ public class UserManagerImpl extends BaseManager implements UserManager {
 		user.setEnabled(true);
 		user.setAddress(new Address());
 		setRoles(getDefaultRoles(), user);
-		user.setHash(StringUtil.encodeString(user.getUsername()));
+		user.setHash(StringUtil.createUserHash(user.getUsername()));
 		user.setHashuser(true);
 		
 		try {
