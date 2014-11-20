@@ -33,6 +33,7 @@ import no.unified.soak.service.MailEngine;
 import no.unified.soak.service.NotificationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.UserManager;
+import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.MailUtil;
 
 import org.springframework.mail.MailSender;
@@ -109,11 +110,18 @@ public class PameldingJsonController {
 			throw new NotFoundException(e.getMessage());
 		}
 		
+		//Check if course is published
+        if (!course.getStatus().equals(CourseStatus.COURSE_PUBLISHED)) {
+			LEAVE__Critical__Section();
+        	throw new CourseCancelledException();
+        }
+		
 		//Check if user is already registered - send error
 		User user = userManager.findUserByEmail(registration.getEmail());
         if(user == null){
             user = userManager.addUser(registration);
         }
+        
         //Check if already registered
         List<Registration> registrations = registrationManager.getCourseRegistrations(course.getId());
         for (Registration reg : registrations) {
