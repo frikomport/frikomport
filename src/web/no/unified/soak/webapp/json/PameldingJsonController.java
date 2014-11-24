@@ -219,7 +219,7 @@ public class PameldingJsonController {
 
 	@GET
 	@Produces( MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@Path("/{id}/{hash}")
+	@Path("/slett/{id}/{hash}")
 	public Registration hentPamelding(@PathParam("id") String registrationId, @PathParam("hash") String userhash) {
 		try {
 			Registration registration = registrationManager.getRegistration(registrationId);
@@ -233,7 +233,7 @@ public class PameldingJsonController {
 		}
 	}
 	
-	@DELETE
+	@GET
 	@Path("/{id}/{hash}")
 	public Response avbrytPamelding(@PathParam("id") String registrationId, @PathParam("hash") String userhash) {
 		try {
