@@ -8,7 +8,6 @@ import java.util.Locale;
 
 import javax.mail.internet.MimeMessage;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -218,8 +217,8 @@ public class PameldingJsonController {
 	}
 
 	@GET
+	@Path("/{id}/{hash}")
 	@Produces( MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@Path("/slett/{id}/{hash}")
 	public Registration hentPamelding(@PathParam("id") String registrationId, @PathParam("hash") String userhash) {
 		try {
 			Registration registration = registrationManager.getRegistration(registrationId);
@@ -234,7 +233,7 @@ public class PameldingJsonController {
 	}
 	
 	@GET
-	@Path("/{id}/{hash}")
+	@Path("/slett/{id}/{hash}")
 	public Response avbrytPamelding(@PathParam("id") String registrationId, @PathParam("hash") String userhash) {
 		try {
 			Registration registration = registrationManager.getRegistration(registrationId);

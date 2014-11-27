@@ -76,7 +76,7 @@
     <property name="database.url" 
         value="jdbc:${database.type}:thin:@${database.host}:${database.port}:${database.name}"/>
 
-	<property name="database.show_sql" value="true"/>
+	<property name="database.show_sql" value="false"/>
 
 	<!-- Defaults for eZ db integration -->
 	<property name="ez.database.type" value="mysql"/>

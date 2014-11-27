@@ -18,11 +18,11 @@ import no.unified.soak.model.Category;
 import no.unified.soak.model.Configuration;
 import no.unified.soak.model.Course;
 import no.unified.soak.model.Organization;
+import no.unified.soak.model.Organization.Type;
 import no.unified.soak.model.Person;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.ServiceArea;
 import no.unified.soak.model.User;
-import no.unified.soak.model.Organization.Type;
 import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.DatabaseUpdateManager;
@@ -40,10 +40,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.validator.EmailValidator;
 import org.springframework.context.MessageSource;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.ObjectRetrievalFailureException;
-
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 /**
  * User: gv Date: 05.jun.2008 Time: 10:26:23
@@ -175,12 +174,19 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	 */
 	private void changeRolesBySQL() {
 		String sql = "update role set \"NAME\" = 'eventresponsible' where \"NAME\" = 'instructor'";
-		if (DefaultQuotedNamingStrategy.usesOracle()) {
-			sql = "update role set \"NAME\" = 'eventresponsible' where \"NAME\" = 'instructor'";
-		}
 
 		try {
-			int nRowsAffected = jt.update(sql);
+			int nRowsAffected = 0;
+			try {
+				nRowsAffected = jt.update(sql);
+			} catch (BadSqlGrammarException e) {
+				/*
+				 * Endrer til lowercase feltnavn i sql-uttrykket for å unngå:
+				 * "(...)org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar(...)"
+				 */
+				nRowsAffected = jt.update(sql.toLowerCase());
+			}
+
 			if (nRowsAffected > 0) {
 				log.info("Endret rolle 'instructor' til 'eventresponsible' i Role.");
 			}
@@ -624,10 +630,26 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
 			int existCount = 0;
 			if (aSelectAndInsert[0] != null) {
-				existCount = jt.queryForInt(adjustToOracle(aSelectAndInsert[0]));
+				try {
+					existCount = jt.queryForInt(adjustToOracle(aSelectAndInsert[0], false));
+				} catch (BadSqlGrammarException e) {
+					/*
+					 * Endrer til lowercase feltnavn i sql-uttrykket for å unngå:
+					 * "(...)org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar(...)"
+					 */
+					existCount = jt.queryForInt(adjustToOracle(aSelectAndInsert[0], true));
+				}
 			}
 			if (existCount == 0 && aSelectAndInsert[1] != null) {
-				count += jt.update(adjustToOracle(aSelectAndInsert[1]));
+				try {
+					count += jt.update(adjustToOracle(aSelectAndInsert[1], false));
+				} catch (BadSqlGrammarException e) {
+					/*
+					 * Endrer til lowercase feltnavn i sql-uttrykket for å unngå:
+					 * "(...)org.springframework.jdbc.BadSqlGrammarException: StatementCallback; bad SQL grammar(...)"
+					 */
+					count += jt.update(adjustToOracle(aSelectAndInsert[1], true));
+				}
 			}
 		}
 		if (count > 0 && log.isInfoEnabled()) {
@@ -635,7 +657,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		}
 	}
 
-	private String adjustToOracle(String sql) {
+	private String adjustToOracle(String sql, boolean fieldnameToLowercase) {
 		StringBuffer sqlSB = new StringBuffer(sql);
 		boolean usesOracle = DefaultQuotedNamingStrategy.usesOracle();
 		if (usesOracle) {
@@ -657,6 +679,10 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 					endPos = sqlSB.indexOf("=", startPos + 8);
 				}
 				sqlSB.insert(endPos, '"');
+				
+				if (fieldnameToLowercase) {
+					sqlSB.replace(startPos + 8, endPos, sqlSB.substring(startPos + 8, endPos).toLowerCase());
+				}
 			}
 
 			startPos = sqlSB.indexOf(" (") + 2;
@@ -666,6 +692,9 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 				String fieldQuoted = "\"" + StringUtils.join(fieldArray, "\",\"") + "\"";
 				sqlSB.delete(startPos, endPos);
 				sqlSB.insert(startPos, fieldQuoted);
+				if (fieldnameToLowercase) {
+					sqlSB.replace(startPos + 1, endPos + 3, sqlSB.substring(startPos + 1, endPos + 3).toLowerCase());
+				}
 			}
 
 			// Boolean value adjustment for Oracle. true->1, false->0.
