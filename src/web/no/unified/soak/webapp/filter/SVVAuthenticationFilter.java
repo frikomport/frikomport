@@ -27,6 +27,10 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+/**
+ *
+ * @web.filter display-name="SVV Authentication Filter" name="svvAuthenticationFilter"
+ */
 public class SVVAuthenticationFilter implements Filter {
     
     private FilterConfig config;

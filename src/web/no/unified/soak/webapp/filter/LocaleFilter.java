@@ -29,6 +29,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
  * Filter to wrap request with a request including user preferred locale.
+ *
+ * @web.filter display-name="Locale Filter" name="localeFilter"
  */
 public class LocaleFilter extends OncePerRequestFilter {
     protected final Log log = LogFactory.getLog(getClass());
