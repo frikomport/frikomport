@@ -597,7 +597,7 @@ public class Registration extends BaseObject implements Serializable {
 
 	/**
 	 * @return the comment
-	 * @hibernate.property column="comment" length="255"
+	 * @hibernate.property column="`comment`" length="255"
 	 */
 	@XmlTransient
 	public String getComment() {
