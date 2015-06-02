@@ -515,6 +515,7 @@
             <lib file="${urlrewrite.jar}"/>
         </war>
     	
+    	<!-- Build teh EAR file -->
     	<ear appxml="ear/META-INF/application.xml" destfile="${webapp.dist}/${webapp.name}.ear">
           <fileset dir="${webapp.dist}" includes="*.war"/>
           <fileset dir="ear" includes="META-INF/orion-application.xml"/>
@@ -527,7 +528,7 @@
         <!-- <copy todir="C:/OC4J/j2ee/home/applications" file="${webapp.dist}/${webapp.name}.ear"/> -->
 
 		<!-- Kopierer bygget war-fil til build-mappe for deployment -->
-		<copy todir="${build.dir}/../build" file="${webapp.dist}/${webapp.name}.ear"/>
+		<copy todir="${build.dir}/../build" file="${webapp.dist}/${webapp.name}.war"/>
 	
     	<!-- visning av tidspunkt for ferdig bygg -->
 		<tstamp><format property="finished" pattern="yyyy-MM-dd HH:mm:ss"/></tstamp>
