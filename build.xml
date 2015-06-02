@@ -524,7 +524,7 @@
     	<!-- copy todir="c:/Programfiler/OCJ4/j2ee/home/applications" file="${webapp.dist}/${webapp.name}.ear"/ -->
 
 		<!-- Ekstra kopiering direkte til OC4J-mappe -->
-        <copy todir="C:/OC4J/j2ee/home/applications" file="${webapp.dist}/${webapp.name}.ear"/>
+        <!-- <copy todir="C:/OC4J/j2ee/home/applications" file="${webapp.dist}/${webapp.name}.ear"/> -->
 
 		<!-- Kopierer bygget war-fil til build-mappe for deployment -->
 		<copy todir="${build.dir}/../build" file="${webapp.dist}/${webapp.name}.ear"/>
