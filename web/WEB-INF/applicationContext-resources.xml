@@ -25,8 +25,8 @@
 
     <!-- JNDI DataSource for J2EE environments -->
     <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-        <!-- property name="jndiName"><value>java:comp/env/jdbc/soakdb</value></property -->
-        <property name="jndiName"><value>jdbc/soakdb</value></property>
+        <property name="jndiName"><value>java:comp/env/jdbc/soakdb</value></property>
+        <!--<property name="jndiName"><value>jdbc/soakdb</value></property>-->
     </bean>
 
     <!--bean id="userEzDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
