@@ -15,6 +15,9 @@ clean:
 deploy:
 	@./ant.sh clean deploy war -Dwebapp.name=mengdetrening 
 
+seed:
+	@./ant.sh setup-db -Dwebapp.name=mengdetrening
+
 setup:
 	@./ant.sh setup -Dwebapp.name=mengdetrening
 
@@ -31,6 +34,7 @@ help:
 	@echo "    build         Build the application (default)"
 	@echo "    clean         Clean the build folder"
 	@echo "    deploy        Deploy the application to Tomcat"
+	@echo "    seed          Prepare DB & seed default data"
 	@echo "    setup         Setup, prepare and run everything"
 	@echo "    test          Run the tests"
 	@echo "    servers       Start the Tomcat & Oracle servers"
