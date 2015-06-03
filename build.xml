@@ -458,12 +458,21 @@
                     <copy tofile="${webapp.dist}/context.xml"
                         file="metadata/conf/tomcat-context-5.5.xml" overwrite="true">
                 -->
-			        <echo>Preparing orion-context.xml for inclusion in war</echo>
+
+			        <!--<echo>Preparing orion-context.xml for inclusion in war</echo>
                     <copy tofile="${webapp.dist}/context.xml"
                         file="metadata/conf/oracle-context.xml" overwrite="true">
     				
                         <filterset refid="db.variables"/>
+                    </copy>-->
+
+                    <echo>Preparing tomcat-context-8.xml for inclusion in war</echo>
+                    <copy tofile="${webapp.dist}/context.xml"
+                        file="metadata/conf/tomcat-context-8.xml" overwrite="true">
+    				
+                        <filterset refid="db.variables"/>
                     </copy>
+
     	<!--
                 </then>
             </elseif>
@@ -1094,6 +1103,14 @@
     <!-- =================================================================== -->
     <target name="setup-tomcat" depends="init" if="tomcat.home"
         description="copies jdbc driver and context.xml to tomcat">
+
+    	<echo message="Detected Tomcat 8..."/>
+        <echo level="info">Copying ${webapp.name}.xml...</echo>
+        <copy tofile="${tomcat.home}/conf/Catalina/localhost/${webapp.name}.xml"
+            file="metadata/conf/tomcat-context-8.xml" overwrite="true">
+            <filterset refid="db.variables"/>
+        </copy>
+        
         <!--if>
             <and>
                 <isset property="tomcat5"/>
@@ -1109,14 +1126,14 @@
             </then>
             <elseif>
                 <isset property="tomcat5.5"/>
-                <then-->
+                <then
                     <echo message="Detected Tomcat 5.5..."/>
                     <echo level="info">Copying ${webapp.name}.xml...</echo>
                     <copy tofile="${tomcat.home}/conf/Catalina/localhost/${webapp.name}.xml"
                         file="metadata/conf/tomcat-context-5.5.xml" overwrite="true">
                         <filterset refid="db.variables"/>
                     </copy>
-                <!--/then>
+                /then>
             </elseif>
             <else>
                 <echo message="Detected Tomcat 4..."/>
