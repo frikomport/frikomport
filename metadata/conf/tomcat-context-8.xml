@@ -7,6 +7,13 @@
               url="@DB-URL@"
               defaultAutoCommit="true" removeAbandoned="true" 
               removeAbandonedTimeout="60" logAbandoned="true"/>
+
+    <Resources className="org.apache.catalina.webresources.StandardRoot">
+        <PreResources className="org.apache.catalina.webresources.DirResourceSet"
+                      base="/data/mengdetrening/conf"
+                      internalPath="/"
+                      webAppMount="/WEB-INF/classes" />
+    </Resources>
               
     <!-- eZ resource -->
     <Resource name="jdbc/ezdb" auth="Container" type="javax.sql.DataSource"
