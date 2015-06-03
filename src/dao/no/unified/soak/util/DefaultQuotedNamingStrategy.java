@@ -15,12 +15,16 @@ public class DefaultQuotedNamingStrategy extends DefaultNamingStrategy {
         super();
         try {
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream("database.properties");
-            Properties properties = new Properties();
-            properties.load(inputStream);
-            if (StringUtils.contains(properties.getProperty("hibernate.connection.url"), "oracle")) {
-                String oracleUsername = properties.getProperty("hibernate.connection.username");
-                if (StringUtils.isNotBlank(oracleUsername)) {
-                    usesOracle = true;
+            if (inputStream != null) {
+                Properties properties = new Properties();
+                if (properties != null) {
+                    properties.load(inputStream);
+                    if (StringUtils.contains(properties.getProperty("hibernate.connection.url"), "oracle")) {
+                        String oracleUsername = properties.getProperty("hibernate.connection.username");
+                        if (StringUtils.isNotBlank(oracleUsername)) {
+                            usesOracle = true;
+                        }
+                    }
                 }
             }
         } catch (FileNotFoundException e) {

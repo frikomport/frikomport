@@ -854,6 +854,7 @@
 
         <generate-database-properties/>
         <schemaexport quiet="no" text="no" drop="no" delimiter=";" 
+        	namingStrategy="no.unified.soak.util.DefaultQuotedNamingStrategy" 
             properties="database.properties" output="create-tables.sql">
             <fileset dir="${build.dir}/dao/gen" includes="**/*.hbm.xml"/>
         </schemaexport>
@@ -1009,8 +1010,10 @@
     <target name="deploy" depends="package-web" if="tomcat.home"
         description="unwar into the servlet container's deployment directory">
 
-        <unwar src="${webapp.dist}/${webapp.war}"
-            dest="${tomcat.home}/webapps/${webapp.name}"/>
+        <copy file="${webapp.dist}/${webapp.war}" 
+        	todir="${tomcat.home}/webapps/"/>
+        <!--<unwar src="${webapp.dist}/${webapp.war}"
+            dest="${tomcat.home}/webapps/${webapp.name}"/>-->
     </target>
     
     <!-- =================================================================== -->
