@@ -5,3 +5,5 @@ build/**
 dist/**
 **/*.iml
 database.properties
+metadata/sql/sample-data-prepared.xml
+
