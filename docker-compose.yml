@@ -1,0 +1,10 @@
+tomcat:
+    image: frikomport/tomcat
+    ports:
+      - "8080:8080"
+    links:
+      - oracle:oracle
+oracle:
+    image: frikomport/oracle
+    ports:
+      - "1521:1521"
