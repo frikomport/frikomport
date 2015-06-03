@@ -149,7 +149,7 @@ public class Attachment extends BaseObject implements Serializable {
     }
 
     /**
-    * @hibernate.property column="`size`"
+    * @hibernate.property column="size"
      * @return Returns the size.
      */
     public Long getSize() {

@@ -172,7 +172,7 @@ public class Organization extends BaseObject implements Serializable {
 
     /**
      * @return Returns the number.
-     * @hibernate.property column="`number`" not-null="true"
+     * @hibernate.property column="number" not-null="true"
      */
     public Long getNumber() {
         return number;
