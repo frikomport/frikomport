@@ -774,13 +774,14 @@
             supportBatchStatement="false"
             url="${database.url}"
             userid="${database.username}"
-            password="${database.password}">
+            password="${database.password}"
+            escapePattern="&quot;?&quot;">
             <operation type="${operation}" src="${file}" format="xml"/>
         </dbunit>
     </target>
 
     <target name="db-data" description="Updates the sample data">
-        <copy file="metadata/sql/sample-data.xml" tofile="metadata/sql/sample-data-prepared.xml" overwrite="true">
+        <copy file="metadata/sql/sample-data.xml" tofile="metadata/sql/sample-data-prepared.xml" overwrite="true" encoding="UTF-8">
             <filterset>
                 <filter token="NOW-1" value="${now-1}"/>
                 <filter token="NOW-2" value="${now-2}"/>
@@ -1145,12 +1146,12 @@
             </else>
         </if-->
 
-        <echo level="info">Copying ${database.type} JDBC Driver...</echo>
-        <copy todir="${tomcat.home}/common/lib" file="${database.jar}" overwrite="true"/>
+        <!--<echo level="info">Copying ${database.type} JDBC Driver...</echo>
+        <copy todir="${tomcat.home}/lib" file="${database.jar}" overwrite="true"/>
         <echo level="info">Copying jta.jar...</echo>
-        <copy todir="${tomcat.home}/common/lib">
+        <copy todir="${tomcat.home}/lib">
             <fileset dir="${hibernate.dir}/lib" includes="jta.jar"/>
-        </copy>
+        </copy>-->
     </target>
     
     <!-- =================================================================== -->
