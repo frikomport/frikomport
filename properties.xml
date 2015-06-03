@@ -53,11 +53,11 @@
 	<property name="database.jar" location="${oracle.jar}"/>
     <property name="database.type" value="oracle"/>
 
-    <property name="database.name" value="orcl"/>
+    <property name="database.name" value="xe"/>
     <property name="database.port" value="1521"/>
-    <property name="database.host" value="localhost"/>
-	<property name="database.admin.username" value="sys"/>
-    <property name="database.admin.password" value="Hurra1814"/>
+    <property name="database.host" value="oracle"/>
+	<property name="database.admin.username" value="system"/>
+    <property name="database.admin.password" value="oracle"/>
 
 <!--
 	<property name="database.name" value="mengdetrening"/>
