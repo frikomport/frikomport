@@ -118,6 +118,8 @@
 		<copy todir="${build.dir}/web/classes" includeEmptyDirs="no">
 			<fileset dir="web/WEB-INF/classes">
 				<exclude name="ApplicationResources_zh_CN.properties"/>
+				<exclude name="ApplicationResources_no.properties"/>
+				<exclude name="ApplicationResources.properties"/>
 				<!-- This line should be commented out when developing: -->
 				<exclude name="ApplicationResources_no_NO_FKPSVV.properties"/>
 				<include name="*.properties"/>
@@ -126,8 +128,11 @@
 			</fileset>
 			<filterset refid="variables.to.replace"/>
 		</copy>
-		<native2ascii src="web/WEB-INF/classes" dest="${build.dir}/web/classes" 
-            includes="ApplicationResources_zh_CN.properties" encoding="UTF-8"/>
+		<native2ascii src="web/WEB-INF/classes" dest="${build.dir}/web/classes" encoding="UTF-8">
+			<include name="ApplicationResources_zh_CN.properties"/>
+			<include name="ApplicationResources_no.properties"/>
+			<include name="ApplicationResources.properties"/>
+		</native2ascii>
 		<generate-database-properties/>
 		<copy todir="${build.dir}/web/classes" file="database.properties"/>
 		<copy overwrite="true" tofile="${build.dir}/${webapp.name}/WEB-INF/applicationContext-${dao.type}.xml">
