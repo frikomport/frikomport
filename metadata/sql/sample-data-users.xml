@@ -175,7 +175,7 @@
 		</row>
 	</table>
 
-<!--	<table name='role'>
+	<table name='role'>
 		<column>name</column>
 		<column>description</column>
 		<row>
@@ -197,7 +197,7 @@
 			</value>
 		</row>
 		<row>
-			<value>eventreponsible</value>
+			<value>eventresponsible</value>
 			<value>
 				<![CDATA[Kursansvarlig]]>
 			</value>
@@ -214,7 +214,7 @@
 				<![CDATA[Reader]]>
 			</value>
 		</row>
-	</table> -->
+	</table>
 
 	<table name='user_role'>
 		<column>username</column>
