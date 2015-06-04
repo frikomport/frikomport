@@ -33,6 +33,8 @@ start: servers
 stop:
 	@docker-compose stop
 	@docker-compose rm -f
+	@rm logs/app/* &>/dev/null
+	@rm logs/tomcat/* &>/dev/null
 
 help:
 	@echo "FriKomPort docker build system"
