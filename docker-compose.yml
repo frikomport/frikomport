@@ -4,6 +4,9 @@ tomcat:
       - "8080:8080"
     links:
       - oracle:oracle
+    volumes:
+      - logs/app:/data/mengdetrening/logs
+      - logs/tomcat:/usr/local/tomcat/logs
 oracle:
     image: frikomport/oracle
     ports:
