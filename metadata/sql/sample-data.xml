@@ -315,7 +315,7 @@
 			</value>
 		</row>
 		<row>
-			<value>instructor</value>
+			<value>eventreponsible</value>
 			<value>
 				<![CDATA[Kursansvarlig]]>
 			</value>
@@ -349,7 +349,7 @@
 		</row>
 		<row>
 			<value>instructor</value>
-			<value>instructor</value>
+			<value>eventreponsible</value>
 		</row>
 	</table>
 
@@ -505,5 +505,757 @@
 	</table>
 
 	<!--Person-END-->
+	<!--ServiceArea-START-->
+
+	<table name='servicearea'>
+
+		<column>id</column>
+		<column>name</column>
+		<column>selectable</column>
+		<column>organizationid</column>
+
+		<row>
+			<value>1</value>
+			<value>Barn og unge</value>
+			<value>1</value>
+			<value>2</value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>Pleie- omsorg</value>
+			<value>1</value>
+			<value>2</value>
+		</row>
+		<row>
+			<value>3</value>
+			<value>Administrasjon</value>
+			<value>1</value>
+			<value>2</value>
+		</row>
+		<row>
+			<value>4</value>
+			<value>Kultur</value>
+			<value>1</value>
+			<value>2</value>
+		</row>
+		<row>
+			<value>5</value>
+			<value>Helse</value>
+			<value>0</value>
+			<value>2</value>
+		</row>
+		<row>
+			<value>6</value>
+			<value>Administrasjon</value>
+			<value>1</value>
+			<value>6</value>
+		</row>
+		<row>
+			<value>7</value>
+			<value>Kultur</value>
+			<value>1</value>
+			<value>6</value>
+		</row>
+		<row>
+			<value>8</value>
+			<value>Helse</value>
+			<value>0</value>
+			<value>6</value>
+		</row>
+		<row>
+			<value>9</value>
+			<value>Skole</value>
+			<value>1</value>
+			<value>2</value>
+		</row>
+		<row>
+			<value>10</value>
+			<value>Barn og unge</value>
+			<value>1</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>11</value>
+			<value>Pleie- omsorg</value>
+			<value>1</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>12</value>
+			<value>Administrasjon</value>
+			<value>1</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>13</value>
+			<value>Kultur</value>
+			<value>1</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>14</value>
+			<value>Helse</value>
+			<value>0</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>15</value>
+			<value>Skole</value>
+			<value>1</value>
+			<value>1</value>
+		</row>
+	</table>
+
+	<!--ServiceArea-END-->
+
+	<!--Category-START-->
+
+	<table name="category">
+        <column>id</column>
+        <column>name</column>
+        <column>selectable</column>
+        <row>
+            <value>1</value>
+            <value>Kurs</value>
+            <value>1</value>
+        </row>
+    </table>
+
+    <!--Category-END-->
+
+	<!--Course-START-->
+
+	<table name='course'>
+
+		<column>instructorid</column>
+		<column>responsibleusername</column>
+		<column>serviceareaid</column>
+		<column>detailurl</column>
+		<column>duration</column>
+		<column>feexternal</column>
+		<column>feeinternal</column>
+		<column>freezeAttendance</column>
+		<column>id</column>
+		<column>maxattendants</column>
+		<column>name</column>
+		<column>registerby</column>
+		<column>registerstart</column>
+		<column>reminder</column>
+		<column>reservedinternal</column>
+		<column>starttime</column>
+		<column>stoptime</column>
+		<column>type</column>
+		<column>locationid</column>
+		<column>organizationid</column>
+		<column>description</column>
+		<column>role</column>
+		<column>status</column>
+        <column>categoryid</column>
+		<row>
+			<value>1</value>
+			<value>instructor</value>
+			<value>1</value>
+			<value>/ez/index.php/fkp_nob/nyheter/kurs1</value>
+			<value>Tre dager, seks timer hver dag</value>
+			<value>1200.00</value>
+			<value>900.00</value>
+			<value>@NOW+2@</value>
+			<value>1</value>
+			<value>5</value>
+			<value>Et flott og fint kurs</value>
+			<value>@NOW+2@</value>
+			<value>@NOW-5@</value>
+			<value>@NOW+2@</value>
+			<value>4</value>
+			<value>@NOW+2@</value>
+			<value>@NOW+5@</value>
+			<value>Filosofer og esteter</value>
+			<value>2</value>
+			<value>2</value>
+			<value>Et høytsvevende kurs om filosofi, estetikk og orale tradisjoner</value>
+			<value>anonymous</value>
+			<value>2</value>
+            <value>1</value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>instructor</value>
+			<value>6</value>
+			<value>http://www.tromso.kommune.no/_utskriftsvennlig.db2?id=13358</value>
+			<value>Fire timer</value>
+			<value>1000.00</value>
+			<value>500.00</value>
+			<value>@NOW+2@</value>
+			<value>2</value>
+			<value>25</value>
+			<value>Adferd - Tilpasset opplæring</value>
+			<value>@NOW+2@</value>
+			<value>@NOW-5@</value>
+			<value>@NOW+2@</value>
+			<value>15</value>
+			<value>@NOW+4@</value>
+			<value>@NOW+5@</value>
+			<value>Lærere</value>
+			<value>2</value>
+			<value>2</value>
+			<value>Et kurs om tilpasset opplæring og elevadferd i skolen</value>
+			<value>anonymous</value>
+			<value>2</value>
+            <value>1</value>
+        </row>
+		<row>
+			<value>2</value>
+			<value>instructor</value>
+			<value>1</value>
+			<value>http://www.mamut.com/homepages/Norway/1/18/barnepasseren/commdet100.htm</value>
+			<value>Fire timer</value>
+			<value>200.00</value>
+			<value>125.00</value>
+			<value>@NOW+2@</value>
+			<value>3</value>
+			<value>20</value>
+			<value>Barnepasserkurs</value>
+			<value>@NOW+2@</value>
+			<value>@NOW-5@</value>
+			<value>@NOW+2@</value>
+			<value>5</value>
+			<value>@NOW+4@</value>
+			<value>@NOW+5@</value>
+			<value>Barnehagepersonell</value>
+			<value>1</value>
+			<value>2</value>
+			<value>Gjennomgår krav og forutsetninger for kommunal støtte til barnepass i privat regi</value>
+			<value>anonymous</value>
+			<value>2</value>
+            <value>1</value>
+        </row>
+		<row>
+			<value>2</value>
+			<value>editor</value>
+			<value>2</value>
+			<value>http://www.ski.no/PrintArticle.aspx?ID=3312</value>
+			<value>7 mandager, kl. 18.30 til ca. 21.30</value>
+			<value>100</value>
+			<value>143</value>
+			<value>@NOW+2@</value>
+			<value>4</value>
+			<value>100</value>
+			<value>Kurs for pensjonister</value>
+			<value>@NOW+2@</value>
+			<value>@NOW-5@</value>
+			<value>@NOW+2@</value>
+			<value>25</value>
+			<value>@NOW+1@</value>
+			<value>@NOW+5@</value>
+			<value>Pensjonister</value>
+			<value>2</value>
+			<value>2</value>
+			<value>Kurs om å takle hverdagen som pensjonist i det reformerte helsenorge</value>
+			<value>anonymous</value>
+			<value>2</value>
+            <value>1</value>
+        </row>
+		<row>
+			<value>2</value>
+			<value>editor</value>
+			<value>6</value>
+			<value>http://www.aa.fylkesbibl.no/kurs/2003/svarstad.html</value>
+			<value>5. og 6. februar, kl. 09.00 til 18.00</value>
+			<value>2200.00</value>
+			<value>2000.00</value>
+			<value>@NOW+2@</value>
+			<value>5</value>
+			<value>25</value>
+			<value>Presentasjonsteknikk</value>
+			<value>@NOW+2@</value>
+			<value>@NOW-5@</value>
+			<value>@NOW+2@</value>
+			<value>15</value>
+			<value>@NOW+4@</value>
+			<value>@NOW+5@</value>
+			<value>Politisk interesserte</value>
+			<value>2</value>
+			<value>2</value>
+			<value>Videregående kurs om hvordan å presentere troverdige muntlige fremstillinger som bare løselig er forankret i virkelighetens verden. Dette er essensielt og populært materiale for medarbeidere med politiske ambisjoner</value>
+			<value>anonymous</value>
+			<value>0</value>
+            <value>1</value>
+        </row>
+	</table>
+
+	<!--Course-END-->
+
+	<!--Registration-START-->
+
+	<table name='registration'>
+		<column>courseid</column>
+		<column>email</column>
+		<column>employeenumber</column>
+		<column>firstname</column>
+		<column>lastname</column>
+		<column>id</column>
+		<column>invoiced</column>
+		<column>closest_leader</column>
+		<column>jobtitle</column>
+		<column>mobilephone</column>
+		<column>organizationid</column>
+		<column>phone</column>
+		<column>registered</column>
+		<column>status</column>
+		<column>serviceareaid</column>
+		<column>usemailaddress</column>
+		<column>locale</column>
+		<column>comment</column>
+		<column>attended</column>
+		<column>invoice_name</column>
+		<column>invoice_address</column>
+		<column>invoice_city</column>
+		<column>invoice_postal_code</column>
+		<column>invoice_country</column>
+		<column>invoice_province</column>
+		<row>
+			<value>1</value>
+			<value>frikomport@gmail.com</value>
+			<value>12345</value>
+			<value>Henrik</value>
+			<value>Gmailsen</value>
+			<value>1</value>
+			<value>1</value>
+			<value>Hans Hansen</value>
+			<value>Barnehageassistent</value>
+			<value>99887766</value>
+			<value>1</value>
+			<value>55544332</value>
+			<value>@NOW-5@</value>
+			<value>2</value>
+			<value>1</value>
+			<value>Harald Haraldsensvei 11, 9999 Haraldsen</value>
+			<value>no</value>
+			<value></value>
+			<value>0</value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>frikomport@gmail.com</value>
+			<value>54321</value>
+			<value>Klaus</value>
+			<value>Staftatoo</value>
+			<value>2</value>
+			<value>0</value>
+			<value>Hans Hansen</value>
+			<value>Assisterende assistent</value>
+			<value>99778866</value>
+			<value>2</value>
+			<value>55332211</value>
+			<value>@NOW-5@</value>
+			<value>2</value>
+			<value>2</value>
+			<value>Heidi Heidisensvei 99, 9998 Heidistad</value>
+			<value>no</value>
+			<value></value>
+			<value>0</value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+		</row>
+		<row>
+			<value>1</value>
+			<value>frikomport@gmail.com</value>
+			<value>51342</value>
+			<value>Frik</value>
+			<value>Omport</value>
+			<value>3</value>
+			<value>1</value>
+			<value>Hans Hansen</value>
+			<value>Sjefssjef</value>
+			<value>66887766</value>
+			<value>2</value>
+			<value>55221144</value>
+			<value>@NOW-5@</value>
+			<value>1</value>
+			<value>1</value>
+			<value>Jarle Jarlsesensvei 27, 9997 Jarlestølen</value>
+			<value>no</value>
+			<value></value>
+			<value>0</value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>frikomport@gmail.com</value>
+			<value>12345</value>
+			<value>Hinrek</value>
+			<value>Hinreksen</value>
+			<value>4</value>
+			<value>0</value>
+			<value>Hans Hansen</value>
+			<value>Adm. dir</value>
+			<value>99556688</value>
+			<value>2</value>
+			<value>55123456</value>
+			<value>@NOW-5@</value>
+			<value>1</value>
+			<value>2</value>
+			<value>Kari Karisdatterveg 2A, 9996 Karimoen</value>
+			<value>no</value>
+			<value></value>
+			<value>0</value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+		</row>
+		<row>
+			<value>1</value>
+			<value>frikomport@gmail.com</value>
+			<value>54321</value>
+			<value>Klausern</value>
+			<value>Unified</value>
+			<value>5</value>
+			<value>0</value>
+			<value>Hans Hansen</value>
+			<value>Adm. dir</value>
+			<value>99556688</value>
+			<value>2</value>
+			<value>55123456</value>
+			<value>@NOW-5@</value>
+			<value>1</value>
+			<value>2</value>
+			<value>Kari Karisdatterveg 2A, 9996 Karimoen</value>
+			<value>no</value>
+			<value></value>
+			<value>0</value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+		</row>
+		<row>
+			<value>1</value>
+			<value>frikomport@gmail.com</value>
+			<value>99999</value>
+			<value>Henrik</value>
+			<value>RouyerGmailsen</value>
+			<value>6</value>
+			<value>0</value>
+			<value>Hans Hansen</value>
+			<value>Adm. dir</value>
+			<value>99556688</value>
+			<value>2</value>
+			<value>55123456</value>
+			<value>@NOW-5@</value>
+			<value>1</value>
+			<value>2</value>
+			<value>Kari Karisdatterveg 2A, 9996 Karimoen</value>
+			<value>no</value>
+			<value></value>
+			<value>0</value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+		</row>
+		<row>
+			<value>1</value>
+			<value>henrik@frikomport.no</value>
+			<value>88888</value>
+			<value>Henrik</value>
+			<value>JobbOgGmailsen</value>
+			<value>7</value>
+			<value>0</value>
+			<value>Hans Hansen</value>
+			<value>Adm. dir</value>
+			<value>99556688</value>
+			<value>1</value>
+			<value>55123456</value>
+			<value>@NOW-5@</value>
+			<value>1</value>
+			<value>2</value>
+			<value>Kari Karisdatterveg 2A, 9996 Karimoen</value>
+			<value>no</value>
+			<value></value>
+			<value>0</value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+		</row>
+		<row>
+			<value>1</value>
+			<value>frikomport@gmail.com</value>
+			<value>77777</value>
+			<value>Klaus</value>
+			<value>JobbOgHjemmesen</value>
+			<value>8</value>
+			<value>0</value>
+			<value>Hans Hansen</value>
+			<value>Adm. dir</value>
+			<value>99556688</value>
+			<value>1</value>
+			<value>55123456</value>
+			<value>@NOW-5@</value>
+			<value>1</value>
+			<value>2</value>
+			<value>Kari Karisdatterveg 2A, 9996 Karimoen</value>
+			<value>no</value>
+			<value></value>
+			<value>0</value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+		</row>
+		<row>
+			<value>1</value>
+			<value>frikomport@gmail.com</value>
+			<value>66666</value>
+			<value>Kari</value>
+			<value>HarIkkeMailsen</value>
+			<value>9</value>
+			<value>0</value>
+			<value>Hans Hansen</value>
+			<value>Adm. dir</value>
+			<value>99556688</value>
+			<value>2</value>
+			<value>55123456</value>
+			<value>@NOW-5@</value>
+			<value>1</value>
+			<value>2</value>
+			<value>Kari Karisdatterveg 2A, 9996 Karimoen</value>
+			<value>no</value>
+			<value></value>
+			<value>0</value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+		</row>
+		<row>
+			<value>1</value>
+			<value>frikomport@gmail.com</value>
+			<value>55555</value>
+			<value>FriKomporten</value>
+			<value>Sensensensen</value>
+			<value>10</value>
+			<value>0</value>
+			<value>Hans Hansen</value>
+			<value>Adm. dir</value>
+			<value>99556688</value>
+			<value>2</value>
+			<value>55123456</value>
+			<value>@NOW-5@</value>
+			<value>1</value>
+			<value>2</value>
+			<value>Kari Karisdatterveg 2A, 9996 Karimoen</value>
+			<value>no</value>
+			<value></value>
+			<value>0</value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+			<value></value>
+		</row>
+	</table>
+
+	<!--Registration-END-->
+
+	<!--Attachment-START-->
+
+	<table name='attachment'>
+		<column>contenttype</column>
+		<column>courseid</column>
+		<column>filename</column>
+		<column>id</column>
+		<column>size</column>
+		<column>storedname</column>
+		<row>
+			<value>pdf</value>
+			<value>1</value>
+			<value>kursinformasjon.pdf</value>
+			<value>1</value>
+			<value>10240</value>
+			<value>attach_1</value>
+		</row>
+		<row>
+			<value>text</value>
+			<value>1</value>
+			<value>kurslokale.txt</value>
+			<value>2</value>
+			<value>20480</value>
+			<value>attach_2</value>
+		</row>
+		<row>
+			<value>jpeg</value>
+			<value>1</value>
+			<value>kursholderen.jpg</value>
+			<value>3</value>
+			<value>30720</value>
+			<value>attach_3</value>
+		</row>
+	</table>
+
+	<table name='attachment'>
+		<column>contenttype</column>
+		<column>filename</column>
+		<column>id</column>
+		<column>locationid</column>
+		<column>size</column>
+		<column>storedname</column>
+		<row>
+			<value>rtf</value>
+			<value>lokasjonsvisning.rtf</value>
+			<value>4</value>
+			<value>1</value>
+			<value>10241</value>
+			<value>attach_4</value>
+		</row>
+	</table>
+
+	<!--Attachment-END-->
+
+	<!--Notification-START-->
+
+	<table name='notification'>
+		<column>id</column>
+		<column>registrationid</column>
+		<column>reminderSent</column>
+		<row>
+			<value>1</value>
+			<value>1</value>
+			<value>0</value>
+		</row>
+		<row>
+			<value>2</value>
+			<value>2</value>
+			<value>0</value>
+		</row>
+		<row>
+			<value>3</value>
+			<value>3</value>
+			<value>1</value>
+		</row>
+	</table>
+
+	<!--Notification-END-->
+
+	<!--Configuration-START-->
+
+    <table name="configuration">
+    	<column>id</column>
+        <column>name</column>
+        <column>value</column>
+        <column>active</column>
+        <row>
+        	<value>1</value>
+            <value>show.menu</value>
+            <value>true</value>
+            <value>0</value>
+        </row>
+        <row>
+        	<value>2</value>
+            <value>list.itemCount</value>
+            <value>25</value>
+            <value>0</value>
+        </row>
+        <row>
+        	<value>3</value>
+            <value>access.registration.userdefaults</value>
+            <value>false</value>
+            <value>0</value>
+        </row>
+        <row>
+        	<value>4</value>
+            <value>access.registration.anonymous</value>
+            <value>false</value>
+            <value>0</value>
+        </row>
+        <row>
+        	<value>5</value>
+            <value>access.registration.delete</value>
+            <value>false</value>
+            <value>0</value>
+        </row>
+        <row>
+        	<value>6</value>
+            <value>access.registration.emailrepeat</value>
+            <value>false</value>
+            <value>0</value>
+        </row>
+
+        <row>
+        	<value>7</value>
+            <value>access.registration.hideEmployeeFields</value>
+            <value>false</value>
+            <value>0</value>
+        </row>
+        <row>
+        	<value>8</value>
+            <value>access.registration.hideServiceArea</value>
+            <value>false</value>
+            <value>0</value>
+        </row>
+        <row>
+        	<value>9</value>
+            <value>access.registration.hideComment</value>
+            <value>false</value>
+            <value>0</value>
+        </row>
+        <row>
+        	<value>10</value>
+            <value>access.course.filterlocation</value>
+            <value>false</value>
+            <value>0</value>
+        </row>
+        <row>
+        	<value>11</value>
+            <value>access.course.singleprice</value>
+            <value>false</value>
+            <value>0</value>
+        </row>
+
+        <!-- 1.7 updates -->
+        <row>
+        	<value>12</value>
+            <value>mail.registration.notifyResponsible</value>
+            <null/>
+            <value>0</value>
+        </row>
+        <row>
+        	<value>13</value>
+            <value>mail.course.sendSummary</value>
+            <null/>
+            <value>1</value>
+        </row>
+    </table>
+    
+    <!--Configuration-END-->
 </dataset>
 
