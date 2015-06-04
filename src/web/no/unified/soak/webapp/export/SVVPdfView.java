@@ -99,7 +99,8 @@ import com.lowagie.text.pdf.PdfWriter;
 	    protected void initTable() throws BadElementException
 	    {
 	        tablePDF = new Table(this.model.getNumberOfColumns());
-	        tablePDF.setDefaultVerticalAlignment(Element.ALIGN_TOP);
+	        //tablePDF.setDefaultVerticalAlignment(Element.ALIGN_TOP);//deprecated
+	        tablePDF.getDefaultLayout().setVerticalAlignment(Element.ALIGN_TOP);
 	        tablePDF.setCellsFitPage(true);
 	        tablePDF.setWidth(100);
 
