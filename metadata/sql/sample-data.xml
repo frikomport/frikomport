@@ -1176,8 +1176,8 @@
         <row>
         	<value>1</value>
             <value>show.menu</value>
-            <value>true</value>
-            <value>0</value>
+            <null/>
+            <value>1</value>
         </row>
         <row>
         	<value>2</value>
@@ -1188,56 +1188,56 @@
         <row>
         	<value>3</value>
             <value>access.registration.userdefaults</value>
-            <value>false</value>
+            <null/>
             <value>0</value>
         </row>
         <row>
         	<value>4</value>
             <value>access.registration.anonymous</value>
-            <value>false</value>
+            <null/>
             <value>0</value>
         </row>
         <row>
         	<value>5</value>
             <value>access.registration.delete</value>
-            <value>false</value>
+            <null/>
             <value>0</value>
         </row>
         <row>
         	<value>6</value>
             <value>access.registration.emailrepeat</value>
-            <value>false</value>
+            <null/>
             <value>0</value>
         </row>
 
         <row>
         	<value>7</value>
-            <value>access.registration.hideEmployeeFields</value>
-            <value>false</value>
-            <value>0</value>
+            <value>access.registration.showEmployeeFields</value>
+            <null/>
+            <value>1</value>
         </row>
         <row>
         	<value>8</value>
-            <value>access.registration.hideServiceArea</value>
-            <value>false</value>
-            <value>0</value>
+            <value>access.registration.showServiceArea</value>
+            <null/>
+            <value>1</value>
         </row>
         <row>
         	<value>9</value>
-            <value>access.registration.hideComment</value>
-            <value>false</value>
-            <value>0</value>
+            <value>access.registration.showComment</value>
+            <null/>
+            <value>1</value>
         </row>
         <row>
         	<value>10</value>
             <value>access.course.filterlocation</value>
-            <value>false</value>
+            <null/>
             <value>0</value>
         </row>
         <row>
         	<value>11</value>
             <value>access.course.singleprice</value>
-            <value>false</value>
+            <null/>
             <value>0</value>
         </row>
 
