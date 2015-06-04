@@ -248,8 +248,8 @@
     </macrodef>
 
     <!-- Setup a preset to handle the file encodings -->
-    <!-- Address this once we fix the encodings... -->
+    <!-- Remove annoying Ant warning... -->
     <presetdef name="javac">
-        <javac encoding="ISO-8859-1" />
+        <javac encoding="ISO-8859-1" includeantruntime="false" />
     </presetdef>
 </project>
