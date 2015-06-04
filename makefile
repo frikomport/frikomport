@@ -15,8 +15,11 @@ clean:
 deploy:
 	@./ant.sh clean deploy war -Dwebapp.name=mengdetrening 
 
+migrate:
+	@./ant.sh db-create db-prepare -Dwebapp.name=mengdetrening
+
 seed:
-	@./ant.sh setup-db -Dwebapp.name=mengdetrening
+	@./ant.sh db-load -Dwebapp.name=mengdetrening
 
 setup:
 	@./ant.sh setup -Dwebapp.name=mengdetrening
@@ -28,7 +31,7 @@ servers:
 	@docker-compose up -d
 
 start: servers
-	@./ant.sh clean compile setup-db deploy war -Dwebapp.name=mengdetrening
+	@./ant.sh clean compile db-create db-prepare deploy war -Dwebapp.name=mengdetrening
 
 stop:
 	@docker-compose stop
