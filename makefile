@@ -25,7 +25,14 @@ test:
 	@./ant.sh test
 
 servers:
-	@docker-compose up
+	@docker-compose up -d
+
+start: servers
+	@./ant.sh clean compile setup-db deploy war -Dwebapp.name=mengdetrening
+
+stop:
+	@docker-compose stop
+	@docker-compose rm -f
 
 help:
 	@echo "FriKomPort docker build system"
@@ -38,4 +45,6 @@ help:
 	@echo "    setup         Setup, prepare and run everything"
 	@echo "    test          Run the tests"
 	@echo "    servers       Start the Tomcat & Oracle servers"
+	@echo "    start         Start the servers, build the application & seed the DB"
+	@echo "    stop          Teardown and remove the server containers"
 	@echo "    help          You're looking at it"
