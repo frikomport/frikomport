@@ -785,6 +785,20 @@
         </dbunit>
     </target>
 
+     <target name="db-load-users" depends="init"
+        description="Loads the database with some sample users">
+        <property name="operation" value="INSERT"/>
+        <property name="file" value="metadata/sql/sample-data-users.xml"/>
+        <dbunit driver="${database.driver_class}"
+            supportBatchStatement="false"
+            url="${database.url}"
+            userid="${database.username}"
+            password="${database.password}"
+            escapePattern="&quot;?&quot;">
+            <operation type="${operation}" src="${file}" format="xml"/>
+        </dbunit>
+    </target>
+
     <target name="db-data" description="Updates the sample data">
         <copy file="metadata/sql/sample-data.xml" tofile="metadata/sql/sample-data-prepared.xml" overwrite="true" encoding="UTF-8">
             <filterset>

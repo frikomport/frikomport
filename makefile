@@ -21,6 +21,9 @@ migrate:
 seed:
 	@./ant.sh db-load -Dwebapp.name=mengdetrening
 
+seed-users:
+	@./ant.sh db-load-users -Dwebapp.name=mengdetrening
+
 setup:
 	@./ant.sh setup -Dwebapp.name=mengdetrening
 
