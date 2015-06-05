@@ -3,7 +3,8 @@ tomcat:
     ports:
       - "8080:8080"
     links:
-      - oracle:oracle
+      - oracle
+      - smtp
     volumes:
       - logs/app:/data/mengdetrening/logs
       - logs/tomcat:/usr/local/tomcat/logs
@@ -11,3 +12,7 @@ oracle:
     image: frikomport/oracle
     ports:
       - "1521:1521"
+smtp:
+    image: frikomport/smtp
+    volumes:
+      - logs/mails:/mails
