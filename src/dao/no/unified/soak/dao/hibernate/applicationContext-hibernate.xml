@@ -22,6 +22,7 @@
 	            <value>no/unified/soak/model/Notification.hbm.xml</value>
 	            <value>no/unified/soak/model/Configuration.hbm.xml</value>
 	            <value>no/unified/soak/model/Category.hbm.xml</value>
+                <value>no/unified/soak/model/Followup.hbm.xml</value>
             </list>
         </property>
         <!-- The property below is commented out b/c it doesn't work when run via

@@ -84,6 +84,7 @@ public class Course extends BaseObject implements Serializable {
     private Set<Registration> registrations;
     private Integer numberOfRegistrations;
     private Integer numberOfParticipants;
+    private Followup followup;
     
     public void setNumberOfParticipants(Integer numberOfParticipants) {
 		this.numberOfParticipants = numberOfParticipants;
@@ -829,6 +830,7 @@ public class Course extends BaseObject implements Serializable {
         this.setChargeoverdue(original.getChargeoverdue());
     	this.setStatus(original.getStatus());
     	this.setAttendants(original.getAttendants());
+        this.setFollowup(original.getFollowup());
     }
 
     /**
@@ -882,5 +884,24 @@ public class Course extends BaseObject implements Serializable {
     	if(new Date().after(registerBy)) return true;
     	else return false;
     }
-    
+
+    /**
+     * @return Returns the followup.
+     * @hibernate.key column="courseid"
+     * @hibernate.one-to-one class="no.unified.soak.model.Followup" cascade="all"
+     */ 
+    @XmlTransient
+    public Followup getFollowup() {
+        return followup;
+    }
+
+    /**
+     * @param followup  The followup to set.
+     */
+    public void setFollowup(Followup followup) {
+        this.followup = followup;
+        if (followup != null) {
+            followup.setCourse(this);
+        }
+    }
 }
