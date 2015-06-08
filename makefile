@@ -34,13 +34,14 @@ servers:
 	@docker-compose up -d
 
 start: servers
-	@./ant.sh clean compile db-create db-prepare db-load-users deploy war -Dwebapp.name=mengdetrening
+	@./ant.sh clean compile db-create db-prepare db-load-users deploy -Dwebapp.name=mengdetrening
 
 stop:
 	@docker-compose stop
 	@docker-compose rm -f
 	@rm logs/app/* &>/dev/null
 	@rm logs/tomcat/* &>/dev/null
+	@rm logs/mails/* &>/dev/null
 
 help:
 	@echo "FriKomPort docker build system"
