@@ -54,17 +54,42 @@ function setStopDate() {
 	}
 }
 
-function setMaxAttendants(obj) {
-	var locid= obj.options[obj.selectedIndex].value;
- 	
+function getMaxAttendantsFromLocation(id) {
 	<c:forEach var="location" items="${locations}">
         <c:if test="${location.maxAttendants != null}">
-        if (("<c:out value="${location.id}"/>" != "") && ("<c:out value="${location.id}"/>" == locid)){
-			document.getElementById('maxAttendants').value = <c:out value="${location.maxAttendants}"/>;
+        if (("<c:out value="${location.id}"/>" != "") && ("<c:out value="${location.id}"/>" == id)){
+			return <c:out value="${location.maxAttendants}"/>;
 		}
         </c:if>
     </c:forEach>
 
+    return null;
+}
+
+// If comparePrevValue is TRUE then we only change max attendants if no previous value
+// has been set, or if the current value is bigger than what we've selected now...
+function setMaxAttendants(obj, comparePrevValue) {
+	var max, current, locid = obj.options[obj.selectedIndex].value;
+	if (max = getMaxAttendantsFromLocation(locid)) {
+		if (comparePrevValue) {
+			current = parseInt(document.getElementById('maxAttendants').value);
+			if (isNaN(current) || current > parseInt(max)) {
+				document.getElementById('maxAttendants').value = max;
+			}
+		}
+		else {
+			document.getElementById('maxAttendants').value = max;
+		}
+	}
+}
+
+function onLocationChange(field) {
+	setMaxAttendants(field, false); //use old behaviour - always override...
+
+	var followup = document.getElementById('followup.locationid');
+	if (followup) {
+		followup.value = field.value;
+	}
 }
 
 // Code to change the select list for service aera based on organization id.
@@ -92,9 +117,10 @@ function fillSelect(obj){
  
 <c:if test="${filterlocation || isSVV}">
     var location = document.course.locationid;
-    while(location.firstChild){
+    /*while(location.firstChild){
+    	console.log(location.firstChild);
         location.removeChild(location.firstChild);
-    }
+    }*/
     var k = 0;
 <c:forEach var="location" items="${locations}">
     if ("<c:out value="${location.organizationid}"/>" == orgid || "<c:out value="${location.id}"/>" == "") {
@@ -432,7 +458,7 @@ function fillSelect(obj){
                 </spring:bind>
                     </c:when>
                     <c:otherwise>
-                <form:select path="locationid" onchange="setMaxAttendants(this)">
+                <form:select path="locationid" onchange="onLocationChange(this)">
 					<form:options items="${locations}" itemValue="id" itemLabel="name" />
 				</form:select>
 				<form:errors cssClass="fieldError" htmlEscape="false" path="locationid" />
@@ -664,6 +690,98 @@ function fillSelect(obj){
 					path="detailURL" />
 			</td>
 		</tr>
+
+		<!-- START 65+ -->
+		<tr id="followup">
+			<th>
+				<soak:label key="followup.title" />
+			</th>
+			<td>
+				<table>
+					<tr>
+						<th>
+							<soak:label key="followup.startTime" />
+						</th>
+						<td>
+							<fmt:formatDate value="${course.followup.startTime}" type="date" pattern="${dateformat}" var="followupStartTimeDate" />
+							<fmt:formatDate value="${course.followup.startTime}" type="time" pattern="${timeformat}" var="followupStartTimeTime" />
+
+							<input type="text" size="12" name="followupStartTimeDate" id="followupStartTimeDate" value="<c:out value="${followupStartTimeDate}"/>" 
+								title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" onChange="changeGUIBasedOnField('followupStartTimeDate');"/>
+							<a href="#" name="a1" id="Anch_followupStartTimeDate"
+								onClick="cal1.select(document.course.followupStartTimeDate,'Anch_followupStartTimeDate','<fmt:message key="date.format"/>'); return false;"
+								title="<fmt:message key="course.calendar.title"/>"><img src="<c:url context="${urlContext}" value="/images/calendar.png"/>"></a>
+							<soak:label key="course.time" />
+							<input type="text" size="6" name="followupStartTimeTime" id="followupStartTimeTime" class="input-small" value="<c:out value="${followupStartTimeTime}"/>"
+								title="<fmt:message key="time.format.title"/>: <fmt:message key="time.format.localized"/>" />
+
+							<spring:bind path="course.followup.startTime">
+								<span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false" /> </span>
+							</spring:bind>
+						</td>
+					</tr>
+					<tr>
+						<th>
+							<soak:label key="followup.stopTime" />
+						</th>
+						<td>
+							<fmt:formatDate value="${course.followup.stopTime}" type="date" pattern="${dateformat}" var="followupStopTimeDate" />
+							<fmt:formatDate value="${course.followup.stopTime}" type="time" pattern="${timeformat}" var="followupStopTimeTime" />
+
+							<input type="text" size="12" name="followupStopTimeDate" id="followupStopTimeDate" value="<c:out value="${followupStopTimeDate}"/>"
+								title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
+							<a href="#" name="a1" id="Anch_followupStopTimeDate"
+								onClick="cal1.select(document.course.followupStopTimeDate,'Anch_stopTimeDate','<fmt:message key="date.format"/>'); return false;"
+								title="<fmt:message key="course.calendar.title"/>"><img src="<c:url context="${urlContext}" value="/images/calendar.png"/>"></a>
+							<soak:label key="course.time" />
+							<input type="text" size="6" name="followupStopTimeTime" id="followupStopTimeTime" class="input-small" value="<c:out value="${followupStopTimeTime}"/>"
+								title="<fmt:message key="time.format.title"/>: <fmt:message key="time.format.localized"/>" />
+
+							<spring:bind path="course.followup.stopTime">
+								<span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false" /> </span>
+							</spring:bind>
+						</td>
+					</tr>
+					<tr>
+						<th> <soak:label key="followup.reminder" /> </th>
+						<td>
+							<fmt:formatDate value="${course.followup.reminder}" type="date" pattern="${dateformat}" var="followupReminderDate" />
+							<fmt:formatDate value="${course.followup.reminder}" type="time" pattern="${timeformat}" var="followupReminderTime" />
+
+							<input type="text" size="12" name="followupReminderDate" id="followupReminderDate"
+								value="<c:out value="${followupReminderDate}"/>"
+								title="<fmt:message key="date.format.title"/>: <fmt:message key="date.format.localized"/>" />
+							<a href="#" name="a1" id="Anch_followupReminderDate"
+								onClick="cal1.select(document.course.followupReminderDate,'Anch_followupReminderDate','<fmt:message key="date.format"/>'); return false;"
+								title="<fmt:message key="course.calendar.title"/>"><img src="<c:url context="${urlContext}" value="/images/calendar.png"/>"></a>
+							<soak:label key="course.time" />
+							<input type="text" size="6" name="followupReminderTime" id="followupReminderTime"
+								class="input-small" value="<c:out value="${followupReminderTime}"/>"
+								title="<fmt:message key="time.format.title"/>: <fmt:message key="time.format.localized"/>" />
+
+							<spring:bind path="course.followup.reminder">
+								<input type="hidden" name="<c:out value="${status.expression}"/>"
+									id="<c:out value="${status.expression}"/>"
+									value="<c:out value="${status.value}"/>" />
+								<span class="fieldError"><c:out value="${status.errorMessage}" escapeXml="false" /> </span>
+							</spring:bind>
+						</td>
+					</tr>
+					<tr>
+						<th>
+							<soak:label key="followup.location" />
+						</th>
+						<td>
+			                <form:select path="followup.locationid" onchange="setMaxAttendants(this, true)">
+								<form:options items="${locations}" itemValue="id" itemLabel="name" />
+								</form:select>
+							<form:errors cssClass="fieldError" htmlEscape="false" path="followup.locationid" />
+			            </td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<!-- END 65+ -->
 
 		<tr>
 			<td></td>

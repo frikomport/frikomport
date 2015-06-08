@@ -904,4 +904,17 @@ public class Course extends BaseObject implements Serializable {
             followup.setCourse(this);
         }
     }
+
+    /**
+     * @return Does this course have a followup?
+     */
+    public boolean hasFollowup() {
+        return this.followup != null;
+    }
+
+    public void removeFollowup() {
+        if (this.followup != null) {
+            //TODO: remvove this instance and make sure it's persisted
+        }
+    }
 }

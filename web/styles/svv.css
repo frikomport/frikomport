@@ -68,6 +68,10 @@ div#frikomport-body tr.sumfinal {
 	background-color:#C9CDCF; 	
 }
 
+div#frikomport-body tr#followup table tr th {
+	background-color: transparent;
+}
+
 div#MainContentContainer.fullwidth,
 div#ContentFrameMiddle {
  width:990px;

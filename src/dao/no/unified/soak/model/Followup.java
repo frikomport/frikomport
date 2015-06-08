@@ -32,7 +32,7 @@ public class Followup extends BaseObject implements Serializable {
     private Date stopTime;
     private Date reminder;
     private Location location;
-    //private Long locationid;
+    private Long locationid;
     
     /**
      * @return Returns the id.
@@ -146,22 +146,18 @@ public class Followup extends BaseObject implements Serializable {
 
     /**
      * @return Returns the locationid.
-     * @hibernate.property column="locationid" not-null="true"
      */
-    /*@XmlTransient
+    @XmlTransient
     public Long getLocationid() {
         return locationid;
-    }*/
+    }
 
     /**
-     * @param locationid
-     *            The locationid to set.
-     * @spring.validator type="required"
+     * @param locationid The locationid to set.
      */
-    /*@Required
     public void setLocationid(Long locationid) {
         this.locationid = locationid;
-    }*/
+    }
 	
 	/**
      * @see java.lang.Object#toString()
