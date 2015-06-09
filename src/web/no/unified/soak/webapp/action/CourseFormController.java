@@ -406,17 +406,11 @@ public class CourseFormController extends BaseFormController {
 			// Default responsible
 			course.setResponsibleUsername(user.getUsername());
 
-		}
-        
-        // Hook up a (temporary) Followup instance to make sure we can bind the object to the form.
-        // TODO: This isn't particularly nice, but changing it would require us to modify the whole
-        //       form binding...
-        course = (newCourse != null)? newCourse : course;
-        if (course != null && !course.hasFollowup()) {
+            // Add a Followup
             course.setFollowup(new Followup());
-        }
+		}
 
-        return course;
+        return (newCourse != null)? newCourse : course;
     }
 
     /**
@@ -717,74 +711,73 @@ public class CourseFormController extends BaseFormController {
     private Object[] handleFollowupData(HttpServletRequest request, BindException errors, Course course, Object[] args) {
         String format = getText("date.format", request.getLocale()) + " " + getText("time.format", request.getLocale());
 
-        Category category = categoryManager.getCategory(course.getCategoryid());
+        if (course.hasFollowup()) {
+            Category category = categoryManager.getCategory(course.getCategoryid());
+            if ((category != null) && category.getUseFollowup()) {
+                Followup followup = course.getFollowup();
 
-        //TODO: if we don't have a category here, we can't do anything, but it shouldn't be checked in THIS function!!!
+                try {
+                    Date time = parseDateAndTime(request, "followupStartTime", format);
 
-        if (category.getUseFollowup()) {
-            Followup followup = course.getFollowup();
-
-            try {
-                Date time = parseDateAndTime(request, "followupStartTime", format);
-
-                if (time != null) {
-                    followup.setStartTime(time);
+                    if (time != null) {
+                        followup.setStartTime(time);
+                    }
+                    else {
+                        followup.setStartTime(null);
+                        throw new BindException(followup, "startTime");
+                    }
                 }
-                else {
-                    followup.setStartTime(null);
-                    throw new BindException(followup, "startTime");
+                catch (Exception e) {
+                    args = new Object[] {
+                        getText("followup.startTime", request.getLocale()),
+                        getText("date.format.localized", request.getLocale()),
+                        getText("time.format.localized", request.getLocale())
+                    };
+                    errors.rejectValue("followup.startTime", "errors.dateformat", args, "Invalid date or time");
+                }
+
+                try {
+                    Date time = parseDateAndTime(request, "followupStopTime", format);
+
+                    if (time != null) {
+                        followup.setStopTime(time);
+                    } else {
+                        followup.setStopTime(null);
+                        throw new BindException(followup, "stopTime");
+                    }
+                }
+                catch (Exception e) {
+                    args = new Object[] {
+                        getText("followup.stopTime", request.getLocale()),
+                        getText("date.format.localized", request.getLocale()),
+                        getText("time.format.localized", request.getLocale())
+                    };
+                    errors.rejectValue("followup.stopTime", "errors.dateformat", args, "Invalid date or time");
+                }
+
+                try {
+                    followup.setReminder(parseDateAndTime(request, "followupReminder", format));
+                }
+                catch (Exception e) {
+                    args = new Object[] {
+                        getText("followup.reminder", request.getLocale()),
+                        getText("date.format.localized", request.getLocale()),
+                        getText("time.format.localized", request.getLocale())
+                    };
+                    errors.rejectValue("followup.reminder", "errors.dateformat", args, "Invalid date or time");
+                }
+
+                if (followup.getLocationid() == null) {
+                    args = new Object[] {
+                        getText("followup.locationid", request.getLocale())
+                    };
+                    errors.rejectValue("followup.location", "errors.required", args, "Is required");
                 }
             }
-            catch (Exception e) {
-                args = new Object[] {
-                    getText("followup.startTime", request.getLocale()),
-                    getText("date.format.localized", request.getLocale()),
-                    getText("time.format.localized", request.getLocale())
-                };
-                errors.rejectValue("followup.startTime", "errors.dateformat", args, "Invalid date or time");
+            else {
+                //Course shouldn't have the followup - remove it!
+                course.setFollowup(null);
             }
-
-            try {
-                Date time = parseDateAndTime(request, "followupStopTime", format);
-
-                if (time != null) {
-                    followup.setStopTime(time);
-                } else {
-                    followup.setStopTime(null);
-                    throw new BindException(followup, "stopTime");
-                }
-            }
-            catch (Exception e) {
-                args = new Object[] {
-                    getText("followup.stopTime", request.getLocale()),
-                    getText("date.format.localized", request.getLocale()),
-                    getText("time.format.localized", request.getLocale())
-                };
-                errors.rejectValue("followup.stopTime", "errors.dateformat", args, "Invalid date or time");
-            }
-
-            try {
-                followup.setReminder(parseDateAndTime(request, "followupReminder", format));
-            }
-            catch (Exception e) {
-                args = new Object[] {
-                    getText("followup.reminder", request.getLocale()),
-                    getText("date.format.localized", request.getLocale()),
-                    getText("time.format.localized", request.getLocale())
-                };
-                errors.rejectValue("followup.reminder", "errors.dateformat", args, "Invalid date or time");
-            }
-
-            if (followup.getLocationid() == null) {
-                args = new Object[] {
-                    getText("followup.locationid", request.getLocale())
-                };
-                errors.rejectValue("followup.location", "errors.required", args, "Is required");
-            }
-        }
-        else {
-            //Course shouldn't have the followup - remove it!
-            course.setFollowup(null);
         }
 
         return args;

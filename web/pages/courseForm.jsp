@@ -234,8 +234,15 @@ function fillSelect(obj){
                 <soak:label key="course.category" />
             </th>
             <td>
-                <form:select path="categoryid" id="categoryid" items="${categories}" itemValue="id" itemLabel="name"  onchange="onCategoryChange(this)" />
-                <form:errors cssClass="fieldError" htmlEscape="false" path="categoryid" />
+            	<c:choose>
+        		<c:when test="${course.categoryid == null}">
+            		<form:select path="categoryid" id="categoryid" items="${categories}" itemValue="id" itemLabel="name"  onchange="onCategoryChange(this)" />
+            		<form:errors cssClass="fieldError" htmlEscape="false" path="categoryid" />
+            	</c:when>
+            	<c:otherwise>
+            		<form:select path="categoryid" id="categoryid" items="${categories}" itemValue="id" itemLabel="name" disabled="true" />
+            	</c:otherwise>
+            	</c:choose>
             </td>
         </tr>
     </c:when>
@@ -716,6 +723,7 @@ function fillSelect(obj){
 			</td>
 		</tr>
 
+<c:if test="${course.followup != null}">
 		<!-- START 65+ -->
 		<tr id="followup">
 			<th>
@@ -807,6 +815,7 @@ function fillSelect(obj){
 			</td>
 		</tr>
 		<!-- END 65+ -->
+</c:if>
 
 		<tr>
 			<td></td>
@@ -855,5 +864,7 @@ function fillSelect(obj){
 <script language="JavaScript">
 changeGUIBasedOnField('startTimeDate');
 fillSelect($p("organizationidElement"));
-onCategoryChange(document.getElementById('categoryid'));
+<c:if test="${course.categoryid == null}">
+	onCategoryChange(document.getElementById('categoryid'));;
+</c:if>
 </script>
