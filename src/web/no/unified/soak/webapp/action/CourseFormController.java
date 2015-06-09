@@ -528,6 +528,8 @@ public class CourseFormController extends BaseFormController {
 						"Antall oppmøtte kan ikke registreres før arrangementet har startet.");
 			}
 
+            args = handleFollowupData(request, errors, course, args);
+
 			if (args != null) {
 				courseManager.evict(course);
 				return showForm(request, response, errors);
@@ -713,6 +715,71 @@ public class CourseFormController extends BaseFormController {
 		}
 		return args;
 	}
+
+    private Object[] handleFollowupData(HttpServletRequest request, BindException errors, Course course, Object[] args) {
+        String format = getText("date.format", request.getLocale()) + " " + getText("time.format", request.getLocale());
+        Followup followup = course.getFollowup();
+
+        try {
+            Date time = parseDateAndTime(request, "followupStartTime", format);
+
+            if (time != null) {
+                followup.setStartTime(time);
+            }
+            else {
+                followup.setStartTime(null);
+                throw new BindException(followup, "startTime");
+            }
+        }
+        catch (Exception e) {
+            args = new Object[] {
+                getText("followup.startTime",request.getLocale()),
+                getText("date.format.localized", request.getLocale()),
+                getText("time.format.localized", request.getLocale())
+            };
+            errors.rejectValue("followup.startTime", "errors.dateformat", args, "Invalid date or time");
+        }
+
+        try {
+            Date time = parseDateAndTime(request, "followupStopTime", format);
+
+            if (time != null) {
+                followup.setStopTime(time);
+            } else {
+                followup.setStopTime(null);
+                throw new BindException(followup, "stopTime");
+            }
+        }
+        catch (Exception e) {
+            args = new Object[] {
+                getText("followup.stopTime", request.getLocale()),
+                getText("date.format.localized", request.getLocale()),
+                getText("time.format.localized", request.getLocale())
+            };
+            errors.rejectValue("followup.stopTime", "errors.dateformat", args, "Invalid date or time");
+        }
+
+        try {
+            followup.setReminder(parseDateAndTime(request, "followupReminder", format));
+        }
+        catch (Exception e) {
+            args = new Object[] {
+                getText("followup.reminder", request.getLocale()),
+                getText("date.format.localized", request.getLocale()),
+                getText("time.format.localized", request.getLocale())
+            };
+            errors.rejectValue("followup.reminder", "errors.dateformat", args, "Invalid date or time");
+        }
+
+        if (followup.getLocationid() == null) {
+            args = new Object[] {
+                getText("followup.locationid", request.getLocale())
+            };
+            errors.rejectValue("followup.location", "errors.required", args, "Is required");
+        }
+
+        return args;
+    }
 
 	private void setCourseStatus(HttpServletRequest request, Course course, boolean isNew) {
 		if (request.getParameter("save") != null && isNew) {
