@@ -96,7 +96,7 @@ public class Category extends BaseObject implements Serializable {
      * @return If the category should use a followup for the courses.
      * @hibernate.property column="useFollowup"
      */
-    @XmlElement(name="oppfolgelse")
+    @XmlElement(name="oppfolging")
     public Boolean getUseFollowup() {
         return useFollowup;
     }

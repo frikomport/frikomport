@@ -13,6 +13,10 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  * This class is used to represent a 65+ course follow-up
  *
@@ -22,6 +26,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @author henhed
  * @hibernate.class table="followup" lazy="false"
  */
+@XmlRootElement()
 public class Followup extends BaseObject implements Serializable {
 
 	private static final long serialVersionUID = -4419585793047249127L;

@@ -890,7 +890,7 @@ public class Course extends BaseObject implements Serializable {
      * @hibernate.key column="courseid"
      * @hibernate.one-to-one class="no.unified.soak.model.Followup" cascade="all"
      */ 
-    @XmlTransient
+    @XmlElement(name="oppfolging")
     public Followup getFollowup() {
         return followup;
     }
