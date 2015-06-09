@@ -26,6 +26,7 @@ import no.unified.soak.model.User;
 import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseManager;
 import no.unified.soak.service.DatabaseUpdateManager;
+import no.unified.soak.service.CategoryManager;
 import no.unified.soak.service.LocationManager;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.PersonManager;

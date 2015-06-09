@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import no.unified.soak.model.Category;
-import no.unified.soak.service.impl.CategoryManager;
+import no.unified.soak.service.CategoryManager;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.BindException;

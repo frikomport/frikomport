@@ -3,6 +3,7 @@ package no.unified.soak.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import no.unified.soak.service.CategoryManager;
 import no.unified.soak.dao.CategoryDAO;
 import no.unified.soak.model.Category;
 

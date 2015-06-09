@@ -3,6 +3,8 @@ package no.unified.soak.model;
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -16,6 +18,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @author gv
  * @hibernate.class table="category" lazy="false"
  */
+@XmlRootElement(name="kategorier")
 public class Category extends BaseObject implements Serializable {
     
     private static final long serialVersionUID = 1351020199381038808L;
@@ -50,6 +53,7 @@ public class Category extends BaseObject implements Serializable {
      * @return The id
      * @hibernate.id column="id" generator-class="native" unsaved-value="null"
      */
+    @XmlElement(name="kategoriId")
     public Long getId() {
         return id;
     }
@@ -62,6 +66,7 @@ public class Category extends BaseObject implements Serializable {
      * @return The name
      * @hibernate.property column="name" length="100" not-null="true" unique="true"
      */
+    @XmlElement(name="navn")
     public String getName() {
         return name;
     }
@@ -78,6 +83,7 @@ public class Category extends BaseObject implements Serializable {
      * @return If the category is selectable
      * @hibernate.property column="selectable"
      */
+    @XmlTransient
     public Boolean getSelectable() {
         return selectable;
     }
@@ -90,6 +96,7 @@ public class Category extends BaseObject implements Serializable {
      * @return If the category should use a followup for the courses.
      * @hibernate.property column="useFollowup"
      */
+    @XmlElement(name="oppfolgelse")
     public Boolean getUseFollowup() {
         return useFollowup;
     }

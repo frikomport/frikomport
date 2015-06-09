@@ -33,7 +33,7 @@ import no.unified.soak.service.LocationManager;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.service.RegistrationManager;
 import no.unified.soak.service.ServiceAreaManager;
-import no.unified.soak.service.impl.CategoryManager;
+import no.unified.soak.service.CategoryManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
 import no.unified.soak.util.CourseStatus;
 import no.unified.soak.util.DateUtil;

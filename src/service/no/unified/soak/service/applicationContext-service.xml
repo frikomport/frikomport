@@ -327,5 +327,9 @@
     	<property name="userManager" ref="userManager"/>
     	<property name="mailSender" ref="mailSender" />
     	<property name="mailEngine" ref="mailEngine" />
-    </bean> 
+    </bean>
+
+    <bean id="categoryJsonController" class="no.unified.soak.webapp.json.CategoryJsonController">
+        <property name="categoryManager" ref="categoryManager"/>
+    </bean>
 </beans>

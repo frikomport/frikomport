@@ -1,4 +1,4 @@
-package no.unified.soak.service.impl;
+package no.unified.soak.service;
 
 import no.unified.soak.service.Manager;
 import no.unified.soak.model.Category;
