@@ -338,8 +338,10 @@ public class CourseFormController extends BaseFormController {
     private void setDefaultValues(Map<String, Object> model, Locale locale) {
         String startTimeTime = messageSource.getMessage("course.startTimeTime", null, locale);
         model.put("startTimeTime",startTimeTime);
+        model.put("followupStartTimeTime",startTimeTime);
         String stopTimeTime = messageSource.getMessage("course.stopTimeTime", null, locale);
         model.put("stopTimeTime",stopTimeTime);
+        model.put("followupStopTimeTime",stopTimeTime);
 
         Date currentTime = new Date();
         SimpleDateFormat dfDate = new SimpleDateFormat("dd.MM.yyyy");
