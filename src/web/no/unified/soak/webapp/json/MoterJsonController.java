@@ -43,10 +43,10 @@ public class MoterJsonController {
 
 	@GET
 	@Produces( MediaType.APPLICATION_JSON + ";charset=utf-8")
-	public List<Course> getMoter(@QueryParam("postnr") String postnr) {
+	public List<Course> getMoter(@QueryParam("postnr") String postnr, @QueryParam("kategori") Long categoryid) {
 		List<Course> courseList = new ArrayList<Course>();
 		if (postnr == null) {
-			List<Course> tmpList = courseManager.getAllCourses();
+			List<Course> tmpList = (categoryid == null)? courseManager.getAllCourses() : courseManager.getCoursesWhereCategory(categoryid);
 			for (Course course : tmpList) {
 				if (course.getStatus().equals(CourseStatus.COURSE_PUBLISHED)) {
 					courseList.add(course);				
@@ -54,7 +54,7 @@ public class MoterJsonController {
 			}
 		} else {
 			List<Long> locationIds = locationManager.getLocationIds((StringUtils.leftPad(""+postnr, 4, '0')));
-			courseList = courseManager.findByLocationIds(locationIds,15);
+			courseList = (categoryid == null)? courseManager.findByLocationIds(locationIds, 15) : courseManager.findByLocationIdsAndCategory(locationIds, categoryid, 15);
 		}
 		if (courseList != null) {
 			return updateAvailableAttendants(courseList);

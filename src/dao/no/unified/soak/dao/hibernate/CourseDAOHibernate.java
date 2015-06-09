@@ -47,6 +47,16 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
     }
 
     /**
+     * @see no.unified.soak.dao.CourseDAO#getCoursesWhereCategory()
+     */
+    public List<Course> getCoursesWhereCategory(final Long categoryid) {
+        DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
+        criteria.add(Restrictions.eq("categoryid", categoryid));
+        criteria.addOrder(Order.asc("startTime"));
+        return getHibernateTemplate().findByCriteria(criteria);
+    }
+
+    /**
      * @see no.unified.soak.dao.CourseDAO#getCourse(Long id)
      */
     public Course getCourse(final Long id) {
@@ -266,5 +276,37 @@ public class CourseDAOHibernate extends BaseDAOHibernate implements CourseDAO {
         }
 		return courses;
 	}
+
+    /**
+     * @see no.unified.soak.dao.CourseDAO#findByLocationIdsAndCategory(List<Long>, Long, Integer)
+     */
+    public List<Course> findByLocationIdsAndCategory(List<Long> locationIds, Long categoryid, Integer numberOfHits) {
+        List<Course> courses = new ArrayList<Course>(numberOfHits);
+        if(!locationIds.isEmpty()){
+            Iterator<Long> ids = locationIds.iterator();
+            while(ids.hasNext()){ // find courses pr locationid
+                Long locationid = ids.next();
+                DetachedCriteria criteria = DetachedCriteria.forClass(Course.class);
+                criteria.add(Restrictions.eq("locationid", locationid));
+                criteria.add(Restrictions.eq("categoryid", categoryid));
+                criteria.add(Restrictions.eq("status", CourseStatus.COURSE_PUBLISHED));
+                criteria.addOrder(Order.asc("startTime"));
+                List coursesForLocation = getHibernateTemplate().findByCriteria(criteria);
+                if(!coursesForLocation.isEmpty()){
+                    Iterator<Course> it = coursesForLocation.iterator();
+                    while(it.hasNext()){
+                        courses.add(it.next());
+                        if(courses.size() == numberOfHits){
+                            break;
+                        }
+                    }
+                }
+                if(courses.size() == numberOfHits){
+                    break;
+                }
+            }
+        }
+        return courses;
+    }
 
 }

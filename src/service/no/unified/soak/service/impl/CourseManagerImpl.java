@@ -78,6 +78,21 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
     }
 
     /**
+     * @see no.unified.soak.service.CourseManager#getCoursesWhereCategory()
+     */
+    public List<Course> getCoursesWhereCategory(Long categoryid) {
+        try {
+            return courseDAO.getCoursesWhereCategory(categoryid);
+        }
+        catch(StaleObjectStateException e){
+            if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+                return courseDAO.getAllCourses();
+            }
+            throw e;
+        }
+    }
+
+    /**
      * @see no.unified.soak.service.CourseManager#getCourse(String id)
      */
     public Course getCourse(final String id) {
@@ -176,6 +191,18 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
     		}
     		throw e;
     	}
+    }
+
+    public List<Course> findByLocationIdsAndCategory(List<Long> locationIds, Long categoryid, Integer numberOfHits) {
+        try {
+            return courseDAO.findByLocationIdsAndCategory(locationIds, categoryid, numberOfHits);
+        }
+        catch(StaleObjectStateException e){
+            if(handleStaleObjectStateExceptionForUserObject(e, userManager)){
+                return courseDAO.findByLocationIds(locationIds, numberOfHits);
+            }
+            throw e;
+        }
     }
     
     /**

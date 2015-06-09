@@ -36,6 +36,11 @@ public interface CourseManager extends Manager {
     public List getAllCourses();
 
     /**
+     * Retrieves all course with specified category
+     */
+    public List<Course> getCoursesWhereCategory(Long categoryid);
+
+    /**
      * Gets course's information based on id.
      * @param id the course's id
      * @return course populated course object
@@ -79,6 +84,7 @@ public interface CourseManager extends Manager {
     public List<Course> findByInstructor(Person person, Integer[] coursestatus);
 
 	public List<Course> findByLocationIds(List<Long> locationIds, Integer numberOfHits);
+    public List<Course> findByLocationIdsAndCategory(List<Long> locationIds, Long categoryid, Integer numberOfHits);
 	
     /**
      * Finds all changes relevant between original course and changed course relevant for 

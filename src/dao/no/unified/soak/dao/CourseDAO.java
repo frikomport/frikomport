@@ -29,6 +29,11 @@ public interface CourseDAO extends DAO {
     public List<Course> getAllCourses();
 
     /**
+     * Retrieves all course with specified category
+     */
+    public List<Course> getCoursesWhereCategory(final Long categoryid);
+
+    /**
      * Gets course's information based on primary key. An
      * ObjectRetrievalFailureException Runtime Exception is thrown if
      * nothing is found.
@@ -85,4 +90,13 @@ public interface CourseDAO extends DAO {
      */
 	public List<Course> findByLocationIds(List<Long> locationIds, Integer numberOfHits);
 	
+    /**
+     * Searches for published courses on given locations, and of a specific category
+     * Handles each locationId separately and in given order until list reaches numberOfHits
+     * @param locationIds list of locationIds
+     * @param categoryid the category to limit to
+     * @param numberOfHits max number of courses returned
+     * @return list of courses limited by numberOfHits
+     */
+    public List<Course> findByLocationIdsAndCategory(List<Long> locationIds, Long categoryid, Integer numberOfHits);
 }
