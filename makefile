@@ -34,7 +34,7 @@ servers:
 	@docker-compose up -d
 
 start: servers
-	@./ant.sh clean compile db-create db-prepare db-load-users deploy -Dwebapp.name=mengdetrening
+	@./ant.sh clean compile db-create db-prepare deploy -Dwebapp.name=mengdetrening
 
 stop:
 	@docker-compose stop
