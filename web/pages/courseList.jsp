@@ -117,7 +117,7 @@ function fillSelect(obj){
 <c:if test="${categories[2] != null}">
             <li>
                 <soak:label key="course.category" styleClass="required"/>
-                <form:select path="categoryid" items="${categories}" itemLabel="name" itemValue="id">
+                <form:select path="categoryid">
                     <form:options items="${categories}" itemLabel="name" itemValue="id"/>
                 </form:select>
                 <form:errors cssClass="fieldError" htmlEscape="false" path="categoryid" />

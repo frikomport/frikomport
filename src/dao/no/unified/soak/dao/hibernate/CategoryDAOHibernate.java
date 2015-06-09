@@ -36,15 +36,13 @@ public class CategoryDAOHibernate extends BaseDAOHibernate implements CategoryDA
      * @see no.unified.soak.dao.CategoryDAO#getCategory(String)
      */
     public Category getCategory(String name) {
-        Category searchCategory = new Category();
-        searchCategory.setName(name);
-        List<Category> categories = getCategories(searchCategory , true); 
-
+        DetachedCriteria criteria = DetachedCriteria.forClass(Category.class);
+        criteria.add(Restrictions.eq("name", name));
+        List<Category> categories = getHibernateTemplate().findByCriteria(criteria);
         if (categories == null || categories.size() == 0) {
             log.warn("Category with name '" + name + "' not found.");
             throw new ObjectRetrievalFailureException(Category.class, name);
         }
-
         return categories.get(0);
     }
     

@@ -374,13 +374,20 @@ public class CourseFormController extends BaseFormController {
 		} else {
 			course = new Course();
 			course.setRole(Constants.ANONYMOUS_ROLE);
-			Category hendelseCategory = categoryManager.getCategory(Category.Name.HENDELSE.getDBValue());
-			if (hendelseCategory != null) {
-				course.setCategoryid(hendelseCategory.getId());
-			} else {
-				course.setCategoryid(1L);
-			}
-			course.setCategory(hendelseCategory);
+
+            if (ApplicationResourcesUtil.isSVV()) {
+            }
+            else {
+    			Category hendelseCategory = categoryManager.getCategory(Category.Name.HENDELSE.getDBValue());
+    			if (hendelseCategory != null) {
+    				course.setCategoryid(hendelseCategory.getId());
+    			} else {
+    				course.setCategoryid(1L);
+    			}
+    			course.setCategory(hendelseCategory);
+            }
+
+
 			// Check if a default organization should be applied
 			User user = (User) request.getSession().getAttribute(Constants.USER_KEY);
 

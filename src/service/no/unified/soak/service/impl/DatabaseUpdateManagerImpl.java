@@ -327,22 +327,32 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		}
 
 		// CATEGORIES
-		try {
-			categoryManager.getCategory(Category.Name.HENDELSE.getDBValue());
-		} catch (ObjectRetrievalFailureException e) {
-			Category cat = new Category();
-			cat.setName(Category.Name.HENDELSE.getDBValue());
-			cat.setSelectable(true);
-			categoryManager.saveCategory(cat);
-			log.info("\"Category\" lagt til i DB: " + cat);
+		if (ApplicationResourcesUtil.isSVV()) {
+			//To make it a bit more data-driven, let's just change things if it's seems like the default.. 
+			List<Category> categories = categoryManager.getAll();
+			if ((categories.size() == 1)) {
+				Category cat = categories.get(0);
+				if (cat.getName().equals(Category.Name.HENDELSE.getDBValue())) {
+					cat.setName("Mengdetrening");
+					categoryManager.saveCategory(cat);
+					createCategoryIfNotExists("Bilfører 65+", true);
+				}
+			}
+			else if(categories.isEmpty()) {
+				createCategoryIfNotExists("Mengdetrening", false);
+				createCategoryIfNotExists("Bilfører 65+", true);
+			}
 		}
+		else {
+			createCategoryIfNotExists(Category.Name.HENDELSE.getDBValue(), false);
 
-		try {
-			String[][] sqlSelectAndInsertCategoryArray = { { "select count(*) from category",
-					"INSERT INTO category (name, selectable) VALUES ('Hendelse', true)" } };
-			insertIntoTableBySQLStatements("category", sqlSelectAndInsertCategoryArray);
-		} catch (Exception e) {
-			log.warn("Feil ved insert av kategori", e);
+			try {
+				String[][] sqlSelectAndInsertCategoryArray = { { "select count(*) from category",
+						"INSERT INTO category (name, selectable) VALUES ('Hendelse', true)" } };
+				insertIntoTableBySQLStatements("category", sqlSelectAndInsertCategoryArray);
+			} catch (Exception e) {
+				log.warn("Feil ved insert av kategori", e);
+			}
 		}
 
 		// PERSONS
@@ -490,6 +500,21 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			log.info(c.getName() + ": " + c.getActive());
 		}
 		// ------------------------------------------------------
+	}
+
+	private void createCategoryIfNotExists(String name, boolean useFollowup) {
+		try {
+			categoryManager.getCategory(name);
+		}
+		catch (ObjectRetrievalFailureException e) {
+			log.info("Attempting to create missing category " + name);
+			Category cat = new Category();
+			cat.setName(name);
+			cat.setSelectable(true);
+			//cat.setUseFollowup(useFollowup);
+			categoryManager.saveCategory(cat);
+			log.info("\"Category\" lagt til i DB: " + cat);
+		}
 	}
 	
 	private Organization saveOrGetRegion(int number, String orgName, Map<Long, Organization> regioner) {
@@ -948,6 +973,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 	 */
 	private void updateCourses() {
 		List<Course> courses = courseManager.getAllCourses();
+		List<Category> categories = categoryManager.getAll();
 		if (courses != null && !courses.isEmpty()) {
 			Iterator<Course> it = courses.iterator();
 			while (it.hasNext()) {
@@ -1004,10 +1030,14 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 					}
 				}
 				if (course.getCategory() == null || course.getCategoryid() == 0) {
-					Category category = categoryManager.getCategory(Category.Name.HENDELSE.getDBValue());
-					course.setCategory(category);
-					course.setCategoryid(category.getId());
-					save = true;
+					if (categories != null && !categories.isEmpty()) {
+						//We used to map to the hard-coded HENDELSE value here, but let's just map to the first category instead..
+						//Category category = categoryManager.getCategory(Category.Name.HENDELSE.getDBValue());
+						Category category = categories.get(0);
+						course.setCategory(category);
+						course.setCategoryid(category.getId());
+						save = true;
+					}
 				}
 
 				// chargeoverdue

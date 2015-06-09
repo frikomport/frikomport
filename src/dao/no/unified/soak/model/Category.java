@@ -20,7 +20,7 @@ public class Category extends BaseObject implements Serializable {
     
     private static final long serialVersionUID = 1351020199381038808L;
     private Long id;
-    private Name name;
+    private String name;
     private Boolean selectable;
 
     public enum Name {
@@ -62,11 +62,7 @@ public class Category extends BaseObject implements Serializable {
      * @hibernate.property column="name" length="100" not-null="true" unique="true"
      */
     public String getName() {
-        return name.getDBValue();
-    }
-
-    public Name getNameAsEnum() {
-        return this.name;
+        return name;
     }
     
     /**
@@ -74,7 +70,7 @@ public class Category extends BaseObject implements Serializable {
      * @spring.validator type="required"
      */
     public void setName(String name) {
-        this.name = Name.getNameFromDBValue(name);
+        this.name = name;
     }
 
     /**
