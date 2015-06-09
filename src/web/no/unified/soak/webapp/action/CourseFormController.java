@@ -378,9 +378,7 @@ public class CourseFormController extends BaseFormController {
 			course = new Course();
 			course.setRole(Constants.ANONYMOUS_ROLE);
 
-            if (ApplicationResourcesUtil.isSVV()) {
-            }
-            else {
+            if (!ApplicationResourcesUtil.isSVV()) {
     			Category hendelseCategory = categoryManager.getCategory(Category.Name.HENDELSE.getDBValue());
     			if (hendelseCategory != null) {
     				course.setCategoryid(hendelseCategory.getId());
@@ -718,64 +716,75 @@ public class CourseFormController extends BaseFormController {
 
     private Object[] handleFollowupData(HttpServletRequest request, BindException errors, Course course, Object[] args) {
         String format = getText("date.format", request.getLocale()) + " " + getText("time.format", request.getLocale());
-        Followup followup = course.getFollowup();
 
-        try {
-            Date time = parseDateAndTime(request, "followupStartTime", format);
+        Category category = categoryManager.getCategory(course.getCategoryid());
 
-            if (time != null) {
-                followup.setStartTime(time);
+        //TODO: if we don't have a category here, we can't do anything, but it shouldn't be checked in THIS function!!!
+
+        if (category.getUseFollowup()) {
+            Followup followup = course.getFollowup();
+
+            try {
+                Date time = parseDateAndTime(request, "followupStartTime", format);
+
+                if (time != null) {
+                    followup.setStartTime(time);
+                }
+                else {
+                    followup.setStartTime(null);
+                    throw new BindException(followup, "startTime");
+                }
             }
-            else {
-                followup.setStartTime(null);
-                throw new BindException(followup, "startTime");
+            catch (Exception e) {
+                args = new Object[] {
+                    getText("followup.startTime", request.getLocale()),
+                    getText("date.format.localized", request.getLocale()),
+                    getText("time.format.localized", request.getLocale())
+                };
+                errors.rejectValue("followup.startTime", "errors.dateformat", args, "Invalid date or time");
+            }
+
+            try {
+                Date time = parseDateAndTime(request, "followupStopTime", format);
+
+                if (time != null) {
+                    followup.setStopTime(time);
+                } else {
+                    followup.setStopTime(null);
+                    throw new BindException(followup, "stopTime");
+                }
+            }
+            catch (Exception e) {
+                args = new Object[] {
+                    getText("followup.stopTime", request.getLocale()),
+                    getText("date.format.localized", request.getLocale()),
+                    getText("time.format.localized", request.getLocale())
+                };
+                errors.rejectValue("followup.stopTime", "errors.dateformat", args, "Invalid date or time");
+            }
+
+            try {
+                followup.setReminder(parseDateAndTime(request, "followupReminder", format));
+            }
+            catch (Exception e) {
+                args = new Object[] {
+                    getText("followup.reminder", request.getLocale()),
+                    getText("date.format.localized", request.getLocale()),
+                    getText("time.format.localized", request.getLocale())
+                };
+                errors.rejectValue("followup.reminder", "errors.dateformat", args, "Invalid date or time");
+            }
+
+            if (followup.getLocationid() == null) {
+                args = new Object[] {
+                    getText("followup.locationid", request.getLocale())
+                };
+                errors.rejectValue("followup.location", "errors.required", args, "Is required");
             }
         }
-        catch (Exception e) {
-            args = new Object[] {
-                getText("followup.startTime",request.getLocale()),
-                getText("date.format.localized", request.getLocale()),
-                getText("time.format.localized", request.getLocale())
-            };
-            errors.rejectValue("followup.startTime", "errors.dateformat", args, "Invalid date or time");
-        }
-
-        try {
-            Date time = parseDateAndTime(request, "followupStopTime", format);
-
-            if (time != null) {
-                followup.setStopTime(time);
-            } else {
-                followup.setStopTime(null);
-                throw new BindException(followup, "stopTime");
-            }
-        }
-        catch (Exception e) {
-            args = new Object[] {
-                getText("followup.stopTime", request.getLocale()),
-                getText("date.format.localized", request.getLocale()),
-                getText("time.format.localized", request.getLocale())
-            };
-            errors.rejectValue("followup.stopTime", "errors.dateformat", args, "Invalid date or time");
-        }
-
-        try {
-            followup.setReminder(parseDateAndTime(request, "followupReminder", format));
-        }
-        catch (Exception e) {
-            args = new Object[] {
-                getText("followup.reminder", request.getLocale()),
-                getText("date.format.localized", request.getLocale()),
-                getText("time.format.localized", request.getLocale())
-            };
-            errors.rejectValue("followup.reminder", "errors.dateformat", args, "Invalid date or time");
-        }
-
-        if (followup.getLocationid() == null) {
-            args = new Object[] {
-                getText("followup.locationid", request.getLocale())
-            };
-            errors.rejectValue("followup.location", "errors.required", args, "Is required");
+        else {
+            //Course shouldn't have the followup - remove it!
+            course.setFollowup(null);
         }
 
         return args;

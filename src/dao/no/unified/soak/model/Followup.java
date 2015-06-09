@@ -60,6 +60,7 @@ public class Followup extends BaseObject implements Serializable {
      * @hibernate.many-to-one not-null="true"
      *                        column="courseid"
      *                        class="no.unified.soak.model.Course"
+     *                        unique="true"
      */
 	@XmlTransient
     public Course getCourse() {
@@ -132,9 +133,12 @@ public class Followup extends BaseObject implements Serializable {
 	
 	/**
      * @return Returns the location.
-     * @hibernate.one-to-one not-null="true"
+     * @hibernate.many-to-one not-null="true"
      *                        column="locationid"
      *                        class="no.unified.soak.model.Location"
+     *                        update="false"
+     *                        cascade="none"
+     *                        insert="false"
      */
     @XmlElement(name="lokale")
     public Location getLocation() {
@@ -151,6 +155,7 @@ public class Followup extends BaseObject implements Serializable {
 
     /**
      * @return Returns the locationid.
+     * @hibernate.property column="locationid" not-null="true"
      */
     @XmlTransient
     public Long getLocationid() {
@@ -159,6 +164,7 @@ public class Followup extends BaseObject implements Serializable {
 
     /**
      * @param locationid The locationid to set.
+     * @spring.validator type="required"
      */
     public void setLocationid(Long locationid) {
         this.locationid = locationid;
@@ -170,7 +176,6 @@ public class Followup extends BaseObject implements Serializable {
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this).append("id", id)
-                .append("course", course)
                 .append("location", location)
                 .append("startTime", startTime)
                 .toString();

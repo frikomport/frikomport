@@ -764,8 +764,10 @@ public class Course extends BaseObject implements Serializable {
                                         .append("instructor", instructor)
                                         .append("name", name)
                                         .append("type", type)
+                                        .append("category", category)
                                         .append("status", status)
                                         .append("startTime", startTime)
+                                        .append("followup", followup)
                                         .toString();
     }
 
@@ -888,7 +890,7 @@ public class Course extends BaseObject implements Serializable {
     /**
      * @return Returns the followup.
      * @hibernate.key column="courseid"
-     * @hibernate.one-to-one class="no.unified.soak.model.Followup" cascade="all"
+     * @hibernate.one-to-one class="no.unified.soak.model.Followup" cascade="all" property-ref="course"
      */ 
     @XmlElement(name="oppfolging")
     public Followup getFollowup() {
