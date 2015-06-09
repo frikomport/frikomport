@@ -241,6 +241,7 @@ function fillSelect(obj){
             	</c:when>
             	<c:otherwise>
             		<form:select path="categoryid" id="categoryid" items="${categories}" itemValue="id" itemLabel="name" disabled="true" />
+            		<form:hidden path="categoryid"/>
             	</c:otherwise>
             	</c:choose>
             </td>

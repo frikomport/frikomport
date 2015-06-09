@@ -755,6 +755,27 @@ public class CourseFormController extends BaseFormController {
                     errors.rejectValue("followup.stopTime", "errors.dateformat", args, "Invalid date or time");
                 }
 
+                Date start = followup.getStartTime();
+                if (start != null) {
+                    Date stop = followup.getStopTime();
+                    if ((stop != null) && (start.after(stop)) || start.equals(stop)) {
+                        args = new Object[] {
+                            getText("followup.startTime", request.getLocale()),
+                            getText("followup.stopTime", request.getLocale())
+                        };
+                        errors.rejectValue("followup.startTime", "errors.XMustBeLessThanY", args, "Start time must be less than stop time");
+                    }
+
+                    stop = course.getStopTime();
+                    if ((stop != null) && (stop.after(start))) {
+                        args = new Object[] {
+                            getText("followup.startTime", request.getLocale()),
+                            getText("course.stopTime", request.getLocale())
+                        };
+                        errors.rejectValue("followup.startTime", "followup.error.mustbeafter", args, "Start time of followup must be after stop time of course");
+                    }
+                }
+
                 try {
                     followup.setReminder(parseDateAndTime(request, "followupReminder", format));
                 }
