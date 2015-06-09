@@ -22,6 +22,7 @@ public class Category extends BaseObject implements Serializable {
     private Long id;
     private String name;
     private Boolean selectable;
+    private Boolean useFollowup;
 
     public enum Name {
         HENDELSE("Hendelse");
@@ -85,10 +86,23 @@ public class Category extends BaseObject implements Serializable {
         this.selectable = selectable;
     }
 
+    /**
+     * @return If the category should use a followup for the courses.
+     * @hibernate.property column="useFollowup"
+     */
+    public Boolean getUseFollowup() {
+        return useFollowup;
+    }
+
+    public void setUseFollowup(Boolean useFollowup) {
+        this.useFollowup = useFollowup;
+    }
+
     public String toString() {
          return new ToStringBuilder(this).append("id", id)
                                         .append("name", name)
                                         .append("selectable", selectable)
+                                        .append("useFollowup", useFollowup)
                                         .toString();
     }
 

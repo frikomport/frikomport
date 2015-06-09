@@ -334,6 +334,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 				Category cat = categories.get(0);
 				if (cat.getName().equals(Category.Name.HENDELSE.getDBValue())) {
 					cat.setName("Mengdetrening");
+					cat.setUseFollowup(false);
 					categoryManager.saveCategory(cat);
 					createCategoryIfNotExists("Bilfører 65+", true);
 				}
@@ -511,7 +512,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			Category cat = new Category();
 			cat.setName(name);
 			cat.setSelectable(true);
-			//cat.setUseFollowup(useFollowup);
+			cat.setUseFollowup(useFollowup);
 			categoryManager.saveCategory(cat);
 			log.info("\"Category\" lagt til i DB: " + cat);
 		}

@@ -66,6 +66,18 @@ function getMaxAttendantsFromLocation(id) {
     return null;
 }
 
+function getUseFollowupFromCategory(id) {
+	<c:forEach var="category" items="${categories}">
+        <c:if test="${category.useFollowup != null}">
+        	if (("<c:out value="${category.id}"/>" != "") && ("<c:out value="${category.id}"/>" == id)){
+				return <c:out value="${category.useFollowup}"/>;
+			}
+        </c:if>
+    </c:forEach>
+
+    return false;
+}
+
 // If comparePrevValue is TRUE then we only change max attendants if no previous value
 // has been set, or if the current value is bigger than what we've selected now...
 function setMaxAttendants(obj, comparePrevValue) {
@@ -80,6 +92,17 @@ function setMaxAttendants(obj, comparePrevValue) {
 		else {
 			document.getElementById('maxAttendants').value = max;
 		}
+	}
+}
+
+function onCategoryChange(field) {
+	var categoryId = field.options[field.selectedIndex].value,
+		useFollowup = getUseFollowupFromCategory(categoryId);
+	if (useFollowup) {
+		Element.show($p('followup'));
+	}
+	else {
+		Element.hide($p('followup'));
 	}
 }
 
@@ -208,8 +231,7 @@ function fillSelect(obj){
                 <soak:label key="course.category" />
             </th>
             <td>
-                <form:select path="categoryid" items="${categories}" itemValue="id"
-                             itemLabel="name" />
+                <form:select path="categoryid" id="categoryid" items="${categories}" itemValue="id" itemLabel="name"  onchange="onCategoryChange(this)" />
                 <form:errors cssClass="fieldError" htmlEscape="false" path="categoryid" />
             </td>
         </tr>
@@ -830,4 +852,5 @@ function fillSelect(obj){
 <script language="JavaScript">
 changeGUIBasedOnField('startTimeDate');
 fillSelect($p("organizationidElement"));
+onCategoryChange(document.getElementById('categoryid'));
 </script>

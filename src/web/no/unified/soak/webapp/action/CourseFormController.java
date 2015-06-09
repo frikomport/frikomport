@@ -30,6 +30,7 @@ import no.unified.soak.Constants;
 import no.unified.soak.model.Attachment;
 import no.unified.soak.model.Category;
 import no.unified.soak.model.Course;
+import no.unified.soak.model.Followup;
 import no.unified.soak.model.Location;
 import no.unified.soak.model.Organization;
 import no.unified.soak.model.Person;
@@ -406,11 +407,16 @@ public class CourseFormController extends BaseFormController {
 			course.setResponsibleUsername(user.getUsername());
 
 		}
-        if (newCourse != null) {
-            return newCourse;
-        } else {
-            return course;
+        
+        // Hook up a (temporary) Followup instance to make sure we can bind the object to the form.
+        // TODO: This isn't particularly nice, but changing it would require us to modify the whole
+        //       form binding...
+        course = (newCourse != null)? newCourse : course;
+        if (course != null && !course.hasFollowup()) {
+            course.setFollowup(new Followup());
         }
+
+        return course;
     }
 
     /**
