@@ -65,7 +65,7 @@ function fillSelect(obj){
 }
 </script>
 
-<form:form commandName="course" name="courseList" action="listCourses.html">
+    <form:form commandName="course" name="courseList" action="listCourses.html">
     <div class="searchForm">
         <ul>
 <c:if test="${useOrganization2 && (isAdmin || isEducationResponsible || isEventResponsible || isReader)}">
@@ -243,6 +243,10 @@ SumBuild sumsExport = new SumBuild();
 	</c:if>
 </c:otherwise>
 </c:choose>
+
+<display:column media="html" property="category.name" sortable="true" headerClass="sortable" titleKey="course.category">
+    <%sums.addToNextSum(null, null);%>
+</display:column>
 
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.status">
