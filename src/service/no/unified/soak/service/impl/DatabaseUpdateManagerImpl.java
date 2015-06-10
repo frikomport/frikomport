@@ -329,24 +329,36 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 
 		// CATEGORIES
 		if (ApplicationResourcesUtil.isSVV()) {
+			//It's not very nice to have a bunch of hard-coded strings here, but the whole idea is to move these into the DB
+			//and have them editable from there. This is just a default seeding.. Also, we con't use the properties files,
+			//because this task doesn't run with the correct locale for our purposes, so the strings would not become what we
+			//would expect...
+			String str1 = "Informasjonsmøte om øvelseskjøring", str2 = "Møtet er for deg som skal være med ungdom å øvelseskjøre. Oppgi navnet og e-postadressen din, og fødselsdatoen til den du skal øvelseskjøre med.";
+			String str3 = "Informasjonsmøte før bilfører 65+ år", str4 = "Oppgi fornavn, etternavn, epost, og fødselsdato for kontaktperson.";
+
 			//To make it a bit more data-driven, let's just change things if it's seems like the default.. 
 			List<Category> categories = categoryManager.getAll();
 			if ((categories.size() == 1)) {
+
+
+
 				Category cat = categories.get(0);
 				if (cat.getName().equals(Category.Name.HENDELSE.getDBValue())) {
 					cat.setName("Mengdetrening");
 					cat.setUseFollowup(false);
+					cat.setDefaultName(str1);
+					cat.setAdditionalInfo(str2);
 					categoryManager.saveCategory(cat);
-					createCategoryIfNotExists("Bilfører 65+", true);
+					createCategoryIfNotExists("Bilfører 65+", true, str3, str4);
 				}
 			}
 			else if(categories.isEmpty()) {
-				createCategoryIfNotExists("Mengdetrening", false);
-				createCategoryIfNotExists("Bilfører 65+", true);
+				createCategoryIfNotExists("Mengdetrening", false, str1, str2);
+				createCategoryIfNotExists("Bilfører 65+", true, str3, str4);
 			}
 		}
 		else {
-			createCategoryIfNotExists(Category.Name.HENDELSE.getDBValue(), false);
+			createCategoryIfNotExists(Category.Name.HENDELSE.getDBValue(), false, null, null);
 
 			try {
 				String[][] sqlSelectAndInsertCategoryArray = { { "select count(*) from category",
@@ -504,7 +516,7 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 		// ------------------------------------------------------
 	}
 
-	private void createCategoryIfNotExists(String name, boolean useFollowup) {
+	private void createCategoryIfNotExists(String name, boolean useFollowup, String defaultName, String additionalInfo) {
 		try {
 			categoryManager.getCategory(name);
 		}
@@ -514,6 +526,8 @@ public class DatabaseUpdateManagerImpl extends BaseManager implements DatabaseUp
 			cat.setName(name);
 			cat.setSelectable(true);
 			cat.setUseFollowup(useFollowup);
+			cat.setDefaultName(defaultName);
+			cat.setAdditionalInfo(additionalInfo);
 			categoryManager.saveCategory(cat);
 			log.info("\"Category\" lagt til i DB: " + cat);
 		}

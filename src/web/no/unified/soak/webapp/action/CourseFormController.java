@@ -861,7 +861,9 @@ public class CourseFormController extends BaseFormController {
 		}
 		
 		if (StringUtils.isEmpty(course.getName()) && !configurationManager.isActive("access.course.showCourseName", true)){
-			course.setName(ApplicationResourcesUtil.getText("course.defaultname"));
+            Category category = categoryManager.getCategory(course.getCategoryid());
+            String name = (category != null)? category.getDefaultName() : null;
+			course.setName((name != null)? name : ApplicationResourcesUtil.getText("course.defaultname"));
 		}
 		
 		if(StringUtils.isEmpty(course.getRole())){

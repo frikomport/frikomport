@@ -126,6 +126,15 @@ public class RegistrationFormController extends BaseFormController {
             isAdmin = (Boolean) roles.contains(Constants.ADMIN_ROLE);
         }
 
+        // Retrieve the course the user wants to attend
+        Course course = courseManager.getCourse(courseId);
+        if (course != null) {
+            model.put("course", course);
+            if (course.getFeeExternal().equals(new Double("0"))) {
+                model.put("freeCourse", new Boolean(true));
+            }
+        }
+
         String registrationId = request.getParameter("id");
         if ((registrationId != null) && StringUtils.isNumeric(registrationId) && StringUtils.isNotEmpty(registrationId)) {
         	Registration registration = registrationManager.getRegistration(registrationId);
@@ -155,8 +164,14 @@ public class RegistrationFormController extends BaseFormController {
             }
         }
         else {
-        	// tilleggsinformasjon vises ved førstegangsvisning av påmeldingsskjema dersom propery er definert
-        	String additionalInfo = getText("registration.additionalInfo", locale);
+            // tilleggsinformasjon vises ved førstegangsvisning av påmeldingsskjema dersom propery er definert
+            String additionalInfo;
+            if (course != null && course.getCategory() != null && course.getCategory().getAdditionalInfo() != null) {
+                additionalInfo = course.getCategory().getAdditionalInfo();
+            }
+            else {
+                additionalInfo = getText("registration.additionalInfo", locale);
+            }
         	if(StringUtils.isNotBlank(additionalInfo)) saveMessage(request, additionalInfo);
         }
 
@@ -194,15 +209,6 @@ public class RegistrationFormController extends BaseFormController {
 	        }
         }
         model.put("organizations", organizations);
-
-        // Retrieve the course the user wants to attend
-        Course course = courseManager.getCourse(courseId);
-        if (course != null) {
-            model.put("course", course);
-            if (course.getFeeExternal().equals(new Double("0"))) {
-                model.put("freeCourse", new Boolean(true));
-            }
-        }
 
         if (!legalRegistrationDate(request, request.getLocale(), course)) {
             model.put("illegalRegistration", new Boolean(true));

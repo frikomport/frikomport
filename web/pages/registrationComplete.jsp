@@ -30,6 +30,9 @@
 		</th>
 		<td>
 			<c:out value="${registration.course.name}" escapeXml="false" />, <c:out value="${registration.course.location.name}"/> - <fmt:formatDate value="${registration.course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
+			<c:if test="${registration.course.followup != null}">
+				&amp; <c:out value="${registration.course.followup.location.name}"/> - <fmt:formatDate value="${registration.course.followup.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
+			</c:if>
 		</td>
 	</tr>
 

@@ -26,6 +26,8 @@ public class Category extends BaseObject implements Serializable {
     private String name;
     private Boolean selectable;
     private Boolean useFollowup;
+    private String defaultName;
+    private String additionalInfo;
 
     public enum Name {
         HENDELSE("Hendelse");
@@ -103,6 +105,38 @@ public class Category extends BaseObject implements Serializable {
 
     public void setUseFollowup(Boolean useFollowup) {
         this.useFollowup = useFollowup;
+    }
+
+    /**
+     * @return The default name of courses with this category
+     * @hibernate.property column="defaultName" length="100"
+     */
+    @XmlTransient
+    public String getDefaultName() {
+        return defaultName;
+    }
+    
+    /**
+     * @param defaultName
+     */
+    public void setDefaultName(String defaultName) {
+        this.defaultName = defaultName;
+    }
+
+    /**
+     * @return The additional info of courses with this category
+     * @hibernate.property column="additionalInfo" length="300"
+     */
+    @XmlTransient
+    public String getAdditionalInfo() {
+        return additionalInfo;
+    }
+    
+    /**
+     * @param additionalInfo
+     */
+    public void setAdditionalInfo(String additionalInfo) {
+        this.additionalInfo = additionalInfo;
     }
 
     public String toString() {

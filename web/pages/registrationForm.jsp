@@ -100,7 +100,11 @@
 					<soak:label key="course.name" />
 				</th>
 				<td>
-					<c:out value="${course.name}" escapeXml="false" />, <c:out value="${course.location.name}"/> - <fmt:formatDate value="${course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/> <c:out value="${courseStatus}"/>
+					<c:out value="${course.name}" escapeXml="false" />, <c:out value="${course.location.name}"/> - <fmt:formatDate value="${course.startTime}" type="both" pattern="${dateformat} ${timeformat}"/> 
+					<c:if test="${course.followup != null}">
+						&amp; <c:out value="${course.followup.location.name}"/> - <fmt:formatDate value="${course.followup.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
+					</c:if>
+					 <c:out value="${courseStatus}"/>
 				</td>
 			</tr>
 
