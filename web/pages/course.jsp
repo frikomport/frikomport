@@ -291,3 +291,53 @@
 	</td>
 </tr>
 </c:if>
+
+<c:if test="${course.followup != null}">
+	<tr id="followup">
+		<th>
+			<soak:label key="followup.title" />
+		</th>
+		<td>
+			<table>
+				<tr>
+					<th>
+						<soak:label key="followup.startTime" />
+					</th>
+					<td>
+						<fmt:formatDate value="${course.followup.startTime}" type="both"
+			pattern="${dateformat} ${timeformat}" />
+					</td>
+				</tr>
+				<tr>
+					<th>
+						<soak:label key="followup.stopTime" />
+					</th>
+					<td>
+						<fmt:formatDate value="${course.followup.stopTime}" type="both"
+			pattern="${dateformat} ${timeformat}" />
+					</td>
+				</tr>
+				<tr>
+					<th>
+						<soak:label key="followup.reminder" />
+					</th>
+					<td>
+						<fmt:formatDate value="${course.followup.reminder}" type="both"
+			pattern="${dateformat} ${timeformat}" />
+					</td>
+				</tr>
+				<tr>
+					<th>
+						<soak:label key="followup.location" />
+					</th>
+					<td>
+						<a
+			href="<c:url context="${urlContext}" value="/detailsLocation.html"><c:param name="id" value="${course.followup.location.id}"/></c:url>"
+			title="<c:out value="${course.followup.location.description}"/>"><c:out
+				value="${course.followup.location.name}" /></a>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</c:if>
