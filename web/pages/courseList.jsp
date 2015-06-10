@@ -296,6 +296,12 @@ SumBuild sumsExport = new SumBuild();
 </c:otherwise>    
 </c:choose>
 
+<c:if test="${isSVV}">
+    <display:column media="csv excel xml pdf" property="followup.startTime" sortable="true" headerClass="sortable" titleKey="followup.title">
+        <fmt:formatDate value="${courseList.followup.startTime}" type="both" pattern="${dateformat} ${timeformat}"/>
+        <%sumsExport.addToNextSum(null, null);%>
+    </display:column>
+</c:if>
 
 <c:if test="${!isSVV}">
     <display:column media="csv excel" sortable="true" headerClass="sortable" titleKey="course.stopTime" sortProperty="stopTime">
