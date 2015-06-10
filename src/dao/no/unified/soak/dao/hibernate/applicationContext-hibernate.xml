@@ -111,6 +111,10 @@
     <!--Course-START-->
     <bean id="courseDAO" class="no.unified.soak.dao.hibernate.CourseDAOHibernate" autowire="byName"/>
     <!--Course-END-->
+
+    <!--Course-START-->
+    <bean id="followupDAO" class="no.unified.soak.dao.hibernate.FollowupDAOHibernate" autowire="byName"/>
+    <!--Course-END-->
     
     <bean id="statisticsDAO" class="no.unified.soak.dao.hibernate.StatisticsDAOHibernate" autowire="byName"/>
     

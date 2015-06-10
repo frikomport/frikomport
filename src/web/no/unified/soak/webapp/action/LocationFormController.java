@@ -25,6 +25,7 @@ import no.unified.soak.model.Organization;
 import no.unified.soak.model.User;
 import no.unified.soak.model.Organization.Type;
 import no.unified.soak.service.CourseManager;
+import no.unified.soak.service.FollowupManager;
 import no.unified.soak.service.LocationManager;
 import no.unified.soak.service.OrganizationManager;
 import no.unified.soak.util.ApplicationResourcesUtil;
@@ -45,10 +46,15 @@ public class LocationFormController extends BaseFormController {
     private LocationManager locationManager = null;
     private OrganizationManager organizationManager = null;
     private CourseManager courseManager = null;
+    private FollowupManager followupManager = null;
 
     
     public void setCourseManager(CourseManager courseManager) {
         this.courseManager = courseManager;
+    }
+
+    public void setFollowupManager(FollowupManager followupManager) {
+        this.followupManager = followupManager;
     }
 
     /**
@@ -143,7 +149,8 @@ public class LocationFormController extends BaseFormController {
             course.setStatus(null); // se etter alle statuser
             course.setLocationid(location.getId());
             List<Course> searchedCourses = courseManager.searchCourses(course, null, null, null);
-            if (searchedCourses == null || searchedCourses.size() == 0) {
+            List searchedFollowups = followupManager.getFollowupsWhereLocation(location.getId());
+            if ((searchedCourses == null || searchedCourses.size() == 0) && (searchedFollowups == null || searchedFollowups.size() == 0)) {
                 locationManager.removeLocation(location.getId().toString());
 //                locationManager.removePostalCodeLocationDistancesForLocation(location);
                 saveMessage(request, getText("location.deleted", locale));

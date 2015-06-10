@@ -158,6 +158,14 @@
         </property>
     </bean>
     <!--Course-END-->
+
+    <!--Followup-START-->
+    <bean id="followupManager" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="no.unified.soak.service.impl.FollowupManagerImpl" autowire="byName"/>
+        </property>
+    </bean>
+    <!--Followup-END-->
     
     <!--Statistics-START-->
     <bean id="statisticsManager" parent="txProxyTemplate">
