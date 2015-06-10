@@ -832,7 +832,11 @@ public class Course extends BaseObject implements Serializable {
         this.setChargeoverdue(original.getChargeoverdue());
     	this.setStatus(original.getStatus());
     	this.setAttendants(original.getAttendants());
-        this.setFollowup(original.getFollowup());
+
+        Followup followup = original.getFollowup();
+        if (followup != null) {
+            this.setFollowup(followup.clone());
+        }
     }
 
     /**

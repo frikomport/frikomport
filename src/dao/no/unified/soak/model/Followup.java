@@ -201,4 +201,13 @@ public class Followup extends BaseObject implements Serializable {
 		return new HashCodeBuilder().append(id).toHashCode();
 	}
 
+    public Followup clone() {
+        Followup clone = new Followup();
+        clone.setStartTime(getStartTime());
+        clone.setStopTime(getStopTime());
+        clone.setReminder(getReminder());
+        clone.setLocation(getLocation());
+        clone.setLocationid(getLocationid());
+        return clone;
+    }
 }

@@ -358,24 +358,23 @@ public class CourseFormController extends BaseFormController {
     throws Exception {
         String id = request.getParameter("id");
         String copyid = request.getParameter("copyid");
-        Course course = null;
-        Course newCourse = null;
 
 		if (!StringUtils.isEmpty(id)) {
 			try {
-				course = courseManager.getCourse(id);
+				return courseManager.getCourse(id);
 			} catch (DataAccessException e) {
 				String[] stringArr = {id};
 				request.setAttribute("courseErrorPage.heading.localized", messageSource.getMessage("courseErrorPage.heading", null, request.getLocale()));
 				throw new CourseAccessException(messageSource.getMessage("courseErrorPage.message", stringArr, request.getLocale()), e);
 			}
 		} else if (!StringUtils.isEmpty(copyid)) {
-            course = courseManager.getCourse(copyid);
-            newCourse = new Course();
+            Course course = courseManager.getCourse(copyid);
+            Course newCourse = new Course();
             newCourse.copyAllButId(course);
             newCourse.setCopyid(new Long(copyid));
+            return newCourse;
 		} else {
-			course = new Course();
+			Course course = new Course();
 			course.setRole(Constants.ANONYMOUS_ROLE);
 
             if (!ApplicationResourcesUtil.isSVV()) {
@@ -408,9 +407,9 @@ public class CourseFormController extends BaseFormController {
 
             // Add a Followup
             course.setFollowup(new Followup());
-		}
 
-        return (newCourse != null)? newCourse : course;
+            return course;
+		}
     }
 
     /**
