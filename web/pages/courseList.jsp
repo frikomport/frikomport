@@ -247,6 +247,10 @@ SumBuild sumsExport = new SumBuild();
 <display:column media="html" property="category.name" sortable="true" headerClass="sortable" titleKey="course.category">
     <%sums.addToNextSum(null, null);%>
 </display:column>
+<% sumsTotal.addToNextSum(null, null); %>
+<display:column media="csv excel xml pdf" property="category.name" sortable="true" headerClass="sortable" titleKey="course.category">
+    <%sumsExport.addToNextSum(null, null);%>
+</display:column>    
 
 <c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
     <display:column media="html" sortable="true" headerClass="sortable" titleKey="course.status">
