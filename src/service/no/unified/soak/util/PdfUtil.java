@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Vector;
 
 import no.unified.soak.model.Course;
+import no.unified.soak.model.Followup;
 import no.unified.soak.model.Registration;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -262,6 +263,14 @@ public class PdfUtil {
 			this.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.name")) + ": " + course.getName() + " - " + date + duration, 13, PdfUtil.ALIGN_LEFT);
 			this.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.responsible")) + ": " + course.getResponsible().getFullName() + "  /  " + StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.instructor")) +  ": " + course.getInstructor().getName(), 9, PdfUtil.ALIGN_LEFT);
 			this.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.location")) + ": " + course.getLocation().getName() + ", " + course.getLocation().getAddress(), 9, PdfUtil.ALIGN_LEFT);
+
+			if (course.hasFollowup()) {
+				Followup followup = course.getFollowup();
+				this.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("followup.title")) + ":", 11, PdfUtil.ALIGN_LEFT);
+				this.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("followup.startTime")) + ": " + formatter.format(followup.getStartTime()) + " - " + formatter.format(followup.getStopTime()), 9, PdfUtil.ALIGN_LEFT);
+				this.addText(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("followup.location")) + ": " + followup.getLocation().getName() + ", " + followup.getLocation().getAddress(), 9, PdfUtil.ALIGN_LEFT);
+				this.addText("", 6, PdfUtil.ALIGN_LEFT);
+			}
 			
 			TableHeader tableHeader = new TableHeader();
 			tableHeader.add(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("user.firstName")), 15);

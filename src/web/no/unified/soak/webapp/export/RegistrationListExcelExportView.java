@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.servlet.jsp.JspException;
 
 import no.unified.soak.model.Course;
+import no.unified.soak.model.Followup;
 import no.unified.soak.model.Registration;
 import no.unified.soak.util.ApplicationResourcesUtil;
 
@@ -230,6 +231,21 @@ public class RegistrationListExcelExportView implements BinaryExportView
 	                writeCell(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.location")), r.createCell(colNum++));
 	                writeCell(course.getLocation().getName(), r.createCell(colNum++));
 	                writeCell(course.getLocation().getAddress(), r.createCell(colNum++));
+
+                    if (course.hasFollowup()) {
+                        Followup followup = course.getFollowup();
+                        colNum = 0;
+                        r = sheet.createRow(rowNum++);
+                        writeCell(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("followup.title")), r.createCell(colNum++));
+                        writeCell(f.format(followup.getStartTime()) + " - " + f.format(followup.getStopTime()), r.createCell(colNum++));
+
+                        colNum = 0;
+                        r = sheet.createRow(rowNum++);
+                        writeCell(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("followup.location")), r.createCell(colNum++));
+                        writeCell(followup.getLocation().getName(), r.createCell(colNum++));
+                        writeCell(followup.getLocation().getAddress(), r.createCell(colNum++));
+                        r = sheet.createRow(rowNum++);
+                    }
 	                
 	                firstRegistration = false;
             	}

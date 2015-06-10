@@ -10,6 +10,7 @@ import java.util.Iterator;
 import javax.servlet.jsp.JspException;
 
 import no.unified.soak.model.Course;
+import no.unified.soak.model.Followup;
 import no.unified.soak.model.Registration;
 import no.unified.soak.util.ApplicationResourcesUtil;
 
@@ -436,6 +437,42 @@ public abstract class CustomBaseExportView implements TextExportView
 		write(out, escapeColumnValue(course.getLocation().getAddress()));
 		write(out, CELL_END);
 		write(out, ROW_END);
+
+        if (course.hasFollowup()) {
+            Followup followup = course.getFollowup();
+            write(out, ROW_START);
+            write(out, CELL_START);
+            write(out, escapeColumnValue(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("followup.title"))));
+            write(out, CELL_END);
+            write(out, ROW_END);
+
+            write(out, ROW_START);
+            write(out, CELL_START);
+            write(out, escapeColumnValue(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("followup.startTime"))));
+            write(out, CELL_END);
+            write(out, CELL_START);
+            write(out, escapeColumnValue(f.format(followup.getStartTime()) + " - " + f.format(followup.getStopTime())));
+            write(out, CELL_END);
+            write(out, ROW_END);
+
+            write(out, ROW_START);
+            write(out, CELL_START);
+            write(out, escapeColumnValue(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("followup.location"))));
+            write(out, CELL_END);
+            write(out, CELL_START);
+            write(out, escapeColumnValue(followup.getLocation().getName()));
+            write(out, CELL_END);
+            write(out, CELL_START);
+            write(out, escapeColumnValue(followup.getLocation().getAddress()));
+            write(out, CELL_END);
+            write(out, ROW_END);
+
+            write(out, ROW_START);
+            write(out, CELL_START);
+            write(out, escapeColumnValue(""));
+            write(out, CELL_END);
+            write(out, ROW_END);
+        }
 
 		return out;
 	}
