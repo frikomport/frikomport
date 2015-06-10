@@ -317,6 +317,7 @@
 			pattern="${dateformat} ${timeformat}" />
 					</td>
 				</tr>
+<c:if test="${isAdmin || isEducationResponsible || isEventResponsible || isReader}">
 				<tr>
 					<th>
 						<soak:label key="followup.reminder" />
@@ -326,6 +327,7 @@
 			pattern="${dateformat} ${timeformat}" />
 					</td>
 				</tr>
+</c:if>
 				<tr>
 					<th>
 						<soak:label key="followup.location" />
