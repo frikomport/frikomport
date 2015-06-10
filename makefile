@@ -15,7 +15,7 @@ clean:
 deploy:
 	@./ant.sh clean deploy -Dwebapp.name=mengdetrening 
 
-migrate:
+schema:
 	@./ant.sh db-create db-prepare -Dwebapp.name=mengdetrening
 
 seed:
