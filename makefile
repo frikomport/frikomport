@@ -13,7 +13,7 @@ clean:
 	@./ant.sh clean -Dwebapp.name=mengdetrening
 
 deploy:
-	@./ant.sh clean deploy war -Dwebapp.name=mengdetrening 
+	@./ant.sh clean deploy -Dwebapp.name=mengdetrening 
 
 migrate:
 	@./ant.sh db-create db-prepare -Dwebapp.name=mengdetrening
