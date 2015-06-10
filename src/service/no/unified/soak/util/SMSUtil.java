@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import no.unified.soak.model.Course;
+import no.unified.soak.model.Followup;
 import no.unified.soak.model.Registration;
 
 import org.apache.commons.logging.Log;
@@ -20,11 +21,21 @@ public class SMSUtil {
 		String mobilnr = registration.getMobilePhone();
 		if(mobilnr == null) return; // no mobilnr in registration
 
+		String msg;
     	String courseName = course.getName();
     	String courseLocation = course.getLocation().getName();
     	String courseStart = DateUtil.getDateTime(ApplicationResourcesUtil.getText("datetime.format"), course.getStartTime());
 
-		String msg = ApplicationResourcesUtil.getText("sms.confirmRegistration", new Object[]{courseName, courseLocation, courseStart});
+    	if (course.hasFollowup()) {
+    		Followup followup = course.getFollowup();
+    		String followupLocation = followup.getLocation().getName();
+    		String followupStart = DateUtil.getDateTime(ApplicationResourcesUtil.getText("datetime.format"), followup.getStartTime());
+
+    		msg = ApplicationResourcesUtil.getText("sms.confirmRegistrationWithFollowup", new Object[]{courseName, courseLocation, courseStart, followupLocation, followupStart});
+    	}
+    	else {
+    		msg = ApplicationResourcesUtil.getText("sms.confirmRegistration", new Object[]{courseName, courseLocation, courseStart});
+    	}
 
 		SMS sms = new SMS(mobilnr, msg);
 		log.info(sms);
