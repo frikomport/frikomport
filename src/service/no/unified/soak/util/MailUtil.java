@@ -786,6 +786,28 @@ public class MailUtil {
 	            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.chargeoverdue")) + ": "
 	                    + (course.getChargeoverdue()?"Ja":"Nei") + "\n");
 	        }
+
+            if (course.hasFollowup()) {
+                String title = ApplicationResourcesUtil.getText("followup.title");
+                Followup followup = course.getFollowup();
+
+                if (changedList.contains("followup.startTime")) {
+                    msg.append(StringEscapeUtils.unescapeHtml(title + " " + ApplicationResourcesUtil.getText("followup.startTime"))
+                            + ": "
+                            + DateUtil.getDateTime(ApplicationResourcesUtil.getText("date.format") + " "
+                                    + ApplicationResourcesUtil.getText("time.format"), followup.getStartTime()) + "\n");
+                }
+                if (changedList.contains("followup.stopTime")) {
+                    msg.append(StringEscapeUtils.unescapeHtml(title + " " + ApplicationResourcesUtil.getText("followup.stopTime"))
+                            + ": "
+                            + DateUtil.getDateTime(ApplicationResourcesUtil.getText("date.format") + " "
+                                    + ApplicationResourcesUtil.getText("time.format"), followup.getStopTime()) + "\n");
+                }
+                if (changedList.contains("followup.location")) {
+                    msg.append(StringEscapeUtils.unescapeHtml(title + " " + ApplicationResourcesUtil.getText("followup.location")) + ": "
+                            + followup.getLocation().getName() + "\n");
+                }
+            }
 	    }
 
 /*

@@ -585,6 +585,7 @@ public class CourseFormController extends BaseFormController {
 						changedList = courseManager.getChangedList(originalCourse, course, format);
 						if (changedList.size() != 0) {
 							enablemail = true;
+                            SMSUtil.sendCourseChangedMessage(course, registrations, changedList);
 							if(configurationManager.isActive("sms.confirmedRegistrationChangedCourse", false)){
 								SMSUtil.sendCourseChangedMessage(course, registrations, changedList);
 							}

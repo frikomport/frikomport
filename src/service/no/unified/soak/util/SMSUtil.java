@@ -13,7 +13,7 @@ import org.apache.commons.logging.LogFactory;
 
 public class SMSUtil {
 
-	public static final Log log = LogFactory.getLog(MailUtil.class);
+	public static final Log log = LogFactory.getLog(SMSUtil.class);
 
 	public SMSUtil(){}
 	
@@ -63,6 +63,23 @@ public class SMSUtil {
         	else if(changedList.contains("startTime") && changedList.contains("location")){
         		msg = ApplicationResourcesUtil.getText("sms.courseTimeAndLocationChanged", new Object[]{courseName, courseLocation, courseStart});
         	}
+
+        	if (course.hasFollowup()) {
+        		Followup followup = course.getFollowup();
+        		courseLocation = followup.getLocation().getName();
+        		courseStart = DateUtil.getDateTime(ApplicationResourcesUtil.getText("datetime.format"), followup.getStartTime());
+        		courseName = courseName.concat(" (" + ApplicationResourcesUtil.getText("followup.title") + ")");
+
+	        	if (changedList.contains("followup.startTime")) {
+	        		if (changedList.contains("followup.location"))
+	        			msg = msg.concat(" " + ApplicationResourcesUtil.getText("sms.courseTimeAndLocationChanged", new Object[]{courseName, courseLocation, courseStart}));
+	        		else
+	        			msg = msg.concat(" " + ApplicationResourcesUtil.getText("sms.courseTimeChanged", new Object[]{courseName, courseStart}));
+	        	}
+	        	else if (changedList.contains("followup.location")) {
+	        		msg = msg.concat(" " + ApplicationResourcesUtil.getText("sms.courseLocationChanged", new Object[]{courseName, courseLocation}));
+	        	}
+	        }
         	
         	if(msg.length() > 0){
         		Iterator<Registration> it = registrations.iterator();

@@ -18,6 +18,7 @@ import java.util.Locale;
 
 import no.unified.soak.dao.CourseDAO;
 import no.unified.soak.model.Course;
+import no.unified.soak.model.Followup;
 import no.unified.soak.model.Person;
 import no.unified.soak.service.ConfigurationManager;
 import no.unified.soak.service.CourseAccessException;
@@ -260,7 +261,7 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
 		if (!originalCourse.getInstructorid().equals(changedCourse.getInstructorid())){
 			changedList.add("instructor");
 		}
-		if (originalCourse.getMaxAttendants() != changedCourse.getMaxAttendants()){
+		if (!originalCourse.getMaxAttendants().equals(changedCourse.getMaxAttendants())) {
 			changedList.add("maxAttendants");
 		}
 		if (!StringUtils.equals(originalCourse.getDescription(), changedCourse.getDescription())){
@@ -269,6 +270,21 @@ public class CourseManagerImpl extends BaseManager implements CourseManager {
 		if (originalCourse.getChargeoverdue() != changedCourse.getChargeoverdue()){
 			changedList.add("chargeoverdue");
 		}
+
+        if (originalCourse.hasFollowup() && changedCourse.hasFollowup()) {
+            Followup originalFollowup = originalCourse.getFollowup();
+            Followup changedFollowup = changedCourse.getFollowup();
+
+            if (!sdf.format(originalFollowup.getStartTime()).equals(sdf.format(changedFollowup.getStartTime()))){
+                changedList.add("followup.startTime");
+            }
+            if (!sdf.format(originalFollowup.getStopTime()).equals(sdf.format(changedFollowup.getStopTime()))){
+                changedList.add("followup.stopTime");
+            }
+            if (!originalFollowup.getLocationid().equals(changedFollowup.getLocationid())){
+                changedList.add("followup.location");
+            }
+        }
 		return changedList;
     }
     
