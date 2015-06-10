@@ -31,6 +31,36 @@
 
     <tr>
         <th>
+            <soak:label key="category.useFollowup"/>
+        </th>
+        <td>
+            <spring:bind path="category.useFollowup">
+                <c:if test="${status.value == true}"><fmt:message key="checkbox.checked"/></c:if>
+                <c:if test="${status.value == false}"><fmt:message key="checkbox.unchecked"/></c:if>
+            </spring:bind>
+        </td>
+    </tr>
+
+    <tr>
+        <th>
+            <soak:label key="category.defaultName"/>
+        </th>
+        <td>
+            <c:out value="${category.defaultName}"/>
+        </td>
+    </tr>
+
+    <tr>
+        <th>
+            <soak:label key="category.additionalInfo"/>
+        </th>
+        <td>
+            <c:out value="${category.additionalInfo}"/>
+        </td>
+    </tr>
+
+    <tr>
+        <th>
             <soak:label key="category.selectable"/>
         </th>
         <td>

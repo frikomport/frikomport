@@ -32,6 +32,36 @@
 
     <tr>
         <th>
+            <soak:label key="category.useFollowup"/>
+        </th>
+        <td>
+            <form:checkbox path="useFollowup"/>
+            <form:errors cssClass="fieldError" path="useFollowup"/>
+        </td>
+    </tr>
+
+    <tr>
+        <th>
+            <soak:label key="category.defaultName" />
+        </th>
+        <td>
+            <form:input size="50" maxlength="100" path="defaultName" />
+            <form:errors cssClass="fieldError" htmlEscape="false" path="defaultName" />
+        </td>
+    </tr>
+
+    <tr>
+        <th>
+            <soak:label key="category.additionalInfo" />
+        </th>
+        <td>
+            <form:input size="100" maxlength="300" path="additionalInfo" />
+            <form:errors cssClass="fieldError" htmlEscape="false" path="additionalInfo" />
+        </td>
+    </tr>
+
+    <tr>
+        <th>
             <soak:label key="category.selectable"/>
         </th>
         <td>
