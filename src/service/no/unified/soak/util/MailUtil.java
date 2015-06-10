@@ -35,6 +35,7 @@ import net.fortuna.ical4j.util.Uris;
 import no.unified.soak.Constants;
 import no.unified.soak.model.Configuration;
 import no.unified.soak.model.Course;
+import no.unified.soak.model.Followup;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.User;
 import no.unified.soak.service.MailEngine;
@@ -649,6 +650,27 @@ public class MailUtil {
         
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.location")) + ": "
                 + course.getLocation().getName() + "\n");
+
+        if (course.hasFollowup()) {
+            Followup followup = course.getFollowup();
+
+            msg.append("\n" + ApplicationResourcesUtil.getText("followup.title") + ":\n");
+
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("followup.startTime"))
+                + ": "
+                + DateUtil.getDateTime(ApplicationResourcesUtil.getText("date.format") + " "
+                        + ApplicationResourcesUtil.getText("time.format"), followup.getStartTime()) + "\n");
+        
+            msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("followup.stopTime"))
+                + ": "
+                + DateUtil.getDateTime(ApplicationResourcesUtil.getText("date.format") + " "
+                        + ApplicationResourcesUtil.getText("time.format"), followup.getStopTime()) + "\n");
+
+            if (followup.getLocation() != null) {
+                msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("followup.location")) + ": "
+                    + followup.getLocation().getName() + "\n");
+            }
+        }
 
         if(!ApplicationResourcesUtil.isSVV()){
 	        if (course.getResponsible() != null) {
