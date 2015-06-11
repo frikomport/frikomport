@@ -27,16 +27,19 @@ public class CourseStatusManagerImpl extends BaseManager implements CourseStatus
 
     public void processCourses(){
         Course search = new Course();
+        Date today = new Date();
         // Get created and published courses
         List<Course> courses = courseManager.searchCourses(search, null, new Date(), new Integer[]{CourseStatus.COURSE_CREATED, CourseStatus.COURSE_PUBLISHED});
         Iterator<Course> it = courses.iterator();
         while (it.hasNext()){
             Course course = it.next();
             // if finished, change status
-            if(course.getStopTime() != null && course.getStopTime().before(new Date())){
-                log.debug("Course finished: " + course.getId());
-                course.setStatus(CourseStatus.COURSE_FINISHED);
-                courseManager.saveCourse(course);
+            if(course.getStopTime() != null && course.getStopTime().before(today)){
+                if (!course.hasFollowup() || (course.getFollowup().getStopTime() != null && course.getFollowup().getStopTime().before(today))) {
+                    log.debug("Course finished: " + course.getId());
+                    course.setStatus(CourseStatus.COURSE_FINISHED);
+                    courseManager.saveCourse(course);
+                }
             }
         }
     }

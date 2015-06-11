@@ -527,8 +527,15 @@ public class CourseFormController extends BaseFormController {
 			}
 
 			// håndtering av eventer som blir opprettet med dato tilbake i tid
-			if(course.getStartTime().before(new Date()) && course.getStopTime().before(new Date())){
-				course.setStatus(CourseStatus.COURSE_FINISHED);
+            Date today = new Date();
+			if (course.getStartTime().before(today) && course.getStopTime().before(today)) {
+                Followup followup = course.getFollowup();
+                if (followup != null && followup.getStartTime() != null && followup.getStopTime() != null) {
+                    if (followup.getStartTime().before(today) && followup.getStopTime().before(today)) {
+                        course.setStatus(CourseStatus.COURSE_FINISHED);
+                    }
+                }
+                else course.setStatus(CourseStatus.COURSE_FINISHED);
 			}
 			
 			courseManager.saveCourse(course);
