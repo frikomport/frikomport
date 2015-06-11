@@ -538,10 +538,8 @@ public class RegistrationFormController extends BaseFormController {
                 	// *****************************************************************************************************************************
                 }
                 
-                Notification notification = new Notification();
-                notification.setRegistrationid(registration.getId());
-                notification.setReminderSent(false);
-                notificationManager.saveNotification(notification);
+                createNotificationsFor(registration, course);
+
                 if(update){
                 	key = "registrationComplete.updated";
                 	saveMessage(request, getText(key, locale));
@@ -584,11 +582,7 @@ public class RegistrationFormController extends BaseFormController {
                 	// *****************************************************************************************************************************
                 }
 
-                Notification notification = new Notification();
-                notification.setRegistrationid(registration.getId());
-                notification.setReminderSent(false);
-                notification.setRegistration(registration);
-                notificationManager.saveNotification(notification);
+                createNotificationsFor(registration, course);
                 key = "registrationComplete.waitinglist";
                 saveMessage(request, getText(key, locale));
                 sendMail(locale, course, registration, Constants.EMAIL_EVENT_WAITINGLIST_NOTIFICATION);
@@ -599,6 +593,25 @@ public class RegistrationFormController extends BaseFormController {
         }
 
         return new ModelAndView(getSuccessView(), model);
+    }
+
+    /**
+     * Create notifications for the registration
+     */
+    private void createNotificationsFor(Registration registration, Course course) {
+        Notification notification = new Notification();
+        notification.setRegistrationid(registration.getId());
+        notification.setReminderSent(false);
+        notification.setIsFollowup(false);
+        notificationManager.saveNotification(notification);
+
+        if (course != null && course.hasFollowup()) {
+            notification = new Notification();
+            notification.setRegistrationid(registration.getId());
+            notification.setReminderSent(false);
+            notification.setIsFollowup(true);
+            notificationManager.saveNotification(notification);
+        }
     }
 
     /**

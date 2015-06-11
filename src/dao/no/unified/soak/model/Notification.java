@@ -28,6 +28,8 @@ public class Notification extends BaseObject implements Serializable {
 
 	private boolean reminderSent;
 
+	private boolean isFollowup;
+
 	/**
 	 * @return Returns the id.
 	 * @hibernate.id column="id" generator-class="native" unsaved-value="null"
@@ -76,6 +78,22 @@ public class Notification extends BaseObject implements Serializable {
 	 */
 	public void setReminderSent(boolean reminderSent) {
 		this.reminderSent = reminderSent;
+	}
+
+	/**
+	 * @return Returns if this is a followup reminder.
+	 * @hibernate.property column="isFollowup"
+	 */
+	public boolean getIsFollowup() {
+		return isFollowup;
+	}
+
+	/**
+	 * @param isFollowup
+	 *				Set if reminder is for a followup.
+	 */
+	public void setIsFollowup(boolean isFollowup) {
+		this.isFollowup = isFollowup;
 	}
 
 	public String toString() {

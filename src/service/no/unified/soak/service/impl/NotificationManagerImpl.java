@@ -15,6 +15,7 @@ import javax.mail.internet.MimeMessage;
 import no.unified.soak.Constants;
 import no.unified.soak.dao.NotificationDao;
 import no.unified.soak.model.Course;
+import no.unified.soak.model.Followup;
 import no.unified.soak.model.Notification;
 import no.unified.soak.model.Registration;
 import no.unified.soak.model.Registration.Status;
@@ -169,6 +170,9 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 		NotificationSummary notificationSummary = new NotificationSummary();
 
 		// Fetch all the Notifications that does not have the sent-flag set.
+		//TODO: This whole routine is just inefficient and wrong.. Why not let the DB filter which exakt notification are
+		//		relevant through a proper query instead (a little bit of JOIN etc)? Then we don't have to do tons of
+		//		redundant loops etc..
 		List<Notification> notifications = this.getUnsentNotifications();
 
 		ArrayList<MimeMessage> emails = new ArrayList<MimeMessage>();
@@ -185,32 +189,35 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 				// The if-test is added mostly because of bad sample data (lazy programmer)
 				if (registration != null && registration.getCourse() != null) {
 
-					if(registration.getStatusAsEnum() == Status.CANCELED || registration.getStatusAsEnum() == Status.INVITED){
+					if(registration.getStatusAsEnum() == Status.CANCELED || registration.getStatusAsEnum() == Status.INVITED) {
 						// notification is only to be sent to reserved/waiting registrations
 						dao.removeNotification(notification.getId());
 						continue;
 					}
 					
-					Course course = notification.getRegistration().getCourse();
+					Course course = registration.getCourse();
 					// Are we after the time of notification?
-					if (course.getStatus().equals(CourseStatus.COURSE_PUBLISHED) 
-					        && course.getReminder() != null 
-					        && course.getReminder().before(today)
-					        && registration.getRegistered().before(course.getReminder())) {
-						// Store that it has been successfully sent - cleanup by
-						// cleanup manager
-						boolean isReserved = notification.getRegistration().getReserved();
-                        StringBuffer msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_body(course, registration, null, isReserved, configurationManager.getConfigurationsMap());
-						ArrayList<Registration> registrations = new ArrayList<Registration>();
-						registrations.add(registration);
-						ArrayList<MimeMessage> newEmails = MailUtil.getMailMessages(registrations, Constants.EMAIL_EVENT_NOTIFICATION, course, msg, null, mailSender, false);
-						emails.addAll(newEmails);
-						
-						notification.setReminderSent(true);
-						
-						dao.saveNotification(notification);
-						
-						notificationSummary.add(notification);
+					if (course.getStatus().equals(CourseStatus.COURSE_PUBLISHED)) {
+						//TODO: it seems to me like this little scheme leaves the notifications for courses without a
+						//		reminder date lying around in the DB without being removed. This loop'll grow big after
+						//		a while... I'm just leaving it (logically) like it was before, since I'm not sure if this
+						//		is handled elsewhere (cleaned up after the course has been done for exmaple)...
+						Date reminder = getReminderForCourse(course, notification.getIsFollowup());
+						if (reminder != null && reminder.before(today) && registration.getRegistered().before(reminder)) {
+							// Store that it has been successfully sent - cleanup by cleanup manager
+							boolean isReserved = notification.getRegistration().getReserved();
+	                        StringBuffer msg = MailUtil.create_EMAIL_EVENT_NOTIFICATION_body(course, registration, null, isReserved, configurationManager.getConfigurationsMap());
+							ArrayList<Registration> registrations = new ArrayList<Registration>();
+							registrations.add(registration);
+							ArrayList<MimeMessage> newEmails = MailUtil.getMailMessages(registrations, Constants.EMAIL_EVENT_NOTIFICATION, course, msg, null, mailSender, false);
+							emails.addAll(newEmails);
+							
+							notification.setReminderSent(true);
+							
+							dao.saveNotification(notification);
+							
+							notificationSummary.add(notification);
+						}
 					}
 				}
 			}
@@ -222,16 +229,29 @@ public class NotificationManagerImpl extends BaseManager implements Notification
 			notificationSummary.send();
 		}
 	}
+
+	private Date getReminderForCourse(Course course, boolean isFollowup) {
+		if (!isFollowup) {
+			return course.getReminder();
+		}
+
+		Followup followup = course.getFollowup();
+		if (followup != null) {
+			return followup.getReminder();
+		}
+		return null;
+	}
 	
 	public void resetCourse(Course course) {
 		List<Registration> result = registrationManager.getCourseRegistrations(course.getId());
 		if (result != null && result.size() > 0) {
 			for (int i=0; i < result.size(); i++) {
-				Notification notification = dao.getNotificationOrNew(result.get(i).getId());
-				notification.setRegistrationid(result.get(i).getId());
-				notification.setReminderSent(false);
-				log.debug("Saving notification with regId: " + notification.getRegistrationid() );
-				this.saveNotification(notification);
+				List<Notification> notifications = dao.getNotificationsOrNew(result.get(i).getId(), course.hasFollowup());
+				for (Notification notification : notifications) {
+					notification.setReminderSent(false);
+					log.debug("Saving notification with regId: " + notification.getRegistrationid() );
+					this.saveNotification(notification);
+				}
 			}
 		}	
 	}

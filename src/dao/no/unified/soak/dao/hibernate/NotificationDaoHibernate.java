@@ -1,6 +1,7 @@
 package no.unified.soak.dao.hibernate;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import no.unified.soak.dao.NotificationDao;
 import no.unified.soak.model.Notification;
@@ -95,20 +96,29 @@ public class NotificationDaoHibernate extends BaseDAOHibernate implements
 		getHibernateTemplate().delete(getNotification(id));
 	}
 	
-	public Notification getNotificationOrNew(Long registrationId) {
-		Notification result = null;
+	public List<Notification> getNotificationsOrNew(Long registrationId, boolean courseHasFollowup) {
+		List<Notification> result = null;
 		if (registrationId != null) {
 			DetachedCriteria criteria = DetachedCriteria
 			.forClass(Notification.class);
 			
 			criteria.add(Restrictions.eq("registrationid", registrationId));
-			List returned = getHibernateTemplate().findByCriteria(criteria);
-			if (returned != null && returned.size() > 0) {
-				result = (Notification) returned.get(0);
-			}
+			result = getHibernateTemplate().findByCriteria(criteria);
 		}
-		if (result == null) {
-			result = new Notification();
+
+		if (result == null || result.isEmpty()) {
+			result = new ArrayList<Notification>();
+			
+			Notification notification = new Notification();
+			notification.setRegistrationid(registrationId);
+			result.add(notification);
+
+			if (courseHasFollowup) {
+				notification = new Notification();
+				notification.setRegistrationid(registrationId);
+				notification.setIsFollowup(true);
+				result.add(notification);
+			}
 		}
 		return result;
 	}

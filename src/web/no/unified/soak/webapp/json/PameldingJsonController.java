@@ -172,7 +172,16 @@ public class PameldingJsonController {
 		Notification notification = new Notification();
         notification.setRegistrationid(registration.getId());
         notification.setReminderSent(false);
+        notification.setIsFollowup(false);
         notificationManager.saveNotification(notification);
+
+        if (course != null && course.hasFollowup()) {
+            notification = new Notification();
+            notification.setRegistrationid(registration.getId());
+            notification.setReminderSent(false);
+            notification.setIsFollowup(true);
+            notificationManager.saveNotification(notification);
+        }
 	}
 	
 	private void sendMail(Locale locale, Course course, Registration registration, int event) throws Exception {

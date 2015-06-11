@@ -46,10 +46,10 @@ public interface NotificationDao extends DAO {
 	public List<Notification> getUnsentNotifications();
 	
 	/**
-	 * Finds a notification by the registration id, or returns an empty Notification if this does not exist.
+	 * Finds the notifications by the registration id, or returns a empty Notifications if this does not exist.
 	 * 
 	 * @param regId The registrationId we want to find the notification for
 	 * @return The notification for the given registration if it exists, if not - an empty Notification
 	 */
-	public Notification getNotificationOrNew(Long registrationid);
+	public List<Notification> getNotificationsOrNew(Long registrationid, boolean courseHasFollowup);
 }
