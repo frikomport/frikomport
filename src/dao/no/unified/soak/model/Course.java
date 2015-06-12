@@ -163,7 +163,7 @@ public class Course extends BaseObject implements Serializable {
      * @return The categoryid
      * @hibernate.property column="categoryid" not-null="false"
      */
-	@XmlTransient
+	@XmlElement(name="kategoriId")
     public Long getCategoryid() {
         return categoryid;
     }
