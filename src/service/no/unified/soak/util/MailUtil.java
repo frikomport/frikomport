@@ -624,6 +624,10 @@ public class MailUtil {
 	        msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.type")) + ": "
 	                + course.getType() + "\n");
         }
+
+        if (course.hasFollowup()) {
+            msg.append("\n" + ApplicationResourcesUtil.getText("followup.courseTitle") + ":\n");
+        }
         
         msg.append(StringEscapeUtils.unescapeHtml(ApplicationResourcesUtil.getText("course.startTime"))
                 + ": "
